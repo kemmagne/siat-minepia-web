@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="controllerHolidayEditDlg" widgetVar="controllerHolidayEditDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['EditControllerHolidayTitle']}" width="800px">
+
+		<h:form id="controllerHolidayEditForm">
+
+
+			<h:panelGroup id="display" styleClass="inpWidth">
+
+				<p:panelGrid columns="4">
+					<p:outputLabel value="#{bundle['EditControllerHolidayLabel_subDepartment']}"
+						title="#{bundle['EditControllerHolidayTitle_subDepartment']}" for="subDepartment" />
+					<h:panelGroup>
+						<h:outputText id="subDepartment" value="#{controllerHolidayController.selectedSubDepartment.abreviation}" />
+						<p:message for="subDepartment" />
+					</h:panelGroup>
+					<p:outputLabel value="#{bundle['EditControllerHolidayLabel_service']}" for="service" />
+					<h:panelGroup>
+						<h:outputText id="service"
+							value="#{facesContext.viewRoot.locale eq 'fr' ? controllerHolidayController.serviceSelected.labelFr : controllerHolidayController.serviceSelected.labelEn}" />
+						<p:message for="service" />
+					</h:panelGroup>
+					<p:outputLabel value="#{bundle['EditControllerHolidayLabel_delegateur']}" for="ispector" />
+					<h:panelGroup>
+						<h:outputText id="ispector"
+							value="#{controllerHolidayController.selected.user.firstName} #{controllerHolidayController.selected.user.lastName}" />
+						<p:message for="ispector" />
+					</h:panelGroup>
+					<h:panelGroup>
+						<p:outputLabel for="dateDu" value="#{bundle['EditControllerHolidayLabel_date_du']}"
+							title="#{bundle['EditControllerHolidayTitle_date_du']}" />
+
+					</h:panelGroup>
+					<p:calendar  navigator="true" id="dateDu" value="#{controllerHolidayController.selected.fromDate}" showOn="button" required="true"
+						requiredMessage="#{bundle['EditControllerHolidayRequiredMessage_date_du']}" readonlyInput="true" pattern="dd/MM/yyyy">
+						<p:ajax event="dateSelect" update="dateAu" />
+					</p:calendar>
+
+					<h:panelGroup>
+						<p:outputLabel for="dateAu" value="#{bundle['EditControllerHolidayLabel_date_au']}"
+							title="#{bundle['EditControllerHolidayTitle_date_au']}" />
+					</h:panelGroup>
+					<p:calendar  navigator="true" id="dateAu" value="#{controllerHolidayController.selected.toDate}" showOn="button" required="true"
+						requiredMessage="#{bundle['EditControllerHolidayRequiredMessage_date_au']}" mindate="#{controllerHolidayController.selected.fromDate}"
+						readonlyInput="true" pattern="dd/MM/yyyy">
+					</p:calendar>
+
+					<p:outputLabel value="#{bundle['CreateControllerHolidayLabel_enabled']}" for="car_operationnel" />
+					<h:panelGroup>
+						<p:selectBooleanCheckbox id="car_operationnel" value="#{controllerHolidayController.selected.enabled}" />
+						<p:message for="car_operationnel" />
+					</h:panelGroup>
+
+				</p:panelGrid>
+				<br />
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="saveEdit" actionListener="#{controllerHolidayController.edit}" value="#{bundle['Save']}"
+						styleClass="ui-priority-primary" update="display,:controllerHolidayListForm,:growl"
+						oncomplete="handleSubmit(xhr,status,args,controllerHolidayEditDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelEdit" value="#{bundle['Cancel']}" styleClass="ui-priority-primary"
+						onclick="PF('controllerHolidayEditDialog').hide();" immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

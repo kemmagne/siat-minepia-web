@@ -1,0 +1,63 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="servicesItemEditDlg" widgetVar="servicesItemEditDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['EditServicesItemTitle']}">
+
+		<h:form id="servicesItemEditForm">
+
+			<h:panelGroup id="display">
+
+				<p:panelGrid columns="4">
+
+					<p:outputLabel value="#{bundle['CreateBureauRegionalLabel_service']}" for="itemService" />
+					<h:panelGroup>
+						<h:outputLabel id="itemService" value="#{servicesItemController.selected.service.labelFr}" />
+						<p:message for="itemService" />
+					</h:panelGroup>
+
+
+					<p:outputLabel value="#{bundle['CreateServicesItemLabel_id']}" for="itemNsh" />
+					<h:panelGroup>
+						<h:outputLabel id="itemNsh" value="#{servicesItemController.selected.nsh.goodsItemCode}" />
+						<p:message for="itemNsh" />
+					</h:panelGroup>
+
+
+					<p:outputLabel value="#{bundle['CreateServicesItemLabel_itemLabel']}" for="itemLabel" />
+					<h:panelGroup>
+						<p:outputLabel id="itemLabel" value="#{servicesItemController.itemLabel}" />
+						<p:message for="itemLabel" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateServicesItemLabel_label']}" for="label" />
+					<h:panelGroup>
+						<p:inputText id="label" value="#{servicesItemController.selected.label}" title="#{bundle['CreateServicesItemLabel_label']}"
+							required="true" requiredMessage="#{bundle['CreateServicesItemRequiredMessage_Label']}" />
+						<p:message for="label" />
+					</h:panelGroup>
+
+				</p:panelGrid>
+
+				<h:inputHidden id="relatedItemToOtherService" value="#{servicesItemController.attachedToOtherService}" />
+				<h:inputHidden id="relatedItemToService" value="#{servicesItemController.attachedToService}" />
+				<br />
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editBtn" actionListener="#{servicesItemController.edit}" value="#{bundle['Save']}"
+						styleClass="ui-priority-primary" update="display,:servicesItemListForm,:growl"
+						oncomplete="handleSubmit(xhr,status,args,servicesItemEditDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary"
+						onclick="PF('servicesItemEditDialog').hide();" immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

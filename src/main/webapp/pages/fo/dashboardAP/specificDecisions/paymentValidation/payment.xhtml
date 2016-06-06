@@ -1,0 +1,54 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<p:dataTable widgetVar="PaymentDTWdg" id="paymentDT" var="invoiceLine"
+		value="#{fileItemApDetailController.paymentData.paymentItemFlowList}">
+
+		<p:column headerText="#{bundle['Payment_product_id']}">
+			<h:outputText title="#{bundle['Payment_product_id']}" value="#{invoiceLine.fileItemId}" />
+		</p:column>
+
+		<p:column headerText="#{bundle['Payment_amount_label']}">
+			<h:panelGroup>
+				<p:inputText id="paymentAmount" value="#{invoiceLine.montantHt}" title="#{bundle['Payment_amount_title']}" required="true"
+					requiredMessage="#{bundle['CreatePaymentAmountRequiredMessage']}">
+					<p:message for="paymentAmount" />
+					<p:ajax event="blur" listener="#{fileItemApDetailController.paymentAmoutValueChangedListener}" update=":total :totalttc" />
+
+				</p:inputText>
+			</h:panelGroup>
+		</p:column>
+		<p:column headerText="#{bundle['Payment_amountTva_label']}">
+			<h:panelGroup>
+				<p:inputText id="paymentAmountTva" value="#{invoiceLine.montantTva}" title="#{bundle['Payment_amountTva_label']}" required="true"
+					requiredMessage="#{bundle['CreatePaymentAmountRequiredMessage']}">
+					<p:message for="paymentAmountTva" />
+					<p:ajax event="blur" listener="#{fileItemApDetailController.paymentAmoutValueChangedListener}" update=":total :totalttc" />
+
+				</p:inputText>
+			</h:panelGroup>
+		</p:column>
+		<p:column headerText="#{bundle['Payment_nature_label']}">
+			<h:panelGroup>
+				<p:inputText id="paymentNature" value="#{invoiceLine.natureFrais}" title="#{bundle['Payment_nature_title']}" required="true"
+					requiredMessage="#{bundle['CreatePaymentNatureRequiredMessage']}" />
+				<p:message for="paymentNature" />
+			</h:panelGroup>
+		</p:column>
+	</p:dataTable>
+	<br />
+	<h:panelGrid columns="6" cellspacing="5">
+
+		<h:outputText value="Total HT (FCFA) :" />
+		<h:outputText id="total" value="#{fileItemApDetailController.invoiceTotalAmount}" />
+
+		<h:outputText value="#{bundle['Payment_otherAmount_label']}" />
+		<h:inputText style="width: 50px" id="other" value="#{fileItemApDetailController.invoiceOtherAmount}">
+			<p:ajax event="blur" listener="#{fileItemApDetailController.paymentAmoutValueChangedListener}" update="total totalttc" />
+		</h:inputText>
+
+		<h:outputText value="Total TTC (FCFA) :" />
+		<h:outputText id="totalttc" value="#{fileItemApDetailController.invoiceTotalTtcAmount}" />
+
+	</h:panelGrid>
+</ui:composition>

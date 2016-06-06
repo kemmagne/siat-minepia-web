@@ -1,0 +1,84 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<p:panel header="#{bundle['organism_title']}">
+		<h:form id="organismListForm">
+
+			<h:commandLink action="#{exporter.exportPDF(table, 'ORGANISMS')}">
+				<h:outputText styleClass="sprite sprite-pdf" />
+			</h:commandLink>
+
+			<br />
+
+			<p:dataTable id="datalist" widgetVar="datalistTable" binding="#{table}" value="#{organismController.items}" filteredValue="" var="item" selectionMode="single"
+				selection="#{organismController.selected}" rowKey="#{item.id}" rows="5" paginator="true" rowsPerPageTemplate="5,10,20"
+				emptyMessage="#{bundle['AucuneResultat']}" styleClass="newui-datatable fixeColumnWidth"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+				<p:ajax event="rowSelect" update=" editButton  datalist" />
+				<p:ajax event="rowUnselect" update=" editButton  datalist" />
+				<p:ajax event="rowDblselect" listener="#{organismController.prepareEdit}" oncomplete="PF('organismEditDialog').show();"
+					update=":organismEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+
+				<p:column id="labelFrColumn" sortBy="#{item.labelFr}" filterBy="#{item.labelFr}" filterMatchMode="contains" style="width:90px">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['OrganismLabel_labelFr']}" title="#{bundle['OrganismTitle_labelFr']}"/>
+					</f:facet>
+					<h:outputText value="#{item.labelFr}" />
+				</p:column>
+
+				<p:column id="labelEnColumn" sortBy="#{item.labelEn}" filterBy="#{item.labelEn}" filterMatchMode="contains" style="width:90px">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['OrganismLabel_labelEn']}" title="#{bundle['OrganismTitle_labelEn']}"/>
+					</f:facet>
+					<h:outputText value="#{item.labelEn}" />
+				</p:column>
+
+				<p:column id="abreviationColumn" sortBy="#{item.abreviation}" filterBy="#{item.abreviation}" filterMatchMode="contains" style="width:90px">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['OrganismLabel_abreviation']}" title="#{bundle['OrganismTitle_abreviation']}"/>
+					</f:facet>
+					<h:outputText value="#{item.abreviation}" />
+				</p:column>
+
+				<p:column id="ministryLabelColumn" sortBy="#{item.ministry.labelFr}" filterBy="#{item.ministry.labelFr}" filterMatchMode="contains" style="width:90px">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['OrganismLabel_ministry']}" title="#{bundle['OrganismTitle_ministry']}"/>
+					</f:facet>
+					<h:outputText value="#{item.ministry.labelFr}" />
+				</p:column>
+				
+				<p:column id="managerLabelColumn" sortBy="#{(item.manager.firstName).concat(' ').concat(item.manager.lastName)}" filterBy="#{(item.manager.firstName).concat(' ').concat(item.manager.lastName)}" filterMatchMode="contains" style="width:90px">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['OrganismLabel_manager']}" title="#{bundle['OrganismTitle_manager']}"/>
+					</f:facet>
+					<h:outputText value="#{(item.manager.firstName).concat(' ').concat(item.manager.lastName)}" />
+			
+				</p:column>
+				
+				<p:column id="adminOrganismLabelColumn" sortBy="#{(item.adminOrganism.firstName).concat(' ').concat(item.adminOrganism.lastName)}" filterBy="#{(item.adminOrganism.firstName).concat(' ').concat(item.adminOrganism.lastName)}" filterMatchMode="contains" style="width:90px">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['OrganismLabel_adminOrganism']}" title="#{bundle['OrganismTitle_adminOrganism']}" />
+					</f:facet>
+					<h:outputText value="#{(item.adminOrganism.firstName).concat(' ').concat(item.adminOrganism.lastName)}" />
+			
+				</p:column>
+
+
+
+				<f:facet name="footer">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editButton" styleClass="btn" icon="sprite sprite-edit" value="#{bundle['Edit']}" actionListener="#{organismController.prepareEdit}"
+						rendered="#{organismController.selected != null and organismController.selected.id != null}" oncomplete="PF('organismEditDialog').show();" update=":organismEditForm" />
+				</f:facet>
+
+			</p:dataTable>
+
+		</h:form>
+
+
+	</p:panel>
+
+</ui:composition>

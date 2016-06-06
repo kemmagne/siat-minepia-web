@@ -1,0 +1,47 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="holidayEditDlg" widgetVar="holidayEditDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['EditHolidayTitle']}">
+
+		<h:form id="holidayEditForm">
+
+			<h:panelGroup id="display" styleClass="inpWidth">
+
+				<p:panelGrid columns="4">
+
+					<p:outputLabel value="#{bundle['EditHolidayLabel_label']}" for="holiday_label" />
+					<h:panelGroup>
+						<p:inputText id="holiday_label" value="#{holidayController.selected.label}" title="#{bundle['EditHolidayTitle_label']}"
+							required="true" requiredMessage="#{bundle['EditHolidayRequiredMessage_label']}" />
+						<p:message for="holiday_label" />
+					</h:panelGroup>
+					<p:outputLabel value="#{bundle['EditHolidayLabel_date']}" for="holiday_date" />
+					<h:panelGroup>
+						<p:calendar  navigator="true" id="holiday_date" value="#{holidayController.selected.holidayDate}" showOn="button"
+							title="#{bundle['EditHolidayTitle_date']}" required="true" requiredMessage="#{bundle['EditHolidayRequiredMessage_date']}"
+							pattern="dd/MM/yyyy" readonlyInput="true" />
+						<p:message for="holiday_date" />
+					</h:panelGroup>
+
+				</p:panelGrid>
+
+				<br />
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editBtn" actionListener="#{holidayController.edit}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+						update="display,:holidayListForm,:growl" oncomplete="handleSubmit(xhr,status,args,holidayEditDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('holidayEditDialog').hide();"
+						immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

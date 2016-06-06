@@ -1,0 +1,63 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="organismEditDlg" widgetVar="organismEditDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['EditOrganismTitle']}">
+
+		<h:form id="organismEditForm">
+
+			<h:panelGroup id="display">
+
+				<p:panelGrid columns="4">
+
+					<p:outputLabel value="#{bundle['EditMinistryLabel_manager']}" />
+					<h:outputText
+						value="#{(organismController.selected.manager.firstName).concat(' ').concat(organismController.selected.manager.lastName)}" />
+
+					<p:outputLabel value="#{bundle['EditMinistryLabel_adminOrganism']}" />
+					<h:outputText
+						value="#{(organismController.selected.adminOrganism.firstName).concat(' ').concat(organismController.selected.manager.lastName)}" />
+
+					<p:outputLabel value="#{bundle['EditOrganismLabel_labelFr']}" for="organism_labelFr" />
+					<h:panelGroup>
+						<p:inputText id="organism_labelFr" value="#{organismController.selected.labelFr}" title="#{bundle['EditOrganismTitle_labelFr']}"
+							required="true" requiredMessage="#{bundle['EditOrganismRequiredMessage_labelFr']}" />
+						<p:message for="organism_labelFr" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditOrganismLabel_labelEn']}" for="organism_labelEn" />
+					<h:panelGroup>
+						<p:inputText id="organism_labelEn" value="#{organismController.selected.labelEn}" title="#{bundle['EditOrganismTitle_labelEn']}"
+							required="true" requiredMessage="#{bundle['EditOrganismRequiredMessage_labelEn']}" />
+						<p:message for="organism_labelEn" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditOrganismLabel_abreviation']}" for="organism_abreviation" />
+					<h:panelGroup>
+						<p:inputText id="organism_abreviation" value="#{organismController.selected.abreviation}"
+							title="#{bundle['EditOrganismTitle_abreviation']}" required="true"
+							requiredMessage="#{bundle['EditOrganismRequiredMessage_abreviation']}" />
+						<p:message for="organism_abreviation" />
+					</h:panelGroup>
+
+				</p:panelGrid>
+
+				<br />
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editBtn" actionListener="#{organismController.edit}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+						update="display,:organismListForm,:growl" oncomplete="handleSubmit(xhr,status,args,organismEditDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('organismEditDialog').hide();"
+						immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

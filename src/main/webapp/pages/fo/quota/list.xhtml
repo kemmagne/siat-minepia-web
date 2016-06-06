@@ -1,0 +1,79 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<p:panel header="#{bundle['quota_quotaList']}">
+
+
+		<h:form id="filtredQuotaList">
+
+			<h:commandLink action="#{exporter.exportPDF(table, 'FILE_ITEMS_SS')}">
+				<h:outputText styleClass="sprite sprite-pdf" />
+			</h:commandLink>
+
+			<br />
+
+			<p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable" value="#{quotaController.searchResult}" filteredValue=""
+				var="item" rowKey="#{item.product.id}" rows="5" paginator="true" rowIndexVar="row" rowsPerPageTemplate="5,10,20"
+				emptyMessage="#{bundle['AucuneResultat']}"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{bundle['quota_quotaListLinenumber']}" title="#{bundle['quota_quotaListLinenumberTitle']}" />
+					</f:facet>
+					<h:outputText value="#{row+1}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{bundle['quota_SearchContribuable']}" title="#{bundle['quota_SearchContribuable']}" />
+					</f:facet>
+					<h:outputText value="#{item.numContribuable}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{bundle['quota_quotaListProduct']}" title="#{bundle['quota_quotaListProductTitle']}" />
+					</f:facet>
+					<h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? item.product.nsh.goodsItemDescEn : item.product.nsh.goodsItemDesc}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{bundle['quota_quotaListGarantedQuatity']}" title="#{bundle['quota_quotaListGarantedQuatityTitle']}" />
+					</f:facet>
+					<h:outputText value="#{item.quantity}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{bundle['quota_quotaListExpImpQuantity']}" title="#{bundle['quota_quotaListExpImpQuantityTitle']}" />
+					</f:facet>
+					<h:outputText value="#{item.impExpQuantity}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{bundle['quota_quotaListRemainingQuantity']}" title="#{bundle['quota_quotaListRemainingQuantityTitle']}" />
+					</f:facet>
+					<h:outputText value="#{item.remainingQuantity}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{bundle['quota_quotaListExpirationDate']}" title="#{bundle['quota_quotaListExpirationDateTitle']}" />
+					</f:facet>
+					<h:outputText value="#{item.deadline}">
+						<f:convertDateTime pattern="dd/mm/yyyy" />
+					</h:outputText>
+				</p:column>
+			</p:dataTable>
+
+		</h:form>
+
+	</p:panel>
+
+</ui:composition>

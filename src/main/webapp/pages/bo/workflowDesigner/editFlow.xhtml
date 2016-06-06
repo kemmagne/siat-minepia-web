@@ -1,0 +1,44 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+
+	<p:dialog closeOnEscape="true" id="flowDlg" widgetVar="flowDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle['EditFlowTitle']}">
+
+		<h:form id="flowForm" prependId="false">
+
+
+			<h:panelGroup id="displayFlow">
+				<p:panelGrid columns="2">
+					<p:outputLabel value="#{bundle['EditFlowLabel_labelFr']}" title="#{bundle['EditFlowTitle_labelFr']}" for="flow_labelFr" />
+					<h:panelGroup>
+						<p:inputText id="flow_labelFr" value="#{workflowDesignerController.selectedFlow.labelFr}" title="#{bundle['EditFlowTitle_labelFr']}"
+							required="true" requiredMessage="#{bundle['EditFlowRequiredMessage_labelFr']}" />
+						<p:message for="flow_labelFr" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditFlowLabel_labelEn']}" title="#{bundle['EditFlowTitle_labelEn']}" for="flow_labelEn" />
+					<h:panelGroup>
+						<p:inputText id="flow_labelEn" value="#{workflowDesignerController.selectedFlow.labelEn}" title="#{bundle['EditFlowTitle_labelEn']}"
+							required="true" requiredMessage="#{bundle['EditFlowRequiredMessage_labelEn']}" />
+						<p:message for="flow_labelEn" />
+					</h:panelGroup>
+
+				</p:panelGrid>
+				<br />
+
+				<div class="btn-bloc">
+					<p:commandButton actionListener="#{workflowDesignerController.editFlow}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+						ajax="false" update="flowForm,:growl " oncomplete="handleSubmitForWorkflow(xhr,status,args,flowDlg);"
+						onerror="console.log('****** flowDialog Error *****');" onsuccess="console.log('****** flowDialog Success *****');" />
+					<p:commandButton value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('flowDialog').hide();" immediate="true" />
+				</div>
+			</h:panelGroup>
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

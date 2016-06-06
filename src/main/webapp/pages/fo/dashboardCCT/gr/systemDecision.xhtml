@@ -1,0 +1,41 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<h:form id="systemDecisionForm" styleClass="decision-content">
+
+		<p:panel rendered="#{fileItemCctDetailController.disionSystemAllowed}">
+			<h:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight" cellspacing="4">
+
+				<p:outputLabel for="systemDecision" value="#{bundle['systemDecision_decision']}" />
+				<h:panelGrid columns="2">
+					<h:outputText id="systemDecision" value="#{riskController.decisionSystem}" />
+					<h:panelGroup>
+						<p:commandLink actionListener="#{riskController.prepareShow('default',fileItemCctDetailController.selectedFileItemCheck.fileItem)}"
+							update="systemDecision">
+							<h:outputText styleClass="sprite sprite-reload-2" />
+						</p:commandLink>
+						<p:spacer width="5" />
+						<p:commandLink actionListener="#{riskController.prepareShow('default',fileItemCctDetailController.selectedFileItemCheck.fileItem)}"
+							 onsuccess="PF('systemDecisionDashboardDialog').show();" update=":systemDecisionDashboardForm">
+							<h:outputText styleClass="sprite sprite-search-2" />
+						</p:commandLink>
+						<p:spacer width="5" />
+						<p:commandLink
+							actionListener="#{riskController.prepareShow('synthesisTab',fileItemCctDetailController.selectedFileItemCheck.fileItem)}"
+							onsuccess="PF('systemDecisionDashboardDialog').show();" update=":systemDecisionDashboardForm"
+							disabled="#{fileItemCctDetailController.disabledTabSynthese}" oncomplete="tabPosition()">
+							<h:outputText styleClass="sprite sprite-file" />
+						</p:commandLink>
+					</h:panelGroup>
+				</h:panelGrid>
+			</h:panelGrid>
+
+		</p:panel>
+
+	</h:form>
+
+</ui:composition>
+
+

@@ -1,0 +1,110 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<p:panel header="#{bundle['simpleSearch_result']}">
+
+
+		<h:form id="filtredFileItemListForm" styleClass="filtredContent">
+
+			<h:panelGrid columns="2">
+				<h:commandLink action="#{exporter.exportPDF(table, 'SEARCH_RESULT')}">
+					<h:outputText styleClass="sprite sprite-pdf" />
+				</h:commandLink>
+
+				<h:commandLink>
+					<h:graphicImage styleClass="sprite sprite-pdf" library="img" name="excel.png"
+						style="width: 34px;height: 34px;display: block;	top: 15px;	right: 52px;position: absolute;" />
+					<p:dataExporter type="xls" target="datalist" fileName="#{bundle['simpleSearch_result']}" />
+				</h:commandLink>
+			</h:panelGrid>
+			<br />
+
+			<p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable" value="#{searchController.simpleSearchItemList}" filteredValue=""
+				var="item" selectionMode="single" selection="#{searchController.selected}" rowKey="#{item.id}" rows="5" paginator="true"
+				rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+				<p:ajax event="rowSelect" />
+				<p:ajax event="rowUnselect" />
+				<p:ajax event="rowDblselect" listener="#{searchController.goToDetailPage}" onstart="PF('statusDialog1').block()"
+					onsuccess="PF('statusDialog1').unblock()" />
+
+
+				<p:column sortBy="#{item.file.referenceSiat}" filterBy="#{item.file.referenceSiat}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_num_siat']}" title="#{bundle['FileTitle_num_siat']}" />
+					</f:facet>
+					<h:outputText value="#{item.file.referenceSiat}" />
+				</p:column>
+
+				<p:column sortBy="#{item.file.numeroDossier}" filterBy="#{item.file.numeroDossier}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_num_eguce']}" title="#{bundle['FileTitle_num_eguce']}" />
+					</f:facet>
+					<h:outputText value="#{item.file.numeroDossier}" />
+				</p:column>
+
+				<p:column sortBy="#{item.file.numeroDemande}" filterBy="#{item.file.numeroDemande}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_numeroDemande']}" title="#{bundle['FileTitle_numeroDemande']}" />
+					</f:facet>
+					<h:outputText value="#{item.file.numeroDemande}" />
+				</p:column>
+
+				<p:column sortBy="#{dateBean.formatSimpleDate(item.file.createdDate)}" filterBy="#{dateBean.formatSimpleDate(item.file.createdDate)}"
+					filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_date_dossier']}" title="#{bundle['FileTitle_date_dossier']}" />
+					</f:facet>
+					<h:outputText value="#{item.file.createdDate}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" locale="fr" />
+					</h:outputText>
+				</p:column>
+
+				<p:column sortBy="#{facesContext.viewRoot.locale eq 'en' ? item.file.bureau.labelEn : item.file.bureau.labelFr}"
+					filterBy="#{facesContext.viewRoot.locale eq 'en' ? item.file.bureau.labelEn : item.file.bureau.labelFr}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_service']}" title="#{bundle['FileTitle_service']}" />
+					</f:facet>
+					<h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? item.file.bureau.labelEn : item.file.bureau.labelFr}" />
+				</p:column>
+
+				<p:column sortBy="#{item.id}" filterBy="#{item.id}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_num_file']}" title="#{bundle['FileTitle_num_file']}" />
+					</f:facet>
+					<h:outputText value="#{item.id}" />
+				</p:column>
+
+				<p:column sortBy="#{item.nsh.goodsItemCode}" filterBy="#{item.nsh.goodsItemCode}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_nsh']}" title="#{bundle['FileTitle_nsh']}" />
+					</f:facet>
+					<h:outputText value="#{item.nsh.goodsItemCode}" />
+				</p:column>
+
+				<p:column sortBy="#{facesContext.viewRoot.locale eq 'en' ? item.redefinedLabelEn : item.redefinedLabelFr}"
+					filterBy="#{facesContext.viewRoot.locale eq 'en' ? item.redefinedLabelEn : item.redefinedLabelFr}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_step']}" title="#{bundle['FileTitle_step']}" />
+					</f:facet>
+					<h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? item.redefinedLabelEn : item.redefinedLabelFr}" />
+				</p:column>
+
+				<p:column sortBy="#{item.subfamily.label}" filterBy="#{item.subfamily.label}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_subfamily']}" title="#{bundle['FileTitle_subfamily']}" />
+					</f:facet>
+					<h:outputText value="#{item.subfamily.label}" />
+				</p:column>
+
+			</p:dataTable>
+
+		</h:form>
+
+	</p:panel>
+
+</ui:composition>

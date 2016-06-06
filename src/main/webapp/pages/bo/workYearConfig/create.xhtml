@@ -1,0 +1,63 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="workYearConfigCreateDlg" widgetVar="workYearConfigCreateDialog" modal="true" resizable="false"
+		appendTo="@(body)" header="#{bundle['CreateWorkYearConfigTitle']}">
+
+		<h:form id="workYearConfigCreateForm">
+
+			<h:panelGroup id="display" styleClass="inpWidth">
+
+				<p:panelGrid columns="4">
+
+					<p:outputLabel value="#{bundle['CreateWorkYearConfigLabel_hourlyType']}" for="workYearConfig_label" />
+					<h:panelGroup>
+						<p:selectOneMenu id="workYearConfig_label" value="#{workYearConfigController.selectedBean.hourlyType}" required="true"
+							requiredMessage="#{bundle['CreateWorkYearConfigRequiredMessage_hourlyType']}">
+
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{workYearConfigController.listHourlyTypes}" var="hourlyType" itemValue="#{hourlyType}"
+								itemLabel="#{hourlyType.labelFr}" />
+							<f:converter binding="#{hourlyTypeConverter}" />
+						</p:selectOneMenu>
+						<p:message for="workYearConfig_label" />
+					</h:panelGroup>
+
+
+					<p:outputLabel value="#{bundle['CreateWorkYearConfigLabel_dateBegin']}" for="workYearConfig_date_begin" />
+					<h:panelGroup>
+						<p:calendar navigator="true" id="workYearConfig_date_begin" value="#{workYearConfigController.selectedBean.beginDate}" showOn="button"
+							mindate="#{workYearConfigController.minDate}" maxdate="#{workYearConfigController.maxDate}"
+							title="#{bundle['CreateHolidayTitle_date']}" required="true"
+							requiredMessage="#{bundle['CreateWorkYearConfigRequiredMessage_dateBegin']}" pattern="dd/MM/yyyy" readonlyInput="true" />
+						<p:message for="workYearConfig_date_begin" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateWorkYearConfigLabel_dateEnd']}" for="workYearConfig_date_end" />
+					<h:panelGroup>
+						<p:calendar navigator="true" id="workYearConfig_date_end" value="#{workYearConfigController.selectedBean.endDate}" showOn="button"
+							mindate="#{workYearConfigController.minDate}" maxdate="#{workYearConfigController.maxDate}"
+							title="#{bundle['CreateWorkYearConfigTitle_dateEnd']}" required="true"
+							requiredMessage="#{bundle['CreateWorkYearConfigRequiredMessage_dateEnd']}" pattern="dd/MM/yyyy" readonlyInput="true" />
+						<p:message for="workYearConfig_date_end" />
+					</h:panelGroup>
+				</p:panelGrid>
+
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="createBtn"
+						actionListener="#{workYearConfigController.createTemporary}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+						update="display,:workYearConfigListForm,:growl" oncomplete="handleSubmit(xhr,status,args,workYearConfigCreateDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="cancelBtn"
+						value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('workYearConfigCreateDialog').hide();" immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+</html>

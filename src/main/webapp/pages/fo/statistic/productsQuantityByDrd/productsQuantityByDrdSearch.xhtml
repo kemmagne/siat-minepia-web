@@ -1,0 +1,45 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<h:form id="fileItemDesicionSearchForm">
+
+		<p:accordionPanel styleClass="search">
+
+			<p:tab title="#{bundle['productsQuantityValuesByDrdSearch_Search']}" dynamic="true" cache="true">
+
+				<h:panelGrid columns="10" cellpadding="10">
+
+					<h:panelGroup>
+						<p:outputLabel for="fromDate" value="#{bundle['productsQuantityValuesByDrdSearch_fromDateLabel']}" />
+					</h:panelGroup>
+					<p:calendar  navigator="true" id="fromDate" value="#{statisticController.filter.fromDate}" title="#{bundle['productsQuantityValuesByDrdSearch_fromDateTitre']}" showOn="button"
+						pattern="dd/MM/yyyy" readonlyInput="true">
+						<p:ajax event="dateSelect" update="toDate" />
+					</p:calendar>
+
+					<h:panelGroup>
+						<p:outputLabel for="toDate" value="#{bundle['productsQuantityValuesByDrdSearch_toDateLabel']}" />
+					</h:panelGroup>
+					<p:calendar  navigator="true" id="toDate" value="#{statisticController.filter.toDate}"  title="#{bundle['productsQuantityValuesByDrdSearch_toDateTitre']}" showOn="button"
+						pattern="dd/MM/yyyy" mindate="#{statisticController.filter.fromDate}" readonlyInput="true">
+					</p:calendar>
+
+					<h:panelGroup>
+
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  icon="ui-icon-search" title="#{bundle['ButtonSearch']}" action="#{statisticController.doServiceItemProductsQuantitiesByDrdFilter}"
+							update=":filtredFileItemListForm:datalist fileItemDesicionSearchForm :growl" oncomplete="PF('datalistTable').filter();" />
+
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  icon="ui-icon-refresh" title="#{bundle['ButtonReset']}" action="#{statisticController.initServiceItemByProductsQuantitiesByDrdSearch}"
+							oncomplete="PF('datalistTable').filter();" update=":filtredFileItemListForm:datalist fileItemDesicionSearchForm" />
+
+					</h:panelGroup>
+				</h:panelGrid>
+
+			</p:tab>
+
+		</p:accordionPanel>
+
+	</h:form>
+</ui:composition>

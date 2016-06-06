@@ -1,0 +1,69 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<h:form id="fileItemDesicionSearchForm">
+
+		<p:accordionPanel styleClass="search">
+
+			<p:tab title="#{bundle['trade_balance']}" dynamic="true" cache="true">
+
+				<h:panelGrid columns="10" cellpadding="10">
+
+					<h:panelGroup>
+						<p:outputLabel for="fromAnnee" value="#{bundle['fileItemDesicionSearch_fromDateLabel']}" />
+					</h:panelGroup>
+					<h:panelGroup>
+						<p:selectOneMenu id="fromAnnee" value="#{tradeBalanceController.startYear}" style="width: 133px" required="true"
+							requiredMessage="#{bundle['TradeRequiredMessage_deb']}">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" itemValue=""></f:selectItem>
+							<f:selectItems value="#{tradeBalanceController.years}"></f:selectItems>
+							<p:ajax event="change" update="toAnnee m_toAnnee" listener="#{tradeBalanceController.changeYear}"></p:ajax>
+						</p:selectOneMenu>
+						<p:message for="fromAnnee"></p:message>
+					</h:panelGroup>
+
+					<h:panelGroup>
+						<p:outputLabel for="toAnnee" value="#{bundle['fileItemDesicionSearch_toDateLabel']}" />
+					</h:panelGroup>
+					<h:panelGroup>
+						<p:selectOneMenu id="toAnnee" value="#{tradeBalanceController.endYear}" style="width: 133px" required="true"
+							requiredMessage="#{bundle['TradeRequiredMessage_end']}" validatorMessage="#{bundle['TradeValidateMessage_date']}">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" itemValue=""></f:selectItem>
+							<f:selectItems value="#{tradeBalanceController.years}"></f:selectItems>
+							<f:validateDoubleRange minimum="#{tradeBalanceController.startYear}"></f:validateDoubleRange>
+							<p:ajax event="change" update="toAnnee m_toAnnee" />
+						</p:selectOneMenu>
+						<p:message for="toAnnee" id="m_toAnnee"></p:message>
+					</h:panelGroup>
+					<h:panelGroup>
+						<p:outputLabel for="type" value="#{bundle['balanceType_label']}" />
+					</h:panelGroup>
+					<h:panelGroup>
+						<p:selectOneMenu id="type" value="#{tradeBalanceController.typeTrade}" style="width: 133px" required="true"
+							requiredMessage="#{bundle['TradeRequiredMessage_type']}">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" itemValue=""></f:selectItem>
+							<f:selectItem itemLabel="#{bundle['Trade_type_01']}" itemValue="01"></f:selectItem>
+							<f:selectItem itemLabel="#{bundle['Trade_type_02']}" itemValue="02"></f:selectItem>
+
+
+						</p:selectOneMenu>
+						<p:message for="type"></p:message>
+					</h:panelGroup>
+					<h:panelGroup>
+
+						<p:commandButton icon="ui-icon-search" title="#{bundle['ButtonBalance']}" action="#{tradeBalanceController.validate}"
+							onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" update="@form :filtredFileItemListForm" />
+
+
+
+					</h:panelGroup>
+				</h:panelGrid>
+
+			</p:tab>
+
+		</p:accordionPanel>
+
+	</h:form>
+</ui:composition>

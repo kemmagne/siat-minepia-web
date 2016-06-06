@@ -1,0 +1,53 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="carCreateDlg" widgetVar="carCreateDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['CreateCarTitle']}">
+
+		<h:form id="carCreateForm">
+			<h:panelGroup id="display">
+
+				<p:panelGrid columns="2">
+
+					<p:outputLabel value="#{bundle['CreateCarLabel_matricule']}" for="car_serialNumber" />
+					<h:panelGroup>
+						<p:inputText id="car_serialNumber" value="#{carController.selected.serialNumber}" title="#{bundle['CreateCarTitle_matricule']}"
+							required="true" requiredMessage="#{bundle['CreateCarRequiredMessage_matricule']}" />
+						<p:message for="car_serialNumber" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateCarLabel_modele']}" for="car_model" />
+					<h:panelGroup>
+						<p:inputText id="car_model" value="#{carController.selected.model}" title="#{bundle['CreateCarTitle_modele']}" required="true"
+							requiredMessage="#{bundle['CreateCarRequiredMessage_modele']}" />
+						<p:message for="car_model" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateCarLabel_Operationnel']}" for="car_operationnel" />
+					<h:panelGroup>
+						<p:selectBooleanCheckbox id="car_operationnel" value="#{carController.selected.enabled}" />
+						<p:message for="car_operationnel" />
+					</h:panelGroup>
+
+				</p:panelGrid>
+
+
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="createBtn"
+						actionListener="#{carController.create}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+						update="display,:carListForm,:growl" oncomplete="handleSubmit(xhr,status,args,carCreateDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="cancelBtn"
+						value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('carCreateDialog').hide();" immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

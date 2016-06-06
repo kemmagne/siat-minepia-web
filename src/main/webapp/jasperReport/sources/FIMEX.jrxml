@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="IFRegistrationReport" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0a3943c7-735d-49ca-8acf-4fe65ab11bc8">
+	<property name="ireport.zoom" value="1.1000000000000019"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="1327"/>
+	<field name="chargerName" class="java.lang.String"/>
+	<field name="numeroContribuable" class="java.lang.String"/>
+	<field name="titleFr" class="java.lang.String"/>
+	<field name="titleEn" class="java.lang.String"/>
+	<field name="dateSignature" class="java.lang.String"/>
+	<field name="activitePrincipale" class="java.lang.String"/>
+	<field name="chargerCity" class="java.lang.String"/>
+	<field name="chargerAddress1" class="java.lang.String"/>
+	<field name="valid" class="java.lang.String"/>
+	<field name="sign" class="java.lang.String"/>
+	<field name="recordId" class="java.lang.String"/>
+	<background>
+		<band height="800" splitType="Stretch">
+			<image scaleImage="RetainShape">
+				<reportElement uuid="bf49b8b0-cd9e-476e-80d9-09e34b695553" x="15" y="112" width="524" height="674"/>
+				<imageExpression><![CDATA["logoMINCOMMERCE.png"]]></imageExpression>
+			</image>
+		</band>
+	</background>
+	<title>
+		<band height="140" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="8e49d9d1-253a-4190-a08c-51f8ecc913b4" x="0" y="3" width="263" height="92"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[REPUBLIQUE DU CAMEROUN
+Paix-Travail-Patrie
+---------
+MINISTERE DU COMMERCE
+---------
+SECRETARIAT GENERAL
+---------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c5640d5a-207f-418b-8318-37f99a79f416" x="327" y="5" width="212" height="90"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<text><![CDATA[REPUBLIC OF CAMEROON
+Peace-Work-Fatherland
+--------
+MINISTRY OF TRADE
+--------
+GENERAL SECRETARIAT
+--------]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="5" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="90" splitType="Stretch">
+			<textField>
+				<reportElement uuid="27397b50-3cc0-4bd8-b62d-102257280a62" x="31" y="0" width="490" height="54"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="20" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{titleFr}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="25d04aac-67d9-4009-b3df-fd72248ad05f" x="31" y="54" width="490" height="36"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="16" isBold="false" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{titleEn}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="396">
+			<staticText>
+				<reportElement uuid="51e636b1-6e78-4393-839e-8e73bb6d2286" x="57" y="142" width="183" height="30"/>
+				<textElement verticalAlignment="Middle">
+					<font size="16" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Raison sociale]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="eed2487b-43d7-4b86-a7df-ce12354c7285" x="240" y="142" width="261" height="30"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="15" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{chargerName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="bfd4998a-7f06-4e76-bbd1-1b2478bbb179" x="57" y="191" width="183" height="30"/>
+				<textElement verticalAlignment="Middle">
+					<font size="16" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Date signature]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="4f4834c3-a73d-4218-b5c7-4faffb2eb6a3" x="240" y="191" width="261" height="30"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="15" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dateSignature}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="4068f1f2-bdf8-48d7-8137-ec073ed8ca3e" x="57" y="240" width="183" height="30"/>
+				<textElement verticalAlignment="Middle">
+					<font size="16" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Secteur d'activité]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="3e70e147-024b-49c2-bb29-1a15449e09f3" x="240" y="240" width="261" height="30"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="15" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{activitePrincipale}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="c16f97dc-5cb4-4ee7-81f3-ce0b6e58b678" x="57" y="342" width="183" height="30"/>
+				<textElement verticalAlignment="Middle">
+					<font size="16" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Adresse]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="ed3c8460-5444-4a1b-a594-937d3cda5345" x="240" y="342" width="261" height="30"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="15" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{chargerAddress1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ff02bc40-26bf-432b-b5b6-607b25477b83" x="241" y="32" width="261" height="30"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="15" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{recordId}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="9a20a6e3-44af-452a-a102-80b603c9392a" x="58" y="32" width="183" height="30"/>
+				<textElement verticalAlignment="Middle">
+					<font size="16" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Numéro inscription]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="ad8f8429-bc88-4a07-a30f-d828313f300e" x="239" y="289" width="261" height="30"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="15" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{chargerCity}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="29d7dbc5-4a2d-41c7-911d-43128ba200a0" x="56" y="289" width="183" height="30"/>
+				<textElement verticalAlignment="Middle">
+					<font size="16" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Ville]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="11ae1335-8f19-4297-a70a-cd51251c4926" x="57" y="364" width="161" height="22"/>
+				<textElement>
+					<font size="13" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Address]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="579c7446-dee4-49e8-883b-3616bd1395f6" x="56" y="310" width="161" height="22"/>
+				<textElement>
+					<font size="13" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Town]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="44f05d9b-81ce-42bb-9079-bf1d06a4dc21" x="57" y="261" width="161" height="22"/>
+				<textElement>
+					<font size="13" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Activity]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b35b1741-624f-4dd1-9d9f-4b29cc2c7ae9" x="57" y="212" width="161" height="22"/>
+				<textElement>
+					<font size="13" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Signature date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="85717431-b078-4b81-9bdc-82d76a978b87" x="56" y="163" width="161" height="22"/>
+				<textElement>
+					<font size="13" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Corporate name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="64fa5e7f-e45e-4e5a-9452-42e2d5fc70c7" x="57" y="55" width="161" height="22"/>
+				<textElement>
+					<font size="13" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Registration number]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9a20a6e3-44af-452a-a102-80b603c9392a" x="58" y="87" width="183" height="30"/>
+				<textElement verticalAlignment="Middle">
+					<font size="16" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Numéro contribuable]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="ff02bc40-26bf-432b-b5b6-607b25477b83" x="241" y="87" width="261" height="30"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="15" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numeroContribuable}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="64fa5e7f-e45e-4e5a-9452-42e2d5fc70c7" x="57" y="110" width="161" height="22"/>
+				<textElement>
+					<font size="13" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Taxpayer number]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="70" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="bcc74245-bcee-4d5f-bb52-3f0747ff14f5" x="0" y="13" width="555" height="56" forecolor="#666666"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[--------------------------------------------------------------------------------------------------------------------------------------------
+Ces informations peuvent êtres verifiées sur le site du ministère du commerce à l'adresse  www.mincommerce.gov.cm
+ou en appelant le 22 22 28 84
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f4da5321-d525-4db7-b127-cc7ad9a2e734" x="10" y="2" width="59" height="20" forecolor="#666666"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Validateur :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="688ad460-ead4-4428-bf2f-44c41e548e54" x="241" y="2" width="59" height="20" forecolor="#666666"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Signataire :]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="6d84fd0f-4882-4aa1-a457-dea38e525d8e" x="68" y="2" width="173" height="20" forecolor="#666666"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valid}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="e52b5334-fc24-4df0-910e-d0502902d3a9" x="301" y="2" width="201" height="20" forecolor="#666666"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sign}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="7" splitType="Stretch"/>
+	</summary>
+</jasperReport>

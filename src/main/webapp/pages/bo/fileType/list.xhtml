@@ -1,0 +1,60 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<p:panel header="#{bundle['FileType_title']}">
+		<h:form id="fileTypeListForm">
+
+			<h:commandLink action="#{exporter.exportPDF(table, 'REGINAL_OFFICES')}">
+				<h:outputText styleClass="sprite sprite-pdf" />
+			</h:commandLink>
+
+			<br />
+
+			<p:dataTable id="datalist" binding="#{table}" value="#{fileTypeController.items}" filteredValue="" var="item" selectionMode="single"
+				selection="#{fileTypeController.selected}" rowKey="#{item.id}" rows="5" paginator="true" rowsPerPageTemplate="5,10,20"
+				emptyMessage="#{bundle['AucuneResultat']}" styleClass="newui-datatable fixeColumnWidth"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})" widgetVar="datalistTable">
+
+				<p:ajax event="rowSelect" update=" editButton  datalist" />
+				<p:ajax event="rowUnselect" update="editButton datalist" />
+				<p:ajax event="rowDblselect" listener="#{fileTypeController.prepareEdit}" oncomplete="PF('fileTypeEditDialog').show();"
+					update=":fileTypeEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+
+
+				<p:column id="nameColumn" sortBy="#{item.code}" filterBy="#{item.code}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileTypeLabel_code']}" title="#{bundle['FileTypeTitle_code']}" />
+					</f:facet>
+					<h:outputText value="#{item.code}" />
+				</p:column>
+
+				<p:column id="labelFrColumn" sortBy="#{item.labelFr}" filterBy="#{item.labelFr}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileTypeLabel_labelFr']}" title="#{bundle['FileTypeTitle_labelFr']}" />
+					</f:facet>
+					<h:outputText value="#{item.labelFr}" />
+				</p:column>
+
+				<p:column id="labelEnColumn" sortBy="#{item.labelEn}" filterBy="#{item.labelEn}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileTypeLabel_labelEn']}" title="#{bundle['FileTypeTitle_labelEn']}" />
+					</f:facet>
+					<h:outputText value="#{item.labelEn}" />
+				</p:column>
+
+
+				<f:facet name="footer">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editButton" styleClass="btn"
+						icon="sprite sprite-edit" value="#{bundle['Edit']}" actionListener="#{fileTypeController.prepareEdit}"
+						rendered="#{fileTypeController.selected != null}" oncomplete="PF('fileTypeEditDialog').show();" update=":fileTypeEditForm" />
+				</f:facet>
+
+			</p:dataTable>
+
+		</h:form>
+	</p:panel>
+
+</ui:composition>

@@ -1,0 +1,75 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<p:panel header="#{bundle['analyseLabSearch_result']}">
+
+
+		<h:form id="filtredAnalyseLabListForm">
+			<h:panelGrid columns="2">
+				<h:commandLink action="#{exporter.exportPDF(table, 'ANALYSE_LAB_SEARCH')}">
+					<h:outputText styleClass="sprite sprite-pdf" />
+				</h:commandLink>
+				<h:commandLink>
+					<h:graphicImage styleClass="sprite sprite-pdf" library="img" name="excel.png"
+						style="width: 34px;height: 34px;display: block;	top: 15px;	right: 52px;position: absolute;" />
+					<p:dataExporter type="xls" target="datalist" fileName="#{bundle['analyseLabSearch_result']}" />
+				</h:commandLink>
+			</h:panelGrid>
+			
+			<br />
+			<p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable" value="#{statisticController.analyseLabList}" filteredValue=""
+				var="item" rows="5" paginator="true" rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+				<p:column
+					sortBy="#{facesContext.viewRoot.locale eq 'fr' ? item.sample.fileItem.nsh.goodsItemDesc : item.sample.fileItem.nsh.goodsItemDescEn}"
+					filterBy="#{facesContext.viewRoot.locale eq 'fr' ? item.sample.fileItem.nsh.goodsItemDesc : item.sample.fileItem.nsh.goodsItemDescEn}"
+					filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText readonly="true" value="#{bundle['analyseLabSearch_goodsItemDescLabel']}" />
+					</f:facet>
+					<h:outputText
+						value="#{facesContext.viewRoot.locale eq 'fr' ? item.sample.fileItem.nsh.goodsItemDesc : item.sample.fileItem.nsh.goodsItemDescEn}" />
+				</p:column>
+
+				<p:column sortBy="#{item.date}" filterBy="#{item.date}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['analyseLabSearch_dateLabel']}" title="#{bundle['analyseLabSearch_dateTitle']}" />
+					</f:facet>
+					<h:outputText value="#{item.date}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
+				<p:column sortBy="#{item.quantity}" filterBy="#{item.quantity}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['analyseLabSearch_quantityLabel']}" title="#{bundle['analyseLabSearch_quantityTitle']}" />
+					</f:facet>
+					<h:outputText value="#{item.quantity}" />
+				</p:column>
+
+				<p:column sortBy="#{item.observation}" filterBy="#{item.observation}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['analyseLabSearch_observationLabel']}" title="#{bundle['analyseLabSearch_observationTitle']}" />
+					</f:facet>
+					<h:outputText value="#{item.observation}" />
+				</p:column>
+
+				<p:column sortBy="#{facesContext.viewRoot.locale eq 'fr' ? item.analyseTypeListFr : item.analyseTypeListFr}"
+					filterBy="#{facesContext.viewRoot.locale eq 'fr' ? item.analyseTypeListFr : item.analyseTypeListFr}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText readonly="true" value="#{bundle['analyseLabSearch_typeAnalyse']}" />
+					</f:facet>
+					<h:outputText value="#{facesContext.viewRoot.locale eq 'fr' ? item.analyseTypeListFr : item.analyseTypeListFr}" />
+				</p:column>
+
+			</p:dataTable>
+
+		</h:form>
+
+	</p:panel>
+
+</ui:composition>

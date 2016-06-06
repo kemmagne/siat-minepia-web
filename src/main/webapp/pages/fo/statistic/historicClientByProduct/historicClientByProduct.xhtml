@@ -1,0 +1,67 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<h:form id="historicClientDecisionSearchForm">
+
+		<p:accordionPanel styleClass="search">
+
+			<p:tab title="#{bundle['historicClientProductSearch_Search']}" dynamic="true" cache="true">
+
+				<h:panelGrid columns="10" cellpadding="10">
+					<h:outputLabel value="#{bundle['historicClientDecisionSearch_clientsTitle']} : " for="client" />
+					<h:panelGroup>
+						<p:selectOneMenu id="client" value="#{statisticController.historicClientFilter.client}" converter="#{companyConverter}"
+							title="#{bundle['historicClientDecisionSearch_clientsTitle']}" filter="true" filterMatchMode="contains">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{statisticController.clientList}" var="client" itemValue="#{client}" itemLabel="#{client.companyName}" />
+						</p:selectOneMenu>
+						<p:message for="client" />
+					</h:panelGroup>
+
+					<h:panelGroup>
+						<h:outputLabel value="#{bundle['historicClientProductSearch_productsTitle']} : " for="nsh" />
+						<p:selectOneMenu id="nsh" value="#{statisticController.historicClientFilter.nsh}" converter="#{nshConverter}"
+							title="#{bundle['historicClientProductSearch_productsTitle']}" filter="true" filterMatchMode="contains">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{statisticController.nshList}" var="nsh" itemValue="#{nsh}" itemLabel="#{nsh.goodsItemCode}" />
+						</p:selectOneMenu>
+						<p:message for="nsh" />
+					</h:panelGroup>
+
+					<h:panelGroup>
+						<p:outputLabel for="fromDate" value="#{bundle['historicClientDecisionSearch_fromDateLabel']}" />
+					</h:panelGroup>
+					<p:calendar navigator="true" id="fromDate" value="#{statisticController.historicClientFilter.fromDate}"
+						title="#{bundle['historicClientDecisionSearch_fromDateTitre']}" showOn="button" pattern="dd/MM/yyyy" readonlyInput="true">
+						<p:ajax event="dateSelect" update="toDate" />
+					</p:calendar>
+
+					<h:panelGroup>
+						<p:outputLabel for="toDate" value="#{bundle['historicClientDecisionSearch_toDateLabel']}" />
+					</h:panelGroup>
+					<p:calendar navigator="true" id="toDate" value="#{statisticController.historicClientFilter.toDate}"
+						title="#{bundle['historicClientDecisionSearch_toDateTitre']}" showOn="button" pattern="dd/MM/yyyy"
+						mindate="#{statisticController.historicClientFilter.fromDate}" readonlyInput="true">
+					</p:calendar>
+
+					<h:panelGroup>
+
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" icon="ui-icon-search"
+							title="#{bundle['ButtonSearch']}" action="#{statisticController.doFileItemClientProductByFilter}"
+							update=":filtredFileItemListForm:datalist historicClientDecisionSearchForm :growl" oncomplete="PF('datalistTable').filter();" />
+
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" icon="ui-icon-refresh"
+							title="#{bundle['ButtonReset']}" action="#{statisticController.initFileItemByClientProductSearch}"
+							oncomplete="PF('datalistTable').filter();" update=":filtredFileItemListForm:datalist historicClientDecisionSearchForm" />
+
+					</h:panelGroup>
+				</h:panelGrid>
+
+			</p:tab>
+
+		</p:accordionPanel>
+
+	</h:form>
+</ui:composition>

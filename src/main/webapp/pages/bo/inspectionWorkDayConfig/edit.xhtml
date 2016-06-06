@@ -1,0 +1,46 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="inspectionWorkDayConfigEditDlg" widgetVar="inspectionWorkDayConfigEditDialog" modal="true"
+		resizable="false" appendTo="@(body)" header="#{bundle['EditInspectionWorkDayConfigTitle']}">
+
+		<h:form id="inspectionWorkDayConfigEditForm">
+
+			<h:panelGroup id="display" styleClass="inpWidth">
+
+				<p:panelGrid columns="2">
+
+					<p:outputLabel value="#{bundle['EditInspectionWorkDayConfigLabel_hour']}" for="inspectionWorkDayConfig_hour" />
+					<h:panelGroup>
+						<p:selectOneMenu id="inspectionWorkDayConfig_hour" value="#{inspectionWorkDayConfigController.selected.hour}"
+							title="#{bundle['CreateInspectionWorkDayConfigTitle_hour']}" required="true"
+							requiredMessage="#{bundle['CreateInspectionWorkDayConfigRequiredMessage_hour']}">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{inspectionWorkDayConfigController.selectedHour}" />
+						</p:selectOneMenu>
+						<p:message for="inspectionWorkDayConfig_hour" />
+
+					</h:panelGroup>
+
+
+				</p:panelGrid>
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editBtn"
+						actionListener="#{inspectionWorkDayConfigController.edit}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+						update="display,:inspectionWorkDayConfigListForm,:growl"
+						oncomplete="handleSubmit(xhr,status,args,inspectionWorkDayConfigEditDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="cancelBtn"
+						value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('inspectionWorkDayConfigEditDialog').hide();"
+						immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+</html>

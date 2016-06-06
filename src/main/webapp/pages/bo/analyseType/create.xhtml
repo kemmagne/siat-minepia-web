@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+	<p:dialog closeOnEscape="true" id="analyseTypeCreateDlg" widgetVar="analyseTypeCreateDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['CreateAnalyseTypeTitle']}">
+
+		<h:form id="analyseTypeCreateForm">
+
+			<h:panelGroup id="display">
+
+				<p:panelGrid columns="4">
+
+					<p:outputLabel value="#{bundle['CreateAnalyseTypeLabel_labelFr']}" for="analyseType_libelleFr" />
+					<h:panelGroup>
+						<p:inputText id="analyseType_libelleFr" value="#{analyseTypeController.selected.labelFr}"
+							title="#{bundle['CreateAnalyseTypeTitle_labelFr']}" required="true"
+							requiredMessage="#{bundle['CreateAnalyseTypeRequiredMessage_labelFr']}" />
+						<p:message for="analyseType_libelleFr" />
+					</h:panelGroup>
+
+
+					<p:outputLabel value="#{bundle['CreateAnalyseTypeLabel_labelEn']}" for="analyseType_libelleEn" />
+					<h:panelGroup>
+						<p:inputText id="analyseType_libelleEn" value="#{analyseTypeController.selected.labelEn}"
+							title="#{bundle['CreateAnalyseTypeTitle_labelEn']}" required="true"
+							requiredMessage="#{bundle['CreateAnalyseTypeRequiredMessage_labelEn']}" />
+						<p:message for="analyseType_libelleEn" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateAnalyseTypeLabel_duree']}" for="analyseType_duration" />
+					<h:panelGroup>
+						<p:inputText id="analyseType_duration" value="#{analyseTypeController.selected.duration}"
+							title="#{bundle['CreateAnalyseTypeTitle_duree']}" required="true"
+							validatorMessage="#{bundle['CreateAnalyseTypeRequiredIntegerMessage_duree']}"
+							converterMessage="#{bundle['CreateAnalyseTypeRequiredFormatMessage_duree']}"
+							requiredMessage="#{bundle['CreateAnalyseTypeRequiredMessage_duree']}">
+							<f:validateLongRange minimum="1" maximum="150" />
+							<f:convertNumber pattern="#,###,##0.00" />
+						</p:inputText>
+						<p:message for="analyseType_duration" />
+					</h:panelGroup>
+				</p:panelGrid>
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="createBtn" actionListener="#{analyseTypeController.create}" value="#{bundle['Save']}"
+						styleClass="ui-priority-primary" update="display :analyseTypeListForm ,:growl"
+						oncomplete="handleSubmit(xhr,status,args,analyseTypeCreateDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary"
+						onclick="PF('analyseTypeCreateDialog').hide();" immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

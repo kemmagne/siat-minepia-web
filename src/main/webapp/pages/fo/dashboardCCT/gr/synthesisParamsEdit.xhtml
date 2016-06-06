@@ -1,0 +1,39 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="configurationEditDlg" widgetVar="configurationEditDialog" modal="true" resizable="false"
+		appendTo="@(body)" header="#{bundle['Configuration_title']}">
+
+		<h:form id="systemDecisionSynthesisParamsEditForm">
+			<h:panelGroup id="display">
+
+				<p:panelGrid columns="2">
+
+					<h:panelGroup>
+						<h:outputLabel value="#{bundle[synthesisParamsController.selectedParam.name]}"
+							title="#{bundle[synthesisParamsController.selectedParam.name]}" for="value" />
+					</h:panelGroup>
+					<p:inputText id="value" value="#{synthesisParamsController.selectedParam.value}" title="#{bundle['Edit']}" required="true"
+						requiredMessage="#{bundle['EditParamsOrganismRequiredMessage']}" />
+
+				</p:panelGrid>
+
+				<br />
+
+				<div align="right">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  actionListener="#{synthesisParamsController.edit}" value="#{bundle['Edit']}" styleClass="ui-priority-primary"
+						update="display,:systemDecisionDashboardForm,  :growl" oncomplete="handleSubmitForTreeTable(xhr,status,args,configurationEditDlg);" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('configurationEditDialog').hide();"
+						immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

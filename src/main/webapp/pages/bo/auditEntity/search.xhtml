@@ -1,0 +1,41 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<h:form id="searchForm">
+
+		<p:accordionPanel styleClass="search">
+
+			<p:tab title="#{bundle['Find']}" dynamic="true" styleClass="title" cache="true">
+
+				<h:panelGrid columns="6" cellpadding="10">
+					<p:outputLabel for="dateDu" value="#{bundle['AuditEntityLabel_date_du']}" />
+					
+						<p:calendar  navigator="true" id="dateDu" value="#{auditEntityController.auditFilter.beginDate}" title="#{bundle['FindCiblageTitle_startDate']}"
+							showOn="button" readonlyInput="true" pattern="dd/MM/yyyy">
+							
+							<p:ajax event="dateSelect" update="dateAu" />
+						</p:calendar>
+					<p:outputLabel for="dateAu" value="#{bundle['AuditEntityLabel_date_au']}" />
+						<p:calendar  navigator="true" id="dateAu" value="#{auditEntityController.auditFilter.endDate}" title="#{bundle['FindCiblageTitle_endDate']}"
+							showOn="button" pattern="dd/MM/yyyy" mindate="#{auditEntityController.auditFilter.beginDate}" readonlyInput="true">
+						</p:calendar>
+					<h:panelGroup>
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="launchSearch" icon="ui-icon-search" action="#{auditEntityController.doSearch}"
+							update=":auditEntityListForm:datalist :searchForm" oncomplete="PF('datalistTable').filter();" title="#{bundle['ButtonSearch']}" />
+						
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="resetSearch" icon="ui-icon-refresh" action="#{auditEntityController.initSearch}"
+							update=":auditEntityListForm:datalist :searchForm" oncomplete="PF('datalistTable').filter();" title="#{bundle['ButtonReset']}" />
+					
+						
+					</h:panelGroup>
+
+				</h:panelGrid>
+
+			</p:tab>
+
+		</p:accordionPanel>
+
+	</h:form>
+</ui:composition>

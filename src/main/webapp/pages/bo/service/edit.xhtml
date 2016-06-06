@@ -1,0 +1,67 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="serviceEditDlg" widgetVar="serviceEditDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['EditServiceTitle']}">
+
+		<h:form id="serviceEditForm">
+
+			<h:panelGroup id="display">
+
+				<p:panelGrid columns="4">
+
+					<p:outputLabel value="#{bundle['EditServiceLabel_headService']}" />
+					<h:outputText
+						value="#{(serviceController.selected.headService.firstName).concat(' ').concat(serviceController.selected.headService.lastName)}" />
+
+					<p:outputLabel value="#{bundle['EditServiceLabel_subDepartmentAbreviation']}" />
+					<h:outputText value="#{serviceController.selected.subDepartment.abreviation}" />
+
+					<p:outputLabel value="#{bundle['EditServiceLabel_headOffice']}" />
+					<h:outputText
+						value="#{(serviceController.selected.centralBureau.headOffice.firstName).concat(' ').concat(serviceController.selected.centralBureau.headOffice.firstName)}" />
+
+					<p:outputLabel value="#{bundle['EditServiceLabel_address']}" />
+					<h:outputText value="#{serviceController.selected.centralBureau.address}" />
+
+					<p:outputLabel value="#{bundle['EditServiceLabel_phone']}" />
+					<h:outputText id="service_phone" value="#{serviceController.selected.centralBureau.telephone}" />
+
+					<p:outputLabel value="#{bundle['EditServiceLabel_fax']}" />
+					<h:outputText value="#{serviceController.selected.centralBureau.fax}" />
+
+					<p:outputLabel value="#{bundle['EditServiceLabel_labelFr']}" for="service_labelFr" />
+					<h:panelGroup>
+						<p:inputText id="service_labelFr" value="#{serviceController.selected.labelFr}" title="#{bundle['EditServiceTitle_labelFr']}"
+							required="true" requiredMessage="#{bundle['EditServiceRequiredMessage_labelFr']}" />
+						<p:message for="service_labelFr" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditServiceLabel_labelEn']}" for="service_labelEn" />
+					<h:panelGroup>
+						<p:inputText id="service_labelEn" value="#{serviceController.selected.labelEn}" title="#{bundle['EditServiceTitle_labelEn']}"
+							required="true" requiredMessage="#{bundle['EditServiceRequiredMessage_labelEn']}" />
+						<p:message for="service_labelEn" />
+					</h:panelGroup>
+
+				</p:panelGrid>
+				<br />
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editBtn"
+						actionListener="#{serviceController.edit}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+						update="display,:serviceListForm,:growl" oncomplete="handleSubmit(xhr,status,args,serviceEditDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="cancelBtn"
+						value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('serviceEditDialog').hide();" immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

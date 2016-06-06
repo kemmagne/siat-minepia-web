@@ -1,0 +1,83 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="systemDecisionFormFolderTab">
+
+		<p:dataTable id="datalistFolderTab" widgetVar="datalistTableFolderTab" value="#{riskController.documentInfoList}" filteredValue=""
+			var="document" selectionMode="single" rowKey="#{document.fileItemId}" rows="5" paginator="true" rowsPerPageTemplate="5,10,20"
+			emptyMessage="#{bundle['AucuneResultat']}" styleClass="newui-datatable fixeColumnWidth"
+			paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+			<p:column sortBy="#{document.fileId}" filterBy="#{document.fileId}" filterMatchMode="contains" style="width:80px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['riskManagementFolderTabLabel_fileId']}" title="#{bundle['riskManagementFolderTabTitle_fileId']}" />
+				</f:facet>
+				<h:outputText value="#{document.fileId}" />
+			</p:column>
+
+			<p:column sortBy="#{document.fileItemId}" filterBy="#{document.fileItemId}" filterMatchMode="contains" style="width:80px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['riskManagementFolderTabLabel_fileItemNum']}"
+						title="#{bundle['riskManagementFolderTabTitle_fileItemNum']}" />
+				</f:facet>
+				<h:outputText value="#{document.fileItemId}" />
+			</p:column>
+
+			<p:column sortBy="#{dateBean.formatSimpleDate(document.depositDate)}" filterBy="#{dateBean.formatSimpleDate(document.depositDate)}"
+				filterMatchMode="contains" style="width:80px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['riskManagementFolderTabLabel_depositDate']}"
+						title="#{bundle['riskManagementFolderTabTitle_depositDate']}" />
+				</f:facet>
+				<h:outputText value="#{document.depositDate}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+
+			<p:column sortBy="#{facesContext.viewRoot.locale eq 'en' ? document.stepLabelEn : document.stepLabelFr}"
+				filterBy="#{facesContext.viewRoot.locale eq 'en' ? document.stepLabelEn : document.stepLabelFr}" filterMatchMode="contains"
+				style="width:80px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['riskManagementFolderTabLabel_step']}" title="#{bundle['riskManagementFolderTabTitle_step']}" />
+				</f:facet>
+				<h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? document.stepLabelEn : document.stepLabelFr}" />
+			</p:column>
+
+			<p:column sortBy="#{dateBean.formatSimpleDate(document.stepDate)}" filterBy="#{dateBean.formatSimpleDate(document.stepDate)}"
+				filterMatchMode="contains" style="width:80px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['riskManagementFolderTabLabel_stepDate']}" title="#{bundle['riskManagementFolderTabTitle_stepDate']}" />
+				</f:facet>
+				<h:outputText value="#{document.stepDate}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+
+			<p:column filterBy="#{document.timeExceeded}" filterMatchMode="equals" style="width:80px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['riskManagementFolderTabLabel_timeExceeded']}"
+						title="#{bundle['riskManagementFolderTabTitle_timeExceeded']}" />
+				</f:facet>
+				<f:facet name="filter">
+					<p:selectOneButton onchange="PF('datalistTableFolderTab').filter()">
+						<f:converter converterId="javax.faces.Boolean" />
+						<f:selectItem itemLabel="#{bundle['Tous']}" itemValue="" />
+						<f:selectItem itemLabel="#{bundle['Oui']}" itemValue="true" />
+						<f:selectItem itemLabel="#{bundle['Non']}" itemValue="false" />
+					</p:selectOneButton>
+				</f:facet>
+
+				<!-- 				<h:outputText value="#{document.timeExceeded ? bundle['Oui'] : bundle['Non']}" /> -->
+
+				<h:outputText value="Not Yet Implemented" style="color:red;font-weight:bold" />
+
+			</p:column>
+
+		</p:dataTable>
+
+	</h:form>
+
+</ui:composition>
+
+

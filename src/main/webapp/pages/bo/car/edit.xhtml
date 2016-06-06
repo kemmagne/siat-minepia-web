@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="carEditDlg" widgetVar="carEditDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['EditCarTitle']}">
+
+		<h:form id="carEditForm">
+			<h:panelGroup id="display">
+
+				<p:panelGrid columns="2">
+
+					<p:outputLabel value="#{bundle['EditCarLabel_matricule']}" for="car_serialNumber" />
+					<h:panelGroup>
+						<p:inputText id="car_serialNumber" value="#{carController.selected.serialNumber}" title="#{bundle['EditCarTitle_matricule']}"
+							required="true" requiredMessage="#{bundle['EditCarRequiredMessage_matricule']}" />
+						<p:message for="car_serialNumber" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditCarLabel_modele']}" for="car_model" />
+					<h:panelGroup>
+						<p:inputText id="car_model" value="#{carController.selected.model}" title="#{bundle['EditCarTitle_modele']}" required="true"
+							requiredMessage="#{bundle['EditCarRequiredMessage_modele']}" />
+						<p:message for="car_model" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditCarLabel_Operationnel']}" for="car_operationnel" />
+					<h:panelGroup>
+						<p:selectBooleanCheckbox id="car_operationnel" value="#{carController.selected.enabled}" />
+						<p:message for="car_operationnel" />
+					</h:panelGroup>
+				</p:panelGrid>
+
+				<br />
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editBtn"
+						actionListener="#{carController.edit}" value="#{bundle['Save']}" styleClass="ui-priority-primary" update="display,:carListForm,:growl"
+						oncomplete="handleSubmit(xhr,status,args,carEditDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="cancelBtn"
+						value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('carEditDialog').hide();" immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

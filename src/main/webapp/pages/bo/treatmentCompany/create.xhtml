@@ -1,0 +1,129 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="treatmentCompanyCreateDlg" widgetVar="treatmentCompanyCreateDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['CreateTreatmentCompanyTitle']}">
+
+		<h:form id="treatmentCompanyCreateForm">
+
+			<h:panelGroup id="display" styleClass="inpWidth">
+
+				<p:panelGrid columns="4">
+
+					<p:outputLabel value="#{bundle['CreateTreatmentCompanyLabel_labelFr']}" for="labelFr" />
+					<h:panelGroup>
+						<p:inputText id="labelFr" value="#{treatmentCompanyController.selected.labelFr}"
+							title="#{bundle['CreateTreatmentCompanyTitle_labelFr']}" required="true"
+							requiredMessage="#{bundle['CreateTreatmentCompanyRequiredMessage_labelFr']}" />
+						<p:message for="labelFr" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateTreatmentCompanyLabel_labelEn']}" for="labelEn" />
+					<h:panelGroup>
+						<p:inputText id="labelEn" value="#{treatmentCompanyController.selected.labelEn}"
+							title="#{bundle['CreateTreatmentCompanyTitle_labelEn']}" required="true"
+							requiredMessage="#{bundle['CreateTreatmentCompanyRequiredMessage_labelEn']}" />
+						<p:message for="labelEn" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateTreatmentCompanyLabel_code']}" for="treatmentCompany_code" />
+					<h:panelGroup>
+						<p:inputText id="treatmentCompany_code" value="#{treatmentCompanyController.selected.code}"
+							title="#{bundle['CreateTreatmentCompanyTitle_code']}" required="true"
+							requiredMessage="#{bundle['CreateTreatmentCompanyRequiredMessage_code']}" />
+						<p:message for="treatmentCompany_code" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateTreatmentCompanyLabel_address']}" for="treatmentCompany_address" />
+					<h:panelGroup>
+						<p:inputText id="treatmentCompany_address" value="#{treatmentCompanyController.selected.address}"
+							title="#{bundle['CreateTreatmentCompanyTitle_address']}" required="true"
+							requiredMessage="#{bundle['CreateTreatmentCompanyRequiredMessage_address']}" />
+						<p:message for="treatmentCompany_address" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateTreatmentCompanyLabel_telephone']}" for="treatmentCompany_telephone" />
+					<p:inputText id="treatmentCompany_telephone" value="#{treatmentCompanyController.selected.telephone}"
+						title="#{bundle['CreateTreatmentCompanyTitle_telephone']}" required="false"
+						requiredMessage="#{bundle['CreateTreatmentCompanyRequiredMessage_telephone']}" />
+
+					<p:outputLabel value="#{bundle['CreateTreatmentCompanyLabel_fax']}" for="treatmentCompany_fax" />
+					<p:inputText id="treatmentCompany_fax" value="#{treatmentCompanyController.selected.fax}"
+						title="#{bundle['CreateTreatmentCompanyTitle_fax']}" required="false"
+						requiredMessage="#{bundle['CreateTreatmentCompanyRequiredMessage_fax']}" />
+
+					<p:outputLabel value="#{bundle['CreateTreatmentCompanyLabel_email']}" for="treatmentCompany_email" />
+					<p:inputText id="treatmentCompany_email" value="#{treatmentCompanyController.selected.email}"
+						title="#{bundle['CreateTreatmentCompanyTitle_email']}" required="false"
+						requiredMessage="#{bundle['CreateTreatmentCompanyRequiredMessage_email']}" validatorMessage="#{bundle['MailValidationFail']}">
+						<f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+					</p:inputText>
+
+					<h:outputLabel value="#{bundle['CreateTreatmentCompanyLabel_subDepartment']}" for="subDepartment" />
+					<p:selectOneMenu id="subDepartment" value="#{treatmentCompanyController.selectedSubDepartment}"
+						requiredMessage="#{bundle['CreateTreatmentCompanyRequiredMessage_subdepartment']}" filter="true" filterMatchMode="contains">
+						<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+						<f:selectItems value="#{treatmentCompanyController.currentOrganism.subDepartmentsList}" var="subDepartment"
+							itemValue="#{subDepartment}" itemLabel="#{facesContext.viewRoot.locale eq 'en' ? subDepartment.labelEn : subDepartment.labelFr}" />
+							<f:converter binding="#{subDepartmentConverter}" />
+						<p:ajax update="service" listener="#{treatmentCompanyController.findServiceListBySelectedSubDepartment}"></p:ajax>
+					</p:selectOneMenu>
+
+					<h:outputLabel value="#{bundle['CreateTreatmentCompanyLabel_service']}" for="service" />
+					<h:panelGroup>
+						<p:selectOneMenu id="service" value="#{treatmentCompanyController.selected.service}" required="true"
+							requiredMessage="#{bundle['CreateTreatmentCompanyRequiredMessage_service']}" disabled="#{empty treatmentCompanyController.selectedSubDepartment ? 'true' : 'false' }">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{treatmentCompanyController.servicesBySubDepartment}" var="service" itemValue="#{service}"
+								itemLabel="#{facesContext.viewRoot.locale eq 'en' ?  service.labelEn : service.labelFr}" />
+							<f:converter binding="#{serviceConverter}" />
+						</p:selectOneMenu>
+						<p:message for="service" />
+					</h:panelGroup>
+
+				</p:panelGrid>
+
+				<h:panelGroup styleClass="panel-bloc">
+					<p:outputLabel value="#{bundle['CreateTreatmentCompanyLabel_treatmentCompanyTypes']}" for="treatmentCompanyTypesPickList" />
+					<h:panelGroup styleClass="panel-bloc-title">
+						<p:pickList required="true" id="treatmentCompanyTypesPickList" value="#{treatmentCompanyController.treatmentTypesPickList}"
+							var="treatmentType" itemValue="#{treatmentType}"
+							itemLabel="#{facesContext.viewRoot.locale eq 'fr' ? treatmentType.labelFr : treatmentType.labelEn}" showSourceControls="false"
+							showTargetControls="false" showCheckbox="true" showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
+							converter="#{treatmentTypeConverter}">
+
+							<f:facet name="sourceCaption">
+								<h:outputLabel value="#{bundle['CreateTreatmentCompanyLabel_treatmentCompanyTypes_available']}" />
+							</f:facet>
+							<f:facet name="targetCaption">
+								<h:outputLabel value="#{bundle['CreateTreatmentCompanyLabel_treatmentCompanyTypes_affected']}" />
+							</f:facet>
+
+							<p:column>
+								<h:outputText value="#{facesContext.viewRoot.locale eq 'fr' ? treatmentType.labelFr : treatmentType.labelEn}" />
+							</p:column>
+						</p:pickList>
+						<p:message for="treatmentCompanyTypesPickList" />
+					</h:panelGroup>
+
+				</h:panelGroup>
+
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="createBtn" actionListener="#{treatmentCompanyController.create}" value="#{bundle['Save']}"
+						styleClass="ui-priority-primary" update="display,:treatmentCompanyListForm,:growl"
+						oncomplete="handleSubmit(xhr,status,args,treatmentCompanyCreateDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary"
+						onclick="PF('treatmentCompanyCreateDialog').hide();" immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

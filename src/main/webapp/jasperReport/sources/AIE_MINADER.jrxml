@@ -1,0 +1,624 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="file" language="groovy" pageWidth="595" pageHeight="1220" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="28078ea8-15af-47d5-9f91-aa95db5f187e">
+	<property name="ireport.zoom" value="1.1269722013523664"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="c784432f-19b9-4c23-9bb1-7acd2901288a">
+		<field name="code" class="java.lang.String"/>
+		<field name="desc" class="java.lang.String"/>
+		<field name="quantity" class="java.lang.Double"/>
+		<variable name="SUM" class="java.lang.Double" calculation="Sum">
+			<variableExpression><![CDATA[$F{quantity}]]></variableExpression>
+			<initialValueExpression><![CDATA[0]]></initialValueExpression>
+		</variable>
+	</subDataset>
+	<parameter name="MINEPIA_LOGO" class="java.lang.String"/>
+	<field name="importer" class="java.lang.String"/>
+	<field name="fileItemList" class="java.util.List"/>
+	<field name="decisionNumber" class="java.lang.String"/>
+	<field name="decisionDate" class="java.util.Date"/>
+	<field name="decisionPlace" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="375" splitType="Stretch">
+			<elementGroup>
+				<staticText>
+					<reportElement uuid="64c20376-3232-4775-93e4-dbe592c209eb" x="32" y="53" width="130" height="24"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[DIRECTION DE LA REGLEMENTATION ET DU CONTROLE DE LA QUALITE DES INTRANTS ET DES PRODUITS AGRICOLES]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="56667fa5-dcc4-4b2e-8b07-a96aac1696a4" x="10" y="15" width="175" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="3005100a-2a68-46bd-9b18-4327c13e9557" x="47" y="20" width="100" height="16"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[MINISTERE DE L'AGRICULTURE ET DU DEVELOPEMENT RURAL]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="2a9cc343-4f27-401a-8f6d-22e423dc4fd8" x="10" y="75" width="175" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="2f8ca3fe-536c-4d2f-8210-cc46e8006012" x="10" y="41" width="175" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[SECRETERIAT GENERAL]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="03eef9ba-5a94-4e39-921f-4678cd226b65" x="10" y="35" width="175" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="25220a4d-2c33-4702-8ee9-c7d841d6f2ef" x="10" y="8" width="175" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[ Paix-Travail-Patrie]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="898b970c-05ed-4951-b8ce-0cdd0de02faf" x="10" y="0" width="175" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[REPUBLIQUE DU CAMEROUN
+]]></text>
+				</staticText>
+			</elementGroup>
+			<elementGroup>
+				<staticText>
+					<reportElement uuid="f1eb4dcf-f754-4de2-9514-0c4ed5812882" x="435" y="50" width="110" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="be32ad23-eac7-4847-9cce-65175f9c0adc" x="435" y="15" width="110" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="029ee73e-a2e3-4a51-aa59-063aa92ffa21" x="435" y="8" width="110" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[Peace-Work-Fatherland]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="df07ef27-c83a-4d21-8e3f-68d9a343f411" x="435" y="0" width="110" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[REPUBLIC OF CAMEROON
+]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="a6d01776-2f72-4567-b8e7-fd246affcb41" x="435" y="55" width="110" height="24"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="aa3eac8e-a117-46a3-9b9f-75d6694aabd1" x="435" y="21" width="110" height="16"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[MINISTRY OF AGRICULTURE AND RURAL DEVELOPMENT]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="d24d613d-16a6-4a93-a7f5-0b062193ba9b" x="435" y="79" width="110" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="4fab1483-b17b-4c04-afff-c9c542065ef9" x="435" y="84" width="110" height="24"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[SUB-DEPARTMENT OF PESTICIDES FERTILIZERS AND SPRAYERS REGULATION]]></text>
+				</staticText>
+			</elementGroup>
+			<staticText>
+				<reportElement uuid="f09ec8df-a786-453b-b87b-fdbe5b2fbeb6" x="435" y="106" width="110" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[*******]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9b20cdf6-e81b-49a2-ad15-f8e7dd87a3fe" x="435" y="112" width="110" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[SERVICE OF PESTICIDES REGULATION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="73b428a1-7682-4306-b5d1-5589af1cbbca" x="10" y="47" width="175" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[*******]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7a33274f-3d65-4d9c-b128-81e49da5c201" x="27" y="80" width="140" height="24"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[SOUS-DIRECTION DE LA REGLEMENTATION DES PESTICIES DES ENGRAIS ET DES APPAREILS DE TRAITEMENT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5e225796-3503-469b-8bf9-c13f9993b070" x="10" y="102" width="175" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[*******]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="57d09ce4-3717-434a-90ed-8be6a8c9cac4" x="42" y="108" width="110" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[SERVICE DE LA REGLEMENTATION DES PESTICIDES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="68cb0b8c-d1b7-4112-ad76-2b64dc7bb49b" x="435" y="42" width="110" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[GENERAL SECRETARIAT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2f2893db-30ab-4c84-829d-f61c97390159" x="435" y="35" width="110" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[*******]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ae530a68-7819-4e62-bd20-6fb6b1365e59" x="0" y="199" width="555" height="55"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LE MINISTRE DE L'AGRICULTURE ET DU DEVELOPPMENT RURAL]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="8a91e148-1d9c-4538-abc9-e5110fda2c15" x="0" y="155" width="555" height="12"/>
+				<textElement textAlignment="Center" markup="none">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["DECISION N° : "+($F{decisionNumber} != null  && $F{decisionNumber}.trim().length()>0 ? $F{decisionNumber} : "-")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="467f7345-1d8f-4af4-98a0-321f7c2d23b2" x="0" y="167" width="555" height="36"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["AUTORISANT LES TESTS CONJOINTS DE BIO-EFFICACITE ET DE PREVULGARISATION DU NEMATICIDE "+($F{fileItemList}!= null && $F{fileItemList}.size()>0 && $F{fileItemList}.get(0).getTradeName() != null && $F{fileItemList}.get(0).getTradeName().trim().length()>0 ? $F{fileItemList}.get(0).getTradeName() : "-") +" "+
+($F{fileItemList}!= null && $F{fileItemList}.size()>0 && $F{fileItemList}.get(0).getUse() != null && $F{fileItemList}.get(0).getUse().trim().length()>0 ?
+$F{fileItemList}.get(0).getUse().toUpperCase() : "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="4a35d6d7-05d7-4f46-9362-c3d5aaf4194a" x="10" y="251" width="12" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Vu]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="befccb44-bae3-4ecc-93ae-c9c5905e931d" x="30" y="251" width="70" height="8"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[la constitution;]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a97d37e8-7019-45e2-999a-db05624c8816" x="30" y="259" width="515" height="8"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[la loi n°2003/003 du 21 avril 2003 portant protection phytosanitaire;]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8e7239b1-95d1-4487-ae22-223468e8ae8f" x="10" y="267" width="12" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Vu]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="91297714-be94-4c81-b9ec-69da2b9efcbc" x="30" y="267" width="515" height="8"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[le décret n° 2004/322 du 8 décembre 2004 portant formation du gouvernement;]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9ec57165-6a9e-41bc-bf61-bd85055c863c" x="10" y="275" width="12" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Vu]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7b9fd371-208c-4170-a776-18919aa7bbe8" x="30" y="275" width="515" height="8"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[le décret n° 2005/0772/PM du 06 avril 2005 fixant les conditions d'homologation et de contrôle des produits phytosanitaires;]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c503146d-b5e2-4d20-888d-7f0d54a5cf42" x="10" y="259" width="12" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Vu]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e73cb914-63f1-4176-8d4e-69540261c9d7" x="10" y="283" width="12" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Vu]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="594115eb-bfa8-46fd-a4b7-68b14b2e34b7" x="30" y="283" width="515" height="8"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[le décret n° 2005/118 du 15 avril 2005 portant organisation du Ministère de l'Agriculture et du Développement Rural;]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c74d8925-8814-4d97-b100-782cf1959ab8" x="30" y="291" width="515" height="8"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[le décret n° 2007/268 du 07 septembre 2007 modifiant et complétant certaines dispositions du décret n° 2004/320 du 8 décembre 2004 portant organisation du gouvernement;]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="04be188f-a0ec-479b-abc6-1e65854da0a5" x="10" y="291" width="12" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Vu]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3fccb72b-2a6e-4846-9e27-331eb6d5ba05" x="30" y="299" width="515" height="8"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[le décret n° 2007/269 du 07 septembre 2007 portant réaménagement du gouvernement;]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="41fe4b5b-707e-43d6-942a-8de965dc5501" x="10" y="299" width="12" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Vu]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="d3a3763d-7099-4dba-bbb4-031566cc4998" x="0" y="309" width="555" height="36"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Considérant l'accord du Centre Africain de Recherche sur Bananiers et Plantains (CARBAP) d'effectuer les tests conjoints du pesticide "+($F{fileItemList}!= null && $F{fileItemList}.size()>0 && $F{fileItemList}.get(0).getTradeName()!= null && $F{fileItemList}.get(0).getTradeName().trim().length()>0 ?
+$F{fileItemList}.get(0).getTradeName() : "-")+" utilisé "+($F{fileItemList}!= null && $F{fileItemList}.size()>0 && $F{fileItemList}.get(0).getUse() != null && $F{fileItemList}.get(0).getUse().trim().length()>0 ?
+$F{fileItemList}.get(0).getUse().toUpperCase() : "-")+" et le dossier introduit par la société "+($F{importer} != null  && $F{importer}.trim().length()>0 ? $F{importer} : "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f47f60c9-159f-46f9-90c5-1629a62277ca" x="10" y="345" width="555" height="28"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DECIDE]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="577" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="c4dbe931-94b1-4334-81b5-188d1e07ec61" x="10" y="42" width="535" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Article 2 : Les spécification techniques du pesticides sus-cités sont les suivantes : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7076d242-8e56-40e8-bf20-7528cb08c06f" x="10" y="60" width="150" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[- Matière active]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a9d2535c-3754-4368-b800-48a564a87ed8" x="10" y="72" width="150" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[- Concentration]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="12015dc6-cda5-4a37-a774-f304accd9c73" x="10" y="84" width="150" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[- Type de formulation]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cc2a156f-1f9e-465d-867f-5bc9c6ce9564" x="10" y="96" width="150" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[- Usage]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="76eb0da7-d5f9-4535-bb59-c0027af3caff" x="10" y="108" width="150" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[- Dose de traitement]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="67b08361-b3ed-4444-86e2-6093fcced6d8" x="160" y="60" width="10" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b33b2b1c-1a61-456c-bdae-66192c5b834f" x="160" y="72" width="10" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e5b8b1cd-4c6e-4ccb-86da-87c94a7b06b8" x="160" y="84" width="10" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="63f7dade-c802-4376-b677-a5b342cda622" x="160" y="96" width="10" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6a9bf483-03c8-49a0-a533-6ff665ada310" x="160" y="108" width="10" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="476ddd70-2faa-4806-8e00-76fa7329a230" x="1" y="126" width="553" height="36"/>
+				<textElement verticalAlignment="Top">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Article 3 : Les tests conjoints de bio-efficacité et de prévulgarisation, objets de la présente décision, seront conduits conjointement par la Direction de la Réglementation et du Contrôle de la Qualité des intrans et des Produits Agricoles (DRCQ) du Ministère de l'Agriculture et du Développement Rural et le Centre Africain de Recherche sur Bananiers et Plantains (CARBAP).]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="befd76db-4021-4b96-b109-9874a946ddb2" x="30" y="176" width="515" height="24"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[- Déposer au Centre Africain de Recherche sur Bananiers et Plantains (CARBAP), des quantités suffisantes de pesticide sus-cité et du produit de référence, ainsi que le matériel de protection corporelle et l'antidote. ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4c72efd2-dacb-4182-9df5-3c27e4dda47c" x="30" y="200" width="515" height="24"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[- Indemniser les planteurs concernés par les tests suivants un accord bilatéral établi sous l'arbitrage des services compétents du Ministère de l'Agriculture et du Développement Rural.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a21d7235-8447-4812-a2ab-7639f570172f" x="1" y="228" width="553" height="36"/>
+				<textElement verticalAlignment="Top" markup="none">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Article 5 : Un rapport détaillé des résultats des tests conjoints de bio-efficacité et de prévulgarisation de ce produit sera élaboré et signé conjointement par la Direction de la Réglementation et du Contrôle de la Qualité des Intrants et des Produits Agricoles (DRCQ) et le Centre Africain de Recherche sur Bananiers et Plantains (CARBAP), dans les 2 mois qui suivent la fin de l'essai.]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="7e20768d-7626-42b4-85ec-e0332fb554a9" x="1" y="274" width="553" height="24"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Article 6 : La présente autorisation est personnelle et non cessible. Il est entendu que la société "+($F{importer} != null  && $F{importer}.trim().length()>0 ? $F{importer} : "-")+" sera tenue responsable de tout accident (intoxication) qui surviendrait pendant la conduite des tests sus-visés."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="b7bc231e-585b-448f-8a0d-b54aa70d3ff2" x="1" y="342" width="553" height="24"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Article 8 : Tous les frais relatifs aux tests conjoints de bio-efficacité et de prévulgarisation, objets de la présente décision sont à la charge de la société "+($F{importer} != null  && $F{importer}.trim().length()>0 ? $F{importer} : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="aa302141-aad7-408e-b8d4-e2fcd0a1eef0" x="1" y="376" width="553" height="48"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Article 9 : La Direction de la Réglementation et du Contrôle de la Qualité des Intrants et des Produits Agricoles (DRCQ) du Ministère de l'Agriculture et du Développement Rural, et le Centre Africain des Recherche sur Bananiers et Plantains (CARBAP) sont chargés d'établir les modalités pratiques des tests conjoints de bio-efficacité et de prévulgarisation du pesticide "+($F{fileItemList}!= null && $F{fileItemList}.size()>0 && $F{fileItemList}.get(0).getTradeName() != null  && $F{fileItemList}.get(0).getTradeName().trim().length()>0 ? $F{fileItemList}.get(0).getTradeName() : "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d0d9b193-a48f-49de-ac6f-269422c9f41b" x="1" y="434" width="553" height="24"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Article 10 : Tout litige survenu dans le cadre des essais prévus dans la présente décision, devra faire l'objet d'arrangement amiable. .En cas de non conciliation, le tribunal camerounais de la localité sera compétent pour connaître de l'affaire.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="758a6610-ebb1-40a6-9fef-de7cee14268e" x="1" y="468" width="553" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Article 11 : La présente décision sera enregistrée, puis communiquée partout où besoin sera.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="84eb5c45-5a76-467e-ab1c-2b539dd60a7e" x="10" y="484" width="100" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[AMPLIATIONS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ce2f29e4-b4d5-420b-a290-e8e2b35cff4d" x="10" y="496" width="100" height="12"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[- DRCQ/SDRP/SRP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9ee5fd7f-789a-4a4a-b954-bea27a0c3040" x="10" y="508" width="100" height="12"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[- DRADER/LT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f3f5d7c0-1650-49c0-9f40-c6699406cd74" x="10" y="520" width="100" height="12"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[- DRADER/SW]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4eff5e49-59f2-4ab6-a158-9c4b74aca8fc" x="10" y="532" width="100" height="12"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[- INTERESSE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8e60db75-029d-4b4c-847b-e3586f8062ba" x="10" y="544" width="100" height="12"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[- DOSSIER]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1b3e25e8-46d9-4301-bd32-a0a77cdde944" x="10" y="556" width="100" height="12"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[- CHRONO/ARCHIVES]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="f3387e58-7716-45d2-a336-55426c8d9d67" x="1" y="308" width="553" height="24"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Article 7 : Toute défaillance de la société "+($F{importer} != null  && $F{importer}.trim().length()>0 ? $F{importer} : "-")+" dûment constatée par les services compétents du ministère de l'Agriculture et du Développement Rural entraînera le retrait de la présente autorisation."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4693aacd-588f-4fe4-9da2-0c128fa189cc" x="10" y="160" width="535" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Article 4 : La société "+($F{importer} != null  && $F{importer}.trim().length()>0 ? $F{importer} : "-")+" devra au préalable :"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="c376ea53-b916-4eda-885c-5c86a4baeab9" x="1" y="5" width="553" height="36"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Article 1 : Sont autorisés pour une période d'un an renouvelable par tacite reconduition, les tests conjoints de bio-efficacité et de prévulgarisation du nématicide "+($F{fileItemList}!= null && $F{fileItemList}.size()>0 && $F{fileItemList}.get(0).getTradeName()!= null && $F{fileItemList}.get(0).getTradeName().trim().length()>0 ?
+$F{fileItemList}.get(0).getTradeName() : "-")+" "+
+($F{fileItemList}!= null && $F{fileItemList}.size()>0 && $F{fileItemList}.get(0).getUse() != null && $F{fileItemList}.get(0).getUse().trim().length()>0 ?
+$F{fileItemList}.get(0).getUse().toUpperCase() : "-")+" "+
+($F{fileItemList}!= null && $F{fileItemList}.size()>0 && $F{fileItemList}.get(0).getUseArea() != null && $F{fileItemList}.get(0).getUseArea().trim().length()>0 ?
+$F{fileItemList}.get(0).getUseArea().toUpperCase() : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="c69af89d-8e98-4764-ae36-407eb7b4170b" x="170" y="60" width="375" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{fileItemList}!= null && $F{fileItemList}.size()>0 && $F{fileItemList}.get(0).getActiveSubstance() != null  && $F{fileItemList}.get(0).getActiveSubstance().trim().length()>0 ? $F{fileItemList}.get(0).getActiveSubstance() : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4ab1ae97-fcf2-48df-a0fe-af85ec16d661" x="170" y="72" width="375" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{fileItemList}!= null && $F{fileItemList}.size()>0 && $F{fileItemList}.get(0).getConcentration() != null  && $F{fileItemList}.get(0).getConcentration().trim().length()>0 ? $F{fileItemList}.get(0).getConcentration() : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="5c734630-a99f-4b31-86fc-4dc528e4c979" x="170" y="84" width="375" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{fileItemList}!= null && $F{fileItemList}.size()>0 && $F{fileItemList}.get(0).getFormulationType() != null  && $F{fileItemList}.get(0).getFormulationType().trim().length()>0 ? $F{fileItemList}.get(0).getFormulationType() : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f45bc360-8117-4a89-b356-8de5f1f0ab43" x="170" y="96" width="375" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Lutte "+($F{fileItemList}!= null && $F{fileItemList}.size()>0 && $F{fileItemList}.get(0).getUse() != null  && $F{fileItemList}.get(0).getUse().trim().length()>0 ? $F{fileItemList}.get(0).getUse() : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="07047113-275c-4e41-a052-eb91b961c4b0" x="170" y="108" width="375" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{fileItemList}!= null && $F{fileItemList}.size()>0 && $F{fileItemList}.get(0).getTreatmentDose() != null  && $F{fileItemList}.get(0).getTreatmentDose().trim().length()>0 ? $F{fileItemList}.get(0).getTreatmentDose() : "-")]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="12" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="ae3cc1cf-cf2d-4ee7-ae96-7fc4a596018b" x="10" y="0" width="535" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{decisionPlace} != null  && $F{decisionPlace}.trim().length()>0 ? $F{decisionPlace} : "-")+", le "+($F{decisionDate}!= null? new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{decisionDate}) : "-")]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

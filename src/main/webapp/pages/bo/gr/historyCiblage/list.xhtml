@@ -1,0 +1,74 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<br />
+
+	<p:panel header="#{bundle['ciblage_history_title']}">
+		<h:form id="ciblageListForm">
+
+			<p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable" filteredValue="" var="item" selectionMode="single"
+				selection="#{historyCiblageController.selected}" rowKey="#{item.id}" value="#{historyCiblageController.historyModelsList}" rows="5"
+				paginator="true" rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}" styleClass="newui-datatable fixeColumnWidth"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+				<p:columnGroup type="header">
+					<p:row>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="#{bundle['CiblageHistoryLabel_id']}" title="#{bundle['CiblageHistoryTitle_id']}" />
+							</f:facet>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="#{bundle['CiblageHistoryLabel_date']}" title="#{bundle['CiblageHistoryTitle_dateLabel']}" />
+							</f:facet>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="#{bundle['CiblageHistoryLabel_user']}" title="#{bundle['CiblageHistoryTitle_user']}" />
+							</f:facet>
+						</p:column>
+						<p:column headerText="#{bundle['CiblageHistoryLabel_action']}">
+							<f:facet name="header">
+								<h:outputText value="#{bundle['CiblageHistoryLabel_action']}" title="#{bundle['CiblageHistoryTitle_action']}" />
+							</f:facet>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="#{bundle['CiblageHistoryLabel_ip']}" title="#{bundle['CiblageHistoryTitle_ip']}" />
+							</f:facet>
+						</p:column>
+					</p:row>
+				</p:columnGroup>
+				<p:subTable var="historyModel" value="#{item.listAuditEntity}">
+					<f:facet name="header">
+						<h:outputText
+							value="#{bundle['CiblageHistory_name']} # #{item.idModel} (#{fn:length(item.listAuditEntity)} #{bundle['CiblageHistory_enter']})" />
+					</f:facet>
+					<p:column>
+						<h:outputText value="#{historyModel.idModel}" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{historyModel.auditDate}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" locale="fr" />
+						</h:outputText>
+					</p:column>
+					<p:column>
+						<h:outputText value="#{historyModel.username}" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{historyModel.action}" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{historyModel.ipAddress}" />
+					</p:column>
+					<p:columnGroup type="footer">
+						<p:row />
+					</p:columnGroup>
+				</p:subTable>
+			</p:dataTable>
+		</h:form>
+	</p:panel>
+
+</ui:composition>

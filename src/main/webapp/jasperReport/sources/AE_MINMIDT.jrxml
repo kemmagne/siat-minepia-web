@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="file" language="groovy" pageWidth="595" pageHeight="960" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="28078ea8-15af-47d5-9f91-aa95db5f187e">
+	<property name="ireport.zoom" value="1.1269722013523664"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="475"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#FFBFBF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="dataset1" uuid="7269f9b3-edca-4e13-83c9-581b10d02e6e">
+		<field name="designation" class="java.lang.String"/>
+		<field name="quantity" class="java.lang.String"/>
+		<field name="measurementUnit" class="java.lang.String"/>
+	</subDataset>
+	<field name="validityDate" class="java.util.Date"/>
+	<field name="originCountry" class="java.lang.String"/>
+	<field name="decisionDate" class="java.util.Date"/>
+	<field name="decisionNumber" class="java.lang.String"/>
+	<field name="decisionPlace" class="java.lang.String"/>
+	<field name="fileItemList" class="java.util.List"/>
+	<field name="importer" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="177" splitType="Stretch">
+			<elementGroup>
+				<staticText>
+					<reportElement uuid="62430ea4-9341-42b4-b2b6-f10ebb958d21" x="10" y="56" width="200" height="16"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[DIRECTION DU DEVELOPPEMENT DES PRODUCTIONS ET DES INDUSTRIES ANIMALES]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="56667fa5-dcc4-4b2e-8b07-a96aac1696a4" x="10" y="16" width="200" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="80ac220a-0832-4cc8-a152-65bc6404e4d3" x="10" y="24" width="200" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[MINISTERE DE L'ELEVAGE, DES PECHES ET DES INDUSTRIES ANIMALES]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="2f8ca3fe-536c-4d2f-8210-cc46e8006012" x="10" y="40" width="200" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[SECRETERIAT GENERAL]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="03eef9ba-5a94-4e39-921f-4678cd226b65" x="10" y="32" width="200" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="25220a4d-2c33-4702-8ee9-c7d841d6f2ef" x="10" y="8" width="200" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[ Paix-Travail-Patrie]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="898b970c-05ed-4951-b8ce-0cdd0de02faf" x="10" y="0" width="200" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false" isStrikeThrough="false"/>
+					</textElement>
+					<text><![CDATA[REPUBLIQUE DU CAMEROUN
+]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="b52c9484-2364-41cc-8360-309c7c96643f" x="10" y="48" width="200" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="514ea7f6-8b01-46c1-8b0b-b11fc57ffd66" x="345" y="48" width="200" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="d225b07f-2159-4168-bd1c-219b39d9bb84" x="10" y="80" width="200" height="10"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[DIRECTION DES SERVICES VETERINAIRES]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="32971d30-2dab-403b-a310-35a60414fd06" x="345" y="56" width="200" height="16"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[DEPARTMENT OF PRODUCTION AND ANIMAL INDUSTRIES DEVELOPMENT]]></text>
+				</staticText>
+			</elementGroup>
+			<elementGroup>
+				<staticText>
+					<reportElement uuid="f1eb4dcf-f754-4de2-9514-0c4ed5812882" x="345" y="32" width="200" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="be32ad23-eac7-4847-9cce-65175f9c0adc" x="345" y="16" width="200" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="029ee73e-a2e3-4a51-aa59-063aa92ffa21" x="345" y="8" width="200" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Peace-Work-Fatherland]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="df07ef27-c83a-4d21-8e3f-68d9a343f411" x="345" y="0" width="200" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[REPUBLIC OF CAMEROON
+]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="a6d01776-2f72-4567-b8e7-fd246affcb41" x="345" y="40" width="200" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[GENERAL SECRETARIAT]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="4f599475-e541-4170-8d85-09e788a313cb" x="345" y="24" width="200" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[MINISTRY OF LIVESTOCK, FISHERIES AND ANIMAL INDUSTRIES]]></text>
+				</staticText>
+			</elementGroup>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="ddc94d02-bff6-4c61-b8ba-a5d682a4f637" x="10" y="94" width="535" height="24"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["AVIS TECHNIQUE N°"+ ($F{decisionNumber} != null  && $F{decisionNumber}.trim().length()>0 ? $F{decisionNumber} : "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="25194798-39d3-4d89-9ff0-d02e5383d788" x="10" y="137" width="535" height="21"/>
+				<textElement textAlignment="Center" markup="none">
+					<font size="10" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[AUTORISATION  D'exportation]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0c7833cb-c2cd-4dbf-a5d3-f76b9e73ab1e" x="0" y="160" width="555" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MINISTERE DES MINES, DE L’INDUSTRIE ET DU DEVELOPPEMENT TECHNOLOGIQUE
+DU CAMEROUN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bef09908-a4d0-4ec9-9c17-511a44662542" x="345" y="80" width="200" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[DEPARTMENT OF VETERITY SERVICES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d54ae254-3373-482b-8399-dff7519df4ac" x="10" y="72" width="200" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[*******]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="28356718-db51-4da7-8b43-1e907c6f84b6" x="345" y="72" width="200" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[*******]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="670" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="dbaaae53-2adb-43fc-95c8-a3cfd3609c51" x="10" y="220" width="535" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="10" isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[EMET l'AVIS TECHNIQUE SUIVANT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="69c6589f-4929-4bec-bbd7-ba03360ba834" x="10" y="0" width="535" height="210"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Vu la loi N°96/12 du 05 août 1996 portant loi cadre relative à la gestion de l'environnement;<br>
+Vu la loi N°2000/017 du 19 décembre 2000 portant réglementation de l'Inspection sanitaire et vétérinaire;<br>
+Vu la loi N°006 du 16 avril 2001 portant nomenclature et règlement zoo sanitaire des maladies du Bétail réputées légalement contagieuses à déclaration obligatoire;<br>
+Vu la loi des finances en vigeur;<br>
+Vu le Décret N°75/527 du 16 juillet 1975 portant règlementation des établissements en matière d'élevage et des industries animales;<br>
+Vu le décret N°76/420 du 14 septembre 1976 portant règlementation de l'élevage, de la circulation et de l'exploitation du bétail, modifié par le décret n°86/755 du 24 juin 1986;<br>
+Vu le décret N°86/711 du 14 juin 1986 fixant les modalités d'inspection de l'inspection sanitaire vétérinaire;<br>
+Vu le décret N° 2011/408 du 09 décembre 2011 portant organisation du gouvernement;<br>
+Vu le décret N° 2011/410 du 09 décembre 2011 portant formation du gouvernement;<br>
+Vu le décret n° 2012/382 du 14 septembre 2012 portant organisation et fonctionnement du Ministère de l'Elevage des Pêches et des Industries Animales;<br>
+Vu la décision n° 00164/MIMEPIA du 25 juillet 2006, portant modification de la décision n°0028/MINEPIA du 17 mars 2006, portant suspension de l'importation de certaines espèces animales sensibles à l'influenza Aviaire Hautement Pathogène (Grippe aviaire) et certains types de matériels d'élevage;<br>
+Vu la décision n°0015/MINEPIA du 08 mai 2013, portant suspension de l'importation des oiseaux, de leurs produits et sous-produits ainsi que du matériel d'élevage usagé des pays infectés par l'influenza Aviaire (Grippe Aviaire) A (H7N9);<br>
+Vu le dossier présenté par l'intéressé(e);
+]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="10" y="245" width="535" height="24"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>Article 1</b>: Monsieur "+($F{importer} != null  && $F{importer}.trim().length()>0 ? $F{importer} : "-")+" est autorisé à importer de " +($F{originCountry} != null  && $F{originCountry}.trim().length()>0 ? $F{originCountry} : "-")+" au titre de l'excercice 2014 des poussins d'un jour et des oeufs à couver selon les quantités ci-aprés :<br>"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="db1aed08-2a1e-4b70-a5d8-aabd7760f102" positionType="FixRelativeToBottom" x="10" y="298" width="535" height="230"/>
+				<textElement markup="html">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[<b>Article 2</b>: Le présent Avis technique est valable pour l'obtention de l'autorisation délivrée par le Ministre en charge du Commerce conformément à la réglementation en vigeur.<br><br>
+<b>Article 3</b>:
+<ol>
+  <li>Le service de l'inspection sanitaire de l'Aéroport ou tout autre lieu de débarquement doit être prévenu par l'importateur 72 heures au moins avant l'arrivée des poussins et des oeufs à couver commandés;</li>
+  <li>Les poussins et les oeufs à couver doivent être accompagnés d'un certificat sanitaire délivré par un vétérinaire officiel compétent à l'exportation dans le pays d'origine;</li>
+  <li>Le certificat sanitaire vétérinaire doit préciser la souche des poussins et des oeufs à couver importés et leur provenance;</li>
+  <li>L'importation des oiseaux, des produits et sous-produits en provenance des pays et zones infectés par l'Influenza Aviaire Hautement Pathogène et l'Influenza Aviaire à A(H7N9) demeure interdite;</li>
+  <li>Le respect scrupuleux du nombre des poussins et des oeufs à couver à importer est obligatoire;</li>
+  <li>Le nombre autorisée n'est pas renouvelable pour un même avis technique.</li>
+  <li>L'Avis Technique n'est pas cessible.</li>
+</ol><br>
+<b>Article 4</b>: Le dossier de demande de renouvellement du présent Avis Technique comportera toutes les pièces réglementaires et en particulier :
+<ul>
+<li>Un rapport d'activité précisant entre autre le nombre importé.</li>
+<li>Les certificats sanitaires d'origine visés par les vétérinaires et ceux des douanes du Cameroun.</li>
+<li>La liste des fournisseurs et leurs adresses.</li>
+<ul>
+]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="efe0664f-4ba2-47cb-ab94-ed73bf4e051f" positionType="FixRelativeToBottom" x="10" y="533" width="535" height="25"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Article 5: le présent Avis Technique, valable jusqu'au "+($F{validityDate}!= null? new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{validityDate}) : "-")+" sera enregistré et communiqué partout où besoin sera."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="60b3521e-c4ba-44f0-839a-1a0fd27f29f7" positionType="FixRelativeToBottom" x="10" y="565" width="287" height="96"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[<b>AMPLIATIONS</b> :
+<ul>
+<li>MINCOMMERCE</li>
+<li>MINEFI</li>
+<li>GOUVERNEUR/LT</li>
+<li>DREPIA-LT</li>
+<li>INTERESSE(E)</li>
+<li>DOSSIER/CHRONO</li>
+<li>ARCHIVES</li>
+</ul>]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement uuid="5b49e164-65da-4bd8-a308-76082aa72916" positionType="FixRelativeToBottom" x="232" y="656" width="313" height="14"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{decisionPlace} != null  && $F{decisionPlace}.trim().length()>0 ? $F{decisionPlace} : "-")+", le "+($F{decisionDate}!= null? new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{decisionDate}) : "-")]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement uuid="b772e348-3a49-45ed-a7da-e13cccdfc1ac" x="10" y="269" width="535" height="22"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical" ignoreWidth="true">
+					<datasetRun subDataset="dataset1" uuid="6b22bbbd-09ad-4da9-897d-d26c82d417bc">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{fileItemList})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="22" width="535">
+						<textField isBlankWhenNull="true">
+							<reportElement uuid="e6d48b78-fbe5-4e74-a3fc-809e5f6acd88" x="29" y="1" width="478" height="18"/>
+							<textElement markup="html">
+								<font size="9"/>
+								<paragraph lineSpacing="Single"/>
+							</textElement>
+							<textFieldExpression><![CDATA["<b>"+($F{designation} != null  && $F{designation}.trim().length()>0 ? $F{designation} : "-")+"</b>:  Quantité :"+($F{quantity} != null  && $F{quantity}.trim().length()>0 ? $F{quantity} : "-")+" Unité :"+($F{measurementUnit} != null  && $F{measurementUnit}.trim().length()>0 ? $F{measurementUnit} : "-")]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

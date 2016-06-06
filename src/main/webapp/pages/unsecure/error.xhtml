@@ -1,0 +1,32 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.request.contextPath}/css/style.css" />
+</h:head>
+
+<body class="error-page">
+	<h:form>
+
+		<div class="left-side-error side-error">
+
+			<div class="error-fatal">
+				<h:outputLabel value="403" />
+			</div>
+
+			<div class="small1">
+				<h:outputLabel value="HTTP Status 403 - Access is denied" />
+			</div>
+
+			<div class="small2">
+				<h:outputLabel value="cliquez sur ce" />
+				<h:commandLink value="lien" action="#{globalBean.goToHomePage}" />
+				<h:outputLabel value="pour revenir à la page d’accueil" />
+			</div>
+
+		</div>
+
+		
+
+	</h:form>
+</body>
+</html>

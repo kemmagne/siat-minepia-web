@@ -1,0 +1,26 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+	<f:view>
+		<p:outputPanel rendered="#{not empty fileItemApDetailController.tabList}">
+			<h:form id="ListContainerForm">
+				<p:accordionPanel value="#{fileItemApDetailController.tabList}" var="tabContentVar" multiple="true" activeIndex="#{fileItemApDetailController.tabIndexList}">
+					<p:tab title="#{facesContext.viewRoot.locale eq 'en' ? tabContentVar.labelEn : tabContentVar.labelFr}" dynamic="true" cache="true"
+						titleStyleClass="title">
+						<p:dataTable id="#{tabContentVar.code}Datalist" value="#{tabContentVar.table}" var="tableContentVar" rows="5" paginator="true"
+							rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}" styleClass="newui-datatable fixeColumnWidth"
+							paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+							currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})" widgetVar="#{tabContentVar.code}DatalistTable">
+							<p:columns value="#{tabContentVar.tableColHeader}" var="column" columnIndexVar="colIdx">
+								<f:facet name="header">  
+                         	<h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? column.labelEn : column.labelFr}" />
+                          </f:facet>
+								<h:outputText value="#{tableContentVar.values().toArray()[colIdx]}" />
+							</p:columns>
+						</p:dataTable>
+					</p:tab>
+				</p:accordionPanel>
+			</h:form>
+		</p:outputPanel>
+	</f:view>
+</ui:composition>

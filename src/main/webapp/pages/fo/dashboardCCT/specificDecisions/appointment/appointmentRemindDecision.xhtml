@@ -1,0 +1,35 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+
+	<h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastDecisionApp}">
+
+		<p:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight">
+
+			<h:outputLabel value="#{bundle['AppointmentDecisionLabel_date']}" />
+			<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionApp.beginTime}">
+				<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+			</h:outputLabel>
+
+			<h:outputLabel value="#{bundle['AppointmentDecisionLabel_visite_place']} : " />
+			<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionApp.inspectionPlace}" />
+
+			<h:outputLabel value="#{bundle['AppointmentDecisionLabel_controller']} : " />
+			<h:outputLabel
+				value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionApp.controller.firstName} #{fileItemCctDetailController.specificDecisionsHistory.lastDecisionApp.controller.lastName}" />
+
+			<h:outputLabel value="#{bundle['AppointmentDecisionLabel_history']} : " />
+			<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionApp.history}" />
+
+			<h:outputLabel value="#{bundle['AppointmentDecisionLabel_car']} : " />
+			<h:outputLabel
+				value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionApp.car.model}, #{fileItemCctDetailController.specificDecisionsHistory.lastDecisionApp.car.serialNumber}" />
+
+			<h:outputLabel value="#{bundle['AppointmentDecisionLabel_observation']} : " />
+			<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionApp.observations}" />
+
+		</p:panelGrid>
+
+	</h:panelGroup>
+
+</ui:composition>

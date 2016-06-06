@@ -1,0 +1,62 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+	<p:dialog closeOnEscape="true" id="treatmentTypeCreateDlg" widgetVar="treatmentTypeCreateDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['CreateTreatmentTypeTitle']}">
+
+		<h:form id="treatmentTypeCreateForm">
+
+			<h:panelGroup id="display">
+
+				<p:panelGrid columns="4">
+
+					<p:outputLabel value="#{bundle['CreateTreatmentTypeLabel_labelFr']}" for="treatmentType_labelFr" />
+					<h:panelGroup>
+						<p:inputText id="treatmentType_labelFr" value="#{treatmentTypeController.selected.labelFr}"
+							title="#{bundle['CreateTreatmentTypeTitle_labelFr']}" required="true"
+							requiredMessage="#{bundle['CreateTreatmentTypeRequiredMessage_labelFr']}" />
+						<p:message for="treatmentType_labelFr" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateTreatmentTypeLabel_labelEn']}" for="treatmentType_labelEn" />
+					<h:panelGroup>
+						<p:inputText id="treatmentType_labelEn" value="#{treatmentTypeController.selected.labelEn}"
+							title="#{bundle['CreateTreatmentTypeTitle_labelEn']}" required="true"
+							requiredMessage="#{bundle['CreateTreatmentTypeRequiredMessage_labelEn']}" />
+						<p:message for="treatmentType_labelEn" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateTreatmentTypeLabel_duree']}" for="treatmentType_duration" />
+					<h:panelGroup>
+						<p:inputText id="treatmentType_duration" value="#{treatmentTypeController.selected.duration}"
+							title="#{bundle['CreateTreatmentTypeTitle_duree']}" required="true"
+							validatorMessage="#{bundle['CreateTreatmentTypeRequiredIntegerMessage_duree']}"
+							converterMessage="#{bundle['CreateTreatmentTypeRequiredFormatMessage_duree']}"
+							requiredMessage="#{bundle['CreateTreatmentTypeRequiredMessage_duree']}">
+							<f:validateLongRange minimum="1" maximum="150" />
+							<f:convertNumber pattern="#,###,##0.00" />
+						</p:inputText>
+						<p:message for="treatmentType_duration" />
+					</h:panelGroup>
+
+				</p:panelGrid>
+
+				<br />
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="createBtn" actionListener="#{treatmentTypeController.create}" value="#{bundle['Save']}"
+						styleClass="ui-priority-primary" update="display :treatmentTypeListForm,:growl "
+						oncomplete="handleSubmit(xhr,status,args,treatmentTypeCreateDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('treatmentTypeCreateDialog').hide();"
+						immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

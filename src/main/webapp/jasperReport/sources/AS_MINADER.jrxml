@@ -1,0 +1,926 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="file" language="groovy" pageWidth="595" pageHeight="1150" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="28078ea8-15af-47d5-9f91-aa95db5f187e">
+	<property name="ireport.zoom" value="1.024520183047606"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="267"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="c784432f-19b9-4c23-9bb1-7acd2901288a">
+		<parameter name="DESTINATION_COUNTRY" class="java.lang.String"/>
+		<parameter name="TRANSPORT_MODE" class="java.lang.String">
+			<defaultValueExpression><![CDATA[$P{TRANSPORT_MODE}]]></defaultValueExpression>
+		</parameter>
+		<parameter name="SUPPLIER_NAME" class="java.lang.String"/>
+		<parameter name="SUPPLIER_ADDRESS" class="java.lang.String"/>
+		<parameter name="MANUFACTURER_NAME" class="java.lang.String"/>
+		<parameter name="MANUFACTURER_ADDRESS" class="java.lang.String"/>
+		<parameter name="ARRIVAL_DATE" class="java.util.Date"/>
+		<parameter name="ENTRY_POINT" class="java.lang.String"/>
+		<queryString language="SQL">
+			<![CDATA[]]>
+		</queryString>
+		<field name="tradeName" class="java.lang.String"/>
+		<field name="activeSubstanceContent" class="java.lang.String"/>
+		<field name="formulationType" class="java.lang.String"/>
+		<field name="use" class="java.lang.String"/>
+		<field name="quantity" class="java.lang.Double"/>
+		<field name="originCountry" class="java.lang.String"/>
+		<variable name="SUM" class="java.lang.Double" calculation="Sum">
+			<variableExpression><![CDATA[$F{quantity}]]></variableExpression>
+			<initialValueExpression><![CDATA[0]]></initialValueExpression>
+		</variable>
+	</subDataset>
+	<parameter name="MINADER_LOGO" class="java.lang.String"/>
+	<field name="fileItemList" class="java.util.List"/>
+	<field name="decisionDate" class="java.util.Date"/>
+	<field name="importer" class="java.lang.String"/>
+	<field name="decisionNumber" class="java.lang.String"/>
+	<field name="validityDate" class="java.util.Date"/>
+	<field name="supplierName" class="java.lang.String"/>
+	<field name="supplierAddress" class="java.lang.String"/>
+	<field name="manufacturerName" class="java.lang.String"/>
+	<field name="manufacturerAddress" class="java.lang.String"/>
+	<field name="entryPoint" class="java.lang.String"/>
+	<field name="arrivalDate" class="java.util.Date"/>
+	<field name="transportMode" class="java.lang.String"/>
+	<field name="destinationCountry" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="550">
+			<elementGroup>
+				<staticText>
+					<reportElement uuid="64c20376-3232-4775-93e4-dbe592c209eb" x="27" y="74" width="140" height="30"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6"/>
+					</textElement>
+					<text><![CDATA[DIRECTION DE LA REGLEMENTATION ET DU CONTROLE DE LA QUALITE DES INTRANTS ET DES PRODUITS AGRICOLES]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="56667fa5-dcc4-4b2e-8b07-a96aac1696a4" x="47" y="20" width="100" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="3005100a-2a68-46bd-9b18-4327c13e9557" x="47" y="28" width="100" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6"/>
+					</textElement>
+					<text><![CDATA[MINISTERE DE L'AGRICULTURE ET DU DEVELOPEMENT RURAL]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="2a9cc343-4f27-401a-8f6d-22e423dc4fd8" x="47" y="104" width="100" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="2f8ca3fe-536c-4d2f-8210-cc46e8006012" x="47" y="56" width="100" height="10"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6"/>
+					</textElement>
+					<text><![CDATA[SECRETERIAT GENERAL]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="03eef9ba-5a94-4e39-921f-4678cd226b65" x="47" y="48" width="100" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="25220a4d-2c33-4702-8ee9-c7d841d6f2ef" x="47" y="10" width="100" height="10"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6"/>
+					</textElement>
+					<text><![CDATA[ Paix-Travail-Patrie]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="898b970c-05ed-4951-b8ce-0cdd0de02faf" x="47" y="0" width="100" height="10"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6"/>
+					</textElement>
+					<text><![CDATA[REPUBLIQUE DU CAMEROUN
+]]></text>
+				</staticText>
+			</elementGroup>
+			<elementGroup>
+				<staticText>
+					<reportElement uuid="f1eb4dcf-f754-4de2-9514-0c4ed5812882" x="425" y="66" width="100" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="be32ad23-eac7-4847-9cce-65175f9c0adc" x="425" y="20" width="100" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="029ee73e-a2e3-4a51-aa59-063aa92ffa21" x="425" y="10" width="100" height="10"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6"/>
+					</textElement>
+					<text><![CDATA[Peace-Work-Fatherland]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="df07ef27-c83a-4d21-8e3f-68d9a343f411" x="425" y="0" width="100" height="10"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6"/>
+					</textElement>
+					<text><![CDATA[REPUBLIC OF CAMEROON
+]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="a6d01776-2f72-4567-b8e7-fd246affcb41" x="425" y="74" width="100" height="30"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6"/>
+					</textElement>
+					<text><![CDATA[DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="aa3eac8e-a117-46a3-9b9f-75d6694aabd1" x="425" y="28" width="100" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6"/>
+					</textElement>
+					<text><![CDATA[MINISTRY OF AGRICULTURE AND RURAL DEVELOPMENT]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="d24d613d-16a6-4a93-a7f5-0b062193ba9b" x="425" y="104" width="100" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+			</elementGroup>
+			<staticText>
+				<reportElement uuid="73b428a1-7682-4306-b5d1-5589af1cbbca" x="47" y="66" width="100" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6"/>
+				</textElement>
+				<text><![CDATA[*******]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="68cb0b8c-d1b7-4112-ad76-2b64dc7bb49b" x="425" y="56" width="100" height="10"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6"/>
+				</textElement>
+				<text><![CDATA[GENERAL SECRETARIAT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2f2893db-30ab-4c84-829d-f61c97390159" x="425" y="48" width="100" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6"/>
+				</textElement>
+				<text><![CDATA[*******]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ae530a68-7819-4e62-bd20-6fb6b1365e59" x="102" y="240" width="350" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font  size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LE MINISTRE DE L'AGRICULTURE ET DU DEVELOPPMENT RURAL,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4a35d6d7-05d7-4f46-9362-c3d5aaf4194a" x="10" y="286" width="12" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font  size="9"/>
+				</textElement>
+				<text><![CDATA[Vu]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="befccb44-bae3-4ecc-93ae-c9c5905e931d" x="32" y="286" width="513" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font  size="9"/>
+				</textElement>
+				<text><![CDATA[la constitution;]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a97d37e8-7019-45e2-999a-db05624c8816" x="32" y="298" width="513" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font  size="9"/>
+				</textElement>
+				<text><![CDATA[la loi n°2003/003 du 21 avril 2003 portant protection phytosanitaire;]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9ec57165-6a9e-41bc-bf61-bd85055c863c" x="10" y="310" width="12" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font  size="9"/>
+				</textElement>
+				<text><![CDATA[Vu]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7b9fd371-208c-4170-a776-18919aa7bbe8" x="32" y="310" width="513" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font  size="9"/>
+				</textElement>
+				<text><![CDATA[le décret n° 2005/0772/PM du 06 avril 2005 fixant les conditions d'homologation et de contrôle des produits phytosanitaires;]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c503146d-b5e2-4d20-888d-7f0d54a5cf42" x="10" y="298" width="12" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font  size="9"/>
+				</textElement>
+				<text><![CDATA[Vu]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e73cb914-63f1-4176-8d4e-69540261c9d7" x="10" y="322" width="12" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font  size="9"/>
+				</textElement>
+				<text><![CDATA[Vu]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="594115eb-bfa8-46fd-a4b7-68b14b2e34b7" x="32" y="322" width="513" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font  size="9"/>
+				</textElement>
+				<text><![CDATA[le décret n° 2005/118 du 15 avril 2005 portant organisation du Ministère de l'Agriculture et du Développement Rural;]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="04be188f-a0ec-479b-abc6-1e65854da0a5" x="10" y="334" width="12" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font  size="9"/>
+				</textElement>
+				<text><![CDATA[Vu]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3fccb72b-2a6e-4846-9e27-331eb6d5ba05" x="32" y="346" width="513" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font  size="9"/>
+				</textElement>
+				<text><![CDATA[le décret n°2011/409 du 09 décembre 2011 portant nomination d'un Premier ministre, chef du gouvernement;]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="41fe4b5b-707e-43d6-942a-8de965dc5501" x="10" y="346" width="12" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font  size="9"/>
+				</textElement>
+				<text><![CDATA[Vu]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f47f60c9-159f-46f9-90c5-1629a62277ca" x="216" y="482" width="80" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font  size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DECIDE : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3c3d2b2f-d1ff-44ba-858a-a7bcef84a7e2" x="17" y="112" width="160" height="30"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6"/>
+				</textElement>
+				<text><![CDATA[SOUS-DIRECTION DE LA REGLEMENTATION DES PESTICIDES, DES ENGRAIS ET DES APPAREILS DE TRAITEMENT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6c328ce4-8e29-4a88-899c-b3a6c59080d0" x="10" y="142" width="175" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6"/>
+				</textElement>
+				<text><![CDATA[*******]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e2f3e911-d5b1-446d-9c72-f2e9acc83388" x="27" y="150" width="140" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6"/>
+				</textElement>
+				<text><![CDATA[SERVICE DE LA REGLEMENTATION DES PESTICIDES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d3ed14a7-8ddd-4efb-8820-c9bdab343943" x="405" y="112" width="140" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6"/>
+				</textElement>
+				<text><![CDATA[SUB-DEPARTMENT OF REGULATION OF PESTICIDES, FERTILIZERS AND SPRAYERS]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="2c5f3f3b-fc07-4742-bfab-517e7610b2f4" x="58" y="180" width="439" height="50"/>
+				<textElement verticalAlignment="Middle">
+					<font  isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["DECISION N° " +($F{decisionNumber}!= null  && $F{decisionNumber}.trim().length()>0 ?$F{decisionNumber} : "-")+" DU "+($F{decisionDate}!= null? new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{decisionDate}) : "-")+" PORTANT AUTORISATION EXCEPTIONNELLE D'IMPORTATION DU PESTICIDE "+$F{fileItemList}!= null && $F{fileItemList}.size()>0 && $F{fileItemList}.get(0).getTradeName()+" PAR LA SOCIETE "+($F{importer} != null  && $F{importer}.trim().length()>0 ? $F{importer} : "-")]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement uuid="f4b2fb5e-2629-4965-a141-8c7152c5c7e9" x="209" y="20" width="145" height="65"/>
+				<imageExpression><![CDATA[new java.io.File($P{MINADER_LOGO})]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="057efa37-5274-4faa-8320-cb81b32bd4b0" x="32" y="334" width="513" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font  size="9"/>
+				</textElement>
+				<text><![CDATA[le décret n°2011/408 du 09 décembre 2011 portant organisation du gouvernement;]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="78a02c94-f5e0-45c2-ac6c-de32def9ce06" x="32" y="358" width="513" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font  size="9"/>
+				</textElement>
+				<text><![CDATA[le décret n°2011/410 du 09 décembre 2011 portant formation du gouvernement;]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="169222d9-8c3d-4926-baef-8ef708333c7d" x="10" y="358" width="12" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font  size="9"/>
+				</textElement>
+				<text><![CDATA[Vu]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="8ea3b3e1-d46b-4df1-a81a-4cdad300ac3a" x="10" y="380" width="535" height="24"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font  size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Considérant le dossier de demande d'autorisation spéciale d'importation du pesticide "+($F{fileItemList}!= null && $F{fileItemList}.size()>0 && $F{fileItemList}.get(0).getTradeName() != null  && $F{fileItemList}.get(0).getTradeName().trim().length()>0 ? $F{fileItemList}.get(0).getTradeName() : "-")+" introduit par la société "+($F{importer} != null  && $F{importer}.trim().length()>0 ? $F{importer} : "-")+" à la suite d'un besoin urgent exprimé par "+($F{supplierName} != null  && $F{supplierName}.trim().length()>0 ? $F{supplierName} : "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="939f1ddd-bf88-4a9d-a56f-2a26b528a93b" x="10" y="414" width="535" height="24"/>
+				<textElement verticalAlignment="Middle">
+					<font  size="9"/>
+				</textElement>
+				<text><![CDATA[Considérant que le processus d'homologation dudit pesticide a été engagé par la société xxx auprés des services compétents du Ministère de l'Agriculture et du Développement Rural;]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="4028da02-c998-47d1-abf1-b8de53673421" x="10" y="448" width="535" height="24"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font  size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Considérant l'accord de cession de l'importation spéciale du pesticide "+($F{fileItemList}!= null && $F{fileItemList}.size()>0 && $F{fileItemList}.get(0).getTradeName() != null  && $F{fileItemList}.get(0).getTradeName().trim().length()>0 ? $F{fileItemList}.get(0).getTradeName() : "-")+" établi entre "+($F{importer} != null  && $F{importer}.trim().length()>0 ? $F{importer} : "-")+" et "+($F{supplierName} != null  && $F{supplierName}.trim().length()>0 ?$F{supplierName} : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="8719f399-b38d-4c7a-873c-ad7e349d9a85" x="10" y="507" width="535" height="24"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Article 1 : La société "+($F{importer} != null  && $F{importer}.trim().length()>0 ? $F{importer} : "-")+" est autorisée à importer "+($F{fileItemList}.get(0).getQuantity() != null  && $F{fileItemList}.get(0).getQuantity().toString().trim().length()>0 ? $F{fileItemList}.get(0).getQuantity() : "-")+" litres du pesticide "+($F{fileItemList}.get(0).getTradeName() != null  && $F{fileItemList}.get(0).getTradeName().trim().length()>0 ? $F{fileItemList}!= null && $F{fileItemList}.size()>0 && $F{fileItemList}.get(0).getTradeName() : "-")+" à titre exceptionnel"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="89dbef21-def5-46ef-88dc-3f93f9d3bfd4" x="425" y="132" width="100" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6"/>
+				</textElement>
+				<text><![CDATA[*******]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e4dcad71-233e-4068-9ced-7ab457a0c05f" x="405" y="140" width="140" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6"/>
+				</textElement>
+				<text><![CDATA[SERVICE OF PESTICIDE REGULATION]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="570" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="93bff3e8-3b06-4e63-a4cc-50be978a87e6" x="10" y="13" width="40" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font  size="9" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Article 2 : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a56aab19-7e4f-43e2-b99f-188d13c17103" positionType="FixRelativeToBottom" x="10" y="420" width="535" height="36"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Article 5 : Le Directeur de la Réglementation et du Contrôle de Qualité des Intrants et des Intrants etdes produits Agricoles et le Chef de Poste de Police Phytosanitaire du Port de Douala sont chargés chacun en ce qui le concerne, de l'application de la présente décision qui sera enregistrée, puis communiquée partout où besoin sera.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="84eb5c45-5a76-467e-ab1c-2b539dd60a7e" positionType="FixRelativeToBottom" x="10" y="464" width="100" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[AMPLIATIONS :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ce2f29e4-b4d5-420b-a290-e8e2b35cff4d" positionType="FixRelativeToBottom" x="10" y="476" width="100" height="12"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[- DRCQ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9ee5fd7f-789a-4a4a-b954-bea27a0c3040" positionType="FixRelativeToBottom" x="10" y="488" width="100" height="12"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[- DRADER LT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f3f5d7c0-1650-49c0-9f40-c6699406cd74" positionType="FixRelativeToBottom" x="10" y="500" width="100" height="12"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[- PP Dla Port]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4eff5e49-59f2-4ab6-a158-9c4b74aca8fc" positionType="FixRelativeToBottom" x="10" y="512" width="100" height="12"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[- SGS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8e60db75-029d-4b4c-847b-e3586f8062ba" positionType="FixRelativeToBottom" x="10" y="524" width="100" height="12"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[- Intéressé]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1b3e25e8-46d9-4301-bd32-a0a77cdde944" positionType="FixRelativeToBottom" x="10" y="536" width="100" height="12"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[- Chrono / Archives]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f4bfa89f-d3ce-4bed-874d-fd6a550810b6" positionType="FixRelativeToBottom" x="55" y="324" width="485" height="36"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[(b) Elle devra en outre respecter scrupuleusement les dispositions de la loi n°2003/003 du 21 avril 2003 portant protection phytosanitaire et ses textes d'application subséquents, ainsi que celles relatives à la dégradation de l'environnement (couche d'ozone)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="50a8aa45-d84f-4b94-bada-220d0691d858" positionType="FixRelativeToBottom" x="55" y="379" width="485" height="24"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[ (d) Un test de contrôle de conformité des spécifications techniques du produit sera effectué à l'arrivée du produit au frais de la société importatrice]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement uuid="e050e88f-c9cf-46d2-8c8c-5955b6865df8" key="table 7" style="table 7" x="10" y="36" width="535" height="75"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
+					<datasetRun subDataset="Table Dataset 1" uuid="95b3cd07-1a93-4943-b933-3976a0c48c92">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{fileItemList})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="107" uuid="af37be8a-ffeb-4474-a596-16679cfb8639">
+						<jr:columnHeader style="table" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="6efb5f6d-f7c3-438e-bb19-0bf13dc11ddb" style="table 1_CH" x="0" y="0" width="107" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Nom Commercial du produit]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 4_TD" height="45" rowSpan="1">
+							<textField>
+								<reportElement uuid="7abc2b93-1c0e-45ba-acea-af1de3c9a052" x="0" y="0" width="107" height="45"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6"/>
+								</textElement>
+								<textFieldExpression><![CDATA[($F{tradeName}!= null  && $F{tradeName}.trim().length()>0 ?$F{tradeName} : "-")]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="107" uuid="38d141d2-16b0-4480-aaa6-48186eb6a146">
+						<jr:columnHeader style="table" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="9528d90b-81a1-4832-a190-b80eb39ea97b" style="table 1_CH" x="0" y="0" width="107" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Teneur en matière active]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 4_TD" height="45" rowSpan="1">
+							<textField>
+								<reportElement uuid="711a63a3-e81a-4ccc-a732-8afe1a26ab65" x="0" y="0" width="107" height="45"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6"/>
+								</textElement>
+								<textFieldExpression><![CDATA[($F{activeSubstanceContent}!= null  && $F{activeSubstanceContent}.trim().length()>0 ?$F{activeSubstanceContent} : "-")]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="107" uuid="b943eb6b-afe8-42f9-bde7-591960fceada">
+						<jr:columnHeader style="table 1" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="543ae680-7c3c-4e63-9236-e430cb747636" style="table 1_CH" x="0" y="0" width="107" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Type de formulation]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 4_TD" height="45" rowSpan="1">
+							<textField>
+								<reportElement uuid="9e10eb8f-3a4d-4bd8-a64d-f83aef3e1077" x="0" y="0" width="107" height="45"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6"/>
+								</textElement>
+								<textFieldExpression><![CDATA[($F{formulationType}!= null  && $F{formulationType}.trim().length()>0 ?$F{formulationType} : "-")]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="107" uuid="fcbf4633-dd5b-4a4d-8bf1-d88497e908e2">
+						<jr:columnHeader style="table" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="73ba46e3-6b5d-4484-899b-1883181baffe" style="table 1_CH" x="0" y="0" width="107" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Usage]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 4_TD" height="45" rowSpan="1">
+							<textField>
+								<reportElement uuid="7cbebabc-36fc-4dd1-b2a7-dfbdbff30d0c" x="0" y="0" width="107" height="45"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6"/>
+								</textElement>
+								<textFieldExpression><![CDATA[($F{use}!= null  && $F{use}.trim().length()>0 ?$F{use} : "-")]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="107" uuid="f2064f8b-6be3-4625-a1cb-986e217fdc6c">
+						<jr:columnHeader style="table 1" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="639ac504-6697-43c1-83c5-2878fb3624f4" style="table 1_CH" x="0" y="0" width="107" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Quantité à importer]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 4_TD" height="45" rowSpan="1">
+							<textField>
+								<reportElement uuid="9be6014f-3a90-470f-b7e0-50f4f7593870" x="0" y="0" width="107" height="45"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6"/>
+								</textElement>
+								<textFieldExpression><![CDATA[($F{quantity}!= null  && $F{quantity}.toString().trim().length()>0 ?$F{quantity} : "-")]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<componentElement>
+				<reportElement uuid="6276ca45-663c-4e5c-9b12-d96a0918a3f0" key="table 7" style="table 7" x="10" y="156" width="535" height="75"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Table Dataset 1" uuid="3cff54e9-72ee-4009-a771-6d807bd210d8">
+						<datasetParameter name="ENTRY_POINT">
+							<datasetParameterExpression><![CDATA[$F{entryPoint}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="ARRIVAL_DATE">
+							<datasetParameterExpression><![CDATA[$F{arrivalDate}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="MANUFACTURER_ADDRESS">
+							<datasetParameterExpression><![CDATA[$F{manufacturerAddress}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="MANUFACTURER_NAME">
+							<datasetParameterExpression><![CDATA[$F{manufacturerName}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="SUPPLIER_ADDRESS">
+							<datasetParameterExpression><![CDATA[$F{supplierAddress}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="SUPPLIER_NAME">
+							<datasetParameterExpression><![CDATA[$F{supplierName}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="TRANSPORT_MODE">
+							<datasetParameterExpression><![CDATA[$F{transportMode}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="DESTINATION_COUNTRY">
+							<datasetParameterExpression><![CDATA[$F{destinationCountry}]]></datasetParameterExpression>
+						</datasetParameter>
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{fileItemList})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="60" uuid="547c9ac4-daaa-43c2-a623-e9e7b949d309">
+						<jr:columnHeader style="table" height="31" rowSpan="1">
+							<staticText>
+								<reportElement uuid="aa448d2e-8f25-47aa-9001-cd52e51a617d" style="table_CH" x="0" y="0" width="60" height="31"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Pays d'origine]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 7_TD" height="46" rowSpan="1">
+							<textField>
+								<reportElement uuid="c4ee5122-722e-4a2c-b428-afc7a348d93b" x="0" y="0" width="60" height="45"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6"/>
+								</textElement>
+								<textFieldExpression><![CDATA[($F{originCountry}!= null  && $F{originCountry}.trim().length()>0 ?$F{originCountry} : "-")]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="61" uuid="3a82aa51-8eb1-46d4-9c6e-6a181c956586">
+						<jr:columnHeader style="table" height="31" rowSpan="1">
+							<staticText>
+								<reportElement uuid="1e0a9a07-3b5e-422a-86a0-664c8bb65b73" style="table_CH" x="0" y="0" width="61" height="31"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Pays de destination]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 7_TD" height="46" rowSpan="1">
+							<textField>
+								<reportElement uuid="52c17b53-b6b2-4f0f-976d-877fef19b743" x="0" y="0" width="61" height="45"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6"/>
+								</textElement>
+								<textFieldExpression><![CDATA[($P{DESTINATION_COUNTRY}!= null  && $P{DESTINATION_COUNTRY}.trim().length()>0 ?$P{DESTINATION_COUNTRY} : "-")]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="60" uuid="6d7e830d-8345-4170-a5bb-79bc2f07b914">
+						<jr:columnHeader style="table" height="31" rowSpan="1">
+							<staticText>
+								<reportElement uuid="90448f31-97dd-4434-bba8-aca364c1a370" style="table_CH" x="0" y="0" width="60" height="31"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Mode de transport]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 7_TD" height="46" rowSpan="1">
+							<textField>
+								<reportElement uuid="cb836018-22b8-45bd-90a1-3e660b52e241" x="0" y="0" width="60" height="45"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6"/>
+								</textElement>
+								<textFieldExpression><![CDATA[($P{TRANSPORT_MODE}!= null  && $P{TRANSPORT_MODE}.trim().length()>0 ?$P{TRANSPORT_MODE} : "-")]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="101" uuid="0eebd26b-1be1-47e7-a37f-3a2195c589d5">
+						<jr:columnHeader style="table" height="31" rowSpan="1">
+							<staticText>
+								<reportElement uuid="0f0de12a-8e05-4c87-9b9c-acec8b7ba679" style="table_CH" x="0" y="0" width="101" height="31"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Nom et adresse du fabriquant]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 7_TD" height="46" rowSpan="1">
+							<textField>
+								<reportElement uuid="e46715b8-9cb0-43a8-bb18-af97724e152d" x="0" y="0" width="101" height="45"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6"/>
+								</textElement>
+								<textFieldExpression><![CDATA[($P{MANUFACTURER_NAME}!= null  && $P{MANUFACTURER_NAME}.trim().length()>0 ?$P{MANUFACTURER_NAME} : "-")+"/"+"\n"+($P{MANUFACTURER_ADDRESS}!= null  && $P{MANUFACTURER_ADDRESS}.trim().length()>0 ?$P{MANUFACTURER_ADDRESS} : "-")]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="100" uuid="14c80479-4428-4fdf-969c-1049eb71e25a">
+						<jr:columnHeader style="table" height="31" rowSpan="1">
+							<staticText>
+								<reportElement uuid="3b68f4cb-2c8f-4d51-9b23-a67bd62b3e77" style="table_CH" x="0" y="0" width="100" height="31"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Nom et adresse du fournisseur]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 7_TD" height="46" rowSpan="1">
+							<textField>
+								<reportElement uuid="a567f4a9-d805-4eba-8c7c-3f18c88d1c00" x="0" y="0" width="100" height="45"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6"/>
+								</textElement>
+								<textFieldExpression><![CDATA[($P{SUPPLIER_NAME}!= null  && $P{SUPPLIER_NAME}.trim().length()>0 ?$P{SUPPLIER_NAME} : "-")+"/"+"\n"+($P{SUPPLIER_ADDRESS}!= null  && $P{SUPPLIER_ADDRESS}.trim().length()>0 ?$P{SUPPLIER_ADDRESS} : "-")]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="75" uuid="e1a8ef66-e8b1-42d7-86a6-856500c16177">
+						<jr:columnHeader style="table" height="31" rowSpan="1">
+							<staticText>
+								<reportElement uuid="ad3bd51a-471c-4d85-b5a2-05d944f742e0" style="table_CH" x="0" y="0" width="75" height="31"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Date probable d'arrivée]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 7_TD" height="46" rowSpan="1">
+							<textField>
+								<reportElement uuid="9ca97b46-da31-46c3-b08b-d9f902df1ee7" x="0" y="0" width="75" height="45"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6"/>
+								</textElement>
+								<textFieldExpression><![CDATA[($P{ARRIVAL_DATE}!= null? new java.text.SimpleDateFormat("dd MMMM yyyy").format($P{ARRIVAL_DATE}) : "-")]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="80" uuid="b8e2c5ae-fc7e-4bff-9d66-cc70b55b586a">
+						<jr:columnHeader style="table" height="31" rowSpan="1">
+							<staticText>
+								<reportElement uuid="92a70bf4-1199-4236-ba22-54843f19cab9" style="table_CH" x="0" y="0" width="80" height="31"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Point d'entrée]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 7_TD" height="46" rowSpan="1">
+							<textField>
+								<reportElement uuid="ab6c0d9d-e0a0-45c0-98b0-945de5344f21" x="0" y="0" width="80" height="45"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6"/>
+								</textElement>
+								<textFieldExpression><![CDATA[($P{ENTRY_POINT}!= null  && $P{ENTRY_POINT}.trim().length()>0 ?$P{ENTRY_POINT} : "-")]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<textField>
+				<reportElement uuid="ef405dc0-6274-43d1-90cd-9ae5bdabfbad" positionType="FixRelativeToBottom" x="10" y="297" width="535" height="24"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Article 4 : (a) La société "+($F{importer} != null  && $F{importer}.trim().length()>0 ? $F{importer} : "-")+" est responsable de tout accident qui surviendrait pendant l'importation du produit visé à l'article 2."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="65276ced-229d-444b-91cf-0a8d8a052397" positionType="FixRelativeToBottom" x="55" y="367" width="485" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["(c) La société "+($F{importer} != null  && $F{importer}.trim().length()>0 ? $F{importer} : "-")+" est tenue d'informer le jour de l'arrivée exacte du pesticide suscité."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="92ff3fea-346f-4a53-8fda-129cbfdd2af9" positionType="FixRelativeToBottom" x="55" y="403" width="485" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["(e) En cas de non-conformité, la cargaison sera simplement saisi et détruite au frais de la société "+($F{importer} != null  && $F{importer}.trim().length()>0 ? $F{importer} : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="dc374a10-cad5-4cbd-897c-8d824abd666c" positionType="FixRelativeToBottom" x="10" y="268" width="535" height="24"/>
+				<textElement>
+					<font  size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Article 3 : La présente autorisation exceptionnelle prend effet à compter de la date de signature et est valable jusqu'au "+($F{validityDate}!= null? new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{validityDate}) : "-")]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

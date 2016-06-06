@@ -1,0 +1,48 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<h:form id="simpleSearchForm">
+
+		<p:accordionPanel styleClass="search">
+
+			<p:tab title="#{bundle['simpleSearch_SearchCriteria']}" dynamic="true" cache="true">
+
+				<h:panelGrid columns="10" cellpadding="10">
+
+					<h:panelGroup>
+						<p:outputLabel for="fromDate" value="#{bundle['SimpleSearch_fromDate']}" />
+					</h:panelGroup>
+
+					<p:calendar navigator="true" id="fromDate" value="#{fimexController.fromDateFilter}" title="#{bundle['SimpleSearch_fromDate']}"
+						showOn="button" pattern="dd/MM/yyyy" readonlyInput="true">
+						<p:ajax event="dateSelect" update="toDate" />
+					</p:calendar>
+
+					<h:panelGroup>
+						<p:outputLabel for="toDate" value="#{bundle['SimpleSearch_toDate']}" />
+					</h:panelGroup>
+					<p:calendar navigator="true" id="toDate" value="#{fimexController.toDateFilter}" title="#{bundle['SimpleSearch_toDate']}"
+						showOn="button" pattern="dd/MM/yyyy" mindate="#{fimexController.fromDateFilter}" readonlyInput="true">
+					</p:calendar>
+
+					<h:panelGroup>
+
+						<p:commandButton icon="ui-icon-search" title="#{bundle['ButtonSearch']}" action="#{fimexController.filterDashboard}"
+							update=":filtredFileItemListForm:datalist :simpleSearchForm :growl" oncomplete="PF('datalistTable').filter();"
+							onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+
+						<p:commandButton icon="ui-icon-refresh" title="#{bundle['ButtonReset']}" action="#{fimexController.init}"
+							onsuccess="PF('datalistTable').filter();" update=":filtredFileItemListForm:datalist" onstart="PF('statusDialog1').block()"
+							oncomplete="PF('statusDialog1').unblock()" />
+
+					</h:panelGroup>
+				</h:panelGrid>
+
+			</p:tab>
+
+		</p:accordionPanel>
+
+	</h:form>
+</ui:composition>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/templates/template.xhtml">
+
+	<ui:define name="title">
+		<h:outputText value="#{bundle['appmenu_myAccount']}" />
+	</ui:define>
+
+	<ui:define name="body">
+		<p:outputPanel>
+			<p:panel>
+				<h:panelGrid columns="2" styleClass="tableInitial tabIn">
+					<h:panelGroup id="center" styleClass="tablelistinitial costscontent">
+						<h:form id="userEditForm">
+
+							<p:panelGrid columns="4">
+
+								<p:outputLabel value="#{bundle['EditUserLabel_login']}" for="user_login" />
+								<h:panelGroup>
+									<p:inputText readonly="true" id="user_login" value="#{userController.loggedUser.login}" title="#{bundle['EditUserTitle_login']}"
+										required="true" requiredMessage="#{bundle['EditUserRequiredMessage_login']}" />
+									<p:message for="user_login" />
+								</h:panelGroup>
+
+								<p:outputLabel value="#{bundle['EditUserLabel_firstName']}" for="user_firstName" />
+								<h:panelGroup>
+									<p:inputText id="user_firstName" value="#{userController.loggedUser.firstName}" title="#{bundle['EditUserTitle_firstName']}"
+										required="true" requiredMessage="#{bundle['EditUserRequiredMessage_firstName']}" />
+									<p:message for="user_firstName" />
+								</h:panelGroup>
+
+								<p:outputLabel value="#{bundle['EditUserLabel_lastName']}" for="user_lastName" />
+								<h:panelGroup>
+									<p:inputText id="user_lastName" value="#{userController.loggedUser.lastName}" title="#{bundle['EditUserTitle_lastName']}"
+										required="true" requiredMessage="#{bundle['EditUserRequiredMessage_lastName']}" />
+									<p:message for="user_lastName" />
+								</h:panelGroup>
+
+								<p:outputLabel value="#{bundle['EditUserLabel_email']}" for="user_email" />
+								<h:panelGroup>
+									<p:inputText id="user_email" value="#{userController.loggedUser.email}" title="#{bundle['EditUserTitle_email']}" required="true"
+										requiredMessage="#{bundle['EditUserRequiredMessage_email']}" validatorMessage="#{bundle['MailValidationFail']}">
+										<f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+										<f:ajax execute="usrMailMsg" event="blur" render="usrMailMsg" />
+									</p:inputText>
+									<p:message id="usrMailMsg" for="user_email" />
+
+								</h:panelGroup>
+
+								<p:outputLabel value="#{bundle['EditUserLabel_telephone']}" for="user_telephone" />
+								<h:panelGroup>
+									<p:inputText id="user_telephone" value="#{userController.loggedUser.telephone}" title="#{bundle['EditUserTitle_telephone']}"
+										required="true" requiredMessage="#{bundle['EditUserRequiredMessage_telephone']}"
+										validatorMessage="#{bundle['PhoneValidationFail']}">
+										<f:validateRegex pattern="[0-9]{0,14}" />
+										<f:ajax execute="telMsg" event="blur" render="telMsg" />
+									</p:inputText>
+									<p:message id="telMsg" for="user_telephone" />
+								</h:panelGroup>
+
+								<p:outputLabel value="#{bundle['EditUserLabel_position']}" for="user_position" />
+								<h:panelGroup>
+									<h:outputText id="user_position" readonly="true"
+										value="#{facesContext.viewRoot.locale eq 'fr' ? userController.loggedUser.position.labelFr : userController.loggedUser.position.labelEn}" />
+									<p:message for="user_position" />
+								</h:panelGroup>
+
+								<p:outputLabel
+									rendered="#{request.isUserInRole('ADMIN_ORG')  and userController.loggedUser.position ne null and  userController.loggedUser.position ne 'DIRECTEUR'}"
+									value="#{bundle['EditUser_sub_department']}" for="user_sub_direction" title="#{budle[EditUserTitle_position]}" />
+								<h:outputText id="user_sub_direction" value="#{userController.selectedsSubDepartment.abreviation}"
+									rendered="#{request.isUserInRole('ADMIN_ORG')  and userController.loggedUser.position ne null and  userController.loggedUser.position ne 'DIRECTEUR'}" />
+
+								<p:outputLabel
+									rendered="#{userController.selectedsSubDepartment ne null and userController.loggedUser.position ne 'DIRECTEUR' and userController.loggedUser.position ne 'SOUS_DIRECTEUR'}"
+									value="#{bundle['EditUser_service']}" for="user_service" />
+								<h:outputText id="user_service"
+									rendered="#{userController.selectedsSubDepartment ne null and userController.loggedUser.position ne 'DIRECTEUR' and userController.loggedUser.position ne 'SOUS_DIRECTEUR'}"
+									value="#{userController.selectedService.abreviation}" />
+
+								<p:outputLabel value="#{bundle['editUser_buerau']}" for="user_entity"
+									rendered="#{userController.selectedService ne null and (userController.loggedUser.position eq 'AGENT' or userController.loggedUser.position eq 'CHEF_BUREAU')}" />
+								<h:outputText id="user_entity" value="#{userController.selectedEntity.code}"
+									rendered="#{userController.selectedService ne null and (userController.loggedUser.position eq 'AGENT' or userController.loggedUser.position eq 'CHEF_BUREAU')}" />
+
+								<p:outputLabel value="#{bundle['EditUserLabel_preferedLanguage']}" for="user_preferedLanguage" />
+								<h:panelGroup>
+									<p:selectOneMenu id="user_preferedLanguage" style="width: 133px" value="#{userController.loggedUser.preferedLanguage}"
+										required="true" requiredMessage="#{bundle['EditUserRequiredMessage_preferedLanguage']}"
+										title="#{bundle['EditUserTitle_preferedLanguage']}">
+										<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+										<f:selectItems value="#{language.languageOptions}" />
+									</p:selectOneMenu>
+									<p:message for="user_preferedLanguage" />
+								</h:panelGroup>
+
+								<p:outputLabel value="#{bundle['EditUserLabel_enabled']}" for="user_enabled" />
+								<h:panelGroup>
+									<p:selectBooleanCheckbox id="user_enabled" value="#{userController.loggedUser.enabled}" title="#{bundle.EditUserTitle_enabled}" />
+									<p:message for="user_enabled" />
+								</h:panelGroup>
+
+								
+							</p:panelGrid>
+
+
+						</h:form>
+					</h:panelGroup>
+				</h:panelGrid>
+			</p:panel>
+		</p:outputPanel>
+	</ui:define>
+
+</ui:composition>

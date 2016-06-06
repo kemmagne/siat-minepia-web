@@ -1,0 +1,127 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<p:dialog closeOnEscape="true" id="historyDlg" widgetVar="historyDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['History']}" width="900px">
+
+		<h:form id="historyForm" styleClass="historyform">
+
+			<h:panelGroup styleClass="scroll-content">
+
+				<p:scrollPanel mode="native">
+
+					<p:dataTable id="historyDataTable" widgetVar="historyDataTable" value="#{fileItemCctDetailController.itemFlowHistoryDtoList}"
+						filteredValue="" var="item" selectionMode="single" rowKey="#{item.itemFlow.id}" rows="20" paginator="true"
+						rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}" styleClass="newui-datatable fixeColumnWidth"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})"
+						selection="#{fileItemCctDetailController.selectedItemFlowDto}">
+
+						<p:ajax event="rowSelect" update="historyForm:lastDecision" listener="#{fileItemCctDetailController.decisionDetailsByItemFlow}"
+							onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+
+						<p:column sortBy="#{item.itemFlow.flow.labelFr}" filterBy="#{item.itemFlow.flow.labelFr}" filterMatchMode="contains"
+							style="width:90px">
+							<f:facet name="header">
+								<h:outputText value="#{bundle['History_transaction']}" title="#{bundle['History_transaction']}" />
+							</f:facet>
+							<h:outputText
+								value="#{facesContext.viewRoot.locale eq 'en' ? item.itemFlow.flow.redefinedLabelEn :  item.itemFlow.flow.redefinedLabelFr}" />
+						</p:column>
+
+						<p:column sortBy="#{item.itemFlow.sender.firstName}" filterBy="#{item.itemFlow.sender.firstName}" filterMatchMode="contains"
+							style="width:90px">
+							<f:facet name="header">
+								<h:outputText value="#{bundle['History_person']}" title="#{bundle['History_person']}" />
+							</f:facet>
+							<h:outputText value="#{item.itemFlow.sender.firstName} #{item.itemFlow.sender.lastName}" />
+						</p:column>
+
+						<p:column sortBy="#{dateBean.formatSimpleDate(item.itemFlow.created)}" filterBy="#{dateBean.formatSimpleDate(item.itemFlow.created)}"
+							filterMatchMode="contains" style="width:90px">
+							<f:facet name="header">
+								<h:outputText value="#{bundle['History_created']}" title="#{bundle['History_created']}" />
+							</f:facet>
+							<h:outputText value="#{item.itemFlow.created}">
+								<f:convertDateTime type="date" pattern="dd/MM/yyyy - HH:mm:ss" />
+							</h:outputText>
+						</p:column>
+
+
+
+						<p:column rendered="#{request.isUserInRole('SUPER')}" style="width:90px">
+							<f:facet name="header">
+								<h:outputText value="#{bundle['History_duration']}" />
+							</f:facet>
+							<h:outputText value="#{item.duration}" />
+						</p:column>
+
+					</p:dataTable>
+
+					<h:panelGroup id="lastDecision" styleClass="decision-side">
+
+						<br />
+
+						<p:panel rendered="#{not empty fileItemCctDetailController.selectedItemFlowDto.itemFlow}" header="#{bundle['RemindDecisionLabel']}">
+
+							<h:panelGrid styleClass="remindDecision" columns="2" columnClasses="labelColumnLeft, labelColumnRight" cellspacing="4"
+								rendered="#{not empty fileItemCctDetailController.selectedItemFlowDto.itemFlow}">
+								<h:outputLabel value="#{bundle['RemaindDecision_decisionLabel']}" title="#{bundle['RemaindDecision_decisionTitle']}" />
+								<h:outputLabel
+									value="#{facesContext.viewRoot.locale eq 'en' ? fileItemCctDetailController.selectedItemFlowDto.itemFlow.flow.redefinedLabelEn : fileItemCctDetailController.selectedItemFlowDto.itemFlow.flow.redefinedLabelFr}" />
+							</h:panelGrid>
+
+							<br />
+
+							<h:panelGroup
+								rendered="#{empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsApp and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAO and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTO and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAR and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTR}">
+								<ui:repeat value="#{fileItemCctDetailController.selectedItemFlowDto.itemFlow.itemFlowsDataList}" var="itemFlowData"
+									varStatus="status">
+									<h:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight" cellspacing="4">
+										<h:outputLabel value="#{itemFlowData.dataType.label} : " title="#{itemFlowData.dataType.label}" />
+										<h:outputLabel
+											value="#{itemFlowData.dataType.type == 'selectBooleanCheckbox' ? (itemFlowData.value ? bundle['Oui'] : bundle['Non']) : itemFlowData.value}" />
+									</h:panelGrid>
+								</ui:repeat>
+							</h:panelGroup>
+
+							<h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR }">
+								<ui:include src="../specificDecisions/inspectionReport/inspectionReportHistory.xhtml" />
+							</h:panelGroup>
+
+							<h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsApp }">
+								<ui:include src="../specificDecisions/appointment/appointmentHistory.xhtml" />
+							</h:panelGroup>
+
+							<h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAO}">
+								<ui:include src="../specificDecisions/analyseRequest/analyseRequestHistory.xhtml" />
+							</h:panelGroup>
+
+							<h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTO}">
+								<ui:include src="../specificDecisions/treatmentRequest/treatmentRequestHistory.xhtml" />
+							</h:panelGroup>
+
+							<h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAR}">
+								<ui:include src="../specificDecisions/analyseResult/analyseResultHistory.xhtml" />
+							</h:panelGroup>
+
+							<h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTR}">
+								<ui:include src="../specificDecisions/treatmentResult/treatmentResultHistory.xhtml" />
+							</h:panelGroup>
+
+							<h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPayData}">
+								<ui:include src="../specificDecisions/paymentValidation/paymentValidationHistory.xhtml" />
+							</h:panelGroup>
+						</p:panel>
+
+					</h:panelGroup>
+
+				</p:scrollPanel>
+
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>

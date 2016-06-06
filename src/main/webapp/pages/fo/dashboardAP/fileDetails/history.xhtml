@@ -1,0 +1,110 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<p:dialog closeOnEscape="true" id="historyDlg" widgetVar="historyDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['History']}" width="900px">
+
+		<h:form id="historyForm" styleClass="historyform">
+
+			<h:panelGroup styleClass="scroll-content">
+
+				<p:scrollPanel mode="native">
+
+					<p:dataTable id="historyDataTable" widgetVar="historyDataTable" value="#{fileItemApDetailController.itemFlowHistoryDtoList}"
+						filteredValue="#{fileItemApDetailController.itemFlowHistoryDtoListFiltred}" var="item" selectionMode="single"
+						rowKey="#{item.itemFlow.id}" rows="20" paginator="true" rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}"
+						styleClass="newui-datatable fixeColumnWidth"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})"
+						selection="#{fileItemApDetailController.selectedItemFlowDto}">
+
+						<p:ajax event="rowSelect" update="historyForm:lastDecision" listener="#{fileItemApDetailController.decisionDetailsByItemFlow}" />
+
+						<p:column sortBy="#{item.itemFlow.flow.redefinedLabelFr}" filterBy="#{item.itemFlow.flow.redefinedLabelFr}" filterMatchMode="contains"
+							style="width:90px">
+							<f:facet name="header">
+								<h:outputText value="#{bundle['History_transaction']}" title="#{bundle['History_transaction']}" />
+							</f:facet>
+							<h:outputText
+								value="#{facesContext.viewRoot.locale eq 'en' ? item.itemFlow.flow.redefinedLabelEn :  item.itemFlow.flow.redefinedLabelFr}" />
+						</p:column>
+
+						<p:column sortBy="#{item.itemFlow.sender.firstName}" filterBy="#{item.itemFlow.sender.firstName}" filterMatchMode="contains"
+							style="width:90px">
+							<f:facet name="header">
+								<h:outputText value="#{bundle['History_person']}" title="#{bundle['History_person']}" />
+							</f:facet>
+							<h:outputText value="#{item.itemFlow.sender.firstName} #{item.itemFlow.sender.lastName}" />
+						</p:column>
+
+						<p:column sortBy="#{dateBean.formatSimpleDate(item.itemFlow.created)}" filterBy="#{dateBean.formatSimpleDate(item.itemFlow.created)}"
+							filterMatchMode="contains" style="width:90px">
+							<f:facet name="header">
+								<h:outputText value="#{bundle['History_created']}" title="#{bundle['History_created']}" />
+							</f:facet>
+							<h:outputText value="#{item.itemFlow.created}">
+								<f:convertDateTime type="date" pattern="dd/MM/yyyy - HH:mm:ss" />
+							</h:outputText>
+						</p:column>
+
+						<p:column rendered="#{request.isUserInRole('SUPER')}" style="width:90px">
+							<f:facet name="header">
+								<h:outputText value="#{bundle['History_duration']}" />
+							</f:facet>
+							<h:outputText value="#{item.duration}" />
+						</p:column>
+
+					</p:dataTable>
+
+					<h:panelGroup id="lastDecision">
+
+						<br />
+
+						<p:panel rendered="#{not empty fileItemApDetailController.selectedItemFlowDto}" header="#{bundle['RemindDecisionLabel']}">
+
+							<h:panelGrid styleClass="remindDecision" columns="2" columnClasses="labelColumnLeft, labelColumnRight" cellspacing="4">
+								<h:outputLabel value="#{bundle['RemaindDecision_decisionLabel']}" title="#{bundle['RemaindDecision_decisionTitle']}" />
+								<h:outputLabel
+									value="#{facesContext.viewRoot.locale eq 'en' ? fileItemApDetailController.selectedItemFlowDto.itemFlow.flow.redefinedLabelEn : fileItemApDetailController.selectedItemFlowDto.itemFlow.flow.redefinedLabelFr }" />
+							</h:panelGrid>
+
+							<ui:repeat value="#{fileItemApDetailController.selectedItemFlowDto.itemFlow.itemFlowsDataList}" var="itemFlowData" varStatus="status">
+
+								<h:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight" cellspacing="4">
+									<h:outputLabel value="#{itemFlowData.dataType.label} : " title="#{itemFlowData.dataType.label}" />
+									<h:outputLabel
+										value="#{itemFlowData.dataType.type == 'selectBooleanCheckbox' ? (itemFlowData.value ? bundle['Oui'] : bundle['Non']) : itemFlowData.value}" />
+								</h:panelGrid>
+
+							</ui:repeat>
+
+							<h:panelGroup
+								rendered="#{not empty fileItemApDetailController.decisionDetailsAR or not empty fileItemApDetailController.decisionDetailsTR}">
+								<ui:include src="../specificDecisions/analyseTestResult/analyseTestHistory.xhtml" />
+							</h:panelGroup>
+
+
+							<h:panelGroup rendered="#{not empty fileItemApDetailController.decisionDetailsER}">
+								<ui:include src="../specificDecisions/essayResult/essayHistory.xhtml" />
+							</h:panelGroup>
+
+
+							<br />
+
+							<h:panelGroup rendered="#{not empty fileItemApDetailController.specificDecisionsHistory.decisionDetailsPayData}">
+								<ui:include src="../specificDecisions/paymentValidation/paymentValidationHistory.xhtml" />
+							</h:panelGroup>
+
+						</p:panel>
+
+					</h:panelGroup>
+
+				</p:scrollPanel>
+
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>

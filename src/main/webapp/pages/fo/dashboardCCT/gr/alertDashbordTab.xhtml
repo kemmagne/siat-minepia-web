@@ -1,0 +1,81 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="systemDecisionFormAlertTab">
+
+		<p:dataTable id="datalistAlertTab" widgetVar="datalistTableAlertTab" value="#{riskController.alertTabList}" filteredValue="" var="item"
+			selectionMode="single" rowKey="#{item.id}" rows="5" paginator="true" rowsPerPageTemplate="5,10,20"
+			emptyMessage="#{bundle['AucuneResultat']}" styleClass="newui-datatable fixeColumnWidth"
+			paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+			<p:column sortBy="#{item.servicesItem.nsh}" filterBy="#{item.servicesItem.nsh}" filterMatchMode="contains" style="width:80px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['AlertTabLabel_snsh']}" title="#{bundle['AlertTabTitle_snsh']}" />
+				</f:facet>
+				<h:outputText value="#{item.servicesItem.snsh}" />
+			</p:column>
+
+			<p:column sortBy="#{item.servicesItem.snshLabel}" filterBy="#{item.servicesItem.snshLabel}" filterMatchMode="contains"
+				style="width:150px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['AlertTabLabel_snshLabel']}" title="#{bundle['AlertTabTitle_snshLabel']}" />
+				</f:facet>
+				<h:outputText value="#{item.servicesItem.snshLabel}" />
+			</p:column>
+
+			<p:column sortBy="#{item.brand}" filterBy="#{item.brand}" filterMatchMode="contains" style="width:65px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['AlertTabLabel_brand']}" title="#{bundle['AlertTabTitle_brand']}" />
+				</f:facet>
+				<h:outputText value="#{item.brand}" />
+			</p:column>
+
+			<p:column sortBy="#{item.model}" filterBy="#{item.model}" filterMatchMode="contains" style="width:65px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['AlertTabLabel_model']}" title="#{bundle['AlertTabTitle_model']}" />
+				</f:facet>
+				<h:outputText value="#{item.model}" />
+			</p:column>
+
+			<p:column sortBy="#{item.country}" filterBy="#{item.country}" filterMatchMode="contains" style="width:65px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['AlertTabLabel_country']}" title="#{bundle['AlertTabTitle_country']}" />
+				</f:facet>
+				<h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? item.country.countryName : item.country.countryNameFr}" />
+			</p:column>
+
+			<p:column sortBy="#{item.manufacturer}" filterBy="#{item.manufacturer}" filterMatchMode="contains" style="width:65px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['AlertTabLabel_manufacturer']}" title="#{bundle['AlertTabTitle_manufacturer']}" />
+				</f:facet>
+				<h:outputText value="#{item.manufacturer}" />
+			</p:column>
+
+			<p:column sortBy="#{not empty item.startDate ? dateBean.formatSimpleDate(item.startDate) : null}"
+				filterBy="#{not empty item.startDate ? dateBean.formatSimpleDate(item.startDate) : null}" filterMatchMode="contains" style="width:65px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['AlertTabLabel_startDate']}" title="#{bundle['AlertTabTitle_startDate']}" />
+				</f:facet>
+				<h:outputText value="#{item.startDate}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" locale="fr" />
+				</h:outputText>
+			</p:column>
+
+			<p:column sortBy="#{not empty item.endDate ? dateBean.formatSimpleDate(item.endDate) : null}"
+				filterBy="#{not empty item.endDate ? dateBean.formatSimpleDate(item.endDate) : null}" filterMatchMode="contains" style="width:65px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['AlertTabLabel_endDate']}" title="#{bundle['AlertTabTitle_endDate']}" />
+				</f:facet>
+				<h:outputText value="#{item.endDate}">
+					<f:convertDateTime type="date" pattern="dd/MM/yyyy" locale="fr" />
+				</h:outputText>
+			</p:column>
+
+		</p:dataTable>
+
+	</h:form>
+
+</ui:composition>
+
+

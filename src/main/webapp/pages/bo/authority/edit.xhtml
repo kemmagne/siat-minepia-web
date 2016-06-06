@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+	<h:form id="authorityEditForm" styleClass="autority">
+		<p:dataTable id="authority_position" widgetVar="authority_position" var="row" rowIndexVar="rowIdx"
+			value="#{authorityController.positionList}">
+			<p:column headerText="#{bundle.UserLabel_file_type_authority}" styleClass="ui-widget-header">
+				<h:outputText value="#{row.code}" />
+			</p:column>
+			<p:columns var="column" value="#{authorityController.items}" headerText="#{facesContext.viewRoot.locale eq 'fr' ? column.labelFr : column.labelEn}" columnIndexVar="colIdx" styleClass="check-bloc">
+				<p:selectBooleanCheckbox  value="#{authorityController.authoritiesPerPositions.get(rowIdx).get(colIdx).checked}" />
+			</p:columns>
+		</p:dataTable>
+		<div class="btn-bloc" >
+			<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editBtn" actionListener="#{authorityController.edit}" value="#{bundle['Save']}" update=" :authorityEditForm,:growl " />
+		</div>
+	</h:form>
+</ui:composition>
+
+</html>
+
+

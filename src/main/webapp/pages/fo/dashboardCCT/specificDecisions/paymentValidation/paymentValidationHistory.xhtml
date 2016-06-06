@@ -1,0 +1,120 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+
+
+
+	<h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPayData}">
+
+		<p:tabView scrollable="false">
+
+			<p:tab title="#{bundle['paymentValidHistoryTitleLabel_frais']}">
+
+				<p:panelGrid columns="2">
+
+					<p:outputLabel value="#{bundle['paymentValidHistoryTitleLabel_montantFrais']}" />
+					<h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPayData.montantHt}" />
+
+					<p:outputLabel value="#{bundle['paymentValidHistoryTitleLabel_natureFrais']}" />
+					<h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPayData.natureFrais}" />
+
+					<p:outputLabel value="#{bundle['paymentValidHistoryTitleLabel_refFact']}" />
+					<h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPayData.refFacture}" />
+
+				</p:panelGrid>
+
+			</p:tab>
+
+			<p:tab title="#{bundle['paymentValidHistoryTitleLabel_signataire']}">
+				<p:panelGrid columns="2">
+
+					<p:outputLabel value="#{bundle['paymentValidHistoryTitleLabel_sigName']}" />
+					<h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPayData.nomSignature}"
+						title="#{bundle['paymentValidHistoryTitleTitle_sigName']}" />
+
+					<p:outputLabel value="#{bundle['paymentValidHistoryTitleLabel_sigQuality']}" />
+					<h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPayData.qualiteSignature}"
+						title="#{bundle['paymentValidHistoryTitleTitle_sigQuality']}" />
+
+
+					<p:outputLabel value="#{bundle['paymentValidHistoryTitleLabel_sigPlace']}" />
+					<h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPayData.lieuSignature}"
+						title="#{bundle['paymentValidHistoryTitleTitle_sigPlace']}" />
+
+					<p:outputLabel value="#{bundle['paymentValidHistoryTitleLabel_sigDate']}" />
+					<h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPayData.dateSignature}"
+						title="#{bundle['paymentValidHistoryTitleTitle_sigDate']}" />
+
+				</p:panelGrid>
+
+			</p:tab>
+
+			<p:tab title="#{bundle['paymentValidHistoryTitleLabel_encaissement']}">
+
+				<p:panelGrid columns="2">
+
+					<p:outputLabel value="#{bundle['paymentValidHistoryTitleLabel_numRecu']}" />
+					<h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPayData.numRecu}"
+						title="#{bundle['paymentValidHistoryTitleTitle_numRecu']}" />
+
+					<p:outputLabel value="#{bundle['paymentValidHistoryTitleLabel_dateEnc']}" />
+					<h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPayData.dateEncaissement}"
+						title="#{bundle['paymentValidHistoryTitleTitle_dateEnc']}" />
+
+					<p:outputLabel value="#{bundle['paymentValidHistoryTitleLabel_partVers']}" />
+					<h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPayData.partVersCont}"
+						title="#{bundle['paymentValidHistoryTitleTitle_partVers']}" />
+
+					<p:outputLabel value="#{bundle['paymentValidHistoryTitleLabel_montantEnc']}" />
+					<h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPayData.montantEncaissement}"
+						title="#{bundle['paymentValidHistoryTitleTitle_montantEnc']}" />
+
+
+					<p:outputLabel value="#{bundle['paymentValidHistoryTitleLabel_natureEnc']}" />
+					<h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPayData.natureEncaissement}"
+						title="#{bundle['paymentValidHistoryTitleTitle_natureEnc']}" />
+
+					<p:outputLabel value="#{bundle['paymentValidHistoryTitleLabel_observation']}" />
+					<h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPayData.observation}"
+						title="#{bundle['paymentValidHistoryTitleTitle_observation']}" />
+
+				</p:panelGrid>
+
+			</p:tab>
+
+			<p:tab title="#{bundle['paymentValidHistoryTitleLabel_recette']}">
+
+				<p:panelGrid columns="2">
+
+					<p:outputLabel value="#{bundle['paymentValidHistoryTitleLabel_numRole']}" />
+					<h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPayData.roleRecette}"
+						title="#{bundle['paymentValidHistoryTitleTitle_numRole']}" />
+
+					<p:outputLabel value="#{bundle['paymentValidHistoryTitleLabel_numQuittance']}" />
+					<h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPayData.numQuittance}"
+						title="#{bundle['paymentValidHistoryTitleTitle_numQuittance']}" />
+
+					<p:outputLabel value="#{bundle['paymentValidHistoryTitleLabel_imputation']}" />
+					<h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPayData.imputation}"
+						title="#{bundle['paymentValidHistoryTitleTitle_imputation']}" />
+
+					<p:outputLabel value="#{bundle['paymentValidHistoryTitleLabel_natureRec']}" />
+					<h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPayData.natureRecette}"
+						title="#{bundle['paymentValidHistoryTitleTitle_natureRec']}" />
+
+					<p:outputLabel value="#{bundle['paymentValidHistoryTitleLabel_article']}" />
+					<h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPayData.article}"
+						title="#{bundle['paymentValidHistoryTitleTitle_article']}" />
+
+				</p:panelGrid>
+				
+			</p:tab>
+			
+		</p:tabView>
+
+	</h:panelGroup>
+
+
+
+
+</ui:composition>

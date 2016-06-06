@@ -1,0 +1,57 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<h:form id="paymentSearchForm">
+
+		<p:accordionPanel styleClass="search">
+
+			<p:tab title="#{bundle['payment_SearchCriteria']}" dynamic="true" cache="true">
+
+				<h:panelGrid columns="10" cellpadding="10">
+					
+						<h:panelGroup>
+							<h:outputLabel value="#{bundle['AdvancedSearch_operator']}" for="operator" />
+						</h:panelGroup>
+						<p:selectOneMenu id="operator" value="#{paymentController.filter.operator}" converter="#{companyConverter}" panelStyle="width:280px"
+							effect="fade" var="op" style="width:160px" filter="true" filterMatchMode="startsWith">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{paymentController.operatorList}" var="op" itemValue="#{op}" itemLabel="#{op.numContribuable}" />
+							<p:column>
+								<h:outputText value="#{op.numContribuable}" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{op.companyName}" />
+							</p:column>
+						</p:selectOneMenu>
+
+					<h:panelGroup>
+						<p:outputLabel for="fromDate" value="#{bundle['payment_fromDate']}" />
+					</h:panelGroup>
+					<p:calendar id="fromDate" value="#{paymentController.filter.fromDate}" title="#{bundle['payment_fromDate']}" showOn="button"
+						pattern="dd/MM/yyyy" readonlyInput="true">
+						<p:ajax event="dateSelect" update="toDate" />
+					</p:calendar>
+
+					<h:panelGroup>
+						<p:outputLabel for="toDate" value="#{bundle['payment_toDate']}" />
+					</h:panelGroup>
+					<p:calendar id="toDate" value="#{paymentController.filter.toDate}" title="#{bundle['payment_toDate']}" showOn="button"
+						pattern="dd/MM/yyyy" mindate="#{paymentController.filter.fromDate}" readonlyInput="true">
+					</p:calendar>
+
+					<h:panelGroup>
+						<p:commandButton icon="ui-icon-search" title="#{bundle['ButtonSearch']}" action="#{paymentController.doSearchByFilter}"
+							update=":fileItemListForm:datalist :paymentSearchForm :growl" oncomplete="PF('datalistTable').filter();" />
+						<p:commandButton icon="ui-icon-refresh" title="#{bundle['ButtonReset']}" action="#{paymentController.initPaymentSearch}"
+							onsuccess="PF('datalistTable').filter();" update=":fileItemListForm:datalist :paymentSearchForm" />
+					</h:panelGroup>
+				</h:panelGrid>
+
+			</p:tab>
+
+		</p:accordionPanel>
+
+	</h:form>
+</ui:composition>

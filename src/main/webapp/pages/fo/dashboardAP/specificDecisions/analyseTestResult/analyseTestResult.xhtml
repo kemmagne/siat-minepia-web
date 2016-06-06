@@ -1,0 +1,128 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<h:panelGroup id="analyseTestGroup" styleClass="analyseTestGroup">
+		<h:panelGroup rendered="#{fileItemApDetailController.acceptationDecisionFileType eq 'EH_MINADER'}">
+
+			<p:panel id="analyseTab" header="#{bundle['AnalyseResultAp_TabTitle']}">
+				<h:panelGrid columns="2">
+
+					<c:forEach varStatus="status" var="item" items="#{fileItemApDetailController.analyseResultApList}">
+
+						<p:panel  id="analyseTab#{status.index}" styleClass="subtitle"
+							header="#{bundle['EssaiTestArticleLabel']}(#{facesContext.viewRoot.locale eq 'fr' ? item.itemFlow.fileItem.nsh.goodsItemDesc : item.itemFlow.fileItem.nsh.goodsItemDescEn})"
+							titletip="#{item.itemFlow.fileItem.nsh.goodsItemCode}">
+							<h:panelGrid columns="2">
+								<p:outputLabel for="analyseType#{status.index}" value="#{bundle['AnalyseResultAp_TypeLabel']}" />
+								<h:panelGroup>
+									<p:inputText required="true" requiredMessage="#{bundle['AnalyseResultAp_TypeRequiredMessage']}" id="analyseType#{status.index}"
+										title="#{bundle['AnalyseResultAp_TypeTitle']}" value="#{item.analyseType}" />
+									<p:messages for="analyseType#{status.index}" id="analyseTypeMsg#{status.index}" />
+								</h:panelGroup>
+
+								<p:outputLabel for="laboratory#{status.index}" value="#{bundle['AnalyseResultAp_LaboLabel']}" />
+								<p:selectOneMenu filter="true" id="laboratory#{status.index}" title="#{bundle['AnalyseResultAp_LaboTitle']}"
+									value="#{item.laboratory}">
+									<f:converter binding="#{laboratoryConverter}" />
+									<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" itemValue="#{null}" />
+									<f:selectItems value="#{fileItemApDetailController.laboratories}" var="lab" itemValue="#{lab}"
+										itemLabel="#{facesContext.viewRoot.locale eq 'en' ? lab.labelEn : lab.labelFr}" />
+								</p:selectOneMenu>
+
+								<p:outputLabel for="description#{status.index}" value="#{bundle['AnalyseResultAp_DescriptionLabel']}" />
+								<p:inputTextarea rows="2" scrollHeight="2" id="description#{status.index}" title="#{bundle['AnalyseResultAp_DescriptionTitle']}"
+									value="#{item.description}" />
+
+								<p:outputLabel for="result#{status.index}" value="#{bundle['AnalyseResultAp_ResultLabel']}" />
+								<p:inputText id="result#{status.index}" title="#{bundle['AnalyseResultAp_ResultTitle']}" value="#{item.result}" />
+
+								<p:outputLabel for="analyseDate#{status.index}" value="#{bundle['AnalyseResultAp_AnalyseDateLabel']}" />
+								<h:panelGroup>
+									<p:calendar  navigator="true" required="true" readonlyInput="true" id="analyseDate#{status.index}" pattern="dd/MM/yyyy"
+										title="#{bundle['AnalyseResultAp_AnalyseDateTitle']}" value="#{item.analyseDate}" showOn="button"
+										requiredMessage="#{bundle['AnalyseResultAp_AnalyseDateRequiredMessage']}" />
+										<p:message for="analyseDate#{status.index}" id="analyseDateMsg#{status.index}"/>
+								</h:panelGroup>
+
+								<p:outputLabel for="analyseObservations#{status.index}" value="#{bundle['AnalyseResultAp_AnalyseObservationsLabel']}" />
+								<p:inputTextarea rows="5" scrollHeight="5" id="analyseObservations#{status.index}"
+									title="#{bundle['AnalyseResultAp_AnalyseObservationsTitle']}" value="#{item.observations}" />
+							</h:panelGrid>
+						</p:panel>
+					</c:forEach>
+				</h:panelGrid>
+			</p:panel>
+
+			<p:panel id="testTab" header="#{bundle['TestResultAp_TabTitle']}">
+				<h:panelGrid columns="2">
+					<c:forEach var="item" items="#{fileItemApDetailController.testResultApList}" varStatus="status">
+						<p:panel id="testTab#{status.index}" styleClass="subtitle"
+							header="#{facesContext.viewRoot.locale eq 'fr' ? item.itemFlow.fileItem.nsh.goodsItemDesc : item.itemFlow.fileItem.nsh.goodsItemDescEn}">
+							<p:panelGrid columns="2">
+								<p:outputLabel value="#{bundle['TestResultAp_TypeLabel']}" />
+								<h:panelGroup>
+									<p:inputText id="testAnalyseType#{status.index}" rendered="true" requiredMessage="#{bundle['TestResultAp_TypeRequiredMessage']}"
+										title="#{bundle['TestResultAp_TypeTitle']}" value="#{item.type}" />
+									<p:message id="testAnalyseTypeMsg#{status.index}" for="testAnalyseType#{status.index}" />
+								</h:panelGroup>
+								<p:outputLabel value="#{bundle['TestResultAp_NatureLabel']}" />
+								<h:panelGroup>
+									<p:inputTextarea id="testNature#{status.index}" required="true" requiredMessage="#{bundle['TestResultAp_NatureRequiredMessage']}"
+										title="#{bundle['TestResultAp_NatureLTitle']}" value="#{item.nature}" />
+									<p:message for="testNature#{status.index}" id="testNatureMsg#{status.index}" />
+								</h:panelGroup>
+
+								<p:outputLabel value="#{bundle['TestResultAp_ConditionsLabel']}" />
+								<p:inputTextarea rows="2" scrollHeight="1" title="#{bundle['TestResultAp_ConditionsTitle']}" value="#{item.condition}" />
+
+								<p:outputLabel value="#{bundle['TestResultAp_CultureLabel']}" />
+								<p:inputTextarea rows="2" scrollHeight="1" title="#{bundle['TestResultAp_CultureTitle']}" value="#{item.culture}" />
+
+								<p:outputLabel value="#{bundle['TestResultAp_StageLabel']}" />
+								<p:inputText title="#{bundle['TestResultAp_StageTitle']}" value="#{item.stage}" />
+
+								<p:outputLabel value="#{bundle['TestResultAp_DescriptionLabel']}" />
+								<p:inputTextarea title="#{bundle['TestResultAp_DescriptionTitle']}" value="#{item.description}" />
+
+								<h:outputLabel value="#{bundle['TestResultAp_DateLabel']}" for="testDate#{status.index}" />
+								<h:panelGroup>
+									<p:calendar  navigator="true" id="testDate#{status.index}" rendered="true" requiredMessage="#{bundle['TestResultAp_DateRequiredMessage']}"
+										pattern="dd/MM/yyyy" showOn="button" value="#{item.testDate}" />
+									<p:message for="testDate#{status.index}" id="testDateMsg#{status.index}" />
+								</h:panelGroup>
+
+								<p:outputLabel for="testPlace#{status.index}" value="#{bundle['TestResultAp_PlaceLabel']}" />
+								<h:panelGroup>
+									<p:inputText id="testPlace#{status.index}" title="#{bundle['AnalyseResultAp_PlaceTitle']}" value="#{item.place}" required="true"
+										requiredMessage="#{bundle['EssaiResultAp_PlaceRequiredMessage']}" />
+									<p:message for="testPlace#{status.index}"/>
+								</h:panelGroup>
+								<p:outputLabel value="#{bundle['TestResultAp_TownCodeLabel']}" />
+								<p:inputText title="#{bundle['TestResultAp_TownCodeTitle']}" value="#{item.townCode}" />
+
+								<p:outputLabel value="#{bundle['TestResultAp_TownNameLabel']}" />
+								<p:inputText title="#{bundle['TestResultAp_TownNameTitle']}" value="#{item.townName}" />
+
+								<p:outputLabel value="#{bundle['TestResultAp_IntervenantsLabel']}" />
+								<p:inputTextarea title="#{bundle['TestResultAp_IntervenantsTitle']}" value="#{item.contributors}" />
+
+								<p:outputLabel value="#{bundle['TestResultAp_ResultLabel']}" />
+
+								<h:panelGroup>
+									<p:inputTextarea id="testResult#{status.index}" rows="2" scrollHeight="1" required="true"
+										requiredMessage="#{bundle['TestResultAp_ResultRequiredMessage']}" title="#{bundle['TestResultAp_ResultTitle']}"
+										value="#{item.resultats}" />
+									<p:message for="testResult#{status.index}" id="testResultMsg#{status.index}" />
+								</h:panelGroup>
+
+								<p:outputLabel value="#{bundle['TestResultAp_ObservationsLabel']}" />
+								<p:inputTextarea title="#{bundle['TestResultAp_ObservationsTitle']}" value="#{item.obsevations}" />
+
+							</p:panelGrid>
+						</p:panel>
+					</c:forEach>
+				</h:panelGrid>
+			</p:panel>
+		</h:panelGroup>
+	</h:panelGroup>
+</ui:composition>

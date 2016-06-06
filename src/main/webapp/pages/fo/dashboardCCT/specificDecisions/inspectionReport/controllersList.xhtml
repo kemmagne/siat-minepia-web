@@ -1,0 +1,45 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+	<p:dialog closeOnEscape="true" modal="true" id="controllerDlg" styleClass="controlldialog" widgetVar="controllerDialog" resizable="false"
+		header="#{bundle['ConstatCreateControllerTitle']}" dynamic="true" width="100px" position="center" style="width: 100px">
+		<h:form id="addController">
+
+			<p:panelGrid id="addRowPg" columns="2">
+
+				<h:outputLabel value="#{bundle['ConstatControllersNameLabel']}" />
+				<h:panelGroup>
+					<p:inputText id="controllerName" title="#{bundle['ConstatControllersNameTitle']}" required="true"
+						value="#{fileItemCctDetailController.controllerForInspectionReport.name}"
+						requiredMessage="#{bundle['ConstatControllersNameRequiredMessage']}" />
+					<p:message for="controllerName" id="controllerNameMsg" />
+				</h:panelGroup>
+
+				<h:outputLabel value="#{bundle['ConstatControllersPositionLabel']}" />
+				<h:panelGroup>
+					<p:inputText required="true" requiredMessage="#{bundle['ConstatControllersPositionTitle']}" id="controllerPosition"
+						title="#{bundle['ConstatControllersPositionTitle']}" value="#{fileItemCctDetailController.controllerForInspectionReport.position}" />
+					<p:message for="controllerPosition" />
+				</h:panelGroup>
+
+				<h:outputLabel value="#{bundle['ConstatControllersServiceLabel']}" />
+				<h:panelGroup>
+					<p:inputText required="true" requiredMessage="#{bundle['ConstatControllersServiceRequiredMessage']}" id="controllerService"
+						title="#{bundle['ConstatControllersServiceTitle']}" value="#{fileItemCctDetailController.controllerForInspectionReport.service}" />
+					<p:message for="controllerService" />
+				</h:panelGroup>
+			</p:panelGrid>
+
+			<div class="btn-bloc">
+				<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="createBtn" actionListener="#{fileItemCctDetailController.addControllerInspectionReport}" value="#{bundle['Save']}"
+					styleClass="ui-priority-primary" update="addRowPg :decisionForm:tabViewConstat:controllersGroup"
+					oncomplete="handleSubmit(xhr,status,args,controllerDlg,'controllersDTWdg');" />
+
+				<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('controllerDialog').hide();"
+					process="@none" immediate="true" />
+			</div>
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>

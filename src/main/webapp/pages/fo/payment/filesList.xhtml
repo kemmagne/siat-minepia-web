@@ -1,0 +1,73 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<p:panel header="#{bundle['file_title']}"  styleClass="nopadding-panel">
+
+		<h:form id="fileItemListForm">
+
+			<h:commandLink action="#{exporter.exportPDF(table, 'FILE_ITEMS')}">
+				<h:outputText styleClass="sprite sprite-pdf" />
+			</h:commandLink>
+
+			<p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable" value="#{paymentController.fileDtoList}" filteredValue=""
+				var="fileDto" selectionMode="single" selection="#{paymentController.selectedFile}" rowKey="#{fileDto.file.id}" rows="5" paginator="true"
+				rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+				<p:ajax event="rowSelect" />
+				<p:ajax event="rowUnselect" />
+				<p:ajax event="rowDblselect" listener="#{paymentController.goToCostsPage}" />
+
+				<p:column sortBy="#{fileDto.file.referenceSiat}" filterBy="#{fileDto.file.referenceSiat}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_num_siat']}" title="#{bundle['FileTitle_num_siat']}" />
+					</f:facet>
+					<h:outputText value="#{fileDto.file.referenceSiat}" />
+				</p:column>
+
+				<p:column sortBy="#{fileDto.file.numeroDossier}" filterBy="#{fileDto.file.numeroDossier}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_num_eguce']}" title="#{bundle['FileTitle_num_eguce']}" />
+					</f:facet>
+					<h:outputText value="#{fileDto.file.numeroDossier}" />
+				</p:column>
+				
+				<p:column sortBy="#{fileDto.file.fileItemsList.size()}" filterBy="#{fileDto.file.fileItemsList.size()}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_nbr_article']}" title="#{bundle['FileTitle_nbr_article']}" />
+					</f:facet>
+					<h:outputText value="#{fileDto.file.fileItemsList.size()}" />
+				</p:column>
+				
+				<p:column sortBy="#{dateBean.formatSimpleDate(fileDto.file.createdDate)}" filterBy="#{dateBean.formatSimpleDate(fileDto.file.createdDate)}"
+					filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_date_dossier']}" title="#{bundle['FileTitle_date_dossier']}" />
+					</f:facet>
+					<h:outputText value="#{fileDto.file.createdDate}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" locale="fr" />
+					</h:outputText>
+				</p:column>
+				
+				<p:column sortBy="#{fileDto.amount}" filterBy="#{fileDto.amount}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_montant']}" title="#{bundle['FileTitle_montant']}" />
+					</f:facet>
+					<h:outputText value="#{fileDto.amount}" />
+				</p:column>
+				
+				<p:column sortBy="#{fileDto.kind}" filterBy="#{fileDto.kind}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_nature']}" title="#{bundle['FileTitle_nature']}" />
+					</f:facet>
+					<h:outputText value="#{fileDto.kind}" />
+				</p:column>
+		
+			</p:dataTable>
+
+		</h:form>
+
+	</p:panel>
+
+</ui:composition>

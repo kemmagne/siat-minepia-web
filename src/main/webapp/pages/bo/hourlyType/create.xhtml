@@ -1,0 +1,49 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="hourlyTypeCreateDlg" widgetVar="hourlyTypeCreateDialog" modal="true" resizable="false"
+		appendTo="@(body)" header="#{bundle['CreateHourlyTypeTitle']}">
+
+		<h:form id="hourlyTypeCreateForm">
+
+			<h:panelGroup id="display">
+
+				<p:panelGrid columns="4">
+
+					<p:outputLabel value="#{bundle['CreateHourlyTypeLabel_labelFr']}" for="hourlyType_labelFr" />
+					<h:panelGroup>
+						<p:inputText id="hourlyType_labelFr" value="#{hourlyTypeController.selected.labelFr}"
+							title="#{bundle['CreateHourlyTypeTitle_labelFr']}" required="true"
+							requiredMessage="#{bundle['CreateHourlyTypeRequiredMessage_labelFr']}" />
+						<p:message for="hourlyType_labelFr" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateHourlyTypeLabel_labelEn']}" for="hourlyType_labelEn" />
+					<h:panelGroup>
+						<p:inputText id="hourlyType_labelEn" value="#{hourlyTypeController.selected.labelEn}"
+							title="#{bundle['CreateHourlyTypeTitle_labelEn']}" required="true"
+							requiredMessage="#{bundle['CreateHourlyTypeRequiredMessage_labelEn']}" />
+						<p:message for="hourlyType_labelEn" />
+					</h:panelGroup>
+
+				</p:panelGrid>
+
+				<br />
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="createBtn"
+						actionListener="#{hourlyTypeController.saveNew}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+						update="display, :hourlyTypeListForm,:growl" oncomplete="handleSubmit(xhr,status,args,hourlyTypeCreateDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="cancelBtn"
+						value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('hourlyTypeCreateDialog').hide();" immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

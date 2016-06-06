@@ -1,0 +1,102 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<p:panel header="#{bundle['service_title']}">
+		<h:form id="serviceListForm">
+
+			<h:commandLink action="#{exporter.exportPDF(table, 'SERVICES')}">
+				<h:outputText styleClass="sprite sprite-pdf" />
+			</h:commandLink>
+
+			<br />
+
+			<p:dataTable id="datalist" widgetVar="datalistTable" binding="#{table}" value="#{serviceController.items}" filteredValue="" var="item"
+				selectionMode="single" selection="#{serviceController.selected}" rowKey="#{item.id}" rows="5" paginator="true"
+				rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}" styleClass="newui-datatable fixeColumnWidth"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+				<p:ajax event="rowSelect" update="editButton datalist" />
+				<p:ajax event="rowUnselect" update="editButton datalist" />
+				<p:ajax event="rowDblselect" listener="#{serviceController.prepareEdit}" oncomplete="PF('serviceEditDialog').show();"
+					update=":serviceEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+
+				<p:column id="labelFrColumn" sortBy="#{item.labelFr}" filterBy="#{item.labelFr}" filterMatchMode="contains" style="width:90px">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['ServiceLabel_labelFr']}" title="#{bundle['ServiceTitle_labelFr']}" />
+					</f:facet>
+					<h:outputText value="#{item.labelFr}" />
+				</p:column>
+
+				<p:column id="labelEnColumn" sortBy="#{item.labelEn}" filterBy="#{item.labelEn}" filterMatchMode="contains" style="width:90px">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['ServiceLabel_labelEn']}" title="#{bundle['ServiceTitle_labelEn']}" />
+					</f:facet>
+					<h:outputText value="#{item.labelEn}" />
+				</p:column>
+
+				<p:column id="centralBureauAddressColumn" sortBy="#{item.centralBureau.address}" filterBy="#{item.centralBureau.address}"
+					filterMatchMode="contains" style="width:90px">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['ServiceLabel_address']}" title="#{bundle['ServiceTitle_address']}" />
+					</f:facet>
+					<h:outputText value="#{item.centralBureau.address}" />
+				</p:column>
+
+				<p:column id="centralBureauTelephoneColumn" sortBy="#{item.centralBureau.telephone}" filterBy="#{item.centralBureau.telephone}"
+					filterMatchMode="contains" style="width:90px">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['ServiceLabel_phone']}" title="#{bundle['ServiceTitle_phone']}" />
+					</f:facet>
+					<h:outputText value="#{item.centralBureau.telephone}" />
+				</p:column>
+
+				<p:column id="centralBureauFaxColumn" sortBy="#{item.centralBureau.fax}" filterBy="#{item.centralBureau.fax}" filterMatchMode="contains"
+					style="width:90px">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['ServiceLabel_fax']}" title="#{bundle['ServiceTitle_fax']}" />
+					</f:facet>
+					<h:outputText value="#{item.centralBureau.fax}" />
+				</p:column>
+
+				<p:column id="headOfficeColumn"
+					sortBy="#{(item.centralBureau.headOffice.firstName).concat(' ').concat(item.centralBureau.headOffice.lastName)}"
+					filterBy="#{(item.centralBureau.headOffice.firstName).concat(' ').concat(item.centralBureau.headOffice.lastName)}"
+					filterMatchMode="contains" style="width:90px">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['ServiceLabel_headOffice']}" title="#{bundle['ServiceTitle_headOffice']}" />
+					</f:facet>
+					<h:outputText value="#{(item.centralBureau.headOffice.firstName).concat(' ').concat(item.centralBureau.headOffice.lastName)}" />
+				</p:column>
+
+				<p:column id="headServiceColumn" sortBy="#{(item.headService.firstName).concat(' ').concat(item.headService.lastName)}"
+					filterBy="#{(item.headService.firstName).concat(' ').concat(item.headService.lastName)}" filterMatchMode="contains" style="width:90px">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['ServiceLabel_headService']}" title="#{bundle['ServiceTitle_headService']}" />
+					</f:facet>
+					<h:outputText value="#{(item.headService.firstName).concat(' ').concat(item.headService.lastName)}" />
+				</p:column>
+
+				<p:column id="subDepartmentAbreviationColumn" sortBy="#{item.subDepartment.abreviation}" filterBy="#{item.subDepartment.abreviation}"
+					filterMatchMode="contains" style="width:90px">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['ServiceLabel_subDepartmentAbreviation']}" title="#{bundle['ServiceTitle_subDepartmentAbreviation']}" />
+					</f:facet>
+					<h:outputText value="#{item.subDepartment.abreviation}" />
+				</p:column>
+
+
+				<f:facet name="footer">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editButton" styleClass="btn" icon="sprite sprite-edit" value="#{bundle['Edit']}" actionListener="#{serviceController.prepareEdit}"
+						rendered="#{serviceController.selected != null and serviceController.selected.id != null}" oncomplete="PF('serviceEditDialog').show();" update=":serviceEditForm, :growl" />
+				</f:facet>
+
+			</p:dataTable>
+
+		</h:form>
+
+	</p:panel>
+
+</ui:composition>

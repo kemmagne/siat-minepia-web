@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="bureauRegionalCreateDlg" widgetVar="bureauRegionalCreateDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['CreateBureauRegionalTitle']}" width="800px">
+
+		<h:form id="bureauRegionalCreateForm">
+
+			<h:panelGroup id="display" styleClass="inpWidth">
+
+				<p:panelGrid columns="4">
+
+					<p:outputLabel value="#{bundle['CreateBureauRegionalLabel_labelFr']}" for="bureauRegional_labelFr" />
+					<h:panelGroup>
+						<p:inputText id="bureauRegional_labelFr" value="#{bureauRegionalController.selected.labelFr}"
+							title="#{bundle['CreateBureauRegionalTitle_labelFr']}" required="true"
+							requiredMessage="#{bundle['CreateBureauRegionalRequiredMessage_labelFr']}" />
+						<p:message for="bureauRegional_labelFr" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateBureauRegionalLabel_labelEn']}" for="bureauRegional_labelEn" />
+					<h:panelGroup>
+						<p:inputText id="bureauRegional_labelEn" value="#{bureauRegionalController.selected.labelEn}"
+							title="#{bundle['CreateBureauRegionalTitle_labelEn']}" required="true"
+							requiredMessage="#{bundle['CreateBureauRegionalRequiredMessage_labelEn']}" />
+						<p:message for="bureauRegional_labelEn" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateBureauRegionalLabel_abbreviation']}" for="bureauRegional_abbreviation" />
+					<h:panelGroup>
+						<p:inputText id="bureauRegional_abbreviation" value="#{bureauRegionalController.selected.code}"
+							title="#{bundle['CreateBureauRegionalTitle_abbreviation']}" required="true"
+							requiredMessage="#{bundle['CreateBureauRegionalRequiredMessage_abbreviation']}" />
+						<p:message for="bureauRegional_abbreviation" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateBureauRegionalLabel_address']}" for="bureauRegional_address" />
+					<h:panelGroup>
+						<p:inputText id="bureauRegional_address" value="#{bureauRegionalController.selected.address}"
+							title="#{bundle['CreateBureauRegionalTitle_address']}" required="true"
+							requiredMessage="#{bundle['CreateBureauRegionalRequiredMessage_address']}" />
+						<p:message for="bureauRegional_address" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateBureauRegionalLabel_telephone']}" for="bureauRegional_telephone" />
+					<h:panelGroup>
+						<p:inputText id="bureauRegional_telephone" value="#{bureauRegionalController.selected.telephone}"
+							title="#{bundle['CreateBureauRegionalTitle_telephone']}" required="false"
+							requiredMessage="#{bundle['CreateBureauRegionalRequiredMessage_telephone']}" validatorMessage="#{bundle['PhoneValidationFail']}">
+							<f:validateRegex pattern="[0-9]{0,14}" />
+						</p:inputText>
+						<p:message for="bureauRegional_telephone" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateBureauRegionalLabel_fax']}" for="bureauRegional_fax" />
+					<h:panelGroup>
+						<p:inputText id="bureauRegional_fax" value="#{bureauRegionalController.selected.fax}"
+							title="#{bundle['CreateBureauRegionalTitle_fax']}" required="false"
+							requiredMessage="#{bundle['CreateBureauRegionalRequiredMessage_fax']}" validatorMessage="#{bundle['FaxValidationFail']}">
+							<f:validateRegex pattern="[0-9]{0,14}" />
+						</p:inputText>
+						<p:message for="bureauRegional_fax" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateBureauRegionalLabel_email']}" for="bureauRegional_email" />
+					<h:panelGroup>
+						<p:inputText id="bureauRegional_email" value="#{bureauRegionalController.selected.email}"
+							title="#{bundle['CreateBureauRegionalTitle_email']}"  required="true"
+							requiredMessage="#{bundle['CreateBureauRegionalRequiredMessage_email']}" validatorMessage="#{bundle['MailValidationFail']}">
+							<f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+						</p:inputText>
+						<p:message for="bureauRegional_email" />
+					</h:panelGroup>
+
+
+					<p:outputLabel value="#{bundle['CreateBureauRegionalLabel_subDepartment']}" for="bureauRegionalSubDepartment" />
+					<h:panelGroup>
+						<p:selectOneMenu id="bureauRegionalSubDepartment" value="#{bureauRegionalController.subDepartment}" required="true"
+							requiredMessage="#{bundle['CreateBureauRegionalRequiredMessage_subDepartment']}">
+							<p:ajax listener="#{bureauRegionalController.onSubDepartmentChange}" update="bureauRegionalService" />
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{bureauRegionalController.subDepartments}" var="subDepartment" itemValue="#{subDepartment}"
+								itemLabel="#{facesContext.viewRoot.locale eq 'en' ? subDepartment.labelEn : subDepartment.labelFr}" />
+							<f:converter binding="#{subDepartmentConverter}" />
+						</p:selectOneMenu>
+						<p:message for="bureauRegionalSubDepartment" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateBureauRegionalLabel_service']}" for="bureauRegionalService" />
+					<h:panelGroup>
+						<p:selectOneMenu id="bureauRegionalService" value="#{bureauRegionalController.selected.service}" required="true"
+							requiredMessage="#{bundle['CreateBureauRegionalRequiredMessage_service']}">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{bureauRegionalController.services}" var="service" itemValue="#{service}"
+								itemLabel="#{facesContext.viewRoot.locale eq 'en' ? service.labelEn : service.labelFr}" />
+							<f:converter binding="#{serviceConverter}" />
+						</p:selectOneMenu>
+						<p:message for="bureauRegionalService" />
+					</h:panelGroup>
+
+				</p:panelGrid>
+				<br />
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="createBtn" actionListener="#{bureauRegionalController.create}" value="#{bundle['Save']}"
+						styleClass="ui-priority-primary" update="display,:bureauRegionalListForm,:growl"
+						oncomplete="handleSubmit(xhr,status,args,bureauRegionalCreateDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary"
+						onclick="PF('bureauRegionalCreateDialog').hide();" immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

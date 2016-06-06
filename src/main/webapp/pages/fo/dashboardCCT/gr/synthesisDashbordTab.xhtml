@@ -1,0 +1,130 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<h:form id="systemDecisionFormSynthesisTab" styleClass="dashboard-content" style="width:auto;height:auto">
+
+		<p:tabView styleClass="ccord-pan-content" orientation="top" activeIndex="#{riskController.syntheseParamsActiveTab}"
+			disabled="#{fileItemCctDetailController.disabledTabSynthese}">
+			<p:ajax event="tabChange" listener="#{riskController.onSynthesisParamsTabChange}" update="@form @this" />
+			<p:tab title="#{bundle['systemDecisionDashboardDetails_details_synthesis']}" titleStyleClass="title ui-panel-title">
+				<p:accordionPanel>
+					<p:tab id="tabSynthesis" title="#{bundle['systemDecisionDashboardDetails_details_synthesis_product']}" dynamic="true" cache="true"
+						titleStyleClass="title">
+						<h:panelGrid columns="2">
+							<h:panelGrid columns="2" cellspacing="5" cellpadding="5" columnClasses="labelColumnLeft, labelColumnRight">
+								<p:outputLabel value="#{bundle['systemDecisionDashboardDetails_details_synthesis_product_know']}" />
+								<h:panelGroup>
+									<h:outputText
+										value="#{riskController.synthesisResult.productIsKnown == 'false' ? bundle['boolean_false'] : bundle['boolean_true']} " />
+								</h:panelGroup>
+								<p:outputLabel value="#{bundle['systemDecisionDashboardDetails_details_synthesis_product_alert']}" />
+								<h:panelGroup>
+									<h:outputText
+										value="#{riskController.synthesisResult.productHasAlert  == 'false' ? bundle['boolean_false'] : bundle['boolean_true']} " />
+								</h:panelGroup>
+								<p:outputLabel value="#{bundle['systemDecisionDashboardDetails_details_synthesis_product_target']}" />
+								<h:panelGroup>
+									<h:outputText
+										value="#{riskController.synthesisResult.productHasTarget == 'false' ? bundle['boolean_false'] : bundle['boolean_true']} " />
+								</h:panelGroup>
+								<p:outputLabel value="#{bundle['systemDecisionDashboardDetails_details_synthesis_product_source']}" />
+								<h:panelGroup>
+									<h:outputText
+										value="#{riskController.synthesisResult.productHasSuspiciousOrigins == 'false' ? bundle['boolean_false'] : bundle['boolean_true']}" />
+								</h:panelGroup>
+
+							</h:panelGrid>
+
+							<h:panelGrid columns="2" cellspacing="5" cellpadding="5" columnClasses="labelColumnLeft, labelColumnRight">
+								<p:outputLabel value="#{bundle['systemDecisionDashboardDetails_details_synthesis_product_fournisseur']}" />
+								<h:panelGroup>
+									<h:outputText
+										value="#{riskController.synthesisResult.exporterReputation == 'false' ? bundle['systemDecisionDashboardDetails_bad'] : bundle['systemDecisionDashboardDetails_good']} " />
+								</h:panelGroup>
+								<p:outputLabel value="#{bundle['systemDecisionDashboardDetails_details_synthesis_product_quantite']}" />
+								<h:panelGroup>
+									<h:outputText
+										value="#{riskController.synthesisResult.quantityIsSmall == 'false' ? bundle['systemDecisionDashboardDetails_small'] : bundle['systemDecisionDashboardDetails_large']}" />
+								</h:panelGroup>
+								<p:outputLabel value="#{bundle['systemDecisionDashboardDetails_details_synthesis_product_lab']}" />
+								<h:panelGroup>
+									<h:outputText
+										value="#{riskController.synthesisResult.productIsTested == 'false' ? bundle['boolean_false'] : bundle['boolean_true']}" />
+								</h:panelGroup>
+								<p:outputLabel value="#{bundle['systemDecisionDashboardDetails_details_synthesis_product_decision']}" />
+								<h:panelGroup>
+									<h:outputText
+										value="#{riskController.synthesisResult.productHasSuspiciousOrigins == 'false' ? bundle['boolean_false'] : bundle['boolean_true']} " />
+								</h:panelGroup>
+
+							</h:panelGrid>
+						</h:panelGrid>
+					</p:tab>
+				</p:accordionPanel>
+				<p:accordionPanel>
+					<p:tab id="tabParams" title="#{bundle['systemDecisionDashboardImportateur_title']}" dynamic="true" cache="true" titleStyleClass="title">
+						<h:panelGrid columns="3" cellspacing="20" cellpadding="10">
+							<h:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight">
+								<p:outputLabel value="#{bundle['systemDecisionDashboardDetails_details_synthesis_know']}" />
+								<h:panelGroup>
+									<h:outputText
+										value="#{riskController.synthesisResult.importerIsKnown == 'false' ? bundle['boolean_false'] : bundle['boolean_true']} " />
+								</h:panelGroup>
+							</h:panelGrid>
+							<h:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight">
+								<p:outputLabel value="#{bundle['systemDecisionDashboardDetails_details_synthesis_target']}" />
+								<h:panelGroup>
+									<h:outputText
+										value="#{riskController.synthesisResult.importerHasTarget == 'false' ? bundle['boolean_false'] : bundle['boolean_true']} " />
+								</h:panelGroup>
+							</h:panelGrid>
+							<h:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight">
+								<p:outputLabel value="#{bundle['systemDecisionDashboardDetails_details_synthesis_folder']}" />
+								<h:panelGroup>
+									<h:outputText
+										value="#{riskController.synthesisResult.outDatedRequests}" />
+								</h:panelGroup>
+							</h:panelGrid>
+						</h:panelGrid>
+					</p:tab>
+				</p:accordionPanel>
+			</p:tab>
+			<p:tab id="tabParams" title="#{bundle['systemDecisionDashboardDetails_details_param']}" titleStyleClass="title ui-panel-title">
+				<p:treeTable id="dataTree" widgetVar="datalistTree" var="item" value="#{synthesisParamsController.root}" selectionMode="single"
+					styleClass="newui-datatable fixeColumnWidth" resizableColumns="true">
+
+					<f:facet name="header">
+						<h:outputText value="#{bundle['Parametre']}" />
+						<p:commandLink style="float:right;" actionListener="#{synthesisParamsController.reloadTreeTable}" ajax="true" process="@this"
+							update=":systemDecisionDashboardForm">
+							<h:outputText styleClass="sprite sprite-reload-b" />
+						</p:commandLink>
+					</f:facet>
+
+					<p:column headerText="#{bundle['Property']}">
+						<span class="tree_text">
+							<h:outputText value="#{bundle[item.name]}" />
+						</span>
+					</p:column>
+
+					<p:column headerText="#{bundle['Value']}">
+						<h:outputText value="#{item.value}" />
+					</p:column>
+
+					<p:column style="width:5%">
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  update=":systemDecisionSynthesisParamsEditForm" oncomplete="PF('configurationEditDialog').show()" title="edit"
+							icon="ui-icon-pencil" rendered="#{item.type != 'category'}" process="@this">
+							<f:setPropertyActionListener value="#{item}" target="#{synthesisParamsController.selectedParam}" />
+						</p:commandButton>
+					</p:column>
+				</p:treeTable>
+			</p:tab>
+		</p:tabView>
+
+	</h:form>
+
+</ui:composition>
+
+

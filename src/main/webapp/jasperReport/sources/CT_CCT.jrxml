@@ -1,0 +1,595 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="file" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="28078ea8-15af-47d5-9f91-aa95db5f187e">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="768"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#FFBFBF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="3a39baf0-0da7-4393-99e8-6c24166aacf7">
+		<field name="name" class="java.lang.String"/>
+		<field name="quality" class="java.lang.String"/>
+		<field name="service" class="java.lang.String"/>
+	</subDataset>
+	<field name="place" class="java.lang.String"/>
+	<field name="date" class="java.util.Date"/>
+	<field name="hour" class="java.lang.String"/>
+	<field name="quantity" class="java.lang.String"/>
+	<field name="containerNumber" class="java.lang.String"/>
+	<field name="lotNumber" class="java.lang.String"/>
+	<field name="controlerList" class="java.util.List"/>
+	<field name="libelle" class="java.lang.String"/>
+	<field name="normeRespect" class="java.lang.String"/>
+	<field name="labellingNumber" class="java.lang.String"/>
+	<field name="temperature" class="java.lang.String"/>
+	<field name="aspect" class="java.lang.String"/>
+	<field name="origineCertificate" class="java.lang.String"/>
+	<field name="generalPhytosanitaryCertificate" class="java.lang.String"/>
+	<field name="specialPhytosanitaryCertificate" class="java.lang.String"/>
+	<field name="qualityCertification" class="java.lang.String"/>
+	<field name="veterinaryHealthCertificate" class="java.lang.String"/>
+	<field name="healthCertificate" class="java.lang.String"/>
+	<field name="conformityCertificate" class="java.lang.String"/>
+	<field name="otherQualityCertificate" class="java.lang.String"/>
+	<field name="decision" class="java.lang.String"/>
+	<field name="observation" class="java.lang.String"/>
+	<field name="motif" class="java.lang.String"/>
+	<field name="inspectionFeeFcfa" class="java.lang.String"/>
+	<field name="processingFee" class="java.lang.String"/>
+	<field name="specialOtherFees" class="java.lang.String"/>
+	<field name="nature" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="50" splitType="Stretch">
+			<elementGroup/>
+			<elementGroup/>
+			<staticText>
+				<reportElement uuid="e4a898fb-c012-4fdc-9c38-195a4571ae39" x="0" y="0" width="555" height="34"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="14" isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Saisie Constat d'inspection]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="700" splitType="Stretch">
+			<textField>
+				<reportElement uuid="ac67fb2d-8416-4e97-be08-e908b6222da1" x="50" y="24" width="505" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{place} != null  && $F{place}.trim().length()>0 ? $F{place} : "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ca1009d0-da19-4c93-8b10-81de07f51c6f" x="0" y="0" width="555" height="24"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Informations générales:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b8730c44-6f89-42b5-b167-005f2e34932a" x="0" y="24" width="50" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Lieu:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ed69e215-c26a-4093-bbe3-3d461cf2e64a" x="0" y="36" width="50" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Date:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="735ac4a0-c5ba-4120-a6f1-769302885f1b" x="50" y="36" width="505" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{date}!= null? new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{date}) : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="5b6ef7b8-ef03-4596-a380-c86519cc5a02" x="50" y="48" width="505" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{hour} != null  && $F{hour}.trim().length()>0 ? $F{hour} : "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="07f7eb5d-7e22-4a12-a2eb-21eaeb3739e0" x="0" y="48" width="50" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Heure:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b78ebebe-f7d4-465b-aa69-1018e357ea0a" x="0" y="60" width="555" height="29"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Echantillons:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="21f2d106-9042-4ed3-a01e-3ecd743a7df6" x="0" y="89" width="65" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Quantité:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="1236affb-8399-4ac2-b5b1-e2e3aefbea90" x="65" y="89" width="490" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{quantity} != null  && $F{quantity}.trim().length()>0 ? $F{quantity} : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="951f7129-7a4f-4fc3-a550-6facb11bf359" x="65" y="101" width="490" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{containerNumber} != null  && $F{containerNumber}.trim().length()>0 ? $F{containerNumber} : "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="3fac9c03-1dce-426b-b7c6-6c396878f5b1" x="0" y="101" width="65" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[N°conteneur:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="0f873ff0-d72e-4770-b45c-b48259ab0956" x="65" y="113" width="490" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{lotNumber} != null  && $F{lotNumber}.trim().length()>0 ? $F{lotNumber} : "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="85689f30-6e2a-4a42-a6da-11120eb528cb" x="0" y="113" width="65" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[N° lot:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="363f811e-40b8-4c65-8f17-501737579810" x="0" y="267" width="555" height="24"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Étiquetage:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="b61a3619-6a85-4c6f-b15e-8e4e00618dd9" x="143" y="303" width="412" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{normeRespect} != null  && $F{normeRespect}.trim().length()>0 ? $F{normeRespect} : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="3102dcdc-dc35-4cd1-b686-1578ba00056f" x="143" y="291" width="412" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{libelle} != null  && $F{libelle}.trim().length()>0 ? $F{libelle} : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="25e9eb5a-8599-45bf-9082-484b17893ad1" x="143" y="315" width="412" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{labellingNumber} != null  && $F{labellingNumber}.trim().length()>0 ? $F{labellingNumber} : "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="7f76bc08-5800-4f34-86b3-dd548154efb2" x="0" y="315" width="143" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Numéro :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e18d2cb2-a361-433f-9f0a-96d74cdfc80b" x="0" y="291" width="143" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Libellé:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5d27851b-8d7a-468a-8dfa-4689a4c3bb51" x="0" y="303" width="143" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Respect Norme Camerounaise:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="990173dd-915a-4b4e-8553-1ed8cd029034" x="0" y="327" width="555" height="25"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Température:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7fbdaee2-43e8-4b83-97c0-bfd37d765423" x="0" y="364" width="83" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Aspect : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7b76735e-48af-476f-b1de-61e5613daacc" x="0" y="352" width="83" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Température(°c):]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="32842ef8-99bc-4407-93ff-c0f45687f706" x="83" y="364" width="472" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{aspect} != null  && $F{aspect}.trim().length()>0 ? $F{aspect} : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="8ae8adac-d22f-40c7-a085-93a7e459bc8f" x="83" y="352" width="472" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{temperature} != null  && $F{temperature}.trim().length()>0 ? $F{temperature} : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="c0b4b8d7-e08e-491e-a43d-3d2871c3bc6c" x="143" y="400" width="412" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{origineCertificate} != null  && $F{origineCertificate}.trim().length()>0 ? $F{origineCertificate} : "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="51ae143d-5955-40e2-aada-f7f5d02e6688" x="0" y="376" width="555" height="24"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Certificats ou attestations:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="60e06b60-47b3-44e3-af99-3922544972b2" x="0" y="400" width="143" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Certificat d'origine:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="06158707-edfd-45be-9283-2658d9ebceb2" x="0" y="412" width="143" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Certificat phytosanitaire général:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="813becae-ea4f-4826-a22d-41e3543e2d1f" x="0" y="424" width="143" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Certificat phytosanitaire spécial:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="288317f2-ff15-4b5f-ad4f-1872eec5008f" x="0" y="436" width="143" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Attestation de qualité:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8ca878b9-5586-422b-927a-ae77e254d8b4" x="0" y="448" width="143" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Certificat sanitaire vétérinaire:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="010a62c9-159a-43c5-a889-1a00b595cc01" x="0" y="460" width="143" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Certificat de salubrité:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="dd1d2a66-ce04-44b5-a7b6-754f599cfe98" x="0" y="472" width="143" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Certificat de conformité:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8b7eeb6c-5be4-4ea1-8da1-8ffe5d52a22b" x="0" y="484" width="143" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Autre certificat de qualité : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ed03c601-94ba-47aa-b401-6718214c2a3b" x="0" y="496" width="555" height="26"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Certificats ou attestations:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d39034d0-ce4c-4db6-b680-5c22c972e459" x="0" y="522" width="120" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Décision:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="fabab405-5356-4d4d-8037-8ea50526888c" x="120" y="522" width="435" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{decision} != null  && $F{decision}.trim().length()>0 ? $F{decision} : "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="71ae38b9-73a2-4cc7-95a0-47c9da4f6404" x="0" y="534" width="120" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Observation:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="fb5e9216-fe6d-49a1-b666-aa42c9b0ebcf" x="120" y="534" width="435" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{observation} != null  && $F{observation}.trim().length()>0 ? $F{observation} : "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d7e7c7b2-4b21-4704-92da-25479b8dd26e" x="0" y="546" width="120" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Motif:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="3b607a71-ff52-4df7-952f-6dbcceebc8b7" x="120" y="546" width="412" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{motif} != null  && $F{motif}.trim().length()>0 ? $F{motif} : "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="fe80aea1-1c1d-4af4-9b8e-32a13d15db90" x="0" y="558" width="120" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Frais d'inspection (FCFA):]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="a5250700-044f-4f97-ae89-c16b618034f6" x="120" y="558" width="435" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{inspectionFeeFcfa} != null  && $F{inspectionFeeFcfa}.trim().length()>0 ? $F{inspectionFeeFcfa} : "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="5de95334-f48f-4ed4-ad80-aef836761251" x="0" y="594" width="120" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Infraction:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="0810eb8c-7c9a-438c-bdcc-514c4e446dd4" x="120" y="594" width="435" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{nature} != null  && $F{nature}.trim().length()>0 ? $F{nature} : "-")]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement uuid="44951582-1374-4515-b03e-0fa972942efa" key="table 2" style="table 2" x="0" y="135" width="270" height="132"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Table Dataset 1" uuid="d59b2d10-8f20-42d5-af25-4d42383990b9">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{controlerList})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="90" uuid="c38f1bfa-5eaa-4127-bbe0-94c9c0e8a652">
+						<jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="16411891-2136-49fc-83c2-e02414006f4b" x="0" y="0" width="90" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[name]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement uuid="1bb1d703-13eb-44b1-8cf6-bc44c763cfc1" x="0" y="0" width="90" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[($F{name} != null  && $F{name}.trim().length()>0 ? $F{name} : "-")]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="ca1b565e-9890-4dfa-8483-7b906f14d473">
+						<jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="ea794847-a192-403e-8d4c-e42222919ff3" x="0" y="0" width="90" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[quality]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement uuid="4b00981c-e0cc-43b9-bd33-c327abd1a17d" x="0" y="0" width="90" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[($F{quality} != null  && $F{quality}.trim().length()>0 ? $F{quality} : "-")]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="b1e9d0f3-1267-418a-b067-85c7db9315c3">
+						<jr:columnHeader style="table 2_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="ca5337e7-764d-4f1e-867d-a97f4a2b3025" x="0" y="0" width="90" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[service]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement uuid="444ce812-d871-4dc7-8681-37445fde238f" x="0" y="0" width="90" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[($F{service} != null  && $F{service}.trim().length()>0 ? $F{service} : "-")]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<textField>
+				<reportElement uuid="30b3215e-e99f-4f70-8ad9-197a7b045499" x="143" y="412" width="412" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{generalPhytosanitaryCertificate} != null  && $F{generalPhytosanitaryCertificate}.trim().length()>0 ? $F{generalPhytosanitaryCertificate} : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="1f00a714-988c-4c93-a0b2-8eb03af3e4c4" x="143" y="424" width="412" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{specialPhytosanitaryCertificate} != null  && $F{specialPhytosanitaryCertificate}.trim().length()>0 ? $F{specialPhytosanitaryCertificate} : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="53c2f927-6a46-4a2b-a4c4-00bbe9cd1c9b" x="143" y="436" width="412" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{qualityCertification} != null  && $F{qualityCertification}.trim().length()>0 ? $F{qualityCertification} : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="cedcd618-c2db-4b2e-8331-7716aed6b8cb" x="143" y="448" width="412" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{veterinaryHealthCertificate} != null  && $F{veterinaryHealthCertificate}.trim().length()>0 ? $F{veterinaryHealthCertificate} : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="04dda06b-ebbf-463f-8db9-7b84fc69bbd4" x="143" y="460" width="412" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{healthCertificate} != null  && $F{healthCertificate}.trim().length()>0 ? $F{healthCertificate} : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="b7ca72f2-8b21-46b3-9921-3d8c5d88d546" x="143" y="472" width="412" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{conformityCertificate} != null  && $F{conformityCertificate}.trim().length()>0 ? $F{conformityCertificate} : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="264b28e0-6848-4d2f-980f-a3c6575dcc01" x="143" y="484" width="412" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{otherQualityCertificate} != null  && $F{otherQualityCertificate}.trim().length()>0 ? $F{otherQualityCertificate} : "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="95bc5d2e-3e64-4479-8826-d2000dadfb21" x="0" y="570" width="120" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Frais de traitement:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="cc6ef0cb-d9aa-49df-871f-a62cd1c4b5e6" x="120" y="570" width="435" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{processingFee} != null  && $F{processingFee}.trim().length()>0 ? $F{processingFee} : "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f81a5059-0618-4d60-88f9-39735f911a2a" x="0" y="582" width="120" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Autres frais(Spécial): ]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="02979329-fc5f-4002-96f2-b182f8f41d51" x="120" y="582" width="435" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{specialOtherFees} != null  && $F{specialOtherFees}.trim().length()>0 ? $F{specialOtherFees} : "-")]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

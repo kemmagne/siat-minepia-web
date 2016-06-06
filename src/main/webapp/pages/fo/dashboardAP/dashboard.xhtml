@@ -1,0 +1,109 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="dealForm">
+		<p:outputPanel styleClass="search">
+			<h:outputText value="#{bundle['deal_title']}" styleClass="title" />
+			<p:tab title="#{bundle['deal_title']}" dynamic="true" cache="true">
+
+				<p:commandLink update=":dealForm :fileItemListForm:datalist" actionListener="#{fileItemApController.dashboardCalculate}"
+					styleClass="reload">
+					<h:outputText styleClass="sprite sprite-reload" title="#{bundle['ButtonReset']}" />
+				</p:commandLink>
+
+				<h:panelGrid columns="3">
+					<h:panelGroup>
+						<h:outputLabel value="#{bundle['DealLabel_new_folder']}" style="font-weight:bold" />
+					</h:panelGroup>
+
+					<h:panelGroup>
+						<h:outputText value="#{fileItemApController.unreadFilesList.size()}" />
+						<p:commandLink action="#{fileItemApController.filterFormDashboard}" update=":fileItemListForm:datalist">
+							<f:setPropertyActionListener target="#{fileItemApController.actionFilter}" value="unread" />
+							<p:graphicImage value="/images/dashboard/unread.png" />
+						</p:commandLink>
+					</h:panelGroup>
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="3">
+
+					<h:panelGroup>
+						<h:outputLabel value="#{bundle['DealLabel_open_from']}" style="font-weight:bold" />
+					</h:panelGroup>
+
+					<h:panelGroup>
+						<h:outputLabel value="#{bundle['DealLabel_minus']}" />
+					</h:panelGroup>
+
+					<h:panelGroup>
+						<h:outputText value="#{fileItemApController.receivedBeforOneDayFilesList.size()}" />
+						<p:commandLink action="#{fileItemApController.filterFormDashboard}" update=":fileItemListForm:datalist">
+							<f:setPropertyActionListener target="#{fileItemApController.actionFilter}" value="oneday" />
+							<p:graphicImage value="/images/dashboard/info.png" />
+						</p:commandLink>
+					</h:panelGroup>
+
+					<h:panelGroup></h:panelGroup>
+
+					<h:panelGroup>
+						<h:outputLabel value="#{bundle['DealLabel_between']}" />
+					</h:panelGroup>
+
+					<h:panelGroup>
+						<h:outputText value="#{fileItemApController.receivedBetweenTwoDayFilesList.size()}" />
+						<p:commandLink update=":fileItemListForm:datalist" action="#{fileItemApController.filterFormDashboard}">
+							<f:setPropertyActionListener target="#{fileItemApController.actionFilter}" value="between" />
+							<p:graphicImage value="/images/dashboard/stop.png" />
+						</p:commandLink>
+					</h:panelGroup>
+					<h:panelGroup></h:panelGroup>
+
+					<h:panelGroup>
+						<h:outputLabel value="#{bundle['DealLabel_plus']}" />
+					</h:panelGroup>
+
+					<h:panelGroup>
+						<h:outputText value="#{fileItemApController.receivedMoreTwoDaysFilesList.size()}" />
+						<p:commandLink update=":fileItemListForm:datalist" action="#{fileItemApController.filterFormDashboard}">
+							<f:setPropertyActionListener target="#{fileItemApController.actionFilter}" value="towday" />
+							<p:graphicImage value="/images/dashboard/warning.png" />
+						</p:commandLink>
+					</h:panelGroup>
+
+					<h:panelGroup>
+						<h:outputLabel value="#{bundle['DealLabel_brouillon']}" style="font-weight:bold" />
+					</h:panelGroup>
+					<h:panelGroup></h:panelGroup>
+					<h:panelGroup>
+						<h:outputText value="#{fileItemApController.draftFilesList.size()}" />
+						<p:commandLink action="#{fileItemApController.filterFormDashboard}" update=":fileItemListForm:datalist">
+							<f:setPropertyActionListener target="#{fileItemApController.actionFilter}" value="draft" />
+							<p:graphicImage value="/images/dashboard/draft.png" />
+						</p:commandLink>
+					</h:panelGroup>
+
+
+					<h:panelGroup>
+						<h:outputLabel value="#{bundle['DealLabel_total']} : " style="font-weight:bold" />
+					</h:panelGroup>
+					<h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup>
+						<p:commandLink style="font-weight:bold" value=" #{fileItemApController.filesList.size()}"
+							action="#{fileItemApController.filterFormDashboard}" update=":fileItemListForm:datalist">
+							<f:setPropertyActionListener target="#{fileItemApController.actionFilter}" value="all" />
+						</p:commandLink>
+						<p:commandLink action="#{fileItemApController.filterFormDashboard}" update=":fileItemListForm:datalist">
+							<f:setPropertyActionListener target="#{fileItemApController.actionFilter}" value="all" />
+							<p:graphicImage value="/images/dashboard/total.png" />
+						</p:commandLink>
+					</h:panelGroup>
+
+				</h:panelGrid>
+
+			</p:tab>
+
+		</p:outputPanel>
+	</h:form>
+</ui:composition>

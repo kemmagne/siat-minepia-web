@@ -1,0 +1,65 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<p:dialog closeOnEscape="true" id="systemDecisionDashboardDlg" widgetVar="systemDecisionDashboardDialog" modal="true" resizable="false"
+		appendTo="@(body)" header="#{bundle['systemDecisionDashboarTitle']}" width="1100px" height="600px">
+
+		<h:form id="systemDecisionDashboardForm">
+
+			<p:accordionPanel styleClass="accord-content">
+				<p:tab title="#{bundle['systemDecisionDashboardImportateur_title']}" dynamic="true" cache="true" titleStyleClass="title">
+					<h:panelGrid columns="3" cellspacing="20" cellpadding="10">
+						<h:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight">
+							<p:outputLabel value="#{bundle['systemDecisionDashboardDetails_nom']}" />
+							<h:outputText value="#{fileItemCctDetailController.selectedFileItemCheck.fileItem.file.client.companyName}" />
+						</h:panelGrid>
+						<h:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight">
+							<p:outputLabel value="#{bundle['systemDecisionDashboardDetails_code']}" />
+							<h:outputText value="#{fileItemCctDetailController.selectedFileItemCheck.fileItem.file.client.numContribuable}" />
+						</h:panelGrid>
+						<h:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight">
+							<p:outputLabel value="#{bundle['systemDecisionDashboardDetails_state']}" />
+							<h:outputText value="#{riskController.documentInfoList.size()}" />
+						</h:panelGrid>
+					</h:panelGrid>
+				</p:tab>
+			</p:accordionPanel>
+			<p:accordionPanel styleClass="accord-content">
+				<p:tab title="#{bundle['systemDecisionDashboardDetails_details']}" dynamic="true" cache="true" titleStyleClass="title">
+					<p:panel>
+						<p:tabView styleClass="tabnav-head" scrollable="true" activeIndex="#{riskController.syntheseActiveTab}">
+							<p:ajax event="tabChange" update="@form" />
+							<p:tab id="tabAlert" title="#{bundle['systemDecisionDashboardDetails_details_tab_alert']}">
+								<ui:include src="alertDashbordTab.xhtml" />
+							</p:tab>
+							<p:tab id="tabTarget" title="#{bundle['systemDecisionDashboardDetails_details_tab_ciblage']}">
+								<ui:include src="ciblageDashbordTab.xhtml" />
+							</p:tab>
+							<p:tab id="tabFolder" title="#{bundle['systemDecisionDashboardDetails_details_tab_folder']}">
+								<ui:include src="folderDashbordTab.xhtml" />
+							</p:tab>
+							<p:tab id="tabImportateurDecisionsNegatives"
+								title="#{bundle['systemDecisionDashboardDetails_details_tab_importateur_decision_negatives']}">
+								<ui:include src="importateurDecisionsNegativesDashbordTab.xhtml" />
+							</p:tab>
+							<p:tab id="tabProduitDecisionsNegatives"
+								title="#{bundle['systemDecisionDashboardDetails_details_tab_produit_decision_negatives']}">
+								<ui:include src="produitDecisionsNegativesDashbordTab.xhtml" />
+							</p:tab>
+							<p:tab id="tabSynthesis" title="#{bundle['systemDecisionDashboardDetails_details_tab_synthesis']}"
+								disabled="#{fileItemCctDetailController.disabledTabSynthese}">
+								<ui:include src="synthesisDashbordTab.xhtml" />
+							</p:tab>
+						</p:tabView>
+					</p:panel>
+				</p:tab>
+			</p:accordionPanel>
+
+		</h:form>
+	</p:dialog>
+
+</ui:composition>
+
+

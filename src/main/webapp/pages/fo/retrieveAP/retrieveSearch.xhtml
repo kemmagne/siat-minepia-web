@@ -1,0 +1,52 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+
+	<h:form id="retrieveSearchForm">
+
+		<p:accordionPanel styleClass="search">
+
+			<p:tab title="#{bundle['retrieveSearch_SearchCriteria']}" dynamic="true" cache="true">
+
+				<h:panelGrid columns="10" cellpadding="10">
+					<h:panelGroup>
+						<p:outputLabel for="fileType" value="#{bundle['retrieveSearch_fileTypeLabel']}" />
+					</h:panelGroup>
+					<p:selectOneMenu id="fileType" title="#{bundle['retrieveSearch_fileTypeTitle']}" value="#{retrieveApController.filter.fileType}"
+						filter="true" filterMatchMode="contains">
+						<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" itemValue="#{null}" />
+						<f:selectItems value="#{retrieveApController.fileTypeItems}" />
+						<f:converter binding="#{fileTypeConverter}" />
+					</p:selectOneMenu>
+
+					<h:panelGroup>
+						<p:outputLabel for="fromDate" value="#{bundle['retrieveSearch_fromDate']}" />
+					</h:panelGroup>
+					<p:calendar navigator="true" id="fromDate" value="#{retrieveApController.filter.fromDate}" title="#{bundle['retrieveSearch_fromDate']}"
+						showOn="button" pattern="dd/MM/yyyy" readonlyInput="true">
+						<p:ajax event="dateSelect" update="toDate" />
+					</p:calendar>
+
+					<h:panelGroup>
+						<p:outputLabel for="toDate" value="#{bundle['retrieveSearch_toDate']}" />
+					</h:panelGroup>
+					<p:calendar navigator="true" id="toDate" value="#{retrieveApController.filter.toDate}" title="#{bundle['retrieveSearch_toDate']}"
+						showOn="button" pattern="dd/MM/yyyy" mindate="#{retrieveApController.filter.fromDate}" readonlyInput="true">
+					</p:calendar>
+
+					<h:panelGroup>
+						<p:commandButton icon="ui-icon-search" title="#{bundle['ButtonSearch']}" action="#{retrieveApController.doSearchByFilter}"
+							update=":fileItemListForm:datalist :retrieveSearchForm :growl" oncomplete="PF('datalistTable').filter();"
+							onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+						<p:commandButton icon="ui-icon-refresh" title="#{bundle['ButtonReset']}" action="#{retrieveApController.initRetrieveSearch}"
+							oncomplete="PF('datalistTable').filter();" update=":fileItemListForm:datalist :retrieveSearchForm"
+							onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+					</h:panelGroup>
+				</h:panelGrid>
+
+			</p:tab>
+
+		</p:accordionPanel>
+
+	</h:form>
+</ui:composition>

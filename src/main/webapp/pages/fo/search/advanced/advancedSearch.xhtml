@@ -1,0 +1,157 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<h:form id="advancedSearchForm">
+
+		<p:accordionPanel styleClass="search">
+
+			<p:tab title="#{bundle['AdvancedSearch_title']}" dynamic="true" cache="true">
+
+				<h:panelGrid columns="9" cellpadding="10">
+
+					<p:outputLabel for="criteria" value="#{bundle['AdvancedSearch_criteria']}" />
+					<p:selectOneMenu id="criteria" style="width: 160px" value="#{searchController.searchCriteria}">
+						<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+						<f:selectItems value="#{searchController.searchCriteriaList}" var="criteria" itemValue="#{criteria}" itemLabel="#{criteria}" />
+						<p:ajax event="change" listener="#{searchController.changeSearchCriteriaHandler}" update=":advancedSearchForm" />
+					</p:selectOneMenu>
+
+					<p:outputLabel for="fromDate" value="#{bundle['AdvancedSearch_fromDate']}" />
+					<p:calendar navigator="true" id="fromDate" value="#{searchController.filter.fromDate}" title="#{bundle['AdvancedSearch_fromDate']}"
+						showOn="button" pattern="dd/MM/yyyy" readonlyInput="true">
+						<p:ajax event="dateSelect" update="toDate" />
+					</p:calendar>
+
+					<p:outputLabel for="toDate" value="#{bundle['AdvancedSearch_toDate']}" />
+					<p:calendar navigator="true" id="toDate" value="#{searchController.filter.toDate}" title="#{bundle['AdvancedSearch_toDate']}"
+						showOn="button" pattern="dd/MM/yyyy" mindate="#{searchController.filter.fromDate}" readonlyInput="true">
+					</p:calendar>
+
+					<h:panelGrid columns="2" cellpadding="10" rendered="#{searchController.isArticle}">
+						<h:outputLabel value="#{bundle['AdvancedSearch_nsh']}" for="nsh" />
+						<p:autoComplete id="nsh" value="#{searchController.filter.subfamily}" completeMethod="#{searchController.fetchNSHList}"
+							title="#{bundle['AdvancedSearch_nsh']}" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="2" cellpadding="10" rendered="#{searchController.isFile}">
+						<h:panelGroup>
+							<h:outputLabel value="#{bundle['AdvancedSearch_docNumber']}" for="docNumber" />
+						</h:panelGroup>
+						<p:inputText id="docNumber" value="#{searchController.filter.file}" label="#{bundle['AdvancedSearch_docNumber']}"
+							title="#{bundle['AdvancedSearch_docNumber']}" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="2" cellpadding="10" rendered="#{searchController.isOperator}">
+						<h:outputLabel value="#{bundle['AdvancedSearch_operator']}" for="operator" />
+						<p:selectOneMenu id="operator" value="#{searchController.filter.operator}" converter="#{companyConverter}" panelStyle="width:280px"
+							effect="fade" var="op" style="width:160px" filter="true" filterMatchMode="startsWith">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{searchController.operatorList}" var="op" itemValue="#{op}" itemLabel="#{op.companyName}" />
+							<p:column>
+								<h:outputText value="#{op.numContribuable}" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{op.companyName}" />
+							</p:column>
+						</p:selectOneMenu>
+					</h:panelGrid>
+
+					<h:panelGrid columns="2" cellpadding="10" rendered="#{searchController.isTransType}">
+						<p:outputLabel for="transType" value="#{bundle['AdvancedSearch_transportType']}" />
+						<p:selectOneMenu id="transType" value="#{searchController.filter.transportType}" converter="#{transportTypeConverter}"
+							panelStyle="width:280px" effect="fade" var="trans" style="width:160px" filter="true" filterMatchMode="startsWith">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{searchController.transportTypeList}" var="transType" itemValue="#{transType}"
+								itemLabel="#{transType.typeMeanTransportCode}" />
+							<p:column>
+								<h:outputText value="#{trans.typeMeanTransportCode}" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? trans.typeMeanTransportNameEn : trans.typeMeanTransportName}" />
+							</p:column>
+						</p:selectOneMenu>
+					</h:panelGrid>
+
+					<h:panelGrid columns="2" cellpadding="10" rendered="#{searchController.isCountry}">
+						<h:outputLabel value="#{bundle['AdvancedSearch_originCountry']}" for="originCountry" />
+						<p:selectOneMenu id="originCountry" value="#{searchController.filter.originCountry}" converter="#{countryConverter}"
+							panelStyle="width:180px" effect="fade" var="count" style="width:160px" filter="true" filterMatchMode="startsWith">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{searchController.countries}" var="country" itemLabel="#{country.countryIdAlpha2}" itemValue="#{country}" />
+							<p:column style="width:10%">
+								<p:graphicImage value="/images/flags/#{count.countryName}.png" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{count.countryIdAlpha2}" />
+							</p:column>
+						</p:selectOneMenu>
+					</h:panelGrid>
+
+					<h:panelGrid columns="2" cellpadding="10" rendered="#{searchController.isPort}">
+						<h:outputLabel value="#{bundle['AdvancedSearch_arrivalPort']}" for="arrivalPort" />
+						<p:selectOneMenu id="arrivalPort" value="#{searchController.filter.arrivalPort}" converter="#{portConverter}" panelStyle="width:280px"
+							effect="fade" var="arrPort" style="width:300px" filter="true" filterMatchMode="startsWith">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{searchController.arrivalPorts}" var="port" itemValue="#{port}" itemLabel="#{port.locationCode}" />
+							<p:column>
+								<h:outputText value="#{arrPort.locationCode}" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? arrPort.locationNameEn : arrPort.locationName }" />
+							</p:column>
+						</p:selectOneMenu>
+					</h:panelGrid>
+
+					<h:panelGrid columns="2" cellpadding="10" rendered="#{searchController.isController}">
+						<h:outputLabel value="#{bundle['AdvancedSearch_controllers']}" for="controller" />
+						<p:selectOneMenu id="controller" value="#{searchController.filter.controller}" converter="#{userConverter}" filter="true"
+							filterMatchMode="startsWith">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{searchController.controllers}" var="controller" itemValue="#{controller}"
+								itemLabel="#{controller.firstName} #{controller.lastName}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+
+					<h:panelGrid columns="2" cellpadding="10" rendered="#{searchController.isAnalyseType}">
+						<h:outputLabel value="#{bundle['AdvancedSearch_analyseTypes']}" for="analyseType" />
+						<p:selectOneMenu id="analyseType" value="#{searchController.filter.analyseType}" converter="#{analyseTypeConverter}" filter="true"
+							filterMatchMode="contains">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{searchController.analyseTypes}" var="analyseType" itemValue="#{analyseType}"
+								itemLabel="#{facesContext.viewRoot.locale eq 'en' ? analyseType.labelEn : analyseType.labelFr }" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+
+					<h:panelGrid columns="2" cellpadding="10" rendered="#{searchController.isLaboratory}">
+						<h:outputLabel value="#{bundle['AdvancedSearch_laboratoriesLabel']} : " for="laboratory" />
+						<h:panelGroup>
+							<p:selectOneMenu id="laboratory" value="#{searchController.filter.laboratory}" converter="#{laboratoryConverter}"
+								title="#{bundle['AdvancedSearch_laboratoriesTitle']}" filter="true" filterMatchMode="contains">
+								<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+								<f:selectItems value="#{searchController.laboratories}" var="lab" itemValue="#{lab}"
+									itemLabel="#{facesContext.viewRoot.locale eq 'en' ? lab.labelEn : lab.labelFr}" />
+							</p:selectOneMenu>
+						</h:panelGroup>
+					</h:panelGrid>
+
+					<h:panelGroup>
+
+						<p:commandButton icon="ui-icon-search" title="#{bundle['ButtonSearch']}" action="#{searchController.doSearchByFilter}"
+							update=":filtredFileItemListForm:datalist :advancedSearchForm " oncomplete="PF('datalistTable').filter();"
+							onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+						<p:commandButton icon="ui-icon-refresh" title="#{bundle['ButtonReset']}" action="#{searchController.init}"
+							oncomplete="PF('datalistTable').filter()" update=":filtredFileItemListForm:datalist :advancedSearchForm"
+							onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+
+					</h:panelGroup>
+
+				</h:panelGrid>
+			</p:tab>
+
+		</p:accordionPanel>
+
+	</h:form>
+
+</ui:composition>

@@ -1,0 +1,83 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+
+
+
+
+	<h:form id="tradeListForm">
+		<p:dataTable data-role="table" data-mode="reflow" tableStyleClass="ui-table-columntoggle ui-responsive" reflow="true" id="datalist"
+			binding="#{table}" value="#{tradeBalanceConfigController.tradeBalanceConfigs}" filteredValue="" var="item" selectionMode="single"
+			selection="#{tradeBalanceConfigController.tradeBalanceConfig}" rowKey="#{item.id}" rows="5" paginator="true"
+			rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}" styleClass="newui-datatable fixeColumnWidth "
+			paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})" widgetVar="datalistTable">
+
+			<p:ajax event="rowSelect" update="editButton datalist" />
+			<p:ajax event="rowUnselect" update="editButton datalist" />
+			<p:ajax event="rowDblselect" oncomplete="PF('tradeEditDialog').show();" update=":tradeEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+
+			<p:column headerText="#{item.code}" id="codeColumn" sortBy="#{item.code}" filterBy="#{item.code}" filterMatchMode="contains">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['TradeLabel_code']}" title="#{bundle['TradeLabel_code']}" />
+				</f:facet>
+				<h:outputText value="#{item.code}" />
+			</p:column>
+
+			<p:column headerText="#{item.firstName}" id="labelColumn" sortBy="#{item.label}" filterBy="#{item.label}" filterMatchMode="contains">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['TradeLabel_label']}" title="#{bundle['TradeLabel_label']}" />
+				</f:facet>
+				<h:outputText value="#{item.label}" />
+			</p:column>
+
+			<p:column headerText="#{item.type}" id="typeColumn" sortBy="#{item.type}" filterBy="#{item.type}" filterMatchMode="exact">
+				<f:facet name="filter">
+					<p:selectOneMenu onchange="PF('datalistTable').filter()">
+						<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" itemValue="#{null}" noSelectionOption="true" />
+						<f:selectItem itemValue="01" itemLabel="#{bundle['TradeLabel_type_01']}"></f:selectItem>
+						<f:selectItem itemValue="02" itemLabel="#{bundle['TradeLabel_type_02']}"></f:selectItem>
+					</p:selectOneMenu>
+				</f:facet>
+
+				<f:facet name="header">
+					<h:outputText value="#{bundle['TradeLabel_type']}" title="#{bundle['TradeLabel_type']}" />
+				</f:facet>
+				<h:outputText value="#{item.type.equals('01')?bundle['TradeLabel_type_01']:bundle['TradeLabel_type_02']}" />
+			</p:column>
+
+
+
+			<f:facet name="footer">
+				<p:commandButton id="createButton" styleClass="btn" icon="sprite sprite-plus" value="#{bundle['Create']}"
+					actionListener="#{tradeBalanceConfigController.prepareCreate}" update=":growl :tradeCreateForm"
+					oncomplete="PF('tradeCreateDialog').show();" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"/>
+				<p:commandButton id="editButton" styleClass="btn" icon="sprite sprite-edit" value="#{bundle['Edit']}"
+					onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"
+					rendered="#{tradeBalanceConfigController.tradeBalanceConfig!=null and tradeBalanceConfigController.tradeBalanceConfig.id!=null}"
+					oncomplete="PF('tradeEditDialog').show();" update=":tradeEditForm" />
+				<p:commandButton id="deleteButton" styleClass="btn" icon="sprite sprite-delete" value="#{bundle['Delete']}"
+					rendered="#{tradeBalanceConfigController.tradeBalanceConfig!=null and tradeBalanceConfigController.tradeBalanceConfig.id!=null}"
+					oncomplete="PF('confirmation').show()" />
+
+			</f:facet>
+
+		</p:dataTable>
+
+	</h:form>
+	<p:confirmDialog closeOnEscape="true" id="diagSupp" message="#{bundle['popup_confirm_delete_message']}"
+		header="#{bundle['popup_confirm_delete_header']}" widgetVar="confirmation" appendTo="@(body)">
+		<div align="right">
+			<h:form id="diagForm">
+				<p:commandButton id="confirm" value="#{bundle['popup_confirm_delete_message_oui']}" update=":growl :tradeListForm:datalist"
+					oncomplete="PF('confirmation').hide();document.getElementById('diagForm:confirm').disabled=false;PF('datalistTable').filter();"
+					onclick="document.getElementById('diagForm:confirm').disabled=true;" actionListener="#{tradeBalanceConfigController.doDelete}"
+					styleClass="ui-priority-primary" onsuccess="PF('datalistTable').filter();" />
+				<p:commandButton id="decline" value="#{bundle['popup_confirm_delete_message_pas_maintenant']}" onclick="PF('confirmation').hide()"
+					update=":tradeListForm" styleClass="ui-priority-primary" />
+			</h:form>
+		</div>
+	</p:confirmDialog>
+
+
+</ui:composition>

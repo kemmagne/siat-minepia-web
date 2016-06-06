@@ -1,0 +1,76 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+	<p:dialog closeOnEscape="true" id="servicesItemCreateDlg" widgetVar="servicesItemCreateDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['CreateServicesItemTitle']}">
+
+		<h:form id="servicesItemCreateForm">
+			<h:panelGroup id="display" styleClass="inpWidth">
+
+				<p:panelGrid columns="4">
+
+					<p:outputLabel value="#{bundle['CreateBureauRegionalLabel_service']}" for="service" />
+					<h:panelGroup>
+						<p:selectOneMenu id="service" value="#{servicesItemController.selectedService}" required="true"
+							requiredMessage="#{bundle['CreateBureauRegionalRequiredMessage_service']}">
+
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{servicesItemController.serviceList}" var="serviceItem" itemValue="#{serviceItem}"
+								itemLabel="#{serviceItem.labelFr}" />
+							<f:converter binding="#{serviceConverter}" />
+							<p:ajax listener="#{servicesItemController.initiateNsh}" update="autoComplete itemLabel" />
+						</p:selectOneMenu>
+						<p:message for="service" />
+					</h:panelGroup>
+
+
+					<p:outputLabel value="#{bundle['CreateServicesItemLabel_id']}" for="autoComplete" />
+					<h:panelGroup>
+						<p:autoComplete id="autoComplete" value="#{servicesItemController.itemNsh}" completeMethod="#{servicesItemController.getNSHList}"
+							required="true" disabled="#{servicesItemController.disableNsh}" requiredMessage="#{bundle['CreateServicesItemRequiredMessage_id']}">
+							<p:ajax event="itemSelect" update="itemLabel" listener="#{servicesItemController.relatedItemWarning}" />
+						</p:autoComplete>
+						<p:message for="autoComplete" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateServicesItemLabel_itemLabel']}" for="itemLabel" />
+					<h:panelGroup>
+						<p:outputLabel id="itemLabel" value="#{servicesItemController.itemLabel}" />
+						<p:message for="itemLabel" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateServicesItemLabel_label']}" for="label" />
+					<h:panelGroup>
+						<p:inputText id="label" value="#{servicesItemController.selected.label}" title="#{bundle['CreateServicesItemLabel_label']}"
+							required="true" requiredMessage="#{bundle['CreateServicesItemRequiredMessage_Label']}">
+							<p:ajax listener="#{servicesItemController.relatedItemWarning}" />
+						</p:inputText>
+						<p:message for="label" />
+					</h:panelGroup>
+
+				</p:panelGrid>
+
+				<h:inputHidden id="relatedItemToOtherService" value="#{servicesItemController.attachedToOtherService}" />
+				<h:inputHidden id="relatedItemToService" value="#{servicesItemController.attachedToService}" />
+				<br />
+
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="createBtn" actionListener="#{servicesItemController.create}" value="#{bundle['Save']}"
+						styleClass="ui-priority-primary" update="display,:servicesItemListForm,:growl"
+						oncomplete="handleSubmit(xhr,status,args,servicesItemCreateDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary"
+						onclick="PF('servicesItemCreateDialog').hide();" immediate="true" />
+
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

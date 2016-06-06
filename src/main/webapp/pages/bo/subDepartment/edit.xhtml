@@ -1,0 +1,61 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="subDepartmentEditDlg" widgetVar="subDepartmentEditDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['EditSubDeartmentTitle']}">
+
+		<h:form id="subDepartmentEditForm">
+
+			<h:panelGroup id="display">
+
+				<p:panelGrid columns="4">
+
+					<p:outputLabel value="#{bundle['EditSubDepartmentLabel_OrganismAbreviation']}" />
+					<h:outputText value="#{subDepartmentController.selected.organism.abreviation}" />
+
+					<p:outputLabel value="#{bundle['EditSubDepartmentLabel_assistantDirector']}" />
+					<h:outputText
+						value="#{(subDepartmentController.selected.assistantDirector.firstName).concat(' ').concat(subDepartmentController.selected.assistantDirector.lastName)}" />
+
+					<p:outputLabel value="#{bundle['EditSubDepartmentLabel_labelFr']}" for="subDepartment_labelFr" />
+					<h:panelGroup>
+						<p:inputText id="subDepartment_labelFr" value="#{subDepartmentController.selected.labelFr}"
+							title="#{bundle['EditSubDepartmentTitle_labelFr']}" required="true"
+							requiredMessage="#{bundle['EditSubDepartmentRequiredMessage_labelFr']}" />
+						<p:message for="subDepartment_labelFr" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditSubDepartmentLabel_labelEn']}" for="subDepartment_labelEn" />
+					<h:panelGroup>
+						<p:inputText id="subDepartment_labelEn" value="#{subDepartmentController.selected.labelEn}"
+							title="#{bundle['EditSubDepartmentTitle_labelEn']}" required="true"
+							requiredMessage="#{bundle['EditSubDepartmentRequiredMessage_labelEn']}" />
+						<p:message for="subDepartment_labelEn" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditSubDepartmentLabel_abreviation']}" for="subDepartment_abreviation" />
+					<p:inputText id="subDepartment_abreviation" value="#{subDepartmentController.selected.abreviation}"
+						title="#{bundle['EditSubDepartmentTitle_abreviation']}" required="false"
+						requiredMessage="#{bundle['EditSubDepartmentRequiredMessage_abreviation']}" />
+
+				</p:panelGrid>
+				<br />
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editBtn" actionListener="#{subDepartmentController.edit}" value="#{bundle['Save']}"
+						styleClass="ui-priority-primary" update="display,:subDepartmentListForm,:growl"
+						oncomplete="handleSubmit(xhr,status,args,subDepartmentEditDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('fileTypeEditDialog').hide();"
+						immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

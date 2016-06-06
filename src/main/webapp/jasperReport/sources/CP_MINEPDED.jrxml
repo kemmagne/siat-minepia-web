@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="file" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="28078ea8-15af-47d5-9f91-aa95db5f187e">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="697"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#FFBFBF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<field name="referenceNumber" class="java.lang.String"/>
+	<field name="importingCountry" class="java.lang.String"/>
+	<field name="fileItemList" class="java.util.List"/>
+	<field name="decisionDate" class="java.util.Date"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="adresse" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="100" splitType="Stretch">
+			<elementGroup/>
+			<elementGroup/>
+			<staticText>
+				<reportElement uuid="25194798-39d3-4d89-9ff0-d02e5383d788" x="0" y="40" width="555" height="20"/>
+				<textElement textAlignment="Center" markup="none">
+					<font  size="15" isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Formulaire d'accusé de réception de la notification d'exportation]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="700" splitType="Stretch">
+			<textField>
+				<reportElement uuid="56db4ebb-5b78-4284-a5ae-0a400caeda17" x="20" y="134" width="535" height="12"/>
+				<textElement markup="html">
+					<font  size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>Numéro de référence de la notification d'exportation</b>: "+($F{referenceNumber} != null  && $F{referenceNumber}.trim().length()>0 ? $F{referenceNumber} : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d842a543-ee58-4b9e-9c21-93cede4e0dc1" x="20" y="102" width="535" height="12"/>
+				<textElement markup="html">
+					<font  size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>Pays importateur</b>: "+($F{importingCountry} != null  && $F{importingCountry}.trim().length()>0 ? $F{importingCountry} : "-")]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="c9be53f7-a8fb-4645-bfb9-90469981020f" x="20" y="337" width="535" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="db1aed08-2a1e-4b70-a5d8-aabd7760f102" x="20" y="60" width="535" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Par la présente, nous accusons réception de la notification d'exportation:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="ac67fb2d-8416-4e97-be08-e908b6222da1" x="20" y="288" width="535" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Date, signature de l'autorité nationale désigné dans le pays importateur et cachet officiel: "+($F{decisionDate}!= null? new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{decisionDate}) : "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="19743d3c-41fc-4881-b6aa-dad1be430810" x="20" y="450" width="535" height="24"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Veuillez envoyer l'accusé de réception au pays exportateur dans les 30 jours à partir de la date indiquée à la section 7 à l'adresse suivante:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="b9f5c23f-548b-4a2c-bf66-0aeab7cede4e" x="20" y="494" width="535" height="12"/>
+				<textElement markup="html">
+					<font  size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>Nom et adresse</b>: "+($F{name} != null  && $F{name}.trim().length()>0 ? $F{name} : "-")+" "+($F{adresse} != null  && $F{adresse}.trim().length()>0 ? $F{adresse} : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="2532cb18-79ae-4d8c-b6de-83f8a9e4cf17" x="20" y="166" width="535" height="12"/>
+				<textElement markup="html">
+					<font  size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>Nom du produit chimique</b>: "+($F{fileItemList}.get(0).getName() != null  && $F{fileItemList}.get(0).getName().trim().length()>0 ? $F{fileItemList}.get(0).getName() : "-")]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

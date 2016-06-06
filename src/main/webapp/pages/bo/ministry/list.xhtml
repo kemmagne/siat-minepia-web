@@ -1,0 +1,78 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<p:panel header="#{bundle['ministry_title']}">
+
+		<h:form id="ministryListForm">
+
+			<h:commandLink action="#{exporter.exportPDF(table, 'MINISTRIES')}">
+				<h:outputText styleClass="sprite sprite-pdf" />
+			</h:commandLink>
+
+			<br />
+
+			<p:dataTable id="datalist" widgetVar="datalistTable" binding="#{table}" value="#{ministryController.items}" filteredValue="" var="item"
+				selectionMode="single" selection="#{ministryController.selected}" rowKey="#{item.id}" rows="5" paginator="true"
+				rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}" styleClass="newui-datatable fixeColumnWidth"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+				<p:ajax event="rowSelect" update="editButton datalist" />
+				<p:ajax event="rowUnselect" update="editButton datalist" />
+				<p:ajax event="rowDblselect" listener="#{ministryController.prepareEdit}" oncomplete="PF('ministryEditDialog').show();"
+					update=":ministryEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+
+				<p:column id="labelFrColumn" sortBy="#{item.labelFr}" filterBy="#{item.labelFr}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['MinistryLabel_labelFr']}" title="#{bundle['MinistryTitle_labelFr']}" />
+					</f:facet>
+					<h:outputText value="#{item.labelFr}" />
+				</p:column>
+
+				<p:column id="labelEnColumn" sortBy="#{item.labelEn}" filterBy="#{item.labelEn}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['MinistryLabel_labelEn']}" title="#{bundle['MinistryTitle_labelEn']}" />
+					</f:facet>
+					<h:outputText value="#{item.labelEn}" />
+				</p:column>
+
+				<p:column id="ministerColumn" sortBy="#{(item.minister.firstName).concat(' ').concat(item.minister.lastName)}"
+					filterBy="#{(item.minister.firstName).concat(' ').concat(item.minister.lastName)}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['MinistryLabel_minister']}" title="#{bundle['MinistryTitle_minister']}" />
+					</f:facet>
+					<h:outputText value="#{(item.minister.firstName).concat(' ').concat(item.minister.lastName)}" />
+				</p:column>
+
+				<p:column id="generalSecretaryColumn" sortBy="#{(item.generalSecretary.firstName).concat(' ').concat(item.generalSecretary.lastName)}"
+					filterBy="#{(item.generalSecretary.firstName).concat(' ').concat(item.generalSecretary.lastName)}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['MinistryLabel_generalSecretary']}" title="#{bundle['MinistryTitle_generalSecretary']}" />
+					</f:facet>
+					<h:outputText value="#{(item.generalSecretary.firstName).concat(' ').concat(item.generalSecretary.lastName)}" />
+				</p:column>
+
+				<p:column id="adminMinistryColumn" sortBy="#{(item.adminMinistry.firstName).concat(' ').concat(item.adminMinistry.lastName)}"
+					filterBy="#{(item.adminMinistry.firstName).concat(' ').concat(item.adminMinistry.lastName)}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['MinistryLabel_adminMinistry']}" title="#{bundle['MinistryTitle_adminMinistry']}" />
+					</f:facet>
+					<h:outputText value="#{(item.adminMinistry.firstName).concat(' ').concat(item.adminMinistry.lastName)}" />
+				</p:column>
+
+				<f:facet name="footer">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editButton" styleClass="btn" icon="sprite sprite-edit" value="#{bundle['Edit']}"
+						actionListener="#{ministryController.prepareEdit}"
+						rendered="#{ministryController.selected != null and ministryController.selected.id != null}"
+						oncomplete="PF('ministryEditDialog').show();" update=":ministryEditForm" />
+				</f:facet>
+
+			</p:dataTable>
+
+		</h:form>
+
+	</p:panel>
+
+</ui:composition>

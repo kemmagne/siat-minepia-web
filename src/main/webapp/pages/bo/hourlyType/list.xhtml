@@ -1,0 +1,75 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<p:panel header="#{bundle['hourlytype_title']}">
+		<h:form id="hourlyTypeListForm">
+
+			<h:commandLink action="#{exporter.exportPDF(table, 'HOURLY_TYPES')}">
+				<h:outputText styleClass="sprite sprite-pdf" />
+			</h:commandLink>
+
+			<br />
+
+			<p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable" value="#{hourlyTypeController.items}" filteredValue="" var="item"
+				selectionMode="single" selection="#{hourlyTypeController.selected}" rowKey="#{item.id}" rows="5" paginator="true"
+				rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}" styleClass="list-tab newui-datatable fixeColumnWidth"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+				<p:ajax event="rowSelect" update="createButton editButton deleteButton datalist" />
+				<p:ajax event="rowUnselect" update="createButton editButton deleteButton datalist" />
+				<p:ajax event="rowDblselect" listener="#{hourlyTypeController.prepareEdit}" oncomplete="PF('hourlyTypeEditDialog').show();"
+					update=":hourlyTypeEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+
+				<p:column id="labelFrColumn" sortBy="#{item.labelFr}" filterBy="#{item.labelFr}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['HourlyTypeLabel_labelFr']}" title="#{bundle['HourlyTypeTitle_labelFr']}" />
+					</f:facet>
+					<h:outputText value="#{item.labelFr}" />
+				</p:column>
+
+				<p:column id="labelEnColumn" sortBy="#{item.labelEn}" filterBy="#{item.labelEn}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['HourlyTypeLabel_labelEn']}" title="#{bundle['HourlyTypeTitle_labelEn']}" />
+					</f:facet>
+					<h:outputText value="#{item.labelEn}" />
+				</p:column>
+
+				<f:facet name="footer">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="createButton" styleClass="btn"
+						icon="sprite sprite-plus" value="#{bundle['Create']}" actionListener="#{hourlyTypeController.prepareCreate}"
+						oncomplete="PF('hourlyTypeCreateDialog').show();" update=":hourlyTypeCreateForm" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editButton" styleClass="btn"
+						icon="sprite sprite-edit" value="#{bundle['Edit']}" actionListener="#{hourlyTypeController.prepareEdit}"
+						rendered="#{hourlyTypeController.selected != null and hourlyTypeController.selected.id != null}"
+						oncomplete="PF('hourlyTypeEditDialog').show();" update=":hourlyTypeEditForm" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="deleteButton" styleClass="btn"
+						icon="sprite sprite-delete" value="#{bundle['Delete']}"
+						rendered="#{hourlyTypeController.selected != null and hourlyTypeController.selected.id != null}"
+						oncomplete="PF('confirmation').show()" />
+				</f:facet>
+
+			</p:dataTable>
+
+		</h:form>
+
+		<p:confirmDialog closeOnEscape="true" id="diagSupp" message="#{bundle['popup_confirm_delete_message']}"
+			header="#{bundle['popup_confirm_delete_header']}" widgetVar="confirmation" appendTo="@(body)">
+			<div align="right">
+				<h:form id="diagForm">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="confirm"
+						value="#{bundle['popup_confirm_delete_message_oui']}" update=":growl :hourlyTypeListForm:datalist"
+						oncomplete="PF('confirmation').hide();document.getElementById('diagForm:confirm').disabled=false;PF('datalistTable').filter();"
+						onclick="document.getElementById('diagForm:confirm').disabled=true;" actionListener="#{hourlyTypeController.delete}"
+						styleClass="ui-priority-primary" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="decline"
+						value="#{bundle['popup_confirm_delete_message_pas_maintenant']}" onclick="PF('confirmation').hide()" update=":hourlyTypeListForm"
+						styleClass="ui-priority-primary" />
+				</h:form>
+			</div>
+		</p:confirmDialog>
+	</p:panel>
+
+</ui:composition>

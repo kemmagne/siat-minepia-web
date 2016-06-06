@@ -1,0 +1,58 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="ministryEditDlg" widgetVar="ministryEditDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['EditMinistryTitle']}">
+
+		<h:form id="ministryEditForm">
+
+			<h:panelGroup id="display">
+
+				<p:panelGrid columns="4">
+
+					<p:outputLabel value="#{bundle['EditMinistryLabel_minister']}" />
+					<h:outputText
+						value="#{(ministryController.selected.minister.firstName).concat(' ').concat(ministryController.selected.minister.lastName)}" />
+
+					<p:outputLabel value="#{bundle['EditMinistryLabel_generalSecretary']}" />
+					<h:outputText
+						value="#{(ministryController.selected.generalSecretary.firstName).concat(' ').concat(ministryController.selected.generalSecretary.lastName)}" />
+
+					<p:outputLabel value="#{bundle['EditMinistryLabel_adminMinistry']}" />
+					<h:outputText
+						value="#{(ministryController.selected.adminMinistry.firstName).concat(' ').concat(ministryController.selected.adminMinistry.lastName)}" />
+
+					<p:outputLabel value="#{bundle['EditMinistryLabel_labelFr']}" for="ministry_labelFr" />
+					<h:panelGroup>
+						<p:inputText id="ministry_labelFr" value="#{ministryController.selected.labelFr}" title="#{bundle['EditMinistryTitle_labelFr']}"
+							required="true" requiredMessage="#{bundle['EditMinistryRequiredMessage_labelFr']}" />
+						<p:message for="ministry_labelFr" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditMinistryLabel_labelEn']}" for="ministry_labelEn" />
+					<h:panelGroup>
+						<p:inputText id="ministry_labelEn" value="#{ministryController.selected.labelEn}" title="#{bundle['EditMinistryTitle_labelEn']}"
+							required="true" requiredMessage="#{bundle['EditMinistryRequiredMessage_labelEn']}" />
+						<p:message for="ministry_labelEn" />
+					</h:panelGroup>
+				</p:panelGrid>
+
+				<br />
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editBtn" actionListener="#{ministryController.edit}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+						update="display,:ministryListForm,:growl" oncomplete="handleSubmit(xhr,status,args,ministryEditDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('ministryEditDialog').hide();"
+						immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

@@ -1,0 +1,140 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<ui:composition>
+
+	<h:form id="userEditForm">
+
+		<p:panel id="userEditPanel" rendered="#{not empty userController.selected and not empty userController.selected.id}"
+			widgetVar="userEditPanelWidget" resizable="false" header="#{bundle['EditUserTitle']}">
+			<h:panelGroup id="display" styleClass="userPage">
+
+				<p:panelGrid columns="4">
+
+					<p:outputLabel value="#{bundle['EditUserLabel_login']}" for="user_login" />
+					<h:panelGroup>
+						<p:inputText id="user_login" value="#{userController.selected.login}" title="#{bundle['EditUserTitle_login']}" required="true"
+							requiredMessage="#{bundle['EditUserRequiredMessage_login']}" />
+						<p:message for="user_login" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditUserLabel_firstName']}" for="user_firstName" />
+					<h:panelGroup>
+						<p:inputText id="user_firstName" value="#{userController.selected.firstName}" title="#{bundle['EditUserTitle_firstName']}"
+							required="true" requiredMessage="#{bundle['EditUserRequiredMessage_firstName']}" />
+						<p:message for="user_firstName" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditUserLabel_lastName']}" for="user_lastName" />
+					<h:panelGroup>
+						<p:inputText id="user_lastName" value="#{userController.selected.lastName}" title="#{bundle['EditUserTitle_lastName']}"
+							required="true" requiredMessage="#{bundle['EditUserRequiredMessage_lastName']}" />
+						<p:message for="user_lastName" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditUserLabel_email']}" for="user_email" />
+					<h:panelGroup>
+						<p:inputText id="user_email" value="#{userController.selected.email}" title="#{bundle['EditUserTitle_email']}" required="true"
+							requiredMessage="#{bundle['EditUserRequiredMessage_email']}" validatorMessage="#{bundle['MailValidationFail']}">
+							<f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+							<f:ajax execute="usrMailMsg" event="blur" render="usrMailMsg" />
+						</p:inputText>
+						<p:message id="usrMailMsg" for="user_email" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditUserLabel_telephone']}" for="user_telephone" />
+					<h:panelGroup>
+						<p:inputText id="user_telephone" value="#{userController.selected.telephone}" title="#{bundle['EditUserTitle_telephone']}"
+							required="true" requiredMessage="#{bundle['EditUserRequiredMessage_telephone']}" validatorMessage="#{bundle['PhoneValidationFail']}">
+							<f:validateRegex pattern="[0-9]{0,14}" />
+							<f:ajax execute="telMsg" event="blur" render="telMsg" />
+						</p:inputText>
+						<p:message id="telMsg" for="user_telephone" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditUserLabel_position']}" for="user_position" />
+					<h:panelGroup>
+						<h:outputText id="user_position" readonly="true"
+							value="#{facesContext.viewRoot.locale eq 'fr' ? userController.selected.position.labelFr : userController.selected.position.labelEn}" />
+						<p:message for="user_position" />
+					</h:panelGroup>
+
+					<p:outputLabel
+						rendered="#{request.isUserInRole('ADMIN_ORG')  and userController.selected.position ne null and  userController.selected.position ne 'DIRECTEUR'}"
+						value="#{bundle['EditUser_sub_department']}" for="user_sub_direction" title="#{budle[EditUserTitle_position]}" />
+					<h:outputText id="user_sub_direction" value="#{userController.selectedsSubDepartment.abreviation}"
+						rendered="#{request.isUserInRole('ADMIN_ORG')  and userController.selected.position ne null and  userController.selected.position ne 'DIRECTEUR'}" />
+
+					<p:outputLabel
+						rendered="#{userController.selectedsSubDepartment ne null and userController.selected.position ne 'DIRECTEUR' and userController.selected.position ne 'SOUS_DIRECTEUR'}"
+						value="#{bundle['EditUser_service']}" for="user_service" />
+					<h:outputText id="user_service"
+						rendered="#{userController.selectedsSubDepartment ne null and userController.selected.position ne 'DIRECTEUR' and userController.selected.position ne 'SOUS_DIRECTEUR'}"
+						value="#{userController.selectedService.abreviation}" />
+
+					<p:outputLabel value="#{bundle['editUser_buerau']}" for="user_entity"
+						rendered="#{userController.selectedService ne null and (userController.selected.position eq 'AGENT' or userController.selected.position eq 'CHEF_BUREAU' or userController.selected.position eq 'OBSERVATEUR')}" />
+					<h:outputText id="user_entity" value="#{userController.selectedEntity.code}"
+						rendered="#{userController.selectedService ne null and (userController.selected.position eq 'AGENT' or userController.selected.position eq 'CHEF_BUREAU' or userController.selected.position eq 'OBSERVATEUR')}" />
+
+					<p:outputLabel value="#{bundle['EditUserLabel_preferedLanguage']}" for="user_preferedLanguage" />
+					<h:panelGroup>
+						<p:selectOneMenu id="user_preferedLanguage" style="width: 133px" value="#{userController.selected.preferedLanguage}" required="true"
+							requiredMessage="#{bundle['EditUserRequiredMessage_preferedLanguage']}" title="#{bundle['EditUserTitle_preferedLanguage']}">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{language.languageOptions}" />
+						</p:selectOneMenu>
+						<p:message for="user_preferedLanguage" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditUserLabel_enabled']}" for="user_enabled" />
+					<h:panelGroup>
+						<p:selectBooleanCheckbox id="user_enabled" value="#{userController.selected.enabled}" title="#{bundle.EditUserTitle_enabled}" />
+						<p:message for="user_enabled" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditUserLabel_non_locked']}" for="user_non_locked" />
+					<h:panelGroup>
+						<p:selectBooleanCheckbox id="user_non_locked" value="#{userController.selected.accountNonLocked}"
+							title="#{bundle['EditUserTitle_non_locked']}" />
+						<p:message for="user_non_locked" />
+					</h:panelGroup>
+
+				</p:panelGrid>
+
+				<p:dataTable id="userAuthorityFiletype" styleClass="usercreate" emptyMessage="#{bundle.CreateUserErro_EmptyFileType}"
+					widgetVar="userAuthorityFiletypeWV" var="row" rowIndexVar="rowIdx" value="#{userController.fileTypeList}">
+					<p:column headerText="#{bundle.UserLabel_file_type_authority}" styleClass="ui-widget-header">
+						<h:outputText value="#{facesContext.viewRoot.locale eq 'fr' ? row.labelFr : row.labelEn}" />
+					</p:column>
+					<p:columns var="column" value="#{userController.authoritiesList}"
+						headerText="#{facesContext.viewRoot.locale eq 'fr' ? column.labelFr : column.labelEn}" columnIndexVar="colIdx">
+						<p:selectBooleanCheckbox value="#{userController.fileTypeAutorityDatas.get(rowIdx).get(colIdx).checked}" />
+					</p:columns>
+				</p:dataTable>
+
+				<p:blockUI block="userAuthorityFiletype" trigger="editBtn">
+					<p:graphicImage styleClass="loading" value="/images/ajax-loader.gif" />
+				</p:blockUI>
+
+				<br />
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editBtn"
+						actionListener="#{userController.edit}" value="#{bundle['Save']}"
+						update=":userListForm:datalist :userCreateForm :userEditForm display :growl" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="cancelBtn"
+						value="#{bundle['Cancel']}" immediate="true" process="@this" update="@form :userListForm:datalist"
+						actionListener="#{userController.resetForm}">
+						<p:resetInput target="userEditForm" />
+					</p:commandButton>
+				</div>
+
+			</h:panelGroup>
+
+		</p:panel>
+
+	</h:form>
+
+</ui:composition>
+</html>

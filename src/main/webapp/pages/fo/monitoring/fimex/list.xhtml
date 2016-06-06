@@ -1,0 +1,74 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<p:panel header="#{bundle['dashboardFimexHeader']}">
+
+
+		<h:form id="filtredFileItemListForm">
+
+			<h:commandLink action="#{exporter.exportPDF(table, 'FIMEX')}">
+				<h:outputText styleClass="sprite sprite-pdf" />
+			</h:commandLink>
+
+			<br />
+
+			<p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable" value="#{fimexController.filesList}" filteredValue="" var="item"
+				selectionMode="single" selection="#{fimexController.selectedFile}" rowKey="#{item.id}" rows="5" paginator="true"
+				rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+				<p:ajax event="rowSelect" />
+				<p:ajax event="rowUnselect" />
+				<p:ajax event="rowDblselect" listener="#{fimexController.goToDetailPage}" onstart="PF('statusDialog1').block()"
+					onsuccess="PF('statusDialog1').unblock()" />
+
+				<p:column sortBy="#{item.referenceSiat}" filterBy="#{item.referenceSiat}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_num_siat']}" title="#{bundle['FileTitle_num_siat']}" />
+					</f:facet>
+					<h:outputText value="#{item.referenceSiat}" />
+				</p:column>
+
+				<p:column sortBy="#{item.referenceGuce}" filterBy="#{item.referenceGuce}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_num_eguce']}" title="#{bundle['FileTitle_num_eguce']}" />
+					</f:facet>
+					<h:outputText value="#{item.referenceGuce}" />
+				</p:column>
+
+				<p:column sortBy="#{item.numeroDemande}" filterBy="#{item.numeroDemande}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_numeroDemande']}" title="#{bundle['FileTitle_numeroDemande']}" />
+					</f:facet>
+					<h:outputText value="#{item.numeroDemande}" />
+				</p:column>
+
+				<p:column sortBy="#{dateBean.formatSimpleDate(item.createdDate)}" filterBy="#{dateBean.formatSimpleDate(item.createdDate)}"
+					filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_date_dossier']}" title="#{bundle['FileTitle_date_dossier']}" />
+					</f:facet>
+					<h:outputText value="#{item.createdDate}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" locale="fr" />
+					</h:outputText>
+				</p:column>
+
+				<p:column sortBy="#{facesContext.viewRoot.locale eq 'en' ? item.bureau.labelEn : item.bureau.labelFr}"
+					filterBy="#{facesContext.viewRoot.locale eq 'en' ? item.bureau.labelEn : item.bureau.labelFr}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_service']}" title="#{bundle['FileTitle_service']}" />
+					</f:facet>
+					<h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? item.bureau.labelEn : item.bureau.labelFr}" />
+				</p:column>
+
+
+			</p:dataTable>
+
+		</h:form>
+
+	</p:panel>
+
+</ui:composition>

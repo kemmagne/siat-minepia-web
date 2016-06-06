@@ -1,0 +1,62 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<p:panel header="#{bundle['pindingFiles_searchResult']}">
+
+
+		<h:form id="filtredPindingFilesListForm">
+			<h:panelGrid columns="2">
+				<h:commandLink action="#{exporter.exportPDF(table, 'PINDING_FILES_SEARCH')}">
+					<h:outputText styleClass="sprite sprite-pdf" />
+				</h:commandLink>
+
+				<h:commandLink>
+					<h:graphicImage styleClass="sprite sprite-pdf" library="img" name="excel.png"
+						style="width: 34px;height: 34px;display: block;	top: 15px;	right: 52px;position: absolute;" />
+					<p:dataExporter type="xls" target="datalist" fileName="#{bundle['pindingFiles_searchResult']}" />
+				</h:commandLink>
+			</h:panelGrid>
+			<br />
+
+			<p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable" value="#{statisticController.searchResult}" filteredValue=""
+				var="item" rows="5" paginator="true" rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+				<p:column sortBy="#{facesContext.viewRoot.locale eq 'fr' ? item.nsh.goodsItemDesc : item.nsh.goodsItemDescEn}"
+					filterBy="#{facesContext.viewRoot.locale eq 'fr' ? item.nsh.goodsItemDesc : item.nsh.goodsItemDescEn}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText readonly="true" value="#{bundle['pindingFilesSearch_goodsItemDescLabel']}"
+							title="#{bundle['pindingFilesSearch_goodsItemDescLabel']}" />
+					</f:facet>
+					<h:outputText value="#{facesContext.viewRoot.locale eq 'fr' ? item.nsh.goodsItemDesc : item.nsh.goodsItemDescEn}" />
+				</p:column>
+
+				<p:column sortBy="#{item.file.createdDate}" filterBy="#{item.file.createdDate}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['pindingFilesSearch_dateLabel']}" title="#{bundle['pindingFilesSearch_dateTitle']}" />
+					</f:facet>
+					<h:outputText value="#{item.file.createdDate}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+
+					</h:outputText>
+				</p:column>
+
+				<p:column filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['pindingFilesSearch_stepLabel']}" title="#{bundle['pindingFilesSearch_stepTitle']}" />
+					</f:facet>
+					<h:outputText value="#{facesContext.viewRoot.locale eq 'fr' ? item.step.labelFr : item.step.labelEn}" />
+				</p:column>
+
+
+
+			</p:dataTable>
+
+		</h:form>
+
+	</p:panel>
+
+</ui:composition>

@@ -1,0 +1,139 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<p:panel header="#{bundle['Alert_title']}">
+		<h:form id="alertListForm">
+
+			<h:commandLink action="#{exporter.exportPDF(table, 'ALERTS')}">
+				<h:outputText styleClass="sprite sprite-pdf" />
+			</h:commandLink>
+
+
+
+			<p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable" value="#{alertController.alerts}"
+				filteredValue="#{alertController.selecteds}" var="item" selectionMode="single" selection="#{alertController.selectedAlert}"
+				rowKey="#{item.alert.id}" rows="5" paginator="true" rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}"
+				styleClass="newui-datatable fixeColumnWidth"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+				<p:ajax event="rowSelect" update="createButton editButton deleteButton datalist" />
+				<p:ajax event="rowUnselect" update="createButton editButton deleteButton datalist" />
+				<p:ajax event="rowDblselect" listener="#{alertController.prepareEdit}" oncomplete="PF('alertEditDialog').show();"
+					update=":alertEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+				<p:column>
+
+					<p:selectBooleanCheckbox value="#{item.cheked}" rendered="#{!item.alert.send}">
+						<p:ajax update=":alertListForm" listener="#{alertController.listnerAlert}"></p:ajax>
+					</p:selectBooleanCheckbox>
+				</p:column>
+				<p:column id="snshColumn" sortBy="#{item.alert.servicesItem.nsh}" filterBy="#{item.alert.servicesItem.nsh}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['AlertLabel_snsh']}" title="#{bundle['AlertTitle_snsh']}" />
+					</f:facet>
+					<h:outputText value="#{item.alert.servicesItem.snsh}" />
+				</p:column>
+
+				<p:column id="snshLabelColumn" sortBy="#{item.alert.servicesItem.snshLabel}" filterBy="#{item.alert.servicesItem.snshLabel}"
+					filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['AlertLabel_snshLabel']}" title="#{bundle['AlertTitle_snshLabel']}" />
+					</f:facet>
+					<h:outputText value="#{item.alert.servicesItem.snshLabel}" />
+				</p:column>
+
+				<p:column id="brandColumn" sortBy="#{item.alert.brand}" filterBy="#{item.alert.brand}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['AlertLabel_brand']}" title="#{bundle['AlertTitle_brand']}" />
+					</f:facet>
+					<h:outputText value="#{item.alert.brand}" />
+				</p:column>
+
+				<p:column id="modelColumn" sortBy="#{item.alert.model}" filterBy="#{item.alert.model}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['AlertLabel_model']}" title="#{bundle['AlertTitle_model']}" />
+					</f:facet>
+					<h:outputText value="#{item.alert.model}" />
+				</p:column>
+
+				<p:column id="countryColumn" sortBy="#{item.alert.country}" filterBy="#{item.alert.country}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['AlertLabel_country']}" title="#{bundle['AlertTitle_country']}" />
+					</f:facet>
+					<h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? item.alert.country.countryName : item.alert.country.countryNameFr}" />
+				</p:column>
+
+				<p:column id="manufacturerColumn" sortBy="#{item.alert.manufacturer}" filterBy="#{item.alert.manufacturer}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['AlertLabel_manufacturer']}" title="#{bundle['AlertTitle_manufacturer']}" />
+					</f:facet>
+					<h:outputText value="#{item.alert.manufacturer}" />
+				</p:column>
+
+				<p:column id="startDateColumn" sortBy="#{not empty item.alert.startDate ? dateBean.formatSimpleDate(item.alert.startDate) : null}"
+					filterBy="#{not empty item.alert.startDate ? dateBean.formatSimpleDate(item.alert.startDate) : null}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['AlertLabel_startDate']}" title="#{bundle['AlertTitle_startDate']}" />
+					</f:facet>
+					<h:outputText value="#{item.alert.startDate}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" locale="fr" />
+					</h:outputText>
+				</p:column>
+
+				<p:column id="endDateColumn" sortBy="#{not empty item.alert.endDate ? dateBean.formatSimpleDate(item.alert.endDate) : null}"
+					filterBy="#{not empty item.alert.endDate ? dateBean.formatSimpleDate(item.alert.endDate) : null}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['AlertLabel_endDate']}" title="#{bundle['AlertTitle_endDate']}" />
+					</f:facet>
+					<h:outputText value="#{item.alert.endDate}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" locale="fr" />
+					</h:outputText>
+				</p:column>
+
+				<f:facet name="footer">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="createButton" styleClass="btn"
+						icon="sprite sprite-plus" value="#{bundle['Create']}" actionListener="#{alertController.prepareCreate}"
+						oncomplete="PF('alertCreateDialog').show();" update=":alertCreateForm" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editButton" styleClass="btn"
+						icon="sprite sprite-edit" value="#{bundle['Edit']}" actionListener="#{alertController.prepareEdit}"
+						rendered="#{alertController.selectedAlert != null and alertController.selectedAlert.alert.id != null }"
+						oncomplete="PF('alertEditDialog').show();" update=":alertEditForm">
+
+					</p:commandButton>
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="deleteButton" styleClass="btn"
+						icon="sprite sprite-delete" value="#{bundle['Delete']}"
+						rendered="#{alertController.selectedAlert != null and alertController.selectedAlert.alert.id != null }"
+						oncomplete="PF('confirmation').show()">
+
+					</p:commandButton>
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="send" styleClass="btn"
+						value="#{bundle['repport_send']}" actionListener="#{alertController.sendAlert}" update=":alertListForm:datalist :growl"
+						rendered="#{alertController.alertSelected}" />
+
+				</f:facet>
+
+			</p:dataTable>
+
+			<h:outputText styleClass="rq" value="#{bundle['repport_warning']}"></h:outputText>
+		</h:form>
+
+		<p:confirmDialog closeOnEscape="true" id="diagSupp" message="#{bundle['popup_confirm_delete_message']}"
+			header="#{bundle['popup_confirm_delete_header']}" widgetVar="confirmation" appendTo="@(body)">
+			<div align="right">
+				<h:form id="diagForm">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="confirm"
+						value="#{bundle['popup_confirm_delete_message_oui']}" update=":growl :alertListForm:datalist"
+						oncomplete="PF('confirmation').hide();document.getElementById('diagForm:confirm').disabled=false;PF('datalistTable').filter();"
+						onclick="document.getElementById('diagForm:confirm').disabled=true;" actionListener="#{alertController.delete}"
+						styleClass="ui-priority-primary" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="decline"
+						value="#{bundle['popup_confirm_delete_message_pas_maintenant']}" onclick="PF('confirmation').hide()" update=":alertListForm"
+						styleClass="ui-priority-primary" />
+				</h:form>
+			</div>
+		</p:confirmDialog>
+	</p:panel>
+
+</ui:composition>

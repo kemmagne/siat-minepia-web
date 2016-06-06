@@ -1,0 +1,241 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="ciblageEditDlg" widgetVar="ciblageEditDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['EditCiblageTitle']}">
+
+		<p:tabView id="editCiblageTabView" activeIndex="#{ciblageController.activeIndex}" styleClass="inpWidth">
+			<p:ajax event="tabChange" listener="#{ciblageController.onEditCiblageTabChange}"
+				update="productTabEditForm,countryTabEditForm,importerTabEditForm,manufacturerTabEditForm" />
+
+			<p:tab id="productTab" title="#{bundle['CiblageTabViewTitle_product']}" disabled="#{ciblageController.activeIndex ne 0}">
+
+				<h:form id="productTabEditForm">
+					<h:panelGroup id="productTabDisplay">
+
+						<p:panelGrid columns="4">
+
+							<p:outputLabel value="#{bundle['EditCiblageLabel_snsh']}" for="editSnsh" />
+							<h:panelGroup>
+								<p:autoComplete id="editSnsh" value="#{ciblageController.selected.servicesItem}" completeMethod="#{ciblageController.completeSnsh}"
+									var="snshItem" itemLabel="#{snshItem.snsh}" itemValue="#{snshItem}" converter="#{serviceItemConverter}" forceSelection="true"
+									title="#{bundle['EditCiblageTitle_snsh']}" required="true" requiredMessage="#{bundle['EditCiblageRequiredMessage_snsh']}">
+									<p:ajax event="itemSelect" update="editSnshLabel" />
+								</p:autoComplete>
+								<p:message for="editSnsh" />
+							</h:panelGroup>
+
+							<p:outputLabel value="#{bundle['EditCiblageLabel_snshLabel']}" for="editSnshLabel" />
+							<h:outputLabel id="editSnshLabel" value="#{ciblageController.selected.servicesItem.snshLabel}"
+								title="#{bundle['EditCiblageTitle_snshLabel']}" />
+
+							<p:outputLabel value="#{bundle['EditCiblageLabel_brand']}" for="editBrand" />
+							<p:inputText id="editBrand" value="#{ciblageController.selected.brand}" title="#{bundle['EditCiblageTitle_brand']}" />
+
+							<p:outputLabel value="#{bundle['EditCiblageLabel_model']}" for="editModel" />
+							<p:inputText id="editModel" value="#{ciblageController.selected.model}" title="#{bundle['EditCiblageTitle_model']}" />
+
+							<p:outputLabel for="editStartDateProductTab" value="#{bundle['EditCiblageLabel_startDate']}" />
+							<h:panelGroup>
+								<p:calendar  navigator="true" id="editStartDateProductTab" value="#{ciblageController.selected.startDate}" showOn="button" pattern="dd/MM/yyyy"
+									title="#{bundle['EditCiblageTitle_startDate']}" required="true" requiredMessage="#{bundle['EditCiblageRequiredMessage_startDate']}"
+									readonlyInput="true">
+									<p:ajax event="dateSelect" update="editEndDateProductTab" />
+								</p:calendar>
+								<p:message for="editStartDateProductTab" />
+							</h:panelGroup>
+
+							<p:outputLabel for="editEndDateProductTab" value="#{bundle['EditCiblageLabel_endDate']}" />
+							<h:panelGroup>
+								<p:calendar  navigator="true" id="editEndDateProductTab" value="#{ciblageController.selected.endDate}" showOn="button" pattern="dd/MM/yyyy"
+									mindate="#{ciblageController.selected.startDate}" title="#{bundle['EditCiblageTitle_endDate']}" required="true"
+									requiredMessage="#{bundle['EditCiblageRequiredMessage_startDate']}" readonlyInput="true">
+								</p:calendar>
+								<p:message for="editEndDateProductTab" />
+							</h:panelGroup>
+
+						</p:panelGrid>
+
+
+						<div class="btn-bloc">
+							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editBtn" actionListener="#{ciblageController.edit}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+								update="productTabDisplay,:ciblageListForm,:growl" oncomplete="handleSubmit(xhr,status,args,ciblageEditDlg,'datalistTable');" />
+							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary"
+								onclick="PF('ciblageEditDialog').hide();" immediate="true" />
+						</div>
+
+					</h:panelGroup>
+				</h:form>
+			</p:tab>
+
+			<p:tab id="countryTab" title="#{bundle['CiblageTabViewTitle_country']}" disabled="#{ciblageController.activeIndex ne 1}">
+				<h:form id="countryTabEditForm">
+					<h:panelGroup id="countryTabDisplay">
+
+						<p:panelGrid columns="4">
+
+							<p:outputLabel for="editCountry" value="#{bundle['EditCiblageLabel_country']}" />
+							<h:panelGroup>
+								<p:selectOneMenu id="editCountry" value="#{ciblageController.selected.country}" converter="#{countryConverter}" effect="fade"
+									var="countryVar" style="width:160px" filter="true" filterMatchMode="startsWith" title="#{bundle['EditCiblageTitle_country']}"
+									required="true" requiredMessage="#{bundle['EditCiblageRequiredMessage_country']}">
+									<f:selectItem itemLabel=" #{bundle['SelectOneMessage']}" />
+									<f:selectItems value="#{ciblageController.countries}" var="country" itemLabel="#{country.countryIdAlpha2}" itemValue="#{country}" />
+									<p:column style="width:10%">
+										<p:graphicImage value="/images/flags/#{countryVar.countryName}.png" />
+									</p:column>
+									<p:column>
+										<h:outputText value="#{countryVar.countryIdAlpha2}" />
+									</p:column>
+									<p:ajax event="change" update="editCountryName" />
+								</p:selectOneMenu>
+								<p:message for="editCountry" />
+							</h:panelGroup>
+
+							<p:outputLabel value="#{bundle['EditCiblageLabel_countryName']}" for="editCountryName" />
+							<h:outputLabel id="editCountryName"
+								value="#{facesContext.viewRoot.locale eq 'en' ? ciblageController.selected.country.countryName : ciblageController.selected.country.countryNameFr}"
+								title="#{bundle['EditCiblageTitle_countryName']}" />
+
+							<p:outputLabel for="editStartDateCountryTab" value="#{bundle['EditCiblageLabel_startDate']}" />
+							<h:panelGroup>
+								<p:calendar  navigator="true" id="editStartDateCountryTab" value="#{ciblageController.selected.startDate}" showOn="button"
+									title="#{bundle['EditCiblageTitle_startDate']}" required="true" requiredMessage="#{bundle['EditCiblageRequiredMessage_startDate']}"
+									pattern="dd/MM/yyyy" readonlyInput="true">
+									<p:ajax event="dateSelect" update="editEndDateCountryTab" />
+								</p:calendar>
+								<p:message for="editStartDateCountryTab" />
+							</h:panelGroup>
+
+							<p:outputLabel for="editEndDateCountryTab" value="#{bundle['EditCiblageLabel_endDate']}" />
+							<h:panelGroup>
+								<p:calendar  navigator="true" id="editEndDateCountryTab" value="#{ciblageController.selected.endDate}" showOn="button"
+									mindate="#{ciblageController.selected.startDate}" title="#{bundle['EditCiblageTitle_endDate']}" required="true"
+									pattern="dd/MM/yyyy" requiredMessage="#{bundle['EditCiblageRequiredMessage_startDate']}" readonlyInput="true">
+								</p:calendar>
+								<p:message for="editEndDateCountryTab" />
+							</h:panelGroup>
+
+						</p:panelGrid>
+
+
+						<div class="btn-bloc">
+							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editBtn" actionListener="#{ciblageController.edit}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+								update="countryTabDisplay,:ciblageListForm,:growl" oncomplete="handleSubmit(xhr,status,args,ciblageEditDlg,'datalistTable');" />
+							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary"
+								onclick="PF('ciblageEditDialog').hide();" immediate="true" />
+						</div>
+
+					</h:panelGroup>
+				</h:form>
+			</p:tab>
+
+			<p:tab id="importerTab" title="#{bundle['CiblageTabViewTitle_importer']}" disabled="#{ciblageController.activeIndex ne 2}">
+				<h:form id="importerTabEditForm">
+					<h:panelGroup id="importerTabDisplay">
+
+						<p:panelGrid columns="4">
+							<p:outputLabel value="#{bundle['EditCiblageLabel_codeDouane']}" for="editCodeDouane" />
+							<h:panelGroup>
+								<p:autoComplete id="editCodeDouane" value="#{ciblageController.selected.company}"
+									completeMethod="#{ciblageController.completeCodeDouane}" var="codeDouaneItem" itemLabel="#{codeDouaneItem.numContribuable}"
+									itemValue="#{codeDouaneItem}" converter="#{companyConverter}" forceSelection="true"
+									title="#{bundle['EditCiblageTitle_codeDouane']}" required="true"
+									requiredMessage="#{bundle['EditCiblageRequiredMessage_codeDouane']}">
+									<p:ajax event="itemSelect" update="editImporterName" />
+								</p:autoComplete>
+								<p:message for="editCodeDouane" />
+							</h:panelGroup>
+
+							<p:outputLabel value="#{bundle['EditCiblageLabel_importerName']}" for="editImporterName" />
+							<h:outputLabel id="editImporterName" value="#{ciblageController.selected.company.companyName}" />
+
+							<p:outputLabel for="editStartDateImporterTab" value="#{bundle['EditCiblageLabel_startDate']}" />
+							<h:panelGroup>
+								<p:calendar  navigator="true" id="editStartDateImporterTab" value="#{ciblageController.selected.startDate}" showOn="button"
+									title="#{bundle['EditCiblageTitle_startDate']}" required="true" requiredMessage="#{bundle['EditCiblageRequiredMessage_startDate']}"
+									pattern="dd/MM/yyyy" readonlyInput="true">
+									<p:ajax event="dateSelect" update="editEndDateImporterTab" />
+								</p:calendar>
+								<p:message for="editStartDateImporterTab" />
+							</h:panelGroup>
+
+							<p:outputLabel for="editEndDateImporterTab" value="#{bundle['EditCiblageLabel_endDate']}" />
+							<h:panelGroup>
+								<p:calendar  navigator="true" id="editEndDateImporterTab" value="#{ciblageController.selected.endDate}" showOn="button" pattern="dd/MM/yyyy"
+									mindate="#{ciblageController.selected.startDate}" title="#{bundle['EditCiblageTitle_endDate']}" required="true"
+									requiredMessage="#{bundle['EditCiblageRequiredMessage_startDate']}" readonlyInput="true">
+								</p:calendar>
+								<p:message for="editEndDateImporterTab" />
+							</h:panelGroup>
+
+						</p:panelGrid>
+
+
+						<div class="btn-bloc">
+							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editBtn" actionListener="#{ciblageController.edit}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+								update="importerTabDisplay,:ciblageListForm,:growl" oncomplete="handleSubmit(xhr,status,args,ciblageEditDlg,'datalistTable');" />
+							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary"
+								onclick="PF('ciblageEditDialog').hide();" immediate="true" />
+						</div>
+
+					</h:panelGroup>
+				</h:form>
+			</p:tab>
+
+			<p:tab id="manufacturerTab" title="#{bundle['CiblageTabViewTitle_manufacturer']}" disabled="#{ciblageController.activeIndex ne 3}">
+				<h:form id="manufacturerTabEditForm">
+					<h:panelGroup id="manufacturerTabDisplay">
+
+						<p:panelGrid columns="4">
+
+							<p:outputLabel value="#{bundle['EditCiblageLabel_manufacturer']}" for="editManufacturer" />
+							<h:panelGroup>
+								<p:inputText id="editManufacturer" value="#{ciblageController.selected.manufacturer}"
+									title="#{bundle['EditCiblageTitle_manufacturer']}" required="true"
+									requiredMessage="#{bundle['EditCiblageRequiredMessage_manufacturer']}" />
+								<p:message for="editManufacturer" />
+							</h:panelGroup>
+
+							<p:outputLabel for="editStartDateManufacturerTab" value="#{bundle['EditCiblageLabel_startDate']}" />
+							<h:panelGroup>
+								<p:calendar  navigator="true" id="editStartDateManufacturerTab" value="#{ciblageController.selected.startDate}" showOn="button"
+									title="#{bundle['EditCiblageTitle_startDate']}" required="true" requiredMessage="#{bundle['EditCiblageRequiredMessage_startDate']}"
+									pattern="dd/MM/yyyy" readonlyInput="true">
+									<p:ajax event="dateSelect" update="editEndDateManufacturerTab" />
+								</p:calendar>
+								<p:message for="editStartDateManufacturerTab" />
+							</h:panelGroup>
+
+							<p:outputLabel for="editEndDateManufacturerTab" value="#{bundle['EditCiblageLabel_endDate']}" />
+							<h:panelGroup>
+								<p:calendar  navigator="true" id="editEndDateManufacturerTab" value="#{ciblageController.selected.endDate}" showOn="button" pattern="dd/MM/yyyy"
+									mindate="#{ciblageController.selected.startDate}" title="#{bundle['EditCiblageTitle_endDate']}" required="true"
+									requiredMessage="#{bundle['EditCiblageRequiredMessage_startDate']}" readonlyInput="true">
+								</p:calendar>
+								<p:message for="editEndDateManufacturerTab" />
+							</h:panelGroup>
+
+						</p:panelGrid>
+
+
+						<div class="btn-bloc">
+							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editBtn" actionListener="#{ciblageController.edit}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+								update="manufacturerTabDisplay,:ciblageListForm,:growl" oncomplete="handleSubmit(xhr,status,args,ciblageEditDlg,'datalistTable');" />
+							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary"
+								onclick="PF('ciblageEditDialog').hide();" immediate="true" />
+						</div>
+
+					</h:panelGroup>
+				</h:form>
+			</p:tab>
+
+		</p:tabView>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

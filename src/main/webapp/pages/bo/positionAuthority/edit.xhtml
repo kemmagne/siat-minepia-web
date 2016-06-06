@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+	<h:form id="positionAuthorityEditForm" styleClass="autority">
+		<p:dataTable id="authority_position" widgetVar="authority_position" var="row" rowIndexVar="rowIdx"
+			value="#{positionAuthorityController.positionList}">
+			<p:column headerText="#{bundle['EditPositionAuthority_header']}" 
+			                      styleClass="ui-widget-header ">
+				<h:outputText value="#{row.code}" />
+			</p:column>
+			<p:columns var="column" value="#{positionAuthorityController.authorities}"  styleClass="check-bloc"
+				headerText="#{facesContext.viewRoot.locale eq 'fr' ? column.labelFr : column.labelEn}" columnIndexVar="colIdx">
+				<p:selectBooleanCheckbox value="#{positionAuthorityController.authoritiesPerPositions.get(rowIdx).get(colIdx).checked}" />
+			</p:columns>
+		</p:dataTable>
+		
+		 <p:blockUI  animate="true" block="authority_position" trigger="editButton" >
+		 		<p:graphicImage styleClass="loading"  value="/images/ajax-loader.gif"/>
+		 </p:blockUI>
+		 
+		<div class="bloc-btn">
+			<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editButton" actionListener="#{positionAuthorityController.edit}" value="#{bundle['Save']}" update=" :positionAuthorityEditForm :growl" oncomplete="PF('confirmationDialog').show()"/>
+		</div>
+	</h:form>
+	<p:confirmDialog closeOnEscape="true" id="confirmationDlg" widgetVar="confirmationDialog" message="#{bundle['EditPositionAuthority_Confirmation_Message']}"
+			header="#{bundle['EditPositionAuthority_Confirmation_Header']}" appendTo="@(body)">
+			<div align="center">
+				<h:form id="confirmationDlgForm">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="decline" value="#{bundle['OK']}" onclick="PF('confirmationDialog').hide()" style="width:80px;" />
+				</h:form>
+			</div>
+	</p:confirmDialog>
+</ui:composition>
+</html>
+
+

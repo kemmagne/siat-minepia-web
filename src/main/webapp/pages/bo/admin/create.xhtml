@@ -1,0 +1,110 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="adminCreateDlg" widgetVar="adminCreateDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['CreateUserTitle']}" dynamic="true">
+
+		<h:form id="adminCreateForm">
+			<h:panelGroup id="display" styleClass="inpWidth">
+
+				<p:panelGrid columns="4">
+
+					<p:outputLabel value="#{bundle['CreateAdminLabel_login']}" for="admin_login" />
+					<h:panelGroup>
+						<p:inputText id="admin_login" value="#{adminController.selected.login}" title="#{bundle['CreateAdminTitle_login']}" required="true"
+							requiredMessage="#{bundle['CreateAdminRequiredMessage_login']}" />
+						<p:message for="admin_login" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateAdminLabel_firstName']}" for="admin_firstName" />
+					<h:panelGroup>
+						<p:inputText id="admin_firstName" value="#{adminController.selected.firstName}" title="#{bundle['CreateAdminTitle_firstName']}"
+							required="true" requiredMessage="#{bundle['CreateAdminRequiredMessage_firstName']}" />
+						<p:message for="admin_firstName" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateAdminLabel_lastName']}" for="admin_lastName" />
+					<h:panelGroup>
+						<p:inputText id="admin_lastName" value="#{adminController.selected.lastName}" title="#{bundle['CreateAdminTitle_lastName']}"
+							required="true" requiredMessage="#{bundle['CreateAdminRequiredMessage_lastName']}" />
+						<p:message for="admin_lastName" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateUserLabel_email']}" for="user_email" />
+					<h:panelGroup>
+						<p:inputText id="user_email" value="#{adminController.selected.email}" title="#{bundle['CreateUserTitle_email']}" required="true"
+							requiredMessage="#{bundle['CreateUserRequiredMessage_email']}" validatorMessage="#{bundle['MailValidationFail']}">
+							<f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+						</p:inputText>
+						<p:message for="user_email" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateUserLabel_telephone']}" for="user_telephone" />
+					<h:panelGroup>
+						<p:inputText id="user_telephone" value="#{adminController.selected.telephone}" title="#{bundle['CreateUserTitle_telephone']}"
+							required="true" requiredMessage="#{bundle['CreateUserRequiredMessage_telephone']}"
+							validatorMessage="#{bundle['PhoneValidationFail']}">
+							<f:validateRegex pattern="[0-9]{0,14}" />
+						</p:inputText>
+						<p:message for="user_telephone" />
+					</h:panelGroup>
+					<p:outputLabel value="#{bundle['CreateAdminLabel_ministry']}" for="administrationMinistry" rendered="#{request.isUserInRole('ROOT') }" />
+					<h:panelGroup rendered="#{request.isUserInRole('ROOT') }">
+						<p:selectOneMenu id="administrationMinistry" value="#{adminController.selected.administration}" required="true"
+							requiredMessage="#{bundle['CreateAdminRequiredMessage_ministry']}" title="#{bundle['CreateAdminTitle_ministry']}"
+							rendered="#{request.isUserInRole('ROOT') }">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{adminController.ministriesList}" var="adminVar" itemValue="#{adminVar}"
+								itemLabel="#{facesContext.viewRoot.locale eq 'en' ? adminVar.labelEn : adminVar.labelFr}" />
+							<f:converter binding="#{ministryConverter}" />
+						</p:selectOneMenu>
+						<h:outputText styleClass="important" rendered="#{empty adminController.ministriesList}" value="#{adminController.allMinHaveAdminMsg}" />
+						<p:message for="administrationMinistry" />
+					</h:panelGroup>
+					<p:outputLabel value="#{bundle['CreateAdminLabel_organism']}" for="administrationOrganism"
+						rendered="#{request.isUserInRole('ADMIN_MIN')}" />
+					<h:panelGroup rendered="#{request.isUserInRole('ADMIN_MIN')}">
+						<p:selectOneMenu id="administrationOrganism" value="#{adminController.selected.administration}" required="true" disabled=""
+							requiredMessage="#{bundle['CreateAdminRequiredMessage_organism']}" title="#{bundle['CreateAdminTitle_organism']}"
+							rendered="#{request.isUserInRole('ADMIN_MIN')}">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{adminController.organismsList}" var="adminVarOrg" itemValue="#{adminVarOrg}"
+								itemLabel="#{facesContext.viewRoot.locale eq 'en' ? adminVarOrg.labelEn : adminVarOrg.labelFr}" />
+							<f:converter binding="#{organismConverter}" />
+						</p:selectOneMenu>
+						<p:message for="administrationOrganism" />
+					</h:panelGroup>
+					<p:outputLabel value="#{bundle['CreateAdminLabel_preferedLanguage']}" for="admin_preferedLanguage" />
+					<h:panelGroup>
+						<p:selectOneMenu id="admin_preferedLanguage" value="#{adminController.selected.preferedLanguage}" required="true"
+							requiredMessage="#{bundle['CreateAdminRequiredMessage_preferedLanguage']}" title="#{bundle['CreateAdminTitle_preferedLanguage']}">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{language.languageOptions}" />
+						</p:selectOneMenu>
+						<p:message for="admin_preferedLanguage" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateAdminLabel_enabled']}" for="enabled" />
+					<p:selectBooleanCheckbox id="enabled" value="#{adminController.selected.enabled}" title="#{bundle['CreateAdminTitle_enabled']}">
+					</p:selectBooleanCheckbox>
+
+				</p:panelGrid>
+
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="createBtn" actionListener="#{adminController.create}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+						update="display,:adminListForm,:growl" oncomplete="handleSubmit(xhr,status,args,adminCreateDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('adminCreateDialog').hide();"
+						immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

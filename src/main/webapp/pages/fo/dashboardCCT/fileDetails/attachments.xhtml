@@ -1,0 +1,49 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<p:outputPanel>
+
+
+		<h:form id="ListAttachmentForm">
+
+			<p:accordionPanel id="accRec">
+
+				<p:tab title="#{bundle['Attachment_title']}" titleStyleClass="title" dynamic="true" cache="true">
+
+					<p:dataTable id="attachmentDatalist" value="#{fileItemCctDetailController.currentFile.attachmentsList}" filteredValue="" var="item"
+						rowKey="#{item.id}" rows="5" paginator="true" selection="#{fileItemCctDetailController.selectedAttachment}"
+						rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}" styleClass="newui-datatable fixeColumnWidth"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})" widgetVar="attachmentDatalistTable">
+
+						<p:ajax event="rowSelectRadio" listener="#{fileItemCctDetailController.showAttachment}"
+						 onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"
+							update=":showAttachmentForm :showAttachmentForm:accordAttachment :productDetailsForm :listRecommandationArticleForm :remindDecisionForm 
+							:productInformationForm" />
+						<p:column selectionMode="single" style="width:30px" />
+
+						<p:column sortBy="#{item.documentName}" filterBy="#{item.documentName}" filterMatchMode="contains" style="width:90px">
+							<f:facet name="header">
+								<h:outputText value="#{bundle['AttachmentLabel_documentName']}" title="#{bundle['AttachmentTitle_documentName']}" />
+							</f:facet>
+							<h:outputText value="#{item.documentName}" />
+						</p:column>
+
+						<p:column sortBy="#{item.attachmentType}" filterBy="#{item.attachmentType}" filterMatchMode="contains" style="width:90px">
+							<f:facet name="header">
+								<h:outputText value="#{bundle['AttachmentLabel_type']}" title="#{bundle['AttachmentTitle_type']}" />
+							</f:facet>
+							<h:outputText value="#{item.attachmentType}" />
+						</p:column>
+
+					</p:dataTable>
+
+				</p:tab>
+
+			</p:accordionPanel>
+
+		</h:form>
+
+	</p:outputPanel>
+
+</ui:composition>

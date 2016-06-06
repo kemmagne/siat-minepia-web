@@ -1,0 +1,47 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<h:form id="remindDecisionForm">
+
+		<p:accordionPanel rendered="#{fileItemApDetailController.showRemindDecisionForm}">
+			<p:tab title="#{bundle['RemindDecisionLabel']}" dynamic="true" cache="true" titleStyleClass="titleColor">
+
+				<h:panelGrid styleClass="remindDecision" columns="2" columnClasses="labelColumnLeft, labelColumnRight" cellspacing="4">
+					<h:outputLabel value="#{bundle['RemaindDecision_decisionLabel']}" title="#{bundle['RemaindDecision_decisionTitle']}" />
+					<h:outputLabel
+						value="#{facesContext.viewRoot.locale eq 'en' ? fileItemApDetailController.lastDecisions.flow.redefinedLabelEn : fileItemApDetailController.lastDecisions.flow.redefinedLabelFr }" />
+				</h:panelGrid>
+
+				<ui:repeat value="#{fileItemApDetailController.lastDecisions.itemFlowsDataList}" var="itemFlowData" varStatus="status">
+
+					<h:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight" cellspacing="4">
+						<h:outputLabel value="#{itemFlowData.dataType.label} : " title="#{itemFlowData.dataType.label}" />
+						<h:outputLabel
+							value="#{itemFlowData.dataType.type == 'selectBooleanCheckbox' ? (itemFlowData.value ? bundle['Oui'] : bundle['Non']) : itemFlowData.value}" />
+					</h:panelGrid>
+
+				</ui:repeat>
+
+				<h:panelGroup rendered="#{not empty fileItemApDetailController.lastDecisionAR or not empty fileItemApDetailController.lastDecisionTR}">
+					<ui:include src="../specificDecisions/analyseTestResult/analyseTestRemindDecision.xhtml" />
+				</h:panelGroup>
+
+				<h:panelGroup rendered="#{not empty fileItemApDetailController.lastDecisionER}">
+					<ui:include src="../specificDecisions/essayResult/essayRemindDecision.xhtml" />
+				</h:panelGroup>
+
+				<h:panelGroup rendered="#{not empty fileItemApDetailController.specificDecisionsHistory.lastPaymentData}">
+					<ui:include src="../specificDecisions/paymentValidation/paymentValidationRemindDecision.xhtml" />
+				</h:panelGroup>
+
+			</p:tab>
+
+		</p:accordionPanel>
+
+	</h:form>
+
+</ui:composition>
+
+

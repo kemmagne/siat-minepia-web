@@ -1,0 +1,86 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<p:panel header="#{bundle['auditEntity_title']}">
+		<h:form id="auditEntityListForm">
+
+			<h:commandLink action="#{exporter.exportPDF(table, 'HISTORY')}">
+				<h:outputText styleClass="sprite sprite-pdf" />
+			</h:commandLink>
+
+			<br />
+
+			<p:dataTable id="datalist" binding="#{table}" value="#{auditEntityController.items}" filteredValue="" var="item" selectionMode="single"
+				selection="#{auditEntityController.selected}" rowKey="#{item.id}" rows="5" paginator="true" rowsPerPageTemplate="5,10,20"
+				emptyMessage="#{bundle['AucuneResultat']}" styleClass="newui-datatable fixeColumnWidth" widgetVar="datalistTable"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+				<p:column sortBy="#{item.action}" filterBy="#{item.action}" filterMatchMode="contains" >
+					<f:facet name="header">
+						<h:outputText value="#{bundle['AuditEntityLabel_action']}" title="#{bundle['AuditEntityTitle_action']}" />
+					</f:facet>
+					<h:outputText value="#{item.action}" />
+				</p:column>
+
+				<p:column sortBy="#{item.model}" filterBy="#{item.model}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['AuditEntityLabel_model']}" title="#{bundle['AuditEntityTitle_model']}" />
+					</f:facet>
+					<h:outputText value="#{item.model}" />
+				</p:column>
+
+				<p:column sortBy="#{item.idModel}" filterBy="#{item.idModel}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['AuditEntityLabel_idModel']}" title="#{bundle['AuditEntityTitle_idModel']}" />
+					</f:facet>
+					<h:outputText value="#{item.idModel}" />
+				</p:column>
+
+
+				<p:column sortBy="#{item.value}" filterBy="#{item.value}" filterMatchMode="contains" >
+					<f:facet name="header">
+						<h:outputText value="#{bundle['AuditEntityLabel_value']}" title="#{bundle['AuditEntityTitle_value']}" />
+					</f:facet>
+					<h:outputText value="#{item.value}" />
+				</p:column>
+
+				<p:column sortBy="#{item.username}" filterBy="#{item.username}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['AuditEntityLabel_username']}" title="#{bundle['AuditEntityTitle_username']}" />
+					</f:facet>
+					<h:outputText value="#{item.username}" />
+				</p:column>
+
+				<p:column sortBy="#{item.ipAddress}" filterBy="#{item.ipAddress}" filterMatchMode="contains" >
+					<f:facet name="header">
+						<h:outputText value="#{bundle['AuditEntityLabel_ipAddress']}" title="#{bundle['AuditEntityTitle_ipAddress']}" />
+					</f:facet>
+					<h:outputText value="#{item.ipAddress}" />
+				</p:column>
+				
+<!-- 				<p:column sortBy="#{item.macAddress}" filterBy="#{item.macAddress}" filterMatchMode="contains" style="width:90px"> -->
+<!-- 					<f:facet name="header"> -->
+<!-- 						<h:outputText value="#{bundle['AuditEntityLabel_macAddress']}" title="#{bundle['AuditEntityTitle_macAddress']}" /> -->
+<!-- 					</f:facet> -->
+<!-- 					<h:outputText value="#{item.macAddress}" /> -->
+<!-- 				</p:column> -->
+
+				<p:column sortBy="#{dateBean.formatSimpleDate(item.auditDate)}" filterBy="#{dateBean.formatSimpleDate(item.auditDate)}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['AuditEntityLabel_auditDate']}" title="#{bundle['AuditEntityTitle_auditDate']}" />
+					</f:facet>
+					<h:outputText value="#{item.auditDate}">
+					 <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss"/>
+					</h:outputText>
+				</p:column>
+
+			</p:dataTable>
+
+		</h:form>
+
+	</p:panel>
+
+</ui:composition>

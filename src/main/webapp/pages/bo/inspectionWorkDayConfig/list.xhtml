@@ -1,0 +1,103 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+	<p:panel header="#{bundle['InspectionWorkDayConfig_title_hourlyType']}">
+		<h:form id="hourForm">
+			<h:panelGroup id="display" styleClass="filtr-bloc">
+
+				<p:panelGrid columns="1">
+
+					<h:panelGroup>
+						<p:outputLabel value="#{bundle['InspectionWorkDayConfigLabel_hourlyType']}" for="inspectionWorkDayConfig_hourlyType" />
+						<p:message for="inspectionWorkDayConfig_hourlyType" />
+
+						<p:selectOneMenu id="inspectionWorkDayConfig_hourlyType" value="#{inspectionWorkDayConfigController.selectedHourlyType}"
+							required="true" requiredMessage="#{bundle['InspectionWorkDayConfigRequiredMessage_hourlyType']}">
+
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" noSelectionOption="true" />
+							<f:selectItems value="#{inspectionWorkDayConfigController.hourlyTypeList}" var="hourlyType" itemValue="#{hourlyType}"
+								itemLabel="#{facesContext.viewRoot.locale eq 'en' ? hourlyType.labelEn : hourlyType.labelFr}" />
+							<p:ajax listener="#{inspectionWorkDayConfigController.selectionChanged}" update=":inspectionWorkDayConfigListForm" event="change"
+								immediate="true" onsuccess="PF('datalistTable').filter();" />
+							<f:converter binding="#{hourlyTypeConverter}" />
+						</p:selectOneMenu>
+					</h:panelGroup>
+				</p:panelGrid>
+
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:panel>
+	<br />
+	<p:panel id="inspectionWorkDayConfigListPnl" header="#{bundle['inspectionWorkDayConfig_title']}">
+
+		<h:form id="inspectionWorkDayConfigListForm">
+
+			<ui:param name="iwdcExportedFileName"
+				value="IW_DAY_CONFIG_#{facesContext.viewRoot.locale eq 'en' ? inspectionWorkDayConfigController.selectedHourlyType.labelEn : inspectionWorkDayConfigController.selectedHourlyType.labelFr}" />
+			<h:commandLink action="#{exporter.exportPDF(table, iwdcExportedFileName)}">
+				<h:outputText styleClass="sprite sprite-pdf" />
+			</h:commandLink>
+
+			<br />
+
+			<p:dataTable id="datalist" binding="#{table}" value="#{inspectionWorkDayConfigController.items}" filteredValue="" var="item"
+				selectionMode="single" selection="#{inspectionWorkDayConfigController.selected}" rowKey="#{item.id}" rows="5" paginator="true"
+				rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}" styleClass="newui-datatable fixeColumnWidth"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})" widgetVar="datalistTable">
+
+				<p:ajax event="rowSelect" update="createButton editButton deleteButton datalist" />
+				<p:ajax event="rowUnselect" update="createButton editButton deleteButton datalist" />
+				<p:ajax event="rowDblselect" listener="#{inspectionWorkDayConfigController.prepareEdit}"
+					oncomplete="PF('inspectionWorkDayConfigEditDialog').show();" update=":inspectionWorkDayConfigEditForm"
+					onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+
+				<p:column id="hourColumn" sortBy="#{item.hour}" filterBy="#{item.hour}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['InspectionWorkDayConfigLabel_hour']}" title="#{bundle['InspectionWorkDayConfigTitle_hour']}" />
+					</f:facet>
+					<h:outputText value="#{item.hour}" />
+				</p:column>
+
+				<f:facet name="footer">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="createButton"
+						rendered="#{inspectionWorkDayConfigController.selectedHourlyType ne null}" styleClass="btn" icon="sprite sprite-plus"
+						value="#{bundle['Create']}" actionListener="#{inspectionWorkDayConfigController.prepareCreate}"
+						oncomplete="PF('inspectionWorkDayConfigCreateDialog').show();" update=":inspectionWorkDayConfigCreateForm" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editButton" styleClass="btn"
+						icon="sprite sprite-edit" value="#{bundle['Edit']}" actionListener="#{inspectionWorkDayConfigController.prepareEdit}"
+						rendered="#{inspectionWorkDayConfigController.selected != null and inspectionWorkDayConfigController.selected.id != null}"
+						oncomplete="PF('inspectionWorkDayConfigEditDialog').show();" update=":inspectionWorkDayConfigEditForm" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="deleteButton" styleClass="btn"
+						icon="sprite sprite-delete" value="#{bundle['Delete']}"
+						rendered="#{inspectionWorkDayConfigController.selected != null and inspectionWorkDayConfigController.selected.id != null}"
+						oncomplete="PF('confirmation').show()" />
+				</f:facet>
+
+			</p:dataTable>
+
+		</h:form>
+
+		<p:confirmDialog closeOnEscape="true" id="diagSupp" message="#{bundle['popup_confirm_delete_message']}"
+			header="#{bundle['popup_confirm_delete_header']}" widgetVar="confirmation" appendTo="@(body)">
+			<div align="right">
+				<h:form id="diagForm">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock();PF('datalistTable').filter();"
+						id="confirm" value="#{bundle['popup_confirm_delete_message_oui']}" update=":growl :inspectionWorkDayConfigListForm:datalist"
+						oncomplete="PF('confirmation').hide();document.getElementById('diagForm:confirm').disabled=false;"
+						onclick="document.getElementById('diagForm:confirm').disabled=true;" actionListener="#{inspectionWorkDayConfigController.delete}"
+						styleClass="ui-priority-primary" />
+
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="decline"
+						value="#{bundle['popup_confirm_delete_message_pas_maintenant']}" onclick="PF('confirmation').hide()"
+						update=":inspectionWorkDayConfigListForm" styleClass="ui-priority-primary" />
+				</h:form>
+			</div>
+		</p:confirmDialog>
+
+
+	</p:panel>
+</ui:composition>

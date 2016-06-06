@@ -1,0 +1,82 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<h:panelGroup rendered="#{not empty fileItemApDetailController.decisionDetailsAR}">
+
+		<h:outputLabel value="#{bundle['AnalyseResultAp_TabTitle']} : " styleClass="analyseResult" />
+
+		<p:panelGrid columns="4" columnClasses="labelColumnLeft, labelColumnRight" cellspacing="4">
+
+			<h:outputLabel value="#{bundle['AnalyseResultAp_TypeLabel']} : " />
+			<h:outputLabel value="#{fileItemApDetailController.decisionDetailsAR.analyseType}" />
+
+			<h:outputLabel value="#{bundle['AnalyseResultAp_LaboLabel']} : " />
+			<h:outputLabel value="#{fileItemApDetailController.decisionDetailsAR.laboratory.code}" />
+
+			<h:outputLabel value="#{bundle['AnalyseResultAp_DescriptionLabel']} : " />
+			<h:outputLabel value="#{fileItemApDetailController.decisionDetailsAR.description}" />
+
+			<h:outputLabel value="#{bundle['AnalyseResultAp_ResultLabel']} : " />
+			<h:outputLabel value="#{fileItemApDetailController.decisionDetailsAR.result}" />
+
+			<h:outputLabel value="#{bundle['AnalyseResultAp_AnalyseDateLabel']} : " />
+			<h:outputLabel value="#{fileItemApDetailController.decisionDetailsAR.analyseDate}" />
+
+			<h:outputLabel value="#{bundle['AnalyseResultAp_AnalyseObservationsLabel']} : " />
+			<h:outputLabel value="#{fileItemApDetailController.decisionDetailsAR.observations}" />
+
+		</p:panelGrid>
+
+	</h:panelGroup>
+
+	<br />
+
+	<h:panelGroup rendered="#{not empty fileItemApDetailController.decisionDetailsTR}">
+
+		<h:outputLabel value="#{bundle['TestResultAp_TabTitle']} : " styleClass="analyseResult" />
+
+		<p:panelGrid columns="4" columnClasses="labelColumnLeft, labelColumnRight" cellspacing="4">
+
+			<h:outputLabel value="#{bundle['TestResultAp_TypeLabel']} : " />
+			<h:outputLabel value="#{fileItemApDetailController.decisionDetailsTR.type}" />
+
+			<h:outputLabel value="#{bundle['TestResultAp_NatureLabel']} : " />
+			<h:outputLabel value="#{fileItemApDetailController.decisionDetailsTR.nature}" />
+
+			<h:outputLabel value="#{bundle['TestResultAp_ConditionsLabel']} : " />
+			<h:outputLabel value="#{fileItemApDetailController.decisionDetailsTR.condition}" />
+
+			<h:outputLabel value="#{bundle['TestResultAp_CultureLabel']} : " />
+			<h:outputLabel value="#{fileItemApDetailController.decisionDetailsTR.culture}" />
+
+			<h:outputLabel value="#{bundle['TestResultAp_StageLabel']} : " />
+			<h:outputLabel value="#{fileItemApDetailController.decisionDetailsTR.stage}" />
+
+			<h:outputLabel value="#{bundle['TestResultAp_DescriptionLabel']} : " />
+			<h:outputLabel value="#{fileItemApDetailController.decisionDetailsTR.description}" />
+
+			<h:outputLabel value="#{bundle['TestResultAp_DateLabel']} : " />
+			<h:outputLabel value="#{fileItemApDetailController.decisionDetailsTR.testDate}" />
+
+			<h:outputLabel value="#{bundle['TestResultAp_PlaceLabel']} : " />
+			<h:outputLabel value="#{fileItemApDetailController.decisionDetailsTR.place}" />
+
+			<h:outputLabel value="#{bundle['TestResultAp_TownCodeLabel']} : " />
+			<h:outputLabel value="#{fileItemApDetailController.decisionDetailsTR.townCode}" />
+
+			<h:outputLabel value="#{bundle['TestResultAp_TownNameLabel']} : " />
+			<h:outputLabel value="#{fileItemApDetailController.decisionDetailsTR.townName}" />
+
+			<h:outputLabel value="#{bundle['TestResultAp_IntervenantsLabel']} : " />
+			<h:outputLabel value="#{fileItemApDetailController.decisionDetailsTR.contributors}" />
+
+			<h:outputLabel value="#{bundle['TestResultAp_ResultLabel']} : " />
+			<h:outputLabel value="#{fileItemApDetailController.decisionDetailsTR.resultats}" />
+
+			<h:outputLabel value="#{bundle['TestResultAp_ObservationsLabel']} : " />
+			<h:outputLabel value="#{fileItemApDetailController.decisionDetailsTR.obsevations}" />
+
+		</p:panelGrid>
+
+	</h:panelGroup>
+</ui:composition>

@@ -1,0 +1,63 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+	<h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAR}">
+
+		<p:panelGrid columns="2">
+
+			<h:outputLabel value="#{bundle['AnalyseResultDateLabel']} : " />
+			<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAR.analyseOrder.date}" />
+
+			<h:outputLabel value="#{bundle['AnalyseResultSampleLabel']} : " />
+			<h:outputLabel
+				value="#{facesContext.viewRoot.locale eq 'fr' ? fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAR.analyseOrder.sample.fileItem.nsh.goodsItemDesc : fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAR.analyseOrder.sample.fileItem.nsh.goodsItemDescEn}" />
+
+			<h:outputLabel value="#{bundle['AnalyseResultQtePrelvLabel']} : " />
+			<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAR.analyseOrder.sample.takenQuantity}" />
+
+			<h:outputLabel value="#{bundle['AnalyseResultQteAnalLabel']} : " />
+			<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAR.analyseOrder.quantity}" />
+
+
+
+			<h:outputLabel value="#{bundle['AnalyseResultPriceLabel']} : " />
+			<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAR.amount}" />
+
+			<h:outputLabel value="#{bundle['AnalyseResultObservationLabel']} : " />
+			<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAR.observation}" />
+
+			<h:outputLabel />
+
+		</p:panelGrid>
+
+		<h:outputLabel value="#{bundle['AnalyseResultDetailsAnalyseType']} : " styleClass="analyseResult" />
+		
+		<br />
+
+	
+		<p:tabView scrollable="true" var="item" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAR.analyseOrder.analysePartsList}">
+
+			<p:tab title="#{facesContext.viewRoot.locale eq 'en' ?item.analyseType.labelEn:item.analyseType.labelFr}">
+
+				<h:panelGrid columns="2">
+
+					<h:outputLabel value="#{bundle['AnalyseResultDetailsCompliant']} : " />
+					<p:selectBooleanCheckbox value="#{item.compliant}" disabled="true" />
+
+					<h:outputLabel value="#{bundle['AnalyseResultDetailsObservation']} : " />
+					<h:outputLabel value="#{item.observation}" />
+
+					<h:outputLabel value="#{bundle['AnalyseResultDetailsAttachment']} : " />
+					<p:commandLink value="#{item.attachment}" ajax="false" style="text-decoration: underline">
+						<p:fileDownload value="#{fileItemCctDetailController.reportMap.get(item.id)}" />
+					</p:commandLink>
+
+				</h:panelGrid>
+
+			</p:tab>
+
+		</p:tabView>
+
+	</h:panelGroup>
+
+</ui:composition>

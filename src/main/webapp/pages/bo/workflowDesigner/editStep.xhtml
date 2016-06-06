@@ -1,0 +1,43 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+
+	<p:dialog closeOnEscape="true" id="stepDlg" widgetVar="stepDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle['EditStepTitle']}">
+
+		<h:form id="stepForm" prependId="false">
+
+			<h:panelGroup id="displayStep">
+				<p:panelGrid columns="2">
+					<p:outputLabel value="#{bundle['EditStepLabel_labelFr']}" title="#{bundle['EditStepTitle_labelFr']}" for="step_labelFr" />
+					<h:panelGroup>
+						<p:inputText id="step_labelFr" value="#{workflowDesignerController.selected.labelFr}" title="#{bundle['EditStepTitle_labelFr']}"
+							required="true" requiredMessage="#{bundle['EditStepRequiredMessage_labelFr']}" />
+						<p:message for="step_labelFr" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditStepLabel_labelFn']}" title="#{bundle['EditStepTitle_labelFn']}" for="step_labelFn" />
+					<h:panelGroup>
+						<p:inputText id="step_labelFn" value="#{workflowDesignerController.selected.labelEn}" title="#{bundle['EditStepTitle_labelFn']}"
+							required="true" requiredMessage="#{bundle['EditStepRequiredMessage_labelFn']}" />
+						<p:message for="step_labelFn" />
+					</h:panelGroup>
+
+				</p:panelGrid>
+				<br />
+
+				<div class="btn-bloc">
+					<p:commandButton actionListener="#{workflowDesignerController.edit}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+						ajax="false" update=" stepForm msgErrorsForStepValidation,:growl " oncomplete="handleSubmitForWorkflow(xhr,status,args,stepDlg);"
+						onsuccess="console.log('****** StepDialog Success ******');" onerror="console.log('****** StepDialog Error *****');" />
+					<p:commandButton value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('stepDialog').hide();" immediate="true" />
+				</div>
+			</h:panelGroup>
+		</h:form>
+	</p:dialog>
+
+
+</ui:composition>
+
+</html>

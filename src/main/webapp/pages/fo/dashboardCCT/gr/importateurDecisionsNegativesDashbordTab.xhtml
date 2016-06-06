@@ -1,0 +1,58 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="systemDecisionFormImportateurDecisionsNegativesTab">
+
+		<p:dataTable id="datalistimpDecisionsNegativesTab" widgetVar="datalistTableimpDecisionsNegativesTab"
+			value="#{riskController.impDecisionsNegativesTabList}" filteredValue="" var="fileItem" selectionMode="single" rowKey="#{fileItem.id}"
+			rows="5" paginator="true" rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}"
+			styleClass="newui-datatable fixeColumnWidth ciblagetab ciblagetab2"
+			paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+			<p:column sortBy="#{fileItem.file.numeroDossier}" filterBy="#{fileItem.file.numeroDossier}" filterMatchMode="contains"
+				style="width:80px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['impDecisionsNegativesTabLabel_numeroDossier']}" title="#{bundle['impDecisionsNegativesTabTitle_numeroDossier']}" />
+				</f:facet>
+				<h:outputText value="#{fileItem.file.numeroDossier}" />
+			</p:column>
+
+			<p:column sortBy="#{fileItem.id}" filterBy="#{fileItem.id}" filterMatchMode="contains" style="width:80px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['impDecisionsNegativesTabLabel_numeroArticle']}" title="#{bundle['impDecisionsNegativesTabTitle_numeroArticle']}" />
+				</f:facet>
+				<h:outputText value="#{fileItem.id}" />
+			</p:column>
+
+			<p:column sortBy="#{dateBean.formatSimpleDate(fileItem.file.createdDate)}" filterBy="#{dateBean.formatSimpleDate(fileItem.file.createdDate)}"
+				filterMatchMode="contains" style="width:80px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['impDecisionsNegativesTabLabel_dateCreation']}" title="#{bundle['impDecisionsNegativesTabTitle_dateCreation']}" />
+				</f:facet>
+				<h:outputText value="#{fileItem.file.createdDate}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+
+			<p:column sortBy="#{fileItem.nsh.goodsItemCode}" filterBy="#{fileItem.nsh.goodsItemCode}" filterMatchMode="contains"
+				style="width:80px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['impDecisionsNegativesTabLabel_nsh']}" title="#{bundle['impDecisionsNegativesTabTitle_nsh']}" />
+				</f:facet>
+				<h:outputText value="#{fileItem.nsh.goodsItemCode}" />
+			</p:column>
+
+			<p:column sortBy="#{fileItem.subfamily.label}" filterBy="#{fileItem.subfamily.label}" filterMatchMode="contains"
+				style="width:80px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['impDecisionsNegativesTabLabel_productLabel']}" title="#{bundle['impDecisionsNegativesTabTitle_productLabel']}" />
+				</f:facet>
+				<h:outputText value="#{fileItem.subfamily.label}" />
+			</p:column>
+
+		</p:dataTable>
+	</h:form>
+</ui:composition>
+
+

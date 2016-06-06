@@ -1,0 +1,67 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="stepCreateDlg" widgetVar="stepCreateDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['CreateStepTitle']}">
+		<h:form id="stepCreateForm">
+			<h:panelGroup id="display" styleClass="inpWidth">
+				<p:panelGrid columns="4">
+					<p:outputLabel value="#{bundle['CreateStepLabel_labelFr']}" for="step_labelFr" />
+					<h:panelGroup>
+						<p:inputText id="step_labelFr" value="#{stepController.selected.labelFr}" title="#{bundle['CreateStepTitle_labelFr']}" required="true"
+							requiredMessage="#{bundle['CreateStepRequiredMessage_labelFr']}" />
+						<p:message for="step_labelFr" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateStepLabel_labelEn']}" for="step_labelEn" />
+					<h:panelGroup>
+						<p:inputText id="step_labelEn" value="#{stepController.selected.labelEn}" title="#{bundle['CreateStepTitle_labelEn']}" required="true"
+							requiredMessage="#{bundle['CreateStepRequiredMessage_labelEn']}" />
+						<p:message for="step_labelEn" />
+					</h:panelGroup>
+					<p:outputLabel value="#{bundle['CreateStepLabel_code']}" for="step_code" />
+					<h:panelGroup>
+						<p:selectOneMenu id="step_code" value="#{stepController.selectedCode}" required="true"
+							requiredMessage="#{bundle['CreateStepRequiredMessage_code']}">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{stepController.stepCodeList}" var="code" itemValue="#{code}" itemLabel="#{code}">
+							</f:selectItems>
+						</p:selectOneMenu>
+						<p:message for="step_code" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateStepLabel_isFinal']}" for="step_isFinal" />
+					<p:selectBooleanCheckbox id="step_isFinal" value="#{stepController.selected.isFinal}" title="#{bundle['CreateStepTitle_isFinal']}" />
+
+				</p:panelGrid>
+				<h:panelGroup styleClass="panel-bloc">
+					<p:outputLabel value="#{bundle['EditStepLabel_stepAuthorities']}" for="stepAuthoritiesPickListCreateFr" />
+					<h:panelGroup styleClass="panel-bloc-title">
+						<p:pickList id="stepAuthoritiesPickListCreateFr" value="#{stepController.authorityPickList}" var="authority" itemValue="#{authority}"
+							itemLabel="#{facesContext.viewRoot.locale eq 'fr' ? authority.labelFr : authority.labelEn}" showSourceControls="false"
+							showTargetControls="false" showCheckbox="true" showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
+							converter="#{grantedAuthorityConverter}">
+							<f:facet name="sourceCaption">#{bundle['CreateStepLabel_stepAuthorities_disponibles']}</f:facet>
+							<f:facet name="targetCaption">#{bundle['CreateStepLabel_stepAuthorities_affectees']} </f:facet>
+							<p:column style="width:75%;">
+								<h:outputText value="#{facesContext.viewRoot.locale eq 'fr' ? authority.labelFr : authority.labelEn}" />
+							</p:column>
+						</p:pickList>
+						<p:message for="stepAuthoritiesPickListCreateFr" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<br />
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  actionListener="#{stepController.create}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+						update="display,:stepListForm,:growl" oncomplete="handleSubmit(xhr,status,args,stepCreateDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('stepCreateDialog').hide();" immediate="true" />
+				</div>
+
+			</h:panelGroup>
+		</h:form>
+	</p:dialog>
+</ui:composition>
+
+</html>

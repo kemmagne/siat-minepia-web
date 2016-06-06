@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/templates/templateFile.xhtml">
+
+	<f:metadata>
+		<f:event listener="#{fileItemApDetailController.reloadPage}" type="preRenderView" />
+	</f:metadata>
+
+	<ui:define name="title">
+		<h:outputText value="#{bundle['ap_file_details_title']}" />
+	</ui:define>
+
+	<ui:define name="body">
+
+		<ui:include src="dispatchDialog.xhtml" />
+		<ui:include src="decision.xhtml" />
+		<ui:include src="recommandationCreate.xhtml" />
+		<ui:include src="recommandationEdit.xhtml" />
+		<ui:include src="recommandationArticleCreate.xhtml" />
+		<ui:include src="recommandationArticleEdit.xhtml" />
+		<ui:include src="history.xhtml" />
+
+		<p:spacer height="5" />
+
+		<p:outputPanel>
+
+			<p:panel>
+				<h:panelGrid columns="2" styleClass="tableInitial tabIn">
+
+					<h:panelGroup id="center" styleClass="tablelistinitial">
+						<ui:include src="recommandation.xhtml" />
+						<ui:include src="generalInformation.xhtml" />
+						<ui:include src="productInformation.xhtml" />
+						<ui:include src="attachments.xhtml" />
+						<!-- 	<ui:include src="repeatableContent.xhtml" /> -->
+
+
+					</h:panelGroup>
+					<h:panelGroup id="detail">
+						<p:panel deferred="true" id="right" styleClass="tableInitialRight" resizable="true" collapsible="true">
+							<f:facet name="header">
+								<h:outputText value="#{fileItemApDetailController.showShowAttachmentForm?bundle['Attachment_title']:bundle['ProductDetails']}" />
+								<h:form>
+									<p:commandLink oncomplete="PF('historyDialog').show();PF('historyDataTable').filter()"
+										action="#{fileItemApDetailController.setSelectedItemFlowDto(null)}" update=":historyForm"
+										rendered="#{fileItemApDetailController.showProductDetailsForm}">
+										<p:graphicImage value="/images/dashboard/horloge.png" />
+									</p:commandLink>
+								</h:form>
+							</f:facet>
+							<h:panelGrid columns="2" styleClass="tableSeparate">
+								<h:panelGroup styleClass="side">
+									<ui:include src="recommandationArticle.xhtml" />
+									<ui:include src="productDetails.xhtml" />
+									<ui:include src="remindDecision.xhtml" />
+									<ui:include src="pdfViewer.xhtml" />
+								</h:panelGroup>
+							</h:panelGrid>
+						</p:panel>
+					</h:panelGroup>
+				</h:panelGrid>
+			</p:panel>
+		</p:outputPanel>
+
+	</ui:define>
+</ui:composition>

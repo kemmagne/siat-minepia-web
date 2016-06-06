@@ -1,0 +1,50 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<h:form id="fileItemDesicionSearchForm">
+
+		<p:accordionPanel styleClass="search">
+
+			<p:tab title="#{bundle['fileItemDesicionDelivree_Search']}" dynamic="true" cache="true">
+
+				<h:panelGrid columns="10" cellpadding="10">
+
+					<h:panelGroup>
+						<p:outputLabel for="fromDate" value="#{bundle['fileItemDesicionSearch_fromDateLabel']}" />
+					</h:panelGroup>
+					<p:calendar navigator="true" id="fromDate" value="#{statisticController.filterDecisionDelivree.fromDate}"
+						title="#{bundle['fileItemDesicionSearch_fromDateTitre']}" showOn="button" pattern="dd/MM/yyyy" >
+						<p:ajax event="dateSelect" update="toDate" />
+					</p:calendar>
+
+					<h:panelGroup>
+						<p:outputLabel for="toDate" value="#{bundle['fileItemDesicionSearch_toDateLabel']}" />
+					</h:panelGroup>
+					<p:calendar navigator="true" id="toDate" value="#{statisticController.filterDecisionDelivree.toDate}"
+						title="#{bundle['fileItemDesicionSearch_toDateTitre']}" showOn="button" pattern="dd/MM/yyyy"
+						mindate="#{statisticController.filterDecisionDelivree.fromDate}" >
+					</p:calendar>
+
+					<h:panelGroup>
+
+						<p:commandButton icon="ui-icon-search" title="#{bundle['ButtonSearch']}"
+							action="#{statisticController.doFileItemDesicionDelivreeByFilter}" onstart="PF('statusDialog1').block()"
+							onsuccess="PF('statusDialog1').unblock()"
+							update=":filtredFileItemListForm :filtredFileItemListForm:datalist fileItemDesicionSearchForm :growl"
+							oncomplete="PF('datalistTable').filter();" />
+
+						<p:commandButton icon="ui-icon-refresh" title="#{bundle['ButtonReset']}"
+							action="#{statisticController.initFileItemByDecisionDelivreeSearch}" onsuccess="PF('datalistTable').filter();"
+							update=":filtredFileItemListForm :filtredFileItemListForm:datalist fileItemDesicionSearchForm" />
+
+					</h:panelGroup>
+				</h:panelGrid>
+
+			</p:tab>
+
+		</p:accordionPanel>
+
+	</h:form>
+</ui:composition>

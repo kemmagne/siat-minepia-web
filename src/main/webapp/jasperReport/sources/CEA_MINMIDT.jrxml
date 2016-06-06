@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="file" language="groovy" pageWidth="595" pageHeight="600" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="28078ea8-15af-47d5-9f91-aa95db5f187e">
+	<property name="ireport.zoom" value="1.1269722013523684"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="88"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table CH" mode="Opaque" backcolor="#FFBFBF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="b9766a3b-82dc-43b6-9def-c2d7b4685e7d">
+		<field name="desc" class="java.lang.String"/>
+		<field name="weight" class="java.lang.Double"/>
+		<field name="goldContent" class="java.lang.String"/>
+		<variable name="SUM" class="java.lang.Double" calculation="Sum">
+			<variableExpression><![CDATA[$F{weight}]]></variableExpression>
+		</variable>
+	</subDataset>
+	<field name="fileItemList" class="java.util.List"/>
+	<field name="company" class="java.lang.String"/>
+	<field name="decisionNumber" class="java.lang.String"/>
+	<field name="decreeNumber" class="java.lang.String"/>
+	<field name="destinationCountry" class="java.lang.String"/>
+	<field name="decisionDate" class="java.util.Date"/>
+	<field name="decreeDate" class="java.util.Date"/>
+	<field name="decisionPlace" class="java.lang.String"/>
+	<variable name="SUM" class="java.lang.String" calculation="Sum"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="280" splitType="Stretch">
+			<elementGroup>
+				<staticText>
+					<reportElement uuid="94ec65bd-9459-4460-8e87-684e6c2cb325" x="10" y="74" width="196" height="24"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[CENTRE DES ANALYSES, DES ESSAIS ET DE LA
+METROLOGIE INDUSTRIELLE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="56667fa5-dcc4-4b2e-8b07-a96aac1696a4" x="10" y="20" width="196" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="b8daa0e8-0311-451e-9129-b6716f5b787c" x="10" y="28" width="196" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[MINISTÈRE DES MINES, DE L'INDUSTRIE
+ET DU DEVELOPPEMENT TECHNOLOGIQUE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="2a9cc343-4f27-401a-8f6d-22e423dc4fd8" x="10" y="98" width="196" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="2f8ca3fe-536c-4d2f-8210-cc46e8006012" x="10" y="56" width="196" height="10"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[SECRÉTERIAT GÉNÉRAL]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="03eef9ba-5a94-4e39-921f-4678cd226b65" x="10" y="48" width="196" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="25220a4d-2c33-4702-8ee9-c7d841d6f2ef" x="10" y="10" width="196" height="10"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[ Paix-Travail-Patrie]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="898b970c-05ed-4951-b8ce-0cdd0de02faf" x="10" y="0" width="196" height="10"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6" isBold="false" isStrikeThrough="false"/>
+					</textElement>
+					<text><![CDATA[RÉPUBLIQUE DU CAMEROUN
+]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="93a87e47-e9c1-42f0-8f5f-c74cc5bb17db" x="10" y="106" width="196" height="10"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[SECTION DES ESSAIS DES PRODUITS SOLIDES]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="0a2a6f4c-1a08-44a9-8c93-a956f8631513" x="10" y="116" width="196" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="b52c9484-2364-41cc-8360-309c7c96643f" x="10" y="66" width="196" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="514ea7f6-8b01-46c1-8b0b-b11fc57ffd66" x="349" y="66" width="196" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="a9457b2c-1793-490b-bcf9-ca4d9c6d9ecc" x="349" y="74" width="196" height="24"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[ANALYSIS, TESTS AND INDUSTRIAL METHROLOGY
+CENTRE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="fd78798c-b8a4-44ed-a8b3-6d923c45e341" x="349" y="98" width="196" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="2789ada0-4fd0-413e-bda3-25b5b141742b" x="349" y="106" width="196" height="10"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[TEST OF SOLID PRODUCTS SECTION]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="94f830e0-b996-4412-8ee8-90fff574abf8" x="349" y="116" width="196" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+			</elementGroup>
+			<elementGroup>
+				<staticText>
+					<reportElement uuid="f1eb4dcf-f754-4de2-9514-0c4ed5812882" x="349" y="48" width="196" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="be32ad23-eac7-4847-9cce-65175f9c0adc" x="349" y="20" width="196" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="029ee73e-a2e3-4a51-aa59-063aa92ffa21" x="349" y="10" width="196" height="10"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Peace-Work-Fatherland]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="df07ef27-c83a-4d21-8e3f-68d9a343f411" x="349" y="0" width="196" height="10"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[REPUBLIC OF CAMEROON
+]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="a6d01776-2f72-4567-b8e7-fd246affcb41" x="349" y="56" width="196" height="10"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[GENERAL SECRETARIAT]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="dc73b37f-418e-4481-a403-7a3b43d5e373" x="349" y="28" width="196" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[MINISTRY OF MINES, INDUSTRY AND TECHNOLOGICAL DEVELOPMENT]]></text>
+				</staticText>
+			</elementGroup>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="a4904901-2454-4316-9fd0-e5170930e591" x="10" y="152" width="183" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font  size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["N° "+($F{decisionNumber} != null  && $F{decisionNumber}.trim().length()>0 ? $F{decisionNumber} : "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="0c7833cb-c2cd-4dbf-a5d3-f76b9e73ab1e" x="0" y="184" width="555" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="19" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CERTIFICATION D'AUTHENTICITE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="67d74d0e-ad0e-4446-9b09-61b8b2b248a1" x="10" y="134" width="196" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[*******]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ea0b3c79-61a8-43d8-8828-c6dfab89a286" x="10" y="124" width="196" height="10"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[LABORATOIRE DES ANALYSES ET ESSAIS MINARALOGIQUES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="78a6b3e5-7827-4109-b574-ff73f89156b0" x="349" y="124" width="196" height="10"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[MINERALOGICAL ANALYSIS AND TEST LABORATORY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0821feae-3e55-4fb2-8137-186c64fe3335" x="349" y="134" width="196" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[*******]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ffd2c8b5-f977-4e48-95f3-7baaab62e893" x="0" y="206" width="555" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Application du Décret N° 2002/648/PM du 26 mars 2002 fixant les modalités d'application de la
+N° 001 du 16 avril 2001 portant code minier]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="d18736a5-7f89-47e8-8471-98b45f42348e" x="10" y="238" width="535" height="36"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["La Société "+($F{company} != null  && $F{company}.trim().length()>0 ? $F{company} : "-")+" agréée par arrêté N° "+($F{decreeNumber} != null  && $F{decreeNumber}.trim().length()>0 ? $F{decreeNumber} : "-")+" du "+($F{decreeDate}!= null? new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{decreeDate}) : "-")+", a présenté ce jour au Laboratoire de Référence du MINMIDT "+($F{fileItemList}.size() != null  && $F{fileItemList}.size().toString().trim().length()>0 ? $F{fileItemList}.size() : "-")+" "+($F{fileItemList}!= null && $F{fileItemList}.size()>0 && $F{fileItemList}.get(0).getName() != null  && $F{fileItemList}.get(0).getName().trim().length()>0 ? $F{fileItemList}.get(0).getName() : "-")+" pour expertise et authentification aux fins d'exportation à "+($F{destinationCountry} != null  && $F{destinationCountry}.trim().length()>0 ? $F{destinationCountry} : "-")+"."]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="140" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="efe615d4-d5e1-4a8e-8c20-8263fc7be600" x="10" y="20" width="535" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font  size="8" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Description  du lingot]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement uuid="c9ab5dfb-aceb-4978-a5db-28caf55937b4" key="table 1" style="table" x="10" y="42" width="535" height="81"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Table Dataset 1" uuid="5f9f5101-2745-4eb0-915c-a182d51662e5">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{fileItemList})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="178" uuid="81fe2476-093f-4b59-823e-3be36dd77045">
+						<jr:columnHeader style="table" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="9767aea9-0fcb-456b-b1af-f0d42e7bba3e" x="0" y="0" width="178" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9"/>
+								</textElement>
+								<text><![CDATA[DESCRIPTION]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="6a01cc60-564d-44c1-9edc-c4f6d3815134" x="0" y="0" width="178" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+									<font  size="9" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Masse Totale]]></text>
+							</staticText>
+						</jr:columnFooter>
+						<jr:detailCell style="table TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement uuid="5749f606-01c5-437c-8cc7-926cd321a0cc" x="0" y="0" width="178" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9"/>
+								</textElement>
+								<textFieldExpression><![CDATA[($F{desc} != null  && $F{desc}.trim().length()>0 ? $F{desc} : "-")]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="178" uuid="af6779b3-b7f3-4a0b-b507-02374d45e0ec">
+						<jr:columnHeader style="table" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="2beb8cb1-b5c7-4832-9641-c74d55c1377f" x="0" y="0" width="178" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9"/>
+								</textElement>
+								<text><![CDATA[POIDS EN GRAMMES]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table" height="30" rowSpan="1">
+							<textField>
+								<reportElement uuid="ef171dae-d068-4fcd-b01e-2cebab17ffad" x="0" y="0" width="178" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{SUM}]]></textFieldExpression>
+							</textField>
+						</jr:columnFooter>
+						<jr:detailCell style="table TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement uuid="5f1730fd-aa75-4540-ac24-c55ace834033" x="0" y="0" width="178" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9"/>
+								</textElement>
+								<textFieldExpression><![CDATA[($F{weight} != null  && $F{weight}.toString().trim().length()>0 ? $F{weight} : "-")]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="179" uuid="bfaa5396-e121-47a6-bda6-11ae3d984aa5">
+						<jr:columnHeader style="table" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="e9289dc3-0a45-4179-9bf3-87b120e8b373" x="0" y="0" width="178" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9"/>
+								</textElement>
+								<text><![CDATA[TENEUR EN OR (CARAT)]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table TD" height="30" rowSpan="1">
+							<textField>
+								<reportElement uuid="e7a45042-80a8-473d-b18b-90b6377f684c" x="0" y="0" width="178" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9"/>
+								</textElement>
+								<textFieldExpression><![CDATA[($F{goldContent} != null  && $F{goldContent}.trim().length()>0 ? $F{goldContent} : "-")]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="50" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="d3ebd257-0153-4f74-8d33-0958b3cd62e7" x="10" y="0" width="535" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Le présent certificat est délivré pour servir et valoir ce que de droit.]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="c46bbe56-5ee0-4f6a-90ba-7a2f628a614f" x="345" y="12" width="200" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Fait à "+($F{decisionPlace} != null  && $F{decisionPlace}.trim().length()>0 ? $F{decisionPlace} : "-")+", le "+($F{decisionDate}!= null? new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{decisionDate}) : "-")]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

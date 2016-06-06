@@ -1,0 +1,133 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<p:panel header="#{bundle['admin_title']}">
+		<h:form id="adminListForm">
+
+			<h:commandLink action="#{exporter.exportPDF(table, 'ADMINS')}">
+				<h:outputText styleClass="sprite sprite-pdf" />
+			</h:commandLink>
+
+			<br />
+
+			<p:dataTable data-role="table" data-mode="reflow" tableStyleClass="ui-table-columntoggle ui-responsive" reflow="true" id="datalist"
+				binding="#{table}" value="#{adminController.items}" filteredValue="" var="item" selectionMode="single"
+				selection="#{adminController.selected}" rowKey="#{item.id}" rows="5" paginator="true" rowsPerPageTemplate="5,10,20"
+				emptyMessage="#{bundle['AucuneResultat']}" styleClass="newui-datatable fixeColumnWidth "
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})" widgetVar="datalistTable">
+
+				<p:ajax event="rowSelect" update="editButton datalist" />
+				<p:ajax event="rowUnselect" update="editButton datalist" />
+				<p:ajax event="rowDblselect" listener="#{adminController.prepareEdit}" oncomplete="PF('adminEditDialog').show();"
+					update=":adminEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+
+				<p:column headerText="#{item.login}" id="loginColumn" sortBy="#{item.login}" filterBy="#{item.login}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['AdminLabel_login']}" title="#{bundle['AdminTitle_login']}" />
+					</f:facet>
+					<h:outputText value="#{item.login}" />
+				</p:column>
+
+				<p:column headerText="#{item.firstName}" id="firstnameColumn" sortBy="#{item.firstName}" filterBy="#{item.firstName}"
+					filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['AdminLabel_firstName']}" title="#{bundle['AdminTitle_firstName']}" />
+					</f:facet>
+					<h:outputText value="#{item.firstName}" />
+				</p:column>
+
+				<p:column headerText="#{item.lastName}" id="lastnameColumn" sortBy="#{item.lastName}" filterBy="#{item.lastName}"
+					filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['AdminLabel_lastName']}" title="#{bundle['AdminTitle_lastName']}" />
+					</f:facet>
+					<h:outputText value="#{item.lastName}" />
+				</p:column>
+
+				<p:column headerText="#{item.email}" id="emailColumn" sortBy="#{item.email}" filterBy="#{item.email}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['AdminLabel_email']}" title="#{bundle['AdminTitle_email']}" />
+					</f:facet>
+					<h:outputText value="#{item.email}" />
+				</p:column>
+
+				<p:column sortBy="#{facesContext.viewRoot.locale eq 'en' ? item.administration.labelEn : item.administration.labelFr }"
+					filterBy="#{facesContext.viewRoot.locale eq 'en' ? item.administration.labelEn : item.administration.labelFr }"
+					filterMatchMode="contains" rendered="#{request.isUserInRole('ROOT') }">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['AdminLabel_ministry']}" title="#{bundle['AdminTitle_ministry']}" />
+					</f:facet>
+					<h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? item.administration.labelEn : item.administration.labelFr }" />
+				</p:column>
+
+				<p:column sortBy="#{facesContext.viewRoot.locale eq 'en' ? item.administration.labelEn : item.administration.labelFr }"
+					filterBy="#{facesContext.viewRoot.locale eq 'en' ? item.administration.labelEn : item.administration.labelFr }"
+					filterMatchMode="contains" rendered="#{request.isUserInRole('ADMIN_MIN')}">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['AdminLabel_organism']}" title="#{bundle['AdminTitle_organism']}" />
+					</f:facet>
+					<h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? item.administration.labelEn : item.administration.labelFr }" />
+				</p:column>
+
+				<p:column id="enabledColumn" filterBy="#{item.enabled}" headerText="#{bundle['AdminLabel_enabled']}" filterMatchMode="equals">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['AdminLabel_enabled']}" title="#{bundle['AdminTitle_enabled']}" />
+					</f:facet>
+					<f:facet name="filter">
+						<p:selectOneButton onchange="PF('datalistTable').filter()">
+							<f:converter converterId="javax.faces.Boolean" />
+							<f:selectItem itemLabel="#{bundle['Tous']}" itemValue="" />
+							<f:selectItem itemLabel="#{bundle['Oui']}" itemValue="true" />
+							<f:selectItem itemLabel="#{bundle['Non']}" itemValue="false" />
+						</p:selectOneButton>
+					</f:facet>
+					<h:outputText value="#{item.enabled ? 'Oui': 'Non'}" />
+				</p:column>
+
+
+				<p:column headerText="#{bundle['UserLabel_role']}" id="authoritiesImagesList">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['UserLabel_role']}" title="#{bundle['UserTitle_role']}" />
+					</f:facet>
+
+					<ui:repeat value="#{adminController.getListAuthoritiesByUser(item)}" var="authority">
+						<p:spacer width="3" />
+						<h:outputText styleClass="sprite sprite-#{authority.role}" />
+					</ui:repeat>
+
+				</p:column>
+
+				<f:facet name="footer">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="createButton" styleClass="btn" icon="sprite sprite-plus" value="#{bundle['Create']}"
+						actionListener="#{adminController.prepareCreate}"  update=":growl :adminCreateForm" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editButton" styleClass="btn" icon="sprite sprite-edit" value="#{bundle['Edit']}"
+						actionListener="#{adminController.prepareEdit}" rendered="#{adminController.selected != null and adminController.selected.id != null}"
+						oncomplete="PF('adminEditDialog').show();" update=":adminEditForm" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="deleteButton" styleClass="btn" icon="sprite sprite-delete" value="#{bundle['Delete']}"
+						rendered="#{adminController.selected != null and adminController.selected.id != null}" oncomplete="PF('confirmation').show()" />
+
+				</f:facet>
+
+			</p:dataTable>
+
+		</h:form>
+
+		<p:confirmDialog closeOnEscape="true" id="diagSupp" message="#{bundle['popup_confirm_delete_message']}" header="#{bundle['popup_confirm_delete_header']}"
+			widgetVar="confirmation" appendTo="@(body)">
+			<div align="right">
+				<h:form id="diagForm">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="confirm" value="#{bundle['popup_confirm_delete_message_oui']}" update=":growl :adminListForm:datalist"
+						oncomplete="PF('confirmation').hide();document.getElementById('diagForm:confirm').disabled=false;PF('datalistTable').filter();"
+						onclick="document.getElementById('diagForm:confirm').disabled=true;" actionListener="#{adminController.delete}"
+						styleClass="ui-priority-primary"  />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="decline" value="#{bundle['popup_confirm_delete_message_pas_maintenant']}" onclick="PF('confirmation').hide()"
+						update=":adminListForm" styleClass="ui-priority-primary" />
+				</h:form>
+			</div>
+		</p:confirmDialog>
+	</p:panel>
+
+</ui:composition>

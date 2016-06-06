@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="delegationCreateDlg" widgetVar="delegationCreateDialog" modal="true" resizable="false"
+		appendTo="@(body)" header="#{bundle['CreateDelegationTitle']}">
+
+		<h:form id="delegationCreateForm">
+
+
+			<h:panelGroup id="display" styleClass="inpWidth">
+
+				<p:panelGrid columns="4">
+
+					<p:outputLabel value="#{bundle['CreateDelegationLabel_service']}" for="service" />
+					<h:panelGroup>
+						<p:selectOneMenu id="service" value="#{delegationController.serviceSelected}" required="true"
+							requiredMessage="#{bundle['CreateDelegationRequiredMessage_service']}">
+							<f:selectItem itemLabel=" #{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{delegationController.listService}" var="serviceItem" itemValue="#{serviceItem}"
+								itemLabel="#{serviceItem.labelFr}" />
+							<f:converter binding="#{serviceConverter}" />
+							<p:ajax listener="#{delegationController.serviceSelectionChanged}" update="delegateur delege" />
+						</p:selectOneMenu>
+						<p:message for="service" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateDelegationLabel_delegateur']}" for="delegateur" />
+					<h:panelGroup>
+						<p:selectOneMenu disabled="#{delegationController.selectOneMenuDelegateurDisabled}" id="delegateur" effect="drop"
+							value="#{delegationController.selected.fromUser}" style="width:125px" required="true"
+							requiredMessage="#{bundle['CreateDelegationRequiredMessage_delegateur']}">
+							<f:selectItem itemLabel=" #{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{delegationController.listUserDelegateur}" var="serviceItem" itemValue="#{serviceItem}"
+								itemLabel="#{serviceItem.firstName} #{serviceItem.lastName}" />
+							<f:converter binding="#{userConverter}" />
+							<p:ajax listener="#{delegationController.delegateurSelectionChanged}" update="delege" />
+						</p:selectOneMenu>
+						<p:message for="delegateur" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateDelegationLabel_delege']}" for="delege" />
+					<h:panelGroup>
+						<p:selectOneMenu disabled="#{delegationController.selectOneMenuDelegeDisabled}" id="delege" effect="drop"
+							value="#{delegationController.selected.toUser}" style="width:125px" required="true"
+							requiredMessage="#{bundle['CreateDelegationRequiredMessage_delege']}">
+							<f:selectItem itemLabel=" #{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{delegationController.listUserDelege}" var="serviceItem" itemValue="#{serviceItem}"
+								itemLabel="#{serviceItem.firstName} #{serviceItem.lastName}" />
+							<f:converter binding="#{userConverter}" />
+						</p:selectOneMenu>
+						<p:message for="delege" />
+					</h:panelGroup>
+
+					<p:outputLabel for="dateDu" value="#{bundle['CreateDelegationLabel_date_du']}" />
+					<h:panelGroup>
+						<p:calendar navigator="true" id="dateDu" value="#{delegationController.selected.beginDate}" showOn="button" required="true"
+							pattern="dd/MM/yyyy" requiredMessage="#{bundle['CreateDelegationRequiredMessage_date_du']}" readonlyInput="true">
+							<p:ajax event="dateSelect" update="dateAu" />
+						</p:calendar>
+						<p:message for="dateDu" />
+					</h:panelGroup>
+
+					<p:outputLabel for="dateAu" value="#{bundle['CreateDelegationLabel_date_au']}" />
+					<h:panelGroup>
+						<p:calendar navigator="true" id="dateAu" value="#{delegationController.selected.endDate}" showOn="button" required="true"
+							pattern="dd/MM/yyyy" requiredMessage="#{bundle['CreateDelegationRequiredMessage_date_au']}"
+							mindate="#{delegationController.selected.beginDate}" readonlyInput="true">
+						</p:calendar>
+						<p:message for="dateAu" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateDelegationLabel_enabled']}" for="deleg_enabled" />
+					<h:panelGroup>
+						<p:selectBooleanCheckbox id="deleg_enabled" value="#{delegationController.selected.enabled}" />
+						<p:message for="deleg_enabled" />
+					</h:panelGroup>
+
+				</p:panelGrid>
+
+				<br />
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="createBtn"
+						actionListener="#{delegationController.create}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+						update=":delegationListForm   delegationCreateForm,:growl"
+						oncomplete="handleSubmit(xhr,status,args,delegationCreateDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="cancelBtn"
+						value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('delegationCreateDialog').hide();" immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

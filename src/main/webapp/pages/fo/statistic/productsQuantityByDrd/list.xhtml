@@ -1,0 +1,68 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<p:panel header="#{bundle['productsQuantityValuesByDrdSearch_result']}">
+
+
+		<h:form id="filtredFileItemListForm">
+
+			<h:panelGrid columns="2">
+				<h:commandLink action="#{exporter.exportPDF(table, 'PRODUCTS_QUANTITY_VALUES_BYDRD_SEARCH')}">
+					<h:outputText styleClass="sprite sprite-pdf" />
+				</h:commandLink>
+
+				<h:commandLink>
+					<h:graphicImage styleClass="sprite sprite-pdf" library="img" name="excel.png"
+						style="width: 34px;height: 34px;display: block;	top: 15px;	right: 52px;position: absolute;" />
+					<p:dataExporter type="xls" target="datalist" fileName="#{bundle['productsQuantityValuesByDrdSearch_result']}" />
+				</h:commandLink>
+			</h:panelGrid>
+			<br />
+
+			<p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable"
+				value="#{statisticController.serviceItemDtoByProductsQuantitiesByDrdList}" filteredValue="" var="item" rowKey="#{item.id}" rows="5"
+				paginator="true" rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+				<p:column id="nshGoodsItemCodeColumn" sortBy="#{item.ssnh}" filterBy="#{item.ssnh}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['productsQuantityValuesByDrdSearch_nshLabel']}"
+							title="#{bundle['productsQuantityValuesByDrdSearch_nshTitle']}" />
+					</f:facet>
+					<h:outputText value="#{item.ssnh}" />
+				</p:column>
+
+				<p:column id="labelColumn" sortBy="#{item.label}" filterBy="#{item.label}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['productsQuantityValuesByDrdSearch_labelLabel']}"
+							title="#{bundle['productsQuantityValuesByDrdSearch_labelTitle']}" />
+					</f:facet>
+					<h:outputText value="#{item.label}" />
+				</p:column>
+
+				<p:column sortBy="#{item.sumQuantities}" filterBy="#{item.sumQuantities}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['productsQuantityValuesByDrdSearch_sumQuantityLabel']}"
+							title="#{bundle['productsQuantityValuesByDrdSearch_sumQuantityTitre']}" />
+					</f:facet>
+					<h:outputText value="#{item.sumQuantities}" />
+				</p:column>
+
+				<p:column sortBy="#{item.sumValeurFob}" filterBy="#{item.sumValeurFob}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['productsQuantityValuesByDrdSearch_sumValuesFobLabel']}"
+							title="#{bundle['productsQuantityValuesByDrdSearch_sumValuesFobTitre']}" />
+					</f:facet>
+					<h:outputText value="#{item.sumValeurFob}" />
+				</p:column>
+
+			</p:dataTable>
+
+		</h:form>
+
+	</p:panel>
+
+</ui:composition>

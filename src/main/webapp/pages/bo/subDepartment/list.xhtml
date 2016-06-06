@@ -1,0 +1,72 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<p:panel header="#{bundle['SubDepartment_title']}">
+		<h:form id="subDepartmentListForm">
+
+			<h:commandLink action="#{exporter.exportPDF(table, 'REGINAL_OFFICES')}">
+				<h:outputText styleClass="sprite sprite-pdf" />
+			</h:commandLink>
+
+			<br />
+
+			<p:dataTable id="datalist" binding="#{table}" value="#{subDepartmentController.items}" filteredValue="" var="item" selectionMode="single"
+				selection="#{subDepartmentController.selected}" rowKey="#{item.id}" rows="5" paginator="true" rowsPerPageTemplate="5,10,20"
+				emptyMessage="#{bundle['AucuneResultat']}" styleClass="newui-datatable fixeColumnWidth"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})" widgetVar="datalistTable">
+
+				<p:ajax event="rowSelect" update=" editButton  datalist" />
+				<p:ajax event="rowUnselect" update="editButton datalist" />
+				<p:ajax event="rowDblselect" listener="#{subDepartmentController.prepareEdit}" oncomplete="PF('subDepartmentEditDialog').show();"
+					update=":subDepartmentEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+
+				<p:column id="labelColumn" sortBy="#{facesContext.viewRoot.locale eq 'en' ? item.labelEn : item.labelFr}"
+					filterBy="#{facesContext.viewRoot.locale eq 'en' ? item.labelEn : item.labelFr}" filterMatchMode="contains" style="width:90px">
+					<f:facet name="header">
+						<h:outputText
+							value="#{facesContext.viewRoot.locale eq 'en' ? bundle['SubDepartmentLabel_labelEn'] : bundle['SubDepartmentLabel_labelFr']}"
+							title="#{facesContext.viewRoot.locale eq 'en' ? bundle['SubDepartmentTitle_labelEn'] : bundle['SubDepartmentTitle_labelFr']}" />
+					</f:facet>
+					<h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? item.labelEn : item.labelFr}" />
+				</p:column>
+
+				<p:column id="abreviationColumn" sortBy="#{item.abreviation}" filterBy="#{item.abreviation}" filterMatchMode="contains"
+					style="width:90px">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['SubDepartmentLabel_abreviation']}" title="#{bundle['SubDepartmentTitle_abreviation']}" />
+					</f:facet>
+					<h:outputText value="#{item.abreviation}" />
+				</p:column>
+
+
+				<p:column id="organismAbreviationColumn" sortBy="#{item.organism.abreviation}" filterBy="#{item.organism.abreviation}}"
+					filterMatchMode="contains" style="width:90px">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['SubDepartmentLabel_OrganismAbreviation']}" title="#{bundle['SubDepartmentTitle_OrganismAbreviation']}" />
+					</f:facet>
+					<h:outputText value="#{item.organism.abreviation}" />
+				</p:column>
+
+				<p:column id="assistantDirectorColumn"
+					sortBy="#{(item.assistantDirector.firstName).concat(' ').concat(item.assistantDirector.lastName)}"
+					filterBy="#{(item.assistantDirector.firstName).concat(' ').concat(item.assistantDirector.lastName)}" filterMatchMode="contains"
+					style="width:90px">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['SubDepartmentLabel_assistantDirector']}" title="#{bundle['SubDepartmentTitle_assistantDirector']}" />
+					</f:facet>
+					<h:outputText value="#{(item.assistantDirector.firstName).concat(' ').concat(item.assistantDirector.lastName)}" />
+				</p:column>
+				<f:facet name="footer">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editButton" styleClass="btn"
+						icon="sprite sprite-edit" value="#{bundle['Edit']}" actionListener="#{subDepartmentController.prepareEdit}"
+						rendered="#{subDepartmentController.selected != null and subDepartmentController.selected.id != null}"
+						oncomplete="PF('subDepartmentEditDialog').show();" update=":subDepartmentEditForm" />
+				</f:facet>
+			</p:dataTable>
+		</h:form>
+	</p:panel>
+
+</ui:composition>

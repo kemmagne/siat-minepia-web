@@ -1,0 +1,96 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+	<p:dialog closeOnEscape="true" widgetVar="eventDialog" id="eventDialogId" header="#{bundle['Calendar_add_appointment']}" showEffect="clip"
+		hideEffect="clip" width="auto" height="auto" appendTo="@(body)" modal="true">
+
+		<h:form id="appointmentForm">
+			<h:panelGroup id="display" styleClass="rdv">
+				<h:panelGrid id="eventDetails" columns="2">
+					<h:panelGroup>
+						<h:outputLabel for="from" value="#{bundle['Calendar_date']} :" />
+					</h:panelGroup>
+					<p:inputMask id="from" value="#{scheduleController.event.startDate}" mask="99/99/9999" disabled="true">
+						<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+1" />
+					</p:inputMask>
+
+					<h:panelGroup>
+						<h:outputLabel value="#{bundle['Calendar_begin_hour']} :" for="Calendar_begin_hour" />
+						<p:spacer />
+					</h:panelGroup>
+					<p:spinner id="Calendar_begin_hour" value="#{scheduleController.event.beginHour}" max="23" min="0"
+						disabled="#{scheduleController.event.editable  eq 'false'}" />
+					<h:panelGroup>
+						<h:outputLabel value="#{bundle['Calendar_begin_minute']}" for="Calendar_begin_minute" />
+						<p:spacer />
+					</h:panelGroup>
+					<p:spinner id="Calendar_begin_minute" value="#{scheduleController.event.beginMinutes}" max="59" min="0"
+						disabled="#{scheduleController.event.editable  eq 'false'}" />
+
+
+					<h:panelGroup>
+						<h:outputLabel value="#{bundle['Calendar_car']} :" for="car" />
+						<h:outputText value="*" styleClass="required-star-right" />
+					</h:panelGroup>
+					<h:panelGroup>
+						<p:selectOneMenu id="car" style="width: 125px" value="#{scheduleController.event.appointment.car}" required="true"
+							disabled="#{scheduleController.event.editable  eq 'false'}" requiredMessage="#{bundle['Calendar_RequiredMessage_car']}">
+							<f:selectItem itemLabel=" #{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{scheduleController.carAvailableList}" var="carItem" itemValue="#{carItem}" itemLabel="#{carItem.model}" />
+							<f:converter binding="#{carConverter}" />
+							<p:message id="carMsg" for="car" />
+						</p:selectOneMenu>
+					</h:panelGroup>
+
+
+					<h:panelGroup>
+						<h:outputLabel value="#{bundle['Calendar_inspector']} :" for="inspector" />
+						<h:outputText value="*" styleClass="required-star-right" />
+					</h:panelGroup>
+					<h:panelGroup>
+						<p:selectOneMenu disabled="#{scheduleController.event.typeEvent  != 'new'}" id="inspector" effect="drop"
+							value="#{scheduleController.event.appointment.controller}" style="width:125px" required="true"
+							requiredMessage="#{bundle['Calendar_RequiredMessage_inspector']}" title="#{bundle['Calendar_inspector']}">
+							<f:selectItem itemLabel=" #{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{scheduleController.inspectorList}" var="inspectorItem" itemValue="#{inspectorItem}"
+								itemLabel="#{inspectorItem.firstName} #{inspectorItem.lastName}" />
+							<f:converter binding="#{userConverter}" />
+						</p:selectOneMenu>
+						<p:message id="inspectorMsg" for="inspector" />
+					</h:panelGroup>
+
+					<h:panelGroup>
+						<h:outputLabel value="#{bundle['Calendar_ObservationLabel']} :" for="inspector" />
+						<h:outputText value="*" styleClass="required-star-right" />
+					</h:panelGroup>
+					<h:panelGroup>
+						<p:inputTextarea disabled="#{scheduleController.event.editable  eq 'false'}"
+							value="#{scheduleController.event.appointment.observations}" id="observation" title="#{bundle['Calendar_ObservationTitle']}" />
+						<p:message id="observationMsg" for="observation" />
+					</h:panelGroup>
+
+
+					<h:panelGroup rendered="#{not empty scheduleController.event.title}">
+						<h:outputLabel value="#{bundle['Calendar_type_event']}" for="type_event" />
+					</h:panelGroup>
+					<h:panelGroup rendered="#{not empty scheduleController.event.title}">
+						<p:outputLabel id="type_event" value="#{scheduleController.event.title}" title="#{scheduleController.event.typeEvent}"
+							styleClass="#{scheduleController.event.typeEvent}" />
+					</h:panelGroup>
+
+
+				</h:panelGrid>
+				<div align="right">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" value="#{bundle['Save']}"
+						actionListener="#{scheduleController.createNewEvent}" styleClass="ui-priority-primary" update=":decisionForm:schedule"
+						rendered="#{scheduleController.event.editable  eq true}"
+						oncomplete="handleSubmitWithoutDataTable(xhr,status,args,eventDialogId);PF('myschedule').update();" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" value="#{bundle['Cancel']}"
+						styleClass="ui-priority-primary" onclick="PF('eventDialog').hide();" immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+	</p:dialog>
+
+</ui:composition>

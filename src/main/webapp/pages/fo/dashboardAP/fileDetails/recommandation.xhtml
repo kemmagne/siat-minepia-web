@@ -1,0 +1,88 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<p:outputPanel>
+
+
+		<h:form id="listRecommandationForm" rendered="#{empty fileItemApDetailController.selectedAttachment}">
+
+			<p:accordionPanel id="accRec">
+
+				<p:tab title="#{bundle['Recommandation_title']}" titleStyleClass="title" dynamic="true">
+
+					<p:dataTable id="datalist" widgetVar="datalistTableRecommandation" value="#{fileItemApDetailController.recommandationList}" var="item"
+						selectionMode="single" selection="#{fileItemApDetailController.selectedRecommandation}" rowKey="#{item.id}" rows="5" paginator="true"
+						rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}" styleClass="newui-datatable fixeColumnWidth"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})" filteredValue="#{fileItemApDetailController.recommandationListFiltred}">
+
+						<p:ajax event="rowSelect" update="createButton editButton deleteButton datalist" />
+						<p:ajax event="rowUnselect" update="createButton editButton deleteButton datalist" />
+						<p:ajax event="rowDblselect" listener="#{fileItemApDetailController.prepareEditRecommandation}"
+							oncomplete="PF('recommandationEditDialog').show();" update=":recommandationEditForm"
+							disabled="#{ not fileItemApDetailController.allowedUser}" />
+
+
+						<p:column sortBy="#{item.value}" filterBy="#{item.value}" filterMatchMode="contains" style="width:90px">
+							<f:facet name="header">
+								<h:outputText value="#{bundle['RecommandationLabel_value']}" title="#{bundle['RecommandationTitle_value']}" />
+							</f:facet>
+							<h:outputText value="#{item.value}"></h:outputText>
+						</p:column>
+
+						<p:column sortBy="#{item.supervisor.firstName}" filterBy="#{item.supervisor.firstName}" filterMatchMode="contains" style="width:90px">
+							<f:facet name="header">
+								<h:outputText value="#{bundle['RecommandationLabel_supervisor']}" title="#{bundle['RecommandationTitle_supervisor']}" />
+							</f:facet>
+							<h:outputText value="#{item.supervisor.firstName} #{item.supervisor.lastName}" />
+						</p:column>
+
+						<p:column sortBy="#{dateBean.formatSimpleDate(item.created)}" filterBy="#{dateBean.formatSimpleDate(item.created)}"
+							filterMatchMode="contains" style="width:90px">
+							<f:facet name="header">
+								<h:outputText value="#{bundle['RecommandationLabel_created']}" title="#{bundle['RecommandationTitle_created']}" />
+							</f:facet>
+							<h:outputText value="#{item.created}">
+								<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+
+						<f:facet name="footer">
+							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="createButton" styleClass="btn" icon="sprite sprite-plus"  value="#{bundle['Create']}"
+								actionListener="#{fileItemApDetailController.prepareCreateRecommandation}" oncomplete="PF('recommandationCreateDialog').show();"
+								update=":recommandationCreateForm" rendered="#{fileItemApDetailController.allowedUser}" />
+							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editButton" styleClass="btn" icon="sprite sprite-edit"  value="#{bundle['Edit']}"
+								actionListener="#{fileItemApDetailController.prepareEditRecommandation}"
+								rendered="#{fileItemApDetailController.selectedRecommandation != null and fileItemApDetailController.allowedUser and fileItemApDetailController.selectedRecommandation.supervisor.id == globalBean.loggedUser.id}"
+								oncomplete="PF('recommandationEditDialog').show()" update=":recommandationEditForm" />
+							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="deleteButton" styleClass="btn" icon="sprite sprite-delete"  value="#{bundle['Delete']}" oncomplete="PF('confirmationRec').show()"
+								rendered="#{fileItemApDetailController.selectedRecommandation != null and  fileItemApDetailController.allowedUser and fileItemApDetailController.selectedRecommandation.supervisor.id == globalBean.loggedUser.id}" />
+						</f:facet>
+
+					</p:dataTable>
+
+				</p:tab>
+
+			</p:accordionPanel>
+
+		</h:form>
+
+	</p:outputPanel>
+
+	<p:confirmDialog closeOnEscape="true" id="diagSuppRec" message="#{bundle['popup_confirm_delete_message']}" header="#{bundle['popup_confirm_delete_header']}"
+		widgetVar="confirmationRec" appendTo="@(body)" global="true">
+		<div align="right">
+			<h:form id="diagFormRec">
+				<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="confirmRec" value="#{bundle['popup_confirm_delete_message_oui']}"
+					update=":growl :listRecommandationForm:accRec:datalist"
+					oncomplete="PF('datalistTableRecommandation').filter();PF('confirmationRec').hide();document.getElementById('diagFormRec:confirmRec').disabled=false;PF('datalistTableRecommandation').filter();"
+					onclick="document.getElementById('diagFormRec:confirmRec').disabled=true;"
+					actionListener="#{fileItemApDetailController.deleteRecommandation}" styleClass="ui-priority-primary"
+					 />
+				<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="decline" value="#{bundle['popup_confirm_delete_message_pas_maintenant']}" onclick="PF('confirmationRec').hide()"
+					update=":listRecommandationForm" styleClass="ui-priority-primary" />
+			</h:form>
+		</div>
+	</p:confirmDialog>
+
+</ui:composition>

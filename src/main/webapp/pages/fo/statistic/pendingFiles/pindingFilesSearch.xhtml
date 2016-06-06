@@ -1,0 +1,42 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<h:form id="pindingSearchForm">
+
+		<p:accordionPanel styleClass="search">
+
+			<p:tab title="#{bundle['pindingFiles_Search']}" dynamic="true" cache="true">
+
+				<h:panelGrid columns="10" cellpadding="10">
+
+					<p:outputLabel for="fromDate" value="#{bundle['pindingFiles_fromDateLabel']}" />
+					<p:calendar navigator="true" id="fromDate" value="#{statisticController.filter.fromDate}"
+						title="#{bundle['pindingFiles_fromDateTitle']}" showOn="button" pattern="dd/MM/yyyy" readonlyInput="true">
+						<p:ajax event="dateSelect" update="toDate" />
+					</p:calendar>
+
+					<p:outputLabel for="toDate" value="#{bundle['pindingFiles_toDateLabel']}" />
+					<p:calendar navigator="true" id="toDate" value="#{statisticController.filter.toDate}" title="#{bundle['pindingFiles_toDateTitle']}"
+						showOn="button" pattern="dd/MM/yyyy" mindate="#{statisticController.filter.fromDate}" readonlyInput="true">
+					</p:calendar>
+
+					<h:panelGroup>
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" icon="ui-icon-search"
+							title="#{bundle['ButtonSearch']}" action="#{statisticController.findPindingFiles}"
+							update=":filtredPindingFilesListForm:datalist :pindingSearchForm :growl" oncomplete="PF('datalistTable').filter();" />
+
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" icon="ui-icon-refresh"
+							title="#{bundle['ButtonReset']}" action="#{statisticController.initPindingFilesSearch}" oncomplete="PF('datalistTable').filter();"
+							update=":filtredPindingFilesListForm:datalist :pindingSearchForm" />
+					</h:panelGroup>
+
+				</h:panelGrid>
+
+			</p:tab>
+
+		</p:accordionPanel>
+
+	</h:form>
+</ui:composition>

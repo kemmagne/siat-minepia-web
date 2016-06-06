@@ -1,0 +1,84 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+	<p:panel header="#{bundle['AnalyseResultHeader']}" rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'ANR'}">
+		<p:panelGrid columns="2">
+
+			<h:outputLabel for="analyseResultSample" value="#{bundle['AnalyseResultSampleLabel']} :" />
+			<h:outputText
+				value="#{facesContext.viewRoot.locale eq 'fr' ? fileItemCctDetailController.analyseResult.analyseOrder.sample.fileItem.nsh.goodsItemDesc : fileItemCctDetailController.analyseResult.analyseOrder.sample.fileItem.nsh.goodsItemDescEn}"
+				id="analyseResultSample" title="#{bundle['AnalyseResultSampleTitle']}" />
+
+			<h:outputLabel for="analyseResultQtePrelv" value="#{bundle['AnalyseResultQtePrelvLabel']} :" />
+			<h:outputText value="#{fileItemCctDetailController.analyseResult.analyseOrder.sample.takenQuantity}" id="analyseResultQtePrelv"
+				title="#{bundle['AnalyseResultQtePrelvTitle']}" />
+
+			<h:outputLabel for="analyseResultQteAnal" value="#{bundle['AnalyseResultQteAnalLabel']} :" />
+			<h:outputText title="#{bundle['AnalyseResultQteAnalTitle']}" value="#{fileItemCctDetailController.analyseResult.analyseOrder.quantity}"
+				id="analyseResultQteAnal" />
+
+			<h:outputLabel for="analyseResultDate" value="#{bundle['AnalyseResultDateLabel']} :" />
+
+			<h:panelGroup>
+				<p:calendar  navigator="true" value="#{fileItemCctDetailController.analyseResult.date}" pattern="dd/MM/yyyy" showOn="button" readonlyInput="true"
+					id="analyseResultDate" required="true" requiredMessage="#{bundle['AnalyseResultDateRequiredMessage']}"
+					title="#{bundle['AnalyseResultDateTitle']}" />
+				<p:message id="analyseResultDateMsg" for="analyseResultDate" />
+			</h:panelGroup>
+
+			<h:outputLabel for="analyseResultPrice" value="#{bundle['AnalyseResultPriceLabel']} :" />
+			<h:panelGroup>
+				<p:inputText required="true" value="#{fileItemCctDetailController.analyseResult.amount}" id="analyseResultPrice"
+					title="#{bundle['AnalyseResultPriceTitle']}" requiredMessage="AnalyseResultPriceRequiredMessage" />
+				<p:message for="analyseResultPrice" id="analyseResultPriceMsg" />
+			</h:panelGroup>
+
+			<h:outputLabel for="analyseResultObservation" value="#{bundle['AnalyseResultObservationLabel']} :" />
+			<p:inputTextarea title="#{bundle['AnalyseResultObservationTitle']}" value="#{fileItemCctDetailController.analyseResult.observation}"
+				id="analyseResultObservation" />
+
+		</p:panelGrid>
+		<p:panel header="#{bundle['AnalyseResultDetails']}" style="width:100%" toggleable="true">
+
+			<p:dataTable styleClass="analyseResultDetails" id="analyseResultDetails" widgetVar="analyseResultDetailsTable" var="item"
+				value="#{fileItemCctDetailController.analysesFileManagers}">
+
+				<p:column headerText="#{bundle['AnalyseResultDetailsAnalyseType']}" id="analyseTypeColumn">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['AnalyseResultDetails_AnalyseTypeNameLabel']}" title="#{bundle['AnalyseResultDetailsAnalyseTypeTitle']}" />
+					</f:facet>
+					<h:outputText value="#{facesContext.viewRoot.locale eq 'en' ?item.part.analyseType.labelEn:item.part.analyseType.labelFr}" />
+				</p:column>
+
+				<p:column headerText="#{bundle['AnalyseResultDetailsCompliant']}">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['AnalyseResultDetailsCompliant']}" title="#{bundle['AnalyseResultDetailsCompliant']}" />
+					</f:facet>
+					<p:selectBooleanCheckbox value="#{item.part.compliant}" />
+				</p:column>
+
+				<p:column headerText="#{bundle['AnalyseResultDetailsObservation']}">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['AnalyseResultDetailsObservation']}" title="#{bundle['AnalyseResultDetailsObservation']}" />
+					</f:facet>
+					<h:inputTextarea value="#{item.part.observation}" />
+				</p:column>
+
+				<p:column headerText="#{bundle['AnalyseResultDetailsAttachment']}">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['AnalyseResultDetailsAttachment']}" title="#{bundle['AnalyseResultDetailsAttachment']}" />
+					</f:facet>
+					<h:panelGroup id="fileUpload">
+
+						<p:fileUpload id="chooseFile" fileUploadListener="#{item.handleFileUpload}" mode="advanced" dragDropSupport="false" update="@this :growl"
+							label="#{bundle['AnalyseResultDetailsAttachmentUpload']}" value="#{item.file}"  auto="true">
+							<h:outputText value="#{item.fileName}" />
+						</p:fileUpload>
+					</h:panelGroup>
+				</p:column>
+			</p:dataTable>
+
+		</p:panel>
+	</p:panel>
+
+</ui:composition>

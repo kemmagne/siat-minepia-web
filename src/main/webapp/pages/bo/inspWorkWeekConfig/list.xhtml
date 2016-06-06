@@ -1,0 +1,84 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+
+
+	<p:panel header="#{bundle['inspWorkWeekConfig_title']}">
+		<h:form id="inspWorkWeekConfigListForm">
+
+
+			<h:outputLabel styleClass="label-txt" value="#{bundle['inspWorkWeekConfig_label_datatable']}" />
+
+			<h:commandLink action="#{exporter.exportPDF(table, 'IW_WEEK_CONFIG')}">
+				<h:outputText styleClass="sprite sprite-pdf" />
+			</h:commandLink>
+
+
+			<p:dataTable id="datalist" binding="#{table}" value="#{inspectionWorkWeekConfigController.iWWConfigListByOrganism}" var="item"
+				rowKey="#{item.id}" emptyMessage="#{bundle['AucuneResultat']}" styleClass="newui-datatable fixeColumnWidth">
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{bundle['InspWorkWeekConfigLabel_hourlyType']}" title="#{bundle['InspWorkWeekConfigTitle_hourlyType']}" />
+					</f:facet>
+					<h:outputText value="#{item.hourlyTypeId.labelFr}" />
+				</p:column>
+
+				<p:column styleClass="check-bloc">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['InspWorkWeekConfigLabel_monday']}" title="#{bundle['InspWorkWeekConfigTitle_monday']}" />
+					</f:facet>
+					<p:selectBooleanCheckbox id="mondayCheck" value="#{item.monday}" />
+				</p:column>
+
+				<p:column styleClass="check-bloc">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['InspWorkWeekConfigLabel_tuesday']}" title="#{bundle['InspWorkWeekConfigTitle_tuesday']}" />
+					</f:facet>
+					<p:selectBooleanCheckbox id="tuesdayCheck" value="#{item.tuesday}" />
+				</p:column>
+
+				<p:column styleClass="check-bloc">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['InspWorkWeekConfigLabel_wednesday']}" title="#{bundle['InspWorkWeekConfigTitle_wednesday']}" />
+					</f:facet>
+					<p:selectBooleanCheckbox id="wednesdayCheck" value="#{item.wednesday}" />
+				</p:column>
+
+				<p:column styleClass="check-bloc">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['InspWorkWeekConfigLabel_thursday']}" title="#{bundle['InspWorkWeekConfigTitle_thursday']}" />
+					</f:facet>
+					<p:selectBooleanCheckbox id="thursdayCheck" value="#{item.thursday}" />
+				</p:column>
+
+				<p:column styleClass="check-bloc">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['InspWorkWeekConfigLabel_friday']}" title="#{bundle['InspWorkWeekConfigTitle_friday']}" />
+					</f:facet>
+					<p:selectBooleanCheckbox id="fridayCheck" value="#{item.friday}" />
+				</p:column>
+
+				<p:column styleClass="check-bloc">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['InspWorkWeekConfigLabel_saturday']}" title="#{bundle['InspWorkWeekConfigTitle_saturday']}" />
+					</f:facet>
+					<p:selectBooleanCheckbox id="saturdayCheck" value="#{item.saturday}" />
+				</p:column>
+
+				<p:column styleClass="check-bloc">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['InspWorkWeekConfigLabel_sunday']}" title="#{bundle['InspWorkWeekConfigTitle_sunday']}" />
+					</f:facet>
+					<p:selectBooleanCheckbox id="sundayCheck" value="#{item.sunday}" />
+				</p:column>
+
+				<f:facet name="footer">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="validateButton" icon=""
+						value="#{bundle['Validate']}" actionListener="#{inspectionWorkWeekConfigController.validateIWWCList}" update=":growl" />
+				</f:facet>
+			</p:dataTable>
+		</h:form>
+	</p:panel>
+
+</ui:composition>

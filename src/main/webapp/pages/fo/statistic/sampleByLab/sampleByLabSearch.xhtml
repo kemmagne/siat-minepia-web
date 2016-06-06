@@ -1,0 +1,52 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<h:form id="sampleLabSearchForm">
+
+		<p:accordionPanel styleClass="search">
+
+			<p:tab title="#{bundle['sampleLabSearch_Search']}" dynamic="true" cache="true">
+
+				<h:panelGrid columns="10" cellpadding="10">
+
+					<h:outputLabel value="#{bundle['sampleLabSearch_laboratoriesLabel']} : " for="laboratory" />
+					<h:panelGroup>
+						<p:selectOneMenu id="laboratory" value="#{statisticController.sampleFilter.laboratory}" converter="#{laboratoryConverter}"
+							title="#{bundle['sampleLabSearch_laboratoriesTitle']}" filter="true" filterMatchMode="contains">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{statisticController.laboratoriesList}" var="lab" itemValue="#{lab}"
+								itemLabel="#{facesContext.viewRoot.locale eq 'en' ? lab.labelEn : lab.labelFr}" />
+						</p:selectOneMenu>
+						<p:message for="laboratory" />
+					</h:panelGroup>
+
+					<p:outputLabel for="fromDate" value="#{bundle['sampleLabSearch_fromDateLabel']}" />
+					<p:calendar navigator="true" id="fromDate" value="#{statisticController.sampleFilter.fromDate}"
+						title="#{bundle['sampleLabSearch_fromDateTitre']}" showOn="button" pattern="dd/MM/yyyy" readonlyInput="true">
+						<p:ajax event="dateSelect" update="toDate" />
+					</p:calendar>
+
+					<p:outputLabel for="toDate" value="#{bundle['sampleLabSearch_toDateLabel']}" />
+					<p:calendar navigator="true" id="toDate" value="#{statisticController.sampleFilter.toDate}"
+						title="#{bundle['sampleLabSearch_toDateTitre']}" showOn="button" pattern="dd/MM/yyyy"
+						mindate="#{statisticController.sampleFilter.fromDate}" readonlyInput="true">
+					</p:calendar>
+
+					<h:panelGroup>
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  icon="ui-icon-search" title="#{bundle['ButtonSearch']}" action="#{statisticController.doSampleLabSearchByFilter}"
+							update=":filtredSampleLabListForm:datalist :sampleLabSearchForm :growl" oncomplete="PF('datalistTable').filter();" />
+
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  icon="ui-icon-refresh" title="#{bundle['ButtonReset']}" action="#{statisticController.initSampleByLabSearch}"
+							oncomplete="PF('datalistTable').filter();" update=":filtredSampleLabListForm:datalist :sampleLabSearchForm" />
+					</h:panelGroup>
+
+				</h:panelGrid>
+
+			</p:tab>
+
+		</p:accordionPanel>
+
+	</h:form>
+</ui:composition>

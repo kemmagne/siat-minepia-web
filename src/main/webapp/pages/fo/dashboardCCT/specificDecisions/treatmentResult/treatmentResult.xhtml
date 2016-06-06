@@ -1,0 +1,72 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+	<p:panel header="#{bundle['TreatmentResultHeader']}" rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'TRR'}">
+		<p:panelGrid columns="2">
+
+			<h:outputLabel for="treatmentProductName" value="#{bundle['TreatmentProductNameLabel']} :" />
+			<h:panelGroup>
+				<p:inputText title="#{bundle['TreatmentProductNameTitle']}" required="true"
+					requiredMessage="#{bundle['TreatmentProductNamerequiredMessage']}"
+					value="#{fileItemCctDetailController.treatmentResult.treatmentProductName}" id="treatmentProductName" />
+				<p:message for="treatmentProductName" id="treatmentProductNameMsg" />
+			</h:panelGroup>
+
+			<h:outputLabel for="treatmentResultDate" value="#{bundle['TreatmentResultDateLabel']} :" />
+			<h:panelGroup>
+				<p:calendar  navigator="true" required="true" value="#{fileItemCctDetailController.treatmentResult.treatmentDate}" showOn="button"
+					pattern="dd/MM/yyyy" readonlyInput="true" id="treatmentResultDate" title="#{bundle['TreatmentResultDateTitle']}"
+					requiredMessage="#{bundle['TreatmentResultDateRequiredMessage']}" />
+				<p:message for="treatmentResultDate" id="treatmentResultDateMsg" />
+			</h:panelGroup>
+
+			<h:outputLabel for="treatmentResultPrice" value="#{bundle['TreatmentResultPriceLabel']} :" />
+			<h:panelGroup>
+				<p:inputText required="true" value="#{fileItemCctDetailController.treatmentResult.amount}" id="treatmentResultPrice"
+					title="#{bundle['TreatmentResultPriceTitle']}" requiredMessage="#{bundle['TreatmentResultPriceRequiredMessage']}" />
+				<p:message for="treatmentResultPrice" />
+			</h:panelGroup>
+
+			<h:outputLabel for="treatmentDosage" value="#{bundle['TreatmentDosageLabel']} :" />
+			<p:inputText title="#{bundle['TreatmentDosageTitle']}" value="#{fileItemCctDetailController.treatmentResult.dosage}" id="treatmentDosage" />
+
+			<h:outputLabel for="treatmentResultObservation" value="#{bundle['TreatmentResultObservationLabel']} :" />
+			<p:inputTextarea title="#{bundle['TreatmentResultObservationTitle']}" value="#{fileItemCctDetailController.treatmentResult.observation}"
+				id="treatmentResultObservation" />
+
+		</p:panelGrid>
+		<p:panel header="#{bundle['TreatmentResultDetails']}" style="width:100%" toggleable="true">
+
+			<p:dataTable id="treatmentResultDetails" widgetVar="treatmentResultDetailsTable" var="item"
+				value="#{fileItemCctDetailController.treatmentFileManagers}">
+
+				<p:column headerText="#{bundle['TreatmentResultDetailsTreatmentType']}" id="treatmentTypeColumn">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['TreatmentResultDetailsTreatmentType']}" title="#{bundle['TreatmentResultDetailsTreatmentType']}" />
+					</f:facet>
+					<h:outputText value="#{facesContext.viewRoot.locale eq 'en' ?item.part.treatmentType.labelEn:item.part.treatmentType.labelFr}" />
+				</p:column>
+
+				<p:column headerText="#{bundle['TreatmentResultDetailsObservation']}">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['TreatmentResultDetailsObservationLabel']}" title="#{bundle['TreatmentResultDetailsObservationTitle']}" />
+					</f:facet>
+					<p:inputTextarea value="#{item.part.observation}" />
+				</p:column>
+
+				<p:column headerText="#{bundle['TreatmentResultDetailsAttachment']}">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['TreatmentResultDetailsAttachmentLabel']}" title="#{bundle['TreatmentResultDetailsAttachmentTitle']}" />
+					</f:facet>
+
+					<p:fileUpload fileUploadListener="#{item.handleFileUpload}" mode="advanced" dragDropSupport="false" update="@this :growl"
+						label="#{bundle['TreatmentResultDetailsAttachmentUpload']}" value="#{item.file}"  auto="true">
+						<h:outputText value="#{item.fileName}" />
+					</p:fileUpload>
+				</p:column>
+			</p:dataTable>
+
+		</p:panel>
+	</p:panel>
+
+</ui:composition>

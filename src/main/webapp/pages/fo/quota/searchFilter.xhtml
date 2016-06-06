@@ -1,0 +1,48 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<h:form id="simpleSearchQuotaForm">
+
+		<p:accordionPanel styleClass="search">
+
+			<p:tab title="#{bundle['quota_SearchHeader']}" dynamic="true" cache="true">
+
+				<h:panelGrid columns="10" cellpadding="10">
+
+					<h:panelGroup>
+						<p:outputLabel for="fromDate" value="#{bundle['quota_SearchFromDate']}" />
+					</h:panelGroup>
+					<p:calendar navigator="true" id="fromDate" value="#{quotaController.searchFilter.beginDateFilter}"
+						title="#{bundle['SimpleSearch_fromDate']}" showOn="button" pattern="dd/MM/yyyy" readonlyInput="true">
+						<p:ajax event="dateSelect" update="toDate" />
+					</p:calendar>
+
+					<h:panelGroup>
+						<p:outputLabel for="toDate" value="#{bundle['quota_SearchToDate']}" />
+					</h:panelGroup>
+					<p:calendar navigator="true" id="toDate" value="#{quotaController.searchFilter.endDateFilter}" title="#{bundle['quota_SearchToDate']}"
+						showOn="button" pattern="dd/MM/yyyy" mindate="#{quotaController.searchFilter.beginDateFilter}" readonlyInput="true">
+					</p:calendar>
+
+					<h:panelGroup>
+						<p:outputLabel for="numCont" value="#{bundle['quota_SearchContribuable']}" />
+					</h:panelGroup>
+					<p:inputText id="numCont" value="#{quotaController.searchFilter.numContribuable}" title="#{bundle['quota_SearchContribuable']}" />
+
+					<h:panelGroup>
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  icon="ui-icon-search" title="#{bundle['ButtonSearch']}" action="#{quotaController.search}"
+							update=":filtredQuotaList:datalist :simpleSearchQuotaForm :growl" oncomplete="PF('datalistTable').filter();" />
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  icon="ui-icon-refresh" title="#{bundle['ButtonReset']}" action="#{quotaController.init}"
+							oncomplete="PF('datalistTable').filter();" update=":filtredQuotaList:datalist :simpleSearchQuotaForm" />
+					</h:panelGroup>
+
+				</h:panelGrid>
+
+			</p:tab>
+
+		</p:accordionPanel>
+
+	</h:form>
+</ui:composition>

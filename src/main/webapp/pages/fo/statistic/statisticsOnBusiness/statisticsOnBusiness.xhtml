@@ -1,0 +1,112 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<h:form id="statisticsOnBusinessSearchForm" class="search-style">
+
+		<p:accordionPanel styleClass="search">
+
+			<p:tab title="#{bundle['statisticsOnBusinessSearch_Search']}" dynamic="true" cache="true">
+
+				<h:panelGrid columns="2">
+					<h:outputLabel value="#{bundle['statisticsOnBusinessSearch_operation']}" for="importer" />
+					<p:selectOneRadio id="operation" value="#{statisticController.checkOperation}">
+						<f:selectItem itemLabel="#{bundle['statisticsOnBusinessSearch_import']}" itemValue="true" />
+						<f:selectItem itemLabel="#{bundle['statisticsOnBusinessSearch_export']}" itemValue="false" />
+						<p:ajax event="change" listener="#{statisticController.resetStatisticsOnBusinessSearch}" />
+					</p:selectOneRadio>
+				</h:panelGrid>
+
+				<h:panelGrid columns="10" cellpadding="10">
+
+					<h:panelGroup>
+						<h:outputLabel value="#{bundle['statisticsOnBusinessSearch_productsLabel']} : " for="nsh" />
+						<p:selectOneMenu id="nsh" value="#{statisticController.statisticBusinessFilter.nsh}" converter="#{nshConverter}"
+							title="#{bundle['statisticsOnBusinessSearch_productsTitle']}" filter="true" filterMatchMode="contains">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{statisticController.nshList}" var="nsh" itemValue="#{nsh}" itemLabel="#{nsh.goodsItemCode}" />
+						</p:selectOneMenu>
+						<p:message for="nsh" />
+					</h:panelGroup>
+
+					<p:outputPanel autoUpdate="true" styleClass="search-select">
+						<h:outputLabel rendered="#{statisticController.checkOperation == true}"
+							value="#{bundle['statisticsOnBusinessSearch_countryOfProvenance']}" for="countryOfProvenance" />
+						<p:selectOneMenu rendered="#{statisticController.checkOperation == true}" id="countryOfProvenance"
+							value="#{statisticController.statisticBusinessFilter.countryOfProvenance}" converter="#{countryConverter}" effect="fade" var="count"
+							filter="true" filterMatchMode="startsWith" editable="true">
+							<f:selectItems value="#{statisticController.countries}" var="country" itemLabel="#{country.countryIdAlpha2}" itemValue="#{country}" />
+							<p:column style="width:10%">
+								<p:graphicImage value="/images/flags/#{count.countryName}.png" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{count.countryIdAlpha2}" />
+							</p:column>
+						</p:selectOneMenu>
+					</p:outputPanel>
+
+					<p:outputPanel autoUpdate="true" styleClass="search-select">
+						<h:outputLabel rendered="#{statisticController.checkOperation != true}"
+							value="#{bundle['statisticsOnBusinessSearch_countryOfDestination']}" for="countryOfDestination" />
+						<p:selectOneMenu rendered="#{statisticController.checkOperation != true}" id="countryOfDestination"
+							value="#{statisticController.statisticBusinessFilter.countryOfDestination}" converter="#{countryConverter}" effect="fade" var="count"
+							style="width:160px" filter="true" filterMatchMode="startsWith" editable="true">
+							<f:selectItems value="#{statisticController.countries}" var="country" itemLabel="#{country.countryIdAlpha2}" itemValue="#{country}" />
+							<p:column style="width:10%">
+								<p:graphicImage value="/images/flags/#{count.countryName}.png" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{count.countryIdAlpha2}" />
+							</p:column>
+						</p:selectOneMenu>
+					</p:outputPanel>
+
+					<p:outputPanel autoUpdate="true" styleClass="search-select">
+						<h:outputLabel rendered="#{statisticController.checkOperation == true}" value="#{bundle['statisticsOnBusinessSearch_ImporterLabel']}"
+							for="importer" />
+						<h:outputLabel rendered="#{statisticController.checkOperation != true}" value="#{bundle['statisticsOnBusinessSearch_ExporterLabel']}" />
+						<p:selectOneMenu id="importer" value="#{statisticController.statisticBusinessFilter.client}" converter="#{companyConverter}"
+							title="#{bundle['statisticsOnBusinessSearch_ImporterTitle']}" filter="true" filterMatchMode="contains">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{statisticController.clientList}" var="client" itemValue="#{client}" itemLabel="#{client.companyName}" />
+						</p:selectOneMenu>
+						<p:message for="importer" />
+					</p:outputPanel>
+
+
+					<h:panelGroup>
+						<p:outputLabel for="fromDate" value="#{bundle['statisticsOnBusinessSearch_fromDateLabel']}" />
+						<p:calendar navigator="true" id="fromDate" value="#{statisticController.statisticBusinessFilter.fromDate}"
+							title="#{bundle['statisticsOnBusinessSearch_fromDateTitre']}" showOn="button" pattern="dd/MM/yyyy" readonlyInput="true">
+							<p:ajax event="dateSelect" update="toDate" />
+						</p:calendar>
+					</h:panelGroup>
+
+					<h:panelGroup>
+						<p:outputLabel for="toDate" value="#{bundle['statisticsOnBusinessSearch_toDateLabel']}" />
+						<p:calendar navigator="true" id="toDate" value="#{statisticController.statisticBusinessFilter.toDate}"
+							title="#{bundle['statisticsOnBusinessSearch_toDateTitre']}" showOn="button" pattern="dd/MM/yyyy"
+							mindate="#{statisticController.statisticBusinessFilter.fromDate}" readonlyInput="true">
+						</p:calendar>
+					</h:panelGroup>
+
+					<h:panelGroup>
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" icon="ui-icon-search"
+							title="#{bundle['ButtonSearch']}" action="#{statisticController.doServiceItemByStatisticsBusinessFilter}"
+							update=":filtredFileItemListForm:datalist statisticsOnBusinessSearchForm :growl" oncomplete="PF('datalistTable').filter();" />
+
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" icon="ui-icon-refresh"
+							title="#{bundle['ButtonReset']}" action="#{statisticController.initServiceItemByStatisticsBusinessSearch}"
+							oncomplete="PF('datalistTable').filter();" update=":filtredFileItemListForm:datalist statisticsOnBusinessSearchForm" />
+
+					</h:panelGroup>
+
+				</h:panelGrid>
+
+			</p:tab>
+
+		</p:accordionPanel>
+
+	</h:form>
+</ui:composition>

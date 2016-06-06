@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="controllerHolidayCreateDlg" widgetVar="controllerHolidayCreateDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['CreateControllerHolidayTitle']}" width="800px">
+
+		<h:form id="controllerHolidayCreateForm">
+
+			<h:panelGroup id="display" styleClass="inpWidth">
+
+				<p:panelGrid columns="4">
+					<p:outputLabel value="#{bundle['CreateControllerHolidayLabel_subDepartment']}"
+						title="#{bundle['CreateControllerHolidayTitle_subDepartment']}" for="subDepartment" />
+					<h:panelGroup>
+						<p:selectOneMenu id="subDepartment" style="width: 125px" value="#{controllerHolidayController.selectedSubDepartment}"
+							requiredMessage="#{bundle['CreateControllerHolidayRequiredMessage_subDepartment']}">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{controllerHolidayController.subDepartments}" var="subDepartmentItem" itemValue="#{subDepartmentItem}"
+								itemLabel="#{subDepartmentItem.abreviation}" />
+							<f:converter binding="#{subDepartmentConverter}" />
+							<p:ajax listener="#{controllerHolidayController.subDepartmentChangedHandler}" update="service,inspector" />
+
+						</p:selectOneMenu>
+						<p:message for="subDepartment" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateControllerHolidayLabel_service']}" title="#{bundle['CreateControllerHolidayTitle_service']}"
+						for="service" />
+					<h:panelGroup>
+						<p:selectOneMenu id="service" style="width: 125px" value="#{controllerHolidayController.serviceSelected}"
+							requiredMessage="#{bundle['CreateControllerHolidayRequiredMessage_service']} ">
+							<f:selectItem itemLabel=" #{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{controllerHolidayController.listService}" var="serviceItem" itemValue="#{serviceItem}"
+								itemLabel="#{facesContext.viewRoot.locale eq 'fr' ? serviceItem.labelFr:serviceItem.labelEn}" />
+							<f:converter binding="#{serviceConverter}" />
+							<p:ajax listener="#{controllerHolidayController.serviceSelectionChangedHandler}" update="inspector" />
+						</p:selectOneMenu>
+						<p:message for="service" />
+					</h:panelGroup>
+
+
+					<p:outputLabel value="#{bundle['CreateControllerHolidayLabel_controlleur']}"
+						title="#{bundle['CreateControllerHolidayTitle_inspecteur']}" for="inspector" />
+					<h:panelGroup>
+						<p:selectOneMenu id="inspector" value="#{controllerHolidayController.selected.user}" style="width:125px"
+							requiredMessage="#{bundle['CreateControllerHolidayRequiredMessage_inspecteur']}" required="true">
+							<f:selectItem itemLabel=" #{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{controllerHolidayController.listUserParService}" var="serviceItem" itemValue="#{serviceItem}"
+								itemLabel="#{serviceItem.firstName} #{serviceItem.lastName}" />
+							<f:converter binding="#{userConverter}" />
+						</p:selectOneMenu>
+						<p:message for="inspector" />
+					</h:panelGroup>
+
+					<h:panelGroup>
+						<p:outputLabel for="dateDu" value="#{bundle['CreateControllerHolidayLabel_date_du']}"
+							title="#{bundle['CreateControllerHolidayTitle_date_du']}" />
+					</h:panelGroup>
+					<p:calendar  navigator="true" id="dateDu" value="#{controllerHolidayController.selected.fromDate}" showOn="button" required="true"
+						requiredMessage="#{bundle['CreateControllerHolidayRequiredMessage_date_du']}" readonlyInput="true" pattern="dd/MM/yyyy">
+						<p:ajax event="dateSelect" update="dateAu" />
+					</p:calendar>
+
+					<h:panelGroup>
+						<p:outputLabel for="dateAu" value="#{bundle['CreateControllerHolidayLabel_date_au']}"
+							title="#{bundle['CreateControllerHolidayTitle_date_au']}" />
+					</h:panelGroup>
+					<p:calendar  navigator="true" id="dateAu" value="#{controllerHolidayController.selected.toDate}" showOn="button" required="true"
+						requiredMessage="#{bundle['CreateControllerHolidayRequiredMessage_date_au']}"
+						mindate="#{controllerHolidayController.selected.fromDate}" readonlyInput="true" pattern="dd/MM/yyyy">
+					</p:calendar>
+					<p:outputLabel value="#{bundle['CreateControllerHolidayLabel_enabled']}" for="holiday_operationnel" />
+					<h:panelGroup>
+						<p:message for="holiday_operationnel" />
+						<p:selectBooleanCheckbox id="holiday_operationnel" value="#{controllerHolidayController.selected.enabled}" />
+					</h:panelGroup>
+
+				</p:panelGrid>
+
+				<br />
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="createHolidayButton" actionListener="#{controllerHolidayController.create}" value="#{bundle['Save']}"
+						styleClass="ui-priority-primary" update="display,:controllerHolidayListForm,:growl"
+						oncomplete="handleSubmit(xhr,status,args,controllerHolidayCreateDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelCreateHolidayButton" value="#{bundle['Cancel']}" styleClass="ui-priority-primary"
+						onclick="PF('controllerHolidayCreateDialog').hide();" immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

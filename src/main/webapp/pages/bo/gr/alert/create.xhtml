@@ -1,0 +1,94 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="AlertCreateDlg" widgetVar="alertCreateDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['CreateAlertTitle']}">
+		<h:form id="alertCreateForm">
+			<h:panelGroup id="display">
+
+				<p:panelGrid columns="4">
+					<p:outputLabel value="#{bundle['CreateAlertLabel_snsh']}" for="acSnsh" />
+					<h:panelGroup>
+						<p:autoComplete title="#{bundle['CreateAlertTitle_snsh']}" id="acSnsh" value="#{alertController.selected.servicesItem}"
+							completeMethod="#{alertController.completeSnsh}" var="sItem" itemLabel="#{sItem.snsh}" itemValue="#{sItem}" required=""
+							converter="#{serviceItemConverter}" forceSelection="true">
+							<p:ajax event="itemSelect" update="snshLabel" />
+						</p:autoComplete>
+						<p:message for="acSnsh" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateAlertLabel_snshLabel']}" for="snshLabel" />
+					<h:outputLabel id="snshLabel" value="#{alertController.selected.servicesItem.snshLabel}" disabled="true"
+						title="#{bundle['CreateAlertTitle_snshLabel']}" />
+
+					<p:outputLabel value="#{bundle['CreateAlertLabel_brand']}" for="sItemBrand" />
+					<p:inputText requiredMessage="#{bundle['CreateAlertTitle_brand']}" id="sItemBrand" value="#{alertController.selected.brand}"
+						title="#{bundle['CreateAlertTitle_brand']}" />
+
+					<p:outputLabel value="#{bundle['CreateAlertLabel_model']}" for="sItemModel" />
+					<p:inputText id="sItemModel" value="#{alertController.selected.model}" title="#{bundle['CreateAlertTitle_model']}" />
+
+					<p:outputLabel for="sItemCountryCode" value="#{bundle['CreateAlertLabel_country']}" />
+					<p:selectOneMenu title="#{bundle['CreateAlertTitle_country']}" id="sItemCountryCode" value="#{alertController.selected.country}"
+						converter="#{countryConverter}" effect="fade" var="count" filter="true" filterMatchMode="startsWith">
+
+						<f:selectItem itemLabel=" #{bundle['SelectOneMessage']}" />
+						<f:selectItems value="#{alertController.countries}" var="country" itemLabel="#{country.countryIdAlpha2}" itemValue="#{country}" />
+						<p:column>
+							<p:graphicImage value="/images/flags/#{count.countryName}.png" />
+						</p:column>
+						<p:column>
+							<h:outputText value="#{count.countryIdAlpha2}" />
+						</p:column>
+						<p:ajax event="change" update="sItemCountryName" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="#{bundle['CreateAlertLabel_country']}" for="sItemCountryName" />
+					<h:outputText id="sItemCountryName" title="#{bundle['CreateAlertLabel_country']}"
+						value="#{facesContext.viewRoot.locale eq 'en' ? alertController.selected.country.countryName : alertController.selected.country.countryNameFr}"
+						disabled="true" />
+
+					<p:outputLabel for="dateDu" value="#{bundle['CreateAlertLabel_startDate']}" />
+					<h:panelGroup>
+						<p:calendar navigator="true" id="dateDu" value="#{alertController.selected.startDate}" showOn="button" required="true"
+							pattern="dd/MM/yyyy" title="#{bundle['CreateAlertTitle_startDate']}"
+							requiredMessage="#{bundle['CreateAlertRequiredMessage_startDate']}" readonlyInput="true">
+							<p:ajax event="dateSelect" update="dateAu" />
+						</p:calendar>
+						<p:message for="dateDu" />
+					</h:panelGroup>
+
+					<p:outputLabel for="dateAu" value="#{bundle['CreateAlertLabel_endDate']}" />
+					<h:panelGroup>
+						<p:calendar navigator="true" id="dateAu" value="#{alertController.selected.endDate}" showOn="button"
+							mindate="#{alertController.selected.startDate}" pattern="dd/MM/yyyy" required="true" title="#{bundle['CreateAlertTitle_endDate']}"
+							requiredMessage="#{bundle['CreateAlertRequiredMessage_endDate']}" readonlyInput="true">
+						</p:calendar>
+						<p:message for="dateAu" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['CreateAlertLabel_manufacturer']}" for="sItemFab" />
+					<p:inputText id="sItemFab" value="#{alertController.selected.manufacturer}" title="#{bundle['CreateAlertTitle_manufacturer']}" />
+
+				</p:panelGrid>
+
+				<br />
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="createBtn"
+						actionListener="#{alertController.create}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+						update="display, :alertListForm,   alertCreateForm,:growl" oncomplete="handleSubmit(xhr,status,args,AlertCreateDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="cancelBtn"
+						value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('alertCreateDialog').hide();" immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

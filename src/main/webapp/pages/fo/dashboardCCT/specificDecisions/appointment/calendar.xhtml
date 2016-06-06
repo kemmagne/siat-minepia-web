@@ -1,0 +1,42 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<p:panelGrid columnClasses="value" styleClass="columns-calendar">
+		<p:row>
+
+			<p:column>
+				
+				<p:schedule styleClass="calendar-cont" timeFormat="HH(:mm)"  leftHeaderTemplate="prev, next" id="schedule" value="#{scheduleController.eventModel}"
+					widgetVar="myschedule" resizable="false" draggable="false" timeZone="GMT+1" allDaySlot="false">
+
+					<p:ajax event="dateSelect" listener="#{scheduleController.onDateSelect}" update=":eventDialogId "
+						oncomplete="PF('eventDialog').show();" />
+					<p:ajax event="eventSelect" listener="#{scheduleController.onEventSelect}" update=":eventDialogId "
+						oncomplete="PF('eventDialog').show();" />
+				</p:schedule>
+			
+				<p:accordionPanel styleClass="select-calendar" >
+					<p:tab title="#{bundle['Calendar_select_inspectors']}" dynamic="true" cache="true" titleStyleClass="title">
+						<h:panelGrid columns="1">
+							<ui:repeat value="#{scheduleController.inspectorCheckList}" var="inspectorCheck" style="position: relative;">
+
+								<p:selectBooleanCheckbox value="#{inspectorCheck.checked}" label="#{inspectorCheck.controller.firstName}"
+									itemLabel="#{inspectorCheck.controller.firstName}">
+									<p:ajax listener="#{scheduleController.calculAndGenerationCalendar}" oncomplete="PF('myschedule').update()" update=":growl"/>
+
+								</p:selectBooleanCheckbox>
+
+							</ui:repeat>
+						</h:panelGrid>
+
+					</p:tab>
+
+				</p:accordionPanel>
+				
+			</p:column>
+
+		</p:row>
+	</p:panelGrid>
+
+
+</ui:composition>

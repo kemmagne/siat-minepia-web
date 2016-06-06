@@ -1,0 +1,210 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<p:outputPanel>
+		<h:outputText />
+		<h:form id="costsForm" styleClass="costsForm">
+			<p:accordionPanel>
+				<p:tab title="#{bundle['payment_title']}" dynamic="true" cache="true" titleStyleClass="title" closable="false">
+					<h:panelGroup id="paymentDisplay">
+
+						<p:fieldset legend="#{bundle['paymentTitleLabel_frais']}">
+
+							<p:panelGrid columns="4">
+
+								<p:outputLabel value="#{bundle['paymentTitleLabel_refFact']}" />
+								<h:outputText value="#{costsController.currentPaymentData.refFacture}" />
+
+								<p:outputLabel value="#{bundle['paymentTitleLabel_montantFraisTotal']}" />
+								<h:outputText value="#{costsController.currentPaymentData.montantHt}" />
+								<p:outputLabel value="Total TVA" />
+								<h:outputText value="#{costsController.currentPaymentData.montantTva}" />
+							</p:panelGrid>
+						</p:fieldset>
+						<p:fieldset legend="#{bundle['payment_invoiceDetail']}">
+							<br />
+							<p:dataTable widgetVar="PaymentDTWdg" id="paymentDT" var="invoiceLine"
+								value="#{costsController.currentPaymentData.paymentItemFlowList}">
+
+								<p:column headerText="#{bundle['Payment_product_id']}">
+									<h:outputText title="#{bundle['Payment_product_id']}" value="#{invoiceLine.itemFlow.fileItem.nsh.goodsItemDesc}" />
+								</p:column>
+								<p:column headerText="#{bundle['Payment_amountTva_label']}">
+									<h:panelGroup>
+										<h:outputText id="paymentAmountTva" value="#{invoiceLine.montantTva}" />
+									</h:panelGroup>
+								</p:column>
+								<p:column headerText="#{bundle['Payment_amount_label']}">
+									<h:outputText id="paymentAmount" value="#{invoiceLine.montantHt}" title="#{bundle['Payment_amount_title']}" required="true"
+										requiredMessage="#{bundle['CreatePaymentAmountRequiredMessage']}" />
+								</p:column>
+
+								<p:column headerText="#{bundle['Payment_nature_label']}">
+									<h:outputText id="paymentNature" value="#{invoiceLine.natureFrais}" title="#{bundle['Payment_nature_title']}" required="true"
+										requiredMessage="#{bundle['CreatePaymentNatureRequiredMessage']}" />
+								</p:column>
+							</p:dataTable>
+						</p:fieldset>
+
+
+						<p:fieldset legend="#{bundle['paymentTitleLabel_signataire']}">
+
+							<p:panelGrid columns="4">
+
+								<p:outputLabel value="#{bundle['paymentTitleLabel_sigName']}" for="sigName" />
+								<h:panelGroup>
+									<p:inputText id="sigName" value="#{costsController.currentPaymentData.nomSignature}" title="#{bundle['paymentTitleTitle_sigName']}"
+										required="true" requiredMessage="#{bundle['paymentRequiredMessage_sigName']}" />
+									<p:message for="sigName" />
+								</h:panelGroup>
+
+								<p:outputLabel value="#{bundle['paymentTitleLabel_sigQuality']}" for="sigQuality" />
+								<h:panelGroup>
+									<p:inputText id="sigQuality" value="#{costsController.currentPaymentData.qualiteSignature}"
+										title="#{bundle['paymentTitleTitle_sigQuality']}" required="true" requiredMessage="#{bundle['paymentRequiredMessage_sigQuality']}" />
+									<p:message for="sigQuality" />
+								</h:panelGroup>
+
+								<p:outputLabel value="#{bundle['paymentTitleLabel_sigPlace']}" for="sigPlace" />
+								<h:panelGroup>
+									<p:inputText id="sigPlace" value="#{costsController.currentPaymentData.lieuSignature}"
+										title="#{bundle['paymentTitleTitle_sigPlace']}" required="true" requiredMessage="#{bundle['paymentRequiredMessage_sigPlace']}" />
+									<p:message for="sigPlace" />
+								</h:panelGroup>
+
+								<p:outputLabel value="#{bundle['paymentTitleLabel_sigDate']}" for="sigDate" />
+								<h:panelGroup>
+									<p:calendar id="sigDate" value="#{costsController.currentPaymentData.dateSignature}" title="#{bundle['paymentTitleTitle_sigDate']}"
+										showOn="button" pattern="dd/MM/yyyy" readonlyInput="true">
+										<p:message for="sigDate" />
+									</p:calendar>
+								</h:panelGroup>
+
+							</p:panelGrid>
+						</p:fieldset>
+
+						<p:fieldset legend="#{bundle['paymentTitleLabel_encaissement']}">
+
+							<p:panelGrid columns="4">
+
+								<p:outputLabel value="#{bundle['paymentTitleLabel_numRecu']}" />
+								<h:outputText value="#{costsController.currentPaymentData.numRecu}" />
+
+								<p:outputLabel value="#{bundle['paymentTitleLabel_dateEnc']}" for="dateEnc" />
+								<h:panelGroup>
+									<p:calendar id="dateEnc" value="#{costsController.currentPaymentData.dateEncaissement}"
+										title="#{bundle['paymentTitleTitle_dateEnc']}" showOn="button" pattern="dd/MM/yyyy" readonlyInput="true">
+										<p:message for="dateEnc" />
+									</p:calendar>
+								</h:panelGroup>
+
+								<p:outputLabel value="#{bundle['paymentTitleLabel_partVers']}" for="partVers" />
+								<h:panelGroup>
+									<p:inputText id="partVers" value="#{costsController.currentPaymentData.partVersCont}"
+										title="#{bundle['paymentTitleTitle_partVers']}" />
+									<p:message for="partVers" />
+								</h:panelGroup>
+								<p:outputLabel value="#{bundle['paymentTitleLabel_partVersRs']}" for="partVersRs" />
+								<h:panelGroup>
+									<p:inputText id="partVersRs" value="#{costsController.currentPaymentData.partVersRs}"
+										title="#{bundle['paymentTitleLabel_partVersRs']}" />
+									<p:message for="partVersRs" />
+								</h:panelGroup>
+								<p:outputLabel value="#{bundle['paymentTitleLabel_montantEnc']}" for="montantEnc" />
+								<h:panelGroup>
+									<p:inputText id="montantEnc" value="#{costsController.currentPaymentData.montantEncaissement}"
+										title="#{bundle['paymentTitleTitle_montantEnc']}" required="true" converterMessage="#{bundle['AmountErrorOccured']}"
+										requiredMessage="#{bundle['paymentRequiredMessage_montantEnc']}" />
+									<p:message for="montantEnc" />
+								</h:panelGroup>
+
+								<p:outputLabel value="#{bundle['paymentTitleLabel_natureEnc']}" for="natureEnc" />
+								<h:panelGroup>
+									<p:inputText id="natureEnc" value="#{costsController.currentPaymentData.natureEncaissement}"
+										title="#{bundle['paymentTitleTitle_natureEnc']}" required="true" requiredMessage="#{bundle['paymentRequiredMessage_natureEnc']}" />
+									<p:message for="natureEnc" />
+								</h:panelGroup>
+
+								<p:outputLabel value="#{bundle['paymentTitleLabel_observation']}" for="observation" />
+								<h:panelGroup>
+									<p:inputTextarea id="observation" rows="10" cols="30" value="#{costsController.currentPaymentData.observation}"
+										title="#{bundle['paymentTitleTitle_observation']}" />
+									<p:message for="observation" />
+								</h:panelGroup>
+
+							</p:panelGrid>
+
+						</p:fieldset>
+
+						<p:fieldset legend="#{bundle['paymentTitleLabel_recette']}">
+
+							<p:panelGrid columns="4">
+
+								<p:outputLabel value="#{bundle['paymentTitleLabel_numRole']}" for="numRole" />
+								<h:panelGroup>
+									<p:inputText id="numRole" value="#{costsController.currentPaymentData.roleRecette}" title="#{bundle['paymentTitleTitle_numRole']}"
+										 requiredMessage="#{bundle['paymentRequiredMessage_numRole']}" />
+									<p:message for="numRole" />
+								</h:panelGroup>
+
+								<p:outputLabel value="#{bundle['paymentTitleLabel_numQuittance']}" />
+								<h:outputText value="#{costsController.currentPaymentData.numQuittance}" />
+
+								<p:outputLabel value="#{bundle['paymentTitleLabel_imputation']}" for="imputation" />
+								<h:panelGroup>
+									<p:inputText id="imputation" value="#{costsController.currentPaymentData.imputation}"
+										title="#{bundle['paymentTitleTitle_imputation']}"  requiredMessage="#{bundle['paymentRequiredMessage_imputation']}" />
+									<p:message for="imputation" />
+								</h:panelGroup>
+
+								<p:outputLabel value="#{bundle['paymentTitleLabel_natureRec']}" for="natureRec" />
+								<h:panelGroup>
+									<p:inputText id="natureRec" value="#{costsController.currentPaymentData.natureRecette}"
+										title="#{bundle['paymentTitleTitle_natureRec']}"  requiredMessage="#{bundle['paymentRequiredMessage_natureRec']}" />
+									<p:message for="natureRec" />
+								</h:panelGroup>
+
+								<p:outputLabel value="#{bundle['paymentTitleLabel_article']}" for="article" />
+								<h:panelGroup>
+									<p:inputText id="article" value="#{costsController.currentPaymentData.article}" title="#{bundle['paymentTitleTitle_article']}"
+										requiredMessage="#{bundle['paymentRequiredMessage_article']}" />
+									<p:message for="article" />
+								</h:panelGroup>
+
+							</p:panelGrid>
+
+						</p:fieldset>
+
+					</h:panelGroup>
+					<br />
+					<div class="btn-bloc">
+						<p:commandButton id="printButton" icon="ui-icon-print" value="#{bundle['paymentButtonTitleLabel_print']}">
+							<p:printer target="paymentDisplay" />
+						</p:commandButton>
+						<p:commandButton id="billButton" icon="ui-icon-clipboard" value="#{bundle['paymentButtonTitleLabel_facture']}" />
+						<p:commandButton id="cardButton" icon="ui-icon-document" value="#{bundle['paymentButtonTitleLabel_recu']}" />
+						<p:commandButton id="validButton" icon="ui-icon-check" value="#{bundle['paymentButtonTitleLabel_Valid']}"
+							styleClass="ui-priority-primary" update="paymentDisplay,:growl"
+							oncomplete="if (args &amp;&amp; !args.validationFailed) PF('confirmation').show()" />
+					</div>
+				</p:tab>
+			</p:accordionPanel>
+		</h:form>
+
+		<p:confirmDialog id="diagValid" message="#{bundle['popup_confirm_payment_message']}" header="#{bundle['popup_confirm_payment_header']}"
+			widgetVar="confirmation" appendToBody="true">
+			<div align="right">
+				<h:form id="diagForm">
+					<p:commandButton id="confirm" value="#{bundle['popup_confirm_payment_message_oui']}"
+						oncomplete="PF('confirmation').hide();document.getElementById('diagForm:confirm').disabled=false;"
+						onclick="document.getElementById('diagForm:confirm').disabled=true;" actionListener="#{costsController.validatePayment}"
+						styleClass="ui-priority-primary" />
+					<p:commandButton id="decline" value="#{bundle['popup_confirm_payment_message_pas_maintenant']}" onclick="PF('confirmation').hide()"
+						styleClass="ui-priority-primary" />
+				</h:form>
+			</div>
+		</p:confirmDialog>
+
+	</p:outputPanel>
+</ui:composition>

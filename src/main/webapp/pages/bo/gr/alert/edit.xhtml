@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="alertEditDlg" widgetVar="alertEditDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['EditAlertTitle']}">
+		<h:form id="alertEditForm">
+
+			<h:panelGroup id="display">
+
+				<p:panelGrid columns="4">
+
+					<p:outputLabel value="#{bundle['EditAlertLabel_snsh']}" for="acSnsh" />
+					<p:autoComplete id="acSnsh" value="#{alertController.selected.servicesItem}" completeMethod="#{alertController.completeSnsh}"
+						var="sItem" itemLabel="#{sItem.snsh}" itemValue="#{sItem}" converter="#{serviceItemConverter}" forceSelection="true"
+						title="#{bundle['EditAlertTitle_snsh']}">
+						<p:ajax event="blur" update="snshLabel" />
+					</p:autoComplete>
+
+					<p:outputLabel value="#{bundle['EditAlertLabel_snshLabel']}" for="snshLabel" />
+					<h:outputLabel id="snshLabel" value="#{alertController.selected.servicesItem.snshLabel}" disabled="true"
+						title="#{bundle['EditAlertTitle_snshLabel']}" />
+
+
+					<p:outputLabel value="#{bundle['EditAlertLabel_brand']}" for="sItemBrand" />
+					<p:inputText id="sItemBrand" value="#{alertController.selected.brand}" title="#{bundle['EditAlertTitle_brand']}" />
+
+
+					<p:outputLabel value="#{bundle['EditAlertLabel_model']}" for="sItemModel" />
+					<p:inputText id="sItemModel" value="#{alertController.selected.model}" title="#{bundle['EditAlertTitle_model']}" />
+
+					<p:outputLabel for="sItemCountryCode" value="#{bundle['EditAlertLabel_country']}" />
+					<p:selectOneMenu id="sItemCountryCode" value="#{alertController.selected.country}" converter="#{countryConverter}" effect="fade"
+						var="count" style="width:160px" filter="true" filterMatchMode="startsWith" title="#{bundle['EditAlertTitle_country']}">
+
+						<f:selectItem itemLabel=" #{bundle['SelectOneMessage']}" />
+						<f:selectItems value="#{alertController.countries}" var="country" itemLabel="#{country.countryIdAlpha2}" itemValue="#{country}" />
+						<p:column style="width:10%">
+							<p:graphicImage value="/images/flags/#{count.countryName}.png" />
+						</p:column>
+						<p:column>
+							<h:outputText value="#{count.countryIdAlpha2}" />
+						</p:column>
+						<p:ajax event="change" update="sItemCountryName" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="#{bundle['EditAlertLabel_country']}" for="sItemCountryName" />
+					<h:outputText id="sItemCountryName"
+						value="#{facesContext.viewRoot.locale eq 'en' ? alertController.selected.country.countryName : alertController.selected.country.countryNameFr}"
+						disabled="true" />
+
+					<p:outputLabel for="dateDu" value="#{bundle['EditAlertLabel_startDate']}" />
+					<h:panelGroup>
+						<p:calendar navigator="true" id="dateDu" value="#{alertController.selected.startDate}" showOn="button" required="true"
+							requiredMessage="#{bundle['EditAlertLabel_startDate']}" title="" readonlyInput="true" pattern="dd/MM/yyyy">
+							<p:ajax event="dateSelect" update="dateAu" />
+						</p:calendar>
+						<p:message for="dateDu" />
+					</h:panelGroup>
+
+					<p:outputLabel for="dateAu" value="#{bundle['EditAlertLabel_endDate']}" />
+					<h:panelGroup>
+						<p:calendar navigator="true" id="dateAu" value="#{alertController.selected.endDate}" showOn="button"
+							mindate="#{alertController.selected.startDate}" required="true" pattern="dd/MM/yyyy"
+							requiredMessage="#{bundle['EditAlertRequiredMessage_endDate']}" readonlyInput="true">
+						</p:calendar>
+						<p:message for="dateAu" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditAlertLabel_manufacturer']}" for="sItemFab" />
+					<p:inputText id="sItemFab" value="#{alertController.selected.manufacturer}" title="#{bundle['EditAlertTitle_manufacturer']}" />
+
+				</p:panelGrid>
+
+				<br />
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editBtn"
+						actionListener="#{alertController.edit}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+						update="display,:alertListForm,:growl" oncomplete="handleSubmit(xhr,status,args,alertEditDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="cancelBtn"
+						value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('alertEditDialog').hide();" immediate="true" />
+				</div>
+			</h:panelGroup>
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

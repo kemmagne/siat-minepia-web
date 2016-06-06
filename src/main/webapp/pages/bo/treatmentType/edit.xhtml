@@ -1,0 +1,58 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="treatmentTypeEditDlg" widgetVar="treatmentTypeEditDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['EditAnalyseTypeTitle']}">
+
+		<h:form id="treatmentTypeEditForm">
+
+			<h:panelGroup id="display">
+
+				<p:panelGrid columns="4">
+
+					<p:outputLabel value="#{bundle['EditTreatmentTypeLabel_labelFr']}" for="treatmentType_labelFr" />
+					<h:panelGroup>
+						<p:inputText id="treatmentType_labelFr" value="#{treatmentTypeController.selected.labelFr}"
+							title="#{bundle['EditTreatmentTypeTitle_labelFr']}" required="true"
+							requiredMessage="#{bundle['EditTreatmentTypeRequiredMessage_labelFr']}" />
+						<p:message for="treatmentType_labelFr" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditTreatmentTypeLabel_labelEn']}" for="treatmentType_labelEn" />
+					<h:panelGroup>
+						<p:inputText id="treatmentType_labelEn" value="#{treatmentTypeController.selected.labelEn}"
+							title="#{bundle['EditTreatmentTypeTitle_labelEn']}" required="true"
+							requiredMessage="#{bundle['EditTreatmentTypeRequiredMessage_labelEn']}" />
+						<p:message for="treatmentType_labelEn" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditTreatmentTypeLabel_duree']}" for="treatmentType_duration" />
+					<h:panelGroup>
+						<p:inputText id="treatmentType_duration" value="#{treatmentTypeController.selected.duration}"
+							title="#{bundle['EditTreatmentTypeTitle_duree']}" required="true"
+							requiredMessage="#{bundle['EditTreatmentTypeRequiredMessage_duree']}" />
+						<p:message for="treatmentType_duration" />
+					</h:panelGroup>
+
+				</p:panelGrid>
+
+				<br />
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editBtn" actionListener="#{treatmentTypeController.edit}" value="#{bundle['Save']}"
+						styleClass="ui-priority-primary" update="display,:treatmentTypeListForm,:growl"
+						oncomplete="handleSubmit(xhr,status,args,treatmentTypeEditDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('treatmentTypeEditDialog').hide();"
+						immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

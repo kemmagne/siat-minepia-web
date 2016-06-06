@@ -1,0 +1,97 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="systemDecisionFormCiblageTab">
+
+		<p:dataTable id="datalistCiblageTab" widgetVar="datalistTableCiblageTab" value="#{riskController.ciblageTabList}" filteredValue=""
+			var="ciblage" selectionMode="single" rowKey="#{ciblage.id}" rows="5" paginator="true" rowsPerPageTemplate="5,10,20"
+			emptyMessage="#{bundle['AucuneResultat']}" styleClass="newui-datatable fixeColumnWidth ciblagetab ciblagetab2"
+			paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+			currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+			<p:column sortBy="#{ciblage.servicesItem.snsh}" filterBy="#{ciblage.servicesItem.snsh}" filterMatchMode="contains" style="width:80px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['CiblageTabLabel_snsh']}" title="#{bundle['CiblageTabTitle_snsh']}" />
+				</f:facet>
+				<h:outputText value="#{ciblage.servicesItem.snsh}" />
+			</p:column>
+
+			<p:column sortBy="#{ciblage.servicesItem.snshLabel}" filterBy="#{ciblage.servicesItem.snshLabel}" filterMatchMode="contains"
+				style="width:150px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['CiblageTabLabel_snshLabel']}" title="#{bundle['CiblageTabTitle_snshLabel']}" />
+				</f:facet>
+				<h:outputText value="#{ciblage.servicesItem.snshLabel}" />
+			</p:column>
+
+			<p:column sortBy="#{ciblage.brand}" filterBy="#{ciblage.brand}" filterMatchMode="contains" style="width:65px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['CiblageTabLabel_brand']}" title="#{bundle['CiblageTabTitle_brand']}" />
+				</f:facet>
+				<h:outputText value="#{ciblage.brand}" />
+			</p:column>
+
+			<p:column sortBy="#{ciblage.model}" filterBy="#{ciblage.model}" filterMatchMode="contains" style="width:65px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['CiblageTabLabel_model']}" title="#{bundle['CiblageTabTitle_model']}" />
+				</f:facet>
+				<h:outputText value="#{ciblage.model}" />
+			</p:column>
+
+			<p:column sortBy="#{ciblage.country.countryNameFr}" filterBy="#{ciblage.country.countryNameFr}" filterMatchMode="contains"
+				style="width:65px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['CiblageTabLabel_country']}" title="#{bundle['CiblageTabTitle_country']}" />
+				</f:facet>
+				<h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? ciblage.country.countryName : ciblage.country.countryNameFr}" />
+			</p:column>
+
+			<p:column sortBy="#{ciblage.manufacturer}" filterBy="#{ciblage.manufacturer}" filterMatchMode="contains" style="width:65px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['CiblageTabLabel_manufacturer']}" title="#{bundle['CiblageTabTitle_manufacturer']}" />
+				</f:facet>
+				<h:outputText value="#{ciblage.manufacturer}" />
+			</p:column>
+
+			<p:column sortBy="#{ciblage.company.numContribuable}" filterBy="#{ciblage.company.numContribuable}" filterMatchMode="contains"
+				style="width:65px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['CiblageTabLabel_codeDouane']}" title="#{bundle['CiblageTabTitle_codeDouane']}" />
+				</f:facet>
+				<h:outputText value="#{ciblage.company.numContribuable}" />
+			</p:column>
+
+			<p:column sortBy="#{ciblage.company.name}" filterBy="#{ciblage.company.name}" filterMatchMode="contains" style="width:65px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['CiblageTabLabel_importerName']}" title="#{bundle['CiblageTabTitle_importerName']}" />
+				</f:facet>
+				<h:outputText value="#{ciblage.company.name}" />
+			</p:column>
+
+			<p:column sortBy="#{dateBean.formatSimpleDate(ciblage.startDate)}" filterBy="#{dateBean.formatSimpleDate(ciblage.startDate)}"
+				filterMatchMode="contains" style="width:65px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['CiblageTabLabel_startDate']}" title="#{bundle['CiblageTabTitle_startDate']}" />
+				</f:facet>
+				<h:outputText value="#{ciblage.startDate}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+
+			<p:column sortBy="#{dateBean.formatSimpleDate(ciblage.endDate)}" filterBy="#{dateBean.formatSimpleDate(ciblage.endDate)}"
+				filterMatchMode="contains" style="width:65px">
+				<f:facet name="header">
+					<h:outputText value="#{bundle['CiblageTabLabel_endDate']}" title="#{bundle['CiblageTabTitle_endDate']}" />
+				</f:facet>
+				<h:outputText value="#{ciblage.endDate}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+
+		</p:dataTable>
+
+	</h:form>
+
+</ui:composition>
+
+

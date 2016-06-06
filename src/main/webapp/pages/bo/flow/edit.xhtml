@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="flowEditDlg" widgetVar="flowEditDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['EditFlowTitle']}">
+
+		<h:form id="flowEditForm">
+
+			<h:panelGroup id="display" styleClass="inpWidth">
+
+				<p:panelGrid columns="4" styleClass="clearfix">
+
+					<p:outputLabel value="#{bundle['EditFlowLabel_labelFr']}" for="flow_labelFr" />
+					<h:panelGroup>
+						<p:inputText id="flow_labelFr" value="#{flowController.selected.labelFr}" title="#{bundle['EditFlowTitle_labelFr']}" required="true"
+							requiredMessage="#{bundle['EditFlowRequiredMessage_labelFr']}" />
+						<p:message for="flow_labelFr" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditFlowLabel_labelEn']}" for="flow_labelEn" />
+					<h:panelGroup>
+						<p:inputText id="flow_labelEn" value="#{flowController.selected.labelEn}" title="#{bundle['EditFlowTitle_labelEn']}" required="true"
+							requiredMessage="#{bundle['EditFlowRequiredMessage_labelEn']}" />
+						<p:message for="flow_labelEn" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditFlowLabel_fromStep']}" for="flow_fromStep" />
+					<h:panelGroup>
+						<p:selectOneMenu id="flow_fromStep" value="#{flowController.selected.fromStep}" required="true" filter="true"
+							filterMatchMode="contains" requiredMessage="#{bundle['EditFlowRequiredMessage_fromStep']}">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{flowController.stepList}" var="fStep" itemValue="#{fStep}"
+								itemLabel="#{facesContext.viewRoot.locale eq 'en' ? fStep.labelEn : fStep.labelFr}">
+							</f:selectItems>
+							<f:converter binding="#{stepConverter}" />
+						</p:selectOneMenu>
+						<p:message for="flow_fromStep" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditFlowLabel_toStep']}" for="flow_toStep" />
+					<h:panelGroup>
+						<p:selectOneMenu id="flow_toStep" value="#{flowController.selected.toStep}" required="true" filter="true" filterMatchMode="contains"
+							requiredMessage="#{bundle['EditFlowRequiredMessage_toStep']}">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{flowController.stepList}" var="tStep" itemValue="#{tStep}"
+								itemLabel="#{facesContext.viewRoot.locale eq 'en' ? tStep.labelEn : tStep.labelFr}">
+							</f:selectItems>
+							<f:converter binding="#{stepConverter}" />
+						</p:selectOneMenu>
+						<p:message for="flow_toStep" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditFlowLabel_code']}" for="flow_code" />
+					<p:inputText id="flow_code" value="#{flowController.selected.code}" title="#{bundle['EditFlowTitle_code']}" disabled="true" />
+
+					<p:outputLabel value="#{bundle['EditFlowLabel_duration']}" for="flow_duration" />
+					<h:panelGroup>
+						<p:inputText id="flow_duration" value="#{flowController.selected.duration}" title="#{bundle['EditFlowTitle_duration']}"
+							required="true" requiredMessage="#{bundle['EditFlowRequiredMessage_duration']}"
+							converterMessage="#{bundle['EditFlowRequiredNumberMessage_duration']}">
+						</p:inputText>
+						<p:message for="flow_duration" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditFlowLabel_outgoing']}" for="flow_outgoing" />
+					<h:panelGroup>
+						<p:inputText id="flow_outgoing" value="#{flowController.selected.outgoing}" title="#{bundle['EditFlowTitle_outgoing']}"
+							required="true" requiredMessage="#{bundle['EditFlowRequiredMessage_outgoing']}"
+							converterMessage="#{bundle['EditFlowRequiredNumberMessage_outgoing']}" />
+						<p:message for="flow_outgoing" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditFlowLabel_isCota']}" for="flow_isCota" />
+					<p:selectBooleanCheckbox id="flow_isCota" value="#{flowController.selected.isCota}" title="#{bundle['EditFlowTitle_isCota']}" />
+				</p:panelGrid>
+
+				<br />
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"
+						actionListener="#{flowController.edit}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+						update="display,:flowListForm,:growl" oncomplete="handleSubmit(xhr,status,args,flowEditDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" value="#{bundle['Cancel']}"
+						styleClass="ui-priority-primary" onclick="PF('flowEditDialog').hide();" immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+</ui:composition>
+</html>

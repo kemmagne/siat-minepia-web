@@ -1,0 +1,48 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="hourlyTypeEditDlg" widgetVar="hourlyTypeEditDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['EditHourlyTypeTitle']}">
+
+		<h:form id="hourlyTypeEditForm">
+
+			<h:panelGroup id="display">
+
+				<p:panelGrid columns="4">
+
+					<p:outputLabel value="#{bundle['EditHourlyTypeLabel_labelFr']}" for="hourlyType_labelFr" />
+					<h:panelGroup>
+						<p:inputText id="hourlyType_labelFr" value="#{hourlyTypeController.selected.labelFr}" title="#{bundle['EditHourlyTypeTitle_labelFr']}"
+							required="true" requiredMessage="#{bundle['EditHourlyTypeRequiredMessage_labelFr']}" />
+						<p:message for="hourlyType_labelFr" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditHourlyTypeLabel_labelEn']}" for="hourlyType_labelEn" />
+					<h:panelGroup>
+						<p:inputText id="hourlyType_labelEn" value="#{hourlyTypeController.selected.labelEn}" title="#{bundle['EditHourlyTypeTitle_labelEn']}"
+							required="true" requiredMessage="#{bundle['EditHourlyTypeRequiredMessage_labelEn']}" />
+						<p:message for="hourlyType_labelEn" />
+					</h:panelGroup>
+
+				</p:panelGrid>
+
+				<br />
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editBtn"
+						actionListener="#{hourlyTypeController.edit}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+						update="display,:hourlyTypeListForm,:growl" oncomplete="handleSubmit(xhr,status,args,hourlyTypeEditDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="cancelBtn"
+						value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('hourlyTypeEditDialog').hide();" immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

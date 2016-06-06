@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/templates/templateFile.xhtml">
+
+	<ui:define name="title">
+		<h:outputText value="#{bundle['ct_dashboard_title']}" />
+	</ui:define>
+
+	<ui:define name="body">
+
+		<p:spacer height="5" />
+
+		<p:outputPanel>
+
+			<p:panel>
+
+
+				<h:panelGrid columns="2" styleClass="tableInitial">
+
+					<h:panelGroup deferred="true" id="right" styleClass="tableContent" header="#{bundle['layout_unit_left_header']}">
+						<h:panelGrid columns="2" styleClass="tableSeparate tbl">
+							<h:panelGroup styleClass="side">
+
+								<ui:include src="dashboard.xhtml" />
+
+							</h:panelGroup>
+						</h:panelGrid>
+					</h:panelGroup>
+
+					<h:panelGroup deferred="true" id="center" styleClass="tableContent-center" header="#{bundle['layout_unit_center_header']}">
+						<ui:include src="fileItemsList.xhtml" />
+					</h:panelGroup>
+
+				</h:panelGrid>
+
+			</p:panel>
+
+		</p:outputPanel>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,78 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<p:panel header="#{bundle['file_title']}">
+
+		<h:form id="fileItemListForm">
+
+			<h:commandLink action="#{exporter.exportPDF(table, 'FILE_ITEMS')}">
+				<h:outputText styleClass="sprite sprite-pdf" />
+			</h:commandLink>
+
+			<p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable" value="#{fileItemApController.filesList}" filteredValue=""
+				var="file" selectionMode="single" selection="#{fileItemApController.selectedFile}" rowKey="#{file.id}" rows="5" paginator="true"
+				rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})"
+				rowStyleClass="#{fileItemApController.hasUnreadItem(file)?'unreadFiles':null}">
+
+
+				<p:ajax event="rowDblselect" listener="#{fileItemApController.goToDetailPage}" onstart="PF('statusDialog1').block()"
+					onsuccess="PF('statusDialog1').unblock()" />
+
+				<p:column sortBy="#{file.referenceSiat}" filterBy="#{file.referenceSiat}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_num_siat']}" title="#{bundle['FileTitle_num_siat']}" />
+					</f:facet>
+					<h:outputText value="#{file.referenceSiat}" />
+				</p:column>
+
+				<p:column sortBy="#{file.numeroDossier}" filterBy="#{file.numeroDossier}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_num_eguce']}" title="#{bundle['FileTitle_num_eguce']}" />
+					</f:facet>
+					<h:outputText value="#{file.numeroDossier}" />
+				</p:column>
+
+				<p:column sortBy="#{item.file.createdDate}" filterBy="#{item.file.createdDate}"
+					filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_date_dossier']}" title="#{bundle['FileTitle_date_dossier']}" />
+					</f:facet>
+					<h:outputText value="#{file.createdDate}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy HH:mm" locale="fr" />
+					</h:outputText>
+				</p:column>
+
+				<p:column sortBy="#{file.fileItemsList.get(0).step.id}"
+					filterBy="#{facesContext.viewRoot.locale eq 'en' ? file.fileItemsList.get(0).redefinedLabelEn: file.fileItemsList.get(0).redefinedLabelFr}"
+					filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_step']}" title="#{bundle['FileTitle_step']}" />
+					</f:facet>
+					<h:outputText
+						value="#{facesContext.viewRoot.locale eq 'en' ? file.fileItemsList.get(0).redefinedLabelEn: file.fileItemsList.get(0).redefinedLabelFr}" />
+				</p:column>
+
+				<p:column sortBy="#{facesContext.viewRoot.locale eq 'en' ? file.fileType.labelEn : file.fileType.labelFr }"
+					filterBy="#{facesContext.viewRoot.locale eq 'en' ? file.fileType.labelEn : file.fileType.labelFr }" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_fileType']}" title="#{bundle['FileTitle_fileType']}" />
+					</f:facet>
+					<h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? file.fileType.labelEn : file.fileType.labelFr }" />
+				</p:column>
+
+				<p:column sortBy="#{file.client.companyName}" filterBy="#{file.client.companyName}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['GeneralInformationLabel_Client']}" title="#{bundle['GeneralInformationLabel_Client']}" />
+					</f:facet>
+					<h:outputText value="#{file.client.companyName}" />
+				</p:column>
+
+			</p:dataTable>
+
+		</h:form>
+
+	</p:panel>
+
+</ui:composition>

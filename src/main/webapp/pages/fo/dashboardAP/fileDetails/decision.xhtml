@@ -1,0 +1,60 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+
+	<p:dialog closeOnEscape="true" id="decisionDlg" widgetVar="decisionDialog" modal="true" resizable="true" appendTo="@(body)"
+		header="#{facesContext.viewRoot.locale eq 'en' ? fileItemApDetailController.selectedFileItem.redefinedLabelEn : fileItemApDetailController.selectedFileItem.redefinedLabelFr}"
+		 height="auto" width="auto" dynamic="true" position="top">
+
+
+		<h:form id="decisionForm" prependId="false">
+
+			<h:panelGroup id="acc" styleClass="scroll-content decisionForm decisionDlg">
+				<p:messages autoUpdate="true" for="amount" />
+				<p:scrollPanel mode="native">
+
+					<h:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight">
+
+						<h:outputLabel value="#{bundle['Flow_newDecision']}" for="flow" />
+						<h:panelGroup>
+							<p:selectOneMenu id="flow" value="#{fileItemApDetailController.selectedFlow}" required="true"
+								requiredMessage="#{bundle['FlowRequiredMessage_possibleDecision']}">
+								<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" itemValue="#{null}" />
+								<f:selectItems value="#{fileItemApDetailController.flows}" var="flowItem" itemValue="#{flowItem}"
+									itemLabel="#{facesContext.viewRoot.locale eq 'en' ? flowItem.redefinedLabelEn : flowItem.redefinedLabelFr}" />
+								<f:converter binding="#{flowConverter}" />
+								<p:ajax event="change" listener="#{fileItemApDetailController.changeDecisionHandler}" update="dataTypeRepeaterGroup decisionForm" />
+							</p:selectOneMenu>
+							<p:message for="flow" />
+						</h:panelGroup>
+					</h:panelGrid>
+					<br />
+					<h:panelGroup id="dataTypeRepeaterGroup">
+						<h:panelGrid id="dataTypeRepeater" binding="#{fileItemApDetailController.decisionDiv}" columns="2" />
+					</h:panelGroup>
+					<br />
+
+					<ui:include src="../specificDecisions/analyseTestResult/analyseTestResult.xhtml" />
+					<ui:include src="../specificDecisions/essayResult/essayResult.xhtml" />
+					<p:panel rendered="#{fileItemApDetailController.isPayment}">
+						<ui:include src="../specificDecisions/paymentValidation/payment.xhtml" />
+					</p:panel>
+				</p:scrollPanel>
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"
+						actionListener="#{fileItemApDetailController.saveDecision}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+						update=":productInformationForm dataTypeRepeaterGroup acc :decisionForm" ajax="true"
+						oncomplete="handleSubmit(xhr,status,args,decisionDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" value="#{bundle['Cancel']}"
+						styleClass="ui-priority-primary" onclick="PF('decisionDialog').hide();" immediate="true" />
+				</div>
+
+			</h:panelGroup>
+		</h:form>
+
+	</p:dialog>
+
+
+
+</ui:composition>

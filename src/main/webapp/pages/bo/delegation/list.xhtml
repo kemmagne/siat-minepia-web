@@ -1,0 +1,111 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<p:panel header="#{bundle['Delegation_title']}">
+		<h:form id="delegationListForm">
+
+			<h:commandLink action="#{exporter.exportPDF(table, 'DELEGATIONS')}">
+				<h:outputText styleClass="sprite sprite-pdf" />
+			</h:commandLink>
+
+			<br />
+
+			<p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable" value="#{delegationController.items}" filteredValue="" var="item"
+				selectionMode="single" selection="#{delegationController.selected}" rowKey="#{item.id}" rows="5" paginator="true"
+				rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}" styleClass="newui-datatable fixeColumnWidth"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+				<p:ajax event="rowSelect" update="createButton editButton deleteButton datalist" />
+				<p:ajax event="rowUnselect" update="createButton editButton deleteButton datalist" />
+				<p:ajax event="rowDblselect" listener="#{delegationController.prepareEdit}" onstart="PF('statusDialog1').block()"
+					onsuccess="PF('statusDialog1').unblock()" oncomplete="PF('delegationEditDialog').show();PF('datalistTable').filter()"
+					update=":delegationEditForm" />
+
+				<p:column id="fromUserColumn" sortBy="#{item.fromUser.firstName} #{item.fromUser.lastName}"
+					filterBy="#{item.fromUser.firstName} #{item.fromUser.lastName}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['DelegationLabel_delegateur']}" title="#{bundle['DelegationTitle_delegateur']}" />
+					</f:facet>
+					<h:outputText value="#{item.fromUser.firstName} #{item.fromUser.lastName}" />
+				</p:column>
+
+				<p:column id="toUserColumn" sortBy="#{item.toUser.firstName} #{item.toUser.lastName}"
+					filterBy="#{item.toUser.firstName} #{item.toUser.lastName}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['DelegationLabel_delegee']}" title="#{bundle['DelegationTitle_delegee']}" />
+					</f:facet>
+					<h:outputText value="#{item.toUser.firstName} #{item.toUser.lastName}" />
+				</p:column>
+
+				<p:column id="beginDateColumn" sortBy="#{dateBean.formatSimpleDate(item.beginDate)}"
+					filterBy="#{dateBean.formatSimpleDate(item.beginDate)}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['DelegationLabel_date_du']}" title="#{bundle['DelegationTitle_date_du']}" />
+					</f:facet>
+					<h:outputText value="#{item.beginDate}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" locale="fr" />
+					</h:outputText>
+				</p:column>
+
+				<p:column id="endDateColumn" sortBy="#{dateBean.formatSimpleDate(item.endDate)}" filterBy="#{dateBean.formatSimpleDate(item.endDate)}"
+					filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['DelegationLabel_date_au']}" title="#{bundle['DelegationTitle_date_au']}" />
+					</f:facet>
+					<h:outputText value="#{item.endDate}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" locale="fr" />
+					</h:outputText>
+				</p:column>
+
+				<p:column filterBy="#{item.enabled}" headerText="#{bundle['DelegationLabel_valide']}" filterMatchMode="equals">
+					<f:facet name="filter">
+						<p:selectOneButton id="enabledCheck" onchange="PF('datalistTable').filter()">
+							<f:converter converterId="javax.faces.Boolean" />
+							<f:selectItem itemLabel="#{bundle['Tous']}" itemValue="" />
+							<f:selectItem itemLabel="#{bundle['Oui']}" itemValue="true" />
+							<f:selectItem itemLabel="#{bundle['Non']}" itemValue="false" />
+						</p:selectOneButton>
+					</f:facet>
+					<h:outputText value="#{item.enabled ? 'Oui': 'Non'}" />
+				</p:column>
+
+
+				<f:facet name="footer">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="createButton" styleClass="btn"
+						icon="sprite sprite-plus" value="#{bundle['Create']}" actionListener="#{delegationController.prepareCreate}"
+						oncomplete="PF('delegationCreateDialog').show();" update=":delegationCreateForm" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editButton" styleClass="btn"
+						icon="sprite sprite-edit" value="#{bundle['Edit']}" actionListener="#{delegationController.prepareEdit}"
+						rendered="#{delegationController.selected != null and delegationController.selected.id != null}"
+						oncomplete="PF('delegationEditDialog').show();" update=":delegationEditForm :delegationEditForm:display" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="deleteButton" styleClass="btn"
+						icon="sprite sprite-delete" value="#{bundle['Delete']}"
+						rendered="#{delegationController.selected != null and delegationController.selected.id != null}"
+						oncomplete="PF('confirmation').show()" />
+				</f:facet>
+
+			</p:dataTable>
+
+		</h:form>
+
+		<p:confirmDialog closeOnEscape="true" id="diagSupp" message="#{bundle['popup_confirm_delete_message']}"
+			header="#{bundle['popup_confirm_delete_header']}" widgetVar="confirmation" appendTo="@(body)">
+			<div align="right">
+				<h:form id="diagForm">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="confirm"
+						value="#{bundle['popup_confirm_delete_message_oui']}" update=":growl :delegationListForm:datalist"
+						oncomplete="PF('confirmation').hide();document.getElementById('diagForm:confirm').disabled=false;PF('datalistTable').filter();"
+						onclick="document.getElementById('diagForm:confirm').disabled=true;" actionListener="#{delegationController.delete}"
+						styleClass="ui-priority-primary" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="decline"
+						value="#{bundle['popup_confirm_delete_message_pas_maintenant']}" onclick="PF('confirmation').hide()" update=":delegationListForm"
+						styleClass="ui-priority-primary" />
+				</h:form>
+			</div>
+		</p:confirmDialog>
+	</p:panel>
+
+</ui:composition>

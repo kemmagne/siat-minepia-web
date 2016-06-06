@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:sec="http://www.springframework.org/schema/security" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="
+     http://www.springframework.org/schema/beans
+     http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+    http://www.springframework.org/schema/security
+    http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+
+	<!-- Enable method level Spring Security by annotations -->
+	<sec:global-method-security pre-post-annotations="enabled" />
+	<sec:http auto-config="true" use-expressions="true">
+		<sec:session-management session-fixation-protection="none" />
+		<sec:custom-filter ref="sessionManagementFilter" before="SESSION_MANAGEMENT_FILTER" />
+		<sec:custom-filter position="CONCURRENT_SESSION_FILTER" ref="concurrencyFilter" />
+
+		<sec:access-denied-handler error-page="/pages/unsecure/error.xhtml" />
+		<!-- Page level Spring Security : Enable Primefaces -->
+		<sec:intercept-url pattern="/javax.faces.resource/**" access="permitAll" />
+		<sec:intercept-url pattern="/css/**" access="permitAll" />
+		<sec:intercept-url pattern="/images/**" access="permitAll" />
+		<sec:intercept-url pattern="/js/**" access="permitAll" />
+		<!-- WSDSLS -->
+		<sec:intercept-url pattern="/ws/**" access="permitAll" />
+
+		<sec:intercept-url pattern="/pages/secure/**" access="isAuthenticated()" />
+
+		<!-- Page level Spring Security : Permit access to resources in /pages/unsecure/** -->
+		<sec:intercept-url pattern="/pages/unsecure/**" access="permitAll" />
+		<sec:intercept-url pattern="/pages/fo/accountSetup/**" access="permitAll" />
+
+		<!-- ADMIN_MIN AND ROOT PAGES ACCESS -->
+		<sec:intercept-url pattern="/pages/bo/admin/**" access="hasAnyRole('ROOT', 'ADMIN_MIN')" />
+
+		<!-- ROOT PAGES ACCESS -->
+		<sec:intercept-url pattern="/pages/bo/holiday/**" access="hasRole('ROOT')" />
+		<sec:intercept-url pattern="/pages/bo/hourlytype/**" access="hasRole('ROOT')" />
+		<sec:intercept-url pattern="/pages/bo/ministry/**" access="hasRole('ROOT')" />
+		<sec:intercept-url pattern="/pages/bo/workYearConfig/**" access="hasRole('ROOT')" />
+		<sec:intercept-url pattern="/pages/bo/auditEntity/**" access="hasAnyRole('ROOT','ADMIN_MIN','ADMIN_ORG')" />
+		<sec:intercept-url pattern="/pages/bo/step/**" access="hasRole('ROOT')" />
+		<sec:intercept-url pattern="/pages/bo/flow/**" access="hasRole('ROOT')" />
+
+		<!-- ADMIN_MIN PAGES ACCESS -->
+		<sec:intercept-url pattern="/pages/bo/organism/**" access="hasRole('ADMIN_MIN')" />
+
+		<!-- ADMIN_MIN AND ADMIN_ORG PAGES ACCESS -->
+		<sec:intercept-url pattern="/pages/bo/user/**" access="hasAnyRole('ADMIN_ORG', 'ADMIN_MIN')" />
+
+		<!-- ADMIN_ORG PAGES ACCESS -->
+		<sec:intercept-url pattern="/pages/bo/treatmentType/**" access="hasRole('ADMIN_ORG')" />
+		<sec:intercept-url pattern="/pages/bo/treatmentCompany/**" access="hasRole('ADMIN_ORG')" />
+		<sec:intercept-url pattern="/pages/bo/analyseType/**" access="hasRole('ADMIN_ORG')" />
+		<sec:intercept-url pattern="/pages/bo/bureauRegional/**" access="hasRole('ADMIN_ORG')" />
+		<sec:intercept-url pattern="/pages/bo/car/**" access="hasRole('ADMIN_ORG')" />
+		<sec:intercept-url pattern="/pages/bo/delegation/**" access="hasRole('ADMIN_ORG')" />
+		<sec:intercept-url pattern="/pages/bo/controllerHoliday/**" access="hasRole('ADMIN_ORG')" />
+		<sec:intercept-url pattern="/pages/bo/inspWorkWeekConfig/**" access="hasRole('ADMIN_ORG')" />
+		<sec:intercept-url pattern="/pages/bo/item/**" access="hasRole('ADMIN_ORG')" />
+		<sec:intercept-url pattern="/pages/bo/laboratory/**" access="hasRole('ADMIN_ORG')" />
+		<sec:intercept-url pattern="/pages/bo/service/**" access="hasRole('ADMIN_ORG')" />
+		<sec:intercept-url pattern="/pages/bo/servicesItem/**" access="hasRole('ADMIN_ORG')" />
+		<sec:intercept-url pattern="/pages/bo/subDepartment/**" access="hasRole('ADMIN_ORG')" />
+		<sec:intercept-url pattern="/pages/bo/inspectionWorkDayConfig/**" access="hasRole('ADMIN_ORG')" />
+		<sec:intercept-url pattern="/pages/bo/workflowDesigner/**" access="hasRole('ADMIN_ORG')" />
+		<sec:intercept-url pattern="/pages/bo/fileType/**" access="hasRole('ADMIN_ORG')" />
+		<sec:intercept-url pattern="/pages/bo/positionAuthority/**" access="hasRole('ADMIN_ORG')" />
+		<sec:intercept-url pattern="/pages/bo/gr/**" access="hasAnyRole('ADMIN_ORG','ROOT')" />
+
+		<!-- USERS WORKFLOW PAGES ACCESS -->
+		<sec:intercept-url pattern="/pages/fo/**"
+			access="hasAnyRole('SUPER', 'CONS', 'AC1', 'AC2', 'AC3', 'AC4', 'AC5', 'AC6', 'AR', 'INS', 'CONT', 'LAB', 'TREAT', 'SIGN', 'RT', 'CA')" />
+
+		<!-- Open pages if user is not anonymous -->
+		<sec:intercept-url pattern="/**" access="isAuthenticated()" />
+
+
+		<!-- Define login page for Spring Security -->
+		<sec:form-login login-page="/pages/unsecure/login.xhtml" />
+
+		<!-- Define logout properties for Spring Security -->
+		<sec:logout invalidate-session="true" delete-cookies="jsessionid" logout-success-url="/" />
+
+		<sec:session-management session-authentication-strategy-ref="sessionAuthenticationStrategy" />
+
+	</sec:http>
+
+	<!-- Set userService class as the authentication Manager for Spring Security -->
+	<sec:authentication-manager alias="authenticationManager">
+		<sec:authentication-provider user-service-ref="userDao">
+			<sec:password-encoder hash="sha" ref="encoder">
+				<sec:salt-source user-property="username" />
+			</sec:password-encoder>
+		</sec:authentication-provider>
+	</sec:authentication-manager>
+
+
+	<!-- Inject authentication Manager to our LoginBean -->
+	<beans:bean id="loginBean" name="loginBean" class="org.guce.siat.web.common.security.LoginBean" scope="prototype">
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+		<beans:property name="sessionAuthenticationStrategy" ref="sessionAuthenticationStrategy" />
+	</beans:bean>
+
+	<beans:bean class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" id="encoder">
+		<beans:constructor-arg value="256" />
+	</beans:bean>
+
+	<!-- session management filter -->
+	<beans:bean id="sessionManagementFilter" class="org.springframework.security.web.session.SessionManagementFilter">
+		<beans:constructor-arg name="securityContextRepository" ref="httpSessionSecurityContextRepository" />
+		<beans:property name="invalidSessionStrategy" ref="invalidSessionDetector" />
+	</beans:bean>
+
+	<beans:bean id="invalidSessionDetector" class="org.guce.siat.web.common.security.session.InvalidSessionDetector">
+		<beans:constructor-arg name="invalidSessionUrl" value="/pages/unsecure/login.xhtml?sessionexpired=1" />
+	</beans:bean>
+
+	<beans:bean id="httpSessionSecurityContextRepository" class="org.springframework.security.web.context.HttpSessionSecurityContextRepository" />
+
+	<!-- Concurrency Control Filter -->
+	<beans:bean id="concurrencyFilter" class="org.springframework.security.web.session.ConcurrentSessionFilter">
+		<beans:property name="sessionRegistry" ref="sessionRegistry" />
+		<beans:property name="expiredUrl" value="/pages/unsecure/login.xhtml?sessionexpired=2" />
+	</beans:bean>
+
+	<beans:bean id="sessionAuthenticationStrategy" class="org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">
+		<beans:constructor-arg name="sessionRegistry" ref="sessionRegistry" />
+		<beans:property name="maximumSessions" value="1" />
+		<beans:property name="exceptionIfMaximumExceeded" value="true" />
+	</beans:bean>
+
+	<beans:bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
+
+</beans:beans>
+

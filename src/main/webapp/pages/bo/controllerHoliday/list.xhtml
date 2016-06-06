@@ -1,0 +1,103 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<p:panel header="#{bundle['ControllerHoliday_title']}">
+		<h:form id="controllerHolidayListForm">
+
+			<h:commandLink action="#{exporter.exportPDF(table, 'INSPECTOR_HOLIDAYS')}">
+				<h:outputText styleClass="sprite sprite-pdf" />
+			</h:commandLink>
+
+			<br />
+
+			<p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable" value="#{controllerHolidayController.items}" filteredValue=""
+				var="item" selectionMode="single" selection="#{controllerHolidayController.selected}" rowKey="#{item.id}" rows="5" paginator="true"
+				rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}" styleClass="newui-datatable fixeColumnWidth"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+				<p:ajax event="rowSelect" update="createButton editButton deleteButton datalist" />
+				<p:ajax event="rowUnselect" update="createButton editButton deleteButton datalist" />
+				<p:ajax event="rowDblselect" listener="#{controllerHolidayController.prepareEdit}"
+					oncomplete="PF('controllerHolidayEditDialog').show();" update=":controllerHolidayEditForm" onstart="PF('statusDialog1').block()"
+					onsuccess="PF('statusDialog1').unblock()" />
+
+				<p:column id="ispectorHolidayName" sortBy="#{item.user.firstName} #{item.user.lastName}"
+					filterBy="#{item.user.firstName} #{item.user.lastName}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['ControllerHolidayLabel_controlleur']}" title="#{bundle['ControllerHolidayTitle_controlleur']}" />
+					</f:facet>
+					<h:outputText value="#{item.user.firstName} #{item.user.lastName}" />
+				</p:column>
+
+				<p:column id="ispectorHolidayDateBegin" sortBy="#{dateBean.formatSimpleDate(item.fromDate)}"
+					filterBy="#{dateBean.formatSimpleDate(item.fromDate)}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['ControllerHolidayLabel_date_du']}" title="#{bundle['ControllerHolidayTitle_date_du']}" />
+					</f:facet>
+					<h:outputText value="#{item.fromDate}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" locale="fr" />
+					</h:outputText>
+				</p:column>
+
+				<p:column id="ispectorHolidayDateEnd" sortBy="#{dateBean.formatSimpleDate(item.toDate)}"
+					filterBy="#{dateBean.formatSimpleDate(item.toDate)}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['ControllerHolidayLabel_date_au']}" title="#{bundle['ControllerHolidayTitle_date_au']}" />
+					</f:facet>
+					<h:outputText value="#{item.toDate}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" locale="fr" />
+					</h:outputText>
+				</p:column>
+
+				<p:column id="ispectorHolidayValide" filterBy="#{item.enabled}" headerText="#{bundle['ControllerHolidayLabel_valide']}"
+					filterMatchMode="equals">
+					<f:facet name="filter">
+						<p:selectOneButton onchange="PF('datalistTable').filter()">
+							<f:converter converterId="javax.faces.Boolean" />
+							<f:selectItem itemLabel="#{bundle['Tous']}" itemValue="" />
+							<f:selectItem itemLabel="#{bundle['Oui']}" itemValue="true" />
+							<f:selectItem itemLabel="#{bundle['Non']}" itemValue="false" />
+						</p:selectOneButton>
+					</f:facet>
+					<h:outputText value="#{item.enabled ? 'Oui': 'Non'}" />
+				</p:column>
+
+
+				<f:facet name="footer">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="createButton" styleClass="btn"
+						icon="sprite sprite-plus" value="#{bundle['Create']}" actionListener="#{controllerHolidayController.prepareCreate}"
+						oncomplete="PF('controllerHolidayCreateDialog').show();" update=":controllerHolidayCreateForm" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editButton" styleClass="btn"
+						icon="sprite sprite-edit" value="#{bundle['Edit']}" actionListener="#{controllerHolidayController.prepareEdit}"
+						rendered="#{controllerHolidayController.selected != null and controllerHolidayController.selected.id != null}"
+						oncomplete="PF('controllerHolidayEditDialog').show();" update=":controllerHolidayEditForm" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="deleteButton" styleClass="btn"
+						icon="sprite sprite-delete" value="#{bundle['Delete']}"
+						rendered="#{controllerHolidayController.selected != null and controllerHolidayController.selected.id != null}"
+						oncomplete="PF('confirmation').show()" />
+				</f:facet>
+
+			</p:dataTable>
+
+		</h:form>
+		<p:confirmDialog closeOnEscape="true" id="diagSupp" message="#{bundle['popup_confirm_delete_message']}"
+			header="#{bundle['popup_confirm_delete_header']}" widgetVar="confirmation" appendTo="@(body)">
+			<div align="right">
+				<h:form id="diagForm">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="confirm"
+						value="#{bundle['popup_confirm_delete_message_oui']}" update=":growl :controllerHolidayListForm:datalist"
+						oncomplete="PF('confirmation').hide();document.getElementById('diagForm:confirm').disabled=false;PF('datalistTable').filter();"
+						onclick="document.getElementById('diagForm:confirm').disabled=true;" actionListener="#{controllerHolidayController.delete}"
+						styleClass="ui-priority-primary" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="decline"
+						value="#{bundle['popup_confirm_delete_message_pas_maintenant']}" onclick="PF('confirmation').hide()"
+						update=":controllerHolidayListForm" styleClass="ui-priority-primary" />
+				</h:form>
+			</div>
+		</p:confirmDialog>
+	</p:panel>
+
+</ui:composition>

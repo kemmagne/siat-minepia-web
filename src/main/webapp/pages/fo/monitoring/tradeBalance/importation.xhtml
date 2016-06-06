@@ -1,0 +1,88 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<h:outputText value="#{bundle['balance_unit_q']};#{bundle['balance_unit_v']}"></h:outputText>
+	<br> </br>
+	<p:dataTable id="groupingTableImportation" styleClass="groupingTableStyle" var="trade" value="#{tradeBalanceController.donnesImport}">
+		<f:facet name="header">
+			<h:outputText
+				value="#{bundle['table_balance_import']}(#{tradeBalanceController.typeTrade eq '01'?bundle['Trade_type_01']:bundle['Trade_type_02']})"></h:outputText>
+		</f:facet>
+
+		<p:columnGroup type="header">
+			<p:row>
+				<p:column rowspan="1" headerText="" />
+				<p:column colspan="1" headerText="#{bundle['balance_periode']}" />
+				<c:forEach var="column" items="#{tradeBalanceController.year}">
+					<p:column colspan="2" headerText="#{column}">
+
+						<f:facet name="header">
+							<h:outputText value="#{column}" />
+						</f:facet>
+					</p:column>
+				</c:forEach>
+
+				<p:column colspan="1" headerText="Part" />
+
+			</p:row>
+
+			<p:row>
+				<p:column colspan="1" headerText="#{bundle['balance_product']}" />
+				<p:column colspan="1" headerText="#{bundle['balance_label']}" />
+				<c:forEach var="column" items="#{tradeBalanceController.details}">
+					<p:column var="column" headerText="#{column}">
+						<f:facet name="header">
+							<h:outputText value="#{column}" />
+						</f:facet>
+					</p:column>
+				</c:forEach>
+
+				<p:column colspan="1" headerText="V" />
+			</p:row>
+
+		</p:columnGroup>
+
+		<p:column>
+			<h:outputText value="#{trade.balanceConfig.code}" />
+		</p:column>
+
+		<p:column>
+			<h:outputText value="#{trade.balanceConfig.label}" />
+		</p:column>
+
+		<p:columns columnIndexVar="colIdx" var="c" value="#{tradeBalanceController.details}">
+			<h:outputText value="#{trade.data[colIdx]}" />
+		</p:columns>
+
+		<p:column>
+			<h:outputText value="#{trade.part}" />
+		</p:column>
+
+		<p:columnGroup type="footer">
+
+			<p:row styleClass="filterFooter">
+				<p:column colspan="2" footerText="#{bundle['balance_total_import']}" />
+
+				<c:forEach var="column" items="#{tradeBalanceController.totalImportation}">
+					<p:column var="column" colspan="1" footerText="#{column}">
+						<f:facet name="footer">
+							<h:outputText value="#{column}" />
+						</f:facet>
+					</p:column>
+				</c:forEach>
+
+				<p:column colspan="1" footerText="100%">
+					<f:facet name="footer">
+						<h:outputText value="100%" />
+					</f:facet>
+				</p:column>
+
+			</p:row>
+
+		</p:columnGroup>
+
+	</p:dataTable>
+
+
+</ui:composition>

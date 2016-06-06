@@ -1,0 +1,126 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:panel header="#{bundle['workflow_title']}" style="width:200%;height:3000px;">
+		<h:form id="workflowForm" prependId="false">
+
+			<h:head>
+				<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+				<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+				<link type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css" rel="stylesheet" />
+				<link type="text/css" rel="stylesheet" href="#{facesContext.externalContext.request.contextPath}/jsPlumb/css/demo.css" />
+			</h:head>
+
+			<h:body>
+				<div id="ext-box" class="ext-box">
+
+					<div class="int-box demo statemachine-demo" id="statemachine-demo">
+						<h2>#{bundle['workflow_role_root']}</h2>
+						<ui:repeat var="step" value="#{workflowDesignerController.steps}" varStatus="status">
+							<h:panelGroup rendered="#{step.authority.id eq 1}">
+								<div class="w" id="opened#{step.id}">
+									#{step.id}-#{facesContext.viewRoot.locale eq 'en' ? step.labelEn : step.labelFr }
+									<p:graphicImage value="/images/icons/icon-#{step.authority.role}.png" width="20" height="20" />
+								</div>
+							</h:panelGroup>
+						</ui:repeat>
+					</div>
+
+					<div class="int-box demo statemachine-demo" id="statemachine-demo">
+						<h2>#{bundle['workflow_role_ar']}</h2>
+						<ui:repeat var="step" value="#{workflowDesignerController.steps}" varStatus="status">
+							<h:panelGroup rendered="#{step.authority.id eq 4}">
+								<div class="w" id="opened#{step.id}">
+									#{step.id}-#{facesContext.viewRoot.locale eq 'en' ? step.labelEn : step.labelFr }
+									<p:graphicImage value="/images/icons/icon-#{step.authority.role}.png" width="20" height="20" />
+								</div>
+							</h:panelGroup>
+						</ui:repeat>
+					</div>
+
+					<div class="int-box demo statemachine-demo" id="statemachine-demo">
+						<h2>#{bundle['workflow_role_rt']}</h2>
+						<ui:repeat var="step" value="#{workflowDesignerController.steps}" varStatus="status">
+							<h:panelGroup rendered="#{step.authority.id eq 5}">
+								<div class="w" id="opened#{step.id}">
+									#{step.id}-#{facesContext.viewRoot.locale eq 'en' ? step.labelEn : step.labelFr }
+									<p:graphicImage value="/images/icons/icon-#{step.authority.role}.png" width="20" height="20" />
+								</div>
+							</h:panelGroup>
+						</ui:repeat>
+					</div>
+
+					<div class="int-box demo statemachine-demo" id="statemachine-demo">
+						<h2>#{bundle['workflow_role_insp']}</h2>
+						<ui:repeat var="step" value="#{workflowDesignerController.steps}" varStatus="status">
+							<h:panelGroup rendered="#{step.authority.id eq 6}">
+								<div class="w" id="opened#{step.id}">
+									#{step.id}-#{facesContext.viewRoot.locale eq 'en' ? step.labelEn : step.labelFr }
+									<p:graphicImage value="/images/icons/icon-#{step.authority.role}.png" width="20" height="20" />
+								</div>
+							</h:panelGroup>
+						</ui:repeat>
+					</div>
+
+					<div class="int-box demo statemachine-demo" id="statemachine-demo">
+						<h2>#{bundle['workflow_role_lab']}</h2>
+						<ui:repeat var="step" value="#{workflowDesignerController.steps}" varStatus="status">
+							<h:panelGroup rendered="#{step.authority.id eq 7}">
+								<div class="w" id="opened#{step.id}">
+									#{step.id}-#{facesContext.viewRoot.locale eq 'en' ? step.labelEn : step.labelFr }
+									<p:graphicImage value="/images/icons/icon-#{step.authority.role}.png" width="20" height="20" />
+								</div>
+							</h:panelGroup>
+						</ui:repeat>
+					</div>
+
+					<div class="int-box demo statemachine-demo" id="statemachine-demo">
+						<h2>#{bundle['workflow_role_imp']}</h2>
+						<ui:repeat var="step" value="#{workflowDesignerController.steps}" varStatus="status">
+							<h:panelGroup rendered="#{step.authority.id eq 8}">
+								<div class="w" id="opened#{step.id}">
+									#{step.id}-#{facesContext.viewRoot.locale eq 'en' ? step.labelEn : step.labelFr }
+									<p:graphicImage value="/images/icons/icon-#{step.authority.role}.png" width="20" height="20" />
+								</div>
+							</h:panelGroup>
+						</ui:repeat>
+					</div>
+
+					<div class="int-box demo statemachine-demo" id="statemachine-demo">
+						<h2>#{bundle['workflow_role_douane']}</h2>
+						<ui:repeat var="step" value="#{workflowDesignerController.steps}" varStatus="status">
+							<h:panelGroup rendered="#{step.authority.id eq 9}">
+								<div class="w" id="opened#{step.id}">
+									#{step.id}-#{facesContext.viewRoot.locale eq 'en' ? step.labelEn : step.labelFr }
+									<p:graphicImage value="/images/icons/icon-#{step.authority.role}.png" width="20" height="20" />
+								</div>
+							</h:panelGroup>
+						</ui:repeat>
+					</div>
+
+				</div>
+
+				<h:inputHidden id="verticesHiddenContainer" value="#{workflowDesignerController.stepsAsJSON}" />
+
+				<p:remoteCommand name="onStepDblclick" actionListener="#{workflowDesignerController.onStepDblclick}" process="@this"
+					oncomplete="PF('stepDialog').show();" onerror="console.log('****** onStepDblclick Error ******');"
+					update=":stepForm :stepDlg :workflowGrowl" />
+
+				<p:remoteCommand name="onFlowDblclick" actionListener="#{workflowDesignerController.onFlowDblclick}" process="@this"
+					oncomplete="handleSubmitForFlowDblClick(xhr,status,args,flowDlg);" onerror="console.log('****** onFlowDblclick Error ******');"
+					update=":flowForm :flowDlg :workflowGrowl" />
+
+				<script src="#{facesContext.externalContext.request.contextPath}/jsPlumb/lib/jquery-1.9.0-min.js"></script>
+				<script src="#{facesContext.externalContext.request.contextPath}/jsPlumb/lib/jquery-ui-1.9.2.min.js"></script>
+				<script src="#{facesContext.externalContext.request.contextPath}/jsPlumb/lib/jquery.ui.touch-punch-0.2.2.min.js"></script>
+				<script src="#{facesContext.externalContext.request.contextPath}/jsPlumb/lib/jquery.jsPlumb-1.7.2-min.js"></script>
+				<script src="#{facesContext.externalContext.request.contextPath}/jsPlumb/lib/demo.js"></script>
+				<script src="#{facesContext.externalContext.request.contextPath}/jsPlumb/lib/demo-list.js"></script>
+			</h:body>
+
+		</h:form>
+	</p:panel>
+</ui:composition>
+</html>

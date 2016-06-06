@@ -1,0 +1,50 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<p:dialog closeOnEscape="true" id="recommandationEditDlg" widgetVar="recommandationEditDialog" modal="true" resizable="false"
+		appendTo="@(body)" header="#{bundle['EditRecommandationTitle']}" width="900px">
+
+		<h:form id="recommandationEditForm">
+			<h:panelGroup id="displayEditRec">
+
+				<p:panelGrid columns="2">
+
+
+					<p:outputLabel value="#{bundle['EditRecommandationLabel_value']}" for="recommandation_value" />
+					<h:panelGroup>
+						<p:inputTextarea id="recommandation_value" value="#{fileItemCctDetailController.selectedRecommandation.value}"
+							title="#{bundle['EditRecommandationTitle_value']}" required="true"
+							requiredMessage="#{bundle['EditRecommandationRequiredMessage_value']}" maxlength="255" />
+						<p:message for="recommandation_value" />
+					</h:panelGroup>
+
+				</p:panelGrid>
+				<h:panelGroup styleClass="panel-bloc">
+					<p:outputLabel value="#{bundle['CreateRecommandationLabel_recommandationAuthorities']}" for="recommandation_authorizedAuthority" />
+					<h:panelGroup styleClass="panel-bloc-title">
+						<p:pickList required="true" id="recommandation_authorizedAuthority" value="#{fileItemCctDetailController.authoritiesList}"
+							var="authority" itemLabel="#{authority.role}" itemValue="#{authority}" converter="#{authorityConverter}" showSourceControls="false"
+							showTargetControls="false" showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains">
+							<f:facet name="sourceCaption">#{bundle['CreateRecommandationLabel_recommandationAuthorities_disponibles']}</f:facet>
+							<f:facet name="targetCaption">#{bundle['CreateRecommandationLabel_recommandationAuthorities_affectees']} </f:facet>
+						</p:pickList>
+						<p:message for="recommandation_authorizedAuthority" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<br />
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  actionListener="#{fileItemCctDetailController.editRecommandation}" value="#{bundle['Edit']}"
+						styleClass="ui-priority-primary" update="displayEditRec, :listRecommandationForm , :growl"
+						oncomplete="handleSubmit(xhr,status,args,recommandationEditDlg,'datalistTableRecommandation');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('recommandationEditDialog').hide();"
+						immediate="true" />
+				</div>
+
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>

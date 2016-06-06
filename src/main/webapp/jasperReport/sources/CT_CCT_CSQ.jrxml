@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="file" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="28078ea8-15af-47d5-9f91-aa95db5f187e">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="279"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="c784432f-19b9-4c23-9bb1-7acd2901288a">
+		<field name="code" class="java.lang.String"/>
+		<field name="desc" class="java.lang.String"/>
+		<field name="quantity" class="java.lang.Double"/>
+		<variable name="SUM" class="java.lang.Double" calculation="Sum">
+			<variableExpression><![CDATA[$F{quantity}]]></variableExpression>
+			<initialValueExpression><![CDATA[0]]></initialValueExpression>
+		</variable>
+	</subDataset>
+	<field name="fileItemList" class="java.util.List"/>
+	<field name="decisionDate" class="java.util.Date"/>
+	<field name="decisionPlace" class="java.lang.String"/>
+	<field name="recipientName" class="java.lang.String"/>
+	<field name="billOfLadingNumber" class="java.lang.String"/>
+	<field name="recipientAddress1" class="java.lang.String"/>
+	<field name="recipientAddress2" class="java.lang.String"/>
+	<field name="recipientCountry" class="java.lang.String"/>
+	<field name="signatoryName" class="java.lang.String"/>
+	<field name="ship" class="java.lang.String"/>
+	<field name="countryOfProvenance" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="134" splitType="Stretch">
+			<elementGroup>
+				<staticText>
+					<reportElement uuid="64c20376-3232-4775-93e4-dbe592c209eb" x="217" y="64" width="120" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6"/>
+					</textElement>
+					<text><![CDATA[POSTE DE SANTÉ AUX FRONTIÈRES DU PORT DE DOUALA]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="56667fa5-dcc4-4b2e-8b07-a96aac1696a4" x="217" y="20" width="120" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="3005100a-2a68-46bd-9b18-4327c13e9557" x="217" y="28" width="120" height="10"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6"/>
+					</textElement>
+					<text><![CDATA[MINISTÈRE DE LA SANTÉ PUBLIQUE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="2a9cc343-4f27-401a-8f6d-22e423dc4fd8" x="217" y="56" width="120" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="2f8ca3fe-536c-4d2f-8210-cc46e8006012" x="217" y="46" width="120" height="10"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6"/>
+					</textElement>
+					<text><![CDATA[DÉLÉGATION RÉGIONALE DU LITTORAL]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="03eef9ba-5a94-4e39-921f-4678cd226b65" x="217" y="38" width="120" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="25220a4d-2c33-4702-8ee9-c7d841d6f2ef" x="217" y="10" width="120" height="10"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6"/>
+					</textElement>
+					<text><![CDATA[ Paix-Travail-Patrie]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="898b970c-05ed-4951-b8ce-0cdd0de02faf" x="217" y="0" width="120" height="10"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font  size="6"/>
+					</textElement>
+					<text><![CDATA[RÉPUBLIQUE DU CAMEROUN
+]]></text>
+				</staticText>
+			</elementGroup>
+			<elementGroup/>
+			<staticText>
+				<reportElement uuid="69aaa6e1-159a-41fc-b5f9-3ab414af9195" x="124" y="104" width="300" height="30"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Certificat de salubrité / qualité]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="144" splitType="Stretch">
+			<textField>
+				<reportElement uuid="976dc2e4-14f5-4937-8a0d-5fa23da264c8" x="10" y="10" width="535" height="30"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Je soussigné "+($F{signatoryName}!= null && $F{signatoryName}.trim().length()>0? $F{signatoryName} : "-")+" chef de poste de santé aux frontières du Port de Douala, certifie avoir contrôlé la qualité sanitaire de la marchandise ci-dessous décrite:"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="2631a369-7ce3-490c-89bd-36c3d03abe32" x="10" y="60" width="205" height="12"/>
+				<textElement markup="none">
+					<font  size="9"/>
+				</textElement>
+				<text><![CDATA[Nature]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c9b8f533-5128-4310-aa24-e3f2d65a6343" x="10" y="72" width="205" height="12"/>
+				<textElement markup="none">
+					<font  size="9"/>
+				</textElement>
+				<text><![CDATA[Quantité]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="eade97b1-d404-40ec-ab00-a728a6f765d4" x="10" y="84" width="205" height="12"/>
+				<textElement markup="none">
+					<font  size="9"/>
+				</textElement>
+				<text><![CDATA[Nom et adresse du destinataire]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a7ff2ce5-bf89-4a12-9aa3-1df1a9f1b894" x="10" y="96" width="205" height="12"/>
+				<textElement markup="none">
+					<font  size="9"/>
+				</textElement>
+				<text><![CDATA[Pays de provenance]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="23fa18f2-fc19-43b7-b29c-20e08e0a5ec9" x="10" y="108" width="205" height="12"/>
+				<textElement markup="none">
+					<font  size="9"/>
+				</textElement>
+				<text><![CDATA[Numéro et type de conteneur]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d9d55a73-8756-476f-b38e-3cdfe6fd8121" x="10" y="120" width="205" height="12"/>
+				<textElement markup="none">
+					<font  size="9"/>
+				</textElement>
+				<text><![CDATA[Numéro de connaissement]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2c76c74f-dd58-4491-bd46-303c3bcbde0a" x="10" y="132" width="205" height="12"/>
+				<textElement markup="none">
+					<font  size="9"/>
+				</textElement>
+				<text><![CDATA[Navire transporteur]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="bd0d6cf2-856b-4fb9-899d-d424b1ca05f3" x="215" y="120" width="330" height="12"/>
+				<textElement>
+					<font  size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{billOfLadingNumber}!= null && $F{billOfLadingNumber}.trim().length()>0? $F{billOfLadingNumber} : "-")]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="f6905a59-a9fe-4ca6-9d86-b51c6c09582a" x="215" y="108" width="330" height="12"/>
+				<textElement>
+					<font  size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{fileItemList}!= null && $F{fileItemList}.size()>0 && $F{fileItemList}.get(0).getContainerNumber() != null  && $F{fileItemList}.get(0).getContainerNumber().trim().length()>0 ? $F{fileItemList}.get(0).getContainerNumber() : "-")+" ; "+($F{fileItemList}!= null && $F{fileItemList}.size()>0 && $F{fileItemList}.get(0).getContainerType() != null  && $F{fileItemList}.get(0).getContainerType().trim().length()>0 ? $F{fileItemList}.get(0).getContainerType() : "-")]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="4f84dd4d-564b-4d12-99ee-b8784daff76f" x="215" y="96" width="330" height="12"/>
+				<textElement>
+					<font  size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{countryOfProvenance}!= null && $F{countryOfProvenance}.trim().length()>0? $F{countryOfProvenance} : "-")]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="ee33f780-d282-4e2b-8994-07f5de77f219" x="215" y="132" width="330" height="12"/>
+				<textElement>
+					<font  size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{ship}!= null && $F{ship}.trim().length()>0? $F{ship} : "-")]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="101d234d-8e60-45bb-9943-123c986d4e75" x="215" y="60" width="330" height="12"/>
+				<textElement>
+					<font  size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{fileItemList}!= null && $F{fileItemList}.size()>0 && $F{fileItemList}.get(0).getNature() != null  && $F{fileItemList}.get(0).getNature().trim().length()>0 ? $F{fileItemList}.get(0).getNature() : "-")]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="549dc86a-a577-4d03-bf77-b3d5050630aa" x="215" y="72" width="330" height="12"/>
+				<textElement>
+					<font  size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{fileItemList}!= null && $F{fileItemList}.size()>0 && $F{fileItemList}.get(0).getQuantity() != null  && $F{fileItemList}.get(0).getQuantity().toString().trim().length()>0 ? $F{fileItemList}.get(0).getQuantity() : "-")]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="61f9e533-c78b-4b97-a358-8c2fdd0cb5b4" x="215" y="84" width="330" height="12"/>
+				<textElement>
+					<font  size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{recipientName}!= null ? $F{recipientName}: "-") + ($F{recipientAddress1}!= null ? $F{recipientAddress1}: "-") + ($F{recipientAddress2}!= null ? $F{recipientAddress2}: "-") +  ($F{recipientCountry}!= null ? $F{recipientCountry}: "-")]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="127" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="83832f53-ce46-4597-bf1a-41f012d56aa6" x="10" y="10" width="535" height="40"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Il ressort de ce contrôle que les documents présentés au Poste de Santé aux Frontières du Port de Douala sont valides at que lesdites marchandises n'ont subit aucune dégradation durant leur transpoprt; Par conséquent, elle ne présente aucun danger pour la santé des consommateurs.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="caa5e3ad-a211-424c-b29f-1eea14a92539" x="10" y="60" width="535" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[En foi de quoi, le présent certificat de contrôle sanitaire est délivré pour valoir de que de droit.]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="ae3cc1cf-cf2d-4ee7-ae96-7fc4a596018b" x="345" y="82" width="200" height="15"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{decisionPlace}!= null ? $F{decisionPlace}: "-")+", le "+new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{decisionDate})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="9ab65cd6-311c-4fd7-9be6-89f5d349f8bd" x="10" y="82" width="134" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Le contrôleur / vérificateur]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="93dd2f2a-def3-403a-9e2e-9daf066d303b" x="345" y="97" width="93" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font  size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Le chef de poste]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

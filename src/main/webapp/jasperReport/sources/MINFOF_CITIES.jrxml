@@ -1,0 +1,775 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="file" language="groovy" pageWidth="595" pageHeight="730" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="28078ea8-15af-47d5-9f91-aa95db5f187e">
+	<property name="ireport.zoom" value="1.5000000000000002"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="336"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#FFBFBF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#FFEFEF"/>
+		</conditionalStyle>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#EFF7FF"/>
+		</conditionalStyle>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#EFF7FF"/>
+		</conditionalStyle>
+	</style>
+	<style name="table 3">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="748e1714-27b9-4546-ac35-3452f20459f2">
+		<field name="quantity" class="java.lang.String"/>
+		<field name="commonName" class="java.lang.String"/>
+		<field name="scientificName" class="java.lang.String"/>
+		<field name="brand" class="java.lang.String"/>
+		<field name="identificationNumber" class="java.lang.String"/>
+		<field name="age" class="java.lang.String"/>
+		<field name="sex" class="java.lang.String"/>
+		<field name="source" class="java.lang.String"/>
+		<field name="annex" class="java.lang.String"/>
+		<field name="reportCountry" class="java.lang.String"/>
+		<field name="originCountry" class="java.lang.String"/>
+		<field name="licenceNumber" class="java.lang.String"/>
+		<field name="date" class="java.util.Date"/>
+		<field name="quota" class="java.lang.String"/>
+		<field name="totalExports" class="java.lang.String"/>
+		<field name="samplingCountries" class="java.lang.String"/>
+		<field name="nativeCountry" class="java.lang.String"/>
+		<field name="livestockCountries" class="java.lang.String"/>
+		<field name="reproductionCountries" class="java.lang.String"/>
+	</subDataset>
+	<field name="decisionNumber" class="java.lang.String"/>
+	<field name="decisionDate" class="java.util.Date"/>
+	<field name="operationType" class="java.lang.String"/>
+	<field name="receiverName" class="java.lang.String"/>
+	<field name="receiverAdress" class="java.lang.String"/>
+	<field name="receiverCountry" class="java.lang.String"/>
+	<field name="holderName" class="java.lang.String"/>
+	<field name="holderAdress" class="java.lang.String"/>
+	<field name="holderCountry" class="java.lang.String"/>
+	<field name="specialConditions" class="java.lang.String"/>
+	<field name="specialConditionsStampNumber" class="java.lang.String"/>
+	<field name="organismName" class="java.lang.String"/>
+	<field name="organismAdress" class="java.lang.String"/>
+	<field name="organismCountry" class="java.lang.String"/>
+	<field name="licensePlace" class="java.lang.String"/>
+	<field name="licenseDate" class="java.util.Date"/>
+	<field name="exportApproach" class="java.lang.String"/>
+	<field name="lading" class="java.lang.String"/>
+	<field name="exportationPort" class="java.lang.String"/>
+	<field name="exportationDate" class="java.util.Date"/>
+	<field name="fileItemList" class="java.util.List"/>
+	<title>
+		<band height="196" splitType="Stretch">
+			<elementGroup/>
+			<elementGroup/>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="593820e8-ecfb-4339-9bff-3fdb5154ee85" x="11" y="184" width="191" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font  size="8" isBold="false" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["N°"+($F{decisionNumber}!= null  && $F{decisionNumber}.trim().length()>0 ?$F{decisionNumber} : "-")+"/P/MINFOF/SG/DF/SDAFF/SN"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="b8203b2c-ce14-486d-a653-5c023f304933" x="10" y="28" width="150" height="10"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[MINISTÈRE DES FORETS ET DE LA FAUNE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ea947dec-f404-4786-9d69-8b5ac3e7cc64" x="10" y="10" width="150" height="10"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[PAIX-TRAVAIL-PATRIE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3c2140ef-d67e-48da-8245-a0f85eacf013" x="10" y="46" width="150" height="10"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[DIRECTION DES FORETS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8f626d59-3a6a-473b-bc87-d01f58afa6de" x="10" y="94" width="150" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[*******]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2c0aa557-a63a-421c-b259-b0a3dba996bc" x="10" y="20" width="150" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[*******]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1c84f1ab-f83e-4653-a351-877a17c0ce09" x="10" y="0" width="150" height="10"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6" isBold="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[RÉPUBLIQUE DU CAMEROUN
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3d74b989-42be-4394-849c-b42fa38dc1f8" x="10" y="38" width="150" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[*******]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5118ee9a-a3ac-4fb4-99da-e16c17ac0042" x="10" y="56" width="150" height="38"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[CONVENTION SUR LE COMMERCE INTERNATIONAL DES ESPECES DE FAUNES ET DE FLAURE SAUVAGES MENACEES D'EXTINCTION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6527f754-8e68-4277-bf28-d84a1db00835" x="395" y="20" width="150" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[*******]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f563897a-cf74-49e0-8c6b-e92f96aa408d" x="395" y="28" width="150" height="10"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[MINISTRY OF FOREST AND WILDLIFE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2f0c3ce3-cea7-4550-b4b2-171e32e622a1" x="395" y="56" width="150" height="38"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[CONVENTION ON INTERNATIONAL TRADE IN ENDANGERED SPECIES OF FAUNAS FLAURE ENDANGERED WILD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="78547c2f-f1ec-45db-b433-dee36c864ef4" x="395" y="94" width="150" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[*******]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f8362dd9-dd86-478b-8367-c03f0538f95f" x="395" y="38" width="150" height="8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[*******]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ed53eb1e-f591-495b-acff-00ed8c0b8460" x="395" y="46" width="150" height="10"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[DIRECTION OF FORESTS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ebac2a6e-3f9c-43a7-a08c-f9b1415b8352" x="395" y="0" width="150" height="10"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6" isBold="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[REPUBLIC OF CAMEROON]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a528087f-7c66-491b-bf18-77a2c780a329" x="395" y="10" width="150" height="10"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font  size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[PEACE - WORK - FATHERLAND]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement uuid="6b29c7eb-f16b-4ed0-bc61-56d3b9a2305b" x="208" y="88" width="20" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="0acfa925-ea2a-4d31-8c2a-40a532b42549" x="208" y="128" width="20" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="9efb5878-280a-469b-8aef-7f5dca8a53cf" x="208" y="108" width="20" height="20"/>
+			</rectangle>
+			<textField>
+				<reportElement uuid="777a3c7b-589e-43fe-ae70-063382363377" x="208" y="88" width="20" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[($F{operationType}!= null  && $F{operationType}.trim().length()>0 ?$F{operationType} : "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="b411658c-5046-41b1-82d4-8564f07d9ed0" x="238" y="88" width="100" height="20"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[EXPORTATION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b7019f7d-8e46-44d0-bdd1-5fdd03f9f460" x="238" y="108" width="100" height="20"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REEXPORTATION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e1e3044-debd-4202-bc1c-f218437e0411" x="238" y="128" width="100" height="20"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[IMPORTATION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8fb76fd1-d4c8-4157-b4b1-ad2935693b23" x="208" y="108" width="20" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5c04387a-bd5d-4fe2-96cf-e8c21df11cdd" x="208" y="128" width="20" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement uuid="3b17f798-a212-41a6-82bd-c8eb0ccfe386" x="352" y="164" width="192" height="32"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="cec1eaa3-90b4-420c-bf4a-a31f3b8dd3cd" x="352" y="144" width="192" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="84315fdd-3558-4e04-9a52-dd8ea67dbd52" x="352" y="144" width="192" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ORIGINAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="17c2d4a7-c60e-4072-932d-00372b5c3db5" x="362" y="176" width="79" height="8"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[NON VALABLE APRES LE :]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="a8317578-78c6-4868-9114-1aed61cdf740" x="441" y="172" width="98" height="24"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($F{decisionDate}!= null? new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{decisionDate}) : "-")]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="158" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="0aa2c620-0a4d-45a1-bbe2-3e2144431d54" x="277" y="44" width="267" height="34"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="db1f7b0c-7ee0-4dd9-b178-b5b29b8114ac" x="11" y="44" width="266" height="34"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="58785bee-3d87-40db-8e7b-7266d33bd551" x="11" y="10" width="267" height="34"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="1edc5e37-4a56-4bf7-a46d-d680ec486c4b" x="277" y="10" width="267" height="34"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="b7cbdaaf-3d92-433b-94d4-b4437c2683c0" x="282" y="27" width="101" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="6" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[HOLDER (Name, Address, Country)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2d78334e-c482-4667-abd4-f4e127091ec4" x="282" y="15" width="101" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[TITULAIRE (Nom, Adresse, Pays)]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="ea939443-a6e8-4197-be47-876ffd16b722" x="383" y="15" width="156" height="24"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{holderName} != null  && $F{holderName}.trim().length()>0 ? $F{holderName} : "-")+"/"+"\n"+($F{holderAdress} != null  && $F{holderAdress}.trim().length()>0 ? $F{holderAdress} : "-")+"/"+"\n"+($F{holderCountry} != null  && $F{holderCountry}.trim().length()>0 ? $F{holderCountry} : "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="736f5555-0b25-45b7-828d-522c674717c3" x="16" y="27" width="110" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="6" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[RECEIVER (Name, Address, Country)]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="7ae11033-3d20-4a0b-8a01-ee9e529b0a72" x="416" y="49" width="123" height="24"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{organismName} != null  && $F{organismName}.trim().length()>0 ? $F{organismName} : "-")+"/"+"\n"+($F{organismAdress} != null  && $F{organismAdress}.trim().length()>0 ? $F{organismAdress} : "-")+"/"+"\n"+($F{organismCountry} != null  && $F{organismCountry}.trim().length()>0 ? $F{organismCountry}: "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="4b94cad5-aeb8-4b0a-96d9-68f0cf4fdb19" x="16" y="15" width="110" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[DESTINATAIRE (Nom, Adresse, Pays)]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="68d3da72-50ea-40bc-886d-624a1d22befa" x="126" y="15" width="147" height="24"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{receiverName} != null  && $F{receiverName}.trim().length()>0 ?$F{receiverName} : "-")+"/"+"\n"+($F{receiverAdress} != null  && $F{receiverAdress}.trim().length()>0 ? $F{receiverAdress} : "-")+"/"+"\n"+($F{receiverCountry} != null  && $F{receiverCountry}.trim().length()>0 ? $F{receiverCountry} : "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="6b5af496-521b-438d-840c-2106974d8bed" x="282" y="49" width="134" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[ORGANE DE GESTION (Nom, Adresse, Pays)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9f98440b-440c-4a3f-b113-974adce9f56e" x="282" y="61" width="134" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="6" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[(Management body) (Name, Address, Country)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b2dcdb89-2c8e-4c5c-9677-1d6ef600d699" x="16" y="61" width="100" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="6" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[(Special conditions)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d179d6f8-de91-4c52-b930-4255db1e0b10" x="16" y="49" width="100" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[CONDITIONS PARTICULIERES]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="d244bb91-f151-4d0d-87bf-ac50ed975cb2" x="116" y="49" width="157" height="24"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{specialConditions} != null  && $F{specialConditions}.trim().length()>0 ? $F{specialConditions} : "-")+"/"+"\n"+($F{specialConditionsStampNumber} != null  && $F{specialConditionsStampNumber}.trim().length()>0 ? $F{specialConditionsStampNumber} : "-")]]></textFieldExpression>
+			</textField>
+			<elementGroup/>
+			<componentElement>
+				<reportElement uuid="802977da-327e-469e-b2f9-0798857b097f" key="table 4" style="table 4" mode="Opaque" x="11" y="78" width="533" height="80"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Table Dataset 1" uuid="83894f80-1267-4f1f-a34a-f1f4f0c96851">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{fileItemList})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="71" uuid="20a90abc-a11f-43cc-927c-df2419bb3009">
+						<jr:columnHeader style="table 4_CH" height="30" rowSpan="1">
+							<elementGroup>
+								<elementGroup>
+									<staticText>
+										<reportElement uuid="89326868-3797-45ed-a37d-80a747960e7d" x="0" y="0" width="71" height="30"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font size="6" isBold="true"/>
+										</textElement>
+										<text><![CDATA[Common name / Scientific name]]></text>
+									</staticText>
+								</elementGroup>
+							</elementGroup>
+						</jr:columnHeader>
+						<jr:detailCell style="table 4_TD" height="49" rowSpan="1">
+							<textField>
+								<reportElement uuid="5f9a2ef8-161c-4901-bbc8-b420a3fdfc36" x="0" y="0" width="71" height="49"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6"/>
+								</textElement>
+								<textFieldExpression><![CDATA[($F{commonName} != null  && $F{commonName}.trim().length()>0 ? $F{commonName} : "-")+"/"+"\n"+($F{scientificName} != null  && $F{scientificName}.trim().length()>0 ? $F{scientificName} : "-")]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="82" uuid="b7160fbb-b005-4868-8f6a-96ea4e9bedda">
+						<jr:columnHeader style="table 4_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="20a1ed19-4585-4402-b09c-3fdcc5e958d0" x="0" y="0" width="82" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Brand / Identification Number /  Age / Sex]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 4_TD" height="49" rowSpan="1">
+							<textField>
+								<reportElement uuid="8ed79fbd-7ee0-431a-96ed-41989b26b6c4" x="0" y="0" width="82" height="49"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6"/>
+								</textElement>
+								<textFieldExpression><![CDATA[($F{brand} != null  && $F{brand}.trim().length()>0 ?$F{brand} : "-")+"/"+"\n"+($F{identificationNumber} != null  && $F{identificationNumber}.trim().length()>0 ? $F{identificationNumber} : "-")+"/"+"\n"+($F{age} != null  && $F{age}.trim().length()>0 ? $F{age} : "-")+"/"+"\n"+($F{sex} != null  && $F{sex}.trim().length()>0 ? $F{sex} : "-")]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="73" uuid="3206b265-46a1-413b-978c-234e231ce6d3">
+						<jr:columnHeader style="table 4_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="20472a31-325a-4a0e-ba7c-d9f50d363a1e" x="0" y="0" width="73" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Origin country / Licence number / Date]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 4_TD" height="49" rowSpan="1">
+							<textField>
+								<reportElement uuid="9d949bcb-0320-4be1-97c5-56e20e462155" x="0" y="0" width="73" height="49"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6"/>
+								</textElement>
+								<textFieldExpression><![CDATA[($F{originCountry} != null  && $F{originCountry}.trim().length()>0 ? $F{originCountry} : "-")+"/"+"\n"+($F{licenceNumber} != null  && $F{licenceNumber}.trim().length()>0 ? $F{licenceNumber} : "-")+"/"+"\n"]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="71" uuid="a6147ebc-e964-43b3-b823-110fcc609f72">
+						<jr:columnHeader style="table 4_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="a0d1fa1e-e4b5-4ac0-989f-db7e30ac405c" x="0" y="0" width="71" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Source / Annex / Report country]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 4_TD" height="49" rowSpan="1">
+							<textField>
+								<reportElement uuid="2ccccdda-7b0b-4463-a6c7-3e34886147e5" x="0" y="0" width="71" height="49"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6"/>
+								</textElement>
+								<textFieldExpression><![CDATA[($F{source} != null  && $F{source}.trim().length()>0 ? $F{source} : "-")+"/"+"\n"+($F{annex}!= null  && $F{annex}.trim().length()>0 ? $F{annex} : "-")+"/"+"\n"+($F{reportCountry} != null  && $F{reportCountry}.trim().length()>0 ? $F{reportCountry} : "-")]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="59" uuid="db7686e4-ed11-47f2-8d33-b86bd1c90160">
+						<jr:columnHeader style="table 4_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="d66698a3-b47f-4a7f-b9b8-843dfd7ad595" x="0" y="0" width="59" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Quantity]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 4_TD" height="49" rowSpan="1">
+							<textField>
+								<reportElement uuid="0ca1fa61-b5ee-44f5-a2c4-34407f4c2383" x="0" y="0" width="59" height="49"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6"/>
+								</textElement>
+								<textFieldExpression><![CDATA[($F{quantity} != null  && $F{quantity}.trim().length()>0 ? $F{quantity} : "-")]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="61" uuid="b6d25c4a-3a55-4d34-a5f5-516d1b60686d">
+						<jr:columnHeader style="table 4_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="fe85faef-4761-46e9-9e31-5053570fb297" x="0" y="0" width="60" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Quota / Total exports ]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 4_TD" height="49" rowSpan="1">
+							<textField>
+								<reportElement uuid="894144bf-53e4-4810-9e14-50e9f61caffa" x="0" y="0" width="61" height="49"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6"/>
+								</textElement>
+								<textFieldExpression><![CDATA[($F{quota} != null  && $F{quota}.trim().length()>0 ? $F{quota} : "-")+"/"+"\n"+($F{totalExports} != null  && $F{totalExports}.trim().length()>0 ? $F{totalExports} : "-")]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="116" uuid="b788749b-2093-4d42-a6df-bef0592fcdde">
+						<jr:columnHeader style="table 4_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement uuid="56b60a32-7fba-4570-8780-67f11fda3800" x="0" y="0" width="116" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Sampling countries / Native country / Livestock countries / Reproduction countries]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table 4_TD" height="49" rowSpan="1">
+							<textField>
+								<reportElement uuid="e31021f7-3a76-4b69-95c7-5e98984c3e6c" x="0" y="0" width="116" height="49"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="6"/>
+								</textElement>
+								<textFieldExpression><![CDATA[($F{samplingCountries} != null  && $F{samplingCountries}.trim().length()>0 ? $F{samplingCountries} : "-")+"/"+"\n"+($F{nativeCountry} != null  && $F{nativeCountry}.trim().length()>0 ? $F{nativeCountry} : "-")+"/"+"\n"+($F{livestockCountries} != null  && $F{livestockCountries}.trim().length()>0 ? $F{livestockCountries} : "-")+"/"+"\n"+($F{reproductionCountries} != null  && $F{reproductionCountries}.trim().length()>0 ? $F{reproductionCountries} : "-")]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+		<band height="234">
+			<rectangle>
+				<reportElement uuid="b1ec3643-8712-49a8-b4e4-913465ee9e64" x="11" y="0" width="533" height="234"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="c01393af-dcc4-4aaf-aa93-db68c7f66807" positionType="FixRelativeToBottom" x="16" y="3" width="522" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="6" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[CE PERMIS EST DELIVRE PAR L'AUTORITE SUIVANTE : LE MINISTRE DES FORETS ET DE LA FAUNE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="956d77a1-fd68-4d88-8f4d-014120bc3b28" positionType="FixRelativeToBottom" x="163" y="53" width="35" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="6" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b3e17a60-6472-4e19-a82a-7a76b193e2b8" positionType="FixRelativeToBottom" x="163" y="41" width="35" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="6" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[DATE]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="451024c6-1304-498d-b8c7-b5c2f097e7d8" positionType="FixRelativeToBottom" x="199" y="41" width="74" height="24"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{licenseDate}!= null? new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{licenseDate}) : "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="01f75865-6c7e-40dc-bb9a-bd627d3a949b" positionType="FixRelativeToBottom" x="16" y="53" width="36" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="6" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Place]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3cfc282a-7760-4957-9352-c8fd9a9ca738" positionType="FixRelativeToBottom" x="294" y="12" width="115" height="66"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="6" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[SIGNATURE]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="f79b3f9b-b1c6-47e0-8177-11d8dbe61a87" positionType="FixRelativeToBottom" x="52" y="41" width="92" height="24"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{licensePlace} != null  && $F{licensePlace}.trim().length()>0 ? $F{licensePlace} : "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="76a47da2-7a2c-4987-a84d-1c952de3d07a" positionType="FixRelativeToBottom" x="16" y="41" width="35" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="6" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[LIEU]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="eccbcb4b-24d5-441e-aa23-e259142f74e4" positionType="FixRelativeToBottom" x="423" y="12" width="115" height="66"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="6" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[CACHET ET TITRE OFFICIELS]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="a135f79e-1b56-4c96-aef9-195cb678bef8" positionType="FixRelativeToBottom" x="116" y="111" width="157" height="24"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{exportApproach} != null  && $F{exportApproach}.trim().length()>0 ? $F{exportApproach} : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="939cb5ff-f77f-44ea-b6b8-c97f2b9dd564" positionType="FixRelativeToBottom" x="440" y="111" width="99" height="24"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{lading} != null  && $F{lading}.trim().length()>0 ? $F{lading} : "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="fea96ef1-597c-4dcb-9c61-784006a5bee0" positionType="FixRelativeToBottom" x="281" y="111" width="159" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[CONNAISSEMENT / LETTRE DE TRANSPORT AERIEN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3320008f-f659-401d-bfb9-e84d6ccb423d" positionType="FixRelativeToBottom" x="16" y="111" width="100" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[APROCHE D'EXPORTATION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="af73a792-51d7-472b-9527-cebb4775d83b" positionType="FixRelativeToBottom" x="16" y="123" width="100" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="6" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[(Exportation approach)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="17dd3c39-46d2-4f7d-a34d-7386b568ef76" positionType="FixRelativeToBottom" x="281" y="123" width="159" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="6" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[(Lading)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9d210cf0-fe0a-4431-b5b6-55dd312cb1d7" positionType="FixRelativeToBottom" x="16" y="183" width="74" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="6" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[PORT D'EXPORTATION]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="51f15997-685c-443d-92bd-1679bd284cc5" positionType="FixRelativeToBottom" x="198" y="183" width="74" height="24"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{exportationDate}!= null? new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{exportationDate}) : "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="36a5dfeb-abce-49fc-bbac-9391a935155e" positionType="FixRelativeToBottom" x="163" y="183" width="35" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="6" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[DATE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="eac65740-1d5a-4d11-83ce-9c25298b5fe3" positionType="FixRelativeToBottom" x="294" y="154" width="115" height="62"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="6" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[SIGNATURE]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="5b52cc98-ff19-47b7-ad5f-0ff97aa83927" positionType="FixRelativeToBottom" x="90" y="183" width="54" height="24"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{exportationPort} != null  && $F{exportationPort}.trim().length()>0 ? $F{exportationPort} : "-")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="84289909-9d15-45ac-ba9f-38fa6712f014" positionType="FixRelativeToBottom" x="423" y="154" width="115" height="62"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="6" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[CACHET ET TITRE OFFICIELS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a612b775-f28b-4b4f-9e87-ae9a78bb3e79" positionType="FixRelativeToBottom" x="163" y="195" width="35" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="6" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5de5a503-bf9e-423c-87af-f9e27c80c49a" positionType="FixRelativeToBottom" x="16" y="195" width="74" height="12"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="6" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[(Exportation port)]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

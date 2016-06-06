@@ -1,0 +1,90 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<p:panel header="#{bundle['item_title']}">
+	
+		
+		<h:form id="itemListForm">
+
+			<h:commandLink action="#{exporter.exportPDF(table, 'NSH')}">
+				<h:outputText styleClass="sprite sprite-pdf" />
+			</h:commandLink>
+
+			<br />
+
+			<p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable" value="#{itemController.items}" filteredValue="" var="item1"
+				selectionMode="single" selection="#{itemController.selected}" rowKey="#{item1.id}" rows="5" paginator="true"
+				rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}" styleClass="newui-datatable fixeColumnWidth"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+				<p:ajax event="rowSelect" update="createButton  deleteButton datalist" />
+				<p:ajax event="rowUnselect" update="createButton deleteButton datalist" />
+
+
+				<p:column id="nshGoodsItemCodeColumn" sortBy="#{item1.nsh.goodsItemCode}" filterBy="#{item1.nsh.goodsItemCode}"
+					filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['itemLabel_id']}" title="#{bundle['itemTitle_id']}" />
+					</f:facet>
+					<h:outputText value="#{item1.nsh.goodsItemCode}" />
+				</p:column>
+
+				<p:column id="nshGoodsItemDescColumn" sortBy="#{item1.nsh.goodsItemDesc}" filterBy="#{item1.nsh.goodsItemDesc}"
+					filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['itemLabel_label']}" title="#{bundle['itemTitle_label']}" />
+					</f:facet>
+					<h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? item1.nsh.goodsItemDescEn : item1.nsh.goodsItemDesc }" />
+				</p:column>
+
+				<p:column id="subDepartmentLabelColumn"
+					sortBy="#{facesContext.viewRoot.locale eq 'en' ? item1.service.subDepartment.labelEn : item1.service.subDepartment.labelFr }"
+					filterBy="#{facesContext.viewRoot.locale eq 'en' ? item1.service.subDepartment.labelEn : item1.service.subDepartment.labelFr }"
+					filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['itemLabel_subDepartment']}" title="#{bundle['itemTitle_subDepartment']}" />
+					</f:facet>
+					<h:outputText
+						value="#{facesContext.viewRoot.locale eq 'en' ? item1.service.subDepartment.labelEn : item1.service.subDepartment.labelFr }" />
+				</p:column>
+
+
+				<p:column id="serviceLabelColumn" sortBy="#{facesContext.viewRoot.locale eq 'en' ? item1.service.labelEn : item1.service.labelFr }"
+					filterBy="#{facesContext.viewRoot.locale eq 'en' ? item1.service.labelEn : item1.service.labelFr }" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['itemLabel_service']}" title="#{bundle['itemTitle_service']}" />
+					</f:facet>
+					<h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? item1.service.labelEn : item1.service.labelFr }" />
+				</p:column>
+
+				<f:facet name="footer">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="createButton" styleClass="btn" icon="sprite sprite-plus" value="#{bundle['Create']}"
+						actionListener="#{itemController.prepareCreate}" oncomplete="PF('itemCreateDialog').show();" update=":itemCreateForm" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="deleteButton" styleClass="btn" icon="sprite sprite-delete" value="#{bundle['Delete']}"
+						rendered="#{itemController.selected != null and itemController.selected.id != null}" oncomplete="PF('confirmation').show()" />
+				</f:facet>
+
+			</p:dataTable>
+
+		</h:form>
+
+		<p:confirmDialog closeOnEscape="true" id="diagSupp" message="#{bundle['popup_confirm_delete_message']}" header="#{bundle['popup_confirm_delete_header']}"
+			widgetVar="confirmation" appendTo="@(body)">
+			<div align="right">
+				<h:form id="diagForm">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="confirm" value="#{bundle['popup_confirm_delete_message_oui']}" update=":growl :itemListForm:datalist"
+						oncomplete="PF('confirmation').hide();document.getElementById('diagForm:confirm').disabled=false;PF('datalistTable').filter();"
+						onclick="document.getElementById('diagForm:confirm').disabled=true;" actionListener="#{itemController.desactivateItem}"
+						styleClass="ui-priority-primary"  />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="decline" value="#{bundle['popup_confirm_delete_message_pas_maintenant']}" onclick="PF('confirmation').hide()"
+						update=":itemListForm" styleClass="ui-priority-primary" />
+				</h:form>
+			</div>
+		</p:confirmDialog>
+	</p:panel>
+
+
+</ui:composition>

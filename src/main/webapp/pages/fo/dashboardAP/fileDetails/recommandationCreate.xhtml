@@ -1,0 +1,50 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<p:dialog closeOnEscape="true" id="recommandationCreateDlg" widgetVar="recommandationCreateDialog" modal="true" resizable="false"
+		appendTo="@(body)" header="#{bundle['CreateRecommandationTitle']}" width="600px">
+
+		<h:form id="recommandationCreateForm">
+
+			<h:panelGroup id="display">
+
+				<p:panelGrid columns="2">
+
+
+					<p:outputLabel value="#{bundle['CreateRecommandationLabel_value']}" for="recommandation_value" />
+					<h:panelGroup>
+						<p:inputTextarea id="recommandation_value" value="#{fileItemApDetailController.selectedRecommandation.value}"
+							title="#{bundle['CreateRecommandationTitle_value']}" required="true"
+							requiredMessage="#{bundle['CreateRecommandationRequiredMessage_value']}" maxlength="255" />
+						<p:message for="recommandation_value" />
+					</h:panelGroup>
+				</p:panelGrid>
+				
+				<h:panelGroup styleClass="panel-bloc">
+					<p:outputLabel value="#{bundle['CreateRecommandationLabel_recommandationAuthorities']}" for="recommandation_authorizedAuthority" />
+					<h:panelGroup styleClass="panel-bloc-title">
+						<p:pickList required="true" id="recommandation_authorizedAuthority" value="#{fileItemApDetailController.authoritiesList}"
+							var="authority" itemLabel="#{authority.role}" itemValue="#{authority}" converter="#{authorityConverter}" showSourceControls="false"
+							showTargetControls="false" showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains">
+							<f:facet name="sourceCaption">#{bundle['CreateRecommandationLabel_recommandationAuthorities_disponibles']}</f:facet>
+							<f:facet name="targetCaption">#{bundle['CreateRecommandationLabel_recommandationAuthorities_affectees']} </f:facet>
+						</p:pickList>
+						<p:message for="recommandation_authorizedAuthority" />
+					</h:panelGroup>
+				</h:panelGroup>
+				<br />
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  actionListener="#{fileItemApDetailController.saveRecommandation}" value="#{bundle['Save']}"
+						styleClass="ui-priority-primary" update="display, :listRecommandationForm , :growl"
+						oncomplete="handleSubmit(xhr,status,args,recommandationCreateDlg,'datalistTableRecommandation');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('recommandationCreateDialog').hide();"
+						immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>

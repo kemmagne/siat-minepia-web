@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="analyseTypeEditDlg" widgetVar="analyseTypeEditDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['EditAnalyseTypeTitle']}" width="800px">
+
+		<h:form id="analyseTypeEditForm">
+
+			<h:panelGroup id="display">
+
+				<p:panelGrid columns="4">
+
+					<p:outputLabel value="#{bundle['EditAnalyseTypeLabel_labelFr']}" for="analyseType_labelFr" />
+					<h:panelGroup>
+						<p:inputText id="analyseType_labelFr" value="#{analyseTypeController.selected.labelFr}"
+							title="#{bundle['EditAnalyseTypeTitle_labelFr']}" required="true"
+							requiredMessage="#{bundle['EditAnalyseTypeRequiredMessage_labelFr']}" />
+						<p:message for="analyseType_labelFr" />
+					</h:panelGroup>
+					<p:outputLabel value="#{bundle['EditAnalyseTypeLabel_labelEn']}" for="analyseType_labelEn" />
+
+					<h:panelGroup>
+						<p:inputText id="analyseType_labelEn" value="#{analyseTypeController.selected.labelEn}"
+							title="#{bundle['EditAnalyseTypeTitle_labelEn']}" required="true"
+							requiredMessage="#{bundle['EditAnalyseTypeRequiredMessage_labelEn']}" />
+						<p:message for="analyseType_labelEn" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditAnalyseTypeLabel_duree']}" for="analyseType_duration" />
+					<h:panelGroup>
+						<p:inputText id="analyseType_duration" value="#{analyseTypeController.selected.duration}"
+							title="#{bundle['EditAnalyseTypeTitle_duree']}" required="true" requiredMessage="#{bundle['EditAnalyseTypeRequiredMessage_duree']}" />
+						<p:message for="analyseType_duration" />
+					</h:panelGroup>
+
+				</p:panelGrid>
+
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editBtn" actionListener="#{analyseTypeController.edit}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+						update="display,:analyseTypeListForm,:growl" oncomplete="handleSubmit(xhr,status,args,analyseTypeEditDlg,'datalistTable');" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary"
+						onclick="PF('analyseTypeEditDialog').hide();" immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

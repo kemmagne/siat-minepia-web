@@ -1,0 +1,45 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<h:form id="searchForm">
+
+		<p:accordionPanel id="alerteAccordionPanel"  styleClass="search">
+
+			<p:tab title="#{bundle['Find']}" styleClass="title"  dynamic="true" cache="true">
+
+				<h:panelGrid columns="6" cellpadding="10">
+
+					<h:panelGroup>
+						<p:outputLabel for="dateDu" value="#{bundle['FindAlertLabel_startDate']}" />
+					</h:panelGroup>
+					<p:calendar  navigator="true" id="dateDu" value="#{alertController.filter.beginDate}" title="#{bundle['FindAlertTitle_startDate']}" showOn="button"
+					pattern="dd/MM/yyyy"	readonlyInput="true">
+						<p:ajax event="dateSelect" update="dateAu" />
+					</p:calendar>
+
+					<h:panelGroup>
+						<p:outputLabel for="dateAu" value="#{bundle['FindAlertLabel_endDate']}" />
+					</h:panelGroup>
+					
+					<p:calendar  navigator="true" id="dateAu" value="#{alertController.filter.endDate}" title="#{bundle['FindAlertTitle_endDate']}" showOn="button"
+						  pattern="dd/MM/yyyy" mindate="#{alertController.filter.beginDate}" readonlyInput="true">
+					</p:calendar>
+					<h:panelGroup>
+						
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="searchBtn" icon="ui-icon-search" action="#{alertController.doSearch}" update=":alertListForm:datalist :searchForm :growl"
+							oncomplete="PF('datalistTable').filter();" title="#{bundle['ButtonSearch']}" />
+						
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="searchAllBtn" icon="ui-icon-refresh" action="#{alertController.initSearch}" update=":alertListForm:datalist :searchForm"
+							oncomplete="PF('datalistTable').filter();" title="#{bundle['ButtonReset']}" />
+					</h:panelGroup>
+
+				</h:panelGrid>
+
+			</p:tab>
+
+		</p:accordionPanel>
+
+	</h:form>
+</ui:composition>

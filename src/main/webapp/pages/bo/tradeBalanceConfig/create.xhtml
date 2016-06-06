@@ -1,0 +1,70 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="tradeCreateDlg" widgetVar="tradeCreateDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['CreateTradeTitle']}" dynamic="true">
+
+		<h:form id="tradeCreateForm">
+			<h:panelGroup id="display" styleClass="inpWidth">
+
+				<p:panelGrid columns="4">
+
+					<p:outputLabel value="#{bundle['TradeLabel_code']}" for="trade_code_c" />
+					<h:panelGroup>
+						<p:inputText id="trade_code_c" value="#{tradeBalanceConfigController.tradeBalanceConfig.code}" validator="#{tradeBalanceConfigController.validate}"
+							title="#{bundle['TradeLabel_code']}" required="true" requiredMessage="#{bundle['TradeRequiredMessage_code']}" />
+						<p:message for="trade_code_c" />
+					</h:panelGroup>
+
+
+
+
+
+					<p:outputLabel value="#{bundle['TradeLabel_label']}" for="trade_label" />
+					<h:panelGroup>
+						<p:inputText id="trade_label" value="#{tradeBalanceConfigController.tradeBalanceConfig.label}"
+							title="#{bundle['TradeLabel_label']}" required="true" requiredMessage="#{bundle['TradeRequiredMessage_label']}" />
+						<p:message for="trade_label" />
+					</h:panelGroup>
+
+
+					<p:outputLabel value="#{bundle['TradeLabel_type']}" for="trade_Type" />
+					<h:panelGroup>
+						<p:selectOneMenu id="trade_Type" value="#{tradeBalanceConfigController.tradeBalanceConfig.type}" required="true"
+							requiredMessage="#{bundle['TradeRequiredMessage_type']}" title="#{bundle['TradeLabel_type']}">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItem itemValue="01" itemLabel="#{bundle['TradeLabel_type_01']}"></f:selectItem>
+							<f:selectItem itemValue="02" itemLabel="#{bundle['TradeLabel_type_02']}"></f:selectItem>
+							<f:param name="type" value="1" id="type"></f:param>
+						</p:selectOneMenu>
+
+						<p:message for="trade_Type" />
+					</h:panelGroup>
+
+
+					<p:outputLabel value="#{bundle['TradeLabel_count']}" for="tradeCount" />
+					<p:selectBooleanCheckbox id="tradeCount" value="#{tradeBalanceConfigController.tradeBalanceConfig.count}"
+						title="#{bundle['TradeLabel_count']}">
+					</p:selectBooleanCheckbox>
+
+				</p:panelGrid>
+
+
+				<div class="btn-bloc">
+					<p:commandButton id="createBtn" actionListener="#{tradeBalanceConfigController.doCreate}" value="#{bundle['Save']}"
+						styleClass="ui-priority-primary" update="display,:tradeListForm,:growl" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"
+						oncomplete="handleSubmit(xhr,status,args,tradeCreateDlg,'datalistTable');" />
+					<p:commandButton id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('tradeCreateDialog').hide();"
+						immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

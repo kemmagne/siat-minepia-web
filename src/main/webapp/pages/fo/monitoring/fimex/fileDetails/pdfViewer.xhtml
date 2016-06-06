@@ -1,0 +1,40 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<br />
+
+	<h:form id="showAttachmentForm">
+		<p:accordionPanel id="accordAttachment" titleStyleClass="title" style="height:100%;width:100%" rendered="#{fimexDetailController.showShowAttachmentForm}">
+
+			<p:tab title="#{bundle['Attachment_title']}" dynamic="true" cache="true" titleStyleClass="title">
+
+				<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  rendered="#{attachmentController.showPanelViewJpeg or attachmentController.showPanelViewPdf}"
+					value="#{bundle['ButtonDetachment']}" icon="ui-icon-extlink" update="attachmentShowDialog"
+					actionListener="#{attachmentController.detachAttachment}" process="@this" />
+
+				<p:panel visible="#{attachmentController.showPanelViewPdf}">
+					<pe:documentViewer id="documentViewer" height="500" value="#{attachmentController.streamPdf}" />
+				</p:panel>
+
+				<p:panel visible="#{attachmentController.showPanelViewJpeg}">
+					<p:graphicImage cache="false" value="#{attachmentController.streamJpeg}" style="height: 100%; width: 100%" />
+				</p:panel>
+
+			</p:tab>
+
+		</p:accordionPanel>
+
+	</h:form>
+
+
+	<p:dialog closeOnEscape="true" id="attachmentShowDialog" widgetVar="attachmentShowDialogWidVar" header="#{attachmentController.selectedAttachment.documentName}">
+		<p:panel visible="#{attachmentController.showPanelViewPdf}">
+			<pe:documentViewer height="500" value="#{attachmentController.streamPdf}" />
+		</p:panel>
+
+		<p:panel visible="#{attachmentController.showPanelViewJpeg}">
+			<p:graphicImage cache="false" value="#{attachmentController.streamJpeg}" style="height: 100%; width: 100%" />
+		</p:panel>
+	</p:dialog>
+
+</ui:composition>

@@ -1,0 +1,111 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<p:dialog closeOnEscape="true" id="adminEditDlg" widgetVar="adminEditDialog" modal="true" resizable="false" appendTo="@(body)"
+		header="#{bundle['EditAdminTitle']}">
+
+		<h:form id="adminEditForm">
+
+			<h:panelGroup id="display" styleClass="inpWidth">
+
+				<p:panelGrid columns="4">
+
+					<p:outputLabel value="#{bundle['EditAdminLabel_login']}" for="admin_login" />
+					<h:panelGroup>
+						<p:inputText id="admin_login" value="#{adminController.selected.login}" title="#{bundle['EditAdminTitle_login']}" required="true"
+							requiredMessage="#{bundle['EditAdminRequiredMessage_login']}" />
+						<p:message for="admin_login" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditAdminLabel_firstName']}" for="admin_firstName" />
+					<h:panelGroup>
+						<p:inputText id="admin_firstName" value="#{adminController.selected.firstName}" title="#{bundle['EditAdminTitle_firstName']}"
+							required="true" requiredMessage="#{bundle['EditAdminRequiredMessage_firstName']}" />
+						<p:message for="admin_firstName" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditAdminLabel_lastName']}" for="admin_lastName" />
+					<h:panelGroup>
+						<p:inputText id="admin_lastName" value="#{adminController.selected.lastName}" title="#{bundle['EditAdminTitle_lastName']}"
+							required="true" requiredMessage="#{bundle['EditAdminRequiredMessage_lastName']}" />
+						<p:message for="admin_lastName" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditUserLabel_email']}" for="user_email" />
+					<h:panelGroup>
+						<p:inputText id="user_email" value="#{adminController.selected.email}" title="#{bundle['EditUserTitle_email']}" required="true"
+							requiredMessage="#{bundle['EditUserRequiredMessage_email']}" validatorMessage="#{bundle['MailValidationFail']}">
+							<f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+						</p:inputText>
+						<p:message for="user_email" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditUserLabel_telephone']}" for="user_telephone" />
+					<h:panelGroup>
+						<p:inputText id="user_telephone" value="#{adminController.selected.telephone}" title="#{bundle['EditUserTitle_telephone']}"
+							required="true" requiredMessage="#{bundle['EditUserRequiredMessage_telephone']}" validatorMessage="#{bundle['PhoneValidationFail']}">
+							<f:validateRegex pattern="[0-9]{0,14}" />
+						</p:inputText>
+						<p:message for="user_telephone" />
+					</h:panelGroup>
+
+					<p:outputLabel rendered="#{request.isUserInRole('ROOT') }" value="#{bundle['EditAdminLabel_ministry']}" for="administrationMinistry" />
+					<h:panelGroup rendered="#{request.isUserInRole('ROOT') }">
+						<p:message for="administrationMinistry" />
+						<p:selectOneMenu id="administrationMinistry" value="#{adminController.selected.administration}" required="true"
+							requiredMessage="#{bundle['EditAdminRequiredMessage_ministry']}" rendered="#{request.isUserInRole('ROOT') }" disabled="true">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{adminController.ministriesList}" var="adminVar" itemValue="#{adminVar}"
+								itemLabel="#{facesContext.viewRoot.locale eq 'en' ? adminVar.labelEn : adminVar.labelFr}" />
+							<f:converter binding="#{ministryConverter}" />
+						</p:selectOneMenu>
+					</h:panelGroup>
+
+					<p:outputLabel rendered="#{request.isUserInRole('ADMIN_MIN')}" value="#{bundle['EditAdminLabel_organism']}" for="administrationOrganism" />
+					<h:panelGroup rendered="#{request.isUserInRole('ADMIN_MIN')}">
+						<p:selectOneMenu id="administrationOrganism" value="#{adminController.selected.administration}" required="true"
+							requiredMessage="#{bundle['EditAdminRequiredMessage_organism']}" rendered="#{request.isUserInRole('ADMIN_MIN')}" disabled="true">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{adminController.organismsList}" var="adminVarOrg" itemValue="#{adminVarOrg}"
+								itemLabel="#{facesContext.viewRoot.locale eq 'en' ? adminVarOrg.labelEn : adminVarOrg.labelFr}" />
+							<f:converter binding="#{organismConverter}" />
+						</p:selectOneMenu>
+						<p:message for="administrationOrganism" />
+					</h:panelGroup>
+
+					<p:outputLabel value="#{bundle['EditAdminLabel_preferedLanguage']}" for="admin_preferedLanguage" />
+					<h:panelGroup>
+						<p:selectOneMenu id="admin_preferedLanguage" style="width: 133px" value="#{adminController.selected.preferedLanguage}" required="true"
+							requiredMessage="#{bundle['EditAdminRequiredMessage_preferedLanguage']}" title="#{bundle['EditAdminTitle_preferedLanguage']}">
+							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+							<f:selectItems value="#{language.languageOptions}" />
+						</p:selectOneMenu>
+						<p:message for="admin_preferedLanguage" />
+					</h:panelGroup>
+
+					<h:outputLabel value="#{bundle['EditAdminLabel_enabled']}" for="enabled" />
+					<p:selectBooleanCheckbox id="enabled" value="#{adminController.selected.enabled}" title="#{bundle['EditAdminTitle_enabled']}">
+					</p:selectBooleanCheckbox>
+
+				</p:panelGrid>
+
+				<br />
+
+				<div class="btn-bloc">
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editBtn" actionListener="#{adminController.edit}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+						update="display,:adminListForm,:growl" oncomplete="handleSubmit(xhr,status,args,adminEditDlg,'datalistTable');"
+						onclick="PF('datalistTable').filter();" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('adminEditDialog').hide();"
+						immediate="true" />
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>
+
+</html>

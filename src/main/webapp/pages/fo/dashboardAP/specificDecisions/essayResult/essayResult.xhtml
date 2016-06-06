@@ -1,0 +1,73 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+
+	<p:panel header="#{bundle['EssayResultAp_Header']}" rendered="#{fileItemApDetailController.acceptationDecisionFileType eq 'CAT_MINADER'}">
+		<p:scrollPanel mode="native">
+
+			<h:panelGrid columns="2">
+				<c:forEach var="item" items="#{fileItemApDetailController.testResultApList}" varStatus="status">
+					<p:panel id="itemsPan#{status.index}" styleClass="subtitle"
+						header="#{bundle['EssaiTestArticleLabel']}(#{facesContext.viewRoot.locale eq 'fr' ? item.itemFlow.fileItem.nsh.goodsItemDesc : item.itemFlow.fileItem.nsh.goodsItemDescEn})"
+						titletip="#{bundle['EssaiTestArticleLabel']}(#{item.itemFlow.fileItem.nsh.goodsItemCode})">
+						<p:panelGrid columns="2">
+
+							<p:outputLabel for="essaiType#{status.index}" value="#{bundle['EssaiResultAp_TypeLabel']}" />
+							<h:panelGroup>
+								<p:inputText id="essaiType#{status.index}" title="#{bundle['EssaiResultAp_TypeTitle']}" value="#{item.type}" required="true"
+									requiredMessage="#{bundle['EssaiResultAp_TypeRequiredMessage']}" />
+								<p:message for="essaiType#{status.index}" id="essaiTypeMsg#{status.index}" />
+							</h:panelGroup>
+
+							<p:outputLabel for="essaiNature#{status.index}" value="#{bundle['EssaiResultAp_NatureLabel']}" />
+							<p:inputTextarea id="essaiNature#{status.index}" title="#{bundle['EssaiResultAp_NatureLTitle']}" value="#{item.nature}" />
+
+							<p:outputLabel for="essaiConditions#{status.index}" value="#{bundle['EssaiResultAp_ConditionsLabel']}" />
+							<p:inputTextarea id="essaiConditions#{status.index}" title="#{bundle['EssaiResultAp_ConditionsTitle']}" value="#{item.condition}" />
+
+							<p:outputLabel for="essaiCulture#{status.index}" value="#{bundle['EssaiResultAp_CultureLabel']}" />
+							<p:inputTextarea id="essaiCulture#{status.index}" title="#{bundle['EssaiResultAp_CultureTitle']}" value="#{item.culture}" />
+
+							<p:outputLabel for="essaiStage#{status.index}" value="#{bundle['EssaiResultAp_StageLabel']}" />
+							<p:inputText id="essaiStage#{status.index}" title="#{bundle['EssaiResultAp_StageTitle']}" value="#{item.stage}" />
+
+							<p:outputLabel for="essaiDescription#{status.index}" value="#{bundle['EssaiResultAp_DescriptionLabel']}" />
+							<p:inputTextarea id="essaiDescription#{status.index}" title="#{bundle['EssaiResultAp_DescriptionTitle']}" value="#{item.description}" />
+
+							<h:outputLabel value="#{bundle['TestResultAp_DateLabel']}" for="essaiDate#{status.index}" />
+							<h:panelGroup>
+								<p:calendar  navigator="true" required="true" readonlyInput="true" pattern="dd/MM/yyyy" title="#{bundle['TestResultAp_DateTitle']}" showOn="button" value="#{item.testDate}"
+									id="essaiDate#{status.index}" requiredMessage="#{bundle['TestResultAp_DateRequiredMessage']}" />
+								<p:message for="essaiDate#{status.index}" />
+							</h:panelGroup>
+
+
+							<p:outputLabel for="placeTest#{status.index}" value="#{bundle['EssaiResultAp_PlaceLabel']}" />
+							<h:panelGroup>
+								<p:inputText required="true" requiredMessage="#{bundle['EssaiResultAp_PlaceRequiredMessage']}" id="placeTest#{status.index}" title="#{bundle['EssaiResultAp_PlaceTitle']}" value="#{item.place}" />
+							<p:message for="placeTest#{status.index}"/>
+							</h:panelGroup>
+
+							<p:outputLabel for="townCodeTest#{status.index}" value="#{bundle['EssaiResultAp_TownCodeLabel']}" />
+							<p:inputText id="townCodeTest#{status.index}" title="#{bundle['EssaiResultAp_TownCodeTitle']}" value="#{item.townCode}" />
+
+							<p:outputLabel for="townNameTest#{status.index}" value="#{bundle['TestResultAp_TownNameLabel']}" />
+							<p:inputText id="townNameTest#{status.index}" title="#{bundle['TestResultAp_TownNameTitle']}" value="#{item.townName}" />
+
+							<p:outputLabel for="intervenantsTest#{status.index}" value="#{bundle['TestResultAp_IntervenantsLabel']}" />
+							<p:inputTextarea id="intervenantsTest#{status.index}" title="#{bundle['TestResultAp_IntervenantsTitle']}"
+								value="#{item.contributors}" />
+
+							<p:outputLabel for="resultatsTest#{status.index}" value="#{bundle['TestResultAp_ResultLabel']}" />
+							<p:inputTextarea id="resultatsTest#{status.index}" title="#{bundle['TestResultAp_ResultTitle']}" value="#{item.resultats}" />
+
+							<p:outputLabel for="observationsTest#{status.index}" value="#{bundle['TestResultAp_ObservationsLabel']}" />
+							<p:inputTextarea id="observationsTest#{status.index}" title="#{bundle['TestResultAp_ObservationsTitle']}" value="#{item.obsevations}" />
+
+						</p:panelGrid>
+					</p:panel>
+				</c:forEach>
+			</h:panelGrid>
+		</p:scrollPanel>
+	</p:panel>
+</ui:composition>
