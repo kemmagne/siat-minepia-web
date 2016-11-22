@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="file" language="groovy" pageWidth="595" pageHeight="960" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="28078ea8-15af-47d5-9f91-aa95db5f187e">
-	<property name="ireport.zoom" value="1.2396694214876032"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AOI_MINSANTE" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8edf22e4-85a7-4ff4-97ff-42cd406afed7">
+	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="378"/>
+	<property name="ireport.y" value="192"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -23,312 +23,493 @@
 			<pen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
-	<subDataset name="dataset1" uuid="dd61e3ea-32ed-4554-87b7-f00a7b70e365">
-		<field name="quantity" class="java.lang.String"/>
-		<field name="designation" class="java.lang.String"/>
-		<field name="measurementUnit" class="java.lang.String"/>
-	</subDataset>
-	<field name="validityDate" class="java.util.Date"/>
-	<field name="originCountry" class="java.lang.String"/>
-	<field name="decisionDate" class="java.util.Date"/>
-	<field name="decisionNumber" class="java.lang.String"/>
-	<field name="decisionPlace" class="java.lang.String"/>
-	<field name="fileItemList" class="java.util.List"/>
-	<field name="importer" class="java.lang.String"/>
+	<subDataset name="Table Dataset 1" uuid="106a947e-f30c-41ab-a50c-5fdcc639112a"/>
+	<field name="pharmacistName" class="java.lang.String"/>
+	<field name="pharmacistFunction" class="java.lang.String"/>
+	<field name="importerName" class="java.lang.String"/>
+	<field name="importerAddress" class="java.lang.String"/>
+	<field name="productCommercialName" class="java.lang.String"/>
+	<field name="productINN" class="java.lang.String"/>
+	<field name="productQuantity" class="java.lang.String"/>
+	<field name="productPresentation" class="java.lang.String"/>
+	<field name="productForm" class="java.lang.String"/>
+	<field name="productDosage" class="java.lang.String"/>
+	<field name="manufacturerName" class="java.lang.String"/>
+	<field name="manufacturerAddress" class="java.lang.String"/>
+	<field name="supplierName" class="java.lang.String"/>
+	<field name="supplierAddress" class="java.lang.String"/>
+	<field name="transportMode" class="java.lang.String"/>
+	<field name="enterringCustomsOffice" class="java.lang.String"/>
+	<field name="productTypeFr" class="java.lang.String"/>
+	<field name="productTypeEn" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="200" splitType="Stretch">
-			<elementGroup>
-				<staticText>
-					<reportElement uuid="62430ea4-9341-42b4-b2b6-f10ebb958d21" x="10" y="64" width="200" height="20"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font  size="6" isBold="false"/>
-					</textElement>
-					<text><![CDATA[DIRECTION DU DEVELOPPEMENT DES PRODUCTIONS ET DES INDUSTRIES ANIMALES]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="56667fa5-dcc4-4b2e-8b07-a96aac1696a4" x="10" y="20" width="200" height="8"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font  size="6" isBold="false"/>
-					</textElement>
-					<text><![CDATA[*******]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="80ac220a-0832-4cc8-a152-65bc6404e4d3" x="10" y="28" width="200" height="10"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font  size="6" isBold="false"/>
-					</textElement>
-					<text><![CDATA[MINISTERE DE L'ELEVAGE, DES PECHES ET DES INDUSTRIES ANIMALES]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="2f8ca3fe-536c-4d2f-8210-cc46e8006012" x="10" y="46" width="200" height="10"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font  size="6" isBold="false"/>
-					</textElement>
-					<text><![CDATA[SECRETERIAT GENERAL]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="03eef9ba-5a94-4e39-921f-4678cd226b65" x="10" y="38" width="200" height="8"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font  size="6" isBold="false"/>
-					</textElement>
-					<text><![CDATA[*******]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="25220a4d-2c33-4702-8ee9-c7d841d6f2ef" x="10" y="10" width="200" height="10"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font  size="6" isBold="false"/>
-					</textElement>
-					<text><![CDATA[ Paix-Travail-Patrie]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="898b970c-05ed-4951-b8ce-0cdd0de02faf" x="10" y="0" width="200" height="10"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font  size="6" isBold="false" isStrikeThrough="false"/>
-					</textElement>
-					<text><![CDATA[REPUBLIQUE DU CAMEROUN
-]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="b52c9484-2364-41cc-8360-309c7c96643f" x="10" y="56" width="200" height="8"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font  size="6" isBold="false"/>
-					</textElement>
-					<text><![CDATA[*******]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="514ea7f6-8b01-46c1-8b0b-b11fc57ffd66" x="345" y="56" width="200" height="8"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font  size="6" isBold="false"/>
-					</textElement>
-					<text><![CDATA[*******]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="d225b07f-2159-4168-bd1c-219b39d9bb84" x="10" y="92" width="200" height="10"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font  size="6" isBold="false"/>
-					</textElement>
-					<text><![CDATA[DIRECTION DES SERVICES VETERINAIRES]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="32971d30-2dab-403b-a310-35a60414fd06" x="345" y="64" width="200" height="10"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font  size="6" isBold="false"/>
-					</textElement>
-					<text><![CDATA[DEPARTMENT OF PRODUCTION AND ANIMAL INDUSTRIES DEVELOPMENT]]></text>
-				</staticText>
-			</elementGroup>
-			<elementGroup>
-				<staticText>
-					<reportElement uuid="f1eb4dcf-f754-4de2-9514-0c4ed5812882" x="345" y="38" width="200" height="8"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font  size="6" isBold="false"/>
-					</textElement>
-					<text><![CDATA[*******]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="be32ad23-eac7-4847-9cce-65175f9c0adc" x="345" y="20" width="200" height="8"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font  size="6" isBold="false"/>
-					</textElement>
-					<text><![CDATA[*******]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="029ee73e-a2e3-4a51-aa59-063aa92ffa21" x="345" y="10" width="200" height="10"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font  size="6" isBold="false"/>
-					</textElement>
-					<text><![CDATA[Peace-Work-Fatherland]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="df07ef27-c83a-4d21-8e3f-68d9a343f411" x="345" y="0" width="200" height="10"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font  size="6" isBold="false"/>
-					</textElement>
-					<text><![CDATA[REPUBLIC OF CAMEROON
-]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="a6d01776-2f72-4567-b8e7-fd246affcb41" x="345" y="46" width="200" height="10"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font  size="6" isBold="false"/>
-					</textElement>
-					<text><![CDATA[GENERAL SECRETARIAT]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="4f599475-e541-4170-8d85-09e788a313cb" x="345" y="28" width="200" height="10"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font  size="6" isBold="false"/>
-					</textElement>
-					<text><![CDATA[MINISTRY OF LIVESTOCK, FISHERIES AND ANIMAL INDUSTRIES]]></text>
-				</staticText>
-			</elementGroup>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="ddc94d02-bff6-4c61-b8ba-a5d682a4f637" x="10" y="122" width="535" height="15"/>
+		<band height="175" splitType="Stretch">
+			<staticText>
+				<reportElement x="54" y="2" width="147" height="14" uuid="1f371b4e-3a85-4975-877b-b1e2b98d66bc"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[REPUBLIQUE DU CAMEROUN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="356" y="2" width="147" height="14" uuid="0ff825a9-65d2-43fe-9302-ea30c3ed16c1"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[REPUBLIC OF CAMEROON]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="41" y="16" width="176" height="14" uuid="292e626a-e2d3-438b-ba4e-4bf2421f2739"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Paix - Travail - Patrie]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="344" y="16" width="176" height="14" uuid="f7a9ba71-a52e-43c0-a9ab-5ba7a5ff1358"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Peace - Work - Fatherland]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="41" y="25" width="176" height="14" uuid="c09da305-4846-4842-9965-d1d5e884b114"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[----------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="344" y="26" width="176" height="14" uuid="033b0f72-f588-47d5-8134-b8c7dd16c2a2"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[----------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="31" y="39" width="198" height="14" uuid="8da57ee6-e58f-42cc-90d8-a12543922a86"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[MINISTERE DE LA SANTE PUBLIQUE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="43" y="50" width="176" height="14" uuid="6b23ac95-3655-4033-84fe-a33995474f10"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[----------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="31" y="64" width="198" height="14" uuid="97c42b59-10bb-4ad8-95dc-14cd75563e2d"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[SECRETARIAT GENERAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="43" y="74" width="176" height="14" uuid="1a84d062-f163-4903-8397-5ba679b3dd1f"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[----------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="47" y="86" width="172" height="33" uuid="d7e6a4f9-4718-4252-9f6a-f8b334f28a45"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIRECTION DE LA PHARMACIE ET DU MEDICAMENT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="334" y="39" width="198" height="14" uuid="cb310bb5-9d6c-4348-a605-b73ed87b1e35"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[MINISTRY OF PUBLIC HEALTH]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="346" y="50" width="176" height="14" uuid="47e83f03-fc34-42fd-840a-4414330fe59a"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[----------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="334" y="61" width="198" height="14" uuid="646925ca-d09c-4ad4-aa9b-5c4c853eb7ff"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[GENERAL SECRETARY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="346" y="72" width="176" height="14" uuid="3d433700-0811-4b93-9d1c-149c062e9f32"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[----------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="344" y="85" width="182" height="33" uuid="14d9e23f-3e57-40ff-88be-310ed4057f41"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIRECTION OF THE PHARMACY AND THE MEDICINE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="43" y="107" width="176" height="14" uuid="448f0e60-5dcd-4233-b2dc-7fa319da1f01"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[----------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="346" y="107" width="176" height="14" uuid="521def95-ffb3-4c25-a0f5-eeac65b13679"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[----------------]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="20" y="129" width="520" height="46" uuid="4a3a304d-47d0-4d25-9c77-8c8954d6a6df"/>
+				<box>
+					<pen lineWidth="1.25"/>
+					<topPen lineWidth="1.25"/>
+					<leftPen lineWidth="1.25"/>
+					<bottomPen lineWidth="1.25"/>
+					<rightPen lineWidth="1.25"/>
+				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font  size="13" isBold="true"/>
+					<font fontName="Times New Roman" size="11" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["AVIS TECHNIQUE N°"+ ($F{decisionNumber} != null  && $F{decisionNumber}.trim().length()>0 ? $F{decisionNumber} : "-")]]></textFieldExpression>
+				<textFieldExpression><![CDATA["DEMANDE D'AUTORISATION OFFICIELLE D'IMPORTATION (A.I.D.) DE " + ($F{productTypeFr} != null ? $F{productTypeFr} : "-") +
+"\nAPPLICATION FOR AN OFFICIAL AUTHORIZATION TO IMPORT " + ($F{productTypeEn} != null ? $F{productTypeEn} : "-")]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement uuid="25194798-39d3-4d89-9ff0-d02e5383d788" x="10" y="137" width="535" height="15"/>
-				<textElement textAlignment="Center" markup="none">
-					<font  size="13" isBold="false" isUnderline="false"/>
-				</textElement>
-				<text><![CDATA[AUTORISANT L'IMPORTATION DES POUSSINS D'UN JOUR ET DES OEUFS A COUVER]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="0c7833cb-c2cd-4dbf-a5d3-f76b9e73ab1e" x="0" y="185" width="555" height="15"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font  size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[LE MINISTÈRE DE L'ELEVAGE, DES PECHES ET DES INDUSTRIES ANIMALES]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="bef09908-a4d0-4ec9-9c17-511a44662542" x="345" y="82" width="200" height="10"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font  size="6" isBold="false"/>
-				</textElement>
-				<text><![CDATA[DEPARTMENT OF VETERITY SERVICES]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="d54ae254-3373-482b-8399-dff7519df4ac" x="10" y="84" width="200" height="8"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font  size="6" isBold="false"/>
-				</textElement>
-				<text><![CDATA[*******]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="28356718-db51-4da7-8b43-1e907c6f84b6" x="345" y="74" width="200" height="8"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font  size="6" isBold="false"/>
-				</textElement>
-				<text><![CDATA[*******]]></text>
-			</staticText>
+			<image>
+				<reportElement x="234" y="12" width="90" height="95" uuid="30c071cf-d6f2-466f-ac79-914fc64efdd3"/>
+				<imageExpression><![CDATA[new java.io.File((java.lang.String)$P{REPORT_PARAMETERS_MAP}.get("MINSANTE_LOGO"))]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>
-		<band splitType="Stretch"/>
-	</pageHeader>
-	<columnHeader>
-		<band splitType="Stretch"/>
-	</columnHeader>
-	<detail>
-		<band height="670" splitType="Stretch">
+		<band height="36" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="dbaaae53-2adb-43fc-95c8-a3cfd3609c51" x="10" y="220" width="535" height="15"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font  size="10" isBold="true" isUnderline="false"/>
-				</textElement>
-				<text><![CDATA[EMET l'AVIS TECHNIQUE SUIVANT]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="69c6589f-4929-4bec-bbd7-ba03360ba834" x="10" y="0" width="535" height="210"/>
-				<textElement verticalAlignment="Middle" markup="html">
-					<font  size="9" isBold="false"/>
-				</textElement>
-				<text><![CDATA[Vu la loi N°96/12 du 05 août 1996 portant loi cadre relative à la gestion de l'environnement;<br>
-Vu la loi N°2000/017 du 19 décembre 2000 portant réglementation de l'Inspection sanitaire et vétérinaire;<br>
-Vu la loi N°006 du 16 avril 2001 portant nomenclature et règlement zoo sanitaire des maladies du Bétail réputées légalement contagieuses à déclaration obligatoire;<br>
-Vu la loi des finances en vigeur;<br>
-Vu le Décret N°75/527 du 16 juillet 1975 portant règlementation des établissements en matière d'élevage et des industries animales;<br>
-Vu le décret N°76/420 du 14 septembre 1976 portant règlementation de l'élevage, de la circulation et de l'exploitation du bétail, modifié par le décret n°86/755 du 24 juin 1986;<br>
-Vu le décret N°86/711 du 14 juin 1986 fixant les modalités d'inspection de l'inspection sanitaire vétérinaire;<br>
-Vu le décret N° 2011/408 du 09 décembre 2011 portant organisation du gouvernement;<br>
-Vu le décret N° 2011/410 du 09 décembre 2011 portant formation du gouvernement;<br>
-Vu le décret n° 2012/382 du 14 septembre 2012 portant organisation et fonctionnement du Ministère de l'Elevage des Pêches et des Industries Animales;<br>
-Vu la décision n° 00164/MIMEPIA du 25 juillet 2006, portant modification de la décision n°0028/MINEPIA du 17 mars 2006, portant suspension de l'importation de certaines espèces animales sensibles à l'influenza Aviaire Hautement Pathogène (Grippe aviaire) et certains types de matériels d'élevage;<br>
-Vu la décision n°0015/MINEPIA du 08 mai 2013, portant suspension de l'importation des oiseaux, de leurs produits et sous-produits ainsi que du matériel d'élevage usagé des pays infectés par l'influenza Aviaire (Grippe Aviaire) A (H7N9);<br>
-Vu le dossier présenté par l'intéressé(e);
-]]></text>
-			</staticText>
-			<textField>
-				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="10" y="245" width="535" height="24"/>
-				<textElement verticalAlignment="Middle" markup="html">
-					<font  size="9" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA["<b>Article 1</b>: Monsieur "+($F{importer} != null  && $F{importer}.trim().length()>0 ? $F{importer} : "-")+" est autorisé à importer de " +($F{originCountry} != null  && $F{originCountry}.trim().length()>0 ? $F{originCountry} : "-")+" au titre de l'excercice 2014 des poussins d'un jour et des oeufs à couver selon les quantités ci-aprés :<br>"]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement uuid="db1aed08-2a1e-4b70-a5d8-aabd7760f102" positionType="FixRelativeToBottom" x="10" y="310" width="535" height="230"/>
-				<textElement markup="html">
-					<font  size="9" isBold="false"/>
-				</textElement>
-				<text><![CDATA[<b>Article 2</b>: Le présent Avis technique est valable pour l'obtention de l'autorisation délivrée par le Ministre en charge du Commerce conformément à la réglementation en vigeur.<br><br>
-<b>Article 3</b>:
-<ol>
-  <li>Le service de l'inspection sanitaire de l'Aéroport ou tout autre lieu de débarquement doit être prévenu par l'importateur 72 heures au moins avant l'arrivée des poussins et des oeufs à couver commandés;</li>
-  <li>Les poussins et les oeufs à couver doivent être accompagnés d'un certificat sanitaire délivré par un vétérinaire officiel compétent à l'exportation dans le pays d'origine;</li>
-  <li>Le certificat sanitaire vétérinaire doit préciser la souche des poussins et des oeufs à couver importés et leur provenance;</li>
-  <li>L'importation des oiseaux, des produits et sous-produits en provenance des pays et zones infectés par l'Influenza Aviaire Hautement Pathogène et l'Influenza Aviaire à A(H7N9) demeure interdite;</li>
-  <li>Le respect scrupuleux du nombre des poussins et des oeufs à couver à importer est obligatoire;</li>
-  <li>Le nombre autorisée n'est pas renouvelable pour un même avis technique.</li>
-  <li>L'Avis Technique n'est pas cessible.</li>
-</ol><br>
-<b>Article 4</b>: Le dossier de demande de renouvellement du présent Avis Technique comportera toutes les pièces réglementaires et en particulier :
-<ul>
-<li>Un rapport d'activité précisant entre autre le nombre importé.</li>
-<li>Les certificats sanitaires d'origine visés par les vétérinaires et ceux des douanes du Cameroun.</li>
-<li>La liste des fournisseurs et leurs adresses.</li>
-<ul>
-]]></text>
-			</staticText>
-			<textField>
-				<reportElement uuid="efe0664f-4ba2-47cb-ab94-ed73bf4e051f" positionType="FixRelativeToBottom" x="10" y="545" width="535" height="25"/>
-				<textElement verticalAlignment="Middle" markup="none">
-					<font  size="9" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Article 5: le présent Avis Technique, valable jusqu'au "+($F{validityDate}!= null? new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{validityDate}) : "-")+" sera enregistré et communiqué partout où besoin sera."]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement uuid="60b3521e-c4ba-44f0-839a-1a0fd27f29f7" positionType="FixRelativeToBottom" x="10" y="577" width="120" height="79"/>
-				<textElement verticalAlignment="Middle" markup="html">
-					<font  size="9" isBold="false"/>
-				</textElement>
-				<text><![CDATA[<b>AMPLIATIONS</b> :
-<ul>
-<li>MINCOMMERCE</li>
-<li>MINEFI</li>
-<li>GOUVERNEUR/LT</li>
-<li>DREPIA-LT</li>
-<li>INTERESSE(E)</li>
-<li>DOSSIER/CHRONO</li>
-<li>ARCHIVES</li>
-</ul>]]></text>
-			</staticText>
-			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement uuid="5b49e164-65da-4bd8-a308-76082aa72916" positionType="FixRelativeToBottom" x="232" y="642" width="313" height="14"/>
+				<reportElement x="80" y="9" width="278" height="27" uuid="9b174883-26fb-40ff-8ce9-81c46a1fbf62"/>
 				<textElement>
-					<font  size="9"/>
+					<font fontName="Times New Roman" size="10" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{decisionPlace} != null  && $F{decisionPlace}.trim().length()>0 ? $F{decisionPlace} : "-")+", le "+($F{decisionDate}!= null? new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{decisionDate}) : "-")]]></textFieldExpression>
+				<text><![CDATA[A Son Excellence Monsieur le Ministre de la Sante Publique
+To His Honourable Minister of Public Health,]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="513" splitType="Stretch">
+			<staticText>
+				<reportElement x="47" y="6" width="485" height="20" uuid="3ca8c00b-b6d5-454d-abfb-d9f78fcf437d"/>
+				<textElement>
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Noms et Prénoms du pharmacien importateur / Names and surnames of importer pharmacist : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="53" width="94" height="20" uuid="e339537f-5133-4614-aae7-4e3c5a706abd"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Fonction / Function : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="47" y="79" width="453" height="20" uuid="2727019e-b889-492c-abe4-0aefd297f05e"/>
+				<textElement>
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Raison sociale et adresse de la structure importatrice / Name and address of importer structure :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="118" width="322" height="27" uuid="10042df2-697f-4168-b92e-d3a13ac25e9c"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Sollicite l'autorisation d'importer / Applies for an import authorization]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="47" y="143" width="453" height="20" uuid="f84b230b-947e-467e-b9eb-b3254fb24e41"/>
+				<textElement>
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Nom commercial du produit sollicité / Brand name of the requested product]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="47" y="191" width="453" height="20" uuid="2be402d1-6e9c-4f66-903a-967e543af740"/>
+				<textElement>
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Dénomination commune internationale (D.C.I.) / International Non proprietary Name (I.N.N.)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="21" y="237" width="89" height="20" uuid="5db18174-b108-4776-82c8-ddf8e1b8ba40"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Quantité / Quantity :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="201" y="237" width="127" height="20" uuid="27dba117-3790-4739-bea6-398002f481b7"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Présentation / Presentation :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="22" y="259" width="84" height="20" uuid="adeb59af-08e2-4041-8f64-8826fa4138ee"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Forme / Form : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="234" y="259" width="94" height="20" uuid="7b0ae409-4da2-48eb-959f-a63dadaff272"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Dosage / Dosing :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="47" y="286" width="485" height="20" uuid="7cd1d963-f352-49f0-ac69-16d12b98517a"/>
+				<textElement>
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Raison sociale et adresse du laboratoire fabricant / Manufacturer laboratory's name and address]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="47" y="334" width="453" height="20" uuid="4ae44a56-2d07-4f1c-981f-e68f4d154f6f"/>
+				<textElement>
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Raison sociale et adresse de l'exportateur (fournisseur) / Exporter's (Supplier's) name and address :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="22" y="378" width="155" height="20" uuid="92352be9-889e-4411-80ed-e0ea27a4ae70"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Mode de transport / Transport mode :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="22" y="400" width="227" height="20" uuid="63912a64-edb7-4655-882e-3d7e9cc66002"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Bureau des douanes d'entrée / Custom's office of entry :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="20" y="21" width="512" height="23" uuid="3e128340-c56f-41d5-8a2f-8448964cef1d"/>
+				<box topPadding="4" leftPadding="6" rightPadding="6">
+					<pen lineWidth="0.75"/>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{pharmacistName} != null ? $F{pharmacistName} : "-"]]></textFieldExpression>
 			</textField>
-			<componentElement>
-				<reportElement uuid="8ef5aed9-d406-4f3d-9f1a-dcf26ab03619" x="10" y="269" width="535" height="31"/>
-				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
-					<datasetRun subDataset="dataset1" uuid="dff9ed55-873a-42bd-a5b6-8467e2ae47f1">
-						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{fileItemList})]]></dataSourceExpression>
-					</datasetRun>
-					<jr:listContents height="31" width="535">
-						<textField>
-							<reportElement uuid="d3346aeb-1a72-44a3-8f00-22ce23e5891c" x="11" y="0" width="514" height="31"/>
-							<textElement markup="html"/>
-							<textFieldExpression><![CDATA["<b>"+($F{designation} != null  && $F{designation}.trim().length()>0 ? $F{designation} : "-")+"</b>:  Quantité :"+($F{quantity} != null  && $F{quantity}.trim().length()>0 ? $F{quantity} : "-")+" Unité :"+($F{measurementUnit} != null  && $F{measurementUnit}.trim().length()>0 ? $F{measurementUnit} : "-")]]></textFieldExpression>
-						</textField>
-					</jr:listContents>
-				</jr:list>
-			</componentElement>
+			<textField>
+				<reportElement x="20" y="94" width="512" height="23" uuid="5ee21674-233b-4b55-b124-b3cf00bc2459"/>
+				<box topPadding="3" leftPadding="6" rightPadding="6">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[($F{importerName} != null ? $F{importerName} : "-") + " , " + ($F{importerAddress} != null ? $F{importerAddress} : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="20" y="159" width="512" height="23" uuid="39f2b7d4-a82f-4a71-a3eb-5e4f6bdf30ee"/>
+				<box topPadding="3" leftPadding="6" rightPadding="6">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{productCommercialName} != null ? $F{productCommercialName} : "-"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="20" y="207" width="512" height="23" uuid="f9374447-70d6-4bb2-b749-726fd87c64ca"/>
+				<box topPadding="3" leftPadding="6" rightPadding="6">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{productINN} != null ? $F{productINN} : "-"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="20" y="302" width="512" height="23" uuid="a9d16b87-072d-4d1a-8fe3-8efb1b1748e8"/>
+				<box topPadding="3" leftPadding="6" rightPadding="6">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[($F{manufacturerName} != null ? $F{manufacturerName} : "-") + " , " + ($F{manufacturerAddress} != null ? $F{manufacturerAddress} : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="20" y="349" width="512" height="23" uuid="f9a22ec6-c310-4509-be70-cea08eb6d25f"/>
+				<box topPadding="3" leftPadding="6" rightPadding="6">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[($F{supplierName} != null ? $F{supplierName} : "-") + ", " + ($F{supplierAddress} != null ? $F{supplierAddress} : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="120" y="51" width="412" height="20" uuid="a7e32b9b-bac1-4801-960f-20567090dd3a"/>
+				<box topPadding="3" leftPadding="6" rightPadding="6">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{pharmacistFunction} != null ? $F{pharmacistFunction} : "-"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="111" y="236" width="90" height="20" uuid="048a76e8-3bc7-40a0-8b91-a223aa507ba7"/>
+				<box topPadding="2" leftPadding="6" rightPadding="6">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{productQuantity} != null ? $F{productQuantity} : "-"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="329" y="236" width="203" height="20" uuid="e182cd84-d031-4e00-9b5b-0816e9102936"/>
+				<box topPadding="2" leftPadding="6" rightPadding="6">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{productPresentation} != null ? $F{productPresentation} : "-"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="111" y="259" width="118" height="20" uuid="23aab270-c643-47ba-9a99-d63e83ca3b2f"/>
+				<box topPadding="2" leftPadding="6" rightPadding="6">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{productForm} != null ? $F{productForm} : "-"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="187" y="377" width="227" height="20" uuid="ebf44fb4-3fa8-4393-8093-dd235c0c3b3c"/>
+				<box topPadding="2" leftPadding="6" rightPadding="6">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{transportMode} != null ? $F{transportMode} : "-"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="258" y="400" width="274" height="20" uuid="4ac8deba-6606-45bb-a79b-95b1a7147dc2"/>
+				<box topPadding="2" leftPadding="6" rightPadding="6">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{enterringCustomsOffice} != null ? $F{enterringCustomsOffice} : "-"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="22" y="431" width="510" height="44" uuid="6e936f9a-43dd-4854-9ee8-b8613d1b50be"/>
+				<text><![CDATA[Dans l'attente d'une suite favorable à ma requête, veuillez agréer, Excellence, l'expression de ma profonde gratitude. /
+Expecting a positive decision, Yours faithfully.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="37" y="485" width="489" height="20" uuid="2518002d-b68f-4a27-a36d-969a7d4d4c41"/>
+				<text><![CDATA[: Un seul timbre pour des demandes groupées / Use one stamp for several applications in one serie.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="21" y="485" width="16" height="20" uuid="42d65bed-4193-42c5-b8ca-48ba94a12b24"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NB]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="329" y="260" width="203" height="20" uuid="5d8d44ad-bd0e-4aec-9cc0-d833bf13734b"/>
+				<box topPadding="2" leftPadding="6" rightPadding="6">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{productDosage} != null ? $F{productDosage} : "-"]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
-	<columnFooter>
-		<band splitType="Stretch"/>
-	</columnFooter>
 	<pageFooter>
-		<band splitType="Stretch"/>
+		<band height="64" splitType="Stretch">
+			<staticText>
+				<reportElement x="55" y="1" width="128" height="44" uuid="245ddeb0-7ed8-4e84-8b29-51e944e5227e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Cachet / Stamp]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="183" y="1" width="184" height="44" uuid="ca179220-2390-4e37-ad51-32853efc8b17"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Signature / Signature]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="367" y="1" width="128" height="44" uuid="8364bcc7-3f8b-4e79-bad8-d88ae49e077c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Date / Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="146" y="48" width="296" height="15" uuid="80ebc23a-9205-4c40-aa8b-c1722db0e850"/>
+				<textElement textAlignment="Justified"/>
+				<text><![CDATA[Site web : www.minsante.cm / www.minsante.gov.cm]]></text>
+			</staticText>
+		</band>
 	</pageFooter>
-	<summary>
-		<band splitType="Stretch"/>
-	</summary>
 </jasperReport>

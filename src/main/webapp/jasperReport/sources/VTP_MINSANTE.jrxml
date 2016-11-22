@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="file" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="28078ea8-15af-47d5-9f91-aa95db5f187e">
-	<property name="ireport.zoom" value="1.5"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VTP_MINSANTE" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8edf22e4-85a7-4ff4-97ff-42cd406afed7">
+	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="table">
@@ -8,12 +8,12 @@
 			<pen lineWidth="1.0" lineColor="#000000"/>
 		</box>
 	</style>
-	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+	<style name="table_TH" mode="Opaque" backcolor="#FFFFFF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
-	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+	<style name="table_CH" mode="Opaque" backcolor="#FFBFBF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
 		</box>
@@ -23,397 +23,646 @@
 			<pen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
-	<subDataset name="Table Dataset 1" uuid="c784432f-19b9-4c23-9bb1-7acd2901288a">
-		<field name="code" class="java.lang.String"/>
-		<field name="desc" class="java.lang.String"/>
-		<field name="quantity" class="java.lang.Double"/>
-		<variable name="SUM" class="java.lang.Double" calculation="Sum">
-			<variableExpression><![CDATA[$F{quantity}]]></variableExpression>
-			<initialValueExpression><![CDATA[0]]></initialValueExpression>
-		</variable>
-	</subDataset>
-	<parameter name="MINSANTE_LOGO" class="java.lang.String"/>
-	<field name="countryOfOrigin" class="java.lang.String"/>
-	<field name="provider" class="java.lang.String"/>
-	<field name="invoice" class="java.lang.String"/>
-	<field name="countryOfProvenance" class="java.lang.String"/>
-	<field name="importer" class="java.lang.String"/>
-	<field name="profession" class="java.lang.String"/>
-	<field name="address" class="java.lang.String"/>
-	<field name="fileItemList" class="java.util.List"/>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#FFBFBF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="106a947e-f30c-41ab-a50c-5fdcc639112a"/>
+	<subDataset name="Table Dataset 2" uuid="d34694dd-1f81-443c-89f3-60400940943a"/>
+	<field name="pharmacistName" class="java.lang.String"/>
+	<field name="pharmacy" class="java.lang.String"/>
+	<field name="pharmacyRoad" class="java.lang.String"/>
+	<field name="pharmacyPoBox" class="java.lang.String"/>
+	<field name="pharmacyTel" class="java.lang.String"/>
+	<field name="invoiceNumber" class="java.lang.String"/>
+	<field name="invoiceDate" class="java.lang.String"/>
+	<field name="invoiceAmount" class="java.lang.String"/>
+	<field name="loadingCustomsOffice" class="java.lang.String"/>
+	<field name="transportWay" class="java.lang.String"/>
+	<field name="enterringCustomsOffice" class="java.lang.String"/>
+	<field name="expirationDate" class="java.lang.String"/>
+	<field name="attestation" class="java.lang.String"/>
+	<field name="supplierName" class="java.lang.String"/>
 	<field name="decisionNumber" class="java.lang.String"/>
-	<field name="decisionDate" class="java.util.Date"/>
-	<field name="decisionPlace" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="363" splitType="Stretch">
+		<band height="206" splitType="Stretch">
+			<staticText>
+				<reportElement x="54" y="2" width="147" height="14" uuid="1f371b4e-3a85-4975-877b-b1e2b98d66bc"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPUBLIQUE DU CAMEROUN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="356" y="2" width="147" height="14" uuid="0ff825a9-65d2-43fe-9302-ea30c3ed16c1"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPUBLIC OF CAMEROON]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="41" y="16" width="176" height="14" uuid="292e626a-e2d3-438b-ba4e-4bf2421f2739"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Paix - Travail - Patrie]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="344" y="16" width="176" height="14" uuid="f7a9ba71-a52e-43c0-a9ab-5ba7a5ff1358"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Peace - Work - Fatherland]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="41" y="25" width="176" height="14" uuid="c09da305-4846-4842-9965-d1d5e884b114"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[----------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="344" y="26" width="176" height="14" uuid="033b0f72-f588-47d5-8134-b8c7dd16c2a2"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[----------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="31" y="39" width="198" height="14" uuid="8da57ee6-e58f-42cc-90d8-a12543922a86"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[MINISTERE DE LA SANTE PUBLIQUE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="43" y="50" width="176" height="14" uuid="6b23ac95-3655-4033-84fe-a33995474f10"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[----------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="31" y="64" width="198" height="14" uuid="97c42b59-10bb-4ad8-95dc-14cd75563e2d"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[SECRETARIAT GENERAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="43" y="74" width="176" height="14" uuid="1a84d062-f163-4903-8397-5ba679b3dd1f"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[----------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="47" y="86" width="172" height="33" uuid="d7e6a4f9-4718-4252-9f6a-f8b334f28a45"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[DIRECTION DE LA PHARMACIE ET DU MEDICAMENT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="334" y="39" width="198" height="14" uuid="cb310bb5-9d6c-4348-a605-b73ed87b1e35"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[MINISTRY OF PUBLIC HEALTH]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="346" y="50" width="176" height="14" uuid="47e83f03-fc34-42fd-840a-4414330fe59a"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[----------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="334" y="61" width="198" height="14" uuid="646925ca-d09c-4ad4-aa9b-5c4c853eb7ff"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[GENERAL SECRETARY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="346" y="72" width="176" height="14" uuid="3d433700-0811-4b93-9d1c-149c062e9f32"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[----------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="344" y="85" width="182" height="33" uuid="14d9e23f-3e57-40ff-88be-310ed4057f41"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[DIRECTION OF THE PHARMACY AND THE MEDICINE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="43" y="107" width="176" height="14" uuid="448f0e60-5dcd-4233-b2dc-7fa319da1f01"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[----------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="346" y="106" width="176" height="14" uuid="521def95-ffb3-4c25-a0f5-eeac65b13679"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[----------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="31" y="117" width="198" height="14" uuid="3fe38ba8-103f-4ea4-bbdf-f1e77ac73323"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[SOUS-DIRECTION DU MEDICAMENT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="43" y="126" width="176" height="14" uuid="6ff0388f-6192-47f7-ab13-ec59c94e5675"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[----------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="336" y="117" width="198" height="14" uuid="0ca85020-d66f-452e-a3c1-d9405f1f8ebf"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[SUB-DEPARTMENT OF DRUGS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="346" y="125" width="176" height="14" uuid="3d9c28bf-86a6-4d59-9428-06ec7d648e20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[----------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="21" y="140" width="21" height="20" uuid="71a12e2c-efdb-4d10-96c3-240c987b22de"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[N° ___]]></text>
+			</staticText>
 			<textField>
-				<reportElement uuid="d43748ad-5cf8-4a4b-bf50-b1ff8fc77136" x="10" y="129" width="174" height="12"/>
-				<textElement markup="none">
-					<font size="9" isBold="true"/>
+				<reportElement x="42" y="140" width="287" height="20" uuid="61d425a9-62e8-4af0-9e0f-0d67f85ecc31"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["N° "+($F{decisionNumber} != null  && $F{decisionNumber}.trim().length()>0 ? $F{decisionNumber} : "-")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{attestation} != null ? $F{attestation} : "-"]]></textFieldExpression>
 			</textField>
-			<elementGroup>
-				<staticText>
-					<reportElement uuid="64c20376-3232-4775-93e4-dbe592c209eb" x="15" y="66" width="130" height="10"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font size="6"/>
-					</textElement>
-					<text><![CDATA[BUREAU NATIONAL DE L'OZONE]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="56667fa5-dcc4-4b2e-8b07-a96aac1696a4" x="15" y="20" width="130" height="8"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font size="6"/>
-					</textElement>
-					<text><![CDATA[*******]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="3005100a-2a68-46bd-9b18-4327c13e9557" x="10" y="28" width="140" height="20"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font size="6"/>
-					</textElement>
-					<text><![CDATA[MINISTÈRE DE L'ENVIRONNEMENT ET DE LA
-    PROTECTION DE LA NATURE]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="2a9cc343-4f27-401a-8f6d-22e423dc4fd8" x="15" y="76" width="130" height="8"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font size="6"/>
-					</textElement>
-					<text><![CDATA[*******]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="2f8ca3fe-536c-4d2f-8210-cc46e8006012" x="15" y="56" width="130" height="10"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font size="6"/>
-					</textElement>
-					<text><![CDATA[SECRÉTERIAT GÉNÉRAL]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="03eef9ba-5a94-4e39-921f-4678cd226b65" x="15" y="48" width="130" height="8"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font size="6"/>
-					</textElement>
-					<text><![CDATA[*******]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="25220a4d-2c33-4702-8ee9-c7d841d6f2ef" x="15" y="10" width="130" height="10"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font size="6"/>
-					</textElement>
-					<text><![CDATA[ Paix-Travail-Patrie]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="898b970c-05ed-4951-b8ce-0cdd0de02faf" x="15" y="0" width="130" height="10"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font size="6"/>
-					</textElement>
-					<text><![CDATA[RÉPUBLIQUE DU CAMEROUN
-]]></text>
-				</staticText>
-			</elementGroup>
-			<elementGroup>
-				<staticText>
-					<reportElement uuid="f1eb4dcf-f754-4de2-9514-0c4ed5812882" x="415" y="48" width="130" height="8"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font size="6"/>
-					</textElement>
-					<text><![CDATA[*******]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="be32ad23-eac7-4847-9cce-65175f9c0adc" x="415" y="20" width="130" height="8"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font size="6"/>
-					</textElement>
-					<text><![CDATA[*******]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="029ee73e-a2e3-4a51-aa59-063aa92ffa21" x="415" y="10" width="130" height="10"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font size="6"/>
-					</textElement>
-					<text><![CDATA[Peace-Work-Fatherland]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="df07ef27-c83a-4d21-8e3f-68d9a343f411" x="415" y="0" width="130" height="10"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font size="6"/>
-					</textElement>
-					<text><![CDATA[REPUBLIC OF CAMEROON
-]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="a6d01776-2f72-4567-b8e7-fd246affcb41" x="415" y="56" width="130" height="10"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font size="6"/>
-					</textElement>
-					<text><![CDATA[GENERAL SECRETARIAT]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="aa3eac8e-a117-46a3-9b9f-75d6694aabd1" x="415" y="28" width="130" height="20"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font size="6"/>
-					</textElement>
-					<text><![CDATA[MINISTRY OF ENVIRONMENT AND
-PROTECTION OF NATURE]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="d24d613d-16a6-4a93-a7f5-0b062193ba9b" x="415" y="76" width="130" height="8"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font size="6"/>
-					</textElement>
-					<text><![CDATA[*******]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="4fab1483-b17b-4c04-afff-c9c542065ef9" x="415" y="66" width="130" height="10"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-						<font size="6"/>
-					</textElement>
-					<text><![CDATA[NATIONAL OZONE OFFICE]]></text>
-				</staticText>
-			</elementGroup>
+			<staticText>
+				<reportElement x="31" y="162" width="495" height="42" uuid="96f54166-b8f0-49d4-97d0-770052121fd5"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VISA TECHNIQUE PROVISOIRE  POUR L’IMPORTATION DE PRODUITS PHARMACEUTIQUES
+TEMPORARAY TECHNICAL VISA FOR IMPORTATION OF PHARMACEUTICALS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="183" y="192" width="176" height="14" uuid="4ae22c0c-b8e8-4488-b417-bb5a34ea0a45"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[----------------]]></text>
+			</staticText>
 			<image>
-				<reportElement uuid="495cc985-b22c-4597-8112-40a380ecb579" x="34" y="84" width="45" height="45"/>
-				<imageExpression><![CDATA[new java.io.File($P{MINSANTE_LOGO})]]></imageExpression>
+				<reportElement x="234" y="22" width="90" height="95" uuid="0a5a56ab-916e-4171-8a2f-9692ea47de48"/>
+				<imageExpression><![CDATA[new java.io.File((java.lang.String)$P{REPORT_PARAMETERS_MAP}.get("MINSANTE_LOGO"))]]></imageExpression>
 			</image>
-			<staticText>
-				<reportElement uuid="69aaa6e1-159a-41fc-b5f9-3ab414af9195" x="0" y="151" width="555" height="30"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font size="20" isBold="true"/>
-				</textElement>
-				<text><![CDATA[VISA TECHNIQUE PROVISOIRE]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="29b637bb-02e0-48f6-aa7e-e4d0ad964d62" x="10" y="181" width="535" height="24"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font size="9" isBold="false"/>
-				</textElement>
-				<text><![CDATA[POUR LE CONTROLE DE QUALITE DES EQUIPEMENTS/APPREILS DE FROID, MATERIELS ET SUBSTANCES CHIMIQUES NEFASTES À LA COUCHE D'OZONE À IMPORTER AU CAMEROUN]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="8ea21934-441d-4c0e-a858-e6e97203594f" x="10" y="215" width="535" height="36"/>
-				<textElement verticalAlignment="Middle" markup="none">
-					<font size="9" isBold="false"/>
-				</textElement>
-				<text><![CDATA[Le Coordonnateur du Bureau National de l'Ozone délivre le présent visa technique étant entendu que ces Substances Chimiques sont autorisées à être importées au Cameroun en conformité avec le plan national d'élimination des Substances Appauvrissant la couche d'ozone et des obligations du calendrier établi par le protocole de Montréal.]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="2631a369-7ce3-490c-89bd-36c3d03abe32" x="10" y="257" width="205" height="12"/>
-				<textElement markup="none">
-					<font size="9"/>
-				</textElement>
-				<text><![CDATA[Nom de l'importateur :]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="c9b8f533-5128-4310-aa24-e3f2d65a6343" x="10" y="269" width="205" height="12"/>
-				<textElement markup="none">
-					<font size="9"/>
-				</textElement>
-				<text><![CDATA[Profession :]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="eade97b1-d404-40ec-ab00-a728a6f765d4" x="10" y="281" width="205" height="12"/>
-				<textElement markup="none">
-					<font size="9"/>
-				</textElement>
-				<text><![CDATA[Adresse :]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="a7ff2ce5-bf89-4a12-9aa3-1df1a9f1b894" x="10" y="293" width="205" height="12"/>
-				<textElement markup="none">
-					<font size="9"/>
-				</textElement>
-				<text><![CDATA[N° de la facture :]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="23fa18f2-fc19-43b7-b29c-20e08e0a5ec9" x="10" y="305" width="205" height="12"/>
-				<textElement markup="none">
-					<font size="9"/>
-				</textElement>
-				<text><![CDATA[Fournisseur]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="d9d55a73-8756-476f-b38e-3cdfe6fd8121" x="10" y="317" width="205" height="12"/>
-				<textElement markup="none">
-					<font size="9"/>
-				</textElement>
-				<text><![CDATA[Pays d'Origine : ]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="2c76c74f-dd58-4491-bd46-303c3bcbde0a" x="10" y="329" width="205" height="12"/>
-				<textElement markup="none">
-					<font size="9"/>
-				</textElement>
-				<text><![CDATA[Pays de Provenance :]]></text>
-			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="bd0d6cf2-856b-4fb9-899d-d424b1ca05f3" x="215" y="317" width="330" height="12"/>
-				<textElement>
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{countryOfOrigin}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="f6905a59-a9fe-4ca6-9d86-b51c6c09582a" x="215" y="305" width="330" height="12"/>
-				<textElement>
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{provider}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="4f84dd4d-564b-4d12-99ee-b8784daff76f" x="215" y="293" width="330" height="12"/>
-				<textElement>
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{invoice}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="ee33f780-d282-4e2b-8994-07f5de77f219" x="215" y="329" width="330" height="12"/>
-				<textElement>
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{countryOfProvenance}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="101d234d-8e60-45bb-9943-123c986d4e75" x="215" y="257" width="330" height="12"/>
-				<textElement>
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{importer}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="549dc86a-a577-4d03-bf77-b3d5050630aa" x="215" y="269" width="330" height="12"/>
-				<textElement>
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{profession}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="61f9e533-c78b-4b97-a358-8c2fdd0cb5b4" x="215" y="281" width="330" height="12"/>
-				<textElement>
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
-			</textField>
 		</band>
 	</title>
+	<pageHeader>
+		<band height="32" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="3" width="555" height="27" uuid="9b174883-26fb-40ff-8ce9-81c46a1fbf62"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[	Le VISA TECHNIQUE PROVISOIRE POUR L’IMPORTATION DE PRODUITS PHARMACEUTIQUES est accordé à /
+The TEMPORARY TECHNICAL VISA FOR  IMPORTATION OF PHARMACEUTICALS is awarded to]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
 	<detail>
-		<band height="180" splitType="Stretch">
-			<componentElement>
-				<reportElement uuid="70d340ae-56f2-41d3-981c-5f9abe44bdfa" key="table" style="table" x="10" y="0" width="535" height="180"/>
-				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="Table Dataset 1" uuid="7f2dfe63-528e-4605-92fa-73e3225e5674">
-						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{fileItemList})]]></dataSourceExpression>
-					</datasetRun>
-					<jr:column width="90" uuid="79334cb4-5c66-4305-84f3-989eae228bd8">
-						<jr:columnHeader height="30" rowSpan="1">
-							<staticText>
-								<reportElement uuid="d52b9832-7144-4607-a3c6-3232ce60245b" x="0" y="0" width="90" height="30"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-									<font size="9"/>
-								</textElement>
-								<text><![CDATA[N°]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:detailCell style="table_TD" height="90" rowSpan="1">
-							<textField>
-								<reportElement uuid="b7d4fa8d-1cce-4f41-a407-d42e6525374d" x="0" y="0" width="90" height="45"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font size="9"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="353" uuid="e0bcfa88-6d92-4831-840c-49f6a938a34c">
-						<jr:columnHeader height="30" rowSpan="1">
-							<staticText>
-								<reportElement uuid="631a140f-39aa-4f2e-ad84-274d06d40cbb" x="0" y="0" width="353" height="30"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-									<font size="9"/>
-								</textElement>
-								<text><![CDATA[Désignation]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:columnFooter height="30" rowSpan="1">
-							<staticText>
-								<reportElement uuid="7eb0fa72-72d4-4168-af90-aaf3f9b1b702" x="0" y="0" width="353" height="30"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-									<font isBold="true"/>
-								</textElement>
-								<text><![CDATA[Total]]></text>
-							</staticText>
-						</jr:columnFooter>
-						<jr:detailCell style="table_TD" height="90" rowSpan="1">
-							<textField>
-								<reportElement uuid="31837ce5-b624-4cc2-81a5-25815314d8bc" x="0" y="0" width="353" height="45"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font size="9"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$F{desc}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-					<jr:column width="92" uuid="b595f029-503c-473b-bd1e-465d141b6633">
-						<jr:columnHeader height="30" rowSpan="1">
-							<staticText>
-								<reportElement uuid="547310f6-420f-462b-91d5-b4462a5e7ae5" x="0" y="0" width="92" height="30"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-									<font size="9"/>
-								</textElement>
-								<text><![CDATA[Quantité]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:columnFooter height="30" rowSpan="1">
-							<textField pattern="">
-								<reportElement uuid="3fa01739-cb7e-4a08-932c-029f2e7f1857" x="0" y="0" width="92" height="30"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font size="14" isBold="true" isUnderline="false"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$V{SUM}]]></textFieldExpression>
-							</textField>
-						</jr:columnFooter>
-						<jr:detailCell style="table_TD" height="90" rowSpan="1">
-							<textField>
-								<reportElement uuid="73aa2199-db24-4065-be04-ebed34f786a1" x="0" y="0" width="90" height="45"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font size="9"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
-				</jr:table>
-			</componentElement>
+		<band height="482" splitType="Stretch">
+			<staticText>
+				<reportElement x="47" y="5" width="96" height="20" uuid="3ca8c00b-b6d5-454d-abfb-d9f78fcf437d"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Docteur / Doctor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="26" width="143" height="37" uuid="e339537f-5133-4614-aae7-4e3c5a706abd"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Pharmacien responsable de /
+Responsible pharmacist  at]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="143" y="5" width="412" height="20" uuid="aa20277e-1564-48ad-be18-cf9a89a974ea"/>
+				<box leftPadding="6" rightPadding="6">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{pharmacistName} != null ? $F{pharmacistName} : "-"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="143" y="37" width="412" height="20" uuid="1af6cd0a-9f6d-4490-a7f1-dae2248081e7"/>
+				<box leftPadding="6" rightPadding="6">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{pharmacy} != null ? $F{pharmacy} : "-"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="120" y="63" width="97" height="20" uuid="19fe26c5-a915-4012-9ceb-f21d82f4e531"/>
+				<box leftPadding="6" rightPadding="6">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{pharmacyRoad} != null ? $F{pharmacyRoad} : "-"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="47" y="63" width="73" height="20" uuid="cefa5519-a2cc-4178-a28e-e52129bf97df"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Rue / Road]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="219" y="63" width="57" height="20" uuid="8ac207d3-bfc7-47a3-9de0-6ece8db0ff01"/>
+				<textElement>
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[BP/POBox :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="276" y="63" width="81" height="20" uuid="88a41c7f-b8cd-41e9-bcf7-fdfff1cd7230"/>
+				<box leftPadding="6" rightPadding="6">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{pharmacyPoBox} != null ? $F{pharmacyPoBox} : "-"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="367" y="63" width="44" height="20" uuid="3488c505-79b9-4a84-90e8-854233fd9ce9"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[Tel / Tel :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="411" y="63" width="144" height="20" uuid="3f7ce62a-b318-4fb4-9651-312f254ae519"/>
+				<box leftPadding="6" rightPadding="6">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{pharmacyTel} != null ? $F{pharmacyTel} : "-"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="84" width="555" height="46" uuid="b30a3a97-8169-4e56-b355-55fc2bfb7635"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Conformément la loi nº90/035 du 10 aout 1990 portant exercice et organisation de la profession de pharmacien, et tous les  textes réglementaires subséquents /
+In accordance with law nº90/035 of 10th august 1990 to organize the profession of pharmacist and all subsequent regulatory orders]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="130" width="555" height="29" uuid="7ff8422e-c6a5-405b-bca4-0323491105de"/>
+				<textElement>
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Pour importer les Produits pharmaceutiques figurant  sur la facture suivante /
+To import the  pharmaceuticals  mentioned on the  invoice below.]]></text>
+			</staticText>
+			<frame>
+				<reportElement x="0" y="190" width="555" height="292" uuid="5d3fc48a-dc24-460a-be20-0dc4f0689638"/>
+				<textField>
+					<reportElement x="201" y="0" width="166" height="29" uuid="d715e969-94f6-43e6-86be-ce21a60600ad"/>
+					<box leftPadding="6" rightPadding="6">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{invoiceNumber} != null ? $F{invoiceNumber} : "-"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="367" y="0" width="188" height="29" uuid="cdc18f91-bcea-48d9-9764-bc0a7225e70c"/>
+					<box leftPadding="6" rightPadding="6">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{invoiceDate} != null ? $F{invoiceDate} : "-"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="201" y="29" width="354" height="45" uuid="0953cf02-8910-4c65-b097-ddbefa2fd017"/>
+					<box leftPadding="6" rightPadding="6">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{supplierName} != null ? $F{supplierName} : "-"]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="0" width="201" height="29" uuid="fa6e245c-9559-4299-b461-e867f4073109"/>
+					<box leftPadding="6" rightPadding="6">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Facture Pro Forma
+Pro Forma Invoice]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="29" width="201" height="45" uuid="a93b4481-a25a-42d1-83cf-b33f5afc40a3"/>
+					<box leftPadding="6" rightPadding="6">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Raison sociale et adresse de l’expéditeur
+Name and adress of the supplier company]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="74" width="201" height="56" uuid="885af591-1a4f-474d-9e3b-e2bb4de95e63"/>
+					<box leftPadding="6" rightPadding="6">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Numéro et date du VISA TECHNIQUE PROVISOIRE
+Number of the TEMPORARY TECHNICAL  VISA]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="201" y="74" width="166" height="56" uuid="84b7a4f7-4d81-4840-9c9e-fd59af8222b9"/>
+					<box leftPadding="6" rightPadding="6">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Montant de la facture
+Invoice Amount]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="367" y="74" width="188" height="56" uuid="6bb5e56c-a2cb-4115-83a2-901f92bacd20"/>
+					<box leftPadding="6" rightPadding="6">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Port d’expédition
+Export customs office]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="0" y="129" width="201" height="46" uuid="c19b362d-d7dd-48cc-a949-a1be09a9c454"/>
+					<box leftPadding="6" rightPadding="6">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{decisionNumber} != null ? $F{decisionNumber} : "-"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="201" y="129" width="166" height="46" uuid="dc7be3ea-5d9c-4053-b21b-e7b94188938c"/>
+					<box leftPadding="6" rightPadding="6">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{invoiceAmount} != null ? $F{invoiceAmount} : "-"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="367" y="130" width="188" height="46" uuid="9b3a5431-05e4-4219-bb68-fa756923b003"/>
+					<box leftPadding="6" rightPadding="6">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{loadingCustomsOffice} != null ? $F{loadingCustomsOffice} : "-"]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="175" width="555" height="29" uuid="17e4d73a-14fa-4e68-92bd-f32aaa796c80"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Suivant les conditions ci-après   /   Under the following conditions :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="204" width="183" height="30" uuid="9de581fb-324f-448a-b5d0-da38a2b7abca"/>
+					<box leftPadding="6" rightPadding="6">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Voie (Sauf postale)
+Route (Except by post)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="183" y="205" width="184" height="30" uuid="2ab946b6-8f96-4606-ae9d-e72a44f2d5e1"/>
+					<box leftPadding="6" rightPadding="6">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Bureau des Douanes d’entrée
+Customs Office of entry]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="367" y="204" width="188" height="30" uuid="72185798-5e7b-466a-b428-4513d7101ba7"/>
+					<box leftPadding="6" rightPadding="6">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Délai de validité
+Time limit]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="0" y="234" width="183" height="56" uuid="a983612d-87b5-41aa-b0fe-ae8db7cf4bd4"/>
+					<box leftPadding="6" rightPadding="6">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{transportWay} != null ? $F{transportWay} : "-"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="183" y="234" width="184" height="56" uuid="bf67afc8-638e-4997-8042-d4bbbf3665b5"/>
+					<box leftPadding="6" rightPadding="6">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{enterringCustomsOffice} != null ? $F{enterringCustomsOffice} : "-"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="367" y="234" width="188" height="56" uuid="fd8bf525-bfc9-4e1f-98da-c97e0102a558"/>
+					<box leftPadding="6" rightPadding="6">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{expirationDate} != null ? $F{expirationDate} : "-"]]></textFieldExpression>
+				</textField>
+			</frame>
+			<staticText>
+				<reportElement x="0" y="159" width="555" height="29" uuid="19a64b8f-12ee-4701-b0f3-217b9ef03f96"/>
+				<textElement>
+					<font fontName="Times New Roman" size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[NB : LE VISA TECHNIQUE PROVISOIRE NE DONNE PAS DROIT AU DEDOUANEMENT DES PRODUITS / THE TEMPORARY TECHNICAL VISA DOES NOT AUTHORISE THE REMOVAL OF PRODUCTS FROM THE COSTUMS OFFICE]]></text>
+			</staticText>
 		</band>
 	</detail>
-	<summary>
-		<band height="100" splitType="Stretch">
+	<pageFooter>
+		<band height="64" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="83832f53-ce46-4597-bf1a-41f012d56aa6" x="10" y="10" width="535" height="24"/>
-				<textElement verticalAlignment="Middle" markup="none">
-					<font size="9" isBold="false"/>
-				</textElement>
-				<text><![CDATA[Ces produits ci-dessus cités sont autorisés à être importés au Cameroun. En fois de quoi ce visa technique est délivré pour servir et valoir ce que de droit.]]></text>
+				<reportElement x="241" y="0" width="314" height="44" uuid="8364bcc7-3f8b-4e79-bad8-d88ae49e077c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[LE DIRECTEUR DE LA PHARMACIE,
+DU MEDICAMENT ET DES LABORATOIRES
+(Cachet et signature)]]></text>
 			</staticText>
-			<staticText>
-				<reportElement uuid="caa5e3ad-a211-424c-b29f-1eea14a92539" x="10" y="44" width="535" height="12"/>
-				<textElement verticalAlignment="Middle" markup="none">
-					<font size="9" isBold="false"/>
-				</textElement>
-				<text><![CDATA[NB : Ce document a une validité de trois mois.]]></text>
-			</staticText>
-			<textField pattern="dd/MM/yyyy">
-				<reportElement uuid="ae3cc1cf-cf2d-4ee7-ae96-7fc4a596018b" x="10" y="66" width="322" height="15"/>
-				<textElement verticalAlignment="Middle" markup="none">
-					<font size="9" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Fait à "+($F{decisionPlace} != null  && $F{decisionPlace}.trim().length()>0 ? $F{decisionPlace} : "-")+", le "+($F{decisionDate}!= null && $F{decisionDate}.toString().trim().length()>0 ? new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{decisionDate}) : "-")]]></textFieldExpression>
-			</textField>
 		</band>
-	</summary>
+	</pageFooter>
 </jasperReport>

@@ -87,7 +87,7 @@ public class GlobalBean implements Serializable
 	public boolean getCertificatAuthentifaction()
 	{
 		final Params param = paramsService.findParamsByName(ParamsNames.TOKEN_AUTHENTIFICATION.getCode());
-		return !param.getValue().equals("0");
+		return (param != null && !param.getValue().equals("0"));
 	}
 
 	/**

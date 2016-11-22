@@ -1610,7 +1610,14 @@ public class FileItemCctDetailController implements Serializable
 				final HtmlOutputLabel htmlOutputLabel = (HtmlOutputLabel) context.getApplication().createComponent(
 						HtmlOutputLabel.COMPONENT_TYPE);
 				htmlOutputLabel.setFor(ID_DECISION_LABEL + stringId);
-				htmlOutputLabel.setValue(dataType.getLabel());
+				if (FacesContext.getCurrentInstance().getViewRoot().getLocale().equals(Locale.FRENCH))
+				{
+					htmlOutputLabel.setValue(dataType.getLabel());
+				}
+				else
+				{
+					htmlOutputLabel.setValue(dataType.getLabelEn());
+				}
 				decisionDiv.getChildren().add(htmlOutputLabel);
 
 				final HtmlPanelGroup htmlPanelGroup = (HtmlPanelGroup) context.getApplication().createComponent(
@@ -2514,7 +2521,14 @@ public class FileItemCctDetailController implements Serializable
 
 			final HtmlOutputText labelOutput = (HtmlOutputText) context.getApplication().createComponent(
 					HtmlOutputText.COMPONENT_TYPE);
-			labelOutput.setValue(dataType.getLabel());
+			if (FacesContext.getCurrentInstance().getViewRoot().getLocale().equals(Locale.FRENCH))
+			{
+				labelOutput.setValue(dataType.getLabel());
+			}
+			else
+			{
+				labelOutput.setValue(dataType.getLabelEn());
+			}
 			htmlPanelGroup.getChildren().add(labelOutput);
 
 			if (dataType.getRequired())
@@ -2537,7 +2551,14 @@ public class FileItemCctDetailController implements Serializable
 					inputText.setRequired(true);
 				}
 				inputText.setId(ID_DISPATCH_LABEL + stringId);
-				inputText.setLabel(dataType.getLabel());
+				if (FacesContext.getCurrentInstance().getViewRoot().getLocale().equals(Locale.FRENCH))
+				{
+					inputText.setLabel(dataType.getLabel());
+				}
+				else
+				{
+					inputText.setLabel(dataType.getLabelEn());
+				}
 				dipatchDiv.getChildren().add(inputText);
 			}
 			else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode()))
@@ -2549,7 +2570,14 @@ public class FileItemCctDetailController implements Serializable
 					booleanCheckbox.setRequired(true);
 				}
 				booleanCheckbox.setId(ID_DISPATCH_LABEL + stringId);
-				booleanCheckbox.setLabel(dataType.getLabel());
+				if (FacesContext.getCurrentInstance().getViewRoot().getLocale().equals(Locale.FRENCH))
+				{
+					booleanCheckbox.setLabel(dataType.getLabel());
+				}
+				else
+				{
+					booleanCheckbox.setLabel(dataType.getLabelEn());
+				}
 				dipatchDiv.getChildren().add(booleanCheckbox);
 
 			}
@@ -2565,7 +2593,14 @@ public class FileItemCctDetailController implements Serializable
 				calendar.setPattern("dd-MM-yyyy");
 				calendar.setLocale(Locale.FRANCE);
 				calendar.setNavigator(true);
-				calendar.setLabel(dataType.getLabel());
+				if (FacesContext.getCurrentInstance().getViewRoot().getLocale().equals(Locale.FRENCH))
+				{
+					calendar.setLabel(dataType.getLabel());
+				}
+				else
+				{
+					calendar.setLabel(dataType.getLabelEn());
+				}
 				dipatchDiv.getChildren().add(calendar);
 
 			}
@@ -2579,7 +2614,14 @@ public class FileItemCctDetailController implements Serializable
 				}
 				inputTextarea.setRows(10);
 				inputTextarea.setId(ID_DISPATCH_LABEL + stringId);
-				inputTextarea.setLabel(dataType.getLabel());
+				if (FacesContext.getCurrentInstance().getViewRoot().getLocale().equals(Locale.FRENCH))
+				{
+					inputTextarea.setLabel(dataType.getLabel());
+				}
+				else
+				{
+					inputTextarea.setLabel(dataType.getLabelEn());
+				}
 				dipatchDiv.getChildren().add(inputTextarea);
 			}
 		}

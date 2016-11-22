@@ -2,7 +2,7 @@
 <configuration>
 	<appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-			<Pattern>.%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg %n  %F line: %L %n
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg %n  %F line: %L %n
 			</Pattern>
 		</encoder>
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -21,7 +21,7 @@
 		</rollingPolicy>
 
 		<encoder>
-			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n  %F line: %L %n</Pattern>
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{35} - %msg %n  %F line: %L %n</Pattern>
 		</encoder>
 	</appender>
 	<appender name="hibernateDailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">

@@ -1,0 +1,5 @@
+- Changement du format d'affichage dans les fichiers logs.
+
+- Externalisation des fichiers de configuration des jar.
+
+- Grouppement des configs dans un seul fichier global-config.properties

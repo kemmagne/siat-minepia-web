@@ -23,12 +23,13 @@
 		<param-value>Production</param-value>
 	</context-param>
 
+	<!-- 	Spring config location -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-			classpath:spring-config.xml, 
+			/WEB-INF/spring-config.xml, 
  			/WEB-INF/applicationContext.xml, 
- 			/WEB-INF/security-context.xml			
+ 			/WEB-INF/security-context.xml
 		</param-value>
 	</context-param>
 	<context-param>

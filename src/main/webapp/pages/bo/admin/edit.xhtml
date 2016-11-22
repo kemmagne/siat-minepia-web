@@ -63,7 +63,8 @@
 						</p:selectOneMenu>
 					</h:panelGroup>
 
-					<p:outputLabel rendered="#{request.isUserInRole('ADMIN_MIN')}" value="#{bundle['EditAdminLabel_organism']}" for="administrationOrganism" />
+					<p:outputLabel rendered="#{request.isUserInRole('ADMIN_MIN')}" value="#{bundle['EditAdminLabel_organism']}"
+						for="administrationOrganism" />
 					<h:panelGroup rendered="#{request.isUserInRole('ADMIN_MIN')}">
 						<p:selectOneMenu id="administrationOrganism" value="#{adminController.selected.administration}" required="true"
 							requiredMessage="#{bundle['EditAdminRequiredMessage_organism']}" rendered="#{request.isUserInRole('ADMIN_MIN')}" disabled="true">
@@ -88,17 +89,23 @@
 					<h:outputLabel value="#{bundle['EditAdminLabel_enabled']}" for="enabled" />
 					<p:selectBooleanCheckbox id="enabled" value="#{adminController.selected.enabled}" title="#{bundle['EditAdminTitle_enabled']}">
 					</p:selectBooleanCheckbox>
-
+					<p:outputLabel value="#{bundle['EditUserLabel_non_locked']}" for="user_non_locked" />
+					<h:panelGroup>
+						<p:selectBooleanCheckbox id="user_non_locked" value="#{adminController.selected.accountNonLocked}"
+							title="#{bundle['EditUserTitle_non_locked']}" />
+						<p:message for="user_non_locked" />
+					</h:panelGroup>
 				</p:panelGrid>
 
 				<br />
 
 				<div class="btn-bloc">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editBtn" actionListener="#{adminController.edit}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editBtn"
+						actionListener="#{adminController.edit}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
 						update="display,:adminListForm,:growl" oncomplete="handleSubmit(xhr,status,args,adminEditDlg,'datalistTable');"
 						onclick="PF('datalistTable').filter();" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('adminEditDialog').hide();"
-						immediate="true" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="cancelBtn"
+						value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('adminEditDialog').hide();" immediate="true" />
 				</div>
 			</h:panelGroup>
 

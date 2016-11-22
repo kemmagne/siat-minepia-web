@@ -65,6 +65,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 
@@ -457,11 +458,13 @@ public class LoginBean implements Serializable
 		final List<Object> sList = sessionRegistry.getAllPrincipals();
 		for (final Object principal : sList)
 		{
-			final List<SessionInformation> sessionInformations = sessionRegistry.getAllSessions(principal, false);
-			for (final SessionInformation sessionInformation : sessionInformations)
+			final UserDetails userDetails = (UserDetails) principal;
+			if (userDetails.getUsername().equals(userName))
 			{
-				sessionInformation.expireNow();
-				sessionInformation.refreshLastRequest();
+				for (final SessionInformation information : sessionRegistry.getAllSessions(userDetails, true))
+				{
+					information.expireNow();
+				}
 			}
 		}
 		try

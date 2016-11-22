@@ -1080,7 +1080,14 @@ public class FileItemApDetailController implements Serializable
 				final HtmlOutputLabel htmlOutputLabel = (HtmlOutputLabel) context.getApplication().createComponent(
 						HtmlOutputLabel.COMPONENT_TYPE);
 				htmlOutputLabel.setFor(ID_DECISION_LABEL + stringId);
-				htmlOutputLabel.setValue(dataType.getLabel());
+				if (FacesContext.getCurrentInstance().getViewRoot().getLocale().equals(Locale.FRENCH))
+				{
+					htmlOutputLabel.setValue(dataType.getLabel());
+				}
+				else
+				{
+					htmlOutputLabel.setValue(dataType.getLabelEn());
+				}
 				decisionDiv.getChildren().add(htmlOutputLabel);
 
 
@@ -1664,7 +1671,14 @@ public class FileItemApDetailController implements Serializable
 
 			final HtmlOutputText labelOutput = (HtmlOutputText) context.getApplication().createComponent(
 					HtmlOutputText.COMPONENT_TYPE);
-			labelOutput.setValue(dataType.getLabel());
+			if (FacesContext.getCurrentInstance().getViewRoot().getLocale().equals(Locale.FRENCH))
+			{
+				labelOutput.setValue(dataType.getLabel());
+			}
+			else
+			{
+				labelOutput.setValue(dataType.getLabelEn());
+			}
 			htmlPanelGroup.getChildren().add(labelOutput);
 
 			if (dataType.getRequired())
