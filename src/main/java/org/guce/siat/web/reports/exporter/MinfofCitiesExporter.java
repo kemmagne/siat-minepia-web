@@ -51,7 +51,7 @@ public class MinfofCitiesExporter extends AbstractReportInvoker
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getReportDataSource()
 	 */
 	@Override
@@ -61,7 +61,7 @@ public class MinfofCitiesExporter extends AbstractReportInvoker
 
 
 		minfofCitiesFileVo.setOperationType("");
-		minfofCitiesFileVo.setDecisionDate(Calendar.getInstance().getTime());
+		minfofCitiesFileVo.setDecisionDate(file.getSignatureDate());
 
 		minfofCitiesFileVo.setHolderCountry("holderCountry");
 		minfofCitiesFileVo.setSpecialConditions("specialConditions");

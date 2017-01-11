@@ -1,7 +1,6 @@
 package org.guce.siat.web.reports.exporter;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +49,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getReportDataSource()
 	 */
 	@Override
@@ -62,7 +61,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker
 		if ((file != null))
 		{
 			ctCctCpEFileVo.setDecisionPlace(file.getBureau().getLabelFr());
-			ctCctCpEFileVo.setDecisionDate(Calendar.getInstance().getTime());
+			ctCctCpEFileVo.setDecisionDate(file.getSignatureDate());
 			ctCctCpEFileVo.setSignatoryName(file.getAssignedUser().getFirstName());
 			if (file.getClient() != null)
 			{
@@ -171,6 +170,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker
 		jRParameters.put("MINADER_LOGO", getRealPath(IMAGES_PATH, "minader", "jpg"));
 		return jRParameters;
 	}
+
 	/**
 	 * Gets the file.
 	 *

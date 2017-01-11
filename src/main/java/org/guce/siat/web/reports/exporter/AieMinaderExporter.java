@@ -4,7 +4,6 @@
 package org.guce.siat.web.reports.exporter;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -43,7 +42,7 @@ public class AieMinaderExporter extends AbstractReportInvoker
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.guce.siat.web.reports.vo.JasperExporter#getReportDataSource(java.lang.Object[])
 	 */
 	@Override
@@ -51,7 +50,7 @@ public class AieMinaderExporter extends AbstractReportInvoker
 	{
 		final AieMinaderFileVo aieMinaderFileVo = new AieMinaderFileVo();
 
-		aieMinaderFileVo.setDecisionDate(Calendar.getInstance().getTime());
+		aieMinaderFileVo.setDecisionDate(file.getSignatureDate());
 
 
 		if ((file != null))
@@ -66,7 +65,7 @@ public class AieMinaderExporter extends AbstractReportInvoker
 				{
 					switch (fileFieldValue.getFileField().getCode())
 					{
-						case"NUMERO_AIE_MINADER":
+						case "NUMERO_AIE_MINADER":
 							aieMinaderFileVo.setDecisionNumber(fileFieldValue.getValue());
 							break;
 						default:

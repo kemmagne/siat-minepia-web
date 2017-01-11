@@ -50,7 +50,7 @@ public class InvExporter extends AbstractReportInvoker
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.guce.siat.web.reports.vo.JasperExporter#getReportDataSource(java.lang.Object[])
 	 */
 	@Override
@@ -72,7 +72,7 @@ public class InvExporter extends AbstractReportInvoker
 		if ((file != null))
 		{
 			final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
-
+			invFileVo.setDecisionDate(file.getSignatureDate());
 			if (CollectionUtils.isNotEmpty(fileFieldValueList))
 			{
 				for (final FileFieldValue fileFieldValue : fileFieldValueList)
@@ -132,7 +132,7 @@ public class InvExporter extends AbstractReportInvoker
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getJRParameters()
 	 */
 	@Override

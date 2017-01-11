@@ -2,7 +2,6 @@ package org.guce.siat.web.reports.exporter;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +42,7 @@ public class CpMinepdedExporter extends AbstractReportInvoker
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.guce.siat.web.reports.vo.JasperExporter#getReportDataSource(java.lang.Object[])
 	 */
 	@Override
@@ -56,7 +55,7 @@ public class CpMinepdedExporter extends AbstractReportInvoker
 		if ((file != null))
 		{
 			final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
-			cpMinepdedFileVo.setDecisionDate(new Date());
+			cpMinepdedFileVo.setDecisionDate(file.getSignatureDate());
 
 			for (final FileFieldValue fileFieldValue : fileFieldValueList)
 			{
@@ -131,7 +130,7 @@ public class CpMinepdedExporter extends AbstractReportInvoker
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getJRParameters()
 	 */
 	@Override

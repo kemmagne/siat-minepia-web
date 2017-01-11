@@ -15,6 +15,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -1866,6 +1867,9 @@ public class FileItemApDetailController implements Serializable
 									//Update report sequence
 									reportOrganism.setSequence(reportOrganism.getSequence() + 1);
 									reportOrganismService.update(reportOrganism);
+									final Map<String, Date> dateParams = new HashMap<String, Date>();
+									dateParams.put("SIGNATURE_DATE", java.util.Calendar.getInstance().getTime());
+									fileService.updateSpecificColumn(dateParams, currentFile);
 								}
 							}
 						}

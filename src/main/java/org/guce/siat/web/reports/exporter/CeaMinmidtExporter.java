@@ -1,7 +1,6 @@
 package org.guce.siat.web.reports.exporter;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class CeaMinmidtExporter extends AbstractReportInvoker
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getReportDataSource()
 	 */
 	@Override
@@ -51,8 +50,8 @@ public class CeaMinmidtExporter extends AbstractReportInvoker
 
 
 		ceaMinmidtFileVo.setDecreeNumber("decreeNumber: 552235");
-		ceaMinmidtFileVo.setDecreeDate(Calendar.getInstance().getTime());
-		ceaMinmidtFileVo.setDecisionDate(Calendar.getInstance().getTime());
+		ceaMinmidtFileVo.setDecreeDate(file.getSignatureDate());
+		ceaMinmidtFileVo.setDecisionDate(file.getSignatureDate());
 		ceaMinmidtFileVo.setDecisionPlace(file.getBureau().getAddress());
 
 

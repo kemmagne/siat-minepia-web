@@ -120,6 +120,9 @@ public interface ControllerConstants
 			/** The report settings page. */
 			String REPORT_SETTINGS_PAGE = "/pages/bo/reportParams/index.xhtml";
 
+			/** The Guce-SIAT offices page. */
+			String GUCE_SIAT_OFFICES_PAGE = "/pages/bo/bureauGuceSiat/bureauGuceSiatCellEditor.xhtml";
+
 			/**
 			 * The Interface GR.
 			 */

@@ -53,7 +53,7 @@ public class EhMinaderExporter extends AbstractReportInvoker
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getReportDataSource()
 	 */
 	@Override
@@ -68,9 +68,9 @@ public class EhMinaderExporter extends AbstractReportInvoker
 		{
 			final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
 
-			ehMinaderFileVo.setSessionDate(new Date());
-			ehMinaderFileVo.setDecisionDate(new Date());
-			ehMinaderFileVo.setDecisionPlace("-");
+			ehMinaderFileVo.setSessionDate(file.getSignatureDate());
+			ehMinaderFileVo.setDecisionDate(file.getSignatureDate());
+			ehMinaderFileVo.setDecisionPlace(file.getAssignedUser().getAdministration().getLabelFr());
 			ehMinaderFileVo.setReferenceNumber(file.getClient().getCommerceApprovalRegistrationNumberFile());
 
 			try
@@ -93,7 +93,7 @@ public class EhMinaderExporter extends AbstractReportInvoker
 
 					switch (fileFieldValue.getFileField().getCode())
 					{
-						case"NUMERO_EH_MINADER":
+						case "NUMERO_EH_MINADER":
 							ehMinaderFileVo.setDecisionNumber(fileFieldValue.getValue());
 							break;
 						case "REPRESENTANT_CAMEROUN_RAISONSOCIALE":

@@ -4,7 +4,6 @@
 package org.guce.siat.web.reports.exporter;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class AeMinmidtExporter extends AbstractReportInvoker
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getReportDataSource()
 	 */
 	@Override
@@ -55,8 +54,8 @@ public class AeMinmidtExporter extends AbstractReportInvoker
 		final AeMinmidtFileVo aeMinmidtFileVo = new AeMinmidtFileVo();
 
 
-		aeMinmidtFileVo.setValidityDate(Calendar.getInstance().getTime());
-		aeMinmidtFileVo.setDecisionDate(Calendar.getInstance().getTime());
+		aeMinmidtFileVo.setValidityDate(file.getSignatureDate());
+		aeMinmidtFileVo.setDecisionDate(file.getSignatureDate());
 		aeMinmidtFileVo.setDecisionPlace(file.getBureau().getAddress());
 
 

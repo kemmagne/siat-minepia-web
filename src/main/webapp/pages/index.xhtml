@@ -72,6 +72,9 @@
 					<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="ministryMenuItem"
 						value="#{bundle['appmenu_gestion_ministeres']}" actionListener="#{ministryController.goToPage}"
 						rendered="#{request.isUserInRole('ROOT')}" />
+					<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="bureauGuceSiatMenuItem"
+						value="#{bundle['appmenu_gestion_bureau_guce_siat']}" actionListener="#{guceSiatBureauController.goToPage}"
+						rendered="#{request.isUserInRole('ROOT')}" />
 					<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="organismMenuItem"
 						value="#{bundle['appmenu_gestion_organism']}" actionListener="#{organismController.goToPage}"
 						rendered="#{request.isUserInRole('ADMIN_MIN')}" />
@@ -89,6 +92,7 @@
 						rendered="#{request.isUserInRole('ADMIN_ORG')}" />
 					<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="auditEntityMenuItem"
 						value="#{bundle['appmenu_gestion_auditEntity']}" actionListener="#{auditEntityController.goToPage}" />
+
 				</p:submenu>
 
 				<p:submenu id="hourlySubMenu" label="#{bundle['appmenu_hourly']}" icon="ui-icon-contact" styleClass="hourly"

@@ -51,7 +51,7 @@ public class PivpsrpMinaderExporter extends AbstractReportInvoker
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getReportDataSource()
 	 */
 	@Override
@@ -64,7 +64,7 @@ public class PivpsrpMinaderExporter extends AbstractReportInvoker
 		pivpsrpMinaderFileVo.setArrivalDate(Calendar.getInstance().getTime());
 		pivpsrpMinaderFileVo.setOriginCountry(file.getCountryOfOrigin().getCountryName());
 		pivpsrpMinaderFileVo.setSessionDate(Calendar.getInstance().getTime());
-		pivpsrpMinaderFileVo.setDecisionDate(Calendar.getInstance().getTime());
+		pivpsrpMinaderFileVo.setDecisionDate(file.getSignatureDate());
 		pivpsrpMinaderFileVo.setDecisionPlace(file.getBureau().getAddress());
 		pivpsrpMinaderFileVo.setReference("REFERENCE");
 
@@ -185,7 +185,7 @@ public class PivpsrpMinaderExporter extends AbstractReportInvoker
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getJRParameters()
 	 */
 	@Override

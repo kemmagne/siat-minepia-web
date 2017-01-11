@@ -49,7 +49,7 @@ public class VtMinepdedExporter extends AbstractReportInvoker
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.guce.siat.web.reports.vo.JasperExporter#getReportDataSource(java.lang.Object[])
 	 */
 	@Override
@@ -61,7 +61,7 @@ public class VtMinepdedExporter extends AbstractReportInvoker
 		if ((file != null))
 		{
 			final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
-
+			vtMinepdedVo.setDecisionDate(file.getSignatureDate());
 			if (CollectionUtils.isNotEmpty(fileFieldValueList))
 			{
 				for (final FileFieldValue fileFieldValue : fileFieldValueList)
@@ -141,7 +141,7 @@ public class VtMinepdedExporter extends AbstractReportInvoker
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getJRParameters()
 	 */
 	@Override

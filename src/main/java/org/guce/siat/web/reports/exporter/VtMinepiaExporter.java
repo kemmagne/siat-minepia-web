@@ -47,7 +47,7 @@ public class VtMinepiaExporter extends AbstractReportInvoker
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.guce.siat.web.reports.vo.JasperExporter#getReportDataSource(java.lang.Object[])
 	 */
 	@Override
@@ -59,7 +59,7 @@ public class VtMinepiaExporter extends AbstractReportInvoker
 		if ((file != null))
 		{
 			final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
-
+			vtMinepiaVo.setDecisionDate(file.getSignatureDate());
 			if (CollectionUtils.isNotEmpty(fileFieldValueList))
 			{
 				for (final FileFieldValue fileFieldValue : fileFieldValueList)
@@ -135,7 +135,7 @@ public class VtMinepiaExporter extends AbstractReportInvoker
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getJRParameters()
 	 */
 	@Override

@@ -4,7 +4,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -52,7 +51,7 @@ public class DiMinaderSExporter extends AbstractReportInvoker
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getReportDataSource()
 	 */
 	@Override
@@ -66,8 +65,8 @@ public class DiMinaderSExporter extends AbstractReportInvoker
 		{
 			final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
 
-			diMinaderSFileVo.setDecisionDate(new Date());
-			diMinaderSFileVo.setDecisionPlace("-");
+			diMinaderSFileVo.setDecisionDate(file.getSignatureDate());
+			diMinaderSFileVo.setDecisionPlace(file.getAssignedUser().getAdministration().getLabelFr());
 
 			if (file.getCountryOfOrigin() != null)
 			{
@@ -203,7 +202,7 @@ public class DiMinaderSExporter extends AbstractReportInvoker
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getJRParameters()
 	 */
 	@Override

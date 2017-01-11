@@ -1,6 +1,5 @@
 package org.guce.siat.web.reports.exporter;
 
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -42,7 +41,7 @@ public class FimexExporter extends AbstractReportInvoker
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getReportDataSource()
 	 */
 	@Override
@@ -52,7 +51,7 @@ public class FimexExporter extends AbstractReportInvoker
 		if (file != null)
 		{
 			fileVo.setRecordId(file.getNumeroDossier());
-			fileVo.setDateSignature(Calendar.getInstance().getTime());
+			fileVo.setDateSignature(file.getSignatureDate());
 			fileVo.setDelegationEn(file.getBureau().getService().getSubDepartment().getOrganism().getLabelEn());
 			fileVo.setDelegationFr(file.getBureau().getService().getSubDepartment().getOrganism().getLabelFr());
 			fileVo.setValid(file.getAssignedUser().getFirstName() + " " + file.getAssignedUser().getLastName());

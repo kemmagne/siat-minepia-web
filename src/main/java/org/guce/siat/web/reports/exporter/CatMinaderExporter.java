@@ -1,6 +1,5 @@
 package org.guce.siat.web.reports.exporter;
 
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -45,9 +44,9 @@ public class CatMinaderExporter extends AbstractReportInvoker
 		final CatMinaderFileVo catMinaderFileVo = new CatMinaderFileVo();
 
 
-		catMinaderFileVo.setDecisionDate(Calendar.getInstance().getTime());
+		catMinaderFileVo.setDecisionDate(file.getSignatureDate());
 		catMinaderFileVo.setDecisionPlace(file.getBureau().getAddress());
-		catMinaderFileVo.setSessionDate(Calendar.getInstance().getTime());
+		catMinaderFileVo.setSessionDate(file.getSignatureDate());
 		catMinaderFileVo.setTreatmentEquipment("Appareil de traitement");
 
 

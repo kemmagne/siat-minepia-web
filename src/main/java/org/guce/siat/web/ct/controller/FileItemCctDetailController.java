@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -1720,6 +1721,7 @@ public class FileItemCctDetailController implements Serializable
 		paymentData.setMontantTva(totalTva);
 		paymentData.setAutreMontant(invoiceOtherAmount);
 	}
+
 	/**
 	 * Remplir la liste des valeurs des filed Values pour le un article.
 	 */
@@ -2344,7 +2346,7 @@ public class FileItemCctDetailController implements Serializable
 				}
 				else
 				{
-				itemFlowService.takeDecision(itemFlowsToAdd, flowDatas);
+					itemFlowService.takeDecision(itemFlowsToAdd, flowDatas);
 				}
 				decisionDiv.getChildren().clear();
 			}
@@ -2915,6 +2917,11 @@ public class FileItemCctDetailController implements Serializable
 										//Update report sequence
 										reportOrganism.setSequence(reportOrganism.getSequence() + 1);
 										reportOrganismService.update(reportOrganism);
+
+
+										final Map<String, Date> dateParams = new HashMap<String, Date>();
+										dateParams.put("SIGNATURE_DATE", java.util.Calendar.getInstance().getTime());
+										fileService.updateSpecificColumn(dateParams, currentFile);
 									}
 								}
 							}

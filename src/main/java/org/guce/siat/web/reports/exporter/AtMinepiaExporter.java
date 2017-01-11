@@ -6,7 +6,6 @@ package org.guce.siat.web.reports.exporter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -54,7 +53,7 @@ public class AtMinepiaExporter extends AbstractReportInvoker
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getReportDataSource()
 	 */
 	@Override
@@ -67,7 +66,7 @@ public class AtMinepiaExporter extends AbstractReportInvoker
 		if (file != null)
 		{
 			final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
-			atMinsanteFileVo.setDecisionDate(Calendar.getInstance().getTime());
+			atMinsanteFileVo.setDecisionDate(file.getSignatureDate());
 			atMinsanteFileVo.setDecisionPlace(file.getBureau().getAddress());
 			if (file.getClient() != null)
 			{

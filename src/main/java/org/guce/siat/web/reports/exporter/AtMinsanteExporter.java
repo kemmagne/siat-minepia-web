@@ -7,7 +7,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -53,7 +52,7 @@ public class AtMinsanteExporter extends AbstractReportInvoker
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getReportDataSource()
 	 */
 	@Override
@@ -66,8 +65,8 @@ public class AtMinsanteExporter extends AbstractReportInvoker
 		if ((file != null))
 		{
 
-			atMinsanteFileVo.setDecisionDate(new Date());
-			atMinsanteFileVo.setDecisionPlace("-");
+			atMinsanteFileVo.setDecisionDate(file.getSignatureDate());
+			atMinsanteFileVo.setDecisionPlace(file.getAssignedUser().getAdministration().getLabelFr());
 
 			if (file.getClient() != null)
 			{

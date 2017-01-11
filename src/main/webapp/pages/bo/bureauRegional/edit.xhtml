@@ -9,6 +9,7 @@
 		header="#{bundle['EditBureauRegionalTitle']}" width="800px">
 
 		<h:form id="bureauRegionalEditForm">
+			
 			<h:panelGroup id="display" styleClass="inpWidth">
 
 
@@ -16,6 +17,7 @@
 				<h:outputText
 					value="#{(bureauRegionalController.selected.headOffice.firstName).concat(' ').concat(bureauRegionalController.selected.headOffice.lastName)}" />
 				<br />
+				
 				<p:panelGrid columns="4">
 
 					<p:outputLabel value="#{bundle['EditBureauRegionalLabel_labelFr']}" for="bureauRegional_labelFr" />

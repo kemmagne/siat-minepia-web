@@ -1,7 +1,6 @@
 package org.guce.siat.web.reports.exporter;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +41,7 @@ public class AsMinaderExporter extends AbstractReportInvoker
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getReportDataSource()
 	 */
 	@Override
@@ -52,9 +51,9 @@ public class AsMinaderExporter extends AbstractReportInvoker
 
 
 
-		asMinaderFileVo.setDecisionDate(Calendar.getInstance().getTime());
-		asMinaderFileVo.setValidityDate(Calendar.getInstance().getTime());
-		asMinaderFileVo.setArrivalDate(Calendar.getInstance().getTime());
+		asMinaderFileVo.setDecisionDate(file.getSignatureDate());
+		asMinaderFileVo.setValidityDate(file.getSignatureDate());
+		asMinaderFileVo.setArrivalDate(file.getSignatureDate());
 
 
 		if (file != null)
@@ -69,7 +68,7 @@ public class AsMinaderExporter extends AbstractReportInvoker
 
 					switch (fileFieldValue.getFileField().getCode())
 					{
-						case"NUMERO_AS_MINADER":
+						case "NUMERO_AS_MINADER":
 							asMinaderFileVo.setDecisionNumber(fileFieldValue.getValue());
 							break;
 
@@ -183,7 +182,7 @@ public class AsMinaderExporter extends AbstractReportInvoker
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getJRParameters()
 	 */
 	@Override

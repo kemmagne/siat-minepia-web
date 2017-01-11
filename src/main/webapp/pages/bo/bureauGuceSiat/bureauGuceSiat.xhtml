@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" template="/templates/template.xhtml">
+
+	<ui:define name="title">
+		<h:outputText value="#{bundle['bureau_guce_siat_title']}" />
+	</ui:define>
+
+	<ui:define name="body">
+
+		<p:panel header="#{bundle['bureau_guce_siat_title']}">
+
+			<h:form id="bureauGuceSiatListForm">
+
+					<h:panelGrid columns="4">
+
+						<p:outputLabel value="#{bundle['MinistryLabel']}" for="administrationMinistry" style="margin:10px 10px; font-weight:bold;" />
+						<h:panelGroup>
+							<p:selectOneMenu id="administrationMinistry" value="#{guceSiatBureauController.selectedMinistry}" style="margin:10px 10px;" >
+								<f:selectItem itemLabel="#{bundle['MinistryItemLabel']}" />
+								<f:selectItems value="#{ministryController.items}" var="adminVar" itemValue="#{adminVar}"
+									itemLabel="#{facesContext.viewRoot.locale eq 'en' ? adminVar.labelEn : adminVar.labelFr}" />
+								<f:converter binding="#{ministryConverter}" />
+								<p:ajax event="change" update="organismGrp" />
+							</p:selectOneMenu>
+							<p:message for="administrationMinistry" />
+						</h:panelGroup>
+
+						<p:outputLabel value="#{bundle['OrganismLabel']}" for="organism" style="margin:10px 10px; font-weight:bold;" />
+						<h:panelGroup id="organismGrp"  >
+							<p:selectOneMenu id="organism" value="#{guceSiatBureauController.selectedOrganism}" style="margin:10px 10px;" >
+								<f:selectItem itemLabel="#{bundle['OrganismItemLabel']}" />
+								<f:selectItems value="#{guceSiatBureauController.selectedMinistry.organismsList}" var="organism" itemValue="#{organism}"
+									itemLabel="#{organism.abreviation}" />
+								<f:converter binding="#{organismConverter}" />
+								<p:ajax event="change" update="subDepartmentGrp" />
+							</p:selectOneMenu>
+							<p:message for="organism" />
+						</h:panelGroup>
+
+						<p:outputLabel  value="#{bundle['SubDepartmentLabel']}" for="subDepartment" style="margin:10px 10px; font-weight:bold;" />
+						<h:panelGroup id="subDepartmentGrp"  >
+							<p:selectOneMenu id="subDepartment" value="#{guceSiatBureauController.selectedSubDepartment}" style="margin:10px 10px;" >
+								<f:selectItem itemLabel="#{bundle['SubDepartmentItemLabel']}" />
+								<f:selectItems value="#{guceSiatBureauController.selectedOrganism.subDepartmentsList}" var="subDep" itemValue="#{subDep}"
+									itemLabel="#{subDep.abreviation}" />
+								<f:converter binding="#{subDepartmentConverter}" />
+								<p:ajax event="change" update="serviceGrp" />
+							</p:selectOneMenu>
+							<p:message for="subDepartment" />
+						</h:panelGroup>
+
+						<p:outputLabel value="#{bundle['ServiceLabel']}" for="service" style="margin:10px 10px; font-weight:bold;" />
+						<h:panelGroup id="serviceGrp" >
+							<p:selectOneMenu id="service" value="#{guceSiatBureauController.selectedService}" style="margin:10px 10px;" >
+								<f:selectItem itemLabel="#{bundle['ServiceItemLabel']}" />
+								<f:selectItems value="#{guceSiatBureauController.selectedSubDepartment.servicesList}" var="service" itemValue="#{service}"
+									itemLabel="#{service.abreviation}" />
+								<f:converter binding="#{serviceConverter}" />
+								<p:ajax event="change" listener="#{guceSiatBureauController.refreshItems}" update="bureauGuceSiatListForm" />
+							</p:selectOneMenu>
+							<p:message for="service" />
+						</h:panelGroup>
+
+
+					</h:panelGrid>
+					
+					<br/>
+					<br/>
+
+					<p:dataTable id="dataList" binding="#{table}" value="#{guceSiatBureauController.items}" filteredValue="" var="item"
+									 selectionMode="single" selection="#{guceSiatBureauController.selected}" rowKey="#{item.id}" rows="5" paginator="true" 
+									 rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}" styleClass="newui-datatable fixeColumnWidth"
+									 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+									 currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})" widgetVar="datalistTable"
+									 rendered="#{not empty guceSiatBureauController.selectedService}" >
+									 
+						<p:ajax event="rowSelect" update="editButton dataList" />
+						<p:ajax event="rowUnselect" update="editButton dataList" />
+						<p:ajax event="rowDblselect" listener="#{guceSiatBureauController.prepareEdit}" oncomplete="PF('guceSiatBureauEditDialog').show();"
+								  update=":guceSiatBureauEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+									 
+						<p:column id="bureauSiatColumn" sortBy="#{item.siatBureau}" filterBy="#{item.siatBureau}" filterMatchMode="contains" style="width:90px" >
+							<f:facet name="header">
+								<p:outputLabel value="#{bundle['GuceSiatBureauLabel_siatBureau']}" title="#{bundle['GuceSiatBureauTitle_siatBureau']}" />
+							</f:facet>
+							<h:outputText value="#{item.siatBureau}" />
+						</p:column>
+						
+						<p:column id="bureauGuceColumn" sortBy="#{item.bureauGuceCode}" filterBy="#{item.bureauGuceCode}" filterMatchMode="contains" style="width:90px" >
+							<f:facet name="header">
+								<p:outputLabel value="#{bundle['GuceSiatBureauLabel_guceBureau']}" title="#{bundle['GuceSiatBureauTitle_guceBureau']}" />
+							</f:facet>
+							<h:outputText value="#{item.bureauGuceCode}" />
+						</p:column>
+						
+						<f:facet name="footer">
+					
+							<p:commandButton id="editButton" styleClass="btn" icon="sprite sprite-edit" value="#{bundle['Edit']}"
+						                    rendered="#{guceSiatBureauController.selected != null and guceSiatBureauController.selected.id != null}"
+						                    oncomplete="PF('guceSiatBureauEditDialog').show();" update=":guceSiatBureauEditForm" />
+					
+						</f:facet>
+						
+					</p:dataTable>
+					
+				</h:form>
+					
+			</p:panel>
+					
+			<p:dialog closeOnEscape="true" id="guceSiatBureauEditDlg" widgetVar="guceSiatBureauEditDialog" modal="true" resizable="false" appendTo="@(body)"
+					    header="#{bundle['EditBureauGuceSiatTitle']}" width="800px">
+
+				<h:form id="guceSiatBureauEditForm">
+			
+					<h:panelGroup id="display" styleClass="inpWidth">
+
+						<h:panelGrid columns="4">
+
+							<p:outputLabel value="#{bundle['GuceSiatBureauLabel_siatBureau']}" />
+							<p:outputLabel value="#{guceSiatBureauController.selected.siatBureau}" />
+
+							<p:outputLabel value="#{bundle['GuceSiatBureauLabel_guceBureau']}" for="guceBureau" />
+							<h:panelGroup>
+								<p:inputText id="guceBureau" value="#{guceSiatBureauController.selected.bureauGuceCode}"
+										    title="#{bundle['EditGuceSiatBureauTitle_guceBureau']}" required="true"
+						                requiredMessage="#{bundle['EditGuceSiatBureauRequiredMessage_guceBureau']}" />
+						      <p:message for="guceBureau" />
+							</h:panelGroup>
+							
+
+						</h:panelGrid>
+
+						<br />
+
+						<div class="btn-bloc">
+							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editBtn" 
+												  actionListener="#{guceSiatBureauController.edit}" value="#{bundle['Save']}"
+								              styleClass="ui-priority-primary" update="display,:bureauGuceSiatListForm,:growl"
+						                    oncomplete="handleSubmit(xhr,status,args,guceSiatBureauEditDlg,'datalistTable');" />
+					      <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary"
+						                    onclick="PF('guceSiatBureauEditDialog').hide();" immediate="true" />
+						</div>
+					</h:panelGroup>
+
+				</h:form>
+
+			</p:dialog>
+
+	</ui:define>
+
+</ui:composition>
