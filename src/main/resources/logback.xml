@@ -2,11 +2,11 @@
 <configuration>
 	<appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-			<Pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg %n  %F line: %L %n
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger - %msg %n %F line: %L %n
 			</Pattern>
 		</encoder>
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-			<level>ERROR</level>
+			<level>INFO</level>
 		</filter>
 	</appender>
 
@@ -14,38 +14,37 @@
 		<File>${catalina.base}/logs/siat_ct.log</File>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<!-- daily rollover -->
-			<FileNamePattern>siat.%d{yyyy-MM-dd}.%i%.log</FileNamePattern>
+			<FileNamePattern>${catalina.base}/logs/siat_ct.log.%d{yyyy-MM-dd}</FileNamePattern>
 
-			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-				<maxFileSize>10MB</maxFileSize>
-			</timeBasedFileNamingAndTriggeringPolicy>
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>90</maxHistory>
 		</rollingPolicy>
 
 		<encoder>
-			<Pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{35} - %msg %n  %F line: %L %n</Pattern>
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger [%F line: %L] - %msg %n %ex{full}</Pattern>
 		</encoder>
 	</appender>
 	<appender name="hibernateDailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<File>${catalina.base}/logs/siat_ct_hibernate.log</File>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<!-- daily rollover -->
-			<FileNamePattern>siat.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<FileNamePattern>${catalina.base}/logs/siat_ct_hibernate.log.%d{yyyy-MM-dd}</FileNamePattern>
 
-			<!-- keep 1 days' worth of history -->
-			<maxHistory>1</maxHistory>
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>
 		</rollingPolicy>
 		<!-- <filter class="org.guce.siat.web.common.util.LogbackFilter" /> -->
 		<encoder>
-			<Pattern>%-4date | %msg %n</Pattern>
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger [%F line: %L] - %msg %n %ex{full}</Pattern>
 		</encoder>
 	</appender>
 	<logger name="org.guce.siat" additivity="false">
-		<level value="ERROR" />
+		<level value="INFO" />
 		<appender-ref ref="dailyRollingFileAppender" />
 		<!-- appender-ref ref="consoleAppender" /-->
 	</logger>
-	<logger name="org.hibernate.SQL" additivity="false">
-		<level value="ERROR" />
+	<logger name="org.hibernate" additivity="false">
+		<level value="WARN" />
 		<appender-ref ref="hibernateDailyRollingFileAppender" />
 	</logger>
 	<!--logger name="org.hibernate.id" additivity="false">
@@ -62,21 +61,21 @@
 		<appender-ref ref="consoleAppender" />
 	</logger-->
 	<logger name="com.jolbox.bonecp" additivity="false">
-		<level value="ERROR" />
+		<level value="WARN" />
 		<appender-ref ref="hibernateDailyRollingFileAppender" />
 		<!-- appender-ref ref="consoleAppender" /-->
 	</logger>
 	
 	<logger name="org.springframework.jms.listener" additivity="false">
-		<level value="ERROR" />
+		<level value="INFO" />
 		<appender-ref ref="dailyRollingFileAppender" />
 		<!-- appender-ref ref="consoleAppender" /-->
 	</logger>
 	
 	<root>
-		<level value="ERROR" />
-		<!--appender-ref ref="consoleAppender" /-->
+		<level value="INFO" />
+		<!-- appender-ref ref="consoleAppender" /-->
 		<appender-ref ref="dailyRollingFileAppender" />
-		<appender-ref ref="hibernateDailyRollingFileAppender" />
+		<!--<appender-ref ref="hibernateDailyRollingFileAppender" />-->
 	</root>
 </configuration>

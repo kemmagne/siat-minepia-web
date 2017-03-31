@@ -25,28 +25,27 @@ import org.guce.siat.web.reports.vo.AtMinepiaFileVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-
 /**
  * The Class AtMinepiaExporter.
  */
-public class AtMinepiaExporter extends AbstractReportInvoker
-{
+public class AtMinepiaExporter extends AbstractReportInvoker {
 
-	/** The Constant LOG. */
+	/**
+	 * The Constant LOG.
+	 */
 	private static final Logger LOG = LoggerFactory.getLogger(AtMinepiaExporter.class);
 
-	/** The file. */
+	/**
+	 * The file.
+	 */
 	private final File file;
 
 	/**
 	 * Instantiates a new at minepia exporter.
 	 *
-	 * @param file
-	 *           the file
+	 * @param file the file
 	 */
-	public AtMinepiaExporter(final File file)
-	{
+	public AtMinepiaExporter(final File file) {
 		super("AT_MINEPIA", "AT_MINEPIA");
 		this.file = file;
 	}
@@ -57,48 +56,37 @@ public class AtMinepiaExporter extends AbstractReportInvoker
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getReportDataSource()
 	 */
 	@Override
-	public JRBeanCollectionDataSource getReportDataSource()
-	{
+	public JRBeanCollectionDataSource getReportDataSource() {
 		final AtMinepiaFileVo atMinsanteFileVo = new AtMinepiaFileVo();
 		final List<AtMinepiaFileItemVo> fileItemVos = new ArrayList<AtMinepiaFileItemVo>();
 		final SimpleDateFormat formatter = new SimpleDateFormat(DateUtils.PATTERN_DDMMYYYY);
 
-		if (file != null)
-		{
+		if (file != null) {
 			final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
 			atMinsanteFileVo.setDecisionDate(file.getSignatureDate());
 			atMinsanteFileVo.setDecisionPlace(file.getBureau().getAddress());
-			if (file.getClient() != null)
-			{
+			if (file.getClient() != null) {
 				atMinsanteFileVo.setImporter(file.getClient().getCompanyName());
 			}
 
-			if (file.getCountryOfOrigin() != null)
-			{
+			if (file.getCountryOfOrigin() != null) {
 				atMinsanteFileVo.setOriginCountry(file.getCountryOfOrigin().getCountryName());
 			}
 
-			for (final FileFieldValue fileFieldValue : fileFieldValueList)
-			{
-				switch (fileFieldValue.getFileField().getCode())
-				{
+			for (final FileFieldValue fileFieldValue : fileFieldValueList) {
+				switch (fileFieldValue.getFileField().getCode()) {
 					case "NUMERO_AT_MINEPIA":
 						atMinsanteFileVo.setDecisionNumber(fileFieldValue.getValue());
 						break;
 					case "DATE_VALIDITE_AVIS_TECHNIQUE":
-						if (StringUtils.isNotBlank(fileFieldValue.getValue()))
-						{
-							try
-							{
-								if (file.getClient() != null && file.getClient().getCommerceApprovalObtainedDate() != null)
-								{
+						if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
+							try {
+								if (file.getClient() != null && file.getClient().getCommerceApprovalObtainedDate() != null) {
 									final Date convertedDate = formatter.parse(file.getClient().getCommerceApprovalObtainedDate());
 									atMinsanteFileVo.setValidityDate(convertedDate);
 								}
-							}
-							catch (final ParseException e)
-							{
-								LOG.error(Objects.toString(e));
+							} catch (final ParseException e) {
+								LOG.error(Objects.toString(e), e);
 							}
 						}
 
@@ -110,23 +98,17 @@ public class AtMinepiaExporter extends AbstractReportInvoker
 
 			}
 
-
 			final List<FileItem> fileItemList = file.getFileItemsList();
 
-			if (CollectionUtils.isNotEmpty(fileItemList))
-			{
-				for (final FileItem fileItem : fileItemList)
-				{
+			if (CollectionUtils.isNotEmpty(fileItemList)) {
+				for (final FileItem fileItem : fileItemList) {
 					final AtMinepiaFileItemVo fileItemVo = new AtMinepiaFileItemVo();
 
 					final List<FileItemFieldValue> fileItemFieldValueList = fileItem.getFileItemFieldValueList();
 
-					if (CollectionUtils.isNotEmpty(fileItemFieldValueList))
-					{
-						for (final FileItemFieldValue fileItemFieldValue : fileItemFieldValueList)
-						{
-							switch (fileItemFieldValue.getFileItemField().getCode())
-							{
+					if (CollectionUtils.isNotEmpty(fileItemFieldValueList)) {
+						for (final FileItemFieldValue fileItemFieldValue : fileItemFieldValueList) {
+							switch (fileItemFieldValue.getFileItemField().getCode()) {
 								case "NOM_COMMERCIAL":
 									fileItemVo.setDesignation(fileItemFieldValue.getValue());
 									break;
@@ -159,8 +141,7 @@ public class AtMinepiaExporter extends AbstractReportInvoker
 	 *
 	 * @return the file
 	 */
-	public File getFile()
-	{
+	public File getFile() {
 		return file;
 	}
 }

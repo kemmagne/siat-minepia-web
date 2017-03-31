@@ -1,6 +1,5 @@
 package org.guce.siat.web.ct.controller;
 
-
 import java.io.ByteArrayInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -143,438 +142,657 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-
-
 /**
  * The Class FileItemApDetailController.
  */
 @ManagedBean(name = "fileItemApDetailController")
 @SessionScoped
-public class FileItemApDetailController implements Serializable
-{
+public class FileItemApDetailController implements Serializable {
 
-	/** The Constant serialVersionUID. */
+	/**
+	 * The Constant serialVersionUID.
+	 */
 	private static final long serialVersionUID = -2087435973539682236L;
 
-	/** The Constant LOG. */
+	/**
+	 * The Constant LOG.
+	 */
 	private static final Logger LOG = LoggerFactory.getLogger(FileItemApDetailController.class);
 
-	/** The Constant DECISION_DIALOG. */
+	/**
+	 * The Constant DECISION_DIALOG.
+	 */
 	private static final String DECISION_DIALOG = "decisionDialog".intern();
 
-	/** The Constant CONFIRMATION_DIALOG. */
+	/**
+	 * The Constant CONFIRMATION_DIALOG.
+	 */
 	private static final String CONFIRMATION_DIALOG = "confirmation".intern();
 
-	/** The Constant STYLE_CLASS. */
+	/**
+	 * The Constant STYLE_CLASS.
+	 */
 	protected static final String STYLE_CLASS = "required-star-right".intern();
 
-	/** The Constant ID_DECISION_LABEL. */
+	/**
+	 * The Constant ID_DECISION_LABEL.
+	 */
 	private static final String ID_DECISION_LABEL = "idDecision".intern();
 
-	/** The Constant ID_DISPATCH_LABEL. */
+	/**
+	 * The Constant ID_DISPATCH_LABEL.
+	 */
 	private static final String ID_DISPATCH_LABEL = "idDispatch".intern();
 
-	/** The Constant LOCAL_BUNDLE_NAME. */
+	/**
+	 * The Constant LOCAL_BUNDLE_NAME.
+	 */
 	protected static final String LOCAL_BUNDLE_NAME = "org.guce.siat.messages.locale".intern();
 
-	/** The Constant EMAIL_BODY_NOTIFICATION_FR. */
+	/**
+	 * The Constant EMAIL_BODY_NOTIFICATION_FR.
+	 */
 	private static final String EMAIL_BODY_NOTIFICATION_FR = "emailBodyNotification_fr.vm";
 
-	/** The Constant EMAIL_BODY_NOTIFICATION_EN. */
+	/**
+	 * The Constant EMAIL_BODY_NOTIFICATION_EN.
+	 */
 	private static final String EMAIL_BODY_NOTIFICATION_EN = "emailBodyNotification_en.vm";
 
-	/** The administration service. */
+	/**
+	 * The administration service.
+	 */
 	@ManagedProperty(value = "#{administrationService}")
 	private AdministrationService administrationService;
 
-	/** The mail service. */
+	/**
+	 * The mail service.
+	 */
 	@ManagedProperty(value = "#{mailService}")
 	private MailService mailService;
 
-	/** The user service. */
+	/**
+	 * The user service.
+	 */
 	@ManagedProperty(value = "#{userService}")
 	private UserService userService;
 
-	/** The flow service. */
+	/**
+	 * The flow service.
+	 */
 	@ManagedProperty(value = "#{flowService}")
 	private FlowService flowService;
 
-	/** The file item service. */
+	/**
+	 * The file item service.
+	 */
 	@ManagedProperty(value = "#{fileItemService}")
 	private FileItemService fileItemService;
 
-	/** The item flow service. */
+	/**
+	 * The item flow service.
+	 */
 	@ManagedProperty(value = "#{itemFlowService}")
 	private ItemFlowService itemFlowService;
 
-	/** The file service. */
+	/**
+	 * The file service.
+	 */
 	@ManagedProperty(value = "#{fileService}")
 	private FileService fileService;
 
-	/** The recommandation service. */
+	/**
+	 * The recommandation service.
+	 */
 	@ManagedProperty(value = "#{recommandationService}")
 	private RecommandationService recommandationService;
 
-	/** The step service. */
+	/**
+	 * The step service.
+	 */
 	@ManagedProperty(value = "#{stepService}")
 	private StepService stepService;
 
-	/** The laboratory service. */
+	/**
+	 * The laboratory service.
+	 */
 	@ManagedProperty(value = "#{laboratoryService}")
 	private LaboratoryService laboratoryService;
 
-	/** The analyse result ap service. */
+	/**
+	 * The analyse result ap service.
+	 */
 	@ManagedProperty(value = "#{analyseResultApService}")
 	private AnalyseResultApService analyseResultApService;
 
-	/** The essay test ap service. */
+	/**
+	 * The essay test ap service.
+	 */
 	@ManagedProperty(value = "#{essayTestApService}")
 	private EssayTestApService essayTestApService;
-	/** The file type step service. */
+	/**
+	 * The file type step service.
+	 */
 	@ManagedProperty(value = "#{fileTypeStepService}")
 	private FileTypeStepService fileTypeStepService;
 
-	/** send file service. */
+	/**
+	 * send file service.
+	 */
 	@ManagedProperty(value = "#{fileProducer}")
 	private FileProducer fileProducer;
 
-	/** The file type service. */
+	/**
+	 * The file type service.
+	 */
 	@ManagedProperty(value = "#{fileTypeService}")
 	private FileTypeService fileTypeService;
 
-	/** The user authority file type service. */
+	/**
+	 * The user authority file type service.
+	 */
 	@ManagedProperty(value = "#{recommandationAuthorityService}")
 	private RecommandationAuthorityService recommandationAuthorityService;
 
-	/** The file field service. */
+	/**
+	 * The file field service.
+	 */
 	@ManagedProperty(value = "#{fileFieldService}")
 	private FileFieldService fileFieldService;
 
-	/** The file field value service. */
+	/**
+	 * The file field value service.
+	 */
 	@ManagedProperty(value = "#{fileFieldValueService}")
 	private FileFieldValueService fileFieldValueService;
 
-	/** The report organism service. */
+	/**
+	 * The report organism service.
+	 */
 	@ManagedProperty(value = "#{reportOrganismService}")
 	private ReportOrganismService reportOrganismService;
 
-	/** The file type flow service. */
+	/**
+	 * The file type flow service.
+	 */
 	@ManagedProperty(value = "#{fileTypeFlowService}")
 	private FileTypeFlowService fileTypeFlowService;
 
-	/** The index page url. */
+	/**
+	 * The index page url.
+	 */
 	private String indexPageUrl;
 
-	/** The selected flow. */
+	/**
+	 * The selected flow.
+	 */
 	private Flow selectedFlow;
 
-	/** The decision div. */
+	/**
+	 * The decision div.
+	 */
 	private HtmlPanelGrid decisionDiv;
 
-	/** The dipatch div. */
+	/**
+	 * The dipatch div.
+	 */
 	private HtmlPanelGrid dipatchDiv;
 
-	/** The product info items enabled. */
+	/**
+	 * The product info items enabled.
+	 */
 	private List<FileItem> productInfoItemsEnabled;
 
-	/** The flows. */
+	/**
+	 * The flows.
+	 */
 	private List<Flow> flows;
 
-	/** The last decisions. */
+	/**
+	 * The last decisions.
+	 */
 	private ItemFlow lastDecisions;
 
-	/** The current file. */
+	/**
+	 * The current file.
+	 */
 	private File currentFile;
 
-	/** The attachment list. */
+	/**
+	 * The attachment list.
+	 */
 	private List<Attachment> attachmentList;
-	/** The attachment list. */
+	/**
+	 * The attachment list.
+	 */
 	private List<Attachment> attachmentListFiltred;
 
-	/** The selected attachment. */
+	/**
+	 * The selected attachment.
+	 */
 	private Attachment selectedAttachment;
 
-	/** The recommandation list. */
+	/**
+	 * The recommandation list.
+	 */
 	private List<Recommandation> recommandationList;
 
-	/** The recommandation list filtred. */
+	/**
+	 * The recommandation list filtred.
+	 */
 	private List<Recommandation> recommandationListFiltred;
 
-	/** The selected recommandation. */
+	/**
+	 * The selected recommandation.
+	 */
 	private Recommandation selectedRecommandation;
 
-	/** The selected recommandation article. */
+	/**
+	 * The selected recommandation article.
+	 */
 	private Recommandation selectedRecommandationArticle;
 
-	/** The recommandation article list. */
+	/**
+	 * The recommandation article list.
+	 */
 	private List<Recommandation> recommandationArticleList;
 
-	/** The recommandation article list filtred. */
+	/**
+	 * The recommandation article list filtred.
+	 */
 	private List<Recommandation> recommandationArticleListFiltred;
 
-	/** The allowed user. */
+	/**
+	 * The allowed user.
+	 */
 	private Boolean allowedUser;
 
-	/** The product info items filtred. */
+	/**
+	 * The product info items filtred.
+	 */
 	private List<FileItem> productInfoItemsFiltred;
 
-	/** The logged user. */
+	/**
+	 * The logged user.
+	 */
 	private User loggedUser;
 
-	/** The current organism. */
+	/**
+	 * The current organism.
+	 */
 	private Organism currentOrganism;
 
-	/** The current service. */
+	/**
+	 * The current service.
+	 */
 	private Service currentService;
 
-	/** The id attachment. */
+	/**
+	 * The id attachment.
+	 */
 	private String idAttachment;
 
-	/** The disabled tab synthese. */
+	/**
+	 * The disabled tab synthese.
+	 */
 	private Boolean disabledTabSynthese;
 
-	/** The decision allowed. */
+	/**
+	 * The decision allowed.
+	 */
 	private Boolean decisionAllowed;
 
-	/** The cotation allowed. */
+	/**
+	 * The cotation allowed.
+	 */
 	private Boolean cotationAllowed;
 
-	/** The dision system allowed. */
+	/**
+	 * The dision system allowed.
+	 */
 	private Boolean disionSystemAllowed;
 
-	/** The user list to affected file cotation. */
+	/**
+	 * The user list to affected file cotation.
+	 */
 	private List<User> userListToAffectedFileCotation;
 
-	/** The list user authority file types. */
+	/**
+	 * The list user authority file types.
+	 */
 	List<UserAuthorityFileType> listUserAuthorityFileTypes;
 
-	/** The selected file item. */
+	/**
+	 * The selected file item.
+	 */
 	private FileItem selectedFileItem;
 
-	/** The destination flows from current step. */
+	/**
+	 * The destination flows from current step.
+	 */
 	private List<Flow> destinationFlowsFromCurrentStep;
 
-	/** The roll back decisions allowed. */
+	/**
+	 * The roll back decisions allowed.
+	 */
 	private Boolean rollBackDecisionsAllowed;
 
-	/** The send decision allowed. */
+	/**
+	 * The send decision allowed.
+	 */
 	private Boolean sendDecisionAllowed;
 
-	/** The product info items. */
+	/**
+	 * The product info items.
+	 */
 	private List<FileItem> productInfoItems;
 
-	/** The tab list. */
+	/**
+	 * The tab list.
+	 */
 	private List<Tab> tabList;
 
-	/** The tab index list. */
+	/**
+	 * The tab index list.
+	 */
 	private String tabIndexList;
 
-	/** The assigned user for cotation. */
+	/**
+	 * The assigned user for cotation.
+	 */
 	private User assignedUserForCotation;
 
-	/** The ap decision step. */
+	/**
+	 * The ap decision step.
+	 */
 	private Step apDecisionStep;
 
-	/** The file field values. */
+	/**
+	 * The file field values.
+	 */
 	private List<FileFieldValue> fileFieldValues;
 
-	/** The file item field values. */
+	/**
+	 * The file item field values.
+	 */
 	private List<FileItemFieldValue> fileItemFieldValues;
 
-	/** The field groups. */
+	/**
+	 * The field groups.
+	 */
 	private List<FieldGroup> fieldGroups;
-	/** The field groups items. */
+	/**
+	 * The field groups items.
+	 */
 	private List<FieldGroup> fieldGroupsItems = new ArrayList<FieldGroup>();
-	/** The file field group dtos. */
+	/**
+	 * The file field group dtos.
+	 */
 	private List<FieldGroupDto<FileFieldValue>> fileFieldGroupDtos;
 
-	/** The file item field group dtos. */
+	/**
+	 * The file item field group dtos.
+	 */
 	private List<FieldGroupDto<FileItemFieldValue>> fileItemFieldGroupDtos;
 
-	/** The show remind decision form. */
+	/**
+	 * The show remind decision form.
+	 */
 	private Boolean showRemindDecisionForm;
 
-	/** The show decision. */
+	/**
+	 * The show decision.
+	 */
 	private Boolean showDecisionButton;
 
-	/** The show list recommandation article form. */
+	/**
+	 * The show list recommandation article form.
+	 */
 	private Boolean showListRecommandationArticleForm;
 
-	/** The show show attachment form. */
+	/**
+	 * The show show attachment form.
+	 */
 	private Boolean showShowAttachmentForm;
 
-	/** The show product details form. */
+	/**
+	 * The show product details form.
+	 */
 	private Boolean showProductDetailsForm;
 
-	/** The authorities list. */
+	/**
+	 * The authorities list.
+	 */
 	private DualListModel<Authority> authoritiesList;
 
-	/** The authority list. */
+	/**
+	 * The authority list.
+	 */
 	private List<Authority> authorityList;
 
-
-	/** The service service. */
+	/**
+	 * The service service.
+	 */
 	@ManagedProperty(value = "#{serviceService}")
 	private ServiceService serviceService;
 
-	/** The xml converter service. */
+	/**
+	 * The xml converter service.
+	 */
 	@ManagedProperty(value = "#{xmlConverterService}")
 	private XmlConverterService xmlConverterService;
 
-	/** The user authority file type service. */
+	/**
+	 * The user authority file type service.
+	 */
 	@ManagedProperty(value = "#{userAuthorityFileTypeService}")
 	private UserAuthorityFileTypeService userAuthorityFileTypeService;
 
-	/** The application propreties service. */
+	/**
+	 * The application propreties service.
+	 */
 	@ManagedProperty(value = "#{applicationPropretiesService}")
 	private ApplicationPropretiesService applicationPropretiesService;
 
-	/** The field group service. */
+	/**
+	 * The field group service.
+	 */
 	@ManagedProperty(value = "#{fieldGroupService}")
 	private FieldGroupService fieldGroupService;
 
-	/** The field group service. */
+	/**
+	 * The field group service.
+	 */
 	@ManagedProperty(value = "#{commonService}")
 	private CommonService commonService;
 
-	/** The file item has draft. */
+	/**
+	 * The file item has draft.
+	 */
 	private Boolean fileItemHasDraft;
 
-	/** The generate report allowed. */
+	/**
+	 * The generate report allowed.
+	 */
 	private Boolean generateReportAllowed;
 
-	/** The ebxml properties service. */
+	/**
+	 * The ebxml properties service.
+	 */
 	@ManagedProperty(value = "#{ebxmlPropertiesService}")
 	private EbxmlPropertiesService ebxmlPropertiesService;
 
-	/** The payment data service. */
+	/**
+	 * The payment data service.
+	 */
 	@ManagedProperty(value = "#{paymentDataService}")
 	private PaymentDataService paymentDataService;
 
-	/** The come from retrieve ap. */
+	/**
+	 * The come from retrieve ap.
+	 */
 	private Boolean comeFromRetrieveAp;
 
-	/** The analyse result aps. */
+	/**
+	 * The analyse result aps.
+	 */
 	private List<AnalyseResultAp> analyseResultApList;
 
-	/** The test result ap list. */
+	/**
+	 * The test result ap list.
+	 */
 	private List<EssayTestAP> testResultApList;
 
-	/** The laboratories. */
+	/**
+	 * The laboratories.
+	 */
 	private List<Laboratory> laboratories;
 
-	/** The acceptation decision. */
+	/**
+	 * The acceptation decision.
+	 */
 	private String acceptationDecisionFileType;
 
-	/** The is payment. */
+	/**
+	 * The is payment.
+	 */
 	private Boolean isPayment = Boolean.FALSE;
 
-	/** The payment data. */
+	/**
+	 * The payment data.
+	 */
 	private PaymentData paymentData;
 
-	/** The invoice total amount. */
+	/**
+	 * The invoice total amount.
+	 */
 	private Long invoiceTotalAmount;
 
-	/** The invoice total amount. */
+	/**
+	 * The invoice total amount.
+	 */
 	private Long invoiceOtherAmount;
 
-	/** The invoice total ttc amount. */
+	/**
+	 * The invoice total ttc amount.
+	 */
 	private Long invoiceTotalTtcAmount;
 
-	/** The show validate payment. */
+	/**
+	 * The show validate payment.
+	 */
 	private Boolean showValidatePayment;
 
 	// BEGIN Remind decision details attributes
-
-	/** The last decision ar. */
+	/**
+	 * The last decision ar.
+	 */
 	private AnalyseResultAp lastDecisionAR;
 
-	/** The last decision test. */
+	/**
+	 * The last decision test.
+	 */
 	private EssayTestAP lastDecisionTR;
 
-	/** The last decision essay. */
+	/**
+	 * The last decision essay.
+	 */
 	private EssayTestAP lastDecisionER;
 
 	// END Remind decision details attributes
-
 	// BEGIN History decision details attributes
-
-	/** The selected item flow dto. */
+	/**
+	 * The selected item flow dto.
+	 */
 	private ItemFlowDto selectedItemFlowDto;
 
-	/** The decision details ar. */
+	/**
+	 * The decision details ar.
+	 */
 	private AnalyseResultAp decisionDetailsAR;
 
-	/** The decision details test. */
+	/**
+	 * The decision details test.
+	 */
 	private EssayTestAP decisionDetailsTR;
 
-	/** The decision details essay. */
+	/**
+	 * The decision details essay.
+	 */
 	private EssayTestAP decisionDetailsER;
 
-	/** The item flow history dto list. */
+	/**
+	 * The item flow history dto list.
+	 */
 	private List<ItemFlowDto> itemFlowHistoryDtoList;
 
-	/** The item flow history dto list filtred. */
+	/**
+	 * The item flow history dto list filtred.
+	 */
 	private List<ItemFlowDto> itemFlowHistoryDtoListFiltred;
 
-	/** The specific decisions history. */
+	/**
+	 * The specific decisions history.
+	 */
 	private ApSpecificDecisionHistory specificDecisionsHistory;
 
 	// END History decision details attributes
-
-	/** The come from search. */
+	/**
+	 * The come from search.
+	 */
 	private boolean comeFromSearch;
 
-	/** The Constant ACCEPTATION_FLOWS. */
+	/**
+	 * The Constant ACCEPTATION_FLOWS.
+	 */
 	private static final List<String> ACCEPTATION_FLOWS = Arrays.asList(FlowCode.FL_AP_101.name(), FlowCode.FL_AP_102.name(),
 			FlowCode.FL_AP_103.name(), FlowCode.FL_AP_104.name(), FlowCode.FL_AP_105.name(), FlowCode.FL_AP_106.name());
 
-	/** The transaction manager. */
+	/**
+	 * The transaction manager.
+	 */
 	@ManagedProperty(value = "#{transactionManager}")
 	private PlatformTransactionManager transactionManager;
 
-	/** The checked fimex file type. */
+	/**
+	 * The checked fimex file type.
+	 */
 	private boolean checkedFimexFileType;
 
-	/** The rejct dispatch allowed. */
+	/**
+	 * The rejct dispatch allowed.
+	 */
 	private boolean rejctDispatchAllowed;
-
 
 	/**
 	 * Gets the transaction manager.
 	 *
 	 * @return the transaction manager
 	 */
-	public PlatformTransactionManager getTransactionManager()
-	{
+	public PlatformTransactionManager getTransactionManager() {
 		return transactionManager;
 	}
 
 	/**
 	 * Sets the transaction manager.
 	 *
-	 * @param transactionManager
-	 *           the new transaction manager
+	 * @param transactionManager the new transaction manager
 	 */
-	public void setTransactionManager(final PlatformTransactionManager transactionManager)
-	{
+	public void setTransactionManager(final PlatformTransactionManager transactionManager) {
 		this.transactionManager = transactionManager;
 	}
 
 	/**
 	 * Instantiates a new file item detail controller.
 	 */
-	public FileItemApDetailController()
-	{
+	public FileItemApDetailController() {
 	}
 
 	/**
 	 * Inits the.
 	 */
-	public void init()
-	{
-		if (LOG.isDebugEnabled())
-		{
+	public void init() {
+		if (LOG.isDebugEnabled()) {
 			LOG.debug(Constants.INIT_LOG_INFO_MESSAGE, FileItemApDetailController.class.getName());
 		}
 
@@ -596,8 +814,7 @@ public class FileItemApDetailController implements Serializable
 		resetDataGridInofrmationProducts();
 
 		// En accédant à partir de la recherche, vérifier la visibilité des boutons des décisions
-		if (comeFromSearch)
-		{
+		if (comeFromSearch) {
 			checkIsAllowedUserForCurrentStep();
 		}
 
@@ -625,7 +842,6 @@ public class FileItemApDetailController implements Serializable
 				getCurrentLocale());
 
 		//Remplir la liste des filed Values du dossier
-
 		//Remplir la liste des valeurs des filed Values pour le premier article
 		loadAndGroupFileItemFieldValues();
 
@@ -642,8 +858,6 @@ public class FileItemApDetailController implements Serializable
 
 		checkGenerateReportAllowed();
 
-
-
 		tabList = new ArrayList<Tab>();
 		tabIndexList = concatenateActiveIndexString(tabList);
 
@@ -652,8 +866,7 @@ public class FileItemApDetailController implements Serializable
 
 		checkedFimexFileType = false;
 		if (currentFile != null && currentFile.getFileType().getCode().equals(FileTypeCode.IDE)
-				|| currentFile.getFileType().getCode().equals(FileTypeCode.IDI))
-		{
+				|| currentFile.getFileType().getCode().equals(FileTypeCode.IDI)) {
 			checkedFimexFileType = true;
 		}
 		rejctDispatchAllowed = (cotationAllowed && !apDecisionStep.equals(currentFile.getFileItemsList().get(0).getStep()) && !StepCode.ST_AP_47
@@ -661,30 +874,26 @@ public class FileItemApDetailController implements Serializable
 	}
 
 	/**
-	 * Prepare decisions. On select button "Decider" we should initialize the decision View before rendred it
+	 * Prepare decisions. On select button "Decider" we should initialize the
+	 * decision View before rendred it
 	 */
-	public void prepareDecisions()
-	{
+	public void prepareDecisions() {
 		analyseResultApList = null;
 		testResultApList = null;
 		acceptationDecisionFileType = null;
 		isPayment = Boolean.FALSE;
 		if (CollectionUtils.isNotEmpty(currentFile.getFileItemsList()) && currentFile.getFileItemsList().get(0) != null
-				&& !currentFile.getFileItemsList().get(0).getDraft())
-		{
+				&& !currentFile.getFileItemsList().get(0).getDraft()) {
 			// this methode is for RISK MANAGMENT
-			for (final FileTypeStep fileTypeStep : currentFile.getFileType().getFileTypeStepList())
-			{
+			for (final FileTypeStep fileTypeStep : currentFile.getFileType().getFileTypeStepList()) {
 				if (fileTypeStep.getIsApDecision() != null && fileTypeStep.getIsApDecision()
-						&& currentFile.getFileItemsList().get(0).getStep().getId().equals(fileTypeStep.getStep().getId()))
-				{
+						&& currentFile.getFileItemsList().get(0).getStep().getId().equals(fileTypeStep.getStep().getId())) {
 					setDisionSystemAllowed(true);
 					break;
 				}
 			}
 
-			if (currentFile.getFileItemsList().isEmpty())
-			{
+			if (currentFile.getFileItemsList().isEmpty()) {
 				final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
 						.getString(ControllerConstants.Bundle.Messages.CHOOSE_DECISION_ERROR);
 				JsfUtil.addErrorMessage(msg);
@@ -692,46 +901,35 @@ public class FileItemApDetailController implements Serializable
 
 			//Tester sur le Current file si tout les file Item appartiennent à la meme step (Controle important pour la decision)
 			final FileItem referenceFileItem = currentFile.getFileItemsList().get(0);
-			if (referenceFileItem.getStep() != null)
-			{
+			if (referenceFileItem.getStep() != null) {
 				boolean equalsSteps = true;
-				for (final FileItem fileItem : currentFile.getFileItemsList())
-				{
-					if (fileItem.getStep() == null || !referenceFileItem.getStep().getId().equals(fileItem.getStep().getId()))
-					{
+				for (final FileItem fileItem : currentFile.getFileItemsList()) {
+					if (fileItem.getStep() == null || !referenceFileItem.getStep().getId().equals(fileItem.getStep().getId())) {
 						equalsSteps = false;
 						break;
 					}
 				}
 
-				if (equalsSteps)
-				{
+				if (equalsSteps) {
 					//Pour la Retreive Seulement une seule decision
 					flows = destinationFlowsFromCurrentStep;
-					if (comeFromRetrieveAp != null && comeFromRetrieveAp)
-					{
+					if (comeFromRetrieveAp != null && comeFromRetrieveAp) {
 						selectedFlow = flowService.findFlowByCurrentStep(apDecisionStep);
-					}
-					//Pour la decision et la cotation
-					else
-					{
+					} //Pour la decision et la cotation
+					else {
 						selectedFlow = null;
 					}
 					decisionDiv.getChildren().clear();
 					final RequestContext requestContext = RequestContext.getCurrentInstance();
 					requestContext.execute("PF('" + DECISION_DIALOG + "').show();");
-				}
-				else
-				{
+				} else {
 					final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
 							.getString(ControllerConstants.Bundle.Messages.SAME_STEPS_ERROR);
 					JsfUtil.addErrorMessage(msg);
 				}
 			}
 
-		}
-		else
-		{
+		} else {
 			final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 					ControllerConstants.Bundle.Messages.ROLLBACK_BEFORE_DECISION);
 			JsfUtil.addErrorMessage(msg);
@@ -741,8 +939,7 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Show attachment Pour afficher la liste des attachement du File Courrant.
 	 */
-	public void showAttachment()
-	{
+	public void showAttachment() {
 
 		selectedFileItem = null;
 		setShowRemindDecisionForm(false);
@@ -762,8 +959,7 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the instance of page attachment controller
 	 */
-	public AttachmentController getInstanceOfPageAttachmentController()
-	{
+	public AttachmentController getInstanceOfPageAttachmentController() {
 		final FacesContext fctx = FacesContext.getCurrentInstance();
 		final Application application = fctx.getApplication();
 		final ELContext context = fctx.getELContext();
@@ -774,10 +970,10 @@ public class FileItemApDetailController implements Serializable
 	}
 
 	/**
-	 * Inits the attachment view : Initialzer la Vue de l'attachment ViewPdf.xhtml selon le fichier selectioné
+	 * Inits the attachment view : Initialzer la Vue de l'attachment
+	 * ViewPdf.xhtml selon le fichier selectioné
 	 */
-	public void initAttachmentView()
-	{
+	public void initAttachmentView() {
 		final AttachmentController attachmentController = getInstanceOfPageAttachmentController();
 		attachmentController.setSelectedAttachment(null);
 		attachmentController.setShowPanelViewJpeg(false);
@@ -785,14 +981,13 @@ public class FileItemApDetailController implements Serializable
 		attachmentController.init();
 	}
 
-
 	/**
-	 * Inits the file item ap details: Initializer la liste des FileItem du File Courrant.
+	 * Inits the file item ap details: Initializer la liste des FileItem du File
+	 * Courrant.
 	 *
 	 * @return the list
 	 */
-	public List<FileItem> initFileItemApDetails()
-	{
+	public List<FileItem> initFileItemApDetails() {
 		//Disabled Button Annuler, Decider, Coter et envoyer l'ors du premier chargement
 		rollBackDecisionsAllowed = false;
 		sendDecisionAllowed = false;
@@ -800,8 +995,7 @@ public class FileItemApDetailController implements Serializable
 		cotationAllowed = false;
 		fileItemHasDraft = false;
 		rejctDispatchAllowed = false;
-		if (currentFile.getFileItemsList() == null)
-		{
+		if (currentFile.getFileItemsList() == null) {
 			currentFile.setFileItemsList(fileItemService.findFileItemsByFile(currentFile));
 
 			//Récuperer la liste des FileItem selon le UserAuthorityFileTypes
@@ -814,10 +1008,8 @@ public class FileItemApDetailController implements Serializable
 			final List<Step> stepListByFileType = currentFile.getFileType().getStepList();
 
 			//apDecisionStep : pour voir si le step courant est un step Decisionnel du AP workflow
-			for (final FileTypeStep fileTypeStep : currentFile.getFileType().getFileTypeStepList())
-			{
-				if (fileTypeStep.getIsApDecision() != null && fileTypeStep.getIsApDecision())
-				{
+			for (final FileTypeStep fileTypeStep : currentFile.getFileType().getFileTypeStepList()) {
+				if (fileTypeStep.getIsApDecision() != null && fileTypeStep.getIsApDecision()) {
 					apDecisionStep = fileTypeStep.getStep();
 					break;
 				}
@@ -828,62 +1020,48 @@ public class FileItemApDetailController implements Serializable
 					StepCode.ST_AP_51, StepCode.ST_AP_52, StepCode.ST_AP_53);
 
 			// Ici, on va remplir la liste des flow qui vont apparaitre dans la view Decision ainsi setter les variable boolean pour l'affichage des button
-			if (stepListByFileType != null && stepListByFileType.contains(currentStep) && currentStep.getFromStepFlowsList() != null)
-			{
+			if (stepListByFileType != null && stepListByFileType.contains(currentStep) && currentStep.getFromStepFlowsList() != null) {
 				destinationFlowsFromCurrentStep = new ArrayList<Flow>();
 
-				for (final Flow flow : currentStep.getFromStepFlowsList())
-				{
+				for (final Flow flow : currentStep.getFromStepFlowsList()) {
 					//to redefine flows labelFr, and labelEn
 					final FileTypeFlow fileTypeFlow = fileTypeFlowService.findByFlowAndFileType(currentFile.getFileType(), flow);
-					if (fileTypeFlow != null)
-					{
+					if (fileTypeFlow != null) {
 						flow.setRedefinedLabelEn(fileTypeFlow.getLabelEn());
 						flow.setRedefinedLabelFr(fileTypeFlow.getLabelFr());
 					}
 					//Dans cette condition nous somme sur la voie de COTATION
-					if (flow.getIsCota() && stepListByFileType.contains(flow.getToStep()))
-					{
+					if (flow.getIsCota() && stepListByFileType.contains(flow.getToStep())) {
 						cotationAllowed = true;
 						decisionAllowed = false;
-					}
-					//Dans cette condition nous somme sur la voie de DECISION (flow.getToStep() == null : cad rejet annulation)
+					} //Dans cette condition nous somme sur la voie de DECISION (flow.getToStep() == null : cad rejet annulation)
 					else if (!cotationAllowed && !flow.getIsCota()
-							&& (stepListByFileType.contains(flow.getToStep()) || flow.getToStep() == null))
-					{
+							&& (stepListByFileType.contains(flow.getToStep()) || flow.getToStep() == null)) {
 						if (currentStep.getStepCode().equals(StepCode.ST_AP_44)
-								&& CollectionUtils.containsAny(getLoggedUser().getAuthorities(), currentStep.getRoleList()))
-						{
+								&& CollectionUtils.containsAny(getLoggedUser().getAuthorities(), currentStep.getRoleList())) {
 							this.setComeFromRetrieveAp(Boolean.TRUE);
-						}
-						else
-						{
+						} else {
 							decisionAllowed = true;
 						}
 						cotationAllowed = false;
 						if (!flow.getFromStep().equals(apDecisionStep)
 								&& Arrays.asList(FlowCode.FL_AP_155.name(), FlowCode.FL_AP_156.name(), FlowCode.FL_AP_157.name(),
-										FlowCode.FL_AP_158.name(), FlowCode.FL_AP_159.name()).contains(flow.getCode()))
-						{
+										FlowCode.FL_AP_158.name(), FlowCode.FL_AP_159.name()).contains(flow.getCode())) {
 							destinationFlowsFromCurrentStep = Collections.singletonList(flow);
 							cotationAllowed = true;
 							decisionAllowed = false;
 							break;
 						}
 						if (flow.getToStep() != null && apDecisionStepCode.contains(flow.getToStep().getStepCode())
-								&& flow.getToStep().getId().equals(apDecisionStep.getId()))
-						{
+								&& flow.getToStep().getId().equals(apDecisionStep.getId())) {
 
 							destinationFlowsFromCurrentStep.add(flow);
-						}
-						else if ((flow.getToStep() != null && !apDecisionStepCode.contains(flow.getToStep().getStepCode()))
-								|| flow.getToStep() == null)
-						{
+						} else if ((flow.getToStep() != null && !apDecisionStepCode.contains(flow.getToStep().getStepCode()))
+								|| flow.getToStep() == null) {
 							destinationFlowsFromCurrentStep.add(flow);
 						}
 					}
-					if (comeFromRetrieveAp != null && comeFromRetrieveAp)
-					{
+					if (comeFromRetrieveAp != null && comeFromRetrieveAp) {
 						cotationAllowed = false;
 						decisionAllowed = false;
 					}
@@ -891,29 +1069,23 @@ public class FileItemApDetailController implements Serializable
 
 				boolean hasPayment = false;
 				boolean payed = false;
-				for (final Step step : stepListByFileType)
-				{
-					if (step.getStepCode().equals(StepCode.ST_AP_64))
-					{
+				for (final Step step : stepListByFileType) {
+					if (step.getStepCode().equals(StepCode.ST_AP_64)) {
 						hasPayment = true;
 						break;
 					}
 				}
-				if (hasPayment)
-				{
-					hist: for (final ItemFlowDto hist : itemFlowHistoryDtoList)
-					{
-						if (hist.getItemFlow().getFlow().getCode().equals(FlowCode.FL_AP_166.name()))
-						{
+				if (hasPayment) {
+					hist:
+					for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
+						if (hist.getItemFlow().getFlow().getCode().equals(FlowCode.FL_AP_166.name())) {
 							payed = true;
 							final Iterator<Flow> it = destinationFlowsFromCurrentStep.iterator();
-							while (it.hasNext())
-							{
+							while (it.hasNext()) {
 								final Flow flx = it.next();
 								if (Arrays.asList(FlowCode.FL_AP_160.name(), FlowCode.FL_AP_161.name(), FlowCode.FL_AP_162.name(),
 										FlowCode.FL_AP_163.name(), FlowCode.FL_AP_164.name(), FlowCode.FL_AP_165.name()).contains(
-										flx.getCode()))
-								{
+										flx.getCode())) {
 									it.remove();
 								}
 							}
@@ -921,48 +1093,37 @@ public class FileItemApDetailController implements Serializable
 						}
 
 					}
-					if (!payed)
-					{
+					if (!payed) {
 						final Iterator<Flow> it = destinationFlowsFromCurrentStep.iterator();
-						while (it.hasNext())
-						{
+						while (it.hasNext()) {
 							final Flow flx = it.next();
-							if (!flx.getIsCota() && ACCEPTATION_FLOWS.contains(flx.getCode()))
-							{
+							if (!flx.getIsCota() && ACCEPTATION_FLOWS.contains(flx.getCode())) {
 								it.remove();
 							}
 						}
 					}
 				}
 
-
 			}
-			if (currentFile.getFileType().getCode().equals(FileTypeCode.PIVPSRP_MINADER))
-			{
+			if (currentFile.getFileType().getCode().equals(FileTypeCode.PIVPSRP_MINADER)) {
 
 				boolean hasPayment = false;
 				boolean payed = false;
-				for (final Step step : stepListByFileType)
-				{
-					if (step.getStepCode().equals(StepCode.ST_AP_65))
-					{
+				for (final Step step : stepListByFileType) {
+					if (step.getStepCode().equals(StepCode.ST_AP_65)) {
 						hasPayment = true;
 						break;
 					}
 				}
-				if (hasPayment)
-				{
-					hist: for (final ItemFlowDto hist : itemFlowHistoryDtoList)
-					{
-						if (hist.getItemFlow().getFlow().getCode().equals(FlowCode.FL_AP_168.name()))
-						{
+				if (hasPayment) {
+					hist:
+					for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
+						if (hist.getItemFlow().getFlow().getCode().equals(FlowCode.FL_AP_168.name())) {
 							payed = true;
 							final Iterator<Flow> it = destinationFlowsFromCurrentStep.iterator();
-							while (it.hasNext())
-							{
+							while (it.hasNext()) {
 								final Flow flx = it.next();
-								if (Arrays.asList(FlowCode.FL_AP_167.name()).contains(flx.getCode()))
-								{
+								if (Arrays.asList(FlowCode.FL_AP_167.name()).contains(flx.getCode())) {
 									it.remove();
 								}
 							}
@@ -970,14 +1131,11 @@ public class FileItemApDetailController implements Serializable
 						}
 
 					}
-					if (!payed)
-					{
+					if (!payed) {
 						final Iterator<Flow> it = destinationFlowsFromCurrentStep.iterator();
-						while (it.hasNext())
-						{
+						while (it.hasNext()) {
 							final Flow flx = it.next();
-							if (FlowCode.FL_AP_88.name().contains(flx.getCode()))
-							{
+							if (FlowCode.FL_AP_88.name().contains(flx.getCode())) {
 								it.remove();
 							}
 						}
@@ -987,34 +1145,27 @@ public class FileItemApDetailController implements Serializable
 		}
 
 		// Si on a des brouillon alors afficher les boutton send Decision et Annuller
-		if (hasDraftFileItemInList(productInfoItems))
-		{
+		if (hasDraftFileItemInList(productInfoItems)) {
 			rollBackDecisionsAllowed = true;
 			sendDecisionAllowed = true;
 			fileItemHasDraft = true;
 		}
 
-
 		return currentFile.getFileItemsList();
 	}
 
 	/**
-	 * Checks for draft file item in list : Renvoyer True si la Liste des FileItem contient des FileItem en mode
-	 * Brouillon.
+	 * Checks for draft file item in list : Renvoyer True si la Liste des
+	 * FileItem contient des FileItem en mode Brouillon.
 	 *
-	 * @param fileItems
-	 *           the file items
+	 * @param fileItems the file items
 	 * @return the boolean
 	 */
-	public Boolean hasDraftFileItemInList(final List<FileItem> fileItems)
-	{
+	public Boolean hasDraftFileItemInList(final List<FileItem> fileItems) {
 
-		if (fileItems != null && !fileItems.isEmpty())
-		{
-			for (final FileItem fileItem : fileItems)
-			{
-				if (fileItem.getDraft() != null && fileItem.getDraft())
-				{
+		if (fileItems != null && !fileItems.isEmpty()) {
+			for (final FileItem fileItem : fileItems) {
+				if (fileItem.getDraft() != null && fileItem.getDraft()) {
 					return true;
 				}
 			}
@@ -1023,13 +1174,12 @@ public class FileItemApDetailController implements Serializable
 	}
 
 	/**
-	 * Gets the instance of page schedule controller. : Retourner l'Instance du controlleur de Schedule (Agenda des
-	 * rendez-vous inspecteur)
+	 * Gets the instance of page schedule controller. : Retourner l'Instance du
+	 * controlleur de Schedule (Agenda des rendez-vous inspecteur)
 	 *
 	 * @return the instance of page schedule controller
 	 */
-	public ScheduleController getInstanceOfPageScheduleController()
-	{
+	public ScheduleController getInstanceOfPageScheduleController() {
 		final FacesContext fctx = FacesContext.getCurrentInstance();
 		final Application application = fctx.getApplication();
 		final ELContext context = fctx.getELContext();
@@ -1042,8 +1192,7 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Change decision handler.
 	 */
-	public void changeDecisionHandler()
-	{
+	public void changeDecisionHandler() {
 		decisionDiv.getChildren().clear();
 		analyseResultApList = null;
 		testResultApList = null;
@@ -1055,51 +1204,40 @@ public class FileItemApDetailController implements Serializable
 		//paiement;FlowCode.FL_CO_155.name().equals(selectedFlow.getCode())
 		if (Arrays.asList(FlowCode.FL_AP_160.name(), FlowCode.FL_AP_161.name(), FlowCode.FL_AP_162.name(),
 				FlowCode.FL_AP_163.name(), FlowCode.FL_AP_164.name(), FlowCode.FL_AP_165.name(), FlowCode.FL_AP_167.name()).contains(
-				selectedFlow.getCode()))
-		{
+				selectedFlow.getCode())) {
 			isPayment = Boolean.TRUE;
 			paymentData = new PaymentData();
 
 			paymentData.setPaymentItemFlowList(new ArrayList<PaymentItemFlow>());
-			for (final FileItem fi : currentFile.getFileItemsList())
-			{
+			for (final FileItem fi : currentFile.getFileItemsList()) {
 				paymentData.getPaymentItemFlowList().add(new PaymentItemFlow(false, fi.getId()));
 			}
 		}
-		for (final DataType dataType : selectedFlow.getDataTypeList())
-		{
+		for (final DataType dataType : selectedFlow.getDataTypeList()) {
 			final FacesContext context = FacesContext.getCurrentInstance();
 
-			if (dataType.getId() != null)
-			{
+			if (dataType.getId() != null) {
 				stringId = String.valueOf(dataType.getId());
 			}
 			HtmlPanelGroup htmlPanelGroup = null;
-			if (!isFimex || dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode()))
-			{
+			if (!isFimex || dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
 				// Label for the component
 				final HtmlOutputLabel htmlOutputLabel = (HtmlOutputLabel) context.getApplication().createComponent(
 						HtmlOutputLabel.COMPONENT_TYPE);
 				htmlOutputLabel.setFor(ID_DECISION_LABEL + stringId);
-				if (FacesContext.getCurrentInstance().getViewRoot().getLocale().equals(Locale.FRENCH))
-				{
+				if (FacesContext.getCurrentInstance().getViewRoot().getLocale().equals(Locale.FRENCH)) {
 					htmlOutputLabel.setValue(dataType.getLabel());
-				}
-				else
-				{
+				} else {
 					htmlOutputLabel.setValue(dataType.getLabelEn());
 				}
 				decisionDiv.getChildren().add(htmlOutputLabel);
 
-
 				htmlPanelGroup = (HtmlPanelGroup) context.getApplication().createComponent(HtmlPanelGroup.COMPONENT_TYPE);
 			}
-			if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode()) && !isFimex)
-			{
+			if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode()) && !isFimex) {
 				final HtmlInputText inputText = (HtmlInputText) context.getApplication()
 						.createComponent(HtmlInputText.COMPONENT_TYPE);
-				if (dataType.getRequired())
-				{
+				if (dataType.getRequired()) {
 					inputText.setRequired(true);
 					inputText.setRequiredMessage(dataType.getLabel()
 							+ Constants.SPACE
@@ -1108,13 +1246,10 @@ public class FileItemApDetailController implements Serializable
 				}
 				inputText.setId(ID_DECISION_LABEL + stringId);
 				htmlPanelGroup.getChildren().add(inputText);
-			}
-			else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode()) && !isFimex)
-			{
+			} else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode()) && !isFimex) {
 				final HtmlSelectBooleanCheckbox booleanCheckbox = (HtmlSelectBooleanCheckbox) context.getApplication()
 						.createComponent(HtmlSelectBooleanCheckbox.COMPONENT_TYPE);
-				if (dataType.getRequired())
-				{
+				if (dataType.getRequired()) {
 					booleanCheckbox.setRequired(true);
 					booleanCheckbox.setRequiredMessage(dataType.getLabel()
 							+ Constants.SPACE
@@ -1123,13 +1258,10 @@ public class FileItemApDetailController implements Serializable
 				}
 				booleanCheckbox.setId(ID_DECISION_LABEL + stringId);
 				htmlPanelGroup.getChildren().add(booleanCheckbox);
-			}
-			else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode()))
-			{
+			} else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
 				final Calendar calendar = (Calendar) context.getApplication().createComponent(Calendar.COMPONENT_TYPE);
 				calendar.setShowOn("button");
-				if (dataType.getRequired())
-				{
+				if (dataType.getRequired()) {
 					calendar.setRequired(true);
 					calendar.setRequiredMessage(dataType.getLabel()
 							+ Constants.SPACE
@@ -1140,8 +1272,7 @@ public class FileItemApDetailController implements Serializable
 				calendar.setPattern("dd-MM-yyyy");
 				calendar.setLocale(Locale.FRANCE);
 				calendar.setNavigator(true);
-				if (isFimex)
-				{
+				if (isFimex) {
 					final java.util.Calendar cal = java.util.Calendar.getInstance();
 					cal.set(java.util.Calendar.MONTH, 11);
 					cal.set(java.util.Calendar.DAY_OF_MONTH, 31);
@@ -1149,13 +1280,10 @@ public class FileItemApDetailController implements Serializable
 					calendar.setReadonly(true);
 				}
 				htmlPanelGroup.getChildren().add(calendar);
-			}
-			else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode()) && !isFimex)
-			{
+			} else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode()) && !isFimex) {
 				final HtmlInputTextarea inputTextarea = (HtmlInputTextarea) context.getApplication().createComponent(
 						HtmlInputTextarea.COMPONENT_TYPE);
-				if (dataType.getRequired())
-				{
+				if (dataType.getRequired()) {
 					inputTextarea.setRequired(true);
 					inputTextarea.setRequiredMessage(dataType.getLabel()
 							+ Constants.SPACE
@@ -1166,8 +1294,7 @@ public class FileItemApDetailController implements Serializable
 				inputTextarea.setId(ID_DECISION_LABEL + stringId);
 				htmlPanelGroup.getChildren().add(inputTextarea);
 			}
-			if (!isFimex || dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode()))
-			{
+			if (!isFimex || dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
 				final Message message = (Message) context.getApplication().createComponent(Message.COMPONENT_TYPE);
 				message.setFor(ID_DECISION_LABEL + stringId);
 				htmlPanelGroup.getChildren().add(message);
@@ -1178,15 +1305,13 @@ public class FileItemApDetailController implements Serializable
 
 		//Acceptation Suite Etude_3 AP EH Minader (affichage des formulaire : analyse result and test result)
 		if (ACCEPTATION_FLOWS.contains(selectedFlow.getCode())
-				&& FileTypeCode.EH_MINADER.equals(selectedFileItem.getFile().getFileType().getCode()))
-		{
+				&& FileTypeCode.EH_MINADER.equals(selectedFileItem.getFile().getFileType().getCode())) {
 			acceptationDecisionFileType = FileTypeCode.EH_MINADER.name();
 			laboratories = laboratoryService.findByAdministration(getLoggedUser().getAdministration());
 			analyseResultApList = new ArrayList<AnalyseResultAp>();
 			testResultApList = new ArrayList<EssayTestAP>();
 			final List<FileItem> fileItems = currentFile.getFileItemsList();
-			for (final FileItem fileItem : fileItems)
-			{
+			for (final FileItem fileItem : fileItems) {
 				final ItemFlow itemFlow = new ItemFlow();
 				itemFlow.setFlow(selectedFlow);
 				itemFlow.setUnread(Boolean.TRUE);
@@ -1195,15 +1320,12 @@ public class FileItemApDetailController implements Serializable
 				analyseResultApList.add(new AnalyseResultAp(itemFlow));
 				testResultApList.add(new EssayTestAP(itemFlow));
 			}
-		}
-		else if (ACCEPTATION_FLOWS.contains(selectedFlow.getCode())
-				&& FileTypeCode.CAT_MINADER.equals(selectedFileItem.getFile().getFileType().getCode()))
-		{
+		} else if (ACCEPTATION_FLOWS.contains(selectedFlow.getCode())
+				&& FileTypeCode.CAT_MINADER.equals(selectedFileItem.getFile().getFileType().getCode())) {
 			acceptationDecisionFileType = FileTypeCode.CAT_MINADER.name();
 			final List<FileItem> fileItems = currentFile.getFileItemsList();
 			testResultApList = new ArrayList<EssayTestAP>();
-			for (final FileItem fileItem : fileItems)
-			{
+			for (final FileItem fileItem : fileItems) {
 				final ItemFlow itemFlow = new ItemFlow();
 				itemFlow.setFlow(selectedFlow);
 				itemFlow.setUnread(Boolean.TRUE);
@@ -1217,13 +1339,11 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Payment amout value changed listener.
 	 */
-	public void paymentAmoutValueChangedListener()
-	{
+	public void paymentAmoutValueChangedListener() {
 		invoiceTotalAmount = 0L;
 		invoiceTotalTtcAmount = 0L;
 		Long totalTva = 0L;
-		for (final PaymentItemFlow pi : paymentData.getPaymentItemFlowList())
-		{
+		for (final PaymentItemFlow pi : paymentData.getPaymentItemFlowList()) {
 			invoiceTotalAmount += pi.getMontantHt() != null ? pi.getMontantHt() : 0;
 			invoiceTotalAmount += invoiceOtherAmount != null ? invoiceOtherAmount : 0;
 			invoiceTotalTtcAmount += invoiceTotalAmount;
@@ -1238,8 +1358,7 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Remplir la liste des valeurs des filed Values pour le un article.
 	 */
-	private void loadAndGroupFileItemFieldValues()
-	{
+	private void loadAndGroupFileItemFieldValues() {
 		fileItemFieldValues = selectedFileItem.getFileItemFieldValueList();
 		groupFileItemFieldValues();
 	}
@@ -1247,8 +1366,7 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Find last decisions.
 	 */
-	private void findLastDecisions()
-	{
+	private void findLastDecisions() {
 		lastDecisionAR = null;
 		lastDecisionTR = null;
 		lastDecisionER = null;
@@ -1256,26 +1374,20 @@ public class FileItemApDetailController implements Serializable
 		lastDecisions = itemFlowService.findLastSentItemFlowByFileItem(selectedFileItem);
 		final FileTypeFlow fileTypeFlow = fileTypeFlowService.findByFlowAndFileType(selectedFileItem.getFile().getFileType(),
 				lastDecisions.getFlow());
-		if (fileTypeFlow != null)
-		{
+		if (fileTypeFlow != null) {
 			lastDecisions.getFlow().setRedefinedLabelEn(fileTypeFlow.getLabelEn());
 			lastDecisions.getFlow().setRedefinedLabelFr(fileTypeFlow.getLabelFr());
 		}
 		specificDecisionsHistory = new ApSpecificDecisionHistory();
 
 		if (FlowCode.FL_AP_102.name().equals(lastDecisions.getFlow().getCode())
-				&& FileTypeCode.EH_MINADER.equals(lastDecisions.getFileItem().getFile().getFileType().getCode()))
-		{
+				&& FileTypeCode.EH_MINADER.equals(lastDecisions.getFileItem().getFile().getFileType().getCode())) {
 			lastDecisionAR = analyseResultApService.findAnalyseResultApByItemFlow(lastDecisions);
-		}
-		else if (FlowCode.FL_AP_102.name().equals(lastDecisions.getFlow().getCode())
-				&& FileTypeCode.CAT_MINADER.equals(lastDecisions.getFileItem().getFile().getFileType().getCode()))
-		{
+		} else if (FlowCode.FL_AP_102.name().equals(lastDecisions.getFlow().getCode())
+				&& FileTypeCode.CAT_MINADER.equals(lastDecisions.getFileItem().getFile().getFileType().getCode())) {
 			lastDecisionTR = essayTestApService.findByItemFlow(lastDecisions);
 			lastDecisionER = essayTestApService.findByItemFlow(lastDecisions);
-		}
-		else if (FlowCode.FL_AP_166.name().equals(lastDecisions.getFlow().getCode()))
-		{
+		} else if (FlowCode.FL_AP_166.name().equals(lastDecisions.getFlow().getCode())) {
 			specificDecisionsHistory.setLastPaymentData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
 			//	specificDecisionsHistory.setDecisionDetailsPayData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
 		}
@@ -1284,8 +1396,7 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Decision details by item flow.
 	 */
-	public void decisionDetailsByItemFlow()
-	{
+	public void decisionDetailsByItemFlow() {
 		decisionDetailsAR = null;
 		decisionDetailsTR = null;
 		decisionDetailsER = null;
@@ -1295,19 +1406,14 @@ public class FileItemApDetailController implements Serializable
 
 		if (FlowCode.FL_AP_102.name().equals(selectedItemFlowDto.getItemFlow().getFlow().getCode())
 				&& FileTypeCode.EH_MINADER.name().equals(
-						selectedItemFlowDto.getItemFlow().getFileItem().getFile().getFileType().getCode().name()))
-		{
+						selectedItemFlowDto.getItemFlow().getFileItem().getFile().getFileType().getCode().name())) {
 			decisionDetailsAR = analyseResultApService.findAnalyseResultApByItemFlow(selectedItemFlowDto.getItemFlow());
 			decisionDetailsTR = essayTestApService.findByItemFlow(selectedItemFlowDto.getItemFlow());
-		}
-		else if (FlowCode.FL_AP_102.name().equals(selectedItemFlowDto.getItemFlow().getFlow().getCode())
+		} else if (FlowCode.FL_AP_102.name().equals(selectedItemFlowDto.getItemFlow().getFlow().getCode())
 				&& FileTypeCode.CAT_MINADER.name().equals(
-						selectedItemFlowDto.getItemFlow().getFileItem().getFile().getFileType().getCode().name()))
-		{
+						selectedItemFlowDto.getItemFlow().getFileItem().getFile().getFileType().getCode().name())) {
 			decisionDetailsER = essayTestApService.findByItemFlow(selectedItemFlowDto.getItemFlow());
-		}
-		else if (FlowCode.FL_AP_166.name().equals(lastDecisions.getFlow().getCode()))
-		{
+		} else if (FlowCode.FL_AP_166.name().equals(lastDecisions.getFlow().getCode())) {
 			specificDecisionsHistory.setDecisionDetailsPayData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
 		}
 	}
@@ -1315,35 +1421,26 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Load product history list.
 	 */
-	private void loadProductHistoryList()
-	{
+	private void loadProductHistoryList() {
 		itemFlowHistoryDtoList = new ArrayList<ItemFlowDto>();
 		final List<ItemFlow> itemFlowHistoryList = itemFlowService.findItemFlowByFileItem(selectedFileItem);
 		//final List<FileItem> itemstepHistoryList = fileItemService.findFileItemsByFile(selectedFileItem.getFile());
 
-
-		if (CollectionUtils.isNotEmpty(itemFlowHistoryList))
-		{
-			for (int i = 0; i < itemFlowHistoryList.size(); i++)
-			{
+		if (CollectionUtils.isNotEmpty(itemFlowHistoryList)) {
+			for (int i = 0; i < itemFlowHistoryList.size(); i++) {
 				final FileTypeFlow fileTypeFlow = fileTypeFlowService.findByFlowAndFileType(selectedFileItem.getFile().getFileType(),
 						itemFlowHistoryList.get(i).getFlow());
-				if (fileTypeFlow != null)
-				{
+				if (fileTypeFlow != null) {
 					itemFlowHistoryList.get(i).getFlow().setRedefinedLabelEn(fileTypeFlow.getLabelEn());
 					itemFlowHistoryList.get(i).getFlow().setRedefinedLabelFr(fileTypeFlow.getLabelFr());
 				}
 
-				if (Constants.ONE <= itemFlowHistoryList.size())
-				{
+				if (Constants.ONE <= itemFlowHistoryList.size()) {
 					final ItemFlowDto itemFlowDto = new ItemFlowDto();
-					if (i + Constants.ONE == itemFlowHistoryList.size())
-					{
+					if (i + Constants.ONE == itemFlowHistoryList.size()) {
 						itemFlowDto.setDuration("-");
 						itemFlowDto.setItemFlow(itemFlowHistoryList.get(i));
-					}
-					else
-					{
+					} else {
 						final String duration = calculatDuration(itemFlowHistoryList.get(i).getCreated().getTime(), itemFlowHistoryList
 								.get(i + Constants.ONE).getCreated().getTime());
 						itemFlowDto.setDuration(duration);
@@ -1353,15 +1450,12 @@ public class FileItemApDetailController implements Serializable
 				}
 			}
 
-
-			for (final ItemFlowDto itemFlowDto : itemFlowHistoryDtoList)
-			{
+			for (final ItemFlowDto itemFlowDto : itemFlowHistoryDtoList) {
 
 				final FileTypeStep fileTypeStep = fileTypeStepService.findFileTypeStepByFileTypeAndStep(selectedFileItem.getFile()
 						.getFileType(), itemFlowDto.getItemFlow().getFlow().getToStep());
 
-				if (fileTypeStep != null)
-				{
+				if (fileTypeStep != null) {
 					itemFlowDto.getItemFlow().getFileItem().setRedefinedLabelEn(fileTypeStep.getLabelEn());
 					itemFlowDto.getItemFlow().getFileItem().setRedefinedLabelFr(fileTypeStep.getLabelFr());
 				}
@@ -1374,37 +1468,29 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Calculat duration.
 	 *
-	 * @param beginDate
-	 *           the begin date
-	 * @param endDate
-	 *           the end date
+	 * @param beginDate the begin date
+	 * @param endDate the end date
 	 * @return the string
 	 */
-	public String calculatDuration(final long beginDate, final long endDate)
-	{
+	public String calculatDuration(final long beginDate, final long endDate) {
 		long secs = (endDate - beginDate) / 1000;
 		final int days = (int) (secs / 86400);
 		secs = secs % 86400;
 		final int hours = (int) (secs / 3600);
 		secs = secs % 3600;
 		final StringBuilder duration = new StringBuilder();
-		if (0 == days && 0 == hours && 0 < secs)
-		{
+		if (0 == days && 0 == hours && 0 < secs) {
 			duration.append(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 					ControllerConstants.Bundle.Messages.HISTORY_DURATION_LESS_THAN_HOUR));
-		}
-		else
-		{
-			if (days > 0)
-			{
+		} else {
+			if (days > 0) {
 				duration.append(days
 						+ " "
 						+ ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 								ControllerConstants.Bundle.Messages.HISTORY_DURATION_DAYS) + ", ");
 			}
 
-			if (hours > 0)
-			{
+			if (hours > 0) {
 				duration.append(hours
 						+ " "
 						+ ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
@@ -1417,10 +1503,8 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Change product selection.
 	 */
-	public void changeProductSelection()
-	{
-		if (selectedFileItem != null)
-		{
+	public void changeProductSelection() {
+		if (selectedFileItem != null) {
 			findLastDecisions();
 			loadProductHistoryList();
 			refreshRecommandationArticleList();
@@ -1441,13 +1525,11 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Reload page listener.
 	 */
-	public void reloadPage()
-	{
+	public void reloadPage() {
 		final FacesContext fc = FacesContext.getCurrentInstance();
 		final boolean isGETMethod = ((HttpServletRequest) fc.getExternalContext().getRequest()).getMethod().equals("GET");
 		// Skip ajax requests. and Http GET method
-		if (isGETMethod)
-		{
+		if (isGETMethod) {
 			init();
 		}
 	}
@@ -1455,14 +1537,11 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Save decision.
 	 *
-	 * @throws ParseException
-	 *            the parse exception
+	 * @throws ParseException the parse exception
 	 */
-	public void saveDecision() throws ParseException
-	{
+	public void saveDecision() throws ParseException {
 		// Check if the step of fileItems was changed by another user when the decision popup is open
-		if (fileItemService.verifyStepChangedWhileDecisionInProgress(currentFile.getFileItemsList()))
-		{
+		if (fileItemService.verifyStepChangedWhileDecisionInProgress(currentFile.getFileItemsList())) {
 			final String summary = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
 					.getString(ControllerConstants.Bundle.Messages.ERROR_DIALOG_TITLE);
 
@@ -1477,53 +1556,42 @@ public class FileItemApDetailController implements Serializable
 
 		final List<ItemFlowData> flowDatas = new ArrayList<ItemFlowData>();
 
-		for (final DataType dataType : selectedFlow.getDataTypeList())
-		{
+		for (final DataType dataType : selectedFlow.getDataTypeList()) {
 			final ItemFlowData itemFlowData = new ItemFlowData();
 			itemFlowData.setDataType(dataType);
 			final boolean isFimex = currentFile.getFileType().getCode().equals(FileTypeCode.FIMEX_WF)
 					&& FlowCode.FL_AP_106.name().equals(selectedFlow.getCode());
 
-			if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode()) && !isFimex)
-			{
+			if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode()) && !isFimex) {
 
 				final HtmlInputText valueDataType = (HtmlInputText) decisionDiv.findComponent(ID_DECISION_LABEL + dataType.getId());
 
 				itemFlowData.setValue(valueDataType.getValue().toString());
 
-			}
-			else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode()) && !isFimex)
-			{
+			} else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode()) && !isFimex) {
 				final HtmlSelectBooleanCheckbox valueDataType = (HtmlSelectBooleanCheckbox) decisionDiv
 						.findComponent(ID_DECISION_LABEL + dataType.getId());
 				itemFlowData.setValue(valueDataType.getValue().toString());
 
-			}
-			else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode()))
-			{
+			} else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
 				final Calendar valueDataType = (Calendar) decisionDiv.findComponent(ID_DECISION_LABEL + dataType.getId());
 				itemFlowData.setValue(DateUtils.formatSimpleDateFromObject(DateUtils.FRENCH_DATE, valueDataType.getValue()));
 
-			}
-			else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode()) && !isFimex)
-			{
+			} else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode()) && !isFimex) {
 				final HtmlInputTextarea valueDataType = (HtmlInputTextarea) decisionDiv.findComponent(ID_DECISION_LABEL
 						+ dataType.getId());
 				itemFlowData.setValue(valueDataType.getValue().toString());
 			}
-			if (!Objects.equals(itemFlowData.getValue(), null))
-			{
+			if (!Objects.equals(itemFlowData.getValue(), null)) {
 				flowDatas.add(itemFlowData);
 			}
 		}
 		//		if there is an accepting step for EH_MINADER or CAT_MINADER
 		if (ACCEPTATION_FLOWS.contains(selectedFlow.getCode())
 				&& (FileTypeCode.EH_MINADER.equals(currentFile.getFileType().getCode()) || FileTypeCode.CAT_MINADER
-						.equals(currentFile.getFileType().getCode())))
-		{
+				.equals(currentFile.getFileType().getCode()))) {
 			final List<ItemFlow> itemFlows = new ArrayList<ItemFlow>();
-			for (final EssayTestAP essayTestAP : testResultApList)
-			{
+			for (final EssayTestAP essayTestAP : testResultApList) {
 				essayTestAP.getItemFlow().setCreated(null);
 				essayTestAP.getItemFlow().setFlow(selectedFlow);
 				essayTestAP.getItemFlow().setSent(Boolean.FALSE);
@@ -1533,13 +1601,10 @@ public class FileItemApDetailController implements Serializable
 					testResultApList);
 			analyseResultApList = null;
 			testResultApList = null;
-		}
-		else
-		{
+		} else {
 			final List<ItemFlow> itemFlowsToAdd = new ArrayList<ItemFlow>();
 
-			for (final FileItem fileItem : currentFile.getFileItemsList())
-			{
+			for (final FileItem fileItem : currentFile.getFileItemsList()) {
 				final ItemFlow itemFlow = new ItemFlow();
 
 				itemFlow.setCreated(null);
@@ -1554,12 +1619,9 @@ public class FileItemApDetailController implements Serializable
 
 			if (Arrays.asList(FlowCode.FL_AP_160.name(), FlowCode.FL_AP_161.name(), FlowCode.FL_AP_162.name(),
 					FlowCode.FL_AP_163.name(), FlowCode.FL_AP_164.name(), FlowCode.FL_AP_165.name(), FlowCode.FL_AP_167.name())
-					.contains(selectedFlow.getCode()))
-			{
+					.contains(selectedFlow.getCode())) {
 				commonService.takeDacisionAndSavePayment(itemFlowsToAdd, paymentData);
-			}
-			else
-			{
+			} else {
 				itemFlowService.takeDecision(itemFlowsToAdd, flowDatas);
 			}
 
@@ -1571,36 +1633,27 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Mark file.
 	 */
-	public void dispatchFile()
-	{
+	public void dispatchFile() {
 		List<ItemFlowData> flowDatas = null;
 
 		flowDatas = new ArrayList<ItemFlowData>();
-		for (final DataType dataType : selectedFlow.getDataTypeList())
-		{
+		for (final DataType dataType : selectedFlow.getDataTypeList()) {
 			final ItemFlowData itemFlowData = new ItemFlowData();
 			itemFlowData.setDataType(dataType);
 
-			if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode()))
-			{
+			if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode())) {
 				final HtmlInputText valueDataType = (HtmlInputText) dipatchDiv.findComponent(ID_DISPATCH_LABEL + dataType.getId());
 				itemFlowData.setValue(valueDataType.getValue().toString());
-			}
-			else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode()))
-			{
+			} else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode())) {
 				final HtmlSelectBooleanCheckbox valueDataType = (HtmlSelectBooleanCheckbox) dipatchDiv
 						.findComponent(ID_DISPATCH_LABEL + dataType.getId());
 				itemFlowData.setValue(valueDataType.getValue().toString());
 
-			}
-			else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode()))
-			{
+			} else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
 				final Calendar valueDataType = (Calendar) dipatchDiv.findComponent(ID_DISPATCH_LABEL + dataType.getId());
 				itemFlowData.setValue(DateUtils.formatSimpleDateFromObject(DateUtils.FRENCH_DATE, valueDataType.getValue()));
 
-			}
-			else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode()))
-			{
+			} else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode())) {
 				final HtmlInputTextarea valueDataType = (HtmlInputTextarea) dipatchDiv.findComponent(ID_DISPATCH_LABEL
 						+ dataType.getId());
 				itemFlowData.setValue(valueDataType.getValue().toString());
@@ -1608,10 +1661,8 @@ public class FileItemApDetailController implements Serializable
 			flowDatas.add(itemFlowData);
 		}
 
-
 		final List<ItemFlow> itemFlowsToAdd = new ArrayList<ItemFlow>();
-		for (final FileItem fileItem : currentFile.getFileItemsList())
-		{
+		for (final FileItem fileItem : currentFile.getFileItemsList()) {
 			final ItemFlow itemFlow = new ItemFlow();
 
 			fileItem.setDraft(true);
@@ -1635,8 +1686,7 @@ public class FileItemApDetailController implements Serializable
 		itemFlowService.takeDecision(itemFlowsToAdd, flowDatas);
 		//		}
 
-		if (assignedUserForCotation != null)
-		{
+		if (assignedUserForCotation != null) {
 			currentFile.setAssignedUser(assignedUserForCotation);
 			fileService.update(currentFile);
 		}
@@ -1647,8 +1697,7 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Prepare dispatch file.
 	 */
-	public void prepareDispatchFile()
-	{
+	public void prepareDispatchFile() {
 		String stringId = null;
 		dipatchDiv.getChildren().clear();
 		assignedUserForCotation = null;
@@ -1658,12 +1707,10 @@ public class FileItemApDetailController implements Serializable
 		userListToAffectedFileCotation = userAuthorityFileTypeService.findUserByFileTypeAndStepAuthorities(
 				currentFile.getFileType(), selectedFlow.getToStep(), currentFile);
 
-		for (final DataType dataType : selectedFlow.getDataTypeList())
-		{
+		for (final DataType dataType : selectedFlow.getDataTypeList()) {
 
 			final FacesContext context = FacesContext.getCurrentInstance();
-			if (dataType.getId() != null)
-			{
+			if (dataType.getId() != null) {
 				stringId = String.valueOf(dataType.getId());
 			}
 
@@ -1672,18 +1719,14 @@ public class FileItemApDetailController implements Serializable
 
 			final HtmlOutputText labelOutput = (HtmlOutputText) context.getApplication().createComponent(
 					HtmlOutputText.COMPONENT_TYPE);
-			if (FacesContext.getCurrentInstance().getViewRoot().getLocale().equals(Locale.FRENCH))
-			{
+			if (FacesContext.getCurrentInstance().getViewRoot().getLocale().equals(Locale.FRENCH)) {
 				labelOutput.setValue(dataType.getLabel());
-			}
-			else
-			{
+			} else {
 				labelOutput.setValue(dataType.getLabelEn());
 			}
 			htmlPanelGroup.getChildren().add(labelOutput);
 
-			if (dataType.getRequired())
-			{
+			if (dataType.getRequired()) {
 				final HtmlOutputText labelOutputRequired = (HtmlOutputText) context.getApplication().createComponent(
 						HtmlOutputText.COMPONENT_TYPE);
 				labelOutputRequired.setValue("*");
@@ -1693,37 +1736,29 @@ public class FileItemApDetailController implements Serializable
 
 			dipatchDiv.getChildren().add(htmlPanelGroup);
 
-			if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode()))
-			{
+			if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode())) {
 				final HtmlInputText inputText = (HtmlInputText) context.getApplication()
 						.createComponent(HtmlInputText.COMPONENT_TYPE);
-				if (dataType.getRequired())
-				{
+				if (dataType.getRequired()) {
 					inputText.setRequired(true);
 				}
 				inputText.setId(ID_DISPATCH_LABEL + stringId);
 				inputText.setLabel(dataType.getLabel());
 				dipatchDiv.getChildren().add(inputText);
-			}
-			else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode()))
-			{
+			} else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode())) {
 				final HtmlSelectBooleanCheckbox booleanCheckbox = (HtmlSelectBooleanCheckbox) context.getApplication()
 						.createComponent(HtmlSelectBooleanCheckbox.COMPONENT_TYPE);
-				if (dataType.getRequired())
-				{
+				if (dataType.getRequired()) {
 					booleanCheckbox.setRequired(true);
 				}
 				booleanCheckbox.setId(ID_DISPATCH_LABEL + stringId);
 				booleanCheckbox.setLabel(dataType.getLabel());
 				dipatchDiv.getChildren().add(booleanCheckbox);
 
-			}
-			else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode()))
-			{
+			} else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
 				final Calendar calendar = (Calendar) context.getApplication().createComponent(Calendar.COMPONENT_TYPE);
 				calendar.setShowOn("button");
-				if (dataType.getRequired())
-				{
+				if (dataType.getRequired()) {
 					calendar.setRequired(true);
 				}
 				calendar.setId(ID_DISPATCH_LABEL + stringId);
@@ -1733,13 +1768,10 @@ public class FileItemApDetailController implements Serializable
 				calendar.setLabel(dataType.getLabel());
 				dipatchDiv.getChildren().add(calendar);
 
-			}
-			else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode()))
-			{
+			} else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode())) {
 				final HtmlInputTextarea inputTextarea = (HtmlInputTextarea) context.getApplication().createComponent(
 						HtmlInputTextarea.COMPONENT_TYPE);
-				if (dataType.getRequired())
-				{
+				if (dataType.getRequired()) {
 					inputTextarea.setRequired(true);
 				}
 				inputTextarea.setRows(10);
@@ -1753,34 +1785,26 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Send decisions.
 	 *
-	 * @throws JAXBException
-	 *            the JAXB exception
-	 * @throws IOException
-	 *            Signals that an I/O exception has occurred.
+	 * @throws JAXBException the JAXB exception
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	@SuppressWarnings("unused")
-	public void sendDecisions() throws JAXBException, IOException
-	{
+	public void sendDecisions() throws JAXBException, IOException {
 		final DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 		def.setReadOnly(false);
 		final TransactionStatus status = transactionManager.getTransaction(def);
-		try
-		{
+		try {
 			// Cotation case
-			if (currentFile.getFileItemsList() != null && cotationAllowed != null && cotationAllowed)
-			{
+			if (currentFile.getFileItemsList() != null && cotationAllowed != null && cotationAllowed) {
 				itemFlowService.sendDecisionsToDispatchFile(currentFile);
 
 				JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
 						getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.SEND_SUCCESS));
 				goToDetailPage();
-			}
-			// Decision case
-			else if (decisionAllowed || (comeFromRetrieveAp != null && comeFromRetrieveAp))
-			{
-				if (currentFile.getFileItemsList() != null && !currentFile.getFileItemsList().isEmpty())
-				{
+			} // Decision case
+			else if (decisionAllowed || (comeFromRetrieveAp != null && comeFromRetrieveAp)) {
+				if (currentFile.getFileItemsList() != null && !currentFile.getFileItemsList().isEmpty()) {
 					final Map<FileItem, Flow> map = itemFlowService.sendDecisions(currentFile.getFileItemsList().get(0).getFile(),
 							currentFile.getFileItemsList());
 					final List<FileItem> fileItemList = new ArrayList<FileItem>(map.keySet());
@@ -1788,12 +1812,10 @@ public class FileItemApDetailController implements Serializable
 
 					ItemFlowData itemFlowData = null;
 					if (CollectionUtils.isNotEmpty(itemFlowList)
-							&& CollectionUtils.isNotEmpty(itemFlowList.get(0).getItemFlowsDataList()))
-					{
+							&& CollectionUtils.isNotEmpty(itemFlowList.get(0).getItemFlowsDataList())) {
 						itemFlowData = itemFlowList.get(0).getItemFlowsDataList().get(0);
 					}
-					if (!map.isEmpty())
-					{
+					if (!map.isEmpty()) {
 						final Flow executedFlow = map.values().iterator().next();
 						final String service = StringUtils.EMPTY;
 						final String documentType = StringUtils.EMPTY;
@@ -1801,30 +1823,24 @@ public class FileItemApDetailController implements Serializable
 
 						//generate report
 						Map<String, byte[]> attachedByteFiles = null;
-						try
-						{
+						try {
 							String reportNumber = StringUtils.EMPTY;
-							if (FlowCode.FL_AP_107.name().equals(flowToSend.getCode()))
-							{
+							if (FlowCode.FL_AP_107.name().equals(flowToSend.getCode())) {
 								attachedByteFiles = new HashMap<String, byte[]>();
 
 								final List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<FileTypeFlowReport>();
 
 								final List<FileTypeFlowReport> fileTypeFlowReportsList = flowToSend.getFileTypeFlowReportsList();
 
-								if (fileTypeFlowReportsList != null)
-								{
+								if (fileTypeFlowReportsList != null) {
 
-									for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList)
-									{
-										if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType()))
-										{
+									for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
+										if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType())) {
 											fileTypeFlowReports.add(fileTypeFlowReport);
 										}
 									}
 								}
-								for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports)
-								{
+								for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
 
 									//Begin Add new field value with report Number
 									final ReportOrganism reportOrganism = reportOrganismService
@@ -1833,8 +1849,7 @@ public class FileItemApDetailController implements Serializable
 											fileTypeFlowReport.getFileFieldName(), fileTypeFlowReport.getFileType().getCode());
 									reportNumber = (reportOrganism.getSequence() + 1)
 											+ (reportOrganism.getValue() != null ? reportOrganism.getValue() : StringUtils.EMPTY);
-									if (reportField != null)
-									{
+									if (reportField != null) {
 										final FileFieldValue reportFieldValue = new FileFieldValue();
 										reportFieldValue.setFile(currentFile);
 										reportFieldValue.setFileField(reportField);
@@ -1848,13 +1863,15 @@ public class FileItemApDetailController implements Serializable
 									@SuppressWarnings("rawtypes")
 									final Class classe = Class.forName(nomClasse);
 									@SuppressWarnings(
-									{ "rawtypes", "unchecked" })
+											{"rawtypes", "unchecked"})
 									final Constructor c1 = classe.getConstructor(File.class);
 
 									final byte[] report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile));
 									attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
 
-									/****/
+									/**
+									 * *
+									 */
 									final java.io.File targetAttachment = new java.io.File(String.format(
 											applicationPropretiesService.getAttachementFolder() + "%s%s", java.io.File.separator,
 											fileTypeFlowReport.getReportName()));
@@ -1862,7 +1879,9 @@ public class FileItemApDetailController implements Serializable
 									final FileOutputStream fileOuputStream = new FileOutputStream(targetAttachment);
 									fileOuputStream.write(report);
 									fileOuputStream.close();
-									/***/
+									/**
+									 *
+									 */
 
 									//Update report sequence
 									reportOrganism.setSequence(reportOrganism.getSequence() + 1);
@@ -1872,13 +1891,10 @@ public class FileItemApDetailController implements Serializable
 									fileService.updateSpecificColumn(dateParams, currentFile);
 								}
 							}
-						}
-						catch (final Exception e)
-						{
-							LOG.error("Error occured when loading report: ", e.getMessage());
+						} catch (final Exception e) {
+							LOG.error("Error occured when loading report: " + e.getMessage(), e);
 							attachedByteFiles = null;
 						}
-
 
 						// convert file to document
 						final Serializable documentSerializable = xmlConverterService.convertFileToDocument(productInfoItems.get(0)
@@ -1888,11 +1904,9 @@ public class FileItemApDetailController implements Serializable
 						final java.io.File xmlFile = SendDocumentUtils.prepareApDocument(documentSerializable,
 								ebxmlPropertiesService.getEbxmlFolder(), service, documentType);
 
-						if (CollectionUtils.isNotEmpty(flowToSend.getCopyRecipientsList()))
-						{
+						if (CollectionUtils.isNotEmpty(flowToSend.getCopyRecipientsList())) {
 							final List<CopyRecipient> copyRecipients = flowToSend.getCopyRecipientsList();
-							for (final CopyRecipient copyRecipient : copyRecipients)
-							{
+							for (final CopyRecipient copyRecipient : copyRecipients) {
 								LOG.info("SEND COPY RECIPIENT TO {}", copyRecipient.getToAuthority().getRole());
 								final Map<String, Object> data = new HashMap<String, Object>();
 								final Path path = Paths.get(xmlFile.getAbsolutePath());
@@ -1906,15 +1920,12 @@ public class FileItemApDetailController implements Serializable
 								data.put(ESBConstants.TO_PARTY_ID, copyRecipient.getToAuthority().getRole());
 								data.put(ESBConstants.DEAD, "0");
 								fileProducer.sendFile(data);
-								if (LOG.isDebugEnabled())
-								{
+								if (LOG.isDebugEnabled()) {
 									LOG.debug("Message sent to OUT queue");
 								}
 
 							}
-						}
-						else
-						{
+						} else {
 							final Map<String, Object> data = new HashMap<String, Object>();
 							final Path path = Paths.get(xmlFile.getAbsolutePath());
 							final byte[] ebxml = Files.readAllBytes(path);
@@ -1927,8 +1938,7 @@ public class FileItemApDetailController implements Serializable
 							data.put(ESBConstants.TO_PARTY_ID, ebxmlPropertiesService.getToPartyId());
 							data.put(ESBConstants.DEAD, "0");
 							fileProducer.sendFile(data);
-							if (LOG.isDebugEnabled())
-							{
+							if (LOG.isDebugEnabled()) {
 								LOG.debug("Message sent to OUT queue");
 							}
 						}
@@ -1941,29 +1951,24 @@ public class FileItemApDetailController implements Serializable
 					goToDetailPage();
 
 				}
-			}
-			else
-			{
+			} else {
 				final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
 						.getString(ControllerConstants.Bundle.Messages.SEND_ERROR);
 				JsfUtil.addErrorMessage(msg);
 			}
 			transactionManager.commit(status);
-			if (LOG.isDebugEnabled())
-			{
+			if (LOG.isDebugEnabled()) {
 				LOG.info("####SEND DECISION Transaction commited####");
 			}
 
 			final File file = fileService.find(currentFile.getId());
 			final Step currentStep = file.getFileItemsList().get(0).getStep();
 			notificationEmail(currentFile, currentStep);
-		}
-		catch (final Exception e)
-		{
+		} catch (final Exception e) {
 			e.printStackTrace();
 			transactionManager.rollback(status);
 
-			LOG.error("####SEND DECISION Transaction rollbacked#### {}", e.getMessage());
+			LOG.error("####SEND DECISION Transaction rollbacked#### " + e.getMessage(), e);
 
 		}
 	}
@@ -1971,10 +1976,8 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Go to detail page.
 	 */
-	public void goToDetailPage()
-	{
-		try
-		{
+	public void goToDetailPage() {
+		try {
 			setIndexPageUrl(ControllerConstants.Pages.FO.DASHBOARD_AP_INDEX_PAGE);
 			final FacesContext context = FacesContext.getCurrentInstance();
 			final ExternalContext extContext = context.getExternalContext();
@@ -1983,9 +1986,7 @@ public class FileItemApDetailController implements Serializable
 					.getActionURL(context, indexPageUrl));
 
 			extContext.redirect(url);
-		}
-		catch (final IOException ex)
-		{
+		} catch (final IOException ex) {
 			LOG.error(ex.getMessage(), ex);
 		}
 	}
@@ -1993,23 +1994,17 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Prepare roll back decisions.
 	 */
-	public void prepareRollBackDecisions()
-	{
-		if (currentFile.getFileItemsList() == null || currentFile.getFileItemsList().isEmpty() && cotationAllowed == null)
-		{
+	public void prepareRollBackDecisions() {
+		if (currentFile.getFileItemsList() == null || currentFile.getFileItemsList().isEmpty() && cotationAllowed == null) {
 			final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 					ControllerConstants.Bundle.Messages.CHOOSE_DECISION_ERROR);
 			JsfUtil.addErrorMessage(msg);
-		}
-		else if (currentFile.getFileItemsList() == null || currentFile.getFileItemsList().isEmpty() && cotationAllowed != null
-				&& cotationAllowed)
-		{
+		} else if (currentFile.getFileItemsList() == null || currentFile.getFileItemsList().isEmpty() && cotationAllowed != null
+				&& cotationAllowed) {
 			final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 					ControllerConstants.Bundle.Messages.DISPATCH_ERROR);
 			JsfUtil.addErrorMessage(msg);
-		}
-		else
-		{
+		} else {
 			final RequestContext requestContext = RequestContext.getCurrentInstance();
 			requestContext.execute("PF('" + CONFIRMATION_DIALOG + "').show()");
 		}
@@ -2018,38 +2013,29 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Annuler decisions.
 	 */
-	public void annulerDecisions()
-	{
+	public void annulerDecisions() {
 		final List<Long> fileItemListIds = new ArrayList<Long>();
-		for (final FileItem fileItem : currentFile.getFileItemsList())
-		{
+		for (final FileItem fileItem : currentFile.getFileItemsList()) {
 			fileItemListIds.add(fileItem.getId());
 		}
-		try
-		{
+		try {
 			// Decision Case
-			if (cotationAllowed != null && !cotationAllowed)
-			{
+			if (cotationAllowed != null && !cotationAllowed) {
 				commonService.rollbackDecision(fileItemListIds);
 
 				JsfUtil.addSuccessMessage(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
 						.getString(ControllerConstants.Bundle.Messages.ROLL_BACK_SUCCESS));
 
 				decisionDiv.getChildren().clear();
-			}
-			// Cotation Case
-			else
-			{
+			} // Cotation Case
+			else {
 				itemFlowService.rollBackDecisionForDispatchFile(fileItemListIds);
 
 				// If the las decision is a cotation flow then rollback the assigned user to the current user
-				if (lastDecisions.getFlow().getIsCota())
-				{
+				if (lastDecisions.getFlow().getIsCota()) {
 					currentFile.setAssignedUser(getLoggedUser());
 					fileService.update(currentFile);
-				}
-				else
-				{
+				} else {
 					currentFile.setAssignedUser(null);
 					fileService.update(currentFile);
 				}
@@ -2060,9 +2046,7 @@ public class FileItemApDetailController implements Serializable
 				JsfUtil.addSuccessMessage(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
 						.getString(ControllerConstants.Bundle.Messages.ROLL_BACK_SUCCESS));
 			}
-		}
-		catch (final Exception e)
-		{
+		} catch (final Exception e) {
 			LOG.error(e.getMessage(), e);
 			JsfUtil.addErrorMessage(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
 					.getString(ControllerConstants.Bundle.Messages.ROLL_BACK_FAIL));
@@ -2072,21 +2056,16 @@ public class FileItemApDetailController implements Serializable
 
 	}
 
-
 	/**
 	 * Disable draft from product info item.
 	 *
-	 * @param infoItems
-	 *           the info items
+	 * @param infoItems the info items
 	 * @return the list
 	 */
-	private List<FileItem> disableDraftFromProductInfoItem(final List<FileItem> infoItems)
-	{
+	private List<FileItem> disableDraftFromProductInfoItem(final List<FileItem> infoItems) {
 		final List<FileItem> returnedInfoItems = new ArrayList<FileItem>();
-		for (final FileItem fileItem : infoItems)
-		{
-			if (fileItem.getDraft() != null && fileItem.getDraft())
-			{
+		for (final FileItem fileItem : infoItems) {
+			if (fileItem.getDraft() != null && fileItem.getDraft()) {
 				fileItem.setDraft(false);
 			}
 			returnedInfoItems.add(fileItem);
@@ -2097,30 +2076,25 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Reset data grid inofrmation products.
 	 */
-	public void resetDataGridInofrmationProducts()
-	{
+	public void resetDataGridInofrmationProducts() {
 		selectedFlow = null;
 		currentFile.setFileItemsList(null);
 		setProductInfoItemsEnabled(null);
 		FileTypeStep fileTypeStep = null;
-		if (selectedFileItem != null)
-		{
+		if (selectedFileItem != null) {
 			fileTypeStep = fileTypeStepService.findFileTypeStepByFileTypeAndStep(selectedFileItem.getFile().getFileType(),
 					selectedFileItem.getStep());
 
 		}
 		productInfoItems = initFileItemApDetails();
-		if (fileTypeStep != null && fileTypeStep.getLabelFr() != null)
-		{
-			for (final FileItem fileItem : productInfoItems)
-			{
+		if (fileTypeStep != null && fileTypeStep.getLabelFr() != null) {
+			for (final FileItem fileItem : productInfoItems) {
 				fileItem.setRedefinedLabelEn((fileTypeStep.getLabelEn()));
 				fileItem.setRedefinedLabelFr((fileTypeStep.getLabelFr()));
 			}
 		}
 
-		if (hasDraftFileItemInList(productInfoItems))
-		{
+		if (hasDraftFileItemInList(productInfoItems)) {
 			rollBackDecisionsAllowed = true;
 			sendDecisionAllowed = true;
 			fileItemHasDraft = true;
@@ -2133,8 +2107,7 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the current locale
 	 */
-	public Locale getCurrentLocale()
-	{
+	public Locale getCurrentLocale() {
 		return FacesContext.getCurrentInstance().getViewRoot().getLocale();
 
 	}
@@ -2144,13 +2117,10 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the logged user
 	 */
-	public User getLoggedUser()
-	{
-		if (loggedUser == null)
-		{
+	public User getLoggedUser() {
+		if (loggedUser == null) {
 			final FacesContext context = FacesContext.getCurrentInstance();
-			if (context != null)
-			{
+			if (context != null) {
 				final HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
 				loggedUser = (User) session.getAttribute("loggedUser");
 			}
@@ -2163,13 +2133,10 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the current organism
 	 */
-	public Organism getCurrentOrganism()
-	{
-		if (currentOrganism == null)
-		{
+	public Organism getCurrentOrganism() {
+		if (currentOrganism == null) {
 			final FacesContext context = FacesContext.getCurrentInstance();
-			if (context != null)
-			{
+			if (context != null) {
 				final HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
 				currentOrganism = (Organism) session.getAttribute("currentOrganism");
 			}
@@ -2182,13 +2149,10 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the current service
 	 */
-	public Service getCurrentService()
-	{
-		if (currentService == null)
-		{
+	public Service getCurrentService() {
+		if (currentService == null) {
 			final FacesContext context = FacesContext.getCurrentInstance();
-			if (context != null)
-			{
+			if (context != null) {
 				final HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
 				currentService = (Service) session.getAttribute("currentService");
 			}
@@ -2199,8 +2163,7 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Prepare create recommandation.
 	 */
-	public void prepareCreateRecommandation()
-	{
+	public void prepareCreateRecommandation() {
 		selectedRecommandation = new Recommandation();
 
 		authorityList = fileTypeService.findAuthoritiesByFileType(currentFile.getFileType());
@@ -2211,8 +2174,7 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Prepare edit recommandation.
 	 */
-	public void prepareEditRecommandation()
-	{
+	public void prepareEditRecommandation() {
 		this.setSelectedRecommandation(recommandationService.find(this.getSelectedRecommandation().getId()));
 
 		authorityList = fileTypeService.findAuthoritiesByFileType(currentFile.getFileType());
@@ -2220,13 +2182,9 @@ public class FileItemApDetailController implements Serializable
 		authoritiesList = new DualListModel<Authority>(new ArrayList<Authority>(), new ArrayList<Authority>());
 		authoritiesList.getSource().addAll(authorityList);
 
-
-		for (final RecommandationAuthority recAuthority : this.getSelectedRecommandation().getAuthorizedAuthorityList())
-		{
-			for (final Authority authority1 : authoritiesList.getSource())
-			{
-				if (recAuthority.getAuthority().getId().equals(authority1.getId()))
-				{
+		for (final RecommandationAuthority recAuthority : this.getSelectedRecommandation().getAuthorizedAuthorityList()) {
+			for (final Authority authority1 : authoritiesList.getSource()) {
+				if (recAuthority.getAuthority().getId().equals(authority1.getId())) {
 					authoritiesList.getTarget().add(recAuthority.getAuthority());
 					authoritiesList.getSource().remove(recAuthority.getAuthority());
 					break;
@@ -2238,8 +2196,7 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Refresh recommandation list.
 	 */
-	public void refreshRecommandationList()
-	{
+	public void refreshRecommandationList() {
 		recommandationList = recommandationService.findRecommandationByFileAndAuthorties(currentFile, (new ArrayList<Authority>(
 				getLoggedUser().getAuthorities())));
 	}
@@ -2247,12 +2204,9 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Save recommandation.
 	 */
-	public void saveRecommandation()
-	{
-		try
-		{
-			if (selectedRecommandation != null && selectedRecommandation.getValue().trim().length() > 0)
-			{
+	public void saveRecommandation() {
+		try {
+			if (selectedRecommandation != null && selectedRecommandation.getValue().trim().length() > 0) {
 				selectedRecommandation.setFile(this.getCurrentFile());
 				selectedRecommandation.setFileItem(null);
 				selectedRecommandation.setSupervisor(this.getLoggedUser());
@@ -2260,8 +2214,7 @@ public class FileItemApDetailController implements Serializable
 
 				selectedRecommandation.setAuthorizedAuthorityList(new ArrayList<RecommandationAuthority>());
 
-				for (final Authority authority : authoritiesList.getTarget())
-				{
+				for (final Authority authority : authoritiesList.getTarget()) {
 					final RecommandationAuthorityId recommandationAuthorityId = new RecommandationAuthorityId();
 					recommandationAuthorityId.setAuthority(authority);
 					recommandationAuthorityId.setRecommandation(selectedRecommandation);
@@ -2271,28 +2224,22 @@ public class FileItemApDetailController implements Serializable
 					selectedRecommandation.getAuthorizedAuthorityList().add(recommandationAuthority);
 				}
 
-
 				recommandationService.save(selectedRecommandation);
 
 				final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
 						.getString("RecommandationCreated");
 				JsfUtil.addSuccessMessage(msg);
 
-				if (!JsfUtil.isValidationFailed())
-				{
+				if (!JsfUtil.isValidationFailed()) {
 					selectedRecommandation = null;
 					refreshRecommandationList();
 				}
-			}
-			else
-			{
+			} else {
 				final String errorMsg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
 						.getString(ControllerConstants.Bundle.Messages.CREATE_RECOMMANDATION_REQUIRED_MESSAGE);
 				JsfUtil.addErrorMessage(errorMsg);
 			}
-		}
-		catch (final Exception e)
-		{
+		} catch (final Exception e) {
 			LOG.error(e.getMessage(), e);
 			JsfUtil.addErrorMessage(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
 					.getString(ControllerConstants.Bundle.Messages.PERSISTENCE_ERROR_OCCURED));
@@ -2303,17 +2250,13 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Edits the recommandation.
 	 */
-	public void editRecommandation()
-	{
-		try
-		{
-			if (selectedRecommandation != null && selectedRecommandation.getValue().trim().length() > 0)
-			{
+	public void editRecommandation() {
+		try {
+			if (selectedRecommandation != null && selectedRecommandation.getValue().trim().length() > 0) {
 				selectedRecommandation.setCreated(java.util.Calendar.getInstance().getTime());
 
 				selectedRecommandation.setAuthorizedAuthorityList(new ArrayList<RecommandationAuthority>());
-				for (final Authority authority : authoritiesList.getTarget())
-				{
+				for (final Authority authority : authoritiesList.getTarget()) {
 					final RecommandationAuthorityId recommandationAuthorityId = new RecommandationAuthorityId();
 					recommandationAuthorityId.setAuthority(authority);
 					recommandationAuthorityId.setRecommandation(selectedRecommandation);
@@ -2333,16 +2276,12 @@ public class FileItemApDetailController implements Serializable
 
 				selectedRecommandation = null;
 				refreshRecommandationList();
-			}
-			else
-			{
+			} else {
 				final String errorMsg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
 						.getString(ControllerConstants.Bundle.Messages.EDIT_RECOMMANDATION_REQUIRED_MESSAGE);
 				JsfUtil.addErrorMessage(errorMsg);
 			}
-		}
-		catch (final Exception e)
-		{
+		} catch (final Exception e) {
 			LOG.error(e.getMessage(), e);
 			JsfUtil.addErrorMessage(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
 					.getString(ControllerConstants.Bundle.Messages.PERSISTENCE_ERROR_OCCURED));
@@ -2352,24 +2291,19 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Delete recommandation.
 	 */
-	public void deleteRecommandation()
-	{
-		try
-		{
+	public void deleteRecommandation() {
+		try {
 			final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 					Recommandation.class.getSimpleName() + PersistenceActions.DELETE.getCode());
 			JsfUtil.addSuccessMessage(msg);
 
 			recommandationService.delete(selectedRecommandation);
 
-			if (!JsfUtil.isValidationFailed())
-			{
+			if (!JsfUtil.isValidationFailed()) {
 				selectedRecommandation = null;
 				refreshRecommandationList();
 			}
-		}
-		catch (final Exception e)
-		{
+		} catch (final Exception e) {
 			JsfUtil.addErrorMessage(e, ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
 					.getString(ControllerConstants.Bundle.Messages.PERSISTENCE_ERROR_OCCURED));
 		}
@@ -2378,19 +2312,16 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Generate report.
 	 *
-	 * @throws IOException
-	 *            Signals that an I/O exception has occurred.
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public void generateReport() throws IOException
-	{
+	public void generateReport() throws IOException {
 		JsfUtil.generateReport(new CpMinepdedExporter(currentFile));
 	}
 
 	/**
 	 * Prepare create recommandation article.
 	 */
-	public void prepareCreateRecommandationArticle()
-	{
+	public void prepareCreateRecommandationArticle() {
 		selectedRecommandationArticle = new Recommandation();
 
 		authorityList = fileTypeService.findAuthoritiesByFileType(currentFile.getFileType());
@@ -2401,8 +2332,7 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Prepare edit recommandation article.
 	 */
-	public void prepareEditRecommandationArticle()
-	{
+	public void prepareEditRecommandationArticle() {
 		this.setSelectedRecommandationArticle(recommandationService.find(this.getSelectedRecommandationArticle().getId()));
 
 		authorityList = fileTypeService.findAuthoritiesByFileType(currentFile.getFileType());
@@ -2410,13 +2340,9 @@ public class FileItemApDetailController implements Serializable
 		authoritiesList = new DualListModel<Authority>(new ArrayList<Authority>(), new ArrayList<Authority>());
 		authoritiesList.getSource().addAll(authorityList);
 
-
-		for (final RecommandationAuthority recAuthority : this.getSelectedRecommandationArticle().getAuthorizedAuthorityList())
-		{
-			for (final Authority authority1 : authoritiesList.getSource())
-			{
-				if (recAuthority.getAuthority().getId().equals(authority1.getId()))
-				{
+		for (final RecommandationAuthority recAuthority : this.getSelectedRecommandationArticle().getAuthorizedAuthorityList()) {
+			for (final Authority authority1 : authoritiesList.getSource()) {
+				if (recAuthority.getAuthority().getId().equals(authority1.getId())) {
 					authoritiesList.getTarget().add(recAuthority.getAuthority());
 					authoritiesList.getSource().remove(recAuthority.getAuthority());
 					break;
@@ -2428,8 +2354,7 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Refresh recommandation article list.
 	 */
-	public void refreshRecommandationArticleList()
-	{
+	public void refreshRecommandationArticleList() {
 		recommandationArticleList = recommandationService.findRecommandationByFileItemAndAuthorties(selectedFileItem,
 				(new ArrayList<Authority>(getLoggedUser().getAuthorities())));
 	}
@@ -2437,12 +2362,9 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Save recommandation article.
 	 */
-	public void saveRecommandationArticle()
-	{
-		try
-		{
-			if (selectedRecommandationArticle != null && selectedRecommandationArticle.getValue().trim().length() > 0)
-			{
+	public void saveRecommandationArticle() {
+		try {
+			if (selectedRecommandationArticle != null && selectedRecommandationArticle.getValue().trim().length() > 0) {
 
 				selectedRecommandationArticle.setFile(null);
 				selectedRecommandationArticle.setFileItem(selectedFileItem);
@@ -2451,8 +2373,7 @@ public class FileItemApDetailController implements Serializable
 
 				selectedRecommandationArticle.setAuthorizedAuthorityList(new ArrayList<RecommandationAuthority>());
 
-				for (final Authority authority : authoritiesList.getTarget())
-				{
+				for (final Authority authority : authoritiesList.getTarget()) {
 					final RecommandationAuthorityId recommandationAuthorityId = new RecommandationAuthorityId();
 					recommandationAuthorityId.setAuthority(authority);
 					recommandationAuthorityId.setRecommandation(selectedRecommandationArticle);
@@ -2468,21 +2389,16 @@ public class FileItemApDetailController implements Serializable
 						.getString("RecommandationCreated");
 				JsfUtil.addSuccessMessage(msg);
 
-				if (!JsfUtil.isValidationFailed())
-				{
+				if (!JsfUtil.isValidationFailed()) {
 					selectedRecommandationArticle = null;
 					refreshRecommandationArticleList();
 				}
-			}
-			else
-			{
+			} else {
 				final String errorMsg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
 						.getString(ControllerConstants.Bundle.Messages.CREATE_RECOMMANDATION_REQUIRED_MESSAGE);
 				JsfUtil.addErrorMessage(errorMsg);
 			}
-		}
-		catch (final Exception e)
-		{
+		} catch (final Exception e) {
 			LOG.error(e.getMessage(), e);
 			JsfUtil.addErrorMessage(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
 					.getString(ControllerConstants.Bundle.Messages.PERSISTENCE_ERROR_OCCURED));
@@ -2492,12 +2408,9 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Edits the recommandation article.
 	 */
-	public void editRecommandationArticle()
-	{
-		try
-		{
-			if (selectedRecommandationArticle != null && selectedRecommandationArticle.getValue().trim().length() > 0)
-			{
+	public void editRecommandationArticle() {
+		try {
+			if (selectedRecommandationArticle != null && selectedRecommandationArticle.getValue().trim().length() > 0) {
 				selectedRecommandationArticle.setCreated(java.util.Calendar.getInstance().getTime());
 
 				recommandationService.update(selectedRecommandationArticle);
@@ -2508,16 +2421,12 @@ public class FileItemApDetailController implements Serializable
 
 				selectedRecommandationArticle = null;
 				refreshRecommandationArticleList();
-			}
-			else
-			{
+			} else {
 				final String errorMsg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
 						.getString(ControllerConstants.Bundle.Messages.EDIT_RECOMMANDATION_REQUIRED_MESSAGE);
 				JsfUtil.addErrorMessage(errorMsg);
 			}
-		}
-		catch (final Exception e)
-		{
+		} catch (final Exception e) {
 			LOG.error(e.getMessage(), e);
 			JsfUtil.addErrorMessage(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
 					.getString(ControllerConstants.Bundle.Messages.PERSISTENCE_ERROR_OCCURED));
@@ -2527,26 +2436,21 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Delete recommandation article.
 	 */
-	public void deleteRecommandationArticle()
-	{
-		try
-		{
+	public void deleteRecommandationArticle() {
+		try {
 			recommandationService.delete(selectedRecommandationArticle);
 
 			final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 					Recommandation.class.getSimpleName() + PersistenceActions.DELETE.getCode());
 			JsfUtil.addSuccessMessage(msg);
 
-			if (!JsfUtil.isValidationFailed())
-			{
+			if (!JsfUtil.isValidationFailed()) {
 				selectedRecommandationArticle = null;
 				refreshRecommandationArticleList();
 			}
 			this.setSelectedRecommandationArticle(null);
 			refreshRecommandationArticleList();
-		}
-		catch (final Exception e)
-		{
+		} catch (final Exception e) {
 			LOG.error(e.getMessage(), e);
 			JsfUtil.addErrorMessage(e, ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
 					.getString(ControllerConstants.Bundle.Messages.PERSISTENCE_ERROR_OCCURED));
@@ -2557,16 +2461,13 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Check is allowed recommandation.
 	 */
-	private void checkIsAllowedRecommandation()
-	{
+	private void checkIsAllowedRecommandation() {
 		final List<UserAuthorityFileType> userAFTList = userAuthorityFileTypeService
 				.findUserAuthorityFileTypeByUserList(getLoggedUser().getMergedDelegatorList());
 
-		for (final UserAuthorityFileType uaft : userAFTList)
-		{
+		for (final UserAuthorityFileType uaft : userAFTList) {
 			if (AuthorityConstants.SUPERVISEUR.getCode().equals(uaft.getUserAuthority().getAuthorityGranted().getRole())
-					&& currentFile.getFileType().equals(uaft.getFileType()))
-			{
+					&& currentFile.getFileType().equals(uaft.getFileType())) {
 				allowedUser = Boolean.TRUE;
 				break;
 			}
@@ -2576,55 +2477,41 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Check is allowed user for current stept.
 	 */
-
-	public void checkIsAllowedUserForCurrentStep()
-	{
+	public void checkIsAllowedUserForCurrentStep() {
 		final List<String> authorityTypes = getLoggedUser().getAuthoritiesList();
 		Boolean authorizeUser = Boolean.FALSE;
-		for (final Authority stepAut : selectedFileItem.getStep().getRoleList())
-		{
+		for (final Authority stepAut : selectedFileItem.getStep().getRoleList()) {
 			User assignedUser = null;
-			if (selectedFileItem != null)
-			{
+			if (selectedFileItem != null) {
 				assignedUser = selectedFileItem.getFile().getAssignedUser();
-			}
-			else
-			{
+			} else {
 				assignedUser = currentFile.getAssignedUser();
 			}
 			final boolean assignedUserAuthorized = assignedUser == null
 					|| (assignedUser != null && assignedUser.getId().equals(getLoggedUser().getId()));
-			if (authorityTypes.contains(stepAut.getRole()) && assignedUserAuthorized)
-			{
+			if (authorityTypes.contains(stepAut.getRole()) && assignedUserAuthorized) {
 				authorizeUser = Boolean.TRUE;
 
 				break;
 			}
 		}
-		if (!authorizeUser)
-		{
+		if (!authorizeUser) {
 			decisionAllowed = Boolean.FALSE;
 			cotationAllowed = Boolean.FALSE;
 		}
 	}
 
-
-
 	/**
 	 * Concatenate active index string.
 	 *
-	 * @param tabList
-	 *           the tab list
+	 * @param tabList the tab list
 	 * @return the string
 	 */
-	public String concatenateActiveIndexString(final List<Tab> tabList)
-	{
+	public String concatenateActiveIndexString(final List<Tab> tabList) {
 		final StringBuilder out = new StringBuilder();
-		for (int i = 0; i < tabList.size(); i++)
-		{
+		for (int i = 0; i < tabList.size(); i++) {
 			out.append(i);
-			if (i + 1 != tabList.size())
-			{
+			if (i + 1 != tabList.size()) {
 				out.append(applicationPropretiesService.getColumnSeparator());
 			}
 		}
@@ -2634,47 +2521,37 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Group file item field values.
 	 */
-	private void groupFileItemFieldValues()
-	{
-		if (fieldGroupsItems.isEmpty())
-		{
+	private void groupFileItemFieldValues() {
+		if (fieldGroupsItems.isEmpty()) {
 			fieldGroupsItems = fieldGroupService.findAllByFileType(currentFile.getFileType(), "02");
 		}
 		fileItemFieldGroupDtos = new ArrayList<FieldGroupDto<FileItemFieldValue>>();
-		for (final FieldGroup fieldGroupItem : fieldGroupsItems)
-		{
+		for (final FieldGroup fieldGroupItem : fieldGroupsItems) {
 			final FieldGroupDto<FileItemFieldValue> fileItemFieldGroupDto = new FieldGroupDto<FileItemFieldValue>();
 			fileItemFieldGroupDto.setLabelFr(fieldGroupItem.getLabelFr());
 			fileItemFieldGroupDto.setLabelEn(fieldGroupItem.getLabelEn());
 			final List<FileItemFieldValue> listFileItemFieldValues = new ArrayList<FileItemFieldValue>();
-			for (final FileItemFieldValue fileItemFieldValue : fileItemFieldValues)
-			{
+			for (final FileItemFieldValue fileItemFieldValue : fileItemFieldValues) {
 				if (fileItemFieldValue.getFileItemField().getGroup() != null
-						&& fieldGroupItem.getId().equals(fileItemFieldValue.getFileItemField().getGroup().getId()))
-				{
+						&& fieldGroupItem.getId().equals(fileItemFieldValue.getFileItemField().getGroup().getId())) {
 					listFileItemFieldValues.add(fileItemFieldValue);
 				}
 			}
 			fileItemFieldGroupDto.setFieldValues(listFileItemFieldValues);
-			if (fieldGroupItem.getId().equals(1L))
-			{
+			if (fieldGroupItem.getId().equals(1L)) {
 				final FileItemFieldValue fileItemFieldValueFob = generateFobValue();
 				final FileItemFieldValue fileItemFieldValueQtit = generateQuantityValue();
-				if (fileItemFieldValueFob != null)
-				{
+				if (fileItemFieldValueFob != null) {
 					listFileItemFieldValues.add(fileItemFieldValueFob);
 				}
 
-				if (fileItemFieldValueQtit != null)
-				{
+				if (fileItemFieldValueQtit != null) {
 					listFileItemFieldValues.add(fileItemFieldValueQtit);
 				}
 
-
 				populateFileItemGeneralGroup(fileItemFieldGroupDto);
 			}
-			if (!listFileItemFieldValues.isEmpty())
-			{
+			if (!listFileItemFieldValues.isEmpty()) {
 				fileItemFieldGroupDtos.add(fileItemFieldGroupDto);
 			}
 		}
@@ -2685,11 +2562,9 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the file item field value
 	 */
-	private FileItemFieldValue generateFobValue()
-	{
+	private FileItemFieldValue generateFobValue() {
 		FileItemFieldValue fileItemFieldValueFob = null;
-		if (selectedFileItem != null && StringUtils.isNotBlank(selectedFileItem.getFobValue()))
-		{
+		if (selectedFileItem != null && StringUtils.isNotBlank(selectedFileItem.getFobValue())) {
 			final FileItemField fileItemFieldFob = new FileItemField();
 			final String fobLabelFr = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, Locale.FRANCE)
 					.getString("ProductDetailsLabel_fobLabel");
@@ -2709,11 +2584,9 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the file item field value
 	 */
-	private FileItemFieldValue generateQuantityValue()
-	{
+	private FileItemFieldValue generateQuantityValue() {
 		FileItemFieldValue fileItemFieldValueQuanity = null;
-		if (selectedFileItem != null && StringUtils.isNotBlank(selectedFileItem.getQuantity()))
-		{
+		if (selectedFileItem != null && StringUtils.isNotBlank(selectedFileItem.getQuantity())) {
 			final FileItemField fileItemFieldQtit = new FileItemField();
 			final String qtitLabelFr = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, Locale.FRANCE)
 					.getString("ProductDetailsLabel_quantity");
@@ -2728,20 +2601,16 @@ public class FileItemApDetailController implements Serializable
 		return fileItemFieldValueQuanity;
 	}
 
-
 	/**
 	 * Populate file item general group.
 	 *
-	 * @param fileFieldGroupDto
-	 *           the file field group dto
+	 * @param fileFieldGroupDto the file field group dto
 	 */
-	private void populateFileItemGeneralGroup(final FieldGroupDto<FileItemFieldValue> fileFieldGroupDto)
-	{
+	private void populateFileItemGeneralGroup(final FieldGroupDto<FileItemFieldValue> fileFieldGroupDto) {
 
 		final List<FileItemFieldValue> fieldValues = fileFieldGroupDto.getFieldValues();
 
-		if (selectedFileItem.getNsh() != null)
-		{
+		if (selectedFileItem.getNsh() != null) {
 			// NSH : GoodsItemDesc
 			final String goodsItemDescLabelFr = ResourceBundle
 					.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, Locale.FRANCE).getString("ProductDetailsLabel_item");
@@ -2770,8 +2639,7 @@ public class FileItemApDetailController implements Serializable
 			fieldValues.add(0, goodsItemCode);
 		}
 
-		if (selectedFileItem.getSubfamily() != null)
-		{
+		if (selectedFileItem.getSubfamily() != null) {
 			// Subfamily : label
 			final String subfamilyLabelLabelFr = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
 					Locale.FRANCE).getString("ProductDetailsLabel_subfamily");
@@ -2806,20 +2674,16 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Check generate report allowed.
 	 */
-	private void checkGenerateReportAllowed()
-	{
+	private void checkGenerateReportAllowed() {
 		generateReportAllowed = false;
 		final Flow reportingFlow = flowService.findByToStep(selectedFileItem.getStep());
 		final List<FileTypeFlowReport> fileTypeFlowReportsList = reportingFlow.getFileTypeFlowReportsList();
 
 		if (StepCode.ST_AP_44.name().equals(selectedFileItem.getStep().getStepCode().name())
-				&& CollectionUtils.isNotEmpty(fileTypeFlowReportsList))
-		{
+				&& CollectionUtils.isNotEmpty(fileTypeFlowReportsList)) {
 
-			for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList)
-			{
-				if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType()))
-				{
+			for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
+				if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType())) {
 					generateReportAllowed = true;
 				}
 			}
@@ -2832,30 +2696,24 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the streamed content
 	 */
-	public StreamedContent downloadReport()
-	{
+	public StreamedContent downloadReport() {
 		final List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<FileTypeFlowReport>();
 
 		final Flow reportingFlow = flowService.findByToStep(selectedFileItem.getStep());
 		final List<FileTypeFlowReport> fileTypeFlowReportsList = reportingFlow.getFileTypeFlowReportsList();
 
-		if (fileTypeFlowReportsList != null)
-		{
+		if (fileTypeFlowReportsList != null) {
 
-			for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList)
-			{
-				if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType()))
-				{
+			for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
+				if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType())) {
 					fileTypeFlowReports.add(fileTypeFlowReport);
 				}
 			}
 		}
-		for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports)
-		{
+		for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
 
 			//Begin Add new field value with report Number
-			try
-			{
+			try {
 				final String nomClasse = fileTypeFlowReport.getReportClassName();
 				@SuppressWarnings("rawtypes")
 				Class classe;
@@ -2863,7 +2721,7 @@ public class FileItemApDetailController implements Serializable
 				classe = Class.forName(nomClasse);
 
 				@SuppressWarnings(
-				{ "rawtypes", "unchecked" })
+						{"rawtypes", "unchecked"})
 				final Constructor c1 = classe.getConstructor(File.class);
 
 				final byte[] report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile));
@@ -2872,10 +2730,8 @@ public class FileItemApDetailController implements Serializable
 						currentFile.getReferenceSiat() + '_' + fileTypeFlowReport.getReportName());
 				return fileToDownload;
 
-			}
-			catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
-					| IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
-			{
+			} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
+					| IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
 						.getString(ControllerConstants.Bundle.Messages.GENERATE_REPORT_FAILED);
 				JsfUtil.addErrorMessage(msg);
@@ -2891,8 +2747,7 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the instance of page fimex detail controller
 	 */
-	public FimexDetailController getInstanceOfPageFimexDetailController()
-	{
+	public FimexDetailController getInstanceOfPageFimexDetailController() {
 		final FacesContext fctx = FacesContext.getCurrentInstance();
 		final Application application = fctx.getApplication();
 		final ELContext context = fctx.getELContext();
@@ -2905,16 +2760,13 @@ public class FileItemApDetailController implements Serializable
 	/**
 	 * Go to fimex details page.
 	 */
-	public void goToFimexDetailsPage()
-	{
-		try
-		{
+	public void goToFimexDetailsPage() {
+		try {
 			final List<FileTypeCode> fileTypeCodeList = Arrays.asList(FileTypeCode.FIMEX);
 			final File fimex = fileService.findMatchingBetweenFimexAndPriorNotice(currentFile.getClient().getNumContribuable(),
 					fileTypeCodeList);
 
-			if (fimex != null)
-			{
+			if (fimex != null) {
 				setIndexPageUrl(ControllerConstants.Pages.FO.DETAILS_FIMEX_INDEX_PAGE);
 				final FacesContext context = FacesContext.getCurrentInstance();
 				final ExternalContext extContext = context.getExternalContext();
@@ -2926,17 +2778,13 @@ public class FileItemApDetailController implements Serializable
 						.getActionURL(context, indexPageUrl));
 
 				extContext.redirect(url);
-			}
-			else
-			{
+			} else {
 				final String errorMsg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
 						.getString(ControllerConstants.Bundle.Messages.NO_FIMEX_MESSAGE);
 				JsfUtil.addErrorMessage(errorMsg);
 			}
 
-		}
-		catch (final IOException ex)
-		{
+		} catch (final IOException ex) {
 			LOG.error(ex.getMessage(), ex);
 		}
 	}
@@ -2946,19 +2794,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the flow service
 	 */
-	public FlowService getFlowService()
-	{
+	public FlowService getFlowService() {
 		return flowService;
 	}
 
 	/**
 	 * Sets the flow service.
 	 *
-	 * @param flowService
-	 *           the new flow service
+	 * @param flowService the new flow service
 	 */
-	public void setFlowService(final FlowService flowService)
-	{
+	public void setFlowService(final FlowService flowService) {
 		this.flowService = flowService;
 	}
 
@@ -2967,19 +2812,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the flows
 	 */
-	public List<Flow> getFlows()
-	{
+	public List<Flow> getFlows() {
 		return flows;
 	}
 
 	/**
 	 * Sets the flows.
 	 *
-	 * @param flows
-	 *           the new flows
+	 * @param flows the new flows
 	 */
-	public void setFlows(final List<Flow> flows)
-	{
+	public void setFlows(final List<Flow> flows) {
 		this.flows = flows;
 	}
 
@@ -2988,19 +2830,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the selected flow
 	 */
-	public Flow getSelectedFlow()
-	{
+	public Flow getSelectedFlow() {
 		return selectedFlow;
 	}
 
 	/**
 	 * Sets the selected flow.
 	 *
-	 * @param selectedFlow
-	 *           the new selected flow
+	 * @param selectedFlow the new selected flow
 	 */
-	public void setSelectedFlow(final Flow selectedFlow)
-	{
+	public void setSelectedFlow(final Flow selectedFlow) {
 		this.selectedFlow = selectedFlow;
 	}
 
@@ -3009,19 +2848,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the decision div
 	 */
-	public HtmlPanelGrid getDecisionDiv()
-	{
+	public HtmlPanelGrid getDecisionDiv() {
 		return decisionDiv;
 	}
 
 	/**
 	 * Sets the decision div.
 	 *
-	 * @param decisionDiv
-	 *           the new decision div
+	 * @param decisionDiv the new decision div
 	 */
-	public void setDecisionDiv(final HtmlPanelGrid decisionDiv)
-	{
+	public void setDecisionDiv(final HtmlPanelGrid decisionDiv) {
 		this.decisionDiv = decisionDiv;
 	}
 
@@ -3030,19 +2866,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the lastDecisions
 	 */
-	public ItemFlow getLastDecisions()
-	{
+	public ItemFlow getLastDecisions() {
 		return lastDecisions;
 	}
 
 	/**
 	 * Sets the last decisions.
 	 *
-	 * @param lastDecisions
-	 *           the lastDecisions to set
+	 * @param lastDecisions the lastDecisions to set
 	 */
-	public void setLastDecisions(final ItemFlow lastDecisions)
-	{
+	public void setLastDecisions(final ItemFlow lastDecisions) {
 		this.lastDecisions = lastDecisions;
 	}
 
@@ -3051,19 +2884,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the file item service
 	 */
-	public FileItemService getFileItemService()
-	{
+	public FileItemService getFileItemService() {
 		return fileItemService;
 	}
 
 	/**
 	 * Sets the file item service.
 	 *
-	 * @param fileItemService
-	 *           the new file item service
+	 * @param fileItemService the new file item service
 	 */
-	public void setFileItemService(final FileItemService fileItemService)
-	{
+	public void setFileItemService(final FileItemService fileItemService) {
 		this.fileItemService = fileItemService;
 	}
 
@@ -3072,19 +2902,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the item flow service
 	 */
-	public ItemFlowService getItemFlowService()
-	{
+	public ItemFlowService getItemFlowService() {
 		return itemFlowService;
 	}
 
 	/**
 	 * Sets the item flow service.
 	 *
-	 * @param itemFlowService
-	 *           the new item flow service
+	 * @param itemFlowService the new item flow service
 	 */
-	public void setItemFlowService(final ItemFlowService itemFlowService)
-	{
+	public void setItemFlowService(final ItemFlowService itemFlowService) {
 		this.itemFlowService = itemFlowService;
 	}
 
@@ -3093,19 +2920,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the file service
 	 */
-	public FileService getFileService()
-	{
+	public FileService getFileService() {
 		return fileService;
 	}
 
 	/**
 	 * Sets the file service.
 	 *
-	 * @param fileService
-	 *           the new file service
+	 * @param fileService the new file service
 	 */
-	public void setFileService(final FileService fileService)
-	{
+	public void setFileService(final FileService fileService) {
 		this.fileService = fileService;
 	}
 
@@ -3114,19 +2938,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the current file
 	 */
-	public File getCurrentFile()
-	{
+	public File getCurrentFile() {
 		return currentFile;
 	}
 
 	/**
 	 * Sets the current file.
 	 *
-	 * @param currentFile
-	 *           the new current file
+	 * @param currentFile the new current file
 	 */
-	public void setCurrentFile(final File currentFile)
-	{
+	public void setCurrentFile(final File currentFile) {
 		this.currentFile = currentFile;
 	}
 
@@ -3135,19 +2956,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the attachment list
 	 */
-	public List<Attachment> getAttachmentList()
-	{
+	public List<Attachment> getAttachmentList() {
 		return attachmentList;
 	}
 
 	/**
 	 * Sets the attachment list.
 	 *
-	 * @param attachmentList
-	 *           the new attachment list
+	 * @param attachmentList the new attachment list
 	 */
-	public void setAttachmentList(final List<Attachment> attachmentList)
-	{
+	public void setAttachmentList(final List<Attachment> attachmentList) {
 		this.attachmentList = attachmentList;
 	}
 
@@ -3156,19 +2974,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the selected attachment
 	 */
-	public Attachment getSelectedAttachment()
-	{
+	public Attachment getSelectedAttachment() {
 		return selectedAttachment;
 	}
 
 	/**
 	 * Sets the selected attachment.
 	 *
-	 * @param selectedAttachment
-	 *           the new selected attachment
+	 * @param selectedAttachment the new selected attachment
 	 */
-	public void setSelectedAttachment(final Attachment selectedAttachment)
-	{
+	public void setSelectedAttachment(final Attachment selectedAttachment) {
 		this.selectedAttachment = selectedAttachment;
 	}
 
@@ -3177,19 +2992,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the recommandation list
 	 */
-	public List<Recommandation> getRecommandationList()
-	{
+	public List<Recommandation> getRecommandationList() {
 		return recommandationList;
 	}
 
 	/**
 	 * Sets the recommandation list.
 	 *
-	 * @param recommandationList
-	 *           the new recommandation list
+	 * @param recommandationList the new recommandation list
 	 */
-	public void setRecommandationList(final List<Recommandation> recommandationList)
-	{
+	public void setRecommandationList(final List<Recommandation> recommandationList) {
 		this.recommandationList = recommandationList;
 	}
 
@@ -3198,30 +3010,25 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the selected recommandation
 	 */
-	public Recommandation getSelectedRecommandation()
-	{
+	public Recommandation getSelectedRecommandation() {
 		return selectedRecommandation;
 	}
 
 	/**
 	 * Sets the selected recommandation.
 	 *
-	 * @param selectedRecommandation
-	 *           the new selected recommandation
+	 * @param selectedRecommandation the new selected recommandation
 	 */
-	public void setSelectedRecommandation(final Recommandation selectedRecommandation)
-	{
+	public void setSelectedRecommandation(final Recommandation selectedRecommandation) {
 		this.selectedRecommandation = selectedRecommandation;
 	}
 
 	/**
 	 * Sets the logged user.
 	 *
-	 * @param loggedUser
-	 *           the loggedUser to set
+	 * @param loggedUser the loggedUser to set
 	 */
-	public void setLoggedUser(final User loggedUser)
-	{
+	public void setLoggedUser(final User loggedUser) {
 		this.loggedUser = loggedUser;
 	}
 
@@ -3230,30 +3037,25 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the id attachment
 	 */
-	public String getIdAttachment()
-	{
+	public String getIdAttachment() {
 		return idAttachment;
 	}
 
 	/**
 	 * Sets the current service.
 	 *
-	 * @param currentService
-	 *           the new current service
+	 * @param currentService the new current service
 	 */
-	public void setCurrentService(final Service currentService)
-	{
+	public void setCurrentService(final Service currentService) {
 		this.currentService = currentService;
 	}
 
 	/**
 	 * Sets the id attachment.
 	 *
-	 * @param idAttachment
-	 *           the new id attachment
+	 * @param idAttachment the new id attachment
 	 */
-	public void setIdAttachment(final String idAttachment)
-	{
+	public void setIdAttachment(final String idAttachment) {
 		this.idAttachment = idAttachment;
 	}
 
@@ -3262,19 +3064,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the index page url
 	 */
-	public String getIndexPageUrl()
-	{
+	public String getIndexPageUrl() {
 		return indexPageUrl;
 	}
 
 	/**
 	 * Sets the index page url.
 	 *
-	 * @param indexPageUrl
-	 *           the new index page url
+	 * @param indexPageUrl the new index page url
 	 */
-	public void setIndexPageUrl(final String indexPageUrl)
-	{
+	public void setIndexPageUrl(final String indexPageUrl) {
 		this.indexPageUrl = indexPageUrl;
 	}
 
@@ -3283,19 +3082,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the product info items enabled
 	 */
-	public List<FileItem> getProductInfoItemsEnabled()
-	{
+	public List<FileItem> getProductInfoItemsEnabled() {
 		return productInfoItemsEnabled;
 	}
 
 	/**
 	 * Sets the product info items enabled.
 	 *
-	 * @param productInfoItemsEnabled
-	 *           the new product info items enabled
+	 * @param productInfoItemsEnabled the new product info items enabled
 	 */
-	public void setProductInfoItemsEnabled(final List<FileItem> productInfoItemsEnabled)
-	{
+	public void setProductInfoItemsEnabled(final List<FileItem> productInfoItemsEnabled) {
 		this.productInfoItemsEnabled = productInfoItemsEnabled;
 	}
 
@@ -3304,19 +3100,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the decision allowed
 	 */
-	public Boolean getDecisionAllowed()
-	{
+	public Boolean getDecisionAllowed() {
 		return decisionAllowed;
 	}
 
 	/**
 	 * Sets the decision allowed.
 	 *
-	 * @param decisionAllowed
-	 *           the new decision allowed
+	 * @param decisionAllowed the new decision allowed
 	 */
-	public void setDecisionAllowed(final Boolean decisionAllowed)
-	{
+	public void setDecisionAllowed(final Boolean decisionAllowed) {
 		this.decisionAllowed = decisionAllowed;
 	}
 
@@ -3325,19 +3118,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the recommandation service
 	 */
-	public RecommandationService getRecommandationService()
-	{
+	public RecommandationService getRecommandationService() {
 		return recommandationService;
 	}
 
 	/**
 	 * Sets the recommandation service.
 	 *
-	 * @param recommandationService
-	 *           the new recommandation service
+	 * @param recommandationService the new recommandation service
 	 */
-	public void setRecommandationService(final RecommandationService recommandationService)
-	{
+	public void setRecommandationService(final RecommandationService recommandationService) {
 		this.recommandationService = recommandationService;
 	}
 
@@ -3346,19 +3136,17 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the selected recommandation article
 	 */
-	public Recommandation getSelectedRecommandationArticle()
-	{
+	public Recommandation getSelectedRecommandationArticle() {
 		return selectedRecommandationArticle;
 	}
 
 	/**
 	 * Sets the selected recommandation article.
 	 *
-	 * @param selectedRecommandationArticle
-	 *           the new selected recommandation article
+	 * @param selectedRecommandationArticle the new selected recommandation
+	 * article
 	 */
-	public void setSelectedRecommandationArticle(final Recommandation selectedRecommandationArticle)
-	{
+	public void setSelectedRecommandationArticle(final Recommandation selectedRecommandationArticle) {
 		this.selectedRecommandationArticle = selectedRecommandationArticle;
 	}
 
@@ -3367,19 +3155,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the recommandation article list
 	 */
-	public List<Recommandation> getRecommandationArticleList()
-	{
+	public List<Recommandation> getRecommandationArticleList() {
 		return recommandationArticleList;
 	}
 
 	/**
 	 * Sets the recommandation article list.
 	 *
-	 * @param recommandationArticleList
-	 *           the new recommandation article list
+	 * @param recommandationArticleList the new recommandation article list
 	 */
-	public void setRecommandationArticleList(final List<Recommandation> recommandationArticleList)
-	{
+	public void setRecommandationArticleList(final List<Recommandation> recommandationArticleList) {
 		this.recommandationArticleList = recommandationArticleList;
 	}
 
@@ -3388,19 +3173,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the allowed user
 	 */
-	public Boolean getAllowedUser()
-	{
+	public Boolean getAllowedUser() {
 		return allowedUser;
 	}
 
 	/**
 	 * Sets the allowed user.
 	 *
-	 * @param allowedUser
-	 *           the new allowed user
+	 * @param allowedUser the new allowed user
 	 */
-	public void setAllowedUser(final Boolean allowedUser)
-	{
+	public void setAllowedUser(final Boolean allowedUser) {
 		this.allowedUser = allowedUser;
 	}
 
@@ -3409,19 +3191,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the disabledTabSynthese
 	 */
-	public Boolean getDisabledTabSynthese()
-	{
+	public Boolean getDisabledTabSynthese() {
 		return disabledTabSynthese;
 	}
 
 	/**
 	 * Sets the disabled tab synthese.
 	 *
-	 * @param disabledTabSynthese
-	 *           the disabledTabSynthese to set
+	 * @param disabledTabSynthese the disabledTabSynthese to set
 	 */
-	public void setDisabledTabSynthese(final Boolean disabledTabSynthese)
-	{
+	public void setDisabledTabSynthese(final Boolean disabledTabSynthese) {
 		this.disabledTabSynthese = disabledTabSynthese;
 	}
 
@@ -3430,19 +3209,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the stepService
 	 */
-	public StepService getStepService()
-	{
+	public StepService getStepService() {
 		return stepService;
 	}
 
 	/**
 	 * Sets the step service.
 	 *
-	 * @param stepService
-	 *           the stepService to set
+	 * @param stepService the stepService to set
 	 */
-	public void setStepService(final StepService stepService)
-	{
+	public void setStepService(final StepService stepService) {
 		this.stepService = stepService;
 	}
 
@@ -3451,19 +3227,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the cotationAllowed
 	 */
-	public Boolean getCotationAllowed()
-	{
+	public Boolean getCotationAllowed() {
 		return cotationAllowed;
 	}
 
 	/**
 	 * Sets the cotation allowed.
 	 *
-	 * @param cotationAllowed
-	 *           the cotationAllowed to set
+	 * @param cotationAllowed the cotationAllowed to set
 	 */
-	public void setCotationAllowed(final Boolean cotationAllowed)
-	{
+	public void setCotationAllowed(final Boolean cotationAllowed) {
 		this.cotationAllowed = cotationAllowed;
 	}
 
@@ -3472,41 +3245,34 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the dipatchDiv
 	 */
-	public HtmlPanelGrid getDipatchDiv()
-	{
+	public HtmlPanelGrid getDipatchDiv() {
 		return dipatchDiv;
 	}
 
 	/**
 	 * Sets the dipatch div.
 	 *
-	 * @param dipatchDiv
-	 *           the dipatchDiv to set
+	 * @param dipatchDiv the dipatchDiv to set
 	 */
-	public void setDipatchDiv(final HtmlPanelGrid dipatchDiv)
-	{
+	public void setDipatchDiv(final HtmlPanelGrid dipatchDiv) {
 		this.dipatchDiv = dipatchDiv;
 	}
-
 
 	/**
 	 * Gets the roll back decisions allowed.
 	 *
 	 * @return the rollBackDecisionsAllowed
 	 */
-	public Boolean getRollBackDecisionsAllowed()
-	{
+	public Boolean getRollBackDecisionsAllowed() {
 		return rollBackDecisionsAllowed;
 	}
 
 	/**
 	 * Sets the roll back decisions allowed.
 	 *
-	 * @param rollBackDecisionsAllowed
-	 *           the rollBackDecisionsAllowed to set
+	 * @param rollBackDecisionsAllowed the rollBackDecisionsAllowed to set
 	 */
-	public void setRollBackDecisionsAllowed(final Boolean rollBackDecisionsAllowed)
-	{
+	public void setRollBackDecisionsAllowed(final Boolean rollBackDecisionsAllowed) {
 		this.rollBackDecisionsAllowed = rollBackDecisionsAllowed;
 	}
 
@@ -3515,19 +3281,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the sendDecisionAllowed
 	 */
-	public Boolean getSendDecisionAllowed()
-	{
+	public Boolean getSendDecisionAllowed() {
 		return sendDecisionAllowed;
 	}
 
 	/**
 	 * Sets the send decision allowed.
 	 *
-	 * @param sendDecisionAllowed
-	 *           the sendDecisionAllowed to set
+	 * @param sendDecisionAllowed the sendDecisionAllowed to set
 	 */
-	public void setSendDecisionAllowed(final Boolean sendDecisionAllowed)
-	{
+	public void setSendDecisionAllowed(final Boolean sendDecisionAllowed) {
 		this.sendDecisionAllowed = sendDecisionAllowed;
 	}
 
@@ -3536,19 +3299,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the listUserAuthorityFileTypes
 	 */
-	public List<UserAuthorityFileType> getListUserAuthorityFileTypes()
-	{
+	public List<UserAuthorityFileType> getListUserAuthorityFileTypes() {
 		return listUserAuthorityFileTypes;
 	}
 
 	/**
 	 * Sets the list user authority file types.
 	 *
-	 * @param listUserAuthorityFileTypes
-	 *           the listUserAuthorityFileTypes to set
+	 * @param listUserAuthorityFileTypes the listUserAuthorityFileTypes to set
 	 */
-	public void setListUserAuthorityFileTypes(final List<UserAuthorityFileType> listUserAuthorityFileTypes)
-	{
+	public void setListUserAuthorityFileTypes(final List<UserAuthorityFileType> listUserAuthorityFileTypes) {
 		this.listUserAuthorityFileTypes = listUserAuthorityFileTypes;
 	}
 
@@ -3557,19 +3317,17 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the userAuthorityFileTypeService
 	 */
-	public UserAuthorityFileTypeService getUserAuthorityFileTypeService()
-	{
+	public UserAuthorityFileTypeService getUserAuthorityFileTypeService() {
 		return userAuthorityFileTypeService;
 	}
 
 	/**
 	 * Sets the user authority file type service.
 	 *
-	 * @param userAuthorityFileTypeService
-	 *           the userAuthorityFileTypeService to set
+	 * @param userAuthorityFileTypeService the userAuthorityFileTypeService to
+	 * set
 	 */
-	public void setUserAuthorityFileTypeService(final UserAuthorityFileTypeService userAuthorityFileTypeService)
-	{
+	public void setUserAuthorityFileTypeService(final UserAuthorityFileTypeService userAuthorityFileTypeService) {
 		this.userAuthorityFileTypeService = userAuthorityFileTypeService;
 	}
 
@@ -3578,19 +3336,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the productInfoItemsFiltred
 	 */
-	public List<FileItem> getProductInfoItemsFiltred()
-	{
+	public List<FileItem> getProductInfoItemsFiltred() {
 		return productInfoItemsFiltred;
 	}
 
 	/**
 	 * Sets the product info items filtred.
 	 *
-	 * @param productInfoItemsFiltred
-	 *           the productInfoItemsFiltred to set
+	 * @param productInfoItemsFiltred the productInfoItemsFiltred to set
 	 */
-	public void setProductInfoItemsFiltred(final List<FileItem> productInfoItemsFiltred)
-	{
+	public void setProductInfoItemsFiltred(final List<FileItem> productInfoItemsFiltred) {
 		this.productInfoItemsFiltred = productInfoItemsFiltred;
 	}
 
@@ -3599,19 +3354,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the selectedFileItem
 	 */
-	public FileItem getSelectedFileItem()
-	{
+	public FileItem getSelectedFileItem() {
 		return selectedFileItem;
 	}
 
 	/**
 	 * Sets the selected file item.
 	 *
-	 * @param selectedFileItem
-	 *           the selectedFileItem to set
+	 * @param selectedFileItem the selectedFileItem to set
 	 */
-	public void setSelectedFileItem(final FileItem selectedFileItem)
-	{
+	public void setSelectedFileItem(final FileItem selectedFileItem) {
 		this.selectedFileItem = selectedFileItem;
 	}
 
@@ -3620,19 +3372,17 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the destinationFlowsFromCurrentStep
 	 */
-	public List<Flow> getDestinationFlowsFromCurrentStep()
-	{
+	public List<Flow> getDestinationFlowsFromCurrentStep() {
 		return destinationFlowsFromCurrentStep;
 	}
 
 	/**
 	 * Sets the destination flows from current step.
 	 *
-	 * @param destinationFlowsFromCurrentStep
-	 *           the destinationFlowsFromCurrentStep to set
+	 * @param destinationFlowsFromCurrentStep the
+	 * destinationFlowsFromCurrentStep to set
 	 */
-	public void setDestinationFlowsFromCurrentStep(final List<Flow> destinationFlowsFromCurrentStep)
-	{
+	public void setDestinationFlowsFromCurrentStep(final List<Flow> destinationFlowsFromCurrentStep) {
 		this.destinationFlowsFromCurrentStep = destinationFlowsFromCurrentStep;
 	}
 
@@ -3641,19 +3391,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the productInfoItems
 	 */
-	public List<FileItem> getProductInfoItems()
-	{
+	public List<FileItem> getProductInfoItems() {
 		return productInfoItems;
 	}
 
 	/**
 	 * Sets the product info items.
 	 *
-	 * @param productInfoItems
-	 *           the productInfoItems to set
+	 * @param productInfoItems the productInfoItems to set
 	 */
-	public void setProductInfoItems(final List<FileItem> productInfoItems)
-	{
+	public void setProductInfoItems(final List<FileItem> productInfoItems) {
 		this.productInfoItems = productInfoItems;
 	}
 
@@ -3662,19 +3409,17 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the userListToAffectedFileCotation
 	 */
-	public List<User> getUserListToAffectedFileCotation()
-	{
+	public List<User> getUserListToAffectedFileCotation() {
 		return userListToAffectedFileCotation;
 	}
 
 	/**
 	 * Sets the user list to affected file cotation.
 	 *
-	 * @param userListToAffectedFileCotation
-	 *           the userListToAffectedFileCotation to set
+	 * @param userListToAffectedFileCotation the userListToAffectedFileCotation
+	 * to set
 	 */
-	public void setUserListToAffectedFileCotation(final List<User> userListToAffectedFileCotation)
-	{
+	public void setUserListToAffectedFileCotation(final List<User> userListToAffectedFileCotation) {
 		this.userListToAffectedFileCotation = userListToAffectedFileCotation;
 	}
 
@@ -3683,19 +3428,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the assignedUserForCotation
 	 */
-	public User getAssignedUserForCotation()
-	{
+	public User getAssignedUserForCotation() {
 		return assignedUserForCotation;
 	}
 
 	/**
 	 * Sets the assigned user for cotation.
 	 *
-	 * @param assignedUserForCotation
-	 *           the assignedUserForCotation to set
+	 * @param assignedUserForCotation the assignedUserForCotation to set
 	 */
-	public void setAssignedUserForCotation(final User assignedUserForCotation)
-	{
+	public void setAssignedUserForCotation(final User assignedUserForCotation) {
 		this.assignedUserForCotation = assignedUserForCotation;
 	}
 
@@ -3704,19 +3446,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the serviceService
 	 */
-	public ServiceService getServiceService()
-	{
+	public ServiceService getServiceService() {
 		return serviceService;
 	}
 
 	/**
 	 * Sets the service service.
 	 *
-	 * @param serviceService
-	 *           the serviceService to set
+	 * @param serviceService the serviceService to set
 	 */
-	public void setServiceService(final ServiceService serviceService)
-	{
+	public void setServiceService(final ServiceService serviceService) {
 		this.serviceService = serviceService;
 	}
 
@@ -3725,41 +3464,34 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the xml converter service
 	 */
-	public XmlConverterService getXmlConverterService()
-	{
+	public XmlConverterService getXmlConverterService() {
 		return xmlConverterService;
 	}
 
 	/**
 	 * Sets the xml converter service.
 	 *
-	 * @param xmlConverterService
-	 *           the new xml converter service
+	 * @param xmlConverterService the new xml converter service
 	 */
-	public void setXmlConverterService(final XmlConverterService xmlConverterService)
-	{
+	public void setXmlConverterService(final XmlConverterService xmlConverterService) {
 		this.xmlConverterService = xmlConverterService;
 	}
-
 
 	/**
 	 * Gets the ap decision step.
 	 *
 	 * @return the apDecisionStep
 	 */
-	public Step getApDecisionStep()
-	{
+	public Step getApDecisionStep() {
 		return apDecisionStep;
 	}
 
 	/**
 	 * Sets the ap decision step.
 	 *
-	 * @param apDecisionStep
-	 *           the apDecisionStep to set
+	 * @param apDecisionStep the apDecisionStep to set
 	 */
-	public void setApDecisionStep(final Step apDecisionStep)
-	{
+	public void setApDecisionStep(final Step apDecisionStep) {
 		this.apDecisionStep = apDecisionStep;
 	}
 
@@ -3768,19 +3500,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the fileFieldValues
 	 */
-	public List<FileFieldValue> getFileFieldValues()
-	{
+	public List<FileFieldValue> getFileFieldValues() {
 		return fileFieldValues;
 	}
 
 	/**
 	 * Sets the file field values.
 	 *
-	 * @param fileFieldValues
-	 *           the fileFieldValues to set
+	 * @param fileFieldValues the fileFieldValues to set
 	 */
-	public void setFileFieldValues(final List<FileFieldValue> fileFieldValues)
-	{
+	public void setFileFieldValues(final List<FileFieldValue> fileFieldValues) {
 		this.fileFieldValues = fileFieldValues;
 	}
 
@@ -3789,19 +3518,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the fileItemFieldValues
 	 */
-	public List<FileItemFieldValue> getFileItemFieldValues()
-	{
+	public List<FileItemFieldValue> getFileItemFieldValues() {
 		return fileItemFieldValues;
 	}
 
 	/**
 	 * Sets the file item field values.
 	 *
-	 * @param fileItemFieldValues
-	 *           the fileItemFieldValues to set
+	 * @param fileItemFieldValues the fileItemFieldValues to set
 	 */
-	public void setFileItemFieldValues(final List<FileItemFieldValue> fileItemFieldValues)
-	{
+	public void setFileItemFieldValues(final List<FileItemFieldValue> fileItemFieldValues) {
 		this.fileItemFieldValues = fileItemFieldValues;
 	}
 
@@ -3810,42 +3536,34 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the fileItemHasDraft
 	 */
-	public Boolean getFileItemHasDraft()
-	{
+	public Boolean getFileItemHasDraft() {
 		return fileItemHasDraft;
 	}
 
 	/**
 	 * Sets the file item has draft.
 	 *
-	 * @param fileItemHasDraft
-	 *           the fileItemHasDraft to set
+	 * @param fileItemHasDraft the fileItemHasDraft to set
 	 */
-	public void setFileItemHasDraft(final Boolean fileItemHasDraft)
-	{
+	public void setFileItemHasDraft(final Boolean fileItemHasDraft) {
 		this.fileItemHasDraft = fileItemHasDraft;
 	}
-
-
 
 	/**
 	 * Gets the ebxml properties service.
 	 *
 	 * @return the ebxmlPropertiesService
 	 */
-	public EbxmlPropertiesService getEbxmlPropertiesService()
-	{
+	public EbxmlPropertiesService getEbxmlPropertiesService() {
 		return ebxmlPropertiesService;
 	}
 
 	/**
 	 * Sets the ebxml properties service.
 	 *
-	 * @param ebxmlPropertiesService
-	 *           the ebxmlPropertiesService to set
+	 * @param ebxmlPropertiesService the ebxmlPropertiesService to set
 	 */
-	public void setEbxmlPropertiesService(final EbxmlPropertiesService ebxmlPropertiesService)
-	{
+	public void setEbxmlPropertiesService(final EbxmlPropertiesService ebxmlPropertiesService) {
 		this.ebxmlPropertiesService = ebxmlPropertiesService;
 	}
 
@@ -3854,19 +3572,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the show remind decision form
 	 */
-	public Boolean getShowRemindDecisionForm()
-	{
+	public Boolean getShowRemindDecisionForm() {
 		return showRemindDecisionForm;
 	}
 
 	/**
 	 * Sets the show remind decision form.
 	 *
-	 * @param showRemindDecisionForm
-	 *           the new show remind decision form
+	 * @param showRemindDecisionForm the new show remind decision form
 	 */
-	public void setShowRemindDecisionForm(final Boolean showRemindDecisionForm)
-	{
+	public void setShowRemindDecisionForm(final Boolean showRemindDecisionForm) {
 		this.showRemindDecisionForm = showRemindDecisionForm;
 	}
 
@@ -3875,19 +3590,17 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the show list recommandation article form
 	 */
-	public Boolean getShowListRecommandationArticleForm()
-	{
+	public Boolean getShowListRecommandationArticleForm() {
 		return showListRecommandationArticleForm;
 	}
 
 	/**
 	 * Sets the show list recommandation article form.
 	 *
-	 * @param showListRecommandationArticleForm
-	 *           the new show list recommandation article form
+	 * @param showListRecommandationArticleForm the new show list recommandation
+	 * article form
 	 */
-	public void setShowListRecommandationArticleForm(final Boolean showListRecommandationArticleForm)
-	{
+	public void setShowListRecommandationArticleForm(final Boolean showListRecommandationArticleForm) {
 		this.showListRecommandationArticleForm = showListRecommandationArticleForm;
 	}
 
@@ -3896,19 +3609,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the show product details form
 	 */
-	public Boolean getShowProductDetailsForm()
-	{
+	public Boolean getShowProductDetailsForm() {
 		return showProductDetailsForm;
 	}
 
 	/**
 	 * Sets the show product details form.
 	 *
-	 * @param showProductDetailsForm
-	 *           the new show product details form
+	 * @param showProductDetailsForm the new show product details form
 	 */
-	public void setShowProductDetailsForm(final Boolean showProductDetailsForm)
-	{
+	public void setShowProductDetailsForm(final Boolean showProductDetailsForm) {
 		this.showProductDetailsForm = showProductDetailsForm;
 	}
 
@@ -3917,19 +3627,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the show show attachment form
 	 */
-	public Boolean getShowShowAttachmentForm()
-	{
+	public Boolean getShowShowAttachmentForm() {
 		return showShowAttachmentForm;
 	}
 
 	/**
 	 * Sets the show show attachment form.
 	 *
-	 * @param showShowAttachmentForm
-	 *           the new show show attachment form
+	 * @param showShowAttachmentForm the new show show attachment form
 	 */
-	public void setShowShowAttachmentForm(final Boolean showShowAttachmentForm)
-	{
+	public void setShowShowAttachmentForm(final Boolean showShowAttachmentForm) {
 		this.showShowAttachmentForm = showShowAttachmentForm;
 	}
 
@@ -3938,19 +3645,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the comeFromRetrieveAp
 	 */
-	public Boolean getComeFromRetrieveAp()
-	{
+	public Boolean getComeFromRetrieveAp() {
 		return comeFromRetrieveAp;
 	}
 
 	/**
 	 * Sets the come from retrieve ap.
 	 *
-	 * @param comeFromRetrieveAp
-	 *           the comeFromRetrieveAp to set
+	 * @param comeFromRetrieveAp the comeFromRetrieveAp to set
 	 */
-	public void setComeFromRetrieveAp(final Boolean comeFromRetrieveAp)
-	{
+	public void setComeFromRetrieveAp(final Boolean comeFromRetrieveAp) {
 		this.comeFromRetrieveAp = comeFromRetrieveAp;
 	}
 
@@ -3959,19 +3663,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the disionSystemAllowed
 	 */
-	public Boolean getDisionSystemAllowed()
-	{
+	public Boolean getDisionSystemAllowed() {
 		return disionSystemAllowed;
 	}
 
 	/**
 	 * Sets the dision system allowed.
 	 *
-	 * @param disionSystemAllowed
-	 *           the disionSystemAllowed to set
+	 * @param disionSystemAllowed the disionSystemAllowed to set
 	 */
-	public void setDisionSystemAllowed(final Boolean disionSystemAllowed)
-	{
+	public void setDisionSystemAllowed(final Boolean disionSystemAllowed) {
 		this.disionSystemAllowed = disionSystemAllowed;
 	}
 
@@ -3980,19 +3681,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the tab list
 	 */
-	public List<Tab> getTabList()
-	{
+	public List<Tab> getTabList() {
 		return tabList;
 	}
 
 	/**
 	 * Sets the tab list.
 	 *
-	 * @param tabList
-	 *           the new tab list
+	 * @param tabList the new tab list
 	 */
-	public void setTabList(final List<Tab> tabList)
-	{
+	public void setTabList(final List<Tab> tabList) {
 		this.tabList = tabList;
 	}
 
@@ -4001,19 +3699,17 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the application propreties service
 	 */
-	public ApplicationPropretiesService getApplicationPropretiesService()
-	{
+	public ApplicationPropretiesService getApplicationPropretiesService() {
 		return applicationPropretiesService;
 	}
 
 	/**
 	 * Sets the application propreties service.
 	 *
-	 * @param applicationPropretiesService
-	 *           the new application propreties service
+	 * @param applicationPropretiesService the new application propreties
+	 * service
 	 */
-	public void setApplicationPropretiesService(final ApplicationPropretiesService applicationPropretiesService)
-	{
+	public void setApplicationPropretiesService(final ApplicationPropretiesService applicationPropretiesService) {
 		this.applicationPropretiesService = applicationPropretiesService;
 	}
 
@@ -4022,19 +3718,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the tab index list
 	 */
-	public String getTabIndexList()
-	{
+	public String getTabIndexList() {
 		return tabIndexList;
 	}
 
 	/**
 	 * Sets the tab index list.
 	 *
-	 * @param tabIndexList
-	 *           the new tab index list
+	 * @param tabIndexList the new tab index list
 	 */
-	public void setTabIndexList(final String tabIndexList)
-	{
+	public void setTabIndexList(final String tabIndexList) {
 		this.tabIndexList = tabIndexList;
 	}
 
@@ -4043,19 +3736,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the field groups
 	 */
-	public List<FieldGroup> getFieldGroups()
-	{
+	public List<FieldGroup> getFieldGroups() {
 		return fieldGroups;
 	}
 
 	/**
 	 * Sets the field groups.
 	 *
-	 * @param fieldGroups
-	 *           the new field groups
+	 * @param fieldGroups the new field groups
 	 */
-	public void setFieldGroups(final List<FieldGroup> fieldGroups)
-	{
+	public void setFieldGroups(final List<FieldGroup> fieldGroups) {
 		this.fieldGroups = fieldGroups;
 	}
 
@@ -4064,19 +3754,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the field group service
 	 */
-	public FieldGroupService getFieldGroupService()
-	{
+	public FieldGroupService getFieldGroupService() {
 		return fieldGroupService;
 	}
 
 	/**
 	 * Sets the field group service.
 	 *
-	 * @param fieldGroupService
-	 *           the new field group service
+	 * @param fieldGroupService the new field group service
 	 */
-	public void setFieldGroupService(final FieldGroupService fieldGroupService)
-	{
+	public void setFieldGroupService(final FieldGroupService fieldGroupService) {
 		this.fieldGroupService = fieldGroupService;
 	}
 
@@ -4085,19 +3772,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the file field group dtos
 	 */
-	public List<FieldGroupDto<FileFieldValue>> getFileFieldGroupDtos()
-	{
+	public List<FieldGroupDto<FileFieldValue>> getFileFieldGroupDtos() {
 		return fileFieldGroupDtos;
 	}
 
 	/**
 	 * Sets the file field group dtos.
 	 *
-	 * @param fileFieldGroupDtos
-	 *           the new file field group dtos
+	 * @param fileFieldGroupDtos the new file field group dtos
 	 */
-	public void setFileFieldGroupDtos(final List<FieldGroupDto<FileFieldValue>> fileFieldGroupDtos)
-	{
+	public void setFileFieldGroupDtos(final List<FieldGroupDto<FileFieldValue>> fileFieldGroupDtos) {
 		this.fileFieldGroupDtos = fileFieldGroupDtos;
 	}
 
@@ -4106,19 +3790,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the file item field group dtos
 	 */
-	public List<FieldGroupDto<FileItemFieldValue>> getFileItemFieldGroupDtos()
-	{
+	public List<FieldGroupDto<FileItemFieldValue>> getFileItemFieldGroupDtos() {
 		return fileItemFieldGroupDtos;
 	}
 
 	/**
 	 * Sets the file item field group dtos.
 	 *
-	 * @param fileItemFieldGroupDtos
-	 *           the new file item field group dtos
+	 * @param fileItemFieldGroupDtos the new file item field group dtos
 	 */
-	public void setFileItemFieldGroupDtos(final List<FieldGroupDto<FileItemFieldValue>> fileItemFieldGroupDtos)
-	{
+	public void setFileItemFieldGroupDtos(final List<FieldGroupDto<FileItemFieldValue>> fileItemFieldGroupDtos) {
 		this.fileItemFieldGroupDtos = fileItemFieldGroupDtos;
 	}
 
@@ -4127,19 +3808,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the analyseResultApList
 	 */
-	public List<AnalyseResultAp> getAnalyseResultApList()
-	{
+	public List<AnalyseResultAp> getAnalyseResultApList() {
 		return analyseResultApList;
 	}
 
 	/**
 	 * Sets the analyse result ap list.
 	 *
-	 * @param analyseResultApList
-	 *           the analyseResultApList to set
+	 * @param analyseResultApList the analyseResultApList to set
 	 */
-	public void setAnalyseResultApList(final List<AnalyseResultAp> analyseResultApList)
-	{
+	public void setAnalyseResultApList(final List<AnalyseResultAp> analyseResultApList) {
 		this.analyseResultApList = analyseResultApList;
 	}
 
@@ -4148,19 +3826,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the testResultApList
 	 */
-	public List<EssayTestAP> getTestResultApList()
-	{
+	public List<EssayTestAP> getTestResultApList() {
 		return testResultApList;
 	}
 
 	/**
 	 * Sets the test result ap list.
 	 *
-	 * @param testResultApList
-	 *           the testResultApList to set
+	 * @param testResultApList the testResultApList to set
 	 */
-	public void setTestResultApList(final List<EssayTestAP> testResultApList)
-	{
+	public void setTestResultApList(final List<EssayTestAP> testResultApList) {
 		this.testResultApList = testResultApList;
 	}
 
@@ -4169,19 +3844,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the laboratories
 	 */
-	public List<Laboratory> getLaboratories()
-	{
+	public List<Laboratory> getLaboratories() {
 		return laboratories;
 	}
 
 	/**
 	 * Sets the laboratories.
 	 *
-	 * @param laboratories
-	 *           the laboratories to set
+	 * @param laboratories the laboratories to set
 	 */
-	public void setLaboratories(final List<Laboratory> laboratories)
-	{
+	public void setLaboratories(final List<Laboratory> laboratories) {
 		this.laboratories = laboratories;
 	}
 
@@ -4190,19 +3862,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the laboratoryService
 	 */
-	public LaboratoryService getLaboratoryService()
-	{
+	public LaboratoryService getLaboratoryService() {
 		return laboratoryService;
 	}
 
 	/**
 	 * Sets the laboratory service.
 	 *
-	 * @param laboratoryService
-	 *           the laboratoryService to set
+	 * @param laboratoryService the laboratoryService to set
 	 */
-	public void setLaboratoryService(final LaboratoryService laboratoryService)
-	{
+	public void setLaboratoryService(final LaboratoryService laboratoryService) {
 		this.laboratoryService = laboratoryService;
 	}
 
@@ -4211,19 +3880,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the selected item flow dto
 	 */
-	public ItemFlowDto getSelectedItemFlowDto()
-	{
+	public ItemFlowDto getSelectedItemFlowDto() {
 		return selectedItemFlowDto;
 	}
 
 	/**
 	 * Sets the selected item flow dto.
 	 *
-	 * @param selectedItemFlowDto
-	 *           the new selected item flow dto
+	 * @param selectedItemFlowDto the new selected item flow dto
 	 */
-	public void setSelectedItemFlowDto(final ItemFlowDto selectedItemFlowDto)
-	{
+	public void setSelectedItemFlowDto(final ItemFlowDto selectedItemFlowDto) {
 		this.selectedItemFlowDto = selectedItemFlowDto;
 	}
 
@@ -4232,19 +3898,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the analyseResultApService
 	 */
-	public AnalyseResultApService getAnalyseResultApService()
-	{
+	public AnalyseResultApService getAnalyseResultApService() {
 		return analyseResultApService;
 	}
 
 	/**
 	 * Sets the analyse result ap service.
 	 *
-	 * @param analyseResultApService
-	 *           the analyseResultApService to set
+	 * @param analyseResultApService the analyseResultApService to set
 	 */
-	public void setAnalyseResultApService(final AnalyseResultApService analyseResultApService)
-	{
+	public void setAnalyseResultApService(final AnalyseResultApService analyseResultApService) {
 		this.analyseResultApService = analyseResultApService;
 	}
 
@@ -4253,19 +3916,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the commonService
 	 */
-	public CommonService getCommonService()
-	{
+	public CommonService getCommonService() {
 		return commonService;
 	}
 
 	/**
 	 * Sets the common service.
 	 *
-	 * @param commonService
-	 *           the commonService to set
+	 * @param commonService the commonService to set
 	 */
-	public void setCommonService(final CommonService commonService)
-	{
+	public void setCommonService(final CommonService commonService) {
 		this.commonService = commonService;
 	}
 
@@ -4274,19 +3934,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the acceptationDecisionFileType
 	 */
-	public String getAcceptationDecisionFileType()
-	{
+	public String getAcceptationDecisionFileType() {
 		return acceptationDecisionFileType;
 	}
 
 	/**
 	 * Sets the acceptation decision file type.
 	 *
-	 * @param acceptationDecisionFileType
-	 *           the acceptationDecisionFileType to set
+	 * @param acceptationDecisionFileType the acceptationDecisionFileType to set
 	 */
-	public void setAcceptationDecisionFileType(final String acceptationDecisionFileType)
-	{
+	public void setAcceptationDecisionFileType(final String acceptationDecisionFileType) {
 		this.acceptationDecisionFileType = acceptationDecisionFileType;
 	}
 
@@ -4295,41 +3952,34 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the lastDecisionAR
 	 */
-	public AnalyseResultAp getLastDecisionAR()
-	{
+	public AnalyseResultAp getLastDecisionAR() {
 		return lastDecisionAR;
 	}
 
 	/**
 	 * Sets the last decision ar.
 	 *
-	 * @param lastDecisionAR
-	 *           the lastDecisionAR to set
+	 * @param lastDecisionAR the lastDecisionAR to set
 	 */
-	public void setLastDecisionAR(final AnalyseResultAp lastDecisionAR)
-	{
+	public void setLastDecisionAR(final AnalyseResultAp lastDecisionAR) {
 		this.lastDecisionAR = lastDecisionAR;
 	}
-
 
 	/**
 	 * Gets the last decision tr.
 	 *
 	 * @return the lastDecisionTR
 	 */
-	public EssayTestAP getLastDecisionTR()
-	{
+	public EssayTestAP getLastDecisionTR() {
 		return lastDecisionTR;
 	}
 
 	/**
 	 * Sets the last decision tr.
 	 *
-	 * @param lastDecisionTR
-	 *           the lastDecisionTR to set
+	 * @param lastDecisionTR the lastDecisionTR to set
 	 */
-	public void setLastDecisionTR(final EssayTestAP lastDecisionTR)
-	{
+	public void setLastDecisionTR(final EssayTestAP lastDecisionTR) {
 		this.lastDecisionTR = lastDecisionTR;
 	}
 
@@ -4338,19 +3988,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the lastDecisionER
 	 */
-	public EssayTestAP getLastDecisionER()
-	{
+	public EssayTestAP getLastDecisionER() {
 		return lastDecisionER;
 	}
 
 	/**
 	 * Sets the last decision er.
 	 *
-	 * @param lastDecisionER
-	 *           the lastDecisionER to set
+	 * @param lastDecisionER the lastDecisionER to set
 	 */
-	public void setLastDecisionER(final EssayTestAP lastDecisionER)
-	{
+	public void setLastDecisionER(final EssayTestAP lastDecisionER) {
 		this.lastDecisionER = lastDecisionER;
 	}
 
@@ -4359,19 +4006,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the essayTestApService
 	 */
-	public EssayTestApService getEssayTestApService()
-	{
+	public EssayTestApService getEssayTestApService() {
 		return essayTestApService;
 	}
 
 	/**
 	 * Sets the essay test ap service.
 	 *
-	 * @param essayTestApService
-	 *           the essayTestApService to set
+	 * @param essayTestApService the essayTestApService to set
 	 */
-	public void setEssayTestApService(final EssayTestApService essayTestApService)
-	{
+	public void setEssayTestApService(final EssayTestApService essayTestApService) {
 		this.essayTestApService = essayTestApService;
 	}
 
@@ -4380,19 +4024,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the decisionDetailsAR
 	 */
-	public AnalyseResultAp getDecisionDetailsAR()
-	{
+	public AnalyseResultAp getDecisionDetailsAR() {
 		return decisionDetailsAR;
 	}
 
 	/**
 	 * Sets the decision details ar.
 	 *
-	 * @param decisionDetailsAR
-	 *           the decisionDetailsAR to set
+	 * @param decisionDetailsAR the decisionDetailsAR to set
 	 */
-	public void setDecisionDetailsAR(final AnalyseResultAp decisionDetailsAR)
-	{
+	public void setDecisionDetailsAR(final AnalyseResultAp decisionDetailsAR) {
 		this.decisionDetailsAR = decisionDetailsAR;
 	}
 
@@ -4401,19 +4042,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the decisionDetailsTR
 	 */
-	public EssayTestAP getDecisionDetailsTR()
-	{
+	public EssayTestAP getDecisionDetailsTR() {
 		return decisionDetailsTR;
 	}
 
 	/**
 	 * Sets the decision details tr.
 	 *
-	 * @param decisionDetailsTR
-	 *           the decisionDetailsTR to set
+	 * @param decisionDetailsTR the decisionDetailsTR to set
 	 */
-	public void setDecisionDetailsTR(final EssayTestAP decisionDetailsTR)
-	{
+	public void setDecisionDetailsTR(final EssayTestAP decisionDetailsTR) {
 		this.decisionDetailsTR = decisionDetailsTR;
 	}
 
@@ -4422,42 +4060,34 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the decisionDetailsER
 	 */
-	public EssayTestAP getDecisionDetailsER()
-	{
+	public EssayTestAP getDecisionDetailsER() {
 		return decisionDetailsER;
 	}
 
 	/**
 	 * Sets the decision details er.
 	 *
-	 * @param decisionDetailsER
-	 *           the decisionDetailsER to set
+	 * @param decisionDetailsER the decisionDetailsER to set
 	 */
-	public void setDecisionDetailsER(final EssayTestAP decisionDetailsER)
-	{
+	public void setDecisionDetailsER(final EssayTestAP decisionDetailsER) {
 		this.decisionDetailsER = decisionDetailsER;
 	}
-
-
 
 	/**
 	 * Gets the file producer.
 	 *
 	 * @return the file producer
 	 */
-	public FileProducer getFileProducer()
-	{
+	public FileProducer getFileProducer() {
 		return fileProducer;
 	}
 
 	/**
 	 * Sets the file producer.
 	 *
-	 * @param fileProducer
-	 *           the new file producer
+	 * @param fileProducer the new file producer
 	 */
-	public void setFileProducer(final FileProducer fileProducer)
-	{
+	public void setFileProducer(final FileProducer fileProducer) {
 		this.fileProducer = fileProducer;
 	}
 
@@ -4466,19 +4096,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the authorities list
 	 */
-	public DualListModel<Authority> getAuthoritiesList()
-	{
+	public DualListModel<Authority> getAuthoritiesList() {
 		return authoritiesList;
 	}
 
 	/**
 	 * Sets the authorities list.
 	 *
-	 * @param authoritiesList
-	 *           the new authorities list
+	 * @param authoritiesList the new authorities list
 	 */
-	public void setAuthoritiesList(final DualListModel<Authority> authoritiesList)
-	{
+	public void setAuthoritiesList(final DualListModel<Authority> authoritiesList) {
 		this.authoritiesList = authoritiesList;
 	}
 
@@ -4487,19 +4114,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the file type service
 	 */
-	public FileTypeService getFileTypeService()
-	{
+	public FileTypeService getFileTypeService() {
 		return fileTypeService;
 	}
 
 	/**
 	 * Sets the file type service.
 	 *
-	 * @param fileTypeService
-	 *           the new file type service
+	 * @param fileTypeService the new file type service
 	 */
-	public void setFileTypeService(final FileTypeService fileTypeService)
-	{
+	public void setFileTypeService(final FileTypeService fileTypeService) {
 		this.fileTypeService = fileTypeService;
 	}
 
@@ -4508,19 +4132,17 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the recommandation authority service
 	 */
-	public RecommandationAuthorityService getRecommandationAuthorityService()
-	{
+	public RecommandationAuthorityService getRecommandationAuthorityService() {
 		return recommandationAuthorityService;
 	}
 
 	/**
 	 * Sets the recommandation authority service.
 	 *
-	 * @param recommandationAuthorityService
-	 *           the new recommandation authority service
+	 * @param recommandationAuthorityService the new recommandation authority
+	 * service
 	 */
-	public void setRecommandationAuthorityService(final RecommandationAuthorityService recommandationAuthorityService)
-	{
+	public void setRecommandationAuthorityService(final RecommandationAuthorityService recommandationAuthorityService) {
 		this.recommandationAuthorityService = recommandationAuthorityService;
 	}
 
@@ -4529,19 +4151,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the field groups items
 	 */
-	public List<FieldGroup> getFieldGroupsItems()
-	{
+	public List<FieldGroup> getFieldGroupsItems() {
 		return fieldGroupsItems;
 	}
 
 	/**
 	 * Sets the field groups items.
 	 *
-	 * @param fieldGroupsItems
-	 *           the new field groups items
+	 * @param fieldGroupsItems the new field groups items
 	 */
-	public void setFieldGroupsItems(final List<FieldGroup> fieldGroupsItems)
-	{
+	public void setFieldGroupsItems(final List<FieldGroup> fieldGroupsItems) {
 		this.fieldGroupsItems = fieldGroupsItems;
 	}
 
@@ -4550,19 +4169,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the payment data service
 	 */
-	public PaymentDataService getPaymentDataService()
-	{
+	public PaymentDataService getPaymentDataService() {
 		return paymentDataService;
 	}
 
 	/**
 	 * Sets the payment data service.
 	 *
-	 * @param paymentDataService
-	 *           the new payment data service
+	 * @param paymentDataService the new payment data service
 	 */
-	public void setPaymentDataService(final PaymentDataService paymentDataService)
-	{
+	public void setPaymentDataService(final PaymentDataService paymentDataService) {
 		this.paymentDataService = paymentDataService;
 	}
 
@@ -4571,19 +4187,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the specific decisions history
 	 */
-	public ApSpecificDecisionHistory getSpecificDecisionsHistory()
-	{
+	public ApSpecificDecisionHistory getSpecificDecisionsHistory() {
 		return specificDecisionsHistory;
 	}
 
 	/**
 	 * Sets the specific decisions history.
 	 *
-	 * @param specificDecisionsHistory
-	 *           the new specific decisions history
+	 * @param specificDecisionsHistory the new specific decisions history
 	 */
-	public void setSpecificDecisionsHistory(final ApSpecificDecisionHistory specificDecisionsHistory)
-	{
+	public void setSpecificDecisionsHistory(final ApSpecificDecisionHistory specificDecisionsHistory) {
 		this.specificDecisionsHistory = specificDecisionsHistory;
 	}
 
@@ -4592,19 +4205,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the item flow history dto list
 	 */
-	public List<ItemFlowDto> getItemFlowHistoryDtoList()
-	{
+	public List<ItemFlowDto> getItemFlowHistoryDtoList() {
 		return itemFlowHistoryDtoList;
 	}
 
 	/**
 	 * Sets the item flow history dto list.
 	 *
-	 * @param itemFlowHistoryDtoList
-	 *           the new item flow history dto list
+	 * @param itemFlowHistoryDtoList the new item flow history dto list
 	 */
-	public void setItemFlowHistoryDtoList(final List<ItemFlowDto> itemFlowHistoryDtoList)
-	{
+	public void setItemFlowHistoryDtoList(final List<ItemFlowDto> itemFlowHistoryDtoList) {
 		this.itemFlowHistoryDtoList = itemFlowHistoryDtoList;
 	}
 
@@ -4613,19 +4223,17 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the item flow history dto list filtred
 	 */
-	public List<ItemFlowDto> getItemFlowHistoryDtoListFiltred()
-	{
+	public List<ItemFlowDto> getItemFlowHistoryDtoListFiltred() {
 		return itemFlowHistoryDtoListFiltred;
 	}
 
 	/**
 	 * Sets the item flow history dto list filtred.
 	 *
-	 * @param itemFlowHistoryDtoListFiltred
-	 *           the new item flow history dto list filtred
+	 * @param itemFlowHistoryDtoListFiltred the new item flow history dto list
+	 * filtred
 	 */
-	public void setItemFlowHistoryDtoListFiltred(final List<ItemFlowDto> itemFlowHistoryDtoListFiltred)
-	{
+	public void setItemFlowHistoryDtoListFiltred(final List<ItemFlowDto> itemFlowHistoryDtoListFiltred) {
 		this.itemFlowHistoryDtoListFiltred = itemFlowHistoryDtoListFiltred;
 	}
 
@@ -4634,19 +4242,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the recommandation list filtred
 	 */
-	public List<Recommandation> getRecommandationListFiltred()
-	{
+	public List<Recommandation> getRecommandationListFiltred() {
 		return recommandationListFiltred;
 	}
 
 	/**
 	 * Sets the recommandation list filtred.
 	 *
-	 * @param recommandationListFiltred
-	 *           the new recommandation list filtred
+	 * @param recommandationListFiltred the new recommandation list filtred
 	 */
-	public void setRecommandationListFiltred(final List<Recommandation> recommandationListFiltred)
-	{
+	public void setRecommandationListFiltred(final List<Recommandation> recommandationListFiltred) {
 		this.recommandationListFiltred = recommandationListFiltred;
 	}
 
@@ -4655,19 +4260,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the attachment list filtred
 	 */
-	public List<Attachment> getAttachmentListFiltred()
-	{
+	public List<Attachment> getAttachmentListFiltred() {
 		return attachmentListFiltred;
 	}
 
 	/**
 	 * Sets the attachment list filtred.
 	 *
-	 * @param attachmentListFiltred
-	 *           the new attachment list filtred
+	 * @param attachmentListFiltred the new attachment list filtred
 	 */
-	public void setAttachmentListFiltred(final List<Attachment> attachmentListFiltred)
-	{
+	public void setAttachmentListFiltred(final List<Attachment> attachmentListFiltred) {
 		this.attachmentListFiltred = attachmentListFiltred;
 	}
 
@@ -4676,19 +4278,17 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the recommandation article list filtred
 	 */
-	public List<Recommandation> getRecommandationArticleListFiltred()
-	{
+	public List<Recommandation> getRecommandationArticleListFiltred() {
 		return recommandationArticleListFiltred;
 	}
 
 	/**
 	 * Sets the recommandation article list filtred.
 	 *
-	 * @param recommandationArticleListFiltred
-	 *           the new recommandation article list filtred
+	 * @param recommandationArticleListFiltred the new recommandation article
+	 * list filtred
 	 */
-	public void setRecommandationArticleListFiltred(final List<Recommandation> recommandationArticleListFiltred)
-	{
+	public void setRecommandationArticleListFiltred(final List<Recommandation> recommandationArticleListFiltred) {
 		this.recommandationArticleListFiltred = recommandationArticleListFiltred;
 	}
 
@@ -4697,19 +4297,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the come from search
 	 */
-	public boolean getComeFromSearch()
-	{
+	public boolean getComeFromSearch() {
 		return comeFromSearch;
 	}
 
 	/**
 	 * Sets the come from search.
 	 *
-	 * @param comeFromSearch
-	 *           the new come from search
+	 * @param comeFromSearch the new come from search
 	 */
-	public void setComeFromSearch(final boolean comeFromSearch)
-	{
+	public void setComeFromSearch(final boolean comeFromSearch) {
 		this.comeFromSearch = comeFromSearch;
 	}
 
@@ -4718,19 +4315,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the checks if is payment
 	 */
-	public Boolean getIsPayment()
-	{
+	public Boolean getIsPayment() {
 		return isPayment;
 	}
 
 	/**
 	 * Sets the checks if is payment.
 	 *
-	 * @param isPayment
-	 *           the new checks if is payment
+	 * @param isPayment the new checks if is payment
 	 */
-	public void setIsPayment(final Boolean isPayment)
-	{
+	public void setIsPayment(final Boolean isPayment) {
 		this.isPayment = isPayment;
 	}
 
@@ -4739,19 +4333,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the payment data
 	 */
-	public PaymentData getPaymentData()
-	{
+	public PaymentData getPaymentData() {
 		return paymentData;
 	}
 
 	/**
 	 * Sets the payment data.
 	 *
-	 * @param paymentData
-	 *           the new payment data
+	 * @param paymentData the new payment data
 	 */
-	public void setPaymentData(final PaymentData paymentData)
-	{
+	public void setPaymentData(final PaymentData paymentData) {
 		this.paymentData = paymentData;
 	}
 
@@ -4760,19 +4351,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the show validate payment
 	 */
-	public Boolean getShowValidatePayment()
-	{
+	public Boolean getShowValidatePayment() {
 		return showValidatePayment;
 	}
 
 	/**
 	 * Sets the show validate payment.
 	 *
-	 * @param showValidatePayment
-	 *           the new show validate payment
+	 * @param showValidatePayment the new show validate payment
 	 */
-	public void setShowValidatePayment(final Boolean showValidatePayment)
-	{
+	public void setShowValidatePayment(final Boolean showValidatePayment) {
 		this.showValidatePayment = showValidatePayment;
 	}
 
@@ -4781,19 +4369,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the fileFieldService
 	 */
-	public FileFieldService getFileFieldService()
-	{
+	public FileFieldService getFileFieldService() {
 		return fileFieldService;
 	}
 
 	/**
 	 * Sets the file field service.
 	 *
-	 * @param fileFieldService
-	 *           the fileFieldService to set
+	 * @param fileFieldService the fileFieldService to set
 	 */
-	public void setFileFieldService(final FileFieldService fileFieldService)
-	{
+	public void setFileFieldService(final FileFieldService fileFieldService) {
 		this.fileFieldService = fileFieldService;
 	}
 
@@ -4802,19 +4387,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the fileFieldValueService
 	 */
-	public FileFieldValueService getFileFieldValueService()
-	{
+	public FileFieldValueService getFileFieldValueService() {
 		return fileFieldValueService;
 	}
 
 	/**
 	 * Sets the file field value service.
 	 *
-	 * @param fileFieldValueService
-	 *           the fileFieldValueService to set
+	 * @param fileFieldValueService the fileFieldValueService to set
 	 */
-	public void setFileFieldValueService(final FileFieldValueService fileFieldValueService)
-	{
+	public void setFileFieldValueService(final FileFieldValueService fileFieldValueService) {
 		this.fileFieldValueService = fileFieldValueService;
 	}
 
@@ -4823,50 +4405,40 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the reportOrganismService
 	 */
-	public ReportOrganismService getReportOrganismService()
-	{
+	public ReportOrganismService getReportOrganismService() {
 		return reportOrganismService;
 	}
 
 	/**
 	 * Sets the report organism service.
 	 *
-	 * @param reportOrganismService
-	 *           the reportOrganismService to set
+	 * @param reportOrganismService the reportOrganismService to set
 	 */
-	public void setReportOrganismService(final ReportOrganismService reportOrganismService)
-	{
+	public void setReportOrganismService(final ReportOrganismService reportOrganismService) {
 		this.reportOrganismService = reportOrganismService;
 	}
 
 	/**
 	 * Notification email.
 	 *
-	 * @param file
-	 *           the file
-	 * @param step
-	 *           the step
+	 * @param file the file
+	 * @param step the step
 	 */
-	public void notificationEmail(final File file, final Step step)
-	{
+	public void notificationEmail(final File file, final Step step) {
 
 		final Map<String, String> map = new HashMap<String, String>();
 
 		String object = null;
 
-		if (file.getAssignedUser() != null)
-		{
+		if (file.getAssignedUser() != null) {
 			final User usr = file.getAssignedUser();
 
-			if ("FR".equals(usr.getPreferedLanguage()))
-			{
+			if ("FR".equals(usr.getPreferedLanguage())) {
 				object = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, Locale.FRANCE).getString(
 						ControllerConstants.Bundle.Messages.OBJECT_MAIL_NOTIFICATION_RECEPT_FOLDER);
 				map.put(MailConstants.SUBJECT, object);
 				map.put(MailConstants.VMF, EMAIL_BODY_NOTIFICATION_FR);
-			}
-			else if ("EN".equals(usr.getPreferedLanguage()))
-			{
+			} else if ("EN".equals(usr.getPreferedLanguage())) {
 				object = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, Locale.ENGLISH).getString(
 						ControllerConstants.Bundle.Messages.OBJECT_MAIL_NOTIFICATION_RECEPT_FOLDER);
 				map.put(MailConstants.SUBJECT, object);
@@ -4880,9 +4452,7 @@ public class FileItemApDetailController implements Serializable
 
 			mailService.sendMail(map);
 
-		}
-		else
-		{
+		} else {
 
 			final Administration administration = administrationService.find(file.getBureau().getId());
 			final List<Administration> adminList = new ArrayList<Administration>();
@@ -4894,18 +4464,14 @@ public class FileItemApDetailController implements Serializable
 			final List<User> users = userService.findByStepAndFileTypeAndAdministration(step.getId(), file.getFileType().getId(),
 					bureauList);
 
-			for (final User usr : users)
-			{
+			for (final User usr : users) {
 
-				if ("FR".equals(usr.getPreferedLanguage()))
-				{
+				if ("FR".equals(usr.getPreferedLanguage())) {
 					object = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, Locale.FRANCE).getString(
 							ControllerConstants.Bundle.Messages.OBJECT_MAIL_NOTIFICATION_RECEPT_FOLDER);
 					map.put(MailConstants.SUBJECT, object);
 					map.put(MailConstants.VMF, EMAIL_BODY_NOTIFICATION_FR);
-				}
-				else if ("EN".equals(usr.getPreferedLanguage()))
-				{
+				} else if ("EN".equals(usr.getPreferedLanguage())) {
 					object = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, Locale.ENGLISH).getString(
 							ControllerConstants.Bundle.Messages.OBJECT_MAIL_NOTIFICATION_RECEPT_FOLDER);
 					map.put(MailConstants.SUBJECT, object);
@@ -4930,19 +4496,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the administration service
 	 */
-	public AdministrationService getAdministrationService()
-	{
+	public AdministrationService getAdministrationService() {
 		return administrationService;
 	}
 
 	/**
 	 * Sets the administration service.
 	 *
-	 * @param administrationService
-	 *           the new administration service
+	 * @param administrationService the new administration service
 	 */
-	public void setAdministrationService(final AdministrationService administrationService)
-	{
+	public void setAdministrationService(final AdministrationService administrationService) {
 		this.administrationService = administrationService;
 	}
 
@@ -4951,19 +4514,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the mail service
 	 */
-	public MailService getMailService()
-	{
+	public MailService getMailService() {
 		return mailService;
 	}
 
 	/**
 	 * Sets the mail service.
 	 *
-	 * @param mailService
-	 *           the new mail service
+	 * @param mailService the new mail service
 	 */
-	public void setMailService(final MailService mailService)
-	{
+	public void setMailService(final MailService mailService) {
 		this.mailService = mailService;
 	}
 
@@ -4972,19 +4532,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the user service
 	 */
-	public UserService getUserService()
-	{
+	public UserService getUserService() {
 		return userService;
 	}
 
 	/**
 	 * Sets the user service.
 	 *
-	 * @param userService
-	 *           the new user service
+	 * @param userService the new user service
 	 */
-	public void setUserService(final UserService userService)
-	{
+	public void setUserService(final UserService userService) {
 		this.userService = userService;
 	}
 
@@ -4993,19 +4550,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return true, if is checked fimex file type
 	 */
-	public boolean isCheckedFimexFileType()
-	{
+	public boolean isCheckedFimexFileType() {
 		return checkedFimexFileType;
 	}
 
 	/**
 	 * Sets the checked fimex file type.
 	 *
-	 * @param checkedFimexFileType
-	 *           the new checked fimex file type
+	 * @param checkedFimexFileType the new checked fimex file type
 	 */
-	public void setCheckedFimexFileType(final boolean checkedFimexFileType)
-	{
+	public void setCheckedFimexFileType(final boolean checkedFimexFileType) {
 		this.checkedFimexFileType = checkedFimexFileType;
 	}
 
@@ -5014,19 +4568,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the file type step service
 	 */
-	public FileTypeStepService getFileTypeStepService()
-	{
+	public FileTypeStepService getFileTypeStepService() {
 		return fileTypeStepService;
 	}
 
 	/**
 	 * Sets the file type step service.
 	 *
-	 * @param fileTypeStepService
-	 *           the new file type step service
+	 * @param fileTypeStepService the new file type step service
 	 */
-	public void setFileTypeStepService(final FileTypeStepService fileTypeStepService)
-	{
+	public void setFileTypeStepService(final FileTypeStepService fileTypeStepService) {
 		this.fileTypeStepService = fileTypeStepService;
 	}
 
@@ -5035,19 +4586,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the file type flow service
 	 */
-	public FileTypeFlowService getFileTypeFlowService()
-	{
+	public FileTypeFlowService getFileTypeFlowService() {
 		return fileTypeFlowService;
 	}
 
 	/**
 	 * Sets the file type flow service.
 	 *
-	 * @param fileTypeFlowService
-	 *           the new file type flow service
+	 * @param fileTypeFlowService the new file type flow service
 	 */
-	public void setFileTypeFlowService(final FileTypeFlowService fileTypeFlowService)
-	{
+	public void setFileTypeFlowService(final FileTypeFlowService fileTypeFlowService) {
 		this.fileTypeFlowService = fileTypeFlowService;
 	}
 
@@ -5056,19 +4604,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the generate report allowed
 	 */
-	public Boolean getGenerateReportAllowed()
-	{
+	public Boolean getGenerateReportAllowed() {
 		return generateReportAllowed;
 	}
 
 	/**
 	 * Sets the generate report allowed.
 	 *
-	 * @param generateReportAllowed
-	 *           the new generate report allowed
+	 * @param generateReportAllowed the new generate report allowed
 	 */
-	public void setGenerateReportAllowed(final Boolean generateReportAllowed)
-	{
+	public void setGenerateReportAllowed(final Boolean generateReportAllowed) {
 		this.generateReportAllowed = generateReportAllowed;
 	}
 
@@ -5077,19 +4622,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the showDecisionButton
 	 */
-	public Boolean getShowDecisionButton()
-	{
+	public Boolean getShowDecisionButton() {
 		return showDecisionButton;
 	}
 
 	/**
 	 * Sets the show decision button.
 	 *
-	 * @param showDecisionButton
-	 *           the showDecisionButton to set
+	 * @param showDecisionButton the showDecisionButton to set
 	 */
-	public void setShowDecisionButton(final Boolean showDecisionButton)
-	{
+	public void setShowDecisionButton(final Boolean showDecisionButton) {
 		this.showDecisionButton = showDecisionButton;
 	}
 
@@ -5098,19 +4640,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return true, if is rejct dispatch allowed
 	 */
-	public boolean isRejctDispatchAllowed()
-	{
+	public boolean isRejctDispatchAllowed() {
 		return rejctDispatchAllowed;
 	}
 
 	/**
 	 * Sets the rejct dispatch allowed.
 	 *
-	 * @param rejctDispatchAllowed
-	 *           the new rejct dispatch allowed
+	 * @param rejctDispatchAllowed the new rejct dispatch allowed
 	 */
-	public void setRejctDispatchAllowed(final boolean rejctDispatchAllowed)
-	{
+	public void setRejctDispatchAllowed(final boolean rejctDispatchAllowed) {
 		this.rejctDispatchAllowed = rejctDispatchAllowed;
 	}
 
@@ -5119,19 +4658,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the invoice total amount
 	 */
-	public Long getInvoiceTotalAmount()
-	{
+	public Long getInvoiceTotalAmount() {
 		return invoiceTotalAmount;
 	}
 
 	/**
 	 * Sets the invoice total amount.
 	 *
-	 * @param invoiceTotalAmount
-	 *           the new invoice total amount
+	 * @param invoiceTotalAmount the new invoice total amount
 	 */
-	public void setInvoiceTotalAmount(final Long invoiceTotalAmount)
-	{
+	public void setInvoiceTotalAmount(final Long invoiceTotalAmount) {
 		this.invoiceTotalAmount = invoiceTotalAmount;
 	}
 
@@ -5140,19 +4676,16 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the invoice other amount
 	 */
-	public Long getInvoiceOtherAmount()
-	{
+	public Long getInvoiceOtherAmount() {
 		return invoiceOtherAmount;
 	}
 
 	/**
 	 * Sets the invoice other amount.
 	 *
-	 * @param invoiceOtherAmount
-	 *           the new invoice other amount
+	 * @param invoiceOtherAmount the new invoice other amount
 	 */
-	public void setInvoiceOtherAmount(final Long invoiceOtherAmount)
-	{
+	public void setInvoiceOtherAmount(final Long invoiceOtherAmount) {
 		this.invoiceOtherAmount = invoiceOtherAmount;
 	}
 
@@ -5161,21 +4694,17 @@ public class FileItemApDetailController implements Serializable
 	 *
 	 * @return the invoice total ttc amount
 	 */
-	public Long getInvoiceTotalTtcAmount()
-	{
+	public Long getInvoiceTotalTtcAmount() {
 		return invoiceTotalTtcAmount;
 	}
 
 	/**
 	 * Sets the invoice total ttc amount.
 	 *
-	 * @param invoiceTotalTtcAmount
-	 *           the new invoice total ttc amount
+	 * @param invoiceTotalTtcAmount the new invoice total ttc amount
 	 */
-	public void setInvoiceTotalTtcAmount(final Long invoiceTotalTtcAmount)
-	{
+	public void setInvoiceTotalTtcAmount(final Long invoiceTotalTtcAmount) {
 		this.invoiceTotalTtcAmount = invoiceTotalTtcAmount;
 	}
-
 
 }

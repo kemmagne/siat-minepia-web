@@ -99,7 +99,7 @@ public class CtCctCsqExporter extends AbstractReportInvoker
 								}
 								catch (final ParseException e)
 								{
-									LOG.error(Objects.toString(e));
+									LOG.error(Objects.toString(e), e);
 								}
 							}
 							break;

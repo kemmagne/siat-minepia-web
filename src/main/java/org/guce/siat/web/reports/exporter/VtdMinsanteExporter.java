@@ -17,12 +17,10 @@ import org.guce.siat.web.reports.vo.VtdMinsanteFileVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * The Class VtdMinsanteExporter.
  */
-public class VtdMinsanteExporter extends AbstractReportInvoker
-{
+public class VtdMinsanteExporter extends AbstractReportInvoker {
 
 	/**
 	 * The Constant LOG.
@@ -38,11 +36,9 @@ public class VtdMinsanteExporter extends AbstractReportInvoker
 	/**
 	 * Instantiates a new vtd minsante exporter.
 	 *
-	 * @param file
-	 *           the file
+	 * @param file the file
 	 */
-	public VtdMinsanteExporter(final File file)
-	{
+	public VtdMinsanteExporter(final File file) {
 		super("VTD_MINSANTE", "VTD_MINSANTE");
 		this.file = file;
 	}
@@ -54,25 +50,20 @@ public class VtdMinsanteExporter extends AbstractReportInvoker
 	 * @see org.guce.siat.web.reports.vo.JasperExporter#getReportDataSource(java.lang.Object[])
 	 */
 	@Override
-	public JRBeanCollectionDataSource getReportDataSource()
-	{
+	public JRBeanCollectionDataSource getReportDataSource() {
 
 		final VtdMinsanteFileVo vtdMinsanteVo = new VtdMinsanteFileVo();
 		String bl = null;
 		String lta = null;
-		if ((file != null))
-		{
+		if ((file != null)) {
 			vtdMinsanteVo.setDecisionPlace(file.getBureau().getAddress());
 			vtdMinsanteVo.setDecisionDate(file.getSignatureDate());
 			final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
 			java.util.Date signatoryDate = null;
 
-			if (CollectionUtils.isNotEmpty(fileFieldValueList))
-			{
-				for (final FileFieldValue fileFieldValue : fileFieldValueList)
-				{
-					switch (fileFieldValue.getFileField().getCode())
-					{
+			if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
+				for (final FileFieldValue fileFieldValue : fileFieldValueList) {
+					switch (fileFieldValue.getFileField().getCode()) {
 						case "NUMERO_VTD_MINSANTE":
 							vtdMinsanteVo.setDecisionNumber(fileFieldValue.getValue());
 							break;
@@ -119,15 +110,11 @@ public class VtdMinsanteExporter extends AbstractReportInvoker
 							bl = fileFieldValue.getValue();
 							break;
 						case "SIGNATAIRE_DATE":
-							if (StringUtils.isNotBlank(fileFieldValue.getValue()))
-							{
-								try
-								{
+							if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
+								try {
 									signatoryDate = new SimpleDateFormat("dd/MM/yyyy").parse(fileFieldValue.getValue());
-								}
-								catch (final ParseException e)
-								{
-									LOG.error(Objects.toString(e));
+								} catch (final ParseException e) {
+									LOG.error(Objects.toString(e), e);
 								}
 							}
 							break;
@@ -153,8 +140,7 @@ public class VtdMinsanteExporter extends AbstractReportInvoker
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getJRParameters()
 	 */
 	@Override
-	protected Map<String, Object> getJRParameters()
-	{
+	protected Map<String, Object> getJRParameters() {
 
 		final Map<String, Object> jRParameters = super.getJRParameters();
 		jRParameters.put("MINSANTE_LOGO", getRealPath(IMAGES_PATH, "minsante", "jpg"));
@@ -166,8 +152,7 @@ public class VtdMinsanteExporter extends AbstractReportInvoker
 	 *
 	 * @return the file
 	 */
-	public File getFile()
-	{
+	public File getFile() {
 		return file;
 	}
 

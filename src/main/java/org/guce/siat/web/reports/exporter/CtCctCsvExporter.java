@@ -21,31 +21,27 @@ import org.guce.siat.web.reports.vo.CtCctCsvFileVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-
-
 /**
  * The Class CtCctCsvExporter.
  */
-public class CtCctCsvExporter extends AbstractReportInvoker
-{
+public class CtCctCsvExporter extends AbstractReportInvoker {
 
-	/** The Constant LOG. */
+	/**
+	 * The Constant LOG.
+	 */
 	private static final Logger LOG = LoggerFactory.getLogger(CtCctCsvExporter.class);
 
-	/** The file. */
+	/**
+	 * The file.
+	 */
 	private final File file;
-
-
 
 	/**
 	 * Instantiates a new ct cct csv exporter.
 	 *
-	 * @param file
-	 *           the file
+	 * @param file the file
 	 */
-	public CtCctCsvExporter(final File file)
-	{
+	public CtCctCsvExporter(final File file) {
 		super("CT_CCT_CSV", "CT_CCT_CSV");
 		this.file = file;
 	}
@@ -57,24 +53,19 @@ public class CtCctCsvExporter extends AbstractReportInvoker
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getReportDataSource()
 	 */
 	@Override
-	public JRBeanCollectionDataSource getReportDataSource()
-	{
+	public JRBeanCollectionDataSource getReportDataSource() {
 
 		final CtCctCsvFileVo ctCctCsvFileVo = new CtCctCsvFileVo();
 
-		if ((file != null))
-		{
+		if ((file != null)) {
 			final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
 			ctCctCsvFileVo.setDecisionPlace(file.getBureau().getLabelFr());
 			ctCctCsvFileVo.setDecisionDate(Calendar.getInstance().getTime());
 			ctCctCsvFileVo.setSignatoryName(file.getAssignedUser().getFirstName());
 			ctCctCsvFileVo.setSignatoryPosition(file.getAssignedUser().getPosition().getLabelFr());
-			if (CollectionUtils.isNotEmpty(fileFieldValueList))
-			{
-				for (final FileFieldValue fileFieldValue : fileFieldValueList)
-				{
-					switch (fileFieldValue.getFileField().getCode())
-					{
+			if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
+				for (final FileFieldValue fileFieldValue : fileFieldValueList) {
+					switch (fileFieldValue.getFileField().getCode()) {
 						case "TRANSITAIRE_RAISONSOCIALE":
 							ctCctCsvFileVo.setConsignorName(fileFieldValue.getValue());
 							break;
@@ -126,15 +117,11 @@ public class CtCctCsvExporter extends AbstractReportInvoker
 							break;
 
 						case "EXPEDITION_DATE_EXPEDITION_DATE":
-							if (StringUtils.isNotBlank(fileFieldValue.getValue()))
-							{
-								try
-								{
+							if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
+								try {
 									ctCctCsvFileVo.setExpeditionDate(new SimpleDateFormat("dd/MM/yyyy").parse(fileFieldValue.getValue()));
-								}
-								catch (final ParseException e)
-								{
-									LOG.error(Objects.toString(e));
+								} catch (final ParseException e) {
+									LOG.error(Objects.toString(e), e);
 								}
 							}
 							break;
@@ -170,15 +157,12 @@ public class CtCctCsvExporter extends AbstractReportInvoker
 
 			ctCctCsvFileVo.setDecisionNumber("/MINEP/SG/BNO");
 
-
 			final List<FileItem> fileItemList = file.getFileItemsList();
 
 			final List<CtCctCsvFileItemVo> fileItemVos = new ArrayList<CtCctCsvFileItemVo>();
 
-			if (CollectionUtils.isNotEmpty(fileItemList))
-			{
-				for (final FileItem fileItem : fileItemList)
-				{
+			if (CollectionUtils.isNotEmpty(fileItemList)) {
+				for (final FileItem fileItem : fileItemList) {
 					final CtCctCsvFileItemVo fileItemVo = new CtCctCsvFileItemVo();
 
 					fileItemVo.setDesc(fileItem.getNsh() != null ? fileItem.getNsh().getGoodsItemDesc() : null);
@@ -186,12 +170,9 @@ public class CtCctCsvExporter extends AbstractReportInvoker
 
 					final List<FileItemFieldValue> fileItemFieldValueList = fileItem.getFileItemFieldValueList();
 
-					if (CollectionUtils.isNotEmpty(fileItemFieldValueList))
-					{
-						for (final FileItemFieldValue fileItemFieldValue : fileItemFieldValueList)
-						{
-							switch (fileItemFieldValue.getFileItemField().getCode())
-							{
+					if (CollectionUtils.isNotEmpty(fileItemFieldValueList)) {
+						for (final FileItemFieldValue fileItemFieldValue : fileItemFieldValueList) {
+							switch (fileItemFieldValue.getFileItemField().getCode()) {
 								case "NUMERO_CONTENEUR":
 									fileItemVo.setContainerNumber(fileItemFieldValue.getValue());
 									break;
@@ -245,8 +226,7 @@ public class CtCctCsvExporter extends AbstractReportInvoker
 	 *
 	 * @return the file
 	 */
-	public File getFile()
-	{
+	public File getFile() {
 		return file;
 	}
 

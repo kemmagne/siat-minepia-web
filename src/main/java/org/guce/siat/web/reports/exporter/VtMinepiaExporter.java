@@ -20,27 +20,27 @@ import org.guce.siat.web.reports.vo.VtMinepiaFileVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * The Class VtMinepiaExporter.
  */
-public class VtMinepiaExporter extends AbstractReportInvoker
-{
+public class VtMinepiaExporter extends AbstractReportInvoker {
 
-	/** The Constant LOG. */
+	/**
+	 * The Constant LOG.
+	 */
 	private static final Logger LOG = LoggerFactory.getLogger(VtMinepiaExporter.class);
 
-	/** The file. */
+	/**
+	 * The file.
+	 */
 	private final File file;
 
 	/**
 	 * Instantiates a new vt minepia exporter.
 	 *
-	 * @param file
-	 *           the file
+	 * @param file the file
 	 */
-	public VtMinepiaExporter(final File file)
-	{
+	public VtMinepiaExporter(final File file) {
 		super("VT_MINEPIA", "VT_MINEPIA");
 		this.file = file;
 	}
@@ -51,21 +51,16 @@ public class VtMinepiaExporter extends AbstractReportInvoker
 	 * @see org.guce.siat.web.reports.vo.JasperExporter#getReportDataSource(java.lang.Object[])
 	 */
 	@Override
-	public JRBeanCollectionDataSource getReportDataSource()
-	{
+	public JRBeanCollectionDataSource getReportDataSource() {
 
 		final VtMinepiaFileVo vtMinepiaVo = new VtMinepiaFileVo();
 
-		if ((file != null))
-		{
+		if ((file != null)) {
 			final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
 			vtMinepiaVo.setDecisionDate(file.getSignatureDate());
-			if (CollectionUtils.isNotEmpty(fileFieldValueList))
-			{
-				for (final FileFieldValue fileFieldValue : fileFieldValueList)
-				{
-					switch (fileFieldValue.getFileField().getCode())
-					{
+			if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
+				for (final FileFieldValue fileFieldValue : fileFieldValueList) {
+					switch (fileFieldValue.getFileField().getCode()) {
 						case "NUMERO_VT_MINEPIA":
 							vtMinepiaVo.setDecisionNumber(fileFieldValue.getValue());
 							break;
@@ -82,15 +77,11 @@ public class VtMinepiaExporter extends AbstractReportInvoker
 							vtMinepiaVo.setProvider(fileFieldValue.getValue());
 							break;
 						case "SIGNATAIRE_DATE":
-							if (StringUtils.isNotBlank(fileFieldValue.getValue()))
-							{
-								try
-								{
+							if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
+								try {
 									vtMinepiaVo.setDecisionDate(new SimpleDateFormat("dd/MM/yyyy").parse(fileFieldValue.getValue()));
-								}
-								catch (final ParseException e)
-								{
-									LOG.error(Objects.toString(e));
+								} catch (final ParseException e) {
+									LOG.error(Objects.toString(e), e);
 								}
 							}
 							break;
@@ -103,8 +94,7 @@ public class VtMinepiaExporter extends AbstractReportInvoker
 				}
 			}
 
-			if ((file.getClient() != null))
-			{
+			if ((file.getClient() != null)) {
 				vtMinepiaVo.setImporter(file.getClient().getCompanyName());
 				vtMinepiaVo.setAddress(file.getClient().getFullAddress());
 				vtMinepiaVo.setProfession(file.getClient().getProfession());
@@ -114,10 +104,8 @@ public class VtMinepiaExporter extends AbstractReportInvoker
 
 			final List<VtMinepiaFileItemVo> fileItemVos = new ArrayList<VtMinepiaFileItemVo>();
 
-			if (CollectionUtils.isNotEmpty(fileItemList))
-			{
-				for (final FileItem fileItem : fileItemList)
-				{
+			if (CollectionUtils.isNotEmpty(fileItemList)) {
+				for (final FileItem fileItem : fileItemList) {
 					final VtMinepiaFileItemVo fileItemVo = new VtMinepiaFileItemVo();
 					fileItemVo.setCode(fileItem.getNsh() != null ? fileItem.getNsh().getGoodsItemCode() : null);
 					fileItemVo.setDesc(fileItem.getNsh() != null ? fileItem.getNsh().getGoodsItemDesc() : null);
@@ -139,8 +127,7 @@ public class VtMinepiaExporter extends AbstractReportInvoker
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getJRParameters()
 	 */
 	@Override
-	protected Map<String, Object> getJRParameters()
-	{
+	protected Map<String, Object> getJRParameters() {
 		final Map<String, Object> jRParameters = super.getJRParameters();
 		jRParameters.put("MINEPIA_LOGO", getRealPath(IMAGES_PATH, "minepia", "jpg"));
 		return jRParameters;
@@ -151,8 +138,7 @@ public class VtMinepiaExporter extends AbstractReportInvoker
 	 *
 	 * @return the file
 	 */
-	public File getFile()
-	{
+	public File getFile() {
 		return file;
 	}
 

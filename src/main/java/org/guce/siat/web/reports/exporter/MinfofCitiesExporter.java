@@ -21,29 +21,27 @@ import org.guce.siat.web.reports.vo.MinfofCitiesFileVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-
 /**
  * The Class MinfofCitiesExporter.
  */
-public class MinfofCitiesExporter extends AbstractReportInvoker
-{
+public class MinfofCitiesExporter extends AbstractReportInvoker {
 
-	/** The Constant LOG. */
+	/**
+	 * The Constant LOG.
+	 */
 	private static final Logger LOG = LoggerFactory.getLogger(MinfofCitiesExporter.class);
 
-	/** The file. */
+	/**
+	 * The file.
+	 */
 	private final File file;
-
 
 	/**
 	 * Instantiates a new minfof cities exporter.
 	 *
-	 * @param file
-	 *           the file
+	 * @param file the file
 	 */
-	public MinfofCitiesExporter(final File file)
-	{
+	public MinfofCitiesExporter(final File file) {
 		super("MINFOF_CITIES", "MINFOF_CITIES");
 		this.file = file;
 
@@ -55,10 +53,8 @@ public class MinfofCitiesExporter extends AbstractReportInvoker
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getReportDataSource()
 	 */
 	@Override
-	protected JRBeanCollectionDataSource getReportDataSource()
-	{
+	protected JRBeanCollectionDataSource getReportDataSource() {
 		final MinfofCitiesFileVo minfofCitiesFileVo = new MinfofCitiesFileVo();
-
 
 		minfofCitiesFileVo.setOperationType("");
 		minfofCitiesFileVo.setDecisionDate(file.getSignatureDate());
@@ -73,19 +69,14 @@ public class MinfofCitiesExporter extends AbstractReportInvoker
 		minfofCitiesFileVo.setExportApproach("exportApproach");
 		minfofCitiesFileVo.setExportationDate(Calendar.getInstance().getTime());
 
-
-		if ((file != null))
-		{
+		if ((file != null)) {
 
 			final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
 
-			if (CollectionUtils.isNotEmpty(fileFieldValueList))
-			{
-				for (final FileFieldValue fileFieldValue : fileFieldValueList)
-				{
+			if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
+				for (final FileFieldValue fileFieldValue : fileFieldValueList) {
 
-					switch (fileFieldValue.getFileField().getCode())
-					{
+					switch (fileFieldValue.getFileField().getCode()) {
 						case "INFORMATIONS_GENERALES_LIEU_CHARGEMENT_LIBELLE":
 							minfofCitiesFileVo.setExportationPort(fileFieldValue.getValue());
 							break;
@@ -110,8 +101,7 @@ public class MinfofCitiesExporter extends AbstractReportInvoker
 							break;
 
 						case "INFORMATIONS_GENERALES_DESTINATAIRE_ADRESSE_ADRESSE2":
-							if (StringUtils.isNotBlank(fileFieldValue.getValue()))
-							{
+							if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
 								final String receiverAddress1 = minfofCitiesFileVo.getReceiverAdress();
 								minfofCitiesFileVo.setReceiverAdress(receiverAddress1 + "/" + "Address 2/Address2:"
 										+ fileFieldValue.getValue());
@@ -123,15 +113,11 @@ public class MinfofCitiesExporter extends AbstractReportInvoker
 							break;
 
 						case "INFORMATIONS_GENERALES_PERMIS_DATE":
-							if (StringUtils.isNotBlank(fileFieldValue.getValue()))
-							{
-								try
-								{
+							if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
+								try {
 									minfofCitiesFileVo.setLicenseDate(new SimpleDateFormat("dd/MM/yyyy").parse(fileFieldValue.getValue()));
-								}
-								catch (final ParseException e)
-								{
-									LOG.error(Objects.toString(e));
+								} catch (final ParseException e) {
+									LOG.error(Objects.toString(e), e);
 								}
 
 							}
@@ -147,15 +133,12 @@ public class MinfofCitiesExporter extends AbstractReportInvoker
 				}
 			}
 
-
 			final List<FileItem> fileItemList = file.getFileItemsList();
 
 			final List<MinfofCitiesFileItemVo> fileItemVos = new ArrayList<MinfofCitiesFileItemVo>();
 
-			if (CollectionUtils.isNotEmpty(fileItemList))
-			{
-				for (final FileItem fileItem : fileItemList)
-				{
+			if (CollectionUtils.isNotEmpty(fileItemList)) {
+				for (final FileItem fileItem : fileItemList) {
 					final MinfofCitiesFileItemVo fileItemVo = new MinfofCitiesFileItemVo();
 
 					final Calendar calendarThree = Calendar.getInstance();
@@ -177,13 +160,10 @@ public class MinfofCitiesExporter extends AbstractReportInvoker
 					fileItemVo.setQuantity(Double.parseDouble(fileItem.getQuantity()));
 					fileItemVo.setIdentificationNumber(fileItem.getNsh() != null ? fileItem.getNsh().getGoodsItemDesc() : null);
 
-					if (CollectionUtils.isNotEmpty(fileItemFieldValueList))
-					{
-						for (final FileItemFieldValue fileItemFieldValue : fileItemFieldValueList)
-						{
+					if (CollectionUtils.isNotEmpty(fileItemFieldValueList)) {
+						for (final FileItemFieldValue fileItemFieldValue : fileItemFieldValueList) {
 
-							switch (fileItemFieldValue.getFileItemField().getCode())
-							{
+							switch (fileItemFieldValue.getFileItemField().getCode()) {
 								case "NOM_COMMERCIAL":
 									fileItemVo.setCommonName(fileItemFieldValue.getValue());
 									break;
@@ -223,8 +203,7 @@ public class MinfofCitiesExporter extends AbstractReportInvoker
 	 *
 	 * @return the file
 	 */
-	public File getFile()
-	{
+	public File getFile() {
 		return file;
 	}
 

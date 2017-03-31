@@ -25,28 +25,27 @@ import org.guce.siat.web.reports.vo.EhMinaderFileVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-
 /**
  * The Class EhMinaderExporter.
  */
-public class EhMinaderExporter extends AbstractReportInvoker
-{
+public class EhMinaderExporter extends AbstractReportInvoker {
 
-	/** The Constant LOG. */
+	/**
+	 * The Constant LOG.
+	 */
 	private static final Logger LOG = LoggerFactory.getLogger(EhMinaderExporter.class);
 
-	/** The file. */
+	/**
+	 * The file.
+	 */
 	private final File file;
 
 	/**
 	 * Instantiates a new eh minader exporter.
 	 *
-	 * @param file
-	 *           the file
+	 * @param file the file
 	 */
-	public EhMinaderExporter(final File file)
-	{
+	public EhMinaderExporter(final File file) {
 		super("EH_MINADER", "EH_MINADER");
 		this.file = file;
 	}
@@ -57,15 +56,13 @@ public class EhMinaderExporter extends AbstractReportInvoker
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getReportDataSource()
 	 */
 	@Override
-	public JRBeanCollectionDataSource getReportDataSource()
-	{
+	public JRBeanCollectionDataSource getReportDataSource() {
 		final SimpleDateFormat formatter = new SimpleDateFormat(DateUtils.PATTERN_DDMMYYYY);
 		final EhMinaderFileVo ehMinaderFileVo = new EhMinaderFileVo();
 
 		final List<EhMinaderFileItemVo> fileItemVos = new ArrayList<EhMinaderFileItemVo>();
 
-		if ((file != null) && (file.getClient() != null))
-		{
+		if ((file != null) && (file.getClient() != null)) {
 			final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
 
 			ehMinaderFileVo.setSessionDate(file.getSignatureDate());
@@ -73,63 +70,51 @@ public class EhMinaderExporter extends AbstractReportInvoker
 			ehMinaderFileVo.setDecisionPlace(file.getAssignedUser().getAdministration().getLabelFr());
 			ehMinaderFileVo.setReferenceNumber(file.getClient().getCommerceApprovalRegistrationNumberFile());
 
-			try
-			{
-				if (file.getClient().getCommerceApprovalObtainedDate() != null)
-				{
+			try {
+				if (file.getClient().getCommerceApprovalObtainedDate() != null) {
 					final Date convertedDate = formatter.parse(file.getClient().getCommerceApprovalObtainedDate());
 					ehMinaderFileVo.setReferenceDate(convertedDate);
 				}
-			}
-			catch (final ParseException e)
-			{
-				LOG.error(Objects.toString(e));
+			} catch (final ParseException e) {
+				LOG.error(Objects.toString(e), e);
 			}
 
-			if (CollectionUtils.isNotEmpty(fileFieldValueList))
-			{
-				for (final FileFieldValue fileFieldValue : fileFieldValueList)
-				{
+			if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
+				for (final FileFieldValue fileFieldValue : fileFieldValueList) {
 
-					switch (fileFieldValue.getFileField().getCode())
-					{
+					switch (fileFieldValue.getFileField().getCode()) {
 						case "NUMERO_EH_MINADER":
 							ehMinaderFileVo.setDecisionNumber(fileFieldValue.getValue());
 							break;
 						case "REPRESENTANT_CAMEROUN_RAISONSOCIALE":
-							if (StringUtils.isNotBlank(fileFieldValue.getValue()))
-							{
+							if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
 								ehMinaderFileVo.setRepresentativeCameroon(fileFieldValue.getValue());
 							}
 							break;
 
 						case "FABRICANT_MATIERE_ACTIVE_RAISONSOCIALE":
-							if (StringUtils.isNotBlank(fileFieldValue.getValue()))
-							{
+							if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
 								ehMinaderFileVo.setMaterialManufacturer(fileFieldValue.getValue());
 							}
 
 							break;
 
 						case "PROMOTEUR_RAISONSOCIALE":
-							if (StringUtils.isNotBlank(fileFieldValue.getValue()))
-							{
+							if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
 								ehMinaderFileVo.setPropertyDeveloper(fileFieldValue.getValue());
 							}
 
 							break;
 
 						case "FORMULATEUR_RAISONSOCIALE":
-							if (StringUtils.isNotBlank(fileFieldValue.getValue()))
-							{
+							if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
 								ehMinaderFileVo.setFormulator(fileFieldValue.getValue());
 							}
 
 							break;
 
 						case "NUMERO_EH":
-							if (StringUtils.isNotBlank(fileFieldValue.getValue()))
-							{
+							if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
 								ehMinaderFileVo.setHomologationNumber(fileFieldValue.getValue());
 							}
 
@@ -139,32 +124,25 @@ public class EhMinaderExporter extends AbstractReportInvoker
 							break;
 					}
 
-					if (StringUtils.isNotBlank(file.getClient().getCompanyName()))
-					{
+					if (StringUtils.isNotBlank(file.getClient().getCompanyName())) {
 						ehMinaderFileVo.setCompany(file.getClient().getCompanyName());
 					}
-					if (StringUtils.isNotBlank(file.getClient().getFullAddress()))
-					{
+					if (StringUtils.isNotBlank(file.getClient().getFullAddress())) {
 						ehMinaderFileVo.setCompanyAddress(file.getClient().getFullAddress());
 					}
 				}
 
 				final List<FileItem> fileItemList = file.getFileItemsList();
 
-				if (CollectionUtils.isNotEmpty(fileItemList))
-				{
-					for (final FileItem fileItem : fileItemList)
-					{
+				if (CollectionUtils.isNotEmpty(fileItemList)) {
+					for (final FileItem fileItem : fileItemList) {
 						final EhMinaderFileItemVo fileItemVo = new EhMinaderFileItemVo();
 
 						final List<FileItemFieldValue> fileItemFieldValueList = fileItem.getFileItemFieldValueList();
 
-						if (CollectionUtils.isNotEmpty(fileItemFieldValueList))
-						{
-							for (final FileItemFieldValue fileItemFieldValue : fileItemFieldValueList)
-							{
-								switch (fileItemFieldValue.getFileItemField().getCode())
-								{
+						if (CollectionUtils.isNotEmpty(fileItemFieldValueList)) {
+							for (final FileItemFieldValue fileItemFieldValue : fileItemFieldValueList) {
+								switch (fileItemFieldValue.getFileItemField().getCode()) {
 									case "NOM_COMMERCIAL":
 										fileItemVo.setProductTradeName(fileItemFieldValue.getValue());
 										break;
@@ -226,8 +204,7 @@ public class EhMinaderExporter extends AbstractReportInvoker
 	 *
 	 * @return the file
 	 */
-	public File getFile()
-	{
+	public File getFile() {
 		return file;
 	}
 }

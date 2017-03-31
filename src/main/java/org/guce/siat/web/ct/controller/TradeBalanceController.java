@@ -49,81 +49,108 @@ import org.primefaces.model.StreamedContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-
-
 /**
  * The Class TradeBalanceConfigController.
  */
 @ManagedBean(name = "tradeBalanceController")
 @SessionScoped
-public class TradeBalanceController implements Serializable
-{
+public class TradeBalanceController implements Serializable {
 
-
-	/** The Constant serialVersionUID. */
+	/**
+	 * The Constant serialVersionUID.
+	 */
 	private static final long serialVersionUID = 1L;
 
-	/** The Constant LOG. */
+	/**
+	 * The Constant LOG.
+	 */
 	private static final Logger LOG = LoggerFactory.getLogger(TradeBalanceController.class);
-	/** The page url. */
+	/**
+	 * The page url.
+	 */
 	private String pageUrl;
 
-	/** The Constant PERSISTENCE_ERROR_OCCURED. */
+	/**
+	 * The Constant PERSISTENCE_ERROR_OCCURED.
+	 */
 	protected static final String PERSISTENCE_ERROR_OCCURED = "PersistenceErrorOccured";
-	/** The Constant LOCAL_BUNDLE_NAME. */
+	/**
+	 * The Constant LOCAL_BUNDLE_NAME.
+	 */
 	protected static final String LOCAL_BUNDLE_NAME = "org.guce.siat.messages.locale";
 
-	/** The start year. */
+	/**
+	 * The start year.
+	 */
 	private Integer startYear;
 
-	/** The end year. */
+	/**
+	 * The end year.
+	 */
 	private Integer endYear;
 
-	/** The type trade. */
+	/**
+	 * The type trade.
+	 */
 	private String typeTrade;
 
-	/** The years. */
+	/**
+	 * The years.
+	 */
 	private List<Integer> years = new ArrayList<Integer>();
 
-	/** The trade balance configs. */
+	/**
+	 * The trade balance configs.
+	 */
 	private List<TradeBalanceConfig> tradeBalanceConfigs = new ArrayList<TradeBalanceConfig>();
 
-	/** The trade balance configs import. */
+	/**
+	 * The trade balance configs import.
+	 */
 	private List<TradeBalanceConfig> tradeBalanceConfigsImport = new ArrayList<TradeBalanceConfig>();
 
-	/** The country dtos. */
+	/**
+	 * The country dtos.
+	 */
 	private List<TradeCountryDto> countryDtos = new ArrayList<TradeCountryDto>();
 
-	/** The table. */
+	/**
+	 * The table.
+	 */
 	private Boolean table;
 
-	/** The file. */
+	/**
+	 * The file.
+	 */
 	private StreamedContent file;
 
-	/** The country. */
+	/**
+	 * The country.
+	 */
 	private List<Country> countrys = new ArrayList<Country>();
 
-	/** The total orientation. */
+	/**
+	 * The total orientation.
+	 */
 	private List<String> totalOrientation;
 
-	/** The active index. */
+	/**
+	 * The active index.
+	 */
 	private Integer activeIndex;
 
-	/** The trade balance config service. */
+	/**
+	 * The trade balance config service.
+	 */
 	@ManagedProperty(value = "#{tradeBalanceConfigService}")
 	private TradeBalanceConfigService tradeBalanceConfigService;
-
-
-
 
 	/**
 	 * Gets the file.
 	 *
 	 * @return the file
 	 */
-	public StreamedContent getFile()
-	{
+	public StreamedContent getFile() {
 
 		file = new DefaultStreamedContent(export(), "application/xls", findMsg("balance_sheet_balance") + type
 				+ dates.get(dates.size() - 1) + ".xls");
@@ -135,8 +162,7 @@ public class TradeBalanceController implements Serializable
 	 *
 	 * @return the byte array input stream
 	 */
-	private ByteArrayInputStream export()
-	{
+	private ByteArrayInputStream export() {
 		ByteArrayOutputStream outputStream = null;
 		outputStream = new ByteArrayOutputStream();
 		final HSSFWorkbook wb = new HSSFWorkbook();
@@ -144,7 +170,6 @@ public class TradeBalanceController implements Serializable
 		final HSSFSheet sheet1 = wb.createSheet("Export");//feuille 2
 		final HSSFSheet sheet3 = wb.createSheet("Import");//feuille 3
 		final HSSFSheet sheet4 = wb.createSheet(findMsg("balance_sheet_orientation"));//feuille 4
-
 
 		HSSFCellStyle cellStyle = null;
 		cellStyle = wb.createCellStyle();
@@ -165,7 +190,9 @@ public class TradeBalanceController implements Serializable
 		cellStyle6 = wb.createCellStyle();
 		//
 		cellStyle6.setFillPattern(HSSFCellStyle.BORDER_HAIR);
-		/**** style ***/
+		/**
+		 * ** style **
+		 */
 		cellStyle2.setBorderBottom(HSSFBorderFormatting.BORDER_DOTTED);
 		cellStyle2.setBorderLeft(HSSFBorderFormatting.BORDER_DOTTED);
 		cellStyle2.setBorderRight(HSSFBorderFormatting.BORDER_DOTTED);
@@ -185,7 +212,9 @@ public class TradeBalanceController implements Serializable
 		cellStyle6.setBorderLeft(HSSFBorderFormatting.BORDER_DOTTED);
 		cellStyle6.setBorderRight(HSSFBorderFormatting.BORDER_DOTTED);
 		cellStyle6.setBorderTop(HSSFBorderFormatting.BORDER_DOTTED);
-		/****************************************/
+		/**
+		 * *************************************
+		 */
 		final HSSFFont fonte = wb.createFont();
 		fonte.setFontHeightInPoints((short) 16);
 		fonte.setFontName("Algerian");
@@ -209,7 +238,6 @@ public class TradeBalanceController implements Serializable
 		font3.setFontName("Comic Sans MS");
 		cellStyle4.setFont(font3);
 
-
 		final HSSFFont font4 = wb.createFont();
 		font4.setFontHeightInPoints((short) 10);
 		font4.setFontName("Arial");
@@ -220,10 +248,11 @@ public class TradeBalanceController implements Serializable
 		 * Font 2
 		 */
 
-
 		HSSFRow row = sheet.createRow(0);
 		HSSFCell cell = null;
-		/*** Feuille 1 entete ****/
+		/**
+		 * * Feuille 1 entete ***
+		 */
 		cell = row.createCell(0);
 		cell.setCellValue(findMsg("table_balance_evolution") + "( " + type + ")");
 		cell.setCellStyle(cellStyle);
@@ -235,7 +264,9 @@ public class TradeBalanceController implements Serializable
 		cell.setCellStyle(cellStyle1);
 		sheet.addMergedRegion(new CellRangeAddress(2, 2, 0, 3));
 
-		/*** Feuille 2 entete ****/
+		/**
+		 * * Feuille 2 entete ***
+		 */
 		row = sheet1.createRow(0);
 		cell = row.createCell(0);
 		cell.setCellValue(findMsg("table_balance_export") + " ( " + type + ")");
@@ -248,7 +279,9 @@ public class TradeBalanceController implements Serializable
 		cell.setCellStyle(cellStyle1);
 		sheet1.addMergedRegion(new CellRangeAddress(2, 2, 0, 3));
 
-		/*** Feuille 3 entete ****/
+		/**
+		 * * Feuille 3 entete ***
+		 */
 		row = sheet3.createRow(0);
 		cell = row.createCell(0);
 		cell.setCellValue(findMsg("table_balance_import") + "( " + type + ")");
@@ -260,7 +293,9 @@ public class TradeBalanceController implements Serializable
 		cell.setCellValue(findMsg("balance_sheet_qv"));
 		cell.setCellStyle(cellStyle1);
 		sheet3.addMergedRegion(new CellRangeAddress(2, 2, 0, 3));
-		/*** Feuille 4 entete ****/
+		/**
+		 * * Feuille 4 entete ***
+		 */
 		row = sheet4.createRow(0);
 		cell = row.createCell(0);
 		cell.setCellValue(findMsg("table_balance_geo") + "( " + type + ")");
@@ -271,16 +306,19 @@ public class TradeBalanceController implements Serializable
 		cell.setCellValue(findMsg("balance_sheet_v"));
 		cell.setCellStyle(cellStyle1);
 		sheet4.addMergedRegion(new CellRangeAddress(2, 2, 0, 3));
-		/************* Contenue feuille 1 ******/
-		/** période ***/
+		/**
+		 * *********** Contenue feuille 1 *****
+		 */
+		/**
+		 * période **
+		 */
 		row = sheet.createRow(3);
 		cell = row.createCell(0);
 		sheet.setColumnWidth(0, 7000);
 		cell.setCellValue(findMsg("balance_periode"));
 		cell.setCellStyle(cellStyle2);
 		int j = 0;
-		for (int i = 1; i < details.size(); i = i + 2)
-		{
+		for (int i = 1; i < details.size(); i = i + 2) {
 			cell = row.createCell(i);
 			cell.setCellValue(year.get(j));
 			sheet.addMergedRegion(new CellRangeAddress(3, 3, i, i + 1));
@@ -288,14 +326,15 @@ public class TradeBalanceController implements Serializable
 			j++;
 		}
 
-		/** Libéllés ***/
+		/**
+		 * Libéllés **
+		 */
 		row = sheet.createRow(4);
 		cell = row.createCell(0);
 		cell.setCellValue(findMsg("balance_label"));
 		cell.setCellStyle(cellStyle2);
 
-		for (int i = 1; i < details.size(); i = i + 2)
-		{
+		for (int i = 1; i < details.size(); i = i + 2) {
 			cell = row.createCell(i);
 			cell.setCellValue("Q");
 			cell.setCellStyle(cellStyle2);
@@ -305,132 +344,144 @@ public class TradeBalanceController implements Serializable
 		}
 
 		//
-		/** Exportations ***/
+		/**
+		 * Exportations **
+		 */
 		row = sheet.createRow(5);
 		cell = row.createCell(0);
 		cell.setCellValue(getCurrentLocale().getLanguage().equals("fr") ? colHeaders.get(0).getLabelFr() : colHeaders.get(0)
 				.getLabelEn());
 		cell.setCellStyle(cellStyle3);
-		for (int i = 1; i <= colHeaders.get(0).getData().size(); i++)
-		{
+		for (int i = 1; i <= colHeaders.get(0).getData().size(); i++) {
 			cell = row.createCell(i);
 			cell.setCellValue(colHeaders.get(0).getData().get(i - 1));
 			cell.setCellStyle(cellStyle3);
 		}
-		/** Pétole brut ***/
+		/**
+		 * Pétole brut **
+		 */
 		row = sheet.createRow(6);
 		cell = row.createCell(0);
 		cell.setCellValue(getCurrentLocale().getLanguage().equals("fr") ? colHeaders.get(1).getLabelFr() : colHeaders.get(1)
 				.getLabelEn());
 		cell.setCellStyle(cellStyle4);
-		for (int i = 1; i <= colHeaders.get(1).getData().size(); i++)
-		{
+		for (int i = 1; i <= colHeaders.get(1).getData().size(); i++) {
 			cell = row.createCell(i);
 			cell.setCellValue(colHeaders.get(1).getData().get(i - 1));
 			cell.setCellStyle(cellStyle4);
 		}
-		/** Exportations hors pétrole ***/
+		/**
+		 * Exportations hors pétrole **
+		 */
 		row = sheet.createRow(7);
 		cell = row.createCell(0);
 		cell.setCellValue(getCurrentLocale().getLanguage().equals("fr") ? colHeaders.get(2).getLabelFr() : colHeaders.get(2)
 				.getLabelEn());
 		cell.setCellStyle(cellStyle4);
-		for (int i = 1; i <= colHeaders.get(2).getData().size(); i++)
-		{
+		for (int i = 1; i <= colHeaders.get(2).getData().size(); i++) {
 			cell = row.createCell(i);
 			cell.setCellValue(colHeaders.get(2).getData().get(i - 1));
 			cell.setCellStyle(cellStyle4);
 		}
-		/** Exportations hors Hydrocarbures ***/
+		/**
+		 * Exportations hors Hydrocarbures **
+		 */
 		row = sheet.createRow(8);
 		cell = row.createCell(0);
 		cell.setCellValue(getCurrentLocale().getLanguage().equals("fr") ? colHeaders.get(3).getLabelFr() : colHeaders.get(3)
 				.getLabelEn());
 		cell.setCellStyle(cellStyle4);
-		for (int i = 1; i <= colHeaders.get(3).getData().size(); i++)
-		{
+		for (int i = 1; i <= colHeaders.get(3).getData().size(); i++) {
 			cell = row.createCell(i);
 			cell.setCellValue(colHeaders.get(3).getData().get(i - 1));
 			cell.setCellStyle(cellStyle4);
 		}
 
-		/** Importations ***/
+		/**
+		 * Importations **
+		 */
 		row = sheet.createRow(9);
 		cell = row.createCell(0);
 		cell.setCellValue(getCurrentLocale().getLanguage().equals("fr") ? colHeaders.get(4).getLabelFr() : colHeaders.get(4)
 				.getLabelEn());
 		cell.setCellStyle(cellStyle3);
-		for (int i = 1; i <= colHeaders.get(4).getData().size(); i++)
-		{
+		for (int i = 1; i <= colHeaders.get(4).getData().size(); i++) {
 			cell = row.createCell(i);
 			cell.setCellValue(colHeaders.get(4).getData().get(i - 1));
 			cell.setCellStyle(cellStyle3);
 		}
-		/** Pétole brut ***/
+		/**
+		 * Pétole brut **
+		 */
 		row = sheet.createRow(10);
 		cell = row.createCell(0);
 		cell.setCellValue(getCurrentLocale().getLanguage().equals("fr") ? colHeaders.get(5).getLabelFr() : colHeaders.get(5)
 				.getLabelEn());
 		cell.setCellStyle(cellStyle4);
-		for (int i = 1; i <= colHeaders.get(5).getData().size(); i++)
-		{
+		for (int i = 1; i <= colHeaders.get(5).getData().size(); i++) {
 			cell = row.createCell(i);
 			cell.setCellValue(colHeaders.get(5).getData().get(i - 1));
 			cell.setCellStyle(cellStyle4);
 		}
 
-		/** Importations hors pétrole ***/
+		/**
+		 * Importations hors pétrole **
+		 */
 		row = sheet.createRow(11);
 		cell = row.createCell(0);
 		cell.setCellValue(getCurrentLocale().getLanguage().equals("fr") ? colHeaders.get(6).getLabelFr() : colHeaders.get(6)
 				.getLabelEn());
 		cell.setCellStyle(cellStyle4);
-		for (int i = 1; i <= colHeaders.get(6).getData().size(); i++)
-		{
+		for (int i = 1; i <= colHeaders.get(6).getData().size(); i++) {
 			cell = row.createCell(i);
 			cell.setCellValue(colHeaders.get(6).getData().get(i - 1));
 			cell.setCellStyle(cellStyle4);
 		}
 
-		/** Importations hors Hydrocarbures ***/
+		/**
+		 * Importations hors Hydrocarbures **
+		 */
 		row = sheet.createRow(12);
 		cell = row.createCell(0);
 		cell.setCellValue(getCurrentLocale().getLanguage().equals("fr") ? colHeaders.get(7).getLabelFr() : colHeaders.get(7)
 				.getLabelEn());
 		cell.setCellStyle(cellStyle4);
-		for (int i = 1; i <= colHeaders.get(7).getData().size(); i++)
-		{
+		for (int i = 1; i <= colHeaders.get(7).getData().size(); i++) {
 			cell = row.createCell(i);
 			cell.setCellValue(colHeaders.get(7).getData().get(i - 1));
 			cell.setCellStyle(cellStyle4);
 		}
 
-		/** Balance commerciale ***/
+		/**
+		 * Balance commerciale **
+		 */
 		row = sheet.createRow(13);
 		cell = row.createCell(0);
 		cell.setCellValue(getCurrentLocale().getLanguage().equals("fr") ? colHeaders.get(8).getLabelFr() : colHeaders.get(8)
 				.getLabelEn());
 		cell.setCellStyle(cellStyle3);
-		for (int i = 1; i <= colHeaders.get(8).getData().size(); i++)
-		{
+		for (int i = 1; i <= colHeaders.get(8).getData().size(); i++) {
 			cell = row.createCell(i);
 			cell.setCellValue(colHeaders.get(8).getData().get(i - 1));
 			cell.setCellStyle(cellStyle3);
 		}
-		/** Bal.com.hors pétrole ***/
+		/**
+		 * Bal.com.hors pétrole **
+		 */
 		row = sheet.createRow(14);
 		cell = row.createCell(0);
 		cell.setCellValue(getCurrentLocale().getLanguage().equals("fr") ? colHeaders.get(9).getLabelFr() : colHeaders.get(9)
 				.getLabelEn());
 		cell.setCellStyle(cellStyle4);
-		for (int i = 1; i <= colHeaders.get(9).getData().size(); i++)
-		{
+		for (int i = 1; i <= colHeaders.get(9).getData().size(); i++) {
 			cell = row.createCell(i);
 			cell.setCellValue(colHeaders.get(9).getData().get(i - 1));
 			cell.setCellStyle(cellStyle4);
 		}
 
-		/** Bal.com.horsHydrocarbures ***/
+		/**
+		 * Bal.com.horsHydrocarbures **
+		 */
 		row = sheet.createRow(15);
 		cell = row.createCell(0);
 
@@ -438,53 +489,59 @@ public class TradeBalanceController implements Serializable
 				.getLabelEn());
 
 		cell.setCellStyle(cellStyle4);
-		for (int i = 1; i <= colHeaders.get(10).getData().size(); i++)
-		{
+		for (int i = 1; i <= colHeaders.get(10).getData().size(); i++) {
 			cell = row.createCell(i);
 			cell.setCellValue(colHeaders.get(10).getData().get(i - 1));
 			cell.setCellStyle(cellStyle4);
 		}
 
-		/** Taux de couverture en % ***/
+		/**
+		 * Taux de couverture en % **
+		 */
 		row = sheet.createRow(16);
 		cell = row.createCell(0);
 		cell.setCellValue(getCurrentLocale().getLanguage().equals("fr") ? colHeaders.get(11).getLabelFr() : colHeaders.get(11)
 				.getLabelEn());
 		cell.setCellStyle(cellStyle3);
-		for (int i = 1; i <= colHeaders.get(11).getData().size(); i++)
-		{
+		for (int i = 1; i <= colHeaders.get(11).getData().size(); i++) {
 			cell = row.createCell(i);
 			cell.setCellValue(colHeaders.get(11).getData().get(i - 1));
 			cell.setCellStyle(cellStyle3);
 		}
-		/** Tx de couv.hors pétrole en % ***/
+		/**
+		 * Tx de couv.hors pétrole en % **
+		 */
 		row = sheet.createRow(17);
 		cell = row.createCell(0);
 		cell.setCellValue(getCurrentLocale().getLanguage().equals("fr") ? colHeaders.get(12).getLabelFr() : colHeaders.get(12)
 				.getLabelEn());
 		cell.setCellStyle(cellStyle4);
-		for (int i = 1; i <= colHeaders.get(12).getData().size(); i++)
-		{
+		for (int i = 1; i <= colHeaders.get(12).getData().size(); i++) {
 			cell = row.createCell(i);
 			cell.setCellValue(colHeaders.get(12).getData().get(i - 1));
 			cell.setCellStyle(cellStyle4);
 		}
 
-		/** * Données provisoires % ***/
+		/**
+		 * * Données provisoires % **
+		 */
 		row = sheet.createRow(19);
 		cell = row.createCell(0);
 		cell.setCellValue(findMsg("balance_data"));
 		cell.setCellStyle(cellStyle5);
-		/********* contenue feuille 2 ************************/
-		/** période ***/
+		/**
+		 * ******* contenue feuille 2 ***********************
+		 */
+		/**
+		 * période **
+		 */
 		row = sheet1.createRow(3);
 		cell = row.createCell(1);
 		sheet1.setColumnWidth(1, 7000);
 		cell.setCellValue(findMsg("balance_periode"));
 		cell.setCellStyle(cellStyle2);
 		j = 2;
-		for (int i = 0; i < year.size(); i++)
-		{
+		for (int i = 0; i < year.size(); i++) {
 			cell = row.createCell(j);
 			cell.setCellValue(year.get(i));
 			//sheet1.addMergedRegion(new CellRangeAddress(3, 3, j, j + 2));
@@ -495,22 +552,23 @@ public class TradeBalanceController implements Serializable
 
 		cell.setCellValue("Part");
 		cell.setCellStyle(cellStyle2);
-		/** Code libile ***/
+		/**
+		 * Code libile **
+		 */
 		row = sheet1.createRow(4);
 		cell = row.createCell(0);
 		cell.setCellValue(findMsg("balance_products"));
 		cell.setCellStyle(cellStyle2);
 		sheet1.setColumnWidth(0, 4000);
 
-
-		/** Libéllés ***/
-
+		/**
+		 * Libéllés **
+		 */
 		cell = row.createCell(1);
 		cell.setCellValue(findMsg("balance_label"));
 		cell.setCellStyle(cellStyle2);
 
-		for (int i = 2; i <= details.size(); i = i + 2)
-		{
+		for (int i = 2; i <= details.size(); i = i + 2) {
 			cell = row.createCell(i);
 			cell.setCellValue("Q");
 			cell.setCellStyle(cellStyle2);
@@ -522,10 +580,11 @@ public class TradeBalanceController implements Serializable
 		cell = row.createCell(details.size() + 2);
 		cell.setCellValue("V");
 		cell.setCellStyle(cellStyle2);
-		/******* code *****/
+		/**
+		 * ***** code ****
+		 */
 
-		for (int i = 0; i < donnes.size(); i++)
-		{
+		for (int i = 0; i < donnes.size(); i++) {
 			row = sheet1.createRow(5 + i);
 			cell = row.createCell(0);
 			cell.setCellValue(donnes.get(i).getBalanceConfig().getCode());
@@ -533,8 +592,7 @@ public class TradeBalanceController implements Serializable
 			cell = row.createCell(1);
 			cell.setCellValue(donnes.get(i).getBalanceConfig().getLabel());
 			cell.setCellStyle(cellStyle4);
-			for (j = 0; j < donnes.get(i).getData().size(); j++)
-			{
+			for (j = 0; j < donnes.get(i).getData().size(); j++) {
 				cell = row.createCell(2 + j);
 				cell.setCellValue(donnes.get(i).getData().get(j));
 				cell.setCellStyle(cellStyle4);
@@ -544,28 +602,30 @@ public class TradeBalanceController implements Serializable
 			cell.setCellValue(donnes.get(i).getPart());
 			cell.setCellStyle(cellStyle4);
 		}
-		/****** Total des principaux produit *****/
+		/**
+		 * **** Total des principaux produit ****
+		 */
 		row = sheet1.createRow(donnes.size() + 5);
 		cell = row.createCell(0);
 		cell.setCellValue(findMsg("balance_total_product"));
 		sheet1.addMergedRegion(new CellRangeAddress(donnes.size() + 5, donnes.size() + 5, 0, 1));
 		cell.setCellStyle(cellStyle6);
 
-		for (int i = 0; i < total.size(); i++)
-		{
+		for (int i = 0; i < total.size(); i++) {
 			cell = row.createCell(i + 2);
 			cell.setCellValue(total.get(i));
 			cell.setCellStyle(cellStyle6);
 		}
-		/****** Total des principaux produit *****/
+		/**
+		 * **** Total des principaux produit ****
+		 */
 		row = sheet1.createRow(donnes.size() + 6);
 		cell = row.createCell(0);
 		cell.setCellValue(findMsg("balance_total_export"));
 		sheet1.addMergedRegion(new CellRangeAddress(donnes.size() + 6, donnes.size() + 6, 0, 1));
 		cell.setCellStyle(cellStyle3);
 
-		for (int i = 0; i < totalExportation.size(); i++)
-		{
+		for (int i = 0; i < totalExportation.size(); i++) {
 			cell = row.createCell(i + 2);
 			cell.setCellValue(totalExportation.get(i));
 			cell.setCellStyle(cellStyle3);
@@ -573,28 +633,35 @@ public class TradeBalanceController implements Serializable
 		cell = row.createCell(details.size() + 2);
 		cell.setCellValue("100%");
 		cell.setCellStyle(cellStyle3);
-		/***** légende ***/
+		/**
+		 * *** légende **
+		 */
 		row = sheet1.createRow(donnes.size() + 7);
 		cell = row.createCell(0);
 		cell.setCellValue(findMsg("balance_sheet_legend"));
 		sheet1.addMergedRegion(new CellRangeAddress(donnes.size() + 7, donnes.size() + 7, 0, 10));
 		cell.setCellStyle(cellStyle4);
 
-		/** * Données provisoires % ***/
+		/**
+		 * * Données provisoires % **
+		 */
 		row = sheet1.createRow(donnes.size() + 9);
 		cell = row.createCell(0);
 		cell.setCellValue(findMsg("balance_data"));
 		cell.setCellStyle(cellStyle5);
-		/********* contenue feuille 3 ************************/
-		/** période ***/
+		/**
+		 * ******* contenue feuille 3 ***********************
+		 */
+		/**
+		 * période **
+		 */
 		row = sheet3.createRow(3);
 		cell = row.createCell(1);
 		sheet3.setColumnWidth(1, 7000);
 		cell.setCellValue(findMsg("balance_periode"));
 		cell.setCellStyle(cellStyle2);
 		j = 2;
-		for (int i = 0; i < year.size(); i++)
-		{
+		for (int i = 0; i < year.size(); i++) {
 			cell = row.createCell(j);
 			cell.setCellValue(year.get(i));
 			//sheet3.addMergedRegion(new CellRangeAddress(3, 3, j, j + 2));
@@ -605,22 +672,23 @@ public class TradeBalanceController implements Serializable
 
 		cell.setCellValue("Part");
 		cell.setCellStyle(cellStyle2);
-		/** Code libile ***/
+		/**
+		 * Code libile **
+		 */
 		row = sheet3.createRow(4);
 		cell = row.createCell(0);
 		cell.setCellValue(findMsg("balance_products"));
 		cell.setCellStyle(cellStyle2);
 		sheet3.setColumnWidth(0, 4000);
 
-
-		/** Libéllés ***/
-
+		/**
+		 * Libéllés **
+		 */
 		cell = row.createCell(1);
 		cell.setCellValue(findMsg("balance_label"));
 		cell.setCellStyle(cellStyle2);
 
-		for (int i = 2; i <= details.size(); i = i + 2)
-		{
+		for (int i = 2; i <= details.size(); i = i + 2) {
 			cell = row.createCell(i);
 			cell.setCellValue("Q");
 			cell.setCellStyle(cellStyle2);
@@ -632,10 +700,11 @@ public class TradeBalanceController implements Serializable
 		cell = row.createCell(details.size() + 2);
 		cell.setCellValue("V");
 		cell.setCellStyle(cellStyle2);
-		/******* code *****/
+		/**
+		 * ***** code ****
+		 */
 
-		for (int i = 0; i < donnesImport.size(); i++)
-		{
+		for (int i = 0; i < donnesImport.size(); i++) {
 			row = sheet3.createRow(5 + i);
 			cell = row.createCell(0);
 			cell.setCellValue(donnesImport.get(i).getBalanceConfig().getCode());
@@ -643,8 +712,7 @@ public class TradeBalanceController implements Serializable
 			cell = row.createCell(1);
 			cell.setCellValue(donnesImport.get(i).getBalanceConfig().getLabel());
 			cell.setCellStyle(cellStyle4);
-			for (j = 0; j < donnesImport.get(i).getData().size(); j++)
-			{
+			for (j = 0; j < donnesImport.get(i).getData().size(); j++) {
 				cell = row.createCell(2 + j);
 				cell.setCellValue(donnesImport.get(i).getData().get(j));
 				cell.setCellStyle(cellStyle4);
@@ -655,15 +723,16 @@ public class TradeBalanceController implements Serializable
 			cell.setCellStyle(cellStyle4);
 		}
 
-		/****** Total des principaux produit *****/
+		/**
+		 * **** Total des principaux produit ****
+		 */
 		row = sheet3.createRow(donnes.size() + 6);
 		cell = row.createCell(0);
 		cell.setCellValue(findMsg("balance_total_import"));
 		sheet3.addMergedRegion(new CellRangeAddress(donnesImport.size() + 6, donnesImport.size() + 6, 0, 1));
 		cell.setCellStyle(cellStyle3);
 
-		for (int i = 0; i < totalImportation.size(); i++)
-		{
+		for (int i = 0; i < totalImportation.size(); i++) {
 			cell = row.createCell(i + 2);
 			cell.setCellValue(totalImportation.get(i));
 			cell.setCellStyle(cellStyle3);
@@ -671,28 +740,35 @@ public class TradeBalanceController implements Serializable
 		cell = row.createCell(details.size() + 2);
 		cell.setCellValue("100%");
 		cell.setCellStyle(cellStyle3);
-		/***** légende ***/
+		/**
+		 * *** légende **
+		 */
 		row = sheet3.createRow(donnesImport.size() + 7);
 		cell = row.createCell(0);
 		cell.setCellValue(findMsg("balance_sheet_legend"));
 		sheet3.addMergedRegion(new CellRangeAddress(donnes.size() + 7, donnesImport.size() + 7, 0, 10));
 		cell.setCellStyle(cellStyle4);
 
-		/** * Données provisoires % ***/
+		/**
+		 * * Données provisoires % **
+		 */
 		row = sheet3.createRow(donnesImport.size() + 9);
 		cell = row.createCell(0);
 		cell.setCellValue(findMsg("balance_data"));
 		cell.setCellStyle(cellStyle5);
-		/********* contenue feuille 4 ************************/
-		/** Année ***/
+		/**
+		 * ******* contenue feuille 4 ***********************
+		 */
+		/**
+		 * Année **
+		 */
 		row = sheet4.createRow(3);
 		cell = row.createCell(0);
 		sheet4.setColumnWidth(0, 7000);
 		cell.setCellValue(findMsg("balance_year"));
 		cell.setCellStyle(cellStyle2);
 		j = 1;
-		for (int i = 0; i < dates.size(); i++)
-		{
+		for (int i = 0; i < dates.size(); i++) {
 			cell = row.createCell(j);
 			cell.setCellValue(dates.get(i));
 			sheet4.addMergedRegion(new CellRangeAddress(3, 3, j, j + 1));
@@ -704,8 +780,7 @@ public class TradeBalanceController implements Serializable
 		cell.setCellValue(findMsg("balance_country"));
 		cell.setCellStyle(cellStyle2);
 		j = 1;
-		for (int i = 0; i < dates.size(); i++)
-		{
+		for (int i = 0; i < dates.size(); i++) {
 
 			cell = row.createCell(j);
 			cell.setCellValue("Export");
@@ -720,15 +795,13 @@ public class TradeBalanceController implements Serializable
 			j = j + 3;
 		}
 
-		for (int i = 0; i < countryDtos.size(); i++)
-		{
+		for (int i = 0; i < countryDtos.size(); i++) {
 			row = sheet4.createRow(5 + i);
 			cell = row.createCell(0);
 			cell.setCellValue(getCurrentLocale().getLanguage().equals("fr") ? countryDtos.get(i).getCountry().getCountryNameCplFr()
 					: countryDtos.get(i).getCountry().getCountryNameCpl());
 			cell.setCellStyle(cellStyle4);
-			for (j = 0; j < orientation.size(); j++)
-			{
+			for (j = 0; j < orientation.size(); j++) {
 				cell = row.createCell(j + 1);
 				cell.setCellValue(countryDtos.get(i).getData().get(j));
 				cell.setCellStyle(cellStyle4);
@@ -738,8 +811,7 @@ public class TradeBalanceController implements Serializable
 		cell = row.createCell(0);
 		cell.setCellValue(findMsg("balance_total"));
 		cell.setCellStyle(cellStyle2);
-		for (j = 0; j < orientation.size(); j++)
-		{
+		for (j = 0; j < orientation.size(); j++) {
 			cell = row.createCell(j + 1);
 			cell.setCellValue(totalOrientation.get(j));
 			cell.setCellStyle(cellStyle4);
@@ -747,42 +819,29 @@ public class TradeBalanceController implements Serializable
 
 		// write the Excel content to the output stream
 		byte[] bytes;
-		try
-		{
+		try {
 			wb.write(outputStream);
-		}
-		catch (final IOException e)
-		{
-			LOG.error(Objects.toString(e));
+		} catch (final IOException e) {
+			LOG.error(Objects.toString(e), e);
 		}
 		bytes = outputStream.toByteArray();
 		final ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
 		return inputStream;
 	}
 
-
 	/**
 	 * On tab change.
 	 *
-	 * @param event
-	 *           the event
+	 * @param event the event
 	 */
-	public void onTabChange(final TabChangeEvent event)
-	{
-		if (event.getTab().getTitle().equals("Evolution de la balance commerciale"))
-		{
+	public void onTabChange(final TabChangeEvent event) {
+		if (event.getTab().getTitle().equals("Evolution de la balance commerciale")) {
 			activeIndex = Constants.ZERO;
-		}
-		else if (event.getTab().getTitle().equals("Exportation"))
-		{
+		} else if (event.getTab().getTitle().equals("Exportation")) {
 			activeIndex = Constants.ONE;
-		}
-		else if (event.getTab().getTitle().equals("Importation"))
-		{
+		} else if (event.getTab().getTitle().equals("Importation")) {
 			activeIndex = Constants.TWO;
-		}
-		else if (event.getTab().getTitle().equals("Orientation Géographique"))
-		{
+		} else if (event.getTab().getTitle().equals("Orientation Géographique")) {
 			activeIndex = Constants.THREE;
 		}
 	}
@@ -790,11 +849,9 @@ public class TradeBalanceController implements Serializable
 	/**
 	 * Sets the file.
 	 *
-	 * @param file
-	 *           the new file
+	 * @param file the new file
 	 */
-	public void setFile(final StreamedContent file)
-	{
+	public void setFile(final StreamedContent file) {
 		this.file = file;
 	}
 
@@ -803,46 +860,34 @@ public class TradeBalanceController implements Serializable
 	 *
 	 * @return the table
 	 */
-	public Boolean getTable()
-	{
+	public Boolean getTable() {
 		return table;
 	}
 
 	/**
 	 * Sets the table.
 	 *
-	 * @param table
-	 *           the new table
+	 * @param table the new table
 	 */
-	public void setTable(final Boolean table)
-	{
+	public void setTable(final Boolean table) {
 		this.table = table;
 	}
-
-
-
-
 
 	/**
 	 * Gets the page url.
 	 *
 	 * @return the page url
 	 */
-	public String getPageUrl()
-	{
+	public String getPageUrl() {
 		return pageUrl;
 	}
-
-
 
 	/**
 	 * Sets the page url.
 	 *
-	 * @param pageUrl
-	 *           the new page url
+	 * @param pageUrl the new page url
 	 */
-	public void setPageUrl(final String pageUrl)
-	{
+	public void setPageUrl(final String pageUrl) {
 		this.pageUrl = pageUrl;
 	}
 
@@ -850,10 +895,8 @@ public class TradeBalanceController implements Serializable
 	 * Inits the.
 	 */
 	@PostConstruct
-	public void init()
-	{
-		if (LOG.isDebugEnabled())
-		{
+	public void init() {
+		if (LOG.isDebugEnabled()) {
 			LOG.debug(Constants.INIT_LOG_INFO_MESSAGE, DelegationController.class.getName());
 		}
 
@@ -861,16 +904,12 @@ public class TradeBalanceController implements Serializable
 		listOfCountry();
 		setPageUrl(ControllerConstants.Pages.FO.TRADE_BALANCE);
 
-
-
-
 	}
 
 	/**
 	 * List of country.
 	 */
-	private void listOfCountry()
-	{
+	private void listOfCountry() {
 		setCountrys(tradeBalanceConfigService.findAllCountry());
 
 	}
@@ -878,30 +917,27 @@ public class TradeBalanceController implements Serializable
 	/**
 	 * List of years.
 	 */
-	private void listOfYears()
-	{
+	private void listOfYears() {
 		final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
 		final Date date = new Date();
 		final String anneeFin = dateFormat.format(date);
 
 		String anneeDeb = dateFormat.format(tradeBalanceConfigService.findMinDateFromFile());
-		if (anneeDeb == null)
-		{
+		if (anneeDeb == null) {
 			anneeDeb = anneeFin;
 		}
 		final Integer max = Integer.parseInt(anneeFin);
 		final Integer min = Integer.parseInt(anneeDeb);
 
-
-		for (int i = min; i <= max; i++)
-		{
+		for (int i = min; i <= max; i++) {
 			years.add(i);
 		}
 
-
 	}
 
-	/** The year. */
+	/**
+	 * The year.
+	 */
 	List<String> year;
 
 	/**
@@ -909,23 +945,22 @@ public class TradeBalanceController implements Serializable
 	 *
 	 * @return the year
 	 */
-	public List<String> getYear()
-	{
+	public List<String> getYear() {
 		return year;
 	}
 
 	/**
 	 * Sets the year.
 	 *
-	 * @param year
-	 *           the new year
+	 * @param year the new year
 	 */
-	public void setYear(final List<String> year)
-	{
+	public void setYear(final List<String> year) {
 		this.year = year;
 	}
 
-	/** The details. */
+	/**
+	 * The details.
+	 */
 	List<String> details = new ArrayList<String>();
 
 	/**
@@ -933,32 +968,37 @@ public class TradeBalanceController implements Serializable
 	 *
 	 * @return the details
 	 */
-	public List<String> getDetails()
-	{
+	public List<String> getDetails() {
 		return details;
 	}
 
 	/**
 	 * Sets the details.
 	 *
-	 * @param details
-	 *           the new details
+	 * @param details the new details
 	 */
-	public void setDetails(final List<String> details)
-	{
+	public void setDetails(final List<String> details) {
 		this.details = details;
 	}
 
-	/** The donnes. */
+	/**
+	 * The donnes.
+	 */
 	private List<TradeDto> donnes;
 
-	/** The donnes import. */
+	/**
+	 * The donnes import.
+	 */
 	private List<TradeDto> donnesImport;
 
-	/** The data. */
+	/**
+	 * The data.
+	 */
 	private List<String> data;
 
-	/** The dates. */
+	/**
+	 * The dates.
+	 */
 	private List<String> dates;
 
 	/**
@@ -966,42 +1006,48 @@ public class TradeBalanceController implements Serializable
 	 *
 	 * @return the dates
 	 */
-	public List<String> getDates()
-	{
+	public List<String> getDates() {
 		return dates;
 	}
 
 	/**
 	 * Sets the dates.
 	 *
-	 * @param dates
-	 *           the new dates
+	 * @param dates the new dates
 	 */
-	public void setDates(final List<String> dates)
-	{
+	public void setDates(final List<String> dates) {
 		this.dates = dates;
 	}
 
-	/** The file type codes. */
+	/**
+	 * The file type codes.
+	 */
 	private List<FileTypeCode> fileTypeCodes;
 
-	/** The file type codes import. */
+	/**
+	 * The file type codes import.
+	 */
 	private List<FileTypeCode> fileTypeCodesImport;
 
-	/** The df. */
+	/**
+	 * The df.
+	 */
 	DecimalFormat df = new DecimalFormat("#.0");
 
-	/** The details o. */
+	/**
+	 * The details o.
+	 */
 	private List<String> detailsO = new ArrayList<String>();
 
-	/** The orientation. */
+	/**
+	 * The orientation.
+	 */
 	private List<String> orientation = new ArrayList<String>();
 
 	/**
 	 * Trade export.
 	 */
-	private void tradeExport()
-	{
+	private void tradeExport() {
 		dates = new ArrayList<String>();
 		tradeBalanceConfigs = tradeBalanceConfigService.findAllTradeBalanceConfigBytype("02");
 		table = true;
@@ -1012,53 +1058,38 @@ public class TradeBalanceController implements Serializable
 		detailsO = new ArrayList<String>();
 		total = new ArrayList<String>();
 
-
-		for (int i = startYear; i <= endYear; i++)
-		{
+		for (int i = startYear; i <= endYear; i++) {
 			dates.add(String.valueOf(i));
 			detailsO.add("E");
 			detailsO.add("I");
-			if (startYear - endYear != 0)
-			{
-				if (i == endYear)
-				{
+			if (startYear - endYear != 0) {
+				if (i == endYear) {
 					year.add("jan-dec" + String.valueOf(i) + "(2)");
-				}
-				else if (i == endYear - 1)
-				{
+				} else if (i == endYear - 1) {
 					year.add("jan-dec" + String.valueOf(i) + "(1)");
-				}
-				else
-				{
+				} else {
 					year.add("jan-dec" + String.valueOf(i));
 				}
-			}
-			else
-			{
+			} else {
 				year.add("jan-dec" + String.valueOf(i));
 			}
 			details.add("Q");
 			details.add("V");
 		}
 
-		for (int k = 0; k < year.size(); k++)
-		{
+		for (int k = 0; k < year.size(); k++) {
 			final FileItem fileItem = tradeBalanceConfigService.findQuantityAndValueByNshAndFileTytpes(null, dates.get(k),
 					fileTypeCodes);
 			totalExportation.add(StringUtils.isNotBlank(fileItem.getQuantity()) ? fileItem.getQuantity() : "0");//Q
 			totalExportation.add(StringUtils.isNotBlank(fileItem.getFobValue()) ? fileItem.getFobValue() : "0");//V
 		}
 
-		for (int i = 0; i < tradeBalanceConfigs.size(); i++)
-		{
-
+		for (int i = 0; i < tradeBalanceConfigs.size(); i++) {
 
 			final TradeDto dto = new TradeDto();
 			final List<String> d = new ArrayList<String>();
 
-
-			for (int k = 0; k < year.size(); k++)
-			{//findQuatite and valu by code in year
+			for (int k = 0; k < year.size(); k++) {//findQuatite and valu by code in year
 				final FileItem fileItem = tradeBalanceConfigService.findQuantityAndValueByNshAndFileTytpes(tradeBalanceConfigs.get(i)
 						.getCode(), dates.get(k), fileTypeCodes);
 				d.add(StringUtils.isNotBlank(fileItem.getQuantity()) ? fileItem.getQuantity() : "0");//Q
@@ -1070,31 +1101,22 @@ public class TradeBalanceController implements Serializable
 			Double r;
 			if (StringUtils.isNotBlank(d.get(details.size() - 1))
 					&& StringUtils.isNotBlank(totalExportation.get(details.size() - 1))
-					&& stringToDouble(d.get(details.size() - 1)) != 0)
-			{
+					&& stringToDouble(d.get(details.size() - 1)) != 0) {
 				final Double a = stringToDouble(d.get(details.size() - 1));
 				final Double t = stringToDouble(totalExportation.get(details.size() - 1));
 				r = (a / t) * 100;
 
-			}
-			else
-			{
+			} else {
 				r = null;
 			}
 
-			if (r == null || r <= 0.0)
-			{
+			if (r == null || r <= 0.0) {
 				dto.setPart("0.0%");
-			}
-			else
-			{
+			} else {
 				dto.setPart(df.format(r) + "%");
 			}
 
-
-
-			if (startYear - endYear != 0)
-			{
+			if (startYear - endYear != 0) {
 				final String q = findQuantity(d);
 				final String v = findValue(d);
 				d.add(q);
@@ -1105,29 +1127,32 @@ public class TradeBalanceController implements Serializable
 			dto.setData(d);
 			donnes.add(dto);
 
-
 		}
 
 		//total exportation variation
-		if (startYear - endYear != 0)
-		{
+		if (startYear - endYear != 0) {
 			final String q = findQuantity(totalExportation);
 			final String v = findValue(totalExportation);
 			totalExportation.add(q);
 			totalExportation.add(v);
 		}
 
-
 	}
 
-	/** The total. */
+	/**
+	 * The total.
+	 */
 	// data
 	List<String> total = new ArrayList<String>();
 
-	/** The total exportation. */
+	/**
+	 * The total exportation.
+	 */
 	List<String> totalExportation = new ArrayList<String>();
 
-	/** The total importation. */
+	/**
+	 * The total importation.
+	 */
 	List<String> totalImportation = new ArrayList<String>();
 
 	/**
@@ -1135,19 +1160,16 @@ public class TradeBalanceController implements Serializable
 	 *
 	 * @return the total importation
 	 */
-	public List<String> getTotalImportation()
-	{
+	public List<String> getTotalImportation() {
 		return totalImportation;
 	}
 
 	/**
 	 * Sets the total importation.
 	 *
-	 * @param totalImportation
-	 *           the new total importation
+	 * @param totalImportation the new total importation
 	 */
-	public void setTotalImportation(final List<String> totalImportation)
-	{
+	public void setTotalImportation(final List<String> totalImportation) {
 		this.totalImportation = totalImportation;
 	}
 
@@ -1156,19 +1178,16 @@ public class TradeBalanceController implements Serializable
 	 *
 	 * @return the total exportation
 	 */
-	public List<String> getTotalExportation()
-	{
+	public List<String> getTotalExportation() {
 		return totalExportation;
 	}
 
 	/**
 	 * Sets the total exportation.
 	 *
-	 * @param totalExportation
-	 *           the new total exportation
+	 * @param totalExportation the new total exportation
 	 */
-	public void setTotalExportation(final List<String> totalExportation)
-	{
+	public void setTotalExportation(final List<String> totalExportation) {
 		this.totalExportation = totalExportation;
 	}
 
@@ -1177,19 +1196,16 @@ public class TradeBalanceController implements Serializable
 	 *
 	 * @return the total
 	 */
-	public List<String> getTotal()
-	{
+	public List<String> getTotal() {
 		return total;
 	}
 
 	/**
 	 * Sets the total.
 	 *
-	 * @param total
-	 *           the new total
+	 * @param total the new total
 	 */
-	public void setTotal(final List<String> total)
-	{
+	public void setTotal(final List<String> total) {
 		this.total = total;
 	}
 
@@ -1204,42 +1220,34 @@ public class TradeBalanceController implements Serializable
 	 *
 	 * @return the type
 	 */
-	public String getType()
-	{
+	public String getType() {
 		return type;
 	}
 
 	/**
 	 * Sets the type.
 	 *
-	 * @param type
-	 *           the new type
+	 * @param type the new type
 	 */
-	public void setType(final String type)
-	{
+	public void setType(final String type) {
 		this.type = type;
 	}
 
 	/**
 	 * Validate.
 	 *
-	 * @throws ParseException
-	 *            the parse exception
+	 * @throws ParseException the parse exception
 	 */
-	public void validate() throws ParseException
-	{
+	public void validate() throws ParseException {
 
 		type = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString("Trade_type_" + typeTrade);
 
 		fileTypeCodes = new ArrayList<FileTypeCode>();
 		fileTypeCodesImport = new ArrayList<FileTypeCode>();
-		if (typeTrade.equals("01"))
-		{
+		if (typeTrade.equals("01")) {
 			fileTypeCodes.add(FileTypeCode.DE_MINCOMMERCE);
 			fileTypeCodesImport.add(FileTypeCode.DI_MINCOMMERCE);
-		}
-		else
-		{
+		} else {
 			fileTypeCodes.add(FileTypeCode.IDE);
 			fileTypeCodesImport.add(FileTypeCode.IDI);
 		}
@@ -1250,21 +1258,15 @@ public class TradeBalanceController implements Serializable
 
 		//total des principeaux produits
 		int j = 0;
-		for (int i = 0; i < year.size(); i++)
-		{
-
+		for (int i = 0; i < year.size(); i++) {
 
 			Double q = (double) 0;
 			Double v = (double) 0;
-			for (final TradeDto dto : donnes)
-
-			{
+			for (final TradeDto dto : donnes) {
 				j = i * 2;
 
-				if (dto.getBalanceConfig().getCount())
-				{
+				if (dto.getBalanceConfig().getCount()) {
 					q = q + stringToDouble(dto.getData().get(j));
-
 
 					j++;
 					v = v + stringToDouble(dto.getData().get(j));
@@ -1272,63 +1274,45 @@ public class TradeBalanceController implements Serializable
 				}
 
 			}
-			if (q == 0)
-			{
+			if (q == 0) {
 				total.add("0");
-			}
-			else
-			{
+			} else {
 				total.add(df.format(q));
 			}
-			if (v == 0)
-			{
+			if (v == 0) {
 				total.add("0");
-			}
-			else
-			{
+			} else {
 				total.add(df.format(v));
 			}
 		}
-		if (startYear - endYear != 0)
-		{
+		if (startYear - endYear != 0) {
 			final String q = findQuantity(total);
 			final String v = findValue(total);
 			total.add(q);
 			total.add(v);
-
-
 
 		}
 		//part
 		Double r;
 		if (StringUtils.isNotBlank(total.get(details.size() - 1))
 				&& StringUtils.isNotBlank(totalExportation.get(details.size() - 1))
-				&& stringToDouble(total.get(details.size() - 1)) != 0)
-		{
+				&& stringToDouble(total.get(details.size() - 1)) != 0) {
 			final Double a = stringToDouble(total.get(details.size() - 1));
 			final Double t = stringToDouble(totalExportation.get(details.size() - 1));
 			r = (a / t) * 100;
 
-		}
-		else
-		{
+		} else {
 			r = null;
 		}
 
-		if (r == null)
-		{
+		if (r == null) {
 			total.add(StringUtils.EMPTY);
-		}
-		else if (r <= 0.0)
-		{
+		} else if (r <= 0.0) {
 			total.add("0.0%");
-		}
-		else
-		{
+		} else {
 			total.add(df.format(r) + "%");
 		}
-		if (startYear - endYear != 0)
-		{
+		if (startYear - endYear != 0) {
 			year.add("Variation en %(2/1)");
 			details.add("Q");
 			details.add("V");
@@ -1339,24 +1323,19 @@ public class TradeBalanceController implements Serializable
 	/**
 	 * Trade orientation.
 	 */
-	private void tradeOrientation()
-	{
+	private void tradeOrientation() {
 		orientation = new ArrayList<String>();
 		countryDtos = new ArrayList<TradeCountryDto>();
-		for (int j = 0; j < dates.size(); j++)
-		{
+		for (int j = 0; j < dates.size(); j++) {
 			orientation.add("I");
 			orientation.add("E");
 			orientation.add("D");
 		}
-		for (int i = 0; i < countrys.size(); i++)
-		{
+		for (int i = 0; i < countrys.size(); i++) {
 			int r = 0;
 			final TradeCountryDto dto = new TradeCountryDto();
 			final List<String> data = new ArrayList<String>();
-			for (int j = 0; j < dates.size(); j++)
-			{
-
+			for (int j = 0; j < dates.size(); j++) {
 
 				FileItem fileItem = tradeBalanceConfigService.findQuantityAndValueByCountryAndFileTytpes(dates.get(j), fileTypeCodes,
 						countrys.get(i).getCountryIdAlpha2(), "E");
@@ -1376,16 +1355,13 @@ public class TradeBalanceController implements Serializable
 		}
 		totalOrientation = new ArrayList<String>();
 		int j = 0;
-		for (int i = 0; i < dates.size(); i++)
-		{
+		for (int i = 0; i < dates.size(); i++) {
 
 			Double q = (double) 0;
 			Double v = (double) 0;
 			Double t = (double) 0;
 
-			for (final TradeCountryDto dto : countryDtos)
-
-			{
+			for (final TradeCountryDto dto : countryDtos) {
 				q = q + stringToDouble(dto.getData().get(j));
 
 				v = v + stringToDouble(dto.getData().get(j + 1));
@@ -1393,28 +1369,19 @@ public class TradeBalanceController implements Serializable
 				t = t + stringToDouble(dto.getData().get(j + 2));
 
 			}
-			if (q == 0)
-			{
+			if (q == 0) {
 				totalOrientation.add("0");
-			}
-			else
-			{
+			} else {
 				totalOrientation.add(df.format(q));
 			}
-			if (v == 0)
-			{
+			if (v == 0) {
 				totalOrientation.add("0");
-			}
-			else
-			{
+			} else {
 				totalOrientation.add(df.format(v));
 			}
-			if (t == 0)
-			{
+			if (t == 0) {
 				totalOrientation.add("0");
-			}
-			else
-			{
+			} else {
 				totalOrientation.add(df.format(t));
 			}
 			//			totalOrientation.add(String.valueOf(Double.parseDouble(totalOrientation.get(r + 1).replace(",", "."))
@@ -1425,8 +1392,9 @@ public class TradeBalanceController implements Serializable
 
 	}
 
-
-	/** The col headers. */
+	/**
+	 * The col headers.
+	 */
 	List<TradeEvolutionDto> colHeaders;
 
 	/**
@@ -1434,19 +1402,16 @@ public class TradeBalanceController implements Serializable
 	 *
 	 * @return the col headers
 	 */
-	public List<TradeEvolutionDto> getColHeaders()
-	{
+	public List<TradeEvolutionDto> getColHeaders() {
 		return colHeaders;
 	}
 
 	/**
 	 * Sets the col headers.
 	 *
-	 * @param colHeaders
-	 *           the new col headers
+	 * @param colHeaders the new col headers
 	 */
-	public void setColHeaders(final List<TradeEvolutionDto> colHeaders)
-	{
+	public void setColHeaders(final List<TradeEvolutionDto> colHeaders) {
 		this.colHeaders = colHeaders;
 	}
 
@@ -1458,8 +1423,7 @@ public class TradeBalanceController implements Serializable
 	/**
 	 * Trade result.
 	 */
-	private void tradeResult()
-	{
+	private void tradeResult() {
 		colHeaders = new ArrayList<TradeEvolutionDto>();
 		final TradeEvolutionDto exp = new TradeEvolutionDto("Exportations", "Exports", true);
 		final TradeEvolutionDto epb = new TradeEvolutionDto("Pétrole brut", "crude Oil", false);
@@ -1479,38 +1443,32 @@ public class TradeBalanceController implements Serializable
 		final TradeEvolutionDto tchp = new TradeEvolutionDto("Tx de couv.hors pétrole en %", "Coverage ratio excluding oil in %",
 				false);
 
-
 		//Exp
 		List<String> export = new ArrayList<String>();
-		for (int j = 0; j < details.size(); j++)
-		{
+		for (int j = 0; j < details.size(); j++) {
 			export.add(totalExportation.get(j));
 
 		}
-		if (startYear - endYear != 0)
-		{
+		if (startYear - endYear != 0) {
 
 			final String q = findQuantity(export);
 			final String v = findValue(export);
 			export.add(q);
 			export.add(v);
 
-
 		}
 		exp.setData(export);
 		colHeaders.add(exp);
 		//pétrole brut
 		export = new ArrayList<String>();
-		for (int j = 0; j < dates.size(); j++)
-		{
+		for (int j = 0; j < dates.size(); j++) {
 			final FileItem fileItem = tradeBalanceConfigService.findQuantityAndValueByNshAndFileTytpes("27.9.00.10", dates.get(j),
 					fileTypeCodes);
 			export.add(StringUtils.isNotBlank(fileItem.getQuantity()) ? fileItem.getQuantity() : "0");//Q
 			export.add(StringUtils.isNotBlank(fileItem.getFobValue()) ? fileItem.getFobValue() : "0");//V
 
 		}
-		if (startYear - endYear != 0)
-		{
+		if (startYear - endYear != 0) {
 			final String q = findQuantity(export);
 			final String v = findValue(export);
 			export.add(q);
@@ -1520,15 +1478,13 @@ public class TradeBalanceController implements Serializable
 		colHeaders.add(epb);
 		//Exportation hors pétrole
 		export = new ArrayList<String>();
-		for (int j = 0; j < details.size(); j++)
-		{
+		for (int j = 0; j < details.size(); j++) {
 			final Double a = stringToDouble(exp.getData().get(j));
 			final Double b = stringToDouble(epb.getData().get(j));
 			export.add(String.valueOf(a - b));
 
 		}
-		if (startYear - endYear != 0)
-		{
+		if (startYear - endYear != 0) {
 			final String q = findQuantity(export);
 			final String v = findValue(export);
 			export.add(q);
@@ -1541,8 +1497,7 @@ public class TradeBalanceController implements Serializable
 		//Exportation hors hydro
 		export = new ArrayList<String>();
 		l = 0;
-		for (int j = 0; j < dates.size(); j++)
-		{
+		for (int j = 0; j < dates.size(); j++) {
 			l = l + j;
 			final FileItem fileItem = tradeBalanceConfigService.findQuantityAndValueByNshAndFileTytpes("27.10", dates.get(j),
 					fileTypeCodes);
@@ -1560,10 +1515,8 @@ public class TradeBalanceController implements Serializable
 			export.add(String.valueOf(eq - (pq + hq)));//quantity
 			export.add(String.valueOf(ev - (pv + hv)));//valeur
 
-
 		}
-		if (startYear - endYear != 0)
-		{
+		if (startYear - endYear != 0) {
 			final String q = findQuantity(export);
 			final String v = findValue(export);
 			export.add(q);
@@ -1575,13 +1528,11 @@ public class TradeBalanceController implements Serializable
 
 		//Importation
 		export = new ArrayList<String>();
-		for (int j = 0; j < details.size(); j++)
-		{
+		for (int j = 0; j < details.size(); j++) {
 			export.add(totalImportation.get(j));
 
 		}
-		if (startYear - endYear != 0)
-		{
+		if (startYear - endYear != 0) {
 			final String q = findQuantity(export);
 			final String v = findValue(export);
 			export.add(q);
@@ -1591,16 +1542,14 @@ public class TradeBalanceController implements Serializable
 		colHeaders.add(imp);
 		//Pétrole brut
 		export = new ArrayList<String>();
-		for (int j = 0; j < dates.size(); j++)
-		{
+		for (int j = 0; j < dates.size(); j++) {
 			final FileItem fileItem = tradeBalanceConfigService.findQuantityAndValueByNshAndFileTytpes("27.9.00.10", dates.get(j),
 					fileTypeCodesImport);
 			export.add(StringUtils.isNotBlank(fileItem.getQuantity()) ? fileItem.getQuantity() : "0");//Q
 			export.add(StringUtils.isNotBlank(fileItem.getFobValue()) ? fileItem.getFobValue() : "0");//V
 
 		}
-		if (startYear - endYear != 0)
-		{
+		if (startYear - endYear != 0) {
 			final String q = findQuantity(export);
 			final String v = findValue(export);
 			export.add(q);
@@ -1610,15 +1559,13 @@ public class TradeBalanceController implements Serializable
 		colHeaders.add(ipb);
 		//Importation hors pétrole
 		export = new ArrayList<String>();
-		for (int j = 0; j < details.size(); j++)
-		{
+		for (int j = 0; j < details.size(); j++) {
 			final Double a = stringToDouble(imp.getData().get(j));
 			final Double b = stringToDouble(ipb.getData().get(j));
 			export.add(String.valueOf(a - b));
 
 		}
-		if (startYear - endYear != 0)
-		{
+		if (startYear - endYear != 0) {
 			final String q = findQuantity(export);
 			final String v = findValue(export);
 			export.add(q);
@@ -1631,8 +1578,7 @@ public class TradeBalanceController implements Serializable
 
 		export = new ArrayList<String>();
 		l = 0;
-		for (int j = 0; j < dates.size(); j++)
-		{
+		for (int j = 0; j < dates.size(); j++) {
 			l = l + j;
 			final FileItem fileItem = tradeBalanceConfigService.findQuantityAndValueByNshAndFileTytpes("27.10", dates.get(j),
 					fileTypeCodesImport);
@@ -1650,10 +1596,8 @@ public class TradeBalanceController implements Serializable
 			export.add(String.valueOf(eq - (pq + hq)));//quantity
 			export.add(String.valueOf(ev - (pv + hv)));//valeur
 
-
 		}
-		if (startYear - endYear != 0)
-		{
+		if (startYear - endYear != 0) {
 			final String q = findQuantity(export);
 			final String v = findValue(export);
 			export.add(q);
@@ -1665,12 +1609,10 @@ public class TradeBalanceController implements Serializable
 		//Balance Commerciale
 		export = new ArrayList<String>();
 
-		for (int j = 0; j < details.size(); j = j + 2)
-		{
+		for (int j = 0; j < details.size(); j = j + 2) {
 
 			export.add(StringUtils.EMPTY);
 			export.add(String.valueOf(stringToDouble(exp.getData().get(j + 1)) - stringToDouble(imp.getData().get(j + 1))));
-
 
 		}
 
@@ -1678,14 +1620,11 @@ public class TradeBalanceController implements Serializable
 		colHeaders.add(bc);
 		//Balance Commerciale hors pétrole
 
-
 		export = new ArrayList<String>();
-		for (int j = 0; j < details.size(); j = j + 2)
-		{
+		for (int j = 0; j < details.size(); j = j + 2) {
 
 			export.add(StringUtils.EMPTY);
 			export.add(String.valueOf(stringToDouble(epb.getData().get(j + 1)) - stringToDouble(ipb.getData().get(j + 1))));
-
 
 		}
 
@@ -1695,12 +1634,10 @@ public class TradeBalanceController implements Serializable
 		export = new ArrayList<String>();
 
 		export = new ArrayList<String>();
-		for (int j = 0; j < details.size(); j = j + 2)
-		{
+		for (int j = 0; j < details.size(); j = j + 2) {
 
 			export.add(StringUtils.EMPTY);
 			export.add(String.valueOf(stringToDouble(ehh.getData().get(j + 1)) - stringToDouble(ihh.getData().get(j + 1))));
-
 
 		}
 
@@ -1708,19 +1645,14 @@ public class TradeBalanceController implements Serializable
 		colHeaders.add(bchh);
 		//Taux de couv
 		export = new ArrayList<String>();
-		for (int j = 0; j < details.size(); j = j + 2)
-		{
+		for (int j = 0; j < details.size(); j = j + 2) {
 
 			export.add(StringUtils.EMPTY);
-			if (stringToDouble(imp.getData().get(j + 1)) != 0)
-			{
+			if (stringToDouble(imp.getData().get(j + 1)) != 0) {
 				export.add(df.format(stringToDouble(exp.getData().get(j + 1)) * 100 / stringToDouble(imp.getData().get(j + 1))));
-			}
-			else
-			{
+			} else {
 				export.add("100");
 			}
-
 
 		}
 		tc.setData(export);
@@ -1729,27 +1661,19 @@ public class TradeBalanceController implements Serializable
 
 		export = new ArrayList<String>();
 
-		for (int j = 0; j < details.size(); j = j + 2)
-		{
+		for (int j = 0; j < details.size(); j = j + 2) {
 
 			export.add(StringUtils.EMPTY);
-			if (stringToDouble(ipb.getData().get(j + 1)) != 0)
-			{
+			if (stringToDouble(ipb.getData().get(j + 1)) != 0) {
 				final Double r = stringToDouble(epb.getData().get(j + 1)) * 100 / stringToDouble(ipb.getData().get(j + 1));
-				if (r <= 0.0)
-				{
+				if (r <= 0.0) {
 					export.add("0,0");
-				}
-				else
-				{
+				} else {
 					export.add(df.format(r));
 				}
-			}
-			else
-			{
+			} else {
 				export.add("100");
 			}
-
 
 		}
 
@@ -1761,29 +1685,23 @@ public class TradeBalanceController implements Serializable
 	/**
 	 * Trade import.
 	 */
-	private void tradeImport()
-	{
+	private void tradeImport() {
 		tradeBalanceConfigsImport = tradeBalanceConfigService.findAllTradeBalanceConfigBytype("01");
 		donnesImport = new ArrayList<TradeDto>();
 		totalImportation = new ArrayList<String>();
-		for (int k = 0; k < year.size(); k++)
-		{
+		for (int k = 0; k < year.size(); k++) {
 			final FileItem fileItem = tradeBalanceConfigService.findQuantityAndValueByNshAndFileTytpes(null, dates.get(k),
 					fileTypeCodesImport);
 			totalImportation.add(StringUtils.isNotBlank(fileItem.getQuantity()) ? fileItem.getQuantity() : "0");//Q
 			totalImportation.add(StringUtils.isNotBlank(fileItem.getFobValue()) ? fileItem.getFobValue() : "0");//V
 		}
 
-		for (int i = 0; i < tradeBalanceConfigsImport.size(); i++)
-		{
-
+		for (int i = 0; i < tradeBalanceConfigsImport.size(); i++) {
 
 			final TradeDto dto = new TradeDto();
 			final List<String> d = new ArrayList<String>();
 
-
-			for (int k = 0; k < year.size(); k++)
-			{//findQuatite and valu by code in year
+			for (int k = 0; k < year.size(); k++) {//findQuatite and valu by code in year
 				final FileItem fileItem = tradeBalanceConfigService.findQuantityAndValueByNshAndFileTytpes(tradeBalanceConfigsImport
 						.get(i).getCode(), dates.get(k), fileTypeCodesImport);
 				d.add(StringUtils.isNotBlank(fileItem.getQuantity()) ? fileItem.getQuantity() : "0");//Q
@@ -1795,31 +1713,22 @@ public class TradeBalanceController implements Serializable
 			Double r;
 			if (StringUtils.isNotBlank(d.get(details.size() - 1))
 					&& StringUtils.isNotBlank(totalImportation.get(details.size() - 1))
-					&& stringToDouble(d.get(details.size() - 1)) != 0)
-			{
+					&& stringToDouble(d.get(details.size() - 1)) != 0) {
 				final Double a = stringToDouble(d.get(details.size() - 1));
 				final Double t = stringToDouble(totalImportation.get(details.size() - 1));
 				r = (a / t) * 100;
 
-			}
-			else
-			{
+			} else {
 				r = null;
 			}
 
-			if (r == null || r <= 0.0)
-			{
+			if (r == null || r <= 0.0) {
 				dto.setPart("0.0%");
-			}
-			else
-			{
+			} else {
 				dto.setPart(df.format(r) + "%");
 			}
 
-
-
-			if (startYear - endYear != 0)
-			{
+			if (startYear - endYear != 0) {
 				final String q = findQuantity(d);
 				final String v = findValue(d);
 				d.add(q);
@@ -1831,29 +1740,23 @@ public class TradeBalanceController implements Serializable
 			dto.setData(d);
 			donnesImport.add(dto);
 
-
 		}
-
 
 		//total importation variation
 		//total exportation variation
-		if (startYear - endYear != 0)
-		{
+		if (startYear - endYear != 0) {
 			final String q = findQuantity(totalImportation);
 			final String v = findValue(totalImportation);
 			totalImportation.add(q);
 			totalImportation.add(v);
 		}
 
-
-
 	}
 
 	/**
 	 * Change year.
 	 */
-	public void changeYear()
-	{
+	public void changeYear() {
 		endYear = startYear;
 	}
 
@@ -1862,38 +1765,31 @@ public class TradeBalanceController implements Serializable
 	 *
 	 * @return the trade balance config service
 	 */
-	public TradeBalanceConfigService getTradeBalanceConfigService()
-	{
+	public TradeBalanceConfigService getTradeBalanceConfigService() {
 		return tradeBalanceConfigService;
 	}
 
 	/**
 	 * Sets the trade balance config service.
 	 *
-	 * @param tradeBalanceConfigService
-	 *           the new trade balance config service
+	 * @param tradeBalanceConfigService the new trade balance config service
 	 */
-	public void setTradeBalanceConfigService(final TradeBalanceConfigService tradeBalanceConfigService)
-	{
+	public void setTradeBalanceConfigService(final TradeBalanceConfigService tradeBalanceConfigService) {
 		this.tradeBalanceConfigService = tradeBalanceConfigService;
 	}
 
 	/**
 	 * Go to page.
 	 */
-	public void goToPage()
-	{
-		try
-		{
+	public void goToPage() {
+		try {
 			activeIndex = Constants.ZERO;
 
 			final FacesContext context = FacesContext.getCurrentInstance();
 			final ExternalContext extContext = context.getExternalContext();
 			final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, pageUrl));
 			extContext.redirect(url);
-		}
-		catch (final IOException ioe)
-		{
+		} catch (final IOException ioe) {
 
 			java.util.logging.Logger.getLogger(this.getClass().getName())
 					.logp(Level.SEVERE, this.getClass().getName(),
@@ -1902,117 +1798,84 @@ public class TradeBalanceController implements Serializable
 		}
 	}
 
-
-
-
-
 	/**
 	 * Gets the current locale.
 	 *
 	 * @return the current locale
 	 */
-	public Locale getCurrentLocale()
-	{
+	public Locale getCurrentLocale() {
 		return FacesContext.getCurrentInstance().getViewRoot().getLocale();
 	}
-
-
 
 	/**
 	 * Gets the start year.
 	 *
 	 * @return the start year
 	 */
-	public Integer getStartYear()
-	{
+	public Integer getStartYear() {
 		return startYear;
 	}
-
-
 
 	/**
 	 * Sets the start year.
 	 *
-	 * @param startYear
-	 *           the new start year
+	 * @param startYear the new start year
 	 */
-	public void setStartYear(final Integer startYear)
-	{
+	public void setStartYear(final Integer startYear) {
 		this.startYear = startYear;
 	}
-
-
 
 	/**
 	 * Gets the end year.
 	 *
 	 * @return the end year
 	 */
-	public Integer getEndYear()
-	{
+	public Integer getEndYear() {
 		return endYear;
 	}
-
-
 
 	/**
 	 * Sets the end year.
 	 *
-	 * @param endYear
-	 *           the new end year
+	 * @param endYear the new end year
 	 */
-	public void setEndYear(final Integer endYear)
-	{
+	public void setEndYear(final Integer endYear) {
 		this.endYear = endYear;
 	}
-
-
 
 	/**
 	 * Gets the years.
 	 *
 	 * @return the years
 	 */
-	public List<Integer> getYears()
-	{
+	public List<Integer> getYears() {
 		return years;
 	}
-
-
 
 	/**
 	 * Sets the years.
 	 *
-	 * @param years
-	 *           the new years
+	 * @param years the new years
 	 */
-	public void setYears(final List<Integer> years)
-	{
+	public void setYears(final List<Integer> years) {
 		this.years = years;
 	}
-
-
 
 	/**
 	 * Gets the type trade.
 	 *
 	 * @return the type trade
 	 */
-	public String getTypeTrade()
-	{
+	public String getTypeTrade() {
 		return typeTrade;
 	}
-
-
 
 	/**
 	 * Sets the type trade.
 	 *
-	 * @param typeTrade
-	 *           the new type trade
+	 * @param typeTrade the new type trade
 	 */
-	public void setTypeTrade(final String typeTrade)
-	{
+	public void setTypeTrade(final String typeTrade) {
 		this.typeTrade = typeTrade;
 	}
 
@@ -2021,19 +1884,16 @@ public class TradeBalanceController implements Serializable
 	 *
 	 * @return the trade balance configs
 	 */
-	public List<TradeBalanceConfig> getTradeBalanceConfigs()
-	{
+	public List<TradeBalanceConfig> getTradeBalanceConfigs() {
 		return tradeBalanceConfigs;
 	}
 
 	/**
 	 * Sets the trade balance configs.
 	 *
-	 * @param tradeBalanceConfigs
-	 *           the new trade balance configs
+	 * @param tradeBalanceConfigs the new trade balance configs
 	 */
-	public void setTradeBalanceConfigs(final List<TradeBalanceConfig> tradeBalanceConfigs)
-	{
+	public void setTradeBalanceConfigs(final List<TradeBalanceConfig> tradeBalanceConfigs) {
 		this.tradeBalanceConfigs = tradeBalanceConfigs;
 	}
 
@@ -2042,19 +1902,16 @@ public class TradeBalanceController implements Serializable
 	 *
 	 * @return the donnes
 	 */
-	public List<TradeDto> getDonnes()
-	{
+	public List<TradeDto> getDonnes() {
 		return donnes;
 	}
 
 	/**
 	 * Sets the donnes.
 	 *
-	 * @param donnes
-	 *           the new donnes
+	 * @param donnes the new donnes
 	 */
-	public void setDonnes(final List<TradeDto> donnes)
-	{
+	public void setDonnes(final List<TradeDto> donnes) {
 		this.donnes = donnes;
 	}
 
@@ -2063,19 +1920,16 @@ public class TradeBalanceController implements Serializable
 	 *
 	 * @return the data
 	 */
-	public List<String> getData()
-	{
+	public List<String> getData() {
 		return data;
 	}
 
 	/**
 	 * Sets the data.
 	 *
-	 * @param data
-	 *           the new data
+	 * @param data the new data
 	 */
-	public void setData(final List<String> data)
-	{
+	public void setData(final List<String> data) {
 		this.data = data;
 	}
 
@@ -2084,19 +1938,16 @@ public class TradeBalanceController implements Serializable
 	 *
 	 * @return the trade balance configs import
 	 */
-	public List<TradeBalanceConfig> getTradeBalanceConfigsImport()
-	{
+	public List<TradeBalanceConfig> getTradeBalanceConfigsImport() {
 		return tradeBalanceConfigsImport;
 	}
 
 	/**
 	 * Sets the trade balance configs import.
 	 *
-	 * @param tradeBalanceConfigsImport
-	 *           the new trade balance configs import
+	 * @param tradeBalanceConfigsImport the new trade balance configs import
 	 */
-	public void setTradeBalanceConfigsImport(final List<TradeBalanceConfig> tradeBalanceConfigsImport)
-	{
+	public void setTradeBalanceConfigsImport(final List<TradeBalanceConfig> tradeBalanceConfigsImport) {
 		this.tradeBalanceConfigsImport = tradeBalanceConfigsImport;
 	}
 
@@ -2105,43 +1956,34 @@ public class TradeBalanceController implements Serializable
 	 *
 	 * @return the donnes import
 	 */
-	public List<TradeDto> getDonnesImport()
-	{
+	public List<TradeDto> getDonnesImport() {
 		return donnesImport;
 	}
 
 	/**
 	 * Sets the donnes import.
 	 *
-	 * @param donnesImport
-	 *           the new donnes import
+	 * @param donnesImport the new donnes import
 	 */
-	public void setDonnesImport(final List<TradeDto> donnesImport)
-	{
+	public void setDonnesImport(final List<TradeDto> donnesImport) {
 		this.donnesImport = donnesImport;
 	}
 
 	/**
 	 * String to double.
 	 *
-	 * @param value
-	 *           the value
+	 * @param value the value
 	 * @return the double
 	 */
-	public Double stringToDouble(final String value)
-	{
+	public Double stringToDouble(final String value) {
 		final NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
-		try
-		{
-			if (StringUtils.isNotBlank(value))
-			{
+		try {
+			if (StringUtils.isNotBlank(value)) {
 				return format.parse(value).doubleValue();
 			}
 			return (double) 0;
-		}
-		catch (final ParseException e)
-		{
-			LOG.error(Objects.toString(e));
+		} catch (final ParseException e) {
+			LOG.error(Objects.toString(e), e);
 			return (double) 0;
 		}
 	}
@@ -2151,43 +1993,35 @@ public class TradeBalanceController implements Serializable
 	 *
 	 * @return the file type codes import
 	 */
-	public List<FileTypeCode> getFileTypeCodesImport()
-	{
+	public List<FileTypeCode> getFileTypeCodesImport() {
 		return fileTypeCodesImport;
 	}
 
 	/**
 	 * Sets the file type codes import.
 	 *
-	 * @param fileTypeCodesImport
-	 *           the new file type codes import
+	 * @param fileTypeCodesImport the new file type codes import
 	 */
-	public void setFileTypeCodesImport(final List<FileTypeCode> fileTypeCodesImport)
-	{
+	public void setFileTypeCodesImport(final List<FileTypeCode> fileTypeCodesImport) {
 		this.fileTypeCodesImport = fileTypeCodesImport;
 	}
 
 	/**
 	 * Find quantity.
 	 *
-	 * @param value
-	 *           the value
+	 * @param value the value
 	 * @return the string
 	 */
-	public String findQuantity(final List<String> value)
-	{
+	public String findQuantity(final List<String> value) {
 		String q = "0";
 
 		if (StringUtils.isNotBlank(value.get(details.size() - 2)) && StringUtils.isNotBlank(value.get(details.size() - 4))
-				&& (stringToDouble(value.get(details.size() - 4)) != 0))
-		{
+				&& (stringToDouble(value.get(details.size() - 4)) != 0)) {
 			final Double a = stringToDouble(value.get(details.size() - 2));
 			final Double b = stringToDouble(value.get(details.size() - 4));
 			final Double p = ((a - b) / b) * 100;
 
 			q = df.format(p);
-
-
 
 		}
 		return q;
@@ -2196,16 +2030,13 @@ public class TradeBalanceController implements Serializable
 	/**
 	 * Find value.
 	 *
-	 * @param value
-	 *           the value
+	 * @param value the value
 	 * @return the string
 	 */
-	public String findValue(final List<String> value)
-	{
+	public String findValue(final List<String> value) {
 		String v = "0";
 		if (StringUtils.isNotBlank(value.get(details.size() - 1)) && StringUtils.isNotBlank(value.get(details.size() - 3))
-				&& (stringToDouble(value.get(details.size() - 3)) != 0))
-		{
+				&& (stringToDouble(value.get(details.size() - 3)) != 0)) {
 			final Double a = stringToDouble(value.get(details.size() - 1));
 			final Double b = stringToDouble(value.get(details.size() - 3));
 			final Double p = ((a - b) / b) * 100;
@@ -2219,12 +2050,10 @@ public class TradeBalanceController implements Serializable
 	/**
 	 * Find msg.
 	 *
-	 * @param key
-	 *           the key
+	 * @param key the key
 	 * @return the string
 	 */
-	public String findMsg(final String key)
-	{
+	public String findMsg(final String key) {
 		return ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(key);
 	}
 
@@ -2233,19 +2062,16 @@ public class TradeBalanceController implements Serializable
 	 *
 	 * @return the countrys
 	 */
-	public List<Country> getCountrys()
-	{
+	public List<Country> getCountrys() {
 		return countrys;
 	}
 
 	/**
 	 * Sets the countrys.
 	 *
-	 * @param countrys
-	 *           the new countrys
+	 * @param countrys the new countrys
 	 */
-	public void setCountrys(final List<Country> countrys)
-	{
+	public void setCountrys(final List<Country> countrys) {
 		this.countrys = countrys;
 	}
 
@@ -2254,19 +2080,16 @@ public class TradeBalanceController implements Serializable
 	 *
 	 * @return the country dtos
 	 */
-	public List<TradeCountryDto> getCountryDtos()
-	{
+	public List<TradeCountryDto> getCountryDtos() {
 		return countryDtos;
 	}
 
 	/**
 	 * Sets the country dtos.
 	 *
-	 * @param countryDtos
-	 *           the new country dtos
+	 * @param countryDtos the new country dtos
 	 */
-	public void setCountryDtos(final List<TradeCountryDto> countryDtos)
-	{
+	public void setCountryDtos(final List<TradeCountryDto> countryDtos) {
 		this.countryDtos = countryDtos;
 	}
 
@@ -2275,19 +2098,16 @@ public class TradeBalanceController implements Serializable
 	 *
 	 * @return the details o
 	 */
-	public List<String> getDetailsO()
-	{
+	public List<String> getDetailsO() {
 		return detailsO;
 	}
 
 	/**
 	 * Sets the details o.
 	 *
-	 * @param detailsO
-	 *           the new details o
+	 * @param detailsO the new details o
 	 */
-	public void setDetailsO(final List<String> detailsO)
-	{
+	public void setDetailsO(final List<String> detailsO) {
 		this.detailsO = detailsO;
 	}
 
@@ -2296,19 +2116,16 @@ public class TradeBalanceController implements Serializable
 	 *
 	 * @return the total orientation
 	 */
-	public List<String> getTotalOrientation()
-	{
+	public List<String> getTotalOrientation() {
 		return totalOrientation;
 	}
 
 	/**
 	 * Sets the total orientation.
 	 *
-	 * @param totalOrientation
-	 *           the new total orientation
+	 * @param totalOrientation the new total orientation
 	 */
-	public void setTotalOrientation(final List<String> totalOrientation)
-	{
+	public void setTotalOrientation(final List<String> totalOrientation) {
 		this.totalOrientation = totalOrientation;
 	}
 
@@ -2317,19 +2134,16 @@ public class TradeBalanceController implements Serializable
 	 *
 	 * @return the active index
 	 */
-	public Integer getActiveIndex()
-	{
+	public Integer getActiveIndex() {
 		return activeIndex;
 	}
 
 	/**
 	 * Sets the active index.
 	 *
-	 * @param activeIndex
-	 *           the new active index
+	 * @param activeIndex the new active index
 	 */
-	public void setActiveIndex(final Integer activeIndex)
-	{
+	public void setActiveIndex(final Integer activeIndex) {
 		this.activeIndex = activeIndex;
 	}
 
@@ -2338,19 +2152,16 @@ public class TradeBalanceController implements Serializable
 	 *
 	 * @return the orientation
 	 */
-	public List<String> getOrientation()
-	{
+	public List<String> getOrientation() {
 		return orientation;
 	}
 
 	/**
 	 * Sets the orientation.
 	 *
-	 * @param orientation
-	 *           the new orientation
+	 * @param orientation the new orientation
 	 */
-	public void setOrientation(final List<String> orientation)
-	{
+	public void setOrientation(final List<String> orientation) {
 		this.orientation = orientation;
 	}
 

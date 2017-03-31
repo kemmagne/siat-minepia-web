@@ -24,55 +24,67 @@ import org.guce.siat.web.ct.controller.util.JsfUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * The class HourlyTypeController.
  */
 @ManagedBean(name = "hourlyTypeController")
 @SessionScoped
-public class HourlyTypeController extends AbstractController<HourlyType>
-{
+public class HourlyTypeController extends AbstractController<HourlyType> {
 
-	/** The Constant serialVersionUID. */
+	/**
+	 * The Constant serialVersionUID.
+	 */
 	private static final long serialVersionUID = 2611557851726027501L;
 
-	/** The Constant LOG. */
+	/**
+	 * The Constant LOG.
+	 */
 	private static final Logger LOG = LoggerFactory.getLogger(HourlyTypeController.class);
 
-	/** The Constant HOURLY_TYPE_USED_ERROR_MESSAGE. */
+	/**
+	 * The Constant HOURLY_TYPE_USED_ERROR_MESSAGE.
+	 */
 	private static final String HOURLY_TYPE_USED_ERROR_MESSAGE = "HourlyTypeMessageErrorForExist";
 
-	/** The hourly type service. */
+	/**
+	 * The hourly type service.
+	 */
 	@ManagedProperty(value = "#{hourlyTypeService}")
 	private HourlyTypeService hourlyTypeService;
 
-	/** The work year config service. */
+	/**
+	 * The work year config service.
+	 */
 	@ManagedProperty(value = "#{workYearConfigService}")
 	private WorkYearConfigService workYearConfigService;
 
-
-	/** The inspection work day config service. */
+	/**
+	 * The inspection work day config service.
+	 */
 	@ManagedProperty(value = "#{inspectionWorkDayConfigService}")
 	private InspectionWorkDayConfigService inspectionWorkDayConfigService;
 
-	/** The inspection work week config service. */
+	/**
+	 * The inspection work week config service.
+	 */
 	@ManagedProperty(value = "#{inspectionWorkWeekConfigService}")
 	private InspectionWorkWeekConfigService inspectionWorkWeekConfigService;
 
-
-	/** The organism service. */
+	/**
+	 * The organism service.
+	 */
 	@ManagedProperty(value = "#{organismService}")
 	private OrganismService organismService;
 
-
-	/** The organisms. */
+	/**
+	 * The organisms.
+	 */
 	private List<Organism> organisms;
 
 	/**
 	 * Instantiates a new hourly type controller.
 	 */
-	public HourlyTypeController()
-	{
+	public HourlyTypeController() {
 		super(HourlyType.class);
 	}
 
@@ -80,10 +92,8 @@ public class HourlyTypeController extends AbstractController<HourlyType>
 	 * Inits the.
 	 */
 	@PostConstruct
-	public void init()
-	{
-		if (LOG.isDebugEnabled())
-		{
+	public void init() {
+		if (LOG.isDebugEnabled()) {
 			LOG.debug(Constants.INIT_LOG_INFO_MESSAGE, HourlyTypeController.class.getName());
 		}
 		super.setService(hourlyTypeService);
@@ -93,30 +103,23 @@ public class HourlyTypeController extends AbstractController<HourlyType>
 	/**
 	 * Prepare edit.
 	 */
-	public void prepareEdit()
-	{
+	public void prepareEdit() {
 		this.setSelected(hourlyTypeService.find(this.getSelected().getId()));
 	}
-
 
 	/**
 	 * Save new.
 	 *
-	 * @param event
-	 *           the event
+	 * @param event the event
 	 */
-	public void saveNew(final ActionEvent event)
-	{
-		try
-		{
+	public void saveNew(final ActionEvent event) {
+		try {
 
 			final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString("HourlyTypeCreated");
 			final HourlyType hourlyType = hourlyTypeService.save(selected);
 			organisms = organismService.findAll();
-			if (organisms != null)
-			{
-				for (final Organism organism : organisms)
-				{
+			if (organisms != null) {
+				for (final Organism organism : organisms) {
 					final InspectionWorkWeekConfig iwwc = new InspectionWorkWeekConfig();
 					iwwc.setMonday(true);
 					iwwc.setThursday(true);
@@ -133,17 +136,13 @@ public class HourlyTypeController extends AbstractController<HourlyType>
 
 			}
 			JsfUtil.addSuccessMessage(msg);
-		}
-		catch (final Exception e)
-		{
-			LOG.error(e.getLocalizedMessage());
+		} catch (final Exception e) {
+			LOG.error(e.getLocalizedMessage(), e);
 			JsfUtil.addErrorMessage(e,
 					ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(PERSISTENCE_ERROR_OCCURED));
 		}
 
-
-		if (!isValidationFailed())
-		{
+		if (!isValidationFailed()) {
 			refreshItems();
 			selected = null;
 		}
@@ -155,28 +154,21 @@ public class HourlyTypeController extends AbstractController<HourlyType>
 	 * @see org.guce.siat.web.common.AbstractController#delete()
 	 */
 	@Override
-	public void delete()
-	{
+	public void delete() {
 
 		if ((!inspectionWorkDayConfigService.findByHourlyType(selected).isEmpty() || !workYearConfigService.findByHourlyType(
 				selected).isEmpty())
-				&& inspectionWorkWeekConfigService.findByHourlyType(selected).isEmpty())
-		{
+				&& inspectionWorkWeekConfigService.findByHourlyType(selected).isEmpty()) {
 			JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 					HOURLY_TYPE_USED_ERROR_MESSAGE));
-		}
-		else if (!inspectionWorkWeekConfigService.findByHourlyType(selected).isEmpty())
-		{
+		} else if (!inspectionWorkWeekConfigService.findByHourlyType(selected).isEmpty()) {
 
 			for (final InspectionWorkWeekConfig inspectionWorkWeekConfig : inspectionWorkWeekConfigService
-					.findByHourlyType(selected))
-			{
+					.findByHourlyType(selected)) {
 				inspectionWorkWeekConfigService.delete(inspectionWorkWeekConfig);
 			}
 			super.delete();
-		}
-		else
-		{
+		} else {
 			super.delete();
 		}
 	}
@@ -186,19 +178,16 @@ public class HourlyTypeController extends AbstractController<HourlyType>
 	 *
 	 * @return the hourlyTypeService
 	 */
-	public HourlyTypeService getHourlyTypeService()
-	{
+	public HourlyTypeService getHourlyTypeService() {
 		return hourlyTypeService;
 	}
 
 	/**
 	 * Sets the hourly type service.
 	 *
-	 * @param hourlyTypeService
-	 *           the hourlyTypeService to set
+	 * @param hourlyTypeService the hourlyTypeService to set
 	 */
-	public void setHourlyTypeService(final HourlyTypeService hourlyTypeService)
-	{
+	public void setHourlyTypeService(final HourlyTypeService hourlyTypeService) {
 		this.hourlyTypeService = hourlyTypeService;
 	}
 
@@ -207,19 +196,16 @@ public class HourlyTypeController extends AbstractController<HourlyType>
 	 *
 	 * @return the workYearConfigService
 	 */
-	public WorkYearConfigService getWorkYearConfigService()
-	{
+	public WorkYearConfigService getWorkYearConfigService() {
 		return workYearConfigService;
 	}
 
 	/**
 	 * Sets the work year config service.
 	 *
-	 * @param workYearConfigService
-	 *           the workYearConfigService to set
+	 * @param workYearConfigService the workYearConfigService to set
 	 */
-	public void setWorkYearConfigService(final WorkYearConfigService workYearConfigService)
-	{
+	public void setWorkYearConfigService(final WorkYearConfigService workYearConfigService) {
 		this.workYearConfigService = workYearConfigService;
 	}
 
@@ -228,19 +214,17 @@ public class HourlyTypeController extends AbstractController<HourlyType>
 	 *
 	 * @return the inspectionWorkDayConfigService
 	 */
-	public InspectionWorkDayConfigService getInspectionWorkDayConfigService()
-	{
+	public InspectionWorkDayConfigService getInspectionWorkDayConfigService() {
 		return inspectionWorkDayConfigService;
 	}
 
 	/**
 	 * Sets the inspection work day config service.
 	 *
-	 * @param inspectionWorkDayConfigService
-	 *           the inspectionWorkDayConfigService to set
+	 * @param inspectionWorkDayConfigService the inspectionWorkDayConfigService
+	 * to set
 	 */
-	public void setInspectionWorkDayConfigService(final InspectionWorkDayConfigService inspectionWorkDayConfigService)
-	{
+	public void setInspectionWorkDayConfigService(final InspectionWorkDayConfigService inspectionWorkDayConfigService) {
 		this.inspectionWorkDayConfigService = inspectionWorkDayConfigService;
 	}
 
@@ -249,19 +233,17 @@ public class HourlyTypeController extends AbstractController<HourlyType>
 	 *
 	 * @return the inspectionWorkWeekConfigService
 	 */
-	public InspectionWorkWeekConfigService getInspectionWorkWeekConfigService()
-	{
+	public InspectionWorkWeekConfigService getInspectionWorkWeekConfigService() {
 		return inspectionWorkWeekConfigService;
 	}
 
 	/**
 	 * Sets the inspection work week config service.
 	 *
-	 * @param inspectionWorkWeekConfigService
-	 *           the inspectionWorkWeekConfigService to set
+	 * @param inspectionWorkWeekConfigService the
+	 * inspectionWorkWeekConfigService to set
 	 */
-	public void setInspectionWorkWeekConfigService(final InspectionWorkWeekConfigService inspectionWorkWeekConfigService)
-	{
+	public void setInspectionWorkWeekConfigService(final InspectionWorkWeekConfigService inspectionWorkWeekConfigService) {
 		this.inspectionWorkWeekConfigService = inspectionWorkWeekConfigService;
 	}
 
@@ -270,19 +252,16 @@ public class HourlyTypeController extends AbstractController<HourlyType>
 	 *
 	 * @return the organismService
 	 */
-	public OrganismService getOrganismService()
-	{
+	public OrganismService getOrganismService() {
 		return organismService;
 	}
 
 	/**
 	 * Sets the organism service.
 	 *
-	 * @param organismService
-	 *           the organismService to set
+	 * @param organismService the organismService to set
 	 */
-	public void setOrganismService(final OrganismService organismService)
-	{
+	public void setOrganismService(final OrganismService organismService) {
 		this.organismService = organismService;
 	}
 
@@ -291,22 +270,17 @@ public class HourlyTypeController extends AbstractController<HourlyType>
 	 *
 	 * @return the organisms
 	 */
-	public List<Organism> getOrganisms()
-	{
+	public List<Organism> getOrganisms() {
 		return organisms;
 	}
 
 	/**
 	 * Sets the organisms.
 	 *
-	 * @param organisms
-	 *           the organisms to set
+	 * @param organisms the organisms to set
 	 */
-	public void setOrganisms(final List<Organism> organisms)
-	{
+	public void setOrganisms(final List<Organism> organisms) {
 		this.organisms = organisms;
 	}
-
-
 
 }

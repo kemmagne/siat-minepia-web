@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.guce.siat</groupId>
@@ -10,10 +10,23 @@
 	<artifactId>siat-ct-web</artifactId>
 	<packaging>war</packaging>
 	<name>siat-ct-web</name>
+	<version>1.2.1</version>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<resource.dir>src/main/resources</resource.dir>
 	</properties>
+	<distributionManagement>
+		<repository>
+			<id>guce-repository</id>
+			<name>Depot Maven du GUCE</name>
+			<url>https://srvdev.guce.local/nexus/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>guce-repository</id>
+			<name>Depot Maven du GUCE</name>
+			<url>https://srvdev.guce.local/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 	<profiles>
 		<profile>
 			<id>profile-development</id>
@@ -252,9 +265,9 @@
 			<version>3.7</version>
 		</dependency>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
+			<groupId>org.guce.siat</groupId>
 			<artifactId>siat-ct-core</artifactId>
-			<version>${project.version}</version>
+			<version>1.2.1</version>
 		</dependency>
 
 		<dependency>

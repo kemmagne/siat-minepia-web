@@ -19,32 +19,33 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * The Class JasperReportBuilder.
  */
-public abstract class AbstractReportInvoker implements ReportCommand
-{
+public abstract class AbstractReportInvoker implements ReportCommand {
 
-	/** The Constant LOG. */
+	/**
+	 * The Constant LOG.
+	 */
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractReportInvoker.class);
 
-	/** The pdf file name. */
+	/**
+	 * The pdf file name.
+	 */
 	protected String pdfFileName;
 
-	/** The jasper file name. */
+	/**
+	 * The jasper file name.
+	 */
 	protected String jasperFileName;
 
 	/**
 	 * Instantiates a new jasper report builder.
 	 *
-	 * @param jasperFileName
-	 *           the jasper file name
-	 * @param pdfFileName
-	 *           the pdf file name
+	 * @param jasperFileName the jasper file name
+	 * @param pdfFileName the pdf file name
 	 */
-	public AbstractReportInvoker(final String jasperFileName, final String pdfFileName)
-	{
+	public AbstractReportInvoker(final String jasperFileName, final String pdfFileName) {
 		this.jasperFileName = jasperFileName;
 		this.pdfFileName = pdfFileName;
 	}
@@ -55,10 +56,8 @@ public abstract class AbstractReportInvoker implements ReportCommand
 	 * @see org.guce.siat.web.reports.vo.JasperExporter#generateReport()
 	 */
 	@Override
-	public void exportReportToPdf()
-	{
-		try
-		{
+	public void exportReportToPdf() {
+		try {
 			// the method for generating the document in pdf format
 			final JasperPrint jasperPrint = JasperFillManager.fillReport(getRealPath(REPORTS_PATH, jasperFileName, "jasper"),
 					getJRParameters(), getReportDataSource());
@@ -77,9 +76,7 @@ public abstract class AbstractReportInvoker implements ReportCommand
 			servletOutputStream.flush();
 			servletOutputStream.close();
 			FacesContext.getCurrentInstance().responseComplete();
-		}
-		catch (final JRException | IOException ex)
-		{
+		} catch (final JRException | IOException ex) {
 			LOG.error(ex.getMessage(), ex);
 		}
 	}
@@ -89,8 +86,7 @@ public abstract class AbstractReportInvoker implements ReportCommand
 	 *
 	 * @return the JR parameters
 	 */
-	protected Map<String, Object> getJRParameters()
-	{
+	protected Map<String, Object> getJRParameters() {
 		//Initialize the global parameters we're going to need
 		final Map<String, Object> jRParameters = new HashMap<String, Object>();
 		jRParameters.put("SIAT_LOGO", getRealPath(IMAGES_PATH, SIAT_LOGO, "png"));
@@ -100,16 +96,12 @@ public abstract class AbstractReportInvoker implements ReportCommand
 	/**
 	 * Gets the real path.
 	 *
-	 * @param relativePath
-	 *           the relative path
-	 * @param fileName
-	 *           the file name
-	 * @param fileExtension
-	 *           the file extension
+	 * @param relativePath the relative path
+	 * @param fileName the file name
+	 * @param fileExtension the file extension
 	 * @return the real path
 	 */
-	protected String getRealPath(final String relativePath, final String fileName, final String fileExtension)
-	{
+	protected String getRealPath(final String relativePath, final String fileName, final String fileExtension) {
 		final StringBuilder builder = new StringBuilder();
 		builder.append(File.separator);
 		builder.append(relativePath);
@@ -125,8 +117,7 @@ public abstract class AbstractReportInvoker implements ReportCommand
 	 *
 	 * @return the pdfFileName
 	 */
-	public String getPdfFileName()
-	{
+	public String getPdfFileName() {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("attachment; filename=");
 		builder.append(pdfFileName);
@@ -139,19 +130,15 @@ public abstract class AbstractReportInvoker implements ReportCommand
 	 *
 	 * @return the pdf file
 	 */
-	public byte[] getPdfFile()
-	{
+	public byte[] getPdfFile() {
 		byte[] pdfReport = null;
-		try
-		{
+		try {
 			final JasperPrint jasperPrint = JasperFillManager.fillReport(getRealPath(REPORTS_PATH, jasperFileName, "jasper"),
 					getJRParameters(), getReportDataSource());
 			pdfReport = JasperExportManager.exportReportToPdf(jasperPrint);
 
-		}
-		catch (final JRException e)
-		{
-			LOG.error(Objects.toString(e));
+		} catch (final JRException e) {
+			LOG.error(Objects.toString(e), e);
 		}
 		return pdfReport;
 	}

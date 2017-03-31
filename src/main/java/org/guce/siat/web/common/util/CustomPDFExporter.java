@@ -35,18 +35,19 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.sun.faces.facelets.component.UIRepeat;
 
-
-
 /**
  * The Class CustomPDFExporter.
  */
-public class CustomPDFExporter extends PDFExporter
-{
+public class CustomPDFExporter extends PDFExporter {
 
-	/** The Constant LOG. */
+	/**
+	 * The Constant LOG.
+	 */
 	private static final Logger LOG = LoggerFactory.getLogger(CustomPDFExporter.class);
 
-	/** The Constant AUTHORITIES_IMAGES_LIST_ID. */
+	/**
+	 * The Constant AUTHORITIES_IMAGES_LIST_ID.
+	 */
 	private static final String AUTHORITIES_IMAGES_LIST_ID = "authoritiesImagesList";
 
 	/*
@@ -56,37 +57,27 @@ public class CustomPDFExporter extends PDFExporter
 	 * javax.faces.component.UIComponent)
 	 */
 	@Override
-	protected String exportValue(final FacesContext context, final UIComponent component)
-	{
-		if (component instanceof CellEditor)
-		{
+	protected String exportValue(final FacesContext context, final UIComponent component) {
+		if (component instanceof CellEditor) {
 			return exportValue(context, ((CellEditor) component).getFacet("output"));
-		}
-		else if (component instanceof HtmlGraphicImage)
-		{
+		} else if (component instanceof HtmlGraphicImage) {
 			return (String) component.getAttributes().get("value");
-		}
-		else if (component instanceof UIRepeat
-				&& AUTHORITIES_IMAGES_LIST_ID.equals(component.getParent().getAttributes().get("id")))
-		{
+		} else if (component instanceof UIRepeat
+				&& AUTHORITIES_IMAGES_LIST_ID.equals(component.getParent().getAttributes().get("id"))) {
 			final StringBuilder imageUrlList = new StringBuilder();
 
 			@SuppressWarnings("unchecked")
 			final List<Authority> authoritiesList = (List<Authority>) component.getAttributes().get("value");
 
-			for (final Authority authority : authoritiesList)
-			{
+			for (final Authority authority : authoritiesList) {
 				imageUrlList.append("/images/icons/icon-" + authority.getRole() + ".png");
-				if (authoritiesList.size() > 1)
-				{
+				if (authoritiesList.size() > 1) {
 					imageUrlList.append("_");
 				}
 			}
 
 			return imageUrlList.toString();
-		}
-		else
-		{
+		} else {
 			return super.exportValue(context, component);
 		}
 	}
@@ -98,27 +89,20 @@ public class CustomPDFExporter extends PDFExporter
 	 * com.lowagie.text.Font)
 	 */
 	@Override
-	protected void addColumnValue(final PdfPTable pdfTable, final List<UIComponent> components, final Font font)
-	{
+	protected void addColumnValue(final PdfPTable pdfTable, final List<UIComponent> components, final Font font) {
 		final StringBuilder builder = new StringBuilder();
 		List<String> imagesUrlList = new ArrayList<String>();
 
 		final FacesContext context = FacesContext.getCurrentInstance();
 
-		for (final UIComponent component : components)
-		{
-			if (component.isRendered())
-			{
+		for (final UIComponent component : components) {
+			if (component.isRendered()) {
 				final String value = exportValue(context, component);
 
-				if (value != null)
-				{
-					if (component instanceof UIRepeat)
-					{
+				if (value != null) {
+					if (component instanceof UIRepeat) {
 						imagesUrlList = Arrays.asList(value.split("_"));
-					}
-					else
-					{
+					} else {
 						builder.append(value);
 					}
 				}
@@ -131,36 +115,23 @@ public class CustomPDFExporter extends PDFExporter
 	/**
 	 * Adds the columns pdf p table.
 	 *
-	 * @param pdfTable
-	 *           the pdf table
-	 * @param font
-	 *           the font
-	 * @param builder
-	 *           the builder
-	 * @param imagesUrlList
-	 *           the images url list
+	 * @param pdfTable the pdf table
+	 * @param font the font
+	 * @param builder the builder
+	 * @param imagesUrlList the images url list
 	 */
 	private void addColumnsPdfPTable(final PdfPTable pdfTable, final Font font, final StringBuilder builder,
-			final List<String> imagesUrlList)
-	{
+			final List<String> imagesUrlList) {
 		// Add cells in the pdf table by type : text or graphic images
-		if (builder.toString().isEmpty() && imagesUrlList.isEmpty())
-		{
+		if (builder.toString().isEmpty() && imagesUrlList.isEmpty()) {
 			pdfTable.addCell(new Paragraph(Constants.EMPTY_STRING, font));
-		}
-		else if (!builder.toString().isEmpty())
-		{
+		} else if (!builder.toString().isEmpty()) {
 			pdfTable.addCell(new Paragraph(JsfUtil.convertToFrenchBoolean(builder).toString(), font));
-		}
-		else if (!imagesUrlList.isEmpty() && builder.toString().isEmpty())
-		{
+		} else if (!imagesUrlList.isEmpty() && builder.toString().isEmpty()) {
 			final PdfPCell pdfCell = new PdfPCell();
-			for (final String imageUrl : imagesUrlList)
-			{
-				if (StringUtils.isNotBlank(imageUrl))
-				{
-					try
-					{
+			for (final String imageUrl : imagesUrlList) {
+				if (StringUtils.isNotBlank(imageUrl)) {
+					try {
 						final ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext()
 								.getContext();
 						final String graphicImageUrl = servletContext.getRealPath(StringUtils.EMPTY) + imageUrl;
@@ -170,15 +141,10 @@ public class CustomPDFExporter extends PDFExporter
 						graphicImage.scaleAbsoluteWidth(Constants.FIFTEEN);
 
 						pdfCell.addElement(graphicImage);
-					}
-					catch (final BadElementException bee)
-					{
+					} catch (final BadElementException bee) {
 						LOG.error(bee.getMessage(), bee);
-					}
-					catch (final IOException ioe)
-					{
-						if ("FileNotFoundException".equals(ioe.getClass().getSimpleName()))
-						{
+					} catch (final IOException ioe) {
+						if ("FileNotFoundException".equals(ioe.getClass().getSimpleName())) {
 							pdfCell.addElement(new Paragraph(Constants.EMPTY_STRING, font));
 							LOG.error(ioe.getMessage(), ioe);
 						}
@@ -202,22 +168,17 @@ public class CustomPDFExporter extends PDFExporter
 	@Override
 	public void export(final FacesContext context, final DataTable table, final String filename, final boolean pageOnly,
 			final boolean selectionOnly, final String encodingType, final MethodExpression preProcessor,
-			final MethodExpression postProcessor) throws IOException
-	{
-		try
-		{
+			final MethodExpression postProcessor) throws IOException {
+		try {
 			final Document document = new Document();
 			final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			PdfWriter.getInstance(document, baos);
 
-			if (preProcessor != null)
-			{
-				preProcessor.invoke(context.getELContext(), new Object[]
-				{ document });
+			if (preProcessor != null) {
+				preProcessor.invoke(context.getELContext(), new Object[]{document});
 			}
 
-			if (!document.isOpen())
-			{
+			if (!document.isOpen()) {
 				document.setPageSize(PageSize.A4.rotate());
 				document.setMargins(Constants.NEGATIVE_THIRTY_SIX, Constants.NEGATIVE_THIRTY_SIX, Constants.THIRTY_SIX,
 						Constants.THIRTY_SIX);
@@ -226,19 +187,15 @@ public class CustomPDFExporter extends PDFExporter
 
 			document.add(exportPDFTable(context, table, pageOnly, selectionOnly, encodingType));
 
-			if (postProcessor != null)
-			{
-				postProcessor.invoke(context.getELContext(), new Object[]
-				{ document });
+			if (postProcessor != null) {
+				postProcessor.invoke(context.getELContext(), new Object[]{document});
 			}
 
 			document.close();
 
 			writePDFToResponse(context.getExternalContext(), baos, filename);
 
-		}
-		catch (final DocumentException e)
-		{
+		} catch (final DocumentException e) {
 			LOG.error(e.getMessage(), e);
 			throw new IOException(e.getMessage());
 		}

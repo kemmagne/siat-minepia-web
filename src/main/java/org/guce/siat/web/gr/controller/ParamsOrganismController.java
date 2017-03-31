@@ -28,55 +28,74 @@ import org.primefaces.model.TreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * The Class ParamsOrganismController.
  */
 @ManagedBean(name = "paramsOrganismController")
 @SessionScoped
-public class ParamsOrganismController extends AbstractController<ParamsOrganism>
-{
+public class ParamsOrganismController extends AbstractController<ParamsOrganism> {
 
-	/** The Constant serialVersionUID. */
+	/**
+	 * The Constant serialVersionUID.
+	 */
 	private static final long serialVersionUID = 6136435911440328457L;
 
-	/** The Constant LOG. */
+	/**
+	 * The Constant LOG.
+	 */
 	private static final Logger LOG = LoggerFactory.getLogger(ParamsOrganismController.class);
 
-	/** The Constant PARAMS_ORGANISM_VALIDATION_ERROR. */
+	/**
+	 * The Constant PARAMS_ORGANISM_VALIDATION_ERROR.
+	 */
 	private static final String PARAMS_ORGANISM_VALIDATION_ERROR = "ParamsOrganismValidationMsg";
 
-	/** The Constant COEFFICIENT_VALIDATION_ERROR. */
+	/**
+	 * The Constant COEFFICIENT_VALIDATION_ERROR.
+	 */
 	private static final String COEFFICIENT_VALIDATION_ERROR = "CoefficientValidationMsg";
 
-	/** The Constant POSITIVE_NUMBER_ERROR. */
+	/**
+	 * The Constant POSITIVE_NUMBER_ERROR.
+	 */
 	private static final String POSITIVE_NUMBER_ERROR = "PostiveNumberError";
 
-	/** The Constant CATEGORY. */
+	/**
+	 * The Constant CATEGORY.
+	 */
 	private static final String CATEGORY = "category";
 
-	/** The Constant PARAM. */
+	/**
+	 * The Constant PARAM.
+	 */
 	private static final String PARAM = "param";
 
-	/** The root. */
+	/**
+	 * The root.
+	 */
 	private TreeNode root;
 
-	/** The selected param. */
+	/**
+	 * The selected param.
+	 */
 	private ParamsNode selectedParam;
 
-	/** The params organism service. */
+	/**
+	 * The params organism service.
+	 */
 	@ManagedProperty(value = "#{paramsOrganismService}")
 	private ParamsOrganismService paramsOrganismService;
 
-	/** The params service. */
+	/**
+	 * The params service.
+	 */
 	@ManagedProperty(value = "#{paramsService}")
 	private ParamsService paramsService;
 
 	/**
 	 * Instantiates a new params organism controller.
 	 */
-	public ParamsOrganismController()
-	{
+	public ParamsOrganismController() {
 		super(ParamsOrganism.class);
 	}
 
@@ -84,10 +103,8 @@ public class ParamsOrganismController extends AbstractController<ParamsOrganism>
 	 * Inits the.
 	 */
 	@PostConstruct
-	public void init()
-	{
-		if (LOG.isDebugEnabled())
-		{
+	public void init() {
+		if (LOG.isDebugEnabled()) {
 			LOG.debug(Constants.INIT_LOG_INFO_MESSAGE, ParamsOrganismController.class.getName());
 		}
 		super.setService(paramsOrganismService);
@@ -102,14 +119,10 @@ public class ParamsOrganismController extends AbstractController<ParamsOrganism>
 	 * @see org.guce.siat.web.common.AbstractController#getItems()
 	 */
 	@Override
-	public List<ParamsOrganism> getItems()
-	{
-		try
-		{
+	public List<ParamsOrganism> getItems() {
+		try {
 			items = paramsOrganismService.findParamsOrganismByOrganism(getCurrentOrganism(), ParamsCategory.GR);
-		}
-		catch (final Exception ex)
-		{
+		} catch (final Exception ex) {
 			JsfUtil.addErrorMessage(ex,
 					ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(PERSISTENCE_ERROR_OCCURED));
 		}
@@ -123,39 +136,28 @@ public class ParamsOrganismController extends AbstractController<ParamsOrganism>
 	 * @see org.guce.siat.web.common.AbstractController#edit()
 	 */
 	@Override
-	public void edit()
-	{
-		if (ParamsNames.MAX_ATTEMPTS_USER_CONNEXION.getCode().equals(selectedParam.getName()))
-		{
+	public void edit() {
+		if (ParamsNames.MAX_ATTEMPTS_USER_CONNEXION.getCode().equals(selectedParam.getName())) {
 			final Params param = paramsService.findParamsByName(ParamsNames.MAX_ATTEMPTS_USER_CONNEXION.getCode());
 			param.setValue(selectedParam.getValue());
 			paramsService.update(param);
-		}
-		else
-		{
-			try
-			{
+		} else {
+			try {
 				ParamsOrganism paramsOrganism = null;
 				final Float paramValue = Float.parseFloat(selectedParam.getValue());
 				if (selectedParam.getName().equalsIgnoreCase(ParamsNames.QUANTITY_COEFFICIENT.getCode())
-						&& (paramValue < 0 || paramValue > 1))
-				{
+						&& (paramValue < 0 || paramValue > 1)) {
 					final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 							COEFFICIENT_VALIDATION_ERROR);
 					JsfUtil.addErrorMessage(msg);
 
-				}
-				else if (paramValue >= 0)
-				{
+				} else if (paramValue >= 0) {
 					paramsOrganism = new ParamsOrganism();
 					paramsOrganism = convertParamsNode(selectedParam);
-					if (paramsOrganism != null)
-					{
+					if (paramsOrganism != null) {
 						paramsOrganism.setValue(selectedParam.getValue());
 						paramsOrganismService.update(paramsOrganism);
-					}
-					else if (!selectedParam.getValue().equalsIgnoreCase(getDefaultValueOfParamsOrganism(selectedParam)))
-					{
+					} else if (!selectedParam.getValue().equalsIgnoreCase(getDefaultValueOfParamsOrganism(selectedParam))) {
 						paramsOrganism = new ParamsOrganism();
 						final Params param = paramsService.findParamsByName(selectedParam.getName());
 						paramsOrganism.setOrganism(currentOrganism);
@@ -167,31 +169,23 @@ public class ParamsOrganismController extends AbstractController<ParamsOrganism>
 					final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 							ParamsOrganism.class.getSimpleName() + PersistenceActions.UPDATE.getCode());
 					JsfUtil.addSuccessMessage(msg);
-				}
-				else
-				{
+				} else {
 					final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale())
 							.getString(POSITIVE_NUMBER_ERROR);
 					JsfUtil.addErrorMessage(msg);
 				}
-			}
-			catch (final NumberFormatException ex)
-			{
+			} catch (final NumberFormatException ex) {
 				final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 						PARAMS_ORGANISM_VALIDATION_ERROR);
 				JsfUtil.addErrorMessage(msg);
-			}
-			catch (final Exception ex)
-			{
-				if (LOG.isDebugEnabled())
-				{
+			} catch (final Exception ex) {
+				if (LOG.isDebugEnabled()) {
 					LOG.debug(ex.getCause().toString());
 				}
+				LOG.warn(null, ex);
 				JsfUtil.addErrorMessage(ex,
 						ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(PERSISTENCE_ERROR_OCCURED));
-			}
-			finally
-			{
+			} finally {
 				refreshNode();
 			}
 		}
@@ -200,26 +194,21 @@ public class ParamsOrganismController extends AbstractController<ParamsOrganism>
 	/**
 	 * Refresh node.
 	 */
-	public void refreshNode()
-	{
+	public void refreshNode() {
 		root = populateParamsOrganismNode(getItems());
 	}
 
 	/**
 	 * Populate params organism node.
 	 *
-	 * @param list
-	 *           the list
+	 * @param list the list
 	 * @return the tree node
 	 */
-	public TreeNode populateParamsOrganismNode(final List<ParamsOrganism> list)
-	{
+	public TreeNode populateParamsOrganismNode(final List<ParamsOrganism> list) {
 
 		final TreeNode parentRoot = new DefaultTreeNode();
 
-
-		if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ROOT.getCode()))
-		{
+		if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ROOT.getCode())) {
 			final TreeNode authentificationAttemps = new DefaultTreeNode(new ParamsNode(
 					CategoryNames.AUTHENTIFICATION_ATTEMPTS.getCode(), null, CATEGORY), parentRoot);
 			authentificationAttemps.setExpanded(true);
@@ -228,47 +217,34 @@ public class ParamsOrganismController extends AbstractController<ParamsOrganism>
 					getCurrentOrganism(), ParamsCategory.GN);
 			final List<TreeNode> treeNodeList = new ArrayList<TreeNode>();
 			treeNodeList.add(authentificationAttemps);
-			for (final ParamsOrganism paramsOrganism : generalsParamsOrganism)
-			{
+			for (final ParamsOrganism paramsOrganism : generalsParamsOrganism) {
 				initParamsOrganismBeanList(paramsOrganism, treeNodeList);
 			}
-		}
-		else
-		{
+		} else {
 			final TreeNode produitConnu = new DefaultTreeNode(new ParamsNode(CategoryNames.PRODUIT_CONNU.getCode(), null, CATEGORY),
 					parentRoot);
 			produitConnu.setExpanded(true);
 			produitConnu.setSelectable(false);
-
-
 
 			final TreeNode analyseAuLaboratoire = new DefaultTreeNode(new ParamsNode(CategoryNames.ANALYSE_AU_LABORATOIRE.getCode(),
 					null, CATEGORY), parentRoot);
 			analyseAuLaboratoire.setExpanded(true);
 			analyseAuLaboratoire.setSelectable(false);
 
-
-
 			final TreeNode decisionNegtive = new DefaultTreeNode(new ParamsNode(CategoryNames.DECISIONS_NEGATIVES.getCode(), null,
 					CATEGORY), parentRoot);
 			decisionNegtive.setExpanded(true);
 			decisionNegtive.setSelectable(false);
-
-
 
 			final TreeNode quantite = new DefaultTreeNode(new ParamsNode(CategoryNames.QUANTITE.getCode(), null, CATEGORY),
 					parentRoot);
 			quantite.setExpanded(true);
 			quantite.setSelectable(false);
 
-
-
 			final TreeNode importateurConnu = new DefaultTreeNode(new ParamsNode(CategoryNames.IMPORTATEUR_CONNU.getCode(), null,
 					CATEGORY), parentRoot);
 			importateurConnu.setExpanded(true);
 			importateurConnu.setSelectable(false);
-
-
 
 			final TreeNode delaiDeConvocation = new DefaultTreeNode(new ParamsNode(CategoryNames.DELAI_DE_CONVOCATION.getCode(),
 					null, CATEGORY), parentRoot);
@@ -278,7 +254,6 @@ public class ParamsOrganismController extends AbstractController<ParamsOrganism>
 			rddNode.setSelectable(false);
 			rddNode.setExpanded(true);
 			rddNode.setSelectable(false);
-
 
 			importateurConnu.setExpanded(true);
 			importateurConnu.setSelectable(false);
@@ -293,8 +268,7 @@ public class ParamsOrganismController extends AbstractController<ParamsOrganism>
 			treeNodeList.add(delaiDeConvocation);
 			treeNodeList.add(rddNode);
 
-			for (final ParamsOrganism paramsOrganism : list)
-			{
+			for (final ParamsOrganism paramsOrganism : list) {
 				initParamsOrganismBeanList(paramsOrganism, treeNodeList);
 			}
 		}
@@ -304,88 +278,58 @@ public class ParamsOrganismController extends AbstractController<ParamsOrganism>
 	/**
 	 * Inits the params organism bean list.
 	 *
-	 * @param paramsOrganism
-	 *           the params organism
-	 * @param treeNodeList
-	 *           the tree node list
+	 * @param paramsOrganism the params organism
+	 * @param treeNodeList the tree node list
 	 */
-	public void initParamsOrganismBeanList(final ParamsOrganism paramsOrganism, final List<TreeNode> treeNodeList)
-	{
-		try
-		{
+	public void initParamsOrganismBeanList(final ParamsOrganism paramsOrganism, final List<TreeNode> treeNodeList) {
+		try {
 
-				if (paramsOrganism.getParam().getName().equalsIgnoreCase(ParamsNames.PRODUCT_KNOWN_PERIOD.getCode()))
-				{
-					final TreeNode productknowPeriod = new DefaultTreeNode(convertParamsOrganism(paramsOrganism),
-							treeNodeList.get(Constants.ZERO));
-					productknowPeriod.setSelectable(false);
-				}
+			if (paramsOrganism.getParam().getName().equalsIgnoreCase(ParamsNames.PRODUCT_KNOWN_PERIOD.getCode())) {
+				final TreeNode productknowPeriod = new DefaultTreeNode(convertParamsOrganism(paramsOrganism),
+						treeNodeList.get(Constants.ZERO));
+				productknowPeriod.setSelectable(false);
+			} else if (paramsOrganism.getParam().getName().equalsIgnoreCase(ParamsNames.PRODUCT_KNOWN_THRESHOLD.getCode())) {
+				final TreeNode productknownthreshold = new DefaultTreeNode(convertParamsOrganism(paramsOrganism),
+						treeNodeList.get(Constants.ZERO));
+				productknownthreshold.setSelectable(false);
+			} else if (paramsOrganism.getParam().getName().equalsIgnoreCase(ParamsNames.PRODUCT_TESTED_PERIOD.getCode())) {
+				final TreeNode productTestedPeriod = new DefaultTreeNode(convertParamsOrganism(paramsOrganism),
+						treeNodeList.get(Constants.ONE));
+				productTestedPeriod.setSelectable(false);
+			} else if (paramsOrganism.getParam().getName().equalsIgnoreCase(ParamsNames.NEGATIVE_DECISIONS_PERIOD.getCode())) {
+				final TreeNode negativeDecisionPeriod = new DefaultTreeNode(convertParamsOrganism(paramsOrganism),
+						treeNodeList.get(Constants.TWO));
+				negativeDecisionPeriod.setSelectable(false);
+			} else if (paramsOrganism.getParam().getName().equalsIgnoreCase(ParamsNames.QUANTITY_COEFFICIENT.getCode())) {
+				final TreeNode quantityCoefficient = new DefaultTreeNode(convertParamsOrganism(paramsOrganism),
+						treeNodeList.get(Constants.THREE));
+				quantityCoefficient.setSelectable(false);
+			} else if (paramsOrganism.getParam().getName().equalsIgnoreCase(ParamsNames.IMPORTER_KNOWN_PERIOD.getCode())) {
+				final TreeNode importerKnowPeriod = new DefaultTreeNode(convertParamsOrganism(paramsOrganism),
+						treeNodeList.get(Constants.FOUR));
+				importerKnowPeriod.setSelectable(false);
+			} else if (paramsOrganism.getParam().getName().equalsIgnoreCase(ParamsNames.IMPORTER_KNOWN_THRESHOLD.getCode())) {
+				final TreeNode importerKnowthreshold = new DefaultTreeNode(convertParamsOrganism(paramsOrganism),
+						treeNodeList.get(Constants.FOUR));
+				importerKnowthreshold.setSelectable(false);
+			} else if (paramsOrganism.getParam().getName().equalsIgnoreCase(ParamsNames.RDD_DELAY.getCode())) {
+				final TreeNode rddDelay = new DefaultTreeNode(convertParamsOrganism(paramsOrganism),
+						treeNodeList.get(Constants.FIVE));
+				rddDelay.setSelectable(false);
+			} else if (paramsOrganism.getParam().getName().equalsIgnoreCase(ParamsNames.CLEARANCE_DELAY.getCode())) {
+				final TreeNode clearanceDelay = new DefaultTreeNode(convertParamsOrganism(paramsOrganism),
+						treeNodeList.get(Constants.FIVE));
+				clearanceDelay.setSelectable(false);
+			} else if (paramsOrganism.getParam().getName().equalsIgnoreCase(ParamsNames.MEC_DELAY.getCode())) {
+				final TreeNode mecDelay = new DefaultTreeNode(convertParamsOrganism(paramsOrganism),
+						treeNodeList.get(Constants.FIVE));
+				mecDelay.setSelectable(false);
+			} else if (paramsOrganism.getParam().getName().equalsIgnoreCase(ParamsNames.NB_RDD.getCode())) {
+				final TreeNode nbRdd = new DefaultTreeNode(convertParamsOrganism(paramsOrganism), treeNodeList.get(Constants.SIX));
+				nbRdd.setSelectable(false);
+			}
 
-				else if (paramsOrganism.getParam().getName().equalsIgnoreCase(ParamsNames.PRODUCT_KNOWN_THRESHOLD.getCode()))
-				{
-					final TreeNode productknownthreshold = new DefaultTreeNode(convertParamsOrganism(paramsOrganism),
-							treeNodeList.get(Constants.ZERO));
-					productknownthreshold.setSelectable(false);
-				}
-				else if (paramsOrganism.getParam().getName().equalsIgnoreCase(ParamsNames.PRODUCT_TESTED_PERIOD.getCode()))
-				{
-					final TreeNode productTestedPeriod = new DefaultTreeNode(convertParamsOrganism(paramsOrganism),
-							treeNodeList.get(Constants.ONE));
-					productTestedPeriod.setSelectable(false);
-				}
-				else if (paramsOrganism.getParam().getName().equalsIgnoreCase(ParamsNames.NEGATIVE_DECISIONS_PERIOD.getCode()))
-				{
-					final TreeNode negativeDecisionPeriod = new DefaultTreeNode(convertParamsOrganism(paramsOrganism),
-							treeNodeList.get(Constants.TWO));
-					negativeDecisionPeriod.setSelectable(false);
-				}
-				else if (paramsOrganism.getParam().getName().equalsIgnoreCase(ParamsNames.QUANTITY_COEFFICIENT.getCode()))
-				{
-					final TreeNode quantityCoefficient = new DefaultTreeNode(convertParamsOrganism(paramsOrganism),
-							treeNodeList.get(Constants.THREE));
-					quantityCoefficient.setSelectable(false);
-				}
-				else if (paramsOrganism.getParam().getName().equalsIgnoreCase(ParamsNames.IMPORTER_KNOWN_PERIOD.getCode()))
-				{
-					final TreeNode importerKnowPeriod = new DefaultTreeNode(convertParamsOrganism(paramsOrganism),
-							treeNodeList.get(Constants.FOUR));
-					importerKnowPeriod.setSelectable(false);
-				}
-				else if (paramsOrganism.getParam().getName().equalsIgnoreCase(ParamsNames.IMPORTER_KNOWN_THRESHOLD.getCode()))
-				{
-					final TreeNode importerKnowthreshold = new DefaultTreeNode(convertParamsOrganism(paramsOrganism),
-							treeNodeList.get(Constants.FOUR));
-					importerKnowthreshold.setSelectable(false);
-				}
-
-				else if (paramsOrganism.getParam().getName().equalsIgnoreCase(ParamsNames.RDD_DELAY.getCode()))
-				{
-					final TreeNode rddDelay = new DefaultTreeNode(convertParamsOrganism(paramsOrganism),
-							treeNodeList.get(Constants.FIVE));
-					rddDelay.setSelectable(false);
-				}
-				else if (paramsOrganism.getParam().getName().equalsIgnoreCase(ParamsNames.CLEARANCE_DELAY.getCode()))
-				{
-					final TreeNode clearanceDelay = new DefaultTreeNode(convertParamsOrganism(paramsOrganism),
-							treeNodeList.get(Constants.FIVE));
-					clearanceDelay.setSelectable(false);
-				}
-				else if (paramsOrganism.getParam().getName().equalsIgnoreCase(ParamsNames.MEC_DELAY.getCode()))
-				{
-					final TreeNode mecDelay = new DefaultTreeNode(convertParamsOrganism(paramsOrganism),
-							treeNodeList.get(Constants.FIVE));
-					mecDelay.setSelectable(false);
-				}
-				else if (paramsOrganism.getParam().getName().equalsIgnoreCase(ParamsNames.NB_RDD.getCode()))
-				{
-					final TreeNode nbRdd = new DefaultTreeNode(convertParamsOrganism(paramsOrganism), treeNodeList.get(Constants.SIX));
-					nbRdd.setSelectable(false);
-				}
-
-
-		}
-		catch (final Exception e)
-		{
+		} catch (final Exception e) {
 			LOG.error(e.getMessage(), e);
 		}
 	}
@@ -393,36 +337,30 @@ public class ParamsOrganismController extends AbstractController<ParamsOrganism>
 	/**
 	 * Convert params organism.
 	 *
-	 * @param param
-	 *           the param
+	 * @param param the param
 	 * @return the params node
 	 */
-	public ParamsNode convertParamsOrganism(final ParamsOrganism param)
-	{
+	public ParamsNode convertParamsOrganism(final ParamsOrganism param) {
 		return new ParamsNode(param.getParam().getName(), param.getValue(), PARAM);
 	}
 
 	/**
 	 * Convert params node.
 	 *
-	 * @param paramsNode
-	 *           the params node
+	 * @param paramsNode the params node
 	 * @return the params organism
 	 */
-	public ParamsOrganism convertParamsNode(final ParamsNode paramsNode)
-	{
+	public ParamsOrganism convertParamsNode(final ParamsNode paramsNode) {
 		return paramsOrganismService.findParamsOrganismByOrganismAndName(currentOrganism, paramsNode.getName());
 	}
 
 	/**
 	 * Gets the default value of params organism.
 	 *
-	 * @param paramsNode
-	 *           the params node
+	 * @param paramsNode the params node
 	 * @return the default value of params organism
 	 */
-	public String getDefaultValueOfParamsOrganism(final ParamsNode paramsNode)
-	{
+	public String getDefaultValueOfParamsOrganism(final ParamsNode paramsNode) {
 		final Params param = paramsService.findParamsByName(paramsNode.getName());
 		return param.getValue();
 	}
@@ -432,20 +370,16 @@ public class ParamsOrganismController extends AbstractController<ParamsOrganism>
 	 *
 	 * @return the params organism service
 	 */
-	public ParamsOrganismService getParamsOrganismService()
-	{
+	public ParamsOrganismService getParamsOrganismService() {
 		return paramsOrganismService;
 	}
-
 
 	/**
 	 * Sets the params organism service.
 	 *
-	 * @param paramsOrganismService
-	 *           the new params organism service
+	 * @param paramsOrganismService the new params organism service
 	 */
-	public void setParamsOrganismService(final ParamsOrganismService paramsOrganismService)
-	{
+	public void setParamsOrganismService(final ParamsOrganismService paramsOrganismService) {
 		this.paramsOrganismService = paramsOrganismService;
 	}
 
@@ -454,19 +388,16 @@ public class ParamsOrganismController extends AbstractController<ParamsOrganism>
 	 *
 	 * @return the root
 	 */
-	public TreeNode getRoot()
-	{
+	public TreeNode getRoot() {
 		return root;
 	}
 
 	/**
 	 * Sets the root.
 	 *
-	 * @param root
-	 *           the root to set
+	 * @param root the root to set
 	 */
-	public void setRoot(final TreeNode root)
-	{
+	public void setRoot(final TreeNode root) {
 		this.root = root;
 	}
 
@@ -475,19 +406,16 @@ public class ParamsOrganismController extends AbstractController<ParamsOrganism>
 	 *
 	 * @return the selectedParam
 	 */
-	public ParamsNode getSelectedParam()
-	{
+	public ParamsNode getSelectedParam() {
 		return selectedParam;
 	}
 
 	/**
 	 * Sets the selected param.
 	 *
-	 * @param selectedParam
-	 *           the selectedParam to set
+	 * @param selectedParam the selectedParam to set
 	 */
-	public void setSelectedParam(final ParamsNode selectedParam)
-	{
+	public void setSelectedParam(final ParamsNode selectedParam) {
 		this.selectedParam = selectedParam;
 	}
 
@@ -496,26 +424,17 @@ public class ParamsOrganismController extends AbstractController<ParamsOrganism>
 	 *
 	 * @return the paramsService
 	 */
-	public ParamsService getParamsService()
-	{
+	public ParamsService getParamsService() {
 		return paramsService;
 	}
 
 	/**
 	 * Sets the params service.
 	 *
-	 * @param paramsService
-	 *           the paramsService to set
+	 * @param paramsService the paramsService to set
 	 */
-	public void setParamsService(final ParamsService paramsService)
-	{
+	public void setParamsService(final ParamsService paramsService) {
 		this.paramsService = paramsService;
 	}
-
-
-
-
-
-
 
 }

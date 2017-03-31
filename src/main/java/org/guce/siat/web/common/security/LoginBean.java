@@ -1,7 +1,5 @@
 package org.guce.siat.web.common.security;
 
-
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.MessageFormat;
@@ -69,136 +67,197 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 
-
 /**
  * The Class LoginBean.
  */
 @ManagedBean(name = "loginMgmtBean")
 @RequestScoped
 @SessionScoped
-public class LoginBean implements Serializable
-{
+public class LoginBean implements Serializable {
 
-	/** The Constant serialVersionUID. */
+	/**
+	 * The Constant serialVersionUID.
+	 */
 	private static final long serialVersionUID = -8770486440615437519L;
 
-	/** The Constant LOG. */
+	/**
+	 * The Constant LOG.
+	 */
 	private static final Logger LOG = LoggerFactory.getLogger(LoginBean.class);
 
-	/** The Constant LOCAL_BUNDLE_NAME. */
+	/**
+	 * The Constant LOCAL_BUNDLE_NAME.
+	 */
 	private static final String LOCAL_BUNDLE_NAME = "org.guce.siat.messages.locale";
 
-	/** The Constant AUTHENTIFICATION_PROBLEM. */
+	/**
+	 * The Constant AUTHENTIFICATION_PROBLEM.
+	 */
 	private static final String AUTHENTIFICATION_PROBLEM = "authentification_problem";
 
-	/** The Constant RESET_CHANGE_SUCCESS. */
+	/**
+	 * The Constant RESET_CHANGE_SUCCESS.
+	 */
 	private static final String RESET_CHANGE_SUCCESS = "reset_change_success";
 
-	/** The Constant SEND_MAIL_MESSAGE. */
+	/**
+	 * The Constant SEND_MAIL_MESSAGE.
+	 */
 	private static final String SEND_MAIL_MESSAGE = "send_mail_message";
 
-	/** The Constant EMAIL_BODY. */
+	/**
+	 * The Constant EMAIL_BODY.
+	 */
 	private static final String EMAIL_BODY = "emailBodyUserLocked";
 
-	/** The Constant EMAIL_SUBJECT_USER_LOCKED. */
+	/**
+	 * The Constant EMAIL_SUBJECT_USER_LOCKED.
+	 */
 	private static final String EMAIL_SUBJECT_USER_LOCKED = "send_mail_title";
 
-	/** The user name. */
+	/**
+	 * The user name.
+	 */
 	private String userName;
 
-	/** The password. */
+	/**
+	 * The password.
+	 */
 	private String password;
 
-	/** The logged user. */
+	/**
+	 * The logged user.
+	 */
 	private User loggedUser;
 
-	/** The bundle. */
+	/**
+	 * The bundle.
+	 */
 	private ResourceBundle bundle;
 
-	/** The context. */
+	/**
+	 * The context.
+	 */
 	private FacesContext context;
 
-	/** The new password. */
+	/**
+	 * The new password.
+	 */
 	private String newPassword;
 
-	/** The gr params organism map. */
+	/**
+	 * The gr params organism map.
+	 */
 	private Map<String, ParamsOrganism> grParamsOrganismMap;
 
-	/** The authentication manager. */
+	/**
+	 * The authentication manager.
+	 */
 	@ManagedProperty(value = "#{authenticationManager}")
 	private AuthenticationManager authenticationManager;
 
-	/** The administration service. */
+	/**
+	 * The administration service.
+	 */
 	@ManagedProperty(value = "#{administrationService}")
 	private AdministrationService administrationService;
 
-	/** The ministry service. */
+	/**
+	 * The ministry service.
+	 */
 	@ManagedProperty(value = "#{ministryService}")
 	private MinistryService ministryService;
 
-	/** The organism service. */
+	/**
+	 * The organism service.
+	 */
 	@ManagedProperty(value = "#{organismService}")
 	private OrganismService organismService;
 
-	/** The sub department service. */
+	/**
+	 * The sub department service.
+	 */
 	@ManagedProperty(value = "#{subDepartmentService}")
 	private SubDepartmentService subDepartmentService;
 
-	/** The service service. */
+	/**
+	 * The service service.
+	 */
 	@ManagedProperty(value = "#{serviceService}")
 	private ServiceService serviceService;
 
-	/** The entity service. */
+	/**
+	 * The entity service.
+	 */
 	@ManagedProperty(value = "#{entityService}")
 	private EntityService entityService;
 
-	/** The user service. */
+	/**
+	 * The user service.
+	 */
 	@ManagedProperty(value = "#{userService}")
 	private UserService userService;
 
-	/** The delegation service. */
+	/**
+	 * The delegation service.
+	 */
 	@ManagedProperty(value = "#{delegationService}")
 	private DelegationService delegationService;
 
-	/** The params organism service. */
+	/**
+	 * The params organism service.
+	 */
 	@ManagedProperty(value = "#{paramsOrganismService}")
 	private ParamsOrganismService paramsOrganismService;
 
-	/** The mail service. */
+	/**
+	 * The mail service.
+	 */
 	@ManagedProperty(value = "#{mailService}")
 	private MailService mailService;
 
-	/** The file type service. */
+	/**
+	 * The file type service.
+	 */
 	@ManagedProperty(value = "#{fileTypeService}")
 	private FileTypeService fileTypeService;
 
-	/** The session authentication strategy. */
+	/**
+	 * The session authentication strategy.
+	 */
 	@ManagedProperty(value = "#{sessionAuthenticationStrategy}")
 	private SessionAuthenticationStrategy sessionAuthenticationStrategy;
 
-	/** The session registry. */
+	/**
+	 * The session registry.
+	 */
 	@ManagedProperty(value = "#{sessionRegistry}")
 	private SessionRegistry sessionRegistry;
 
-	/** The ap rendred. */
+	/**
+	 * The ap rendred.
+	 */
 	private Boolean apRendred;
 
-	/** The cct rendred. */
+	/**
+	 * The cct rendred.
+	 */
 	private Boolean cctRendred;
 
-	/** The search render. */
+	/**
+	 * The search render.
+	 */
 	private Boolean searchRender;
 
-	/** The payment render. */
+	/**
+	 * The payment render.
+	 */
 	private Boolean paymentRender;
-
-
 
 	/**
 	 * Instantiates a new login bean.
 	 */
-	public LoginBean()
-	{
+	public LoginBean() {
 		context = FacesContext.getCurrentInstance();
 		bundle = context.getApplication().getResourceBundle(context, "bundle");
 	}
@@ -207,29 +266,22 @@ public class LoginBean implements Serializable
 	 * Inits the.
 	 */
 	@PostConstruct
-	public void init()
-	{
-		if (LOG.isDebugEnabled())
-		{
+	public void init() {
+		if (LOG.isDebugEnabled()) {
 			LOG.debug(Constants.INIT_LOG_INFO_MESSAGE, LoginBean.class.getName());
 		}
 		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (auth instanceof UsernamePasswordAuthenticationToken)
-		{
+		if (auth instanceof UsernamePasswordAuthenticationToken) {
 			final String username = ((org.springframework.security.core.userdetails.User) auth.getPrincipal()).getUsername();
 			final User user = userService.findByLogin(username);
-			if (!user.getFirstLogin())
-			{
+			if (!user.getFirstLogin()) {
 				final FacesContext facesContext = FacesContext.getCurrentInstance();
 				final ExternalContext extContext = facesContext.getExternalContext();
 				final String url = extContext.encodeActionURL(facesContext.getApplication().getViewHandler()
 						.getActionURL(facesContext, ControllerConstants.Pages.INDEX_PAGE));
-				try
-				{
+				try {
 					extContext.redirect(url);
-				}
-				catch (final IOException e)
-				{
+				} catch (final IOException e) {
 					LOG.error(e.getMessage(), e);
 					JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 							AUTHENTIFICATION_PROBLEM));
@@ -238,18 +290,14 @@ public class LoginBean implements Serializable
 		}
 	}
 
-
 	/**
 	 * Login.
 	 *
 	 * @return the string
-	 * @throws ServletException
-	 *            the servlet exception
+	 * @throws ServletException the servlet exception
 	 */
-	public String login() throws ServletException
-	{
-		try
-		{
+	public String login() throws ServletException {
+		try {
 			((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false)).invalidate();
 			final Authentication request = new UsernamePasswordAuthenticationToken(this.getUserName(), this.getPassword());
 			final Authentication result = authenticationManager.authenticate(request);
@@ -292,46 +340,33 @@ public class LoginBean implements Serializable
 			session.setAttribute("currentEntity", currentEntity);
 
 			// Chargement de la liste des params organism dans la session
-			if (currentOrganism != null)
-			{
+			if (currentOrganism != null) {
 				addParamsOrganismInSession(currentOrganism);
 			}
 
 			session.setAttribute("authorities", user.getAuthorities());
 
-			if (user.getFirstLogin())
-			{
+			if (user.getFirstLogin()) {
 				return ControllerConstants.Pages.RESET_PASSWORD_PAGE_REDIRECT;
 			}
 
 			// Conditional Redirection (AP, CCT, Search)
 			userDashboardsRender();
 
-			if (BooleanUtils.isTrue(cctRendred))
-			{
+			if (BooleanUtils.isTrue(cctRendred)) {
 				return ControllerConstants.Pages.FO.DASHBOARD_CCT_INDEX_PAGE_REDIRECT;
-			}
-			else if (BooleanUtils.isTrue(apRendred))
-			{
+			} else if (BooleanUtils.isTrue(apRendred)) {
 				return ControllerConstants.Pages.FO.DASHBOARD_AP_INDEX_PAGE_REDIRECT;
-			}
-			else if (BooleanUtils.isTrue(searchRender))
-			{
+			} else if (BooleanUtils.isTrue(searchRender)) {
 				return ControllerConstants.Pages.FO.SIMPLE_SEARCH_INDEX_PAGE_REDIRECT;
-			}
-			else if (BooleanUtils.isTrue(paymentRender))
-			{
+			} else if (BooleanUtils.isTrue(paymentRender)) {
 				return ControllerConstants.Pages.FO.PAYMENT_INDEX_PAGE_REDIRECT;
-			}
-			else
-			{
+			} else {
 				return ControllerConstants.Pages.INDEX_PAGE;
 			}
 
-		}
-		catch (final BadCredentialsException bce)
-		{
-			LOG.error("######  An attempt to connect with bad credentials {}", userName);
+		} catch (final BadCredentialsException bce) {
+			LOG.error("######  An attempt to connect with bad credentials " + userName, bce);
 
 			final User user = userService.findByLogin(userName);
 
@@ -340,10 +375,8 @@ public class LoginBean implements Serializable
 
 			JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 					"authentification_loginFailed_badCredentials"));
-		}
-		catch (final LockedException le)
-		{
-			LOG.error("######  An attempt to connect with Locked account {}", userName);
+		} catch (final LockedException le) {
+			LOG.error("######  An attempt to connect with Locked account " + userName, le);
 
 			final User user = userService.findByLogin(userName);
 
@@ -353,41 +386,30 @@ public class LoginBean implements Serializable
 					ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 							"authentification_loginFailed_lockedUser"), ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale())
 							.getString(SEND_MAIL_MESSAGE), user.getLogin(), DateUtils.formatSimpleDateForOracle(user
-							.getLastAttemptsTime()));
+					.getLastAttemptsTime()));
 			JsfUtil.addErrorMessage(message);
-		}
-		catch (final SessionAuthenticationException sae)
-		{
+		} catch (final SessionAuthenticationException sae) {
 			//maximum of sessions exceeded
-			LOG.error("######  An attempt to connect ( maximum of sessions exceeded ) {}", userName);
+			LOG.error("######  An attempt to connect ( maximum of sessions exceeded ) " + userName, sae);
 
 			JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 					"logPage_maximumSessionsexceeded"));
 
 			RequestContext.getCurrentInstance().execute("PF('logoutAthorSession').show();");
-		}
-		catch (final AuthenticationException ae)
-		{
-			LOG.error("######  An attempt to connect ( AuthenticationException ) {}", userName);
+		} catch (final AuthenticationException ae) {
+			LOG.error("######  An attempt to connect ( AuthenticationException ) " + userName, ae);
 
-			if (userName.isEmpty() && password.isEmpty())
-			{
+			if (userName.isEmpty() && password.isEmpty()) {
 
 				JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 						"authentification_loginFailed_accessDenied_user_password"));
-			}
-			else if (password.isEmpty())
-			{
+			} else if (password.isEmpty()) {
 				JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 						"authentification_loginFailed_accessDenied_password"));
-			}
-			else if (userName.isEmpty())
-			{
+			} else if (userName.isEmpty()) {
 				JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 						"authentification_loginFailed_accessDenied_user"));
-			}
-			else
-			{
+			} else {
 				JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 						"authentification_loginFailed_accessDenied_prob"));
 			}
@@ -399,8 +421,7 @@ public class LoginBean implements Serializable
 	/**
 	 * User dashboards render.
 	 */
-	private void userDashboardsRender()
-	{
+	private void userDashboardsRender() {
 
 		final List<FileTypeCode> apCodes = Arrays.asList(FileTypeCode.AIE_MINADER, FileTypeCode.EH_MINADER,
 				FileTypeCode.AS_MINADER, FileTypeCode.CAT_MINADER, FileTypeCode.PIVPSRP_MINADER, FileTypeCode.DI_MINADER,
@@ -418,28 +439,21 @@ public class LoginBean implements Serializable
 		final List<FileType> fileTypes = fileTypeService.findDistinctFileTypesByUser(getLoggedUser());
 		final Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
 
-
-		for (final FileType fileType : fileTypes)
-		{
-			if (apCodes.contains(fileType.getCode()))
-			{
+		for (final FileType fileType : fileTypes) {
+			if (apCodes.contains(fileType.getCode())) {
 				sessionMap.put("apRendred", true);
 				apRendred = Boolean.TRUE;
-			}
-			else if (cctCodes.contains(fileType.getCode()))
-			{
+			} else if (cctCodes.contains(fileType.getCode())) {
 				sessionMap.put("cctRendred", true);
 				cctRendred = Boolean.TRUE;
 			}
 		}
-		if (getLoggedUser().getAuthoritiesList().contains("SUPER") || getLoggedUser().getAuthoritiesList().contains("CONS"))
-		{
+		if (getLoggedUser().getAuthoritiesList().contains("SUPER") || getLoggedUser().getAuthoritiesList().contains("CONS")) {
 			apRendred = Boolean.FALSE;
 			cctRendred = Boolean.FALSE;
 			searchRender = Boolean.TRUE;
 		}
-		if (getLoggedUser().getAuthoritiesList().contains("CA"))
-		{
+		if (getLoggedUser().getAuthoritiesList().contains("CA")) {
 			apRendred = Boolean.FALSE;
 			cctRendred = Boolean.FALSE;
 			paymentRender = Boolean.TRUE;
@@ -452,27 +466,20 @@ public class LoginBean implements Serializable
 	 *
 	 * @return the
 	 */
-	public String confirmLogoutOtherSession()
-	{
+	public String confirmLogoutOtherSession() {
 
 		final List<Object> sList = sessionRegistry.getAllPrincipals();
-		for (final Object principal : sList)
-		{
+		for (final Object principal : sList) {
 			final UserDetails userDetails = (UserDetails) principal;
-			if (userDetails.getUsername().equals(userName))
-			{
-				for (final SessionInformation information : sessionRegistry.getAllSessions(userDetails, true))
-				{
+			if (userDetails.getUsername().equals(userName)) {
+				for (final SessionInformation information : sessionRegistry.getAllSessions(userDetails, true)) {
 					information.expireNow();
 				}
 			}
 		}
-		try
-		{
+		try {
 			return this.login();
-		}
-		catch (final ServletException ex)
-		{
+		} catch (final ServletException ex) {
 			LOG.error(ex.getMessage(), ex);
 		}
 		return null;
@@ -481,19 +488,16 @@ public class LoginBean implements Serializable
 	/**
 	 * Adds the params organism in session.
 	 *
-	 * @param organism
-	 *           the organism
+	 * @param organism the organism
 	 */
-	private void addParamsOrganismInSession(final Organism organism)
-	{
+	private void addParamsOrganismInSession(final Organism organism) {
 		grParamsOrganismMap = new HashMap<String, ParamsOrganism>();
 
 		// Chargement de la liste des params organism dans la session
 		final List<ParamsOrganism> grParamsOrganism = paramsOrganismService.findParamsOrganismByOrganism(organism,
 				ParamsCategory.GR);
 
-		for (final ParamsOrganism params : grParamsOrganism)
-		{
+		for (final ParamsOrganism params : grParamsOrganism) {
 			grParamsOrganismMap.put(params.getParam().getName(), params);
 		}
 
@@ -504,13 +508,10 @@ public class LoginBean implements Serializable
 	/**
 	 * Validation new password.
 	 *
-	 * @throws ServletException
-	 *            the servlet exception
+	 * @throws ServletException the servlet exception
 	 */
-	public void validationNewPassword() throws ServletException
-	{
-		try
-		{
+	public void validationNewPassword() throws ServletException {
+		try {
 			final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 			final String nomUtilisateur = ((org.springframework.security.core.userdetails.User) auth.getPrincipal()).getUsername();
 			final User user = userService.findByLogin(nomUtilisateur);
@@ -524,34 +525,26 @@ public class LoginBean implements Serializable
 			JsfUtil.addSuccessMessage(msg);
 			SecurityContextHolder.getContext().setAuthentication(null);
 
-		}
-		catch (final Exception ex)
-		{
+		} catch (final Exception ex) {
 			JsfUtil.addErrorMessage(ex, ex.getMessage());
 		}
-		try
-		{
+		try {
 			final FacesContext facesContext = FacesContext.getCurrentInstance();
 			final ExternalContext extContext = facesContext.getExternalContext();
 			final String url = extContext.encodeActionURL(facesContext.getApplication().getViewHandler()
 					.getActionURL(facesContext, ControllerConstants.Pages.INDEX_PAGE));
 			extContext.redirect(url);
-		}
-		catch (final IOException ex)
-		{
+		} catch (final IOException ex) {
 			JsfUtil.addErrorMessage(ex, ex.getMessage());
 		}
 	}
 
-
 	/**
 	 * Send email.
 	 *
-	 * @param user
-	 *           the user
+	 * @param user the user
 	 */
-	public void sendEmail(final User user)
-	{
+	public void sendEmail(final User user) {
 		final String templateFileName = localeFileTemplate(EMAIL_BODY, getCurrentLocale().getLanguage());
 		Map<String, String> map = new HashMap<String, String>();
 		map = prepareMap(user, templateFileName);
@@ -561,14 +554,11 @@ public class LoginBean implements Serializable
 	/**
 	 * Prepare map.
 	 *
-	 * @param user
-	 *           the user
-	 * @param template
-	 *           the template
+	 * @param user the user
+	 * @param template the template
 	 * @return the map
 	 */
-	private Map<String, String> prepareMap(final User user, final String template)
-	{
+	private Map<String, String> prepareMap(final User user, final String template) {
 		final Map<String, String> map = new HashMap<String, String>();
 
 		map.put(MailConstants.SUBJECT,
@@ -585,14 +575,11 @@ public class LoginBean implements Serializable
 	/**
 	 * Locale file template.
 	 *
-	 * @param fileName
-	 *           the file name
-	 * @param language
-	 *           the language
+	 * @param fileName the file name
+	 * @param language the language
 	 * @return the string
 	 */
-	private String localeFileTemplate(final String fileName, final String language)
-	{
+	private String localeFileTemplate(final String fileName, final String language) {
 		final StringBuilder templateFileName = new StringBuilder(fileName);
 		templateFileName.append("_").append(language).append(".vm");
 		return templateFileName.toString();
@@ -603,8 +590,7 @@ public class LoginBean implements Serializable
 	 *
 	 * @return the current locale
 	 */
-	public Locale getCurrentLocale()
-	{
+	public Locale getCurrentLocale() {
 		return FacesContext.getCurrentInstance().getViewRoot().getLocale();
 	}
 
@@ -613,8 +599,7 @@ public class LoginBean implements Serializable
 	 *
 	 * @return the string
 	 */
-	public String cancel()
-	{
+	public String cancel() {
 		return null;
 	}
 
@@ -623,19 +608,16 @@ public class LoginBean implements Serializable
 	 *
 	 * @return the userName
 	 */
-	public String getUserName()
-	{
+	public String getUserName() {
 		return userName;
 	}
 
 	/**
 	 * Sets the user name.
 	 *
-	 * @param userName
-	 *           the userName to set
+	 * @param userName the userName to set
 	 */
-	public void setUserName(final String userName)
-	{
+	public void setUserName(final String userName) {
 		this.userName = userName;
 	}
 
@@ -644,19 +626,16 @@ public class LoginBean implements Serializable
 	 *
 	 * @return the password
 	 */
-	public String getPassword()
-	{
+	public String getPassword() {
 		return password;
 	}
 
 	/**
 	 * Sets the password.
 	 *
-	 * @param password
-	 *           the password to set
+	 * @param password the password to set
 	 */
-	public void setPassword(final String password)
-	{
+	public void setPassword(final String password) {
 		this.password = password;
 	}
 
@@ -665,19 +644,16 @@ public class LoginBean implements Serializable
 	 *
 	 * @return the loggedUser
 	 */
-	public User getLoggedUser()
-	{
+	public User getLoggedUser() {
 		return loggedUser;
 	}
 
 	/**
 	 * Sets the logged user.
 	 *
-	 * @param loggedUser
-	 *           the loggedUser to set
+	 * @param loggedUser the loggedUser to set
 	 */
-	public void setLoggedUser(final User loggedUser)
-	{
+	public void setLoggedUser(final User loggedUser) {
 		this.loggedUser = loggedUser;
 	}
 
@@ -686,19 +662,16 @@ public class LoginBean implements Serializable
 	 *
 	 * @return the bundle
 	 */
-	public ResourceBundle getBundle()
-	{
+	public ResourceBundle getBundle() {
 		return bundle;
 	}
 
 	/**
 	 * Sets the bundle.
 	 *
-	 * @param bundle
-	 *           the bundle to set
+	 * @param bundle the bundle to set
 	 */
-	public void setBundle(final ResourceBundle bundle)
-	{
+	public void setBundle(final ResourceBundle bundle) {
 		this.bundle = bundle;
 	}
 
@@ -707,19 +680,16 @@ public class LoginBean implements Serializable
 	 *
 	 * @return the context
 	 */
-	public FacesContext getContext()
-	{
+	public FacesContext getContext() {
 		return context;
 	}
 
 	/**
 	 * Sets the context.
 	 *
-	 * @param context
-	 *           the context to set
+	 * @param context the context to set
 	 */
-	public void setContext(final FacesContext context)
-	{
+	public void setContext(final FacesContext context) {
 		this.context = context;
 	}
 
@@ -728,19 +698,16 @@ public class LoginBean implements Serializable
 	 *
 	 * @return the newPassword
 	 */
-	public String getNewPassword()
-	{
+	public String getNewPassword() {
 		return newPassword;
 	}
 
 	/**
 	 * Sets the new password.
 	 *
-	 * @param newPassword
-	 *           the newPassword to set
+	 * @param newPassword the newPassword to set
 	 */
-	public void setNewPassword(final String newPassword)
-	{
+	public void setNewPassword(final String newPassword) {
 		this.newPassword = newPassword;
 	}
 
@@ -749,19 +716,16 @@ public class LoginBean implements Serializable
 	 *
 	 * @return the grParamsOrganismMap
 	 */
-	public Map<String, ParamsOrganism> getGrParamsOrganismMap()
-	{
+	public Map<String, ParamsOrganism> getGrParamsOrganismMap() {
 		return grParamsOrganismMap;
 	}
 
 	/**
 	 * Sets the gr params organism map.
 	 *
-	 * @param grParamsOrganismMap
-	 *           the grParamsOrganismMap to set
+	 * @param grParamsOrganismMap the grParamsOrganismMap to set
 	 */
-	public void setGrParamsOrganismMap(final Map<String, ParamsOrganism> grParamsOrganismMap)
-	{
+	public void setGrParamsOrganismMap(final Map<String, ParamsOrganism> grParamsOrganismMap) {
 		this.grParamsOrganismMap = grParamsOrganismMap;
 	}
 
@@ -770,19 +734,16 @@ public class LoginBean implements Serializable
 	 *
 	 * @return the authenticationManager
 	 */
-	public AuthenticationManager getAuthenticationManager()
-	{
+	public AuthenticationManager getAuthenticationManager() {
 		return authenticationManager;
 	}
 
 	/**
 	 * Sets the authentication manager.
 	 *
-	 * @param authenticationManager
-	 *           the authenticationManager to set
+	 * @param authenticationManager the authenticationManager to set
 	 */
-	public void setAuthenticationManager(final AuthenticationManager authenticationManager)
-	{
+	public void setAuthenticationManager(final AuthenticationManager authenticationManager) {
 		this.authenticationManager = authenticationManager;
 	}
 
@@ -791,19 +752,16 @@ public class LoginBean implements Serializable
 	 *
 	 * @return the administrationService
 	 */
-	public AdministrationService getAdministrationService()
-	{
+	public AdministrationService getAdministrationService() {
 		return administrationService;
 	}
 
 	/**
 	 * Sets the administration service.
 	 *
-	 * @param administrationService
-	 *           the administrationService to set
+	 * @param administrationService the administrationService to set
 	 */
-	public void setAdministrationService(final AdministrationService administrationService)
-	{
+	public void setAdministrationService(final AdministrationService administrationService) {
 		this.administrationService = administrationService;
 	}
 
@@ -812,19 +770,16 @@ public class LoginBean implements Serializable
 	 *
 	 * @return the ministryService
 	 */
-	public MinistryService getMinistryService()
-	{
+	public MinistryService getMinistryService() {
 		return ministryService;
 	}
 
 	/**
 	 * Sets the ministry service.
 	 *
-	 * @param ministryService
-	 *           the ministryService to set
+	 * @param ministryService the ministryService to set
 	 */
-	public void setMinistryService(final MinistryService ministryService)
-	{
+	public void setMinistryService(final MinistryService ministryService) {
 		this.ministryService = ministryService;
 	}
 
@@ -833,19 +788,16 @@ public class LoginBean implements Serializable
 	 *
 	 * @return the organismService
 	 */
-	public OrganismService getOrganismService()
-	{
+	public OrganismService getOrganismService() {
 		return organismService;
 	}
 
 	/**
 	 * Sets the organism service.
 	 *
-	 * @param organismService
-	 *           the organismService to set
+	 * @param organismService the organismService to set
 	 */
-	public void setOrganismService(final OrganismService organismService)
-	{
+	public void setOrganismService(final OrganismService organismService) {
 		this.organismService = organismService;
 	}
 
@@ -854,19 +806,16 @@ public class LoginBean implements Serializable
 	 *
 	 * @return the subDepartmentService
 	 */
-	public SubDepartmentService getSubDepartmentService()
-	{
+	public SubDepartmentService getSubDepartmentService() {
 		return subDepartmentService;
 	}
 
 	/**
 	 * Sets the sub department service.
 	 *
-	 * @param subDepartmentService
-	 *           the subDepartmentService to set
+	 * @param subDepartmentService the subDepartmentService to set
 	 */
-	public void setSubDepartmentService(final SubDepartmentService subDepartmentService)
-	{
+	public void setSubDepartmentService(final SubDepartmentService subDepartmentService) {
 		this.subDepartmentService = subDepartmentService;
 	}
 
@@ -875,19 +824,16 @@ public class LoginBean implements Serializable
 	 *
 	 * @return the serviceService
 	 */
-	public ServiceService getServiceService()
-	{
+	public ServiceService getServiceService() {
 		return serviceService;
 	}
 
 	/**
 	 * Sets the service service.
 	 *
-	 * @param serviceService
-	 *           the serviceService to set
+	 * @param serviceService the serviceService to set
 	 */
-	public void setServiceService(final ServiceService serviceService)
-	{
+	public void setServiceService(final ServiceService serviceService) {
 		this.serviceService = serviceService;
 	}
 
@@ -896,19 +842,16 @@ public class LoginBean implements Serializable
 	 *
 	 * @return the entityService
 	 */
-	public EntityService getEntityService()
-	{
+	public EntityService getEntityService() {
 		return entityService;
 	}
 
 	/**
 	 * Sets the entity service.
 	 *
-	 * @param entityService
-	 *           the entityService to set
+	 * @param entityService the entityService to set
 	 */
-	public void setEntityService(final EntityService entityService)
-	{
+	public void setEntityService(final EntityService entityService) {
 		this.entityService = entityService;
 	}
 
@@ -917,19 +860,16 @@ public class LoginBean implements Serializable
 	 *
 	 * @return the userService
 	 */
-	public UserService getUserService()
-	{
+	public UserService getUserService() {
 		return userService;
 	}
 
 	/**
 	 * Sets the user service.
 	 *
-	 * @param userService
-	 *           the userService to set
+	 * @param userService the userService to set
 	 */
-	public void setUserService(final UserService userService)
-	{
+	public void setUserService(final UserService userService) {
 		this.userService = userService;
 	}
 
@@ -938,19 +878,16 @@ public class LoginBean implements Serializable
 	 *
 	 * @return the delegationService
 	 */
-	public DelegationService getDelegationService()
-	{
+	public DelegationService getDelegationService() {
 		return delegationService;
 	}
 
 	/**
 	 * Sets the delegation service.
 	 *
-	 * @param delegationService
-	 *           the delegationService to set
+	 * @param delegationService the delegationService to set
 	 */
-	public void setDelegationService(final DelegationService delegationService)
-	{
+	public void setDelegationService(final DelegationService delegationService) {
 		this.delegationService = delegationService;
 	}
 
@@ -959,19 +896,16 @@ public class LoginBean implements Serializable
 	 *
 	 * @return the paramsOrganismService
 	 */
-	public ParamsOrganismService getParamsOrganismService()
-	{
+	public ParamsOrganismService getParamsOrganismService() {
 		return paramsOrganismService;
 	}
 
 	/**
 	 * Sets the params organism service.
 	 *
-	 * @param paramsOrganismService
-	 *           the paramsOrganismService to set
+	 * @param paramsOrganismService the paramsOrganismService to set
 	 */
-	public void setParamsOrganismService(final ParamsOrganismService paramsOrganismService)
-	{
+	public void setParamsOrganismService(final ParamsOrganismService paramsOrganismService) {
 		this.paramsOrganismService = paramsOrganismService;
 	}
 
@@ -980,19 +914,16 @@ public class LoginBean implements Serializable
 	 *
 	 * @return the mailService
 	 */
-	public MailService getMailService()
-	{
+	public MailService getMailService() {
 		return mailService;
 	}
 
 	/**
 	 * Sets the mail service.
 	 *
-	 * @param mailService
-	 *           the mailService to set
+	 * @param mailService the mailService to set
 	 */
-	public void setMailService(final MailService mailService)
-	{
+	public void setMailService(final MailService mailService) {
 		this.mailService = mailService;
 	}
 
@@ -1001,19 +932,16 @@ public class LoginBean implements Serializable
 	 *
 	 * @return the fileTypeService
 	 */
-	public FileTypeService getFileTypeService()
-	{
+	public FileTypeService getFileTypeService() {
 		return fileTypeService;
 	}
 
 	/**
 	 * Sets the file type service.
 	 *
-	 * @param fileTypeService
-	 *           the fileTypeService to set
+	 * @param fileTypeService the fileTypeService to set
 	 */
-	public void setFileTypeService(final FileTypeService fileTypeService)
-	{
+	public void setFileTypeService(final FileTypeService fileTypeService) {
 		this.fileTypeService = fileTypeService;
 	}
 
@@ -1022,19 +950,17 @@ public class LoginBean implements Serializable
 	 *
 	 * @return the sessionAuthenticationStrategy
 	 */
-	public SessionAuthenticationStrategy getSessionAuthenticationStrategy()
-	{
+	public SessionAuthenticationStrategy getSessionAuthenticationStrategy() {
 		return sessionAuthenticationStrategy;
 	}
 
 	/**
 	 * Sets the session authentication strategy.
 	 *
-	 * @param sessionAuthenticationStrategy
-	 *           the sessionAuthenticationStrategy to set
+	 * @param sessionAuthenticationStrategy the sessionAuthenticationStrategy to
+	 * set
 	 */
-	public void setSessionAuthenticationStrategy(final SessionAuthenticationStrategy sessionAuthenticationStrategy)
-	{
+	public void setSessionAuthenticationStrategy(final SessionAuthenticationStrategy sessionAuthenticationStrategy) {
 		this.sessionAuthenticationStrategy = sessionAuthenticationStrategy;
 	}
 
@@ -1043,19 +969,16 @@ public class LoginBean implements Serializable
 	 *
 	 * @return the sessionRegistry
 	 */
-	public SessionRegistry getSessionRegistry()
-	{
+	public SessionRegistry getSessionRegistry() {
 		return sessionRegistry;
 	}
 
 	/**
 	 * Sets the session registry.
 	 *
-	 * @param sessionRegistry
-	 *           the sessionRegistry to set
+	 * @param sessionRegistry the sessionRegistry to set
 	 */
-	public void setSessionRegistry(final SessionRegistry sessionRegistry)
-	{
+	public void setSessionRegistry(final SessionRegistry sessionRegistry) {
 		this.sessionRegistry = sessionRegistry;
 	}
 
@@ -1064,19 +987,16 @@ public class LoginBean implements Serializable
 	 *
 	 * @return the ap rendred
 	 */
-	public Boolean getApRendred()
-	{
+	public Boolean getApRendred() {
 		return apRendred;
 	}
 
 	/**
 	 * Sets the ap rendred.
 	 *
-	 * @param apRendred
-	 *           the new ap rendred
+	 * @param apRendred the new ap rendred
 	 */
-	public void setApRendred(final Boolean apRendred)
-	{
+	public void setApRendred(final Boolean apRendred) {
 		this.apRendred = apRendred;
 	}
 
@@ -1085,19 +1005,16 @@ public class LoginBean implements Serializable
 	 *
 	 * @return the cct rendred
 	 */
-	public Boolean getCctRendred()
-	{
+	public Boolean getCctRendred() {
 		return cctRendred;
 	}
 
 	/**
 	 * Sets the cct rendred.
 	 *
-	 * @param cctRendred
-	 *           the new cct rendred
+	 * @param cctRendred the new cct rendred
 	 */
-	public void setCctRendred(final Boolean cctRendred)
-	{
+	public void setCctRendred(final Boolean cctRendred) {
 		this.cctRendred = cctRendred;
 	}
 

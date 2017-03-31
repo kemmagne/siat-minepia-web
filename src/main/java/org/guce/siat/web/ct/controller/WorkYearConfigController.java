@@ -26,68 +26,94 @@ import org.guce.siat.web.ct.controller.util.enums.PersistenceActions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * The Class WorkYearConfigController.
  */
 @ManagedBean(name = "workYearConfigController")
 @SessionScoped
-public class WorkYearConfigController extends AbstractController<WorkYearConfig>
-{
+public class WorkYearConfigController extends AbstractController<WorkYearConfig> {
 
-	/** The Constant serialVersionUID. */
+	/**
+	 * The Constant serialVersionUID.
+	 */
 	private static final long serialVersionUID = -2664243597608408070L;
 
-	/** The Constant LOG. */
+	/**
+	 * The Constant LOG.
+	 */
 	private static final Logger LOG = LoggerFactory.getLogger(WorkYearConfigController.class);
 
-	/** The Constant DATE_ERROR_OCCURED. */
+	/**
+	 * The Constant DATE_ERROR_OCCURED.
+	 */
 	private static final String DATE_ERROR_OCCURED = "DateErrorOccured";
 
-	/** The Constant SAVE_ERROR_OCCURED. */
+	/**
+	 * The Constant SAVE_ERROR_OCCURED.
+	 */
 	private static final String SAVE_ERROR_OCCURED = "SaveErrorOccured";
 
-	/** The work year config service. */
+	/**
+	 * The work year config service.
+	 */
 	@ManagedProperty(value = "#{workYearConfigService}")
 	private WorkYearConfigService workYearConfigService;
 
-	/** The hourly type service. */
+	/**
+	 * The hourly type service.
+	 */
 	@ManagedProperty(value = "#{hourlyTypeService}")
 	private HourlyTypeService hourlyTypeService;
 
-	/** The list hourly types. */
+	/**
+	 * The list hourly types.
+	 */
 	private List<HourlyType> listHourlyTypes;
 
-	/** The years list. */
+	/**
+	 * The years list.
+	 */
 	private List<Integer> yearsList;
 
-	/** The selected year. */
+	/**
+	 * The selected year.
+	 */
 	private Integer selectedYear;
 
-	/** The selected bean. */
+	/**
+	 * The selected bean.
+	 */
 	private WorkYearConfigBean selectedBean;
 
-	/** The min date. */
+	/**
+	 * The min date.
+	 */
 	private Date minDate;
 
-	/** The max date. */
+	/**
+	 * The max date.
+	 */
 	private Date maxDate;
 
-	/** The work year config bean list. */
+	/**
+	 * The work year config bean list.
+	 */
 	private List<WorkYearConfigBean> workYearConfigBeanList;
 
-	/** The work year config beans filtred. */
+	/**
+	 * The work year config beans filtred.
+	 */
 	private List<WorkYearConfigBean> workYearConfigBeansFiltred;
 
-	/** The counter. */
+	/**
+	 * The counter.
+	 */
 	private long counter = 0;
-
 
 	/**
 	 * Instantiates a new work year config controller.
 	 */
-	public WorkYearConfigController()
-	{
+	public WorkYearConfigController() {
 		super(WorkYearConfig.class);
 	}
 
@@ -95,10 +121,8 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 	 * Inits the.
 	 */
 	@PostConstruct
-	public void init()
-	{
-		if (LOG.isDebugEnabled())
-		{
+	public void init() {
+		if (LOG.isDebugEnabled()) {
 			LOG.debug(Constants.INIT_LOG_INFO_MESSAGE, WorkYearConfigController.class.getName());
 		}
 		super.setService(workYearConfigService);
@@ -113,14 +137,12 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 	/**
 	 * Inits the years list.
 	 */
-	private void initYearsList()
-	{
+	private void initYearsList() {
 		yearsList = new ArrayList<Integer>();
 		final Calendar calendar = Calendar.getInstance();
 		int currentYear = calendar.get(Calendar.YEAR);
 		int i = 0;
-		while (i <= Constants.TWO)
-		{
+		while (i <= Constants.TWO) {
 			yearsList.add(new Integer(currentYear));
 			currentYear += 1;
 			i++;
@@ -130,11 +152,9 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 	/**
 	 * Refresh temp work year config list.
 	 */
-	private void refreshTempWorkYearConfigList()
-	{
+	private void refreshTempWorkYearConfigList() {
 		workYearConfigBeanList = new ArrayList<WorkYearConfigBean>();
-		for (final WorkYearConfig workYearConfig : workYearConfigService.findWorkYearConfigByYear(selectedYear))
-		{
+		for (final WorkYearConfig workYearConfig : workYearConfigService.findWorkYearConfigByYear(selectedYear)) {
 			workYearConfigBeanList.add(convert(workYearConfig));
 		}
 	}
@@ -145,8 +165,7 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 	 * @see org.guce.siat.web.common.AbstractController#prepareCreate()
 	 */
 	@Override
-	public void prepareCreate()
-	{
+	public void prepareCreate() {
 		listHourlyTypes = hourlyTypeService.findAll();
 		selectedBean = new WorkYearConfigBean();
 
@@ -158,14 +177,11 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 	/**
 	 * Prepare edit.
 	 */
-	public void prepareEdit()
-	{
+	public void prepareEdit() {
 		listHourlyTypes = hourlyTypeService.findAll();
 
-		for (final WorkYearConfigBean wc : workYearConfigBeanList)
-		{
-			if (wc.getId().equals(selectedBean.getId()))
-			{
+		for (final WorkYearConfigBean wc : workYearConfigBeanList) {
+			if (wc.getId().equals(selectedBean.getId())) {
 				selectedBean = wc;
 				break;
 			}
@@ -176,8 +192,7 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 	/**
 	 * Inits the dates.
 	 */
-	private void initDates()
-	{
+	private void initDates() {
 		final Calendar calendar = Calendar.getInstance();
 
 		calendar.set(selectedYear, Constants.ZERO, Constants.ONE);
@@ -190,14 +205,11 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 	/**
 	 * Controle work year config.
 	 *
-	 * @param list
-	 *           the list
-	 * @param year
-	 *           the year
+	 * @param list the list
+	 * @param year the year
 	 * @return true, if successful
 	 */
-	public boolean controleWorkYearConfig(final List<WorkYearConfigBean> list, final Integer year)
-	{
+	public boolean controleWorkYearConfig(final List<WorkYearConfigBean> list, final Integer year) {
 		final Calendar calendar = Calendar.getInstance();
 
 		Date tomorrow = new Date();
@@ -208,32 +220,24 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 		calendar.set(year, Constants.ELEVEN, Constants.THIRTYONE);
 		final Date maxDateControl = calendar.getTime();
 
-		if (!list.isEmpty())
-		{
+		if (!list.isEmpty()) {
 			final WorkYearConfigBean firstRow = list.get(0);
 			final WorkYearConfigBean lastRow = list.get(list.size() - 1);
 
 			if (DateUtils.formatSimpleDate(minDateControl).equals(DateUtils.formatSimpleDate(firstRow.getBeginDate()))
-					&& DateUtils.formatSimpleDate(maxDateControl).equals(DateUtils.formatSimpleDate(lastRow.getEndDate())))
-			{
+					&& DateUtils.formatSimpleDate(maxDateControl).equals(DateUtils.formatSimpleDate(lastRow.getEndDate()))) {
 				int i = 0;
-				for (final WorkYearConfigBean wc : list)
-				{
-					if (i > 0 && !DateUtils.formatSimpleDate(tomorrow).equals(DateUtils.formatSimpleDate(wc.getBeginDate())))
-					{
+				for (final WorkYearConfigBean wc : list) {
+					if (i > 0 && !DateUtils.formatSimpleDate(tomorrow).equals(DateUtils.formatSimpleDate(wc.getBeginDate()))) {
 						return false;
 					}
 					tomorrow = DateUtils.getTomorrow(wc.getEndDate());
 					i++;
 				}
-			}
-			else
-			{
+			} else {
 				return false;
 			}
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 
@@ -243,20 +247,15 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 	/**
 	 * Save.
 	 *
-	 * @param event
-	 *           the event
+	 * @param event the event
 	 */
-	public void save(final ActionEvent event)
-	{
-		if (controleWorkYearConfig(workYearConfigBeanList, selectedYear))
-		{
-			try
-			{
+	public void save(final ActionEvent event) {
+		if (controleWorkYearConfig(workYearConfigBeanList, selectedYear)) {
+			try {
 				workYearConfigService.deleteWorkYearConfigByYear(selectedYear);
 
 				final List<WorkYearConfig> listForSave = new ArrayList<WorkYearConfig>();
-				for (final WorkYearConfigBean wc : workYearConfigBeanList)
-				{
+				for (final WorkYearConfigBean wc : workYearConfigBeanList) {
 					listForSave.add(reverseConvert(wc));
 				}
 
@@ -265,15 +264,11 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 				final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 						WorkYearConfig.class.getSimpleName() + "s" + PersistenceActions.CREATE.getCode());
 				JsfUtil.addSuccessMessage(msg);
-			}
-			catch (final Exception ex)
-			{
+			} catch (final Exception ex) {
 				JsfUtil.addErrorMessage(ex,
 						ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(PERSISTENCE_ERROR_OCCURED));
 			}
-		}
-		else
-		{
+		} else {
 			final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(SAVE_ERROR_OCCURED);
 			JsfUtil.addErrorMessage(msg);
 		}
@@ -282,8 +277,7 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 	/**
 	 * Selection changed.
 	 */
-	public void selectionChanged()
-	{
+	public void selectionChanged() {
 		refreshTempWorkYearConfigList();
 	}
 
@@ -292,39 +286,30 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 	 *
 	 * @return the work year config service
 	 */
-	public WorkYearConfigService getWorkYearConfigService()
-	{
+	public WorkYearConfigService getWorkYearConfigService() {
 		return workYearConfigService;
 	}
 
 	/**
 	 * Sets the work year config service.
 	 *
-	 * @param workYearConfigService
-	 *           the new work year config service
+	 * @param workYearConfigService the new work year config service
 	 */
-	public void setWorkYearConfigService(final WorkYearConfigService workYearConfigService)
-	{
+	public void setWorkYearConfigService(final WorkYearConfigService workYearConfigService) {
 		this.workYearConfigService = workYearConfigService;
 	}
 
 	/**
 	 * Creates the temporary.
 	 *
-	 * @param event
-	 *           the event
+	 * @param event the event
 	 */
-	public void createTemporary(final ActionEvent event)
-	{
-		try
-		{
-			if (selectedBean.getBeginDate().after(selectedBean.getEndDate()))
-			{
+	public void createTemporary(final ActionEvent event) {
+		try {
+			if (selectedBean.getBeginDate().after(selectedBean.getEndDate())) {
 				final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(DATE_ERROR_OCCURED);
 				JsfUtil.addErrorMessage(msg);
-			}
-			else
-			{
+			} else {
 				selectedBean.setId(++counter);
 				workYearConfigBeanList.add(selectedBean);
 				final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
@@ -332,10 +317,8 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 				JsfUtil.addSuccessMessage(msg);
 				selectedBean = null;
 			}
-		}
-		catch (final Exception ex)
-		{
-			LOG.error(ex.getLocalizedMessage());
+		} catch (final Exception ex) {
+			LOG.error(ex.getLocalizedMessage(), ex);
 			JsfUtil.addErrorMessage(ex,
 					ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(PERSISTENCE_ERROR_OCCURED));
 		}
@@ -345,11 +328,9 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 	/**
 	 * Edits the temporary.
 	 *
-	 * @param event
-	 *           the event
+	 * @param event the event
 	 */
-	public void editTemporary(final ActionEvent event)
-	{
+	public void editTemporary(final ActionEvent event) {
 		final int index = workYearConfigBeanList.indexOf(selectedBean);
 		workYearConfigBeanList.remove(index);
 		workYearConfigBeanList.add(index, selectedBean);
@@ -363,13 +344,10 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 	/**
 	 * Delete temporary.
 	 *
-	 * @param event
-	 *           the event
+	 * @param event the event
 	 */
-	public void deleteTemporary(final ActionEvent event)
-	{
-		if (workYearConfigBeanList != null)
-		{
+	public void deleteTemporary(final ActionEvent event) {
+		if (workYearConfigBeanList != null) {
 			workYearConfigBeanList.remove(selectedBean);
 			final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 					WorkYearConfig.class.getSimpleName() + PersistenceActions.DELETE.getCode());
@@ -382,12 +360,10 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 	/**
 	 * Gets the year of date.
 	 *
-	 * @param date
-	 *           the date
+	 * @param date the date
 	 * @return the year of date
 	 */
-	public Integer getYearOfDate(final Date date)
-	{
+	public Integer getYearOfDate(final Date date) {
 		final Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		return cal.get(Calendar.YEAR);
@@ -398,8 +374,7 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 	 *
 	 * @return the years list
 	 */
-	public List<Integer> getYearsList()
-	{
+	public List<Integer> getYearsList() {
 		return yearsList;
 	}
 
@@ -408,19 +383,16 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 	 *
 	 * @return the hourly type service
 	 */
-	public HourlyTypeService getHourlyTypeService()
-	{
+	public HourlyTypeService getHourlyTypeService() {
 		return hourlyTypeService;
 	}
 
 	/**
 	 * Sets the hourly type service.
 	 *
-	 * @param hourlyTypeService
-	 *           the new hourly type service
+	 * @param hourlyTypeService the new hourly type service
 	 */
-	public void setHourlyTypeService(final HourlyTypeService hourlyTypeService)
-	{
+	public void setHourlyTypeService(final HourlyTypeService hourlyTypeService) {
 		this.hourlyTypeService = hourlyTypeService;
 	}
 
@@ -429,19 +401,16 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 	 *
 	 * @return the list hourly types
 	 */
-	public List<HourlyType> getListHourlyTypes()
-	{
+	public List<HourlyType> getListHourlyTypes() {
 		return listHourlyTypes;
 	}
 
 	/**
 	 * Sets the list hourly types.
 	 *
-	 * @param listHourlyTypes
-	 *           the new list hourly types
+	 * @param listHourlyTypes the new list hourly types
 	 */
-	public void setListHourlyTypes(final List<HourlyType> listHourlyTypes)
-	{
+	public void setListHourlyTypes(final List<HourlyType> listHourlyTypes) {
 		this.listHourlyTypes = listHourlyTypes;
 	}
 
@@ -450,52 +419,43 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 	 *
 	 * @return the selected year
 	 */
-	public Integer getSelectedYear()
-	{
+	public Integer getSelectedYear() {
 		return selectedYear;
 	}
 
 	/**
 	 * Sets the selected year.
 	 *
-	 * @param selectedYear
-	 *           the new selected year
+	 * @param selectedYear the new selected year
 	 */
-	public void setSelectedYear(final Integer selectedYear)
-	{
+	public void setSelectedYear(final Integer selectedYear) {
 		this.selectedYear = selectedYear;
 	}
 
 	/**
 	 * Sets the years list.
 	 *
-	 * @param yearsList
-	 *           the new years list
+	 * @param yearsList the new years list
 	 */
-	public void setYearsList(final List<Integer> yearsList)
-	{
+	public void setYearsList(final List<Integer> yearsList) {
 		this.yearsList = yearsList;
 	}
-
 
 	/**
 	 * Gets the min date.
 	 *
 	 * @return the min date
 	 */
-	public Date getMinDate()
-	{
+	public Date getMinDate() {
 		return minDate;
 	}
 
 	/**
 	 * Sets the min date.
 	 *
-	 * @param minDate
-	 *           the new min date
+	 * @param minDate the new min date
 	 */
-	public void setMinDate(final Date minDate)
-	{
+	public void setMinDate(final Date minDate) {
 		this.minDate = minDate;
 	}
 
@@ -504,19 +464,16 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 	 *
 	 * @return the max date
 	 */
-	public Date getMaxDate()
-	{
+	public Date getMaxDate() {
 		return maxDate;
 	}
 
 	/**
 	 * Sets the max date.
 	 *
-	 * @param maxDate
-	 *           the new max date
+	 * @param maxDate the new max date
 	 */
-	public void setMaxDate(final Date maxDate)
-	{
+	public void setMaxDate(final Date maxDate) {
 		this.maxDate = maxDate;
 	}
 
@@ -525,19 +482,16 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 	 *
 	 * @return the selectedBean
 	 */
-	public WorkYearConfigBean getSelectedBean()
-	{
+	public WorkYearConfigBean getSelectedBean() {
 		return selectedBean;
 	}
 
 	/**
 	 * Sets the selected bean.
 	 *
-	 * @param selectedBean
-	 *           the selectedBean to set
+	 * @param selectedBean the selectedBean to set
 	 */
-	public void setSelectedBean(final WorkYearConfigBean selectedBean)
-	{
+	public void setSelectedBean(final WorkYearConfigBean selectedBean) {
 		this.selectedBean = selectedBean;
 	}
 
@@ -546,31 +500,26 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 	 *
 	 * @return the workYearConfigBeanList
 	 */
-	public List<WorkYearConfigBean> getWorkYearConfigBeanList()
-	{
+	public List<WorkYearConfigBean> getWorkYearConfigBeanList() {
 		return workYearConfigBeanList;
 	}
 
 	/**
 	 * Sets the work year config bean list.
 	 *
-	 * @param workYearConfigBeanList
-	 *           the new work year config bean list
+	 * @param workYearConfigBeanList the new work year config bean list
 	 */
-	public void setWorkYearConfigBeanList(final List<WorkYearConfigBean> workYearConfigBeanList)
-	{
+	public void setWorkYearConfigBeanList(final List<WorkYearConfigBean> workYearConfigBeanList) {
 		this.workYearConfigBeanList = workYearConfigBeanList;
 	}
 
 	/**
 	 * Convert.
 	 *
-	 * @param workYearConfig
-	 *           the work year config
+	 * @param workYearConfig the work year config
 	 * @return the work year config bean
 	 */
-	private WorkYearConfigBean convert(final WorkYearConfig workYearConfig)
-	{
+	private WorkYearConfigBean convert(final WorkYearConfig workYearConfig) {
 		final WorkYearConfigBean workYearConfigBean = new WorkYearConfigBean();
 
 		workYearConfigBean.setId(++counter);
@@ -581,16 +530,13 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 		return workYearConfigBean;
 	}
 
-
 	/**
 	 * Reverse convert.
 	 *
-	 * @param workYearConfigBean
-	 *           the work year config bean
+	 * @param workYearConfigBean the work year config bean
 	 * @return the work year config
 	 */
-	private WorkYearConfig reverseConvert(final WorkYearConfigBean workYearConfigBean)
-	{
+	private WorkYearConfig reverseConvert(final WorkYearConfigBean workYearConfigBean) {
 		final WorkYearConfig workYearConfig = new WorkYearConfig();
 
 		workYearConfig.setBeginDate(workYearConfigBean.getBeginDate());
@@ -605,19 +551,16 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 	 *
 	 * @return the workYearConfigBeansFiltred
 	 */
-	public List<WorkYearConfigBean> getWorkYearConfigBeansFiltred()
-	{
+	public List<WorkYearConfigBean> getWorkYearConfigBeansFiltred() {
 		return workYearConfigBeansFiltred;
 	}
 
 	/**
 	 * Sets the work year config beans filtred.
 	 *
-	 * @param workYearConfigBeansFiltred
-	 *           the workYearConfigBeansFiltred to set
+	 * @param workYearConfigBeansFiltred the workYearConfigBeansFiltred to set
 	 */
-	public void setWorkYearConfigBeansFiltred(final List<WorkYearConfigBean> workYearConfigBeansFiltred)
-	{
+	public void setWorkYearConfigBeansFiltred(final List<WorkYearConfigBean> workYearConfigBeansFiltred) {
 		this.workYearConfigBeansFiltred = workYearConfigBeansFiltred;
 	}
 
@@ -626,19 +569,16 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 	 *
 	 * @return the counter
 	 */
-	public long getCounter()
-	{
+	public long getCounter() {
 		return counter;
 	}
 
 	/**
 	 * Sets the counter.
 	 *
-	 * @param counter
-	 *           the counter to set
+	 * @param counter the counter to set
 	 */
-	public void setCounter(final long counter)
-	{
+	public void setCounter(final long counter) {
 		this.counter = counter;
 	}
 
@@ -647,8 +587,7 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 	 *
 	 * @return the dateErrorOccured
 	 */
-	public static String getDateErrorOccured()
-	{
+	public static String getDateErrorOccured() {
 		return DATE_ERROR_OCCURED;
 	}
 
@@ -657,10 +596,8 @@ public class WorkYearConfigController extends AbstractController<WorkYearConfig>
 	 *
 	 * @return the saveErrorOccured
 	 */
-	public static String getSaveErrorOccured()
-	{
+	public static String getSaveErrorOccured() {
 		return SAVE_ERROR_OCCURED;
 	}
-
 
 }

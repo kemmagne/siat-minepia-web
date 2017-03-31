@@ -20,28 +20,27 @@ import org.guce.siat.web.reports.vo.VtMinepdedFileVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-
 /**
  * The Class VtMinepdedExporter.
  */
-public class VtMinepdedExporter extends AbstractReportInvoker
-{
+public class VtMinepdedExporter extends AbstractReportInvoker {
 
-	/** The Constant LOG. */
+	/**
+	 * The Constant LOG.
+	 */
 	private static final Logger LOG = LoggerFactory.getLogger(VtMinepdedExporter.class);
 
-	/** The file. */
+	/**
+	 * The file.
+	 */
 	private final File file;
 
 	/**
 	 * Instantiates a new vt minepded exporter.
 	 *
-	 * @param file
-	 *           the file
+	 * @param file the file
 	 */
-	public VtMinepdedExporter(final File file)
-	{
+	public VtMinepdedExporter(final File file) {
 		super("VT_MINEPDED", "VT_MINEPDED");
 		this.file = file;
 	}
@@ -53,21 +52,16 @@ public class VtMinepdedExporter extends AbstractReportInvoker
 	 * @see org.guce.siat.web.reports.vo.JasperExporter#getReportDataSource(java.lang.Object[])
 	 */
 	@Override
-	public JRBeanCollectionDataSource getReportDataSource()
-	{
+	public JRBeanCollectionDataSource getReportDataSource() {
 
 		final VtMinepdedFileVo vtMinepdedVo = new VtMinepdedFileVo();
 
-		if ((file != null))
-		{
+		if ((file != null)) {
 			final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
 			vtMinepdedVo.setDecisionDate(file.getSignatureDate());
-			if (CollectionUtils.isNotEmpty(fileFieldValueList))
-			{
-				for (final FileFieldValue fileFieldValue : fileFieldValueList)
-				{
-					switch (fileFieldValue.getFileField().getCode())
-					{
+			if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
+				for (final FileFieldValue fileFieldValue : fileFieldValueList) {
+					switch (fileFieldValue.getFileField().getCode()) {
 						case "NUMERO_VT_MINEPDED":
 							vtMinepdedVo.setDecisionNumber(fileFieldValue.getValue());
 							break;
@@ -84,15 +78,11 @@ public class VtMinepdedExporter extends AbstractReportInvoker
 							vtMinepdedVo.setProvider(fileFieldValue.getValue());
 							break;
 						case "SIGNATAIRE_DATE":
-							if (StringUtils.isNotBlank(fileFieldValue.getValue()))
-							{
-								try
-								{
+							if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
+								try {
 									vtMinepdedVo.setDecisionDate(new SimpleDateFormat("dd/MM/yyyy").parse(fileFieldValue.getValue()));
-								}
-								catch (final ParseException e)
-								{
-									LOG.error(Objects.toString(e));
+								} catch (final ParseException e) {
+									LOG.error(Objects.toString(e), e);
 								}
 							}
 
@@ -106,23 +96,18 @@ public class VtMinepdedExporter extends AbstractReportInvoker
 				}
 			}
 
-
-			if ((file.getClient() != null))
-			{
+			if ((file.getClient() != null)) {
 				vtMinepdedVo.setImporter(file.getClient().getCompanyName());
 				vtMinepdedVo.setAddress(file.getClient().getFullAddress());
 				vtMinepdedVo.setProfession(file.getClient().getProfession());
 			}
 
-
 			final List<FileItem> fileItemList = file.getFileItemsList();
 
 			final List<VtMinepdedFileItemVo> fileItemVos = new ArrayList<VtMinepdedFileItemVo>();
 
-			if (CollectionUtils.isNotEmpty(fileItemList))
-			{
-				for (final FileItem fileItem : fileItemList)
-				{
+			if (CollectionUtils.isNotEmpty(fileItemList)) {
+				for (final FileItem fileItem : fileItemList) {
 					final VtMinepdedFileItemVo fileItemVo = new VtMinepdedFileItemVo();
 					fileItemVo.setCode(fileItem.getNsh() != null ? fileItem.getNsh().getGoodsItemCode() : null);
 					fileItemVo.setDesc(fileItem.getNsh() != null ? fileItem.getNsh().getGoodsItemDesc() : null);
@@ -145,9 +130,7 @@ public class VtMinepdedExporter extends AbstractReportInvoker
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getJRParameters()
 	 */
 	@Override
-	protected Map<String, Object> getJRParameters()
-	{
-
+	protected Map<String, Object> getJRParameters() {
 
 		final Map<String, Object> jRParameters = super.getJRParameters();
 		jRParameters.put("MINEPDED_LOGO", getRealPath(IMAGES_PATH, "minepded", "jpg"));
@@ -159,8 +142,7 @@ public class VtMinepdedExporter extends AbstractReportInvoker
 	 *
 	 * @return the file
 	 */
-	public File getFile()
-	{
+	public File getFile() {
 		return file;
 	}
 

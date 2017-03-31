@@ -24,28 +24,27 @@ import org.guce.siat.web.reports.vo.AtMinsanteFileVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * The Class AtMinsanteExporter.
  */
-public class AtMinsanteExporter extends AbstractReportInvoker
-{
+public class AtMinsanteExporter extends AbstractReportInvoker {
 
-	/** The Constant LOG. */
+	/**
+	 * The Constant LOG.
+	 */
 	private static final Logger LOG = LoggerFactory.getLogger(AtMinsanteExporter.class);
 
-	/** The file. */
+	/**
+	 * The file.
+	 */
 	private final File file;
-
 
 	/**
 	 * Instantiates a new at minsante exporter.
 	 *
-	 * @param file
-	 *           the file
+	 * @param file the file
 	 */
-	public AtMinsanteExporter(final File file)
-	{
+	public AtMinsanteExporter(final File file) {
 		super("AT_MINSANTE", "AT_MINSANTE");
 		this.file = file;
 	}
@@ -56,51 +55,40 @@ public class AtMinsanteExporter extends AbstractReportInvoker
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getReportDataSource()
 	 */
 	@Override
-	public JRBeanCollectionDataSource getReportDataSource()
-	{
+	public JRBeanCollectionDataSource getReportDataSource() {
 		final AtMinsanteFileVo atMinsanteFileVo = new AtMinsanteFileVo();
 
 		final List<AtMinsanteFileItemVo> fileItemVos = new ArrayList<AtMinsanteFileItemVo>();
 
-		if ((file != null))
-		{
+		if ((file != null)) {
 
 			atMinsanteFileVo.setDecisionDate(file.getSignatureDate());
 			atMinsanteFileVo.setDecisionPlace(file.getAssignedUser().getAdministration().getLabelFr());
 
-			if (file.getClient() != null)
-			{
+			if (file.getClient() != null) {
 				atMinsanteFileVo.setImporter(file.getClient().getCompanyName());
 			}
 
-			if (file.getCountryOfOrigin() != null)
-			{
+			if (file.getCountryOfOrigin() != null) {
 				atMinsanteFileVo.setOriginCountry(file.getCountryOfOrigin().getCountryName());
 			}
 
 			final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
 
-			for (final FileFieldValue fileFieldValue : fileFieldValueList)
-			{
-				switch (fileFieldValue.getFileField().getCode())
-				{
+			for (final FileFieldValue fileFieldValue : fileFieldValueList) {
+				switch (fileFieldValue.getFileField().getCode()) {
 					case "NUMERO_AT_MINSANTE":
 						atMinsanteFileVo.setDecisionNumber(fileFieldValue.getValue());
 						break;
 					case "DATE_VALIDITE_AVIS_TECHNIQUE":
-						if (StringUtils.isNotBlank(fileFieldValue.getValue()))
-						{
-							try
-							{
-								if (file.getClient() != null && file.getClient().getCommerceApprovalObtainedDate() != null)
-								{
+						if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
+							try {
+								if (file.getClient() != null && file.getClient().getCommerceApprovalObtainedDate() != null) {
 									atMinsanteFileVo.setValidityDate(new SimpleDateFormat(DateUtils.PATTERN_DDMMYYYY).parse(file
 											.getClient().getCommerceApprovalObtainedDate()));
 								}
-							}
-							catch (final ParseException e)
-							{
-								LOG.error(Objects.toString(e));
+							} catch (final ParseException e) {
+								LOG.error(Objects.toString(e), e);
 							}
 						}
 						break;
@@ -111,23 +99,17 @@ public class AtMinsanteExporter extends AbstractReportInvoker
 
 			}
 
-
 			final List<FileItem> fileItemList = file.getFileItemsList();
 
-			if (CollectionUtils.isNotEmpty(fileItemList))
-			{
-				for (final FileItem fileItem : fileItemList)
-				{
+			if (CollectionUtils.isNotEmpty(fileItemList)) {
+				for (final FileItem fileItem : fileItemList) {
 					final AtMinsanteFileItemVo fileItemVo = new AtMinsanteFileItemVo();
 
 					final List<FileItemFieldValue> fileItemFieldValueList = fileItem.getFileItemFieldValueList();
 
-					if (CollectionUtils.isNotEmpty(fileItemFieldValueList))
-					{
-						for (final FileItemFieldValue fileItemFieldValue : fileItemFieldValueList)
-						{
-							switch (fileItemFieldValue.getFileItemField().getCode())
-							{
+					if (CollectionUtils.isNotEmpty(fileItemFieldValueList)) {
+						for (final FileItemFieldValue fileItemFieldValue : fileItemFieldValueList) {
+							switch (fileItemFieldValue.getFileItemField().getCode()) {
 								case "NOM_COMMERCIAL":
 									fileItemVo.setDesignation(fileItemFieldValue.getValue());
 									break;
@@ -159,8 +141,7 @@ public class AtMinsanteExporter extends AbstractReportInvoker
 	 *
 	 * @return the file
 	 */
-	public File getFile()
-	{
+	public File getFile() {
 		return file;
 	}
 }

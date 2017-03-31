@@ -22,28 +22,27 @@ import org.guce.siat.web.reports.vo.PivpsrpMinaderFileVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-
 /**
  * The Class PivpsrpMinaderExporter.
  */
-public class PivpsrpMinaderExporter extends AbstractReportInvoker
-{
+public class PivpsrpMinaderExporter extends AbstractReportInvoker {
 
-	/** The Constant LOG. */
+	/**
+	 * The Constant LOG.
+	 */
 	private static final Logger LOG = LoggerFactory.getLogger(PivpsrpMinaderExporter.class);
 
-	/** The file. */
+	/**
+	 * The file.
+	 */
 	private final File file;
 
 	/**
 	 * Instantiates a new as minader exporter.
 	 *
-	 * @param file
-	 *           the file
+	 * @param file the file
 	 */
-	public PivpsrpMinaderExporter(final File file)
-	{
+	public PivpsrpMinaderExporter(final File file) {
 		super("PIVPSRP_MINADER", "PIVPSRP_MINADER");
 		this.file = file;
 	}
@@ -55,11 +54,8 @@ public class PivpsrpMinaderExporter extends AbstractReportInvoker
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getReportDataSource()
 	 */
 	@Override
-	public JRBeanCollectionDataSource getReportDataSource()
-	{
+	public JRBeanCollectionDataSource getReportDataSource() {
 		final PivpsrpMinaderFileVo pivpsrpMinaderFileVo = new PivpsrpMinaderFileVo();
-
-
 
 		pivpsrpMinaderFileVo.setArrivalDate(Calendar.getInstance().getTime());
 		pivpsrpMinaderFileVo.setOriginCountry(file.getCountryOfOrigin().getCountryName());
@@ -68,25 +64,19 @@ public class PivpsrpMinaderExporter extends AbstractReportInvoker
 		pivpsrpMinaderFileVo.setDecisionPlace(file.getBureau().getAddress());
 		pivpsrpMinaderFileVo.setReference("REFERENCE");
 
-
-		if ((file != null))
-		{
+		if ((file != null)) {
 			//"Validité : Valable jusqu'au "+($F{validityDate}!= null? new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{validityDate}) : "-")
 
-			if (file.getClient() != null)
-			{
+			if (file.getClient() != null) {
 				pivpsrpMinaderFileVo.setImporter(file.getClient().getCompanyName());
 			}
 
 			final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
 
-			if (CollectionUtils.isNotEmpty(fileFieldValueList))
-			{
-				for (final FileFieldValue fileFieldValue : fileFieldValueList)
-				{
+			if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
+				for (final FileFieldValue fileFieldValue : fileFieldValueList) {
 
-					switch (fileFieldValue.getFileField().getCode())
-					{
+					switch (fileFieldValue.getFileField().getCode()) {
 						case "NUMERO_PIVPSRP_MINADER":
 							pivpsrpMinaderFileVo.setDecisionNumber(fileFieldValue.getValue());
 							break;
@@ -103,8 +93,7 @@ public class PivpsrpMinaderExporter extends AbstractReportInvoker
 							break;
 
 						case "FOURNISSEUR_ADRESSE_ADRESSE2":
-							if (StringUtils.isNotBlank(fileFieldValue.getValue()))
-							{
+							if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
 								final String supplierAddress1 = pivpsrpMinaderFileVo.getSupplierAddress();
 								pivpsrpMinaderFileVo.setSupplierAddress(supplierAddress1 + "/" + "Address 2/Adresse2:"
 										+ fileFieldValue.getValue());
@@ -112,16 +101,12 @@ public class PivpsrpMinaderExporter extends AbstractReportInvoker
 							break;
 
 						case "DATE_VALIDITE":
-							if (StringUtils.isNotBlank(fileFieldValue.getValue()))
-							{
-								try
-								{
+							if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
+								try {
 									pivpsrpMinaderFileVo.setValidityDate(new SimpleDateFormat("dd/MM/yyyy").parse(fileFieldValue
 											.getValue()));
-								}
-								catch (final ParseException e)
-								{
-									LOG.error(Objects.toString(e));
+								} catch (final ParseException e) {
+									LOG.error(Objects.toString(e), e);
 								}
 							}
 							break;
@@ -132,15 +117,12 @@ public class PivpsrpMinaderExporter extends AbstractReportInvoker
 				}
 			}
 
-
 			final List<FileItem> fileItemList = file.getFileItemsList();
 
 			final List<PivpsrpMinaderFileItemVo> fileItemVos = new ArrayList<PivpsrpMinaderFileItemVo>();
 
-			if (CollectionUtils.isNotEmpty(fileItemList))
-			{
-				for (final FileItem fileItem : fileItemList)
-				{
+			if (CollectionUtils.isNotEmpty(fileItemList)) {
+				for (final FileItem fileItem : fileItemList) {
 					final PivpsrpMinaderFileItemVo fileItemVo = new PivpsrpMinaderFileItemVo();
 
 					fileItemVo.setQuantity(Double.parseDouble("7582"));
@@ -149,14 +131,10 @@ public class PivpsrpMinaderExporter extends AbstractReportInvoker
 
 					final List<FileItemFieldValue> fileItemFieldValueList = fileItem.getFileItemFieldValueList();
 
+					if (CollectionUtils.isNotEmpty(fileItemFieldValueList)) {
+						for (final FileItemFieldValue fileItemFieldValue : fileItemFieldValueList) {
 
-					if (CollectionUtils.isNotEmpty(fileItemFieldValueList))
-					{
-						for (final FileItemFieldValue fileItemFieldValue : fileItemFieldValueList)
-						{
-
-							switch (fileItemFieldValue.getFileItemField().getCode())
-							{
+							switch (fileItemFieldValue.getFileItemField().getCode()) {
 								case "NOM_COMMERCIAL":
 									fileItemVo.setName(fileItemFieldValue.getValue());
 									break;
@@ -189,8 +167,7 @@ public class PivpsrpMinaderExporter extends AbstractReportInvoker
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getJRParameters()
 	 */
 	@Override
-	protected Map<String, Object> getJRParameters()
-	{
+	protected Map<String, Object> getJRParameters() {
 		final Map<String, Object> jRParameters = super.getJRParameters();
 		jRParameters.put("MINADER_LOGO", getRealPath(IMAGES_PATH, "minader", "jpg"));
 		return jRParameters;
@@ -201,10 +178,8 @@ public class PivpsrpMinaderExporter extends AbstractReportInvoker
 	 *
 	 * @return the file
 	 */
-	public File getFile()
-	{
+	public File getFile() {
 		return file;
 	}
-
 
 }
