@@ -27,7 +27,7 @@ public class VtpMinsanteExporter extends AbstractReportInvoker {
 	 */
 	private static final Logger LOG = LoggerFactory.getLogger(VtpMinsanteExporter.class);
 	private static final String PREFIX = "/SG/DPML/SDM du ";
-
+	
 	/**
 	 * The file.
 	 */
@@ -119,6 +119,9 @@ public class VtpMinsanteExporter extends AbstractReportInvoker {
 							break;
 						case "SIGNATAIRE_LIEU":
 							vtpMinsanteVo.setDecisionPlace(fileFieldValue.getValue());
+							break;
+						case "DATE_VALIDITE":
+							vtpMinsanteVo.setExpirationDate(fileFieldValue.getValue());
 							break;
 						default:
 							break;

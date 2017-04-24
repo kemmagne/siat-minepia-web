@@ -46,6 +46,7 @@ import javax.xml.bind.JAXBException;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.guce.siat.common.dao.ItemFlowDao;
 import org.guce.siat.common.data.FieldGroupDto;
 import org.guce.siat.common.data.ItemFlowDto;
 import org.guce.siat.common.mail.MailConstants;
@@ -763,7 +764,12 @@ public class FileItemApDetailController implements Serializable {
 	 * The rejct dispatch allowed.
 	 */
 	private boolean rejctDispatchAllowed;
-
+	
+	/**
+	 * The name of the field vaidity Date
+	 */
+	final static String validityDateFieldName = "DATE_VALIDITE";
+	
 	/**
 	 * Gets the transaction manager.
 	 *
@@ -1820,7 +1826,31 @@ public class FileItemApDetailController implements Serializable {
 						final String service = StringUtils.EMPTY;
 						final String documentType = StringUtils.EMPTY;
 						final Flow flowToSend = map.get(fileItemList.get(0));
-
+						
+						ItemFlow decisionFlow = null;
+						if (currentFile.getFileType().getCode().equals(FileTypeCode.VTP_MINSANTE)){
+							decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_103);
+						} else if (currentFile.getFileType().getCode().equals(FileTypeCode.VTD_MINSANTE)){
+							decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_105);
+						}
+						if (decisionFlow != null) {
+							final List<ItemFlowData> itemFlowDataList = decisionFlow.getItemFlowsDataList();
+								for (final ItemFlowData ifd : itemFlowDataList) {
+									if (ifd.getDataType().getLabel().equalsIgnoreCase("Date validité")) {
+										final FileField dateValidityField = fileFieldService.findFileFieldByCodeAndFileType(
+											validityDateFieldName, currentFile.getFileType().getCode());
+										if (dateValidityField != null) {
+											FileFieldValue nff = new FileFieldValue();
+											nff.setFile(currentFile);
+											nff.setFileField(dateValidityField);
+											nff.setValue(ifd.getValue());
+											currentFile.getFileFieldValueList().add(nff);
+											fileFieldValueService.save(nff);
+										}
+										break;
+									}
+								}
+						}
 						//generate report
 						Map<String, byte[]> attachedByteFiles = null;
 						try {
@@ -1895,7 +1925,7 @@ public class FileItemApDetailController implements Serializable {
 							LOG.error("Error occured when loading report: " + e.getMessage(), e);
 							attachedByteFiles = null;
 						}
-
+						
 						// convert file to document
 						final Serializable documentSerializable = xmlConverterService.convertFileToDocument(productInfoItems.get(0)
 								.getFile(), fileItemList, itemFlowList, executedFlow);

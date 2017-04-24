@@ -118,6 +118,9 @@ public class VtdMinsanteExporter extends AbstractReportInvoker {
 								}
 							}
 							break;
+						case "DATE_VALIDITE":
+							vtdMinsanteVo.setExpirationDate(fileFieldValue.getValue());
+							break;
 
 						default:
 							break;

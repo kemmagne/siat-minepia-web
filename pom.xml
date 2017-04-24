@@ -10,7 +10,7 @@
 	<artifactId>siat-ct-web</artifactId>
 	<packaging>war</packaging>
 	<name>siat-ct-web</name>
-	<version>1.2.1</version>
+	<version>1.2.2</version>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<resource.dir>src/main/resources</resource.dir>
@@ -34,9 +34,10 @@
 				<environment>dev</environment>
 				<db.username>siat_ct</db.username>
 				<db.password>siat</db.password>
+				<!--<db.url>jdbc:oracle:thin:@guce.preprod:1510:GUCE</db.url>-->
 				<db.url>jdbc:oracle:thin:@localhost:1521:XE</db.url>
 				<ged.url>http://172.24.2.134:8080</ged.url>
-				<jms.url>tcp://localhost:61616</jms.url>
+				<jms.url>tcp://guce.preprod:61616</jms.url>
 				<version>${application.version}</version>
 				<ged.username>admin</ged.username>
 				<ged.password>admin</ged.password>
@@ -44,9 +45,9 @@
 				<uri.out>SIAT</uri.out>
 				<uri.dead.in>direct:dead</uri.dead.in>
 				<uri.dead.out>amq:SIAT</uri.dead.out>
-				<ebxml.folder>d:/eGuce/ebxml</ebxml.folder>
-				<xml.folder>d:/eGuce/xml</xml.folder>
-				<attachement.folder>d:/eGuce/attachement</attachement.folder>
+				<ebxml.folder>/home/yenke/Siat/eGuce/ebxml</ebxml.folder>
+				<xml.folder>/home/yenke/Siat/eGuce/xml</xml.folder>
+				<attachement.folder>/home/yenke/eGuce/attachement</attachement.folder>
 				<hibernate.default_schema>SIAT_CT</hibernate.default_schema>
 				<jms.username>admin</jms.username>
 				<jms.password>admin</jms.password>
