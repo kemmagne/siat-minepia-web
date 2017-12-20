@@ -961,6 +961,11 @@ public class FileItemCctDetailController implements Serializable {
 	private boolean checkMinepdedMinistry;
 
 	/**
+	 * this is minader ministry
+	 */
+	private boolean checkMinaderMinistry;
+	
+	/**
 	 * The is payment.
 	 */
 	private Boolean isPayment = Boolean.FALSE;
@@ -984,6 +989,8 @@ public class FileItemCctDetailController implements Serializable {
 	 * The invoice other amount.
 	 */
 	private Long invoiceOtherAmount;
+	
+	private final String MINADER_MINISTRY = "MINADER";
 
 	/**
 	 * Instantiates a new file item detail controller.
@@ -995,7 +1002,7 @@ public class FileItemCctDetailController implements Serializable {
 	 * Inits the.
 	 */
 	public void init() {
-
+		checkMinaderMinistry = false;
 		currentFile = currentFileItem.getFile();
 		loggedUser = getLoggedUser();
 		allowedRecommandation = checkIsAllowadRecommandation();
@@ -1057,6 +1064,9 @@ public class FileItemCctDetailController implements Serializable {
 
 		authoritiesList = new DualListModel<Authority>(new ArrayList<Authority>(), new ArrayList<Authority>());
 		selectedAttachment = null;
+		if (currentFile.getDestinataire().equalsIgnoreCase(MINADER_MINISTRY)){
+			checkMinaderMinistry = true;
+		}
 	}
 
 	/**
@@ -1635,7 +1645,11 @@ public class FileItemCctDetailController implements Serializable {
 		} // Saisie Constat
 		else if (CONSTAT_FLOW_LIST.contains(selectedFlow.getCode())) {
 			checkMinepdedMinistry = false;
-			if (currentFileItem.getSubfamily().getService().getSubDepartment().getOrganism().getMinistry().getLabelFr()
+			if (currentFileItem.getSubfamily()!= null && currentFileItem.getSubfamily().getService() != null &&
+					currentFileItem.getSubfamily().getService().getSubDepartment() != null &&
+					currentFileItem.getSubfamily().getService().getSubDepartment().getOrganism() != null &&
+					currentFileItem.getSubfamily().getService().getSubDepartment().getOrganism().getMinistry() != null &&
+					currentFileItem.getSubfamily().getService().getSubDepartment().getOrganism().getMinistry().getLabelFr()
 					.equals(Constants.MINEPDED_MINISTRY)) {
 				checkMinepdedMinistry = true;
 			}
@@ -1936,16 +1950,22 @@ public class FileItemCctDetailController implements Serializable {
 			sessionCmisClient = CmisSession.getInstance();
 		} catch (final CmisConnectionException ce) {
 			LOG.error(ce.getMessage(), ce);
-			final String senderMail = mailService.getReplyToValue();
-			final String templateFileName = CMIS_CONNEXION_ERROR;
-			final Map<String, String> map = new HashMap<String, String>();
-			map.put(MailConstants.SUBJECT, "[SIAT-CT] : Connexion Cmis échoué");
-			map.put(MailConstants.FROM, mailService.getFromValue());
-			map.put(MailConstants.EMAIL, senderMail);
-			map.put("gedUrl", alfrescoPropretiesService.getIpRepoValue());
-			map.put(MailConstants.VMF, templateFileName);
-			mailService.sendMail(map);
-			return;
+			try {
+				final String senderMail = mailService.getReplyToValue();
+				final String templateFileName = CMIS_CONNEXION_ERROR;
+				final Map<String, String> map = new HashMap<String, String>();
+				map.put(MailConstants.SUBJECT, "[SIAT-CT] : Connexion Cmis échoué");
+				map.put(MailConstants.FROM, mailService.getFromValue());
+				map.put(MailConstants.EMAIL, senderMail);
+				map.put("gedUrl", alfrescoPropretiesService.getIpRepoValue());
+				map.put(MailConstants.VMF, templateFileName);
+				mailService.sendMail(map);
+			} catch (Exception ex){
+				LOG.error(ex.getMessage(), ex);
+			}
+			finally {
+				return;
+			}
 		}
 
 		if (sessionCmisClient != null) {
@@ -2075,14 +2095,33 @@ public class FileItemCctDetailController implements Serializable {
 	 * Generate cct report constat.
 	 */
 	public void generateCctReportConstat() {
-		JsfUtil.generateReport(new CtCctExporter(specificDecisionsHistory.getLastDecisionIR()));
+		if (isCheckMinaderMinistry()){
+			JsfUtil.generateReport(new CtCctExporter("PV_INSPECTION_PHYTOSANITAIRE_IMPORTATION", "PV_INSPECTION_PHYTOSANITAIRE_IMPORTATION", specificDecisionsHistory.getLastDecisionIR()));
+		} else {
+			JsfUtil.generateReport(new CtCctExporter(specificDecisionsHistory.getLastDecisionIR()));
+		}
 	}
 
 	/**
 	 * Generate cct report constat.
 	 */
 	public void generateCctReportConstatHistory() {
-		JsfUtil.generateReport(new CtCctExporter(specificDecisionsHistory.getDecisionDetailsIR()));
+		if (isCheckMinaderMinistry()){
+			JsfUtil.generateReport(new CtCctExporter("PV_INSPECTION_PHYTOSANITAIRE_IMPORTATION", "PV_INSPECTION_PHYTOSANITAIRE_IMPORTATION", specificDecisionsHistory.getDecisionDetailsIR()));
+		} else {
+			JsfUtil.generateReport(new CtCctExporter(specificDecisionsHistory.getDecisionDetailsIR()));
+		}
+	}
+	
+	/**
+	 * Generate PV Inspection des articles reglementes
+	 */
+	public void generatePvInspArtReglemente(){
+		JsfUtil.generateReport(new CtCctExporter("PV_INSPECTION_PHYTOSANITAIRE_ARTICLE_REGLEMENTE", "PV_INSPECTION_PHYTOSANITAIRE_ARTICLE_REGLEMENTE", specificDecisionsHistory.getLastDecisionIR()));
+	}
+	
+	public void generatePvInspArtReglementeHistory(){
+		generatePvInspArtReglemente();
 	}
 
 	/**
@@ -6161,6 +6200,15 @@ public class FileItemCctDetailController implements Serializable {
 	public void setCheckMinepdedMinistry(final boolean checkMinepdedMinistry) {
 		this.checkMinepdedMinistry = checkMinepdedMinistry;
 	}
+
+	public boolean isCheckMinaderMinistry() {
+		return checkMinaderMinistry;
+	}
+
+	public void setCheckMinaderMinistry(boolean checkMinaderMinistry) {
+		this.checkMinaderMinistry = checkMinaderMinistry;
+	}
+	
 
 	/**
 	 * Gets the checks if is payment.

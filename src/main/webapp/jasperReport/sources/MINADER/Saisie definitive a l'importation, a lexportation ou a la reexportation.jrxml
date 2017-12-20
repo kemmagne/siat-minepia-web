@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Saisie definitive a l&apos;importation, a lexportation ou a la reexportation" language="groovy" pageWidth="650" pageHeight="1000" columnWidth="610" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1cb59aed-64e6-4870-a61d-f786f9bc3e22">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="265" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="a636c9c4-e227-4fb3-a0d8-e8c09b5869c9" x="3" y="49" width="210" height="26"/>
+				<textElement/>
+				<text><![CDATA[MINISTERE DE L'AGRICULTURE  ET DU
+           DEVELOPPEMENT RURAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="74" y="110" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="74" y="34" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="29cfc738-8c19-4054-b0d4-beb2db502541" x="48" y="90" width="132" height="20"/>
+				<textElement/>
+				<text><![CDATA[SECRETARIAT GENERAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="74" y="75" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7605a21b-d3bf-4ed1-8d9b-83125377d0ae" x="0" y="125" width="241" height="49"/>
+				<textElement/>
+				<text><![CDATA[DIRECTION DE LA REGLEMENTATION ET DU
+CONTROLE DE LA QUALITE DES INTRANTS DES
+                   PRODUITS AGRICOLES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cf68f528-3b5b-4d40-8e31-9ba98fad63da" x="35" y="2" width="156" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPUBLIQUE DU CAMEROUN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="74" y="174" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="afc168d7-85e5-4ba6-91cf-b5fc7b19e0fa" x="62" y="19" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Paix-Travail-Patrie]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="29cfc738-8c19-4054-b0d4-beb2db502541" x="441" y="90" width="132" height="20"/>
+				<textElement/>
+				<text><![CDATA[GENERAL SECRETARIAT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="465" y="75" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="465" y="174" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="465" y="34" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="afc168d7-85e5-4ba6-91cf-b5fc7b19e0fa" x="441" y="19" width="119" height="15"/>
+				<textElement/>
+				<text><![CDATA[Peace-Work-Fatherland]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7605a21b-d3bf-4ed1-8d9b-83125377d0ae" x="387" y="125" width="267" height="49"/>
+				<textElement/>
+				<text><![CDATA[DEPARTEMENTAL OF REGULATION AND QUALITY
+        CONTROL OF INPUTS AND AGRICULTURAL
+                               PRODUCTS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a636c9c4-e227-4fb3-a0d8-e8c09b5869c9" x="402" y="49" width="223" height="26"/>
+				<textElement/>
+				<text><![CDATA[   MINISTRY OF AGRICULTURE AND RURAL
+                           DEVELOPMENT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cf68f528-3b5b-4d40-8e31-9ba98fad63da" x="429" y="2" width="156" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPUBLIC OF CAMEROON]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="465" y="110" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="19476a68-6b04-491e-b7ba-833d5dffc1ac" x="161" y="243" width="350" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[N°_________________________/SCIR/MINADER/SG/DRCQ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2e4a2493-d2ef-41b7-9f46-9fba3ee0d2d4" x="161" y="218" width="317" height="14"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[FINAL DETENTION FOR IMPORTATION OR FOR RE-EXPORTATION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2dea2939-5c57-4a23-aef7-c2032ff81121" x="81" y="202" width="523" height="16"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SAISIE DEFINITIVE A L'IMPORTATION/ A L'EXPORTATION OU A LA REEXPORTATION]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="471" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="edaa9cc4-d4aa-46dd-9252-bba3c0e69373" x="258" y="56" width="100" height="14"/>
+				<textElement/>
+				<text><![CDATA[Bill of loading n°]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3fb33500-5f7c-482e-b24d-5f8d494e4eb2" x="324" y="84" width="132" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[du (moyen de transport) :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d553ae76-7ee0-4a9e-a115-65fe13448b3a" x="1" y="18" width="171" height="14"/>
+				<textElement/>
+				<text><![CDATA[Dear General Manager]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d553ae76-7ee0-4a9e-a115-65fe13448b3a" x="3" y="40" width="100" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Les lots de:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3fb33500-5f7c-482e-b24d-5f8d494e4eb2" x="222" y="41" width="250" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Connaissement/Lettre de transport/Lettre de voiture]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="edaa9cc4-d4aa-46dd-9252-bba3c0e69373" x="200" y="126" width="311" height="14"/>
+				<textElement/>
+				<text><![CDATA[and belonging to you have been checked today by us and should]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d553ae76-7ee0-4a9e-a115-65fe13448b3a" x="1" y="110" width="102" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Entreposés au]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3fb33500-5f7c-482e-b24d-5f8d494e4eb2" x="199" y="111" width="361" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[et vous appartenant a été inspecté par nos soins et doit :(action à mener)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d553ae76-7ee0-4a9e-a115-65fe13448b3a" x="3" y="84" width="161" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Débarqués ou en provenance de:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5449abc5-dbcf-4a55-9d4b-e1822f537ead" x="3" y="125" width="47" height="14"/>
+				<textElement/>
+				<text><![CDATA[Stored at]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5449abc5-dbcf-4a55-9d4b-e1822f537ead" x="1" y="56" width="100" height="14"/>
+				<textElement/>
+				<text><![CDATA[Tthe batches of]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d553ae76-7ee0-4a9e-a115-65fe13448b3a" x="1" y="4" width="169" height="14"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Monsieur/Madame (contrevenant):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="98f4e8e6-9369-454e-9892-74055429799d" x="534" y="20" width="81" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Le propriétaire]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b01a3fd2-303e-47ed-a2be-267ead16300a" x="3" y="331" width="555" height="13"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Veuillez agréer Monsieur, l'expression de ma considération distinguée.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="67d5567c-206c-47b9-bdf2-177f9b21d08b" x="3" y="344" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Yours truly]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="20df3455-9774-4333-96b4-2b980464987d" x="1" y="280" width="553" height="31"/>
+				<textElement/>
+				<text><![CDATA[In accordance with legislation provisions and its enforcement texts the fees related to these operations are to be paid
+by the owner]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a2bca55c-2403-4579-b2f2-80739b04faaf" x="313" y="390" width="312" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[A________________________,le________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="534" y="40" width="100" height="14"/>
+				<textElement/>
+				<text><![CDATA[Officer The Owner]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="31e2151f-5462-4e37-a06f-c00713002e83" x="1" y="250" width="555" height="30"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Conformément aux dispositions législatives et ses textes d'application, les frais afférents à ces opérations sont  à la charge du propriétaire.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="98f4e8e6-9369-454e-9892-74055429799d" x="534" y="422" width="81" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Le propriétaire]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="98f4e8e6-9369-454e-9892-74055429799d" x="261" y="422" width="132" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Le Douanier]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="262" y="442" width="100" height="14"/>
+				<textElement/>
+				<text><![CDATA[The Customs]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="1" y="444" width="100" height="14"/>
+				<textElement/>
+				<text><![CDATA[The store keeper]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="534" y="442" width="100" height="14"/>
+				<textElement/>
+				<text><![CDATA[Officer The Owner]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="98f4e8e6-9369-454e-9892-74055429799d" x="1" y="424" width="132" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rresponsable du magasin]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="04d131f7-bbb1-4fad-99e1-0c4a158fb985" x="3" y="161" width="631" height="20"/>
+				<textElement/>
+				<text><![CDATA[---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="75270f06-835e-4ae3-8243-b7bde9c6891a" x="0" y="197" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[A partir de :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="689e5e03-7136-4156-9d21-0ac6946abca5" x="0" y="217" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[As from]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

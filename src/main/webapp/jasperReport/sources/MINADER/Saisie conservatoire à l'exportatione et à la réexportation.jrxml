@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="165498ce-6d5a-42c9-b900-e120e7584cfb">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="201" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="a636c9c4-e227-4fb3-a0d8-e8c09b5869c9" x="12" y="54" width="210" height="26"/>
+				<textElement/>
+				<text><![CDATA[MINISTERE DE L'AGRICULTURE  ET DU
+           DEVELOPPEMENT RURAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="83" y="179" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="29cfc738-8c19-4054-b0d4-beb2db502541" x="57" y="95" width="132" height="20"/>
+				<textElement/>
+				<text><![CDATA[SECRETARIAT GENERAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="83" y="80" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="83" y="39" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="83" y="115" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7605a21b-d3bf-4ed1-8d9b-83125377d0ae" x="12" y="130" width="241" height="49"/>
+				<textElement/>
+				<text><![CDATA[DIRECTION DE LA REGLEMENTATION ET DU
+CONTROLE DE LA QUALITE DES INTRANTS DES
+                   PRODUITS AGRICOLES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cf68f528-3b5b-4d40-8e31-9ba98fad63da" x="44" y="7" width="156" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPUBLIQUE DU CAMEROUN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cf68f528-3b5b-4d40-8e31-9ba98fad63da" x="339" y="7" width="142" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPUBLIC OF CAMEROON]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7605a21b-d3bf-4ed1-8d9b-83125377d0ae" x="295" y="130" width="260" height="49"/>
+				<textElement/>
+				<text><![CDATA[DEPARTEMENTAL OF REGULATION AND QUALITY
+  CONTROL OF INPUTS AND AGRICULTURAL
+                                 PRODUCTS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="371" y="80" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a636c9c4-e227-4fb3-a0d8-e8c09b5869c9" x="308" y="54" width="227" height="26"/>
+				<textElement/>
+				<text><![CDATA[MINISTRY OF AGRICULTURE  AND RURAL
+                  DEVELOPMENT ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="371" y="179" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="29cfc738-8c19-4054-b0d4-beb2db502541" x="349" y="95" width="132" height="20"/>
+				<textElement/>
+				<text><![CDATA[GENERAL SECRETARIAT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="371" y="115" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="371" y="39" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4e1737a9-652b-4b45-a5a1-872cdfba1071" x="361" y="-60" width="120" height="14"/>
+				<textElement/>
+				<text><![CDATA[Peace-Work-Fatherland]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="afc168d7-85e5-4ba6-91cf-b5fc7b19e0fa" x="71" y="24" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Paix-Travail-Patrie]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e8e2e380-0b57-4ae8-b1c9-8dd93dc06d7f" x="349" y="24" width="120" height="15"/>
+				<textElement/>
+				<text><![CDATA[Peace-Work-Fatherland]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="405" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="7afbd7b6-2b1f-44e5-bef5-2da7bbd08d35" x="57" y="11" width="446" height="19"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SAISIE CONSERVATOIRE A L'EXPORTATION OU LA REEXPORTATION
+                     ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="dbc2db07-9046-4c4e-8dc0-974b3d34df27" x="95" y="40" width="266" height="18"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[      Detention for exportation or for re-exportation
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="59e826be-8e82-4fdc-87fb-fe1155ae5ae6" x="71" y="68" width="355" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[N°__________________________MINADER/SCER/MINADER/SG/DRCQ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="56c0d316-0e02-4bf3-ad09-14de65217ba7" x="0" y="102" width="171" height="20"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[A Monsieur le Directeur Général :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="994c43e0-6d28-45e6-aca5-7a7aa21fa8dd" x="0" y="122" width="121" height="20"/>
+				<textElement/>
+				<text><![CDATA[To the General Manager]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4a17ca87-f4dd-4603-963c-9791d506efa1" x="0" y="142" width="156" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Monsieur le Directeur Général]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e1e0469b-3621-47db-ba13-701ea8d32b2e" x="0" y="162" width="137" height="20"/>
+				<textElement/>
+				<text><![CDATA[Dear General Manager]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e6956cb9-1ff6-46cb-84b1-1baba50ad78e" x="0" y="182" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Le lot de:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9604dcf4-7ee3-42f8-a8b6-c08d5f97598f" x="0" y="202" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[The batch of]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cf460d78-53c2-4180-a802-059c78793702" x="0" y="222" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Entreposé au:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5f7ace07-1a47-4bc3-83c7-f49a93c32731" x="0" y="242" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[stored at]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4b063486-8cec-4f89-82bf-e7eb8bb1c5a8" x="0" y="262" width="555" height="13"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Et appartenant, ne pourront être enlevés que sur présentation des pièces réglementaires suivantes:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a71fcc46-f5ac-4a1a-a5d5-ade21e52921a" x="0" y="275" width="555" height="14"/>
+				<textElement/>
+				<text><![CDATA[Detent and belonging to you can only be removed it the following statuary documents are shown]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6a99169b-1d62-4c3a-86d1-092ff0e5664b" x="26" y="297" width="521" height="14"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Demande timbrée d'inspection phytosanitaire/import/export]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="184f997b-7288-471a-9b78-08c1cafd35ea" x="26" y="311" width="521" height="14"/>
+				<textElement/>
+				<text><![CDATA[Stamped application for a phytosanitary inspection/import/export]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6a99169b-1d62-4c3a-86d1-092ff0e5664b" x="25" y="338" width="270" height="14"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Certificat phytosanitaire général du pays d'origine (1)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="184f997b-7288-471a-9b78-08c1cafd35ea" x="25" y="352" width="270" height="14"/>
+				<textElement/>
+				<text><![CDATA[General phytosanitary certificat of the country of origin]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6a99169b-1d62-4c3a-86d1-092ff0e5664b" x="394" y="337" width="142" height="14"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Attestation de traitement ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="184f997b-7288-471a-9b78-08c1cafd35ea" x="394" y="351" width="142" height="14"/>
+				<textElement/>
+				<text><![CDATA[Treatment testimonial (2)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="184f997b-7288-471a-9b78-08c1cafd35ea" x="394" y="388" width="142" height="14"/>
+				<textElement/>
+				<text><![CDATA[phytosanitary certificat (5)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6a99169b-1d62-4c3a-86d1-092ff0e5664b" x="394" y="374" width="142" height="14"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Certificat phytosanitaire]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="184f997b-7288-471a-9b78-08c1cafd35ea" x="206" y="387" width="142" height="14"/>
+				<textElement/>
+				<text><![CDATA[Forest's specification (4)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6a99169b-1d62-4c3a-86d1-092ff0e5664b" x="206" y="373" width="142" height="14"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Spécification des forêts]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="184f997b-7288-471a-9b78-08c1cafd35ea" x="25" y="386" width="142" height="14"/>
+				<textElement/>
+				<text><![CDATA[Verification report (3)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6a99169b-1d62-4c3a-86d1-092ff0e5664b" x="25" y="372" width="142" height="14"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Bulletin de vérification]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fd76a4ce-1777-4319-9b69-b7acdfc69246" x="412" y="59" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Static text]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="63" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="5e4b6b43-0fcb-4468-b51e-3d305c709905" x="0" y="12" width="555" height="26"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Conformément aux dispositions législatives et aux textes d'applications, les frais afférents à ces opérations sont à la charge  du propriétaire]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d18e698b-d9d5-4e71-9b4d-ff9827c6507f" x="0" y="38" width="555" height="20"/>
+				<textElement/>
+				<text><![CDATA[In accordance with legislative provisions and its enenforcement texts the fees related to these operations are to be paid
+by the owner]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<pageFooter>
+		<band height="133" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="0f3490f7-3e6c-4741-bbc7-5bf5236bee04" x="0" y="15" width="100" height="13"/>
+				<textElement/>
+				<text><![CDATA[Yours truity]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="45cb49ce-c3a9-4ea6-bee6-9cd1125d919a" x="0" y="0" width="555" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Veuillez agréer Monsieur, l'expression de mes salutations distinguées]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="45cb49ce-c3a9-4ea6-bee6-9cd1125d919a" x="1" y="32" width="136" height="15"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Le responsable du magasin]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0f3490f7-3e6c-4741-bbc7-5bf5236bee04" x="1" y="47" width="100" height="13"/>
+				<textElement/>
+				<text><![CDATA[The store keeper]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="45cb49ce-c3a9-4ea6-bee6-9cd1125d919a" x="0" y="62" width="137" height="15"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Le Douanier]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0f3490f7-3e6c-4741-bbc7-5bf5236bee04" x="0" y="77" width="100" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[The Customers Officer]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f1fe0345-09ee-42e0-900c-d2cd7d8c595a" x="387" y="64" width="100" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Le propriétaire]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f829054c-5211-4212-9660-5c44dad6141e" x="387" y="77" width="100" height="13"/>
+				<textElement/>
+				<text><![CDATA[Tthe Owner]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="419506dc-c99f-4619-88c1-4051bd252b1f" x="387" y="28" width="18" height="19"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Le]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="93470a9b-2241-4dae-acac-fb6046cf045c" x="387" y="47" width="29" height="13"/>
+				<textElement/>
+				<text><![CDATA[ The]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

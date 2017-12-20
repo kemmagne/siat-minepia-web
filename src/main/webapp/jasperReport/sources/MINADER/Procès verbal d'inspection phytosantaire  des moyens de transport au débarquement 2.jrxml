@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PROCES-VERBAL D&apos;ISPECTION PHYTOSANITAIRE DES MOYENS DE TRANSPORT AU DEBARQUEMENT 2" language="groovy" pageWidth="650" pageHeight="1000" columnWidth="610" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0927a9ea-be2c-4a03-9ab4-eab9865a50a2">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="123"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<summary>
+		<band height="469" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="ec14ece6-745a-482e-a582-a3cf5fdff7b7" x="-10" y="0" width="39" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Durée:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b4c61c2c-609a-4a1b-85be-eaa9327fadbd" x="-10" y="14" width="58" height="20"/>
+				<textElement/>
+				<text><![CDATA[Duration]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="43a2143b-d424-4501-89a2-6e7ab21f31b6" x="-10" y="34" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Mode de traitement:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="770af3b5-eb2e-4b08-98c5-6b7b25680ed7" x="-10" y="48" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Method of treatment]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7795d33b-38e9-43f4-89b8-7c6b90231b09" x="-10" y="88" width="229" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Signature de l'agent en charge de l'inspection]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b05bb4c2-6d06-4993-9043-beb01c46e1b0" x="-10" y="102" width="134" height="20"/>
+				<textElement/>
+				<text><![CDATA[Signature of the inspector]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8f409555-0ad4-4d51-89cc-39986920ab6a" x="-10" y="132" width="86" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Le demandeur,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="65221080-4e2b-41ed-acd7-7b94f9489499" x="312" y="152" width="148" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Le Contrôleur Phytosanitaire,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="16ca5d31-6e2e-4559-955d-4a3df5398d37" x="237" y="132" width="75" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fait le/done in]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ca390896-abb9-4f16-b5b0-d564715b97a8" x="-10" y="192" width="86" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Le chef de poste]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ecc02adc-8316-466e-9c92-d3b21fef966c" x="-10" y="220" width="150" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Signature du commandant(3)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="350eedd5-abe3-49f4-9404-768f4630d4bb" x="-10" y="336" width="322" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[(1)        Type de moyen de transport( Véhicule, Navire, Aéronef) ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="17ccdd4c-cace-4588-852e-af95837ea074" x="-10" y="356" width="322" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[(2)        Identification des moyens de transport ( Nomdu navire)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="600cdcfb-3b5f-47d8-ac83-38a63612ff4c" x="-10" y="376" width="322" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[(3)        Signature du Commandant, Chauffeur, Pilote.....................]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="1e638483-1ecd-4255-b2a5-3123f5539a65" x="29" y="0" width="581" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[________________________________________________________________________________________________________________]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="2c8a4904-f554-4c0f-bff9-8085245bd643" x="90" y="34" width="520" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[_____________________________________________________________________________________]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="94a5956f-7ff9-428e-ba24-b8b123b8c6c7" x="312" y="132" width="273" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[__________________________________________]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ecc02adc-8316-466e-9c92-d3b21fef966c" x="-8" y="230" width="150" height="20"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Signature of the master]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

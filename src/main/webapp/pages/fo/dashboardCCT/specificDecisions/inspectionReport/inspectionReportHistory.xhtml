@@ -138,12 +138,50 @@
 					<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.infraction}" />
 				</h:panelGrid>
 			</p:tab>
-
+			
+			<p:tab title="#{bundle['InspectionArticleReglemente']}" rendered="#{fileItemCctDetailController.checkMinaderMinistry}">
+				<h:panelGrid columns="2">
+					<h:outputLabel  value="#{bundle['respectNorme']} : " />
+					<p:selectBooleanCheckbox disabled="true"
+											 value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.respectNorme}" />
+					<h:outputLabel  value="#{bundle['sourcePropagationPeste']} : " />
+					<p:selectBooleanCheckbox disabled="true"
+						value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.sourcePropagationPeste}"/>
+					<h:outputLabel  value="#{bundle['autocontrolDocument']} : " />
+					<h:outputLabel  value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.autocontrolDocument}" />
+					<h:outputLabel  value="#{bundle['autocontrolEquipement']} : " />
+					<h:outputLabel  value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.autocontrolEquipement}" />
+					<h:outputLabel value="#{bundle['processAnalyse']} : " />
+					<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.processAnalyse}" /> 
+					<h:outputLabel  value="#{bundle['casque']} : " />
+					<p:selectBooleanCheckbox disabled="true"
+						value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.casque}"/>
+					<h:outputLabel  value="#{bundle['gants']} : " />
+					<p:selectBooleanCheckbox disabled="true"
+						value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.gants}"/>
+					<h:outputLabel value="#{bundle['combinaison']} : " />
+					<p:selectBooleanCheckbox disabled="true"
+						value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.combinaison}"/>
+					<h:outputLabel  value="#{bundle['chaussureSecurite']} : " />
+					<p:selectBooleanCheckbox disabled="true"
+						value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.chaussureSecurite}"/>
+					<h:outputLabel  value="#{bundle['water']}" />
+					<h:outputLabel  value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.water}" />
+					<h:outputLabel  value="#{bundle['dechet']}" />
+					<h:outputLabel  value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.dechet}" />
+					<h:outputLabel value="#{bundle['procedure']}" />
+					<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.procedure}" />
+				</h:panelGrid>
+			</p:tab>
 		</p:tabView>
 
 		<div class="btn-bloc">
-			<p:commandButton ajax="false" actionListener="#{fileItemCctDetailController.generateCctReportConstatHistory}"
-				value="#{bundle['ConstatReportdownloadBtn']}" styleClass="ui-priority-primary" />
+			<p:splitButton ajax="false" actionListener="#{fileItemCctDetailController.generateCctReportConstatHistory}"
+				value="#{bundle['ConstatReportdownloadBtn']}">
+                <p:menuitem value="#{bundle['PVIPARdownloadBtn']}" ajax="false" rendered="#{fileItemCctDetailController.checkMinaderMinistry}"
+							actionListener="#{fileItemCctDetailController.generatePvInspArtReglementeHistory}">
+                </p:menuitem>
+            </p:splitButton>
 		</div>
 
 	</h:panelGroup>

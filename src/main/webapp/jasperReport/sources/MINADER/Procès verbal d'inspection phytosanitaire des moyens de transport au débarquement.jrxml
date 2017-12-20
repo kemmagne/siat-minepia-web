@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PROCES-VERBAL D&apos;ISPECTION PHYTOSANITAIRE DES MOYENS DE TRANSPORT AU DEBARQUEMENT" pageWidth="660" pageHeight="2000" columnWidth="620" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="88b9e062-9516-48d3-8736-e76bc26e1c86">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="747"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="c2e3a381-4002-4cf5-b55d-a8261114a31b"/>
+	<field name="sous" class="java.lang.String"/>
+	<field name="datee" class="java.lang.String"/>
+	<field name="nom_et_adresse" class="java.lang.String"/>
+	<field name="destination" class="java.lang.String"/>
+	<field name="provenance" class="java.lang.String"/>
+	<field name="escale" class="java.lang.String"/>
+	<field name="heure_lieu" class="java.lang.String"/>
+	<field name="nature" class="java.lang.String"/>
+	<field name="traitement_effec" class="java.lang.String"/>
+	<field name="produit_use" class="java.lang.String"/>
+	<field name="fait" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="260" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="29cfc738-8c19-4054-b0d4-beb2db502541" x="428" y="88" width="132" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[GENERAL SECRETARIAT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="462" y="108" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="afc168d7-85e5-4ba6-91cf-b5fc7b19e0fa" x="441" y="15" width="118" height="15"/>
+				<textElement/>
+				<text><![CDATA[Peace-Work-Fatherland]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cf68f528-3b5b-4d40-8e31-9ba98fad63da" x="420" y="0" width="156" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPUBLIC OF CAMEROON]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7605a21b-d3bf-4ed1-8d9b-83125377d0ae" x="361" y="123" width="259" height="49"/>
+				<textElement/>
+				<text><![CDATA[DEPARTEMENTAL OF REGULATION AND QUALITY
+         CONTROL OF INPUTS AND AGRICULTURAL
+                                      PRODUCTS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="461" y="73" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a636c9c4-e227-4fb3-a0d8-e8c09b5869c9" x="378" y="47" width="241" height="26"/>
+				<textElement/>
+				<text><![CDATA[   MINISTRY OF AGRICULTURE AND RURAL
+                             DEVELOPMENT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="462" y="172" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="462" y="32" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="29cfc738-8c19-4054-b0d4-beb2db502541" x="47" y="90" width="132" height="20"/>
+				<textElement/>
+				<text><![CDATA[SECRETARIAT GENERAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="73" y="110" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="afc168d7-85e5-4ba6-91cf-b5fc7b19e0fa" x="61" y="19" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Paix-Travail-Patrie]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cf68f528-3b5b-4d40-8e31-9ba98fad63da" x="34" y="2" width="156" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPUBLIQUE DU CAMEROUN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7605a21b-d3bf-4ed1-8d9b-83125377d0ae" x="-1" y="125" width="241" height="49"/>
+				<textElement/>
+				<text><![CDATA[DIRECTION DE LA REGLEMENTATION ET DU
+CONTROLE DE LA QUALITE DES INTRANTS DES
+                 PRODUITS AGRICOLES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="73" y="75" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a636c9c4-e227-4fb3-a0d8-e8c09b5869c9" x="2" y="49" width="210" height="26"/>
+				<textElement/>
+				<text><![CDATA[MINISTERE DE L'AGRICULTURE  ET DU
+           DEVELOPPEMENT RURAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="73" y="32" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="83" y="-41" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2dea2939-5c57-4a23-aef7-c2032ff81121" x="61" y="189" width="512" height="15"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PROCES-VERBAL D'ISPECTION PHYTOSANITAIRE DES MOYENS DE TRANSPORT AU DEBARQUEMENT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="73" y="174" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d2567c1a-fdb9-43f8-aab3-63b3c375573d" x="121" y="204" width="365" height="15"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[REPORT OF THE PHYTOSANITARY INSPECTION OF THE SHIP ON UNLOADING]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="40cc1f61-5c43-489f-b047-0894085b0c29" x="120" y="217" width="371" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[N°_______________________/PVIMTD /MINADER/SG/DRCQ]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="1212">
+			<staticText>
+				<reportElement uuid="e282331b-87e8-40f7-81d1-976a28194061" x="1" y="45" width="638" height="14"/>
+				<textElement/>
+				<text><![CDATA[In accordance with article 3 paragraph 2 of law 2003/003 of 21 April 2003 on phytisanitary protection]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="13500373-88ea-4105-8b50-56869bdced34" x="1" y="29" width="636" height="16"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Conformémént à l'article 3 alinéa 2 de la loi 2003/003 du 21 Avril 2003 portant protection phytosanitaire]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2b80f1d5-63bd-4a9f-9759-2a09dea8a565" x="1" y="89" width="228" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Je Soussigné:(Nom/Fonction dans le service)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d1072f62-4e36-4698-afc1-b0814612f260" x="0" y="122" width="305" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Certifi avoir ce jour: (2) (Identification du moyen de transport):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1cf9dadc-3176-493b-beb6-0b44f42f6652" x="0" y="157" width="289" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nom et adresse du Consignataire du moyen de transport:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8ce92c2a-2e23-4205-a0e1-a2bf04285123" x="0" y="174" width="289" height="20"/>
+				<textElement/>
+				<text><![CDATA[Name and address of the consignee, proprietor or owner]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="11cd6b27-2e84-4ad2-8f33-63c3f563d018" x="-1" y="251" width="140" height="20"/>
+				<textElement/>
+				<text><![CDATA[Heure et lieu de l'inspection:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5948b4d2-b144-480e-b3c9-2ec138791e5c" x="2" y="312" width="170" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Zones controlées/checked areas:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a0afed4c-bc9a-42e2-825d-df2e40e83aa5" x="2" y="465" width="630" height="15"/>
+				<textElement/>
+				<text><![CDATA[Given its state and/or that of cargo on board; i have (1)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0c52f51d-b8a4-4bc3-ae58-5c4477326573" x="0" y="451" width="629" height="14"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Etant donné son état et/ ou celui des produits à bord; j'ai décidé (1)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="126f3ca5-24db-4848-97c8-2b6c80d42b18" x="28" y="480" width="417" height="16"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[L'autorisation débarquement immédait des produits]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8ce92c2a-2e23-4205-a0e1-a2bf04285123" x="2" y="194" width="59" height="20"/>
+				<textElement/>
+				<text><![CDATA[Destination:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8ce92c2a-2e23-4205-a0e1-a2bf04285123" x="2" y="211" width="238" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Provenance/Origin:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4e4ab634-49db-4c91-b7c4-5d8bd730fcf5" x="2" y="107" width="227" height="14"/>
+				<textElement/>
+				<text><![CDATA[ I undersigned: (position in the Service) (1)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f477d655-5b34-47bc-a987-688e422728ac" x="2" y="136" width="159" height="19"/>
+				<textElement/>
+				<text><![CDATA[CertIfy to have examine this day]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4831cb56-5a53-44bf-a73c-54b36719c308" x="2" y="610" width="138" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[-          Traitement effectué  ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1842cc45-d6cb-4773-b4a0-f7e33fa228cb" x="34" y="655" width="156" height="20"/>
+				<textElement/>
+				<text><![CDATA[Chemical used and the dosage]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="ed4ad582-ded3-436a-9fd9-0a52fcdb9f8f" x="229" y="89" width="410" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{sous}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="cf883aa4-af9d-4487-98c7-8764f7378f5f" x="307" y="122" width="332" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{datee}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="38135c94-c063-45ce-9cf0-4b1f21e54a6f" x="289" y="157" width="287" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{nom_et_adresse}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="59f3a894-b0f5-4c8b-bd97-d0785b72d804" x="57" y="194" width="580" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{destination}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="acb44599-60ad-4b2f-874e-839da781c83d" x="237" y="211" width="401" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{provenance}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="db1ae464-fc16-492e-a100-853596f10394" x="140" y="253" width="463" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{heure_lieu}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7edf148f-dc5c-450d-b7d8-9f5cc7e029ee" x="212" y="292" width="420" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{nature}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="401772ac-b8ab-4f6f-8b70-3513640cc9b5" x="174" y="312" width="458" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{traitement_effec}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement uuid="6b91336b-2446-4bfb-a3b1-89fbe9b2a460" key="table" style="table" x="-2" y="351" width="641" height="78"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Table Dataset 1" uuid="0efc1dd6-9033-4f7a-9efe-85880dc3b030">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.JREmptyDataSource(1)]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="90" uuid="fcde93d9-a7e8-4a03-a5a5-3cfc1769753e">
+						<jr:columnHeader style="table_CH" height="30"/>
+						<jr:detailCell style="table_TD" height="20"/>
+					</jr:column>
+					<jr:column width="90" uuid="e2d64785-1638-4e0a-b28b-5872f78d099f">
+						<jr:columnHeader style="table_CH" height="30"/>
+						<jr:detailCell style="table_TD" height="20"/>
+					</jr:column>
+					<jr:column width="90" uuid="1a1a982a-e938-4c40-8085-408b08be5b67">
+						<jr:columnHeader style="table_CH" height="30"/>
+						<jr:detailCell style="table_TD" height="20"/>
+					</jr:column>
+					<jr:column width="90" uuid="06e45fa6-70f2-4432-9735-b90dd1c709f0">
+						<jr:columnHeader style="table_CH" height="30"/>
+						<jr:detailCell style="table_TD" height="20"/>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<staticText>
+				<reportElement uuid="24211993-5053-4fba-9b48-c023e3a7effb" x="29" y="493" width="161" height="20"/>
+				<textElement/>
+				<text><![CDATA[Immediate unloading of the cargo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="126f3ca5-24db-4848-97c8-2b6c80d42b18" x="29" y="513" width="417" height="16"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[L'autorisation de débarquement partiel des produits ci-après et le traitement du reste]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="24211993-5053-4fba-9b48-c023e3a7effb" x="28" y="524" width="308" height="20"/>
+				<textElement/>
+				<text><![CDATA[The partial unloading of the cargo and treatment of the reste]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="24211993-5053-4fba-9b48-c023e3a7effb" x="27" y="557" width="308" height="20"/>
+				<textElement/>
+				<text><![CDATA[Unloading after the treatment of the ship and the cargo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="126f3ca5-24db-4848-97c8-2b6c80d42b18" x="28" y="543" width="417" height="16"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[L'autorisation de débarquement après traitement des produits à bord]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="fe641d88-7c37-487a-a6e9-ada77908f92e" x="140" y="610" width="489" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{traitement_effec}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="5e3262bf-0613-469a-a6c3-7dffad474cf1" x="34" y="620" width="127" height="20"/>
+				<textElement/>
+				<text><![CDATA[Treatment carried out]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4831cb56-5a53-44bf-a73c-54b36719c308" x="1" y="640" width="171" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[-          Produits utilisés et dosés: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="ef63b83c-e1a7-4bd5-ae7f-51c04eed5bee" x="172" y="640" width="457" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{produit_use}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="283fd0d3-3508-4bdc-a73d-47ab8d27e7f6" x="-1" y="272" width="140" height="20"/>
+				<textElement/>
+				<text><![CDATA[Time and place of inspection]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="701c914c-2858-488b-9ae0-d4ce9d2bacc0" x="2" y="231" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Escale (Next Port):]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="117f10fd-00ea-4692-b645-c9372136ad3c" x="102" y="231" width="535" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{escale}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="fb47dee4-79aa-4fb7-b813-1d25a42cf0a2" x="2" y="292" width="210" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nature de la cargaison/Nature of cargo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="24211993-5053-4fba-9b48-c023e3a7effb" x="28" y="590" width="418" height="20"/>
+				<textElement/>
+				<text><![CDATA[Return of the cargo to the country of origine at the expenses of the defaulter]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="126f3ca5-24db-4848-97c8-2b6c80d42b18" x="27" y="577" width="417" height="16"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Le refoulement vesr le pays d'origine des produits à bord aux frais du contrevenant]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement uuid="08e399ce-b16c-46d2-93e6-1f5d3701c373" x="-1" y="480" width="28" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="08e399ce-b16c-46d2-93e6-1f5d3701c373" x="-1" y="513" width="28" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="08e399ce-b16c-46d2-93e6-1f5d3701c373" x="0" y="544" width="28" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="08e399ce-b16c-46d2-93e6-1f5d3701c373" x="-1" y="577" width="28" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="4831cb56-5a53-44bf-a73c-54b36719c308" x="0" y="674" width="171" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[-          Durée: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1842cc45-d6cb-4773-b4a0-f7e33fa228cb" x="33" y="729" width="156" height="20"/>
+				<textElement/>
+				<text><![CDATA[Method of treatment]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4831cb56-5a53-44bf-a73c-54b36719c308" x="0" y="714" width="171" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[-          Mmode de traitement: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b05bb4c2-6d06-4993-9043-beb01c46e1b0" x="10" y="687" width="134" height="20"/>
+				<textElement/>
+				<text><![CDATA[Signature of the inspector]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="94a5956f-7ff9-428e-ba24-b8b123b8c6c7" x="332" y="782" width="273" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{fait}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="16ca5d31-6e2e-4559-955d-4a3df5398d37" x="257" y="781" width="75" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fait le/done in]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ecc02adc-8316-466e-9c92-d3b21fef966c" x="12" y="899" width="150" height="20"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Signature of the master]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ecc02adc-8316-466e-9c92-d3b21fef966c" x="10" y="889" width="150" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Signature du commandant(3)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ca390896-abb9-4f16-b5b0-d564715b97a8" x="10" y="835" width="86" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Le chef de poste]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="350eedd5-abe3-49f4-9404-768f4630d4bb" x="1" y="937" width="322" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[(1)        Type de moyen de transport( Véhicule, Navire, Aéronef) ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="17ccdd4c-cace-4588-852e-af95837ea074" x="1" y="957" width="322" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[(2)        Identification des moyens de transport ( Nomdu navire)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="600cdcfb-3b5f-47d8-ac83-38a63612ff4c" x="1" y="977" width="322" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[(3)        Signature du Commandant, Chauffeur, Pilote.....................]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

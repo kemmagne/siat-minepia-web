@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Annexe visa technique" language="groovy" pageWidth="650" pageHeight="842" columnWidth="630" leftMargin="10" rightMargin="10" topMargin="20" bottomMargin="20" uuid="26cd8c0f-282e-48c6-a88a-076e80ea7788">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="431dc42e-77e4-4d97-b7d0-52b864aa794b"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="306" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="6b2711a1-b830-46af-a987-3df9feca5b72" x="162" y="0" width="312" height="62"/>
+				<textElement>
+					<font fontName="Arial" size="24" isBold="true"/>
+				</textElement>
+				<text><![CDATA[
+ANNEXE VISA TECHNIQUE
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bcf69e7e-d96e-4192-80bf-3627d8f4eb1e" x="43" y="70" width="555" height="54"/>
+				<textElement>
+					<font fontName="Century Gothic" size="12"/>
+				</textElement>
+				<text><![CDATA[N°________________/VT/MINEPDED/SG/DNC/SDNAV du______________ pour le contrôle de la qualité des équipements/appareils électriques et électroniques]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement uuid="eb52c39c-b6dc-4ce5-bdd1-086e477e1f27" key="table" style="table" x="43" y="144" width="555" height="107"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Table Dataset 1" uuid="53f65633-b41e-487f-9666-b3493e2627ad">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.JREmptyDataSource(1)]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="198" uuid="346a5772-509f-452f-b95c-00bf271caaed">
+						<jr:tableFooter height="30" rowSpan="1"/>
+						<jr:columnHeader style="table_CH" height="60" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="30" rowSpan="1"/>
+					</jr:column>
+					<jr:column width="188" uuid="713fc31e-787d-4d24-9f1f-f87e18fb9238">
+						<jr:tableFooter height="30" rowSpan="1"/>
+						<jr:columnHeader style="table_CH" height="60" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="30" rowSpan="1"/>
+					</jr:column>
+					<jr:column width="179" uuid="52fe817f-1ccc-4cee-b823-71422de2d27b">
+						<jr:tableFooter height="30" rowSpan="1"/>
+						<jr:columnHeader style="table_CH" height="60" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="30" rowSpan="1"/>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</title>
+	<detail>
+		<band height="125" splitType="Stretch"/>
+	</detail>
+</jasperReport>

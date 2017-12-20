@@ -59,7 +59,12 @@
 							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="rollBackButton"
 								value="#{bundle['FileItemInformationTitle_annuler']}" rendered="#{fileItemApDetailController.rollBackDecisionsAllowed  == 'true' and fileItemApDetailController.showDecisionButton == 'true'}"
 								actionListener="#{fileItemApDetailController.prepareRollBackDecisions}" update=":growl datalist decideButton" />
-
+							
+							<p:commandButton onstart="PF('statusDialog1').block(); disableBtn()" onsuccess="PF('statusDialog1').unblock(); enableBtn()"
+								id="decideCotationButton" value="#{bundle['FileItemInformationTitle_decider']}" styleClass="disBtn"
+								rendered="#{fileItemApDetailController.decisionAllowedAtCotationLevel == 'true' and fileItemApDetailController.fileItemHasDraft  == 'false' and fileItemApDetailController.destinationFlowsFromCurrentCotationStep.size() > 0 and fileItemApDetailController.decisionAllowed == 'false'}"
+								actionListener="#{fileItemApDetailController.prepareDecisionsAtCotation}" update=":growl :decisionForm " resetValues="true" />
+							
 							<p:commandButton onstart="PF('statusDialog1').block(); disableBtn()" onsuccess="PF('statusDialog1').unblock(); enableBtn()"
 								id="decideButton" value="#{fileItemApDetailController.rejctDispatchAllowed=='true'?bundle['FileItemInformationTitle_rejeter']:bundle['FileItemInformationTitle_decider']}" styleClass="disBtn"
 								rendered="#{(fileItemApDetailController.decisionAllowed == 'true' and fileItemApDetailController.fileItemHasDraft  == 'false'  and fileItemApDetailController.showDecisionButton == 'true') or (fileItemApDetailController.rejctDispatchAllowed and fileItemApDetailController.fileItemHasDraft  == 'false' )}"

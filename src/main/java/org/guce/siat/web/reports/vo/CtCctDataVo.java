@@ -91,7 +91,137 @@ public class CtCctDataVo
 
 	/** The nature. */
 	private String nature;
+	
+	/**
+	 * Package quality
+	 */
+	private String packageQuality;
+	
+	/**
+	 * Native country
+	 */
+	private String nativeCountry;
+	
+	/**
+	 * Origin of country
+	 */
+	private String originCountry;
+	
+	/**
+	 * Transport Means
+	 */
+	private String transportMeans;
+	
+	/**
+	 * Bill of loading
+	 */
+	private String billOfLoading;
+	
+	/**
+	 * Controller name
+	 */
+	private String controller;
+	
+	/**
+	 * Sender
+	 */
+	private String sender;
+	
+	/**
+	 * Recipient
+	 */
+	private String recipient;
+	
+	/**
+	 * Production Date
+	 */
+	private Date productionDate;
+	
+	/**
+	 * expirationDate
+	 */
+	private Date expirationDate;
+	
+	/**
+	 * Import Licence Number
+	 */
+	private String importLicenceNumber;
+	
+	/**
+	 * Import Licence Date
+	 */
+	private Date importLicenceDate;
+	
+	/**
+	 * Import licence deliver
+	 */
+	private String importLicenceDeliver;
 
+		/**
+	 * Respect des normes nationales et internationales
+	 */
+	private String respectNorme;
+	
+	/**
+	 * Source de propagation de la peste
+	 */
+	private String sourcePropagationPeste;
+	
+	/**
+	 * Existence des documents d'auto-controle
+	 */
+	private String autocontrolDocument;
+	
+	/**
+	 * Suivi des équipements d'auto-controle
+	 */
+	private String autocontrolEquipement;
+	
+	/**
+	 * Analyse du processus
+	 */
+	private String processAnalyse;
+
+	/**
+	 * Existance Casque
+	 */
+	private String casque;
+	
+	/**
+	 * Gants
+	 */
+	private String gants;
+	
+	/**
+	 * Combinaison
+	 */
+	private String combinaison;
+	
+	/**
+	 * Chaussures de sécurités
+	 */
+	private String chaussureSecurite;
+	
+	/**
+	 * Eau
+	 */
+	private String water;
+	
+	/**
+	 * Evacuation des déchet
+	 */
+	private String dechet;
+	
+	/**
+	 * Procédures
+	 */
+	private String procedure;
+	
+	/**
+	 * 
+	 */
+	private String controller2;
+	
 	/**
 	 * Gets the controler list.
 	 *
@@ -658,4 +788,225 @@ public class CtCctDataVo
 	{
 		this.nature = nature;
 	}
+
+	public String getPackageQuality() {
+		return packageQuality;
+	}
+
+	public void setPackageQuality(String packageQuality) {
+		this.packageQuality = packageQuality;
+	}
+
+	public String getNativeCountry() {
+		return nativeCountry;
+	}
+
+	public void setNativeCountry(String nativeCountry) {
+		this.nativeCountry = nativeCountry;
+	}
+
+	public String getOriginCountry() {
+		return originCountry;
+	}
+
+	public void setOriginCountry(String originCountry) {
+		this.originCountry = originCountry;
+	}
+
+	public String getTransportMeans() {
+		return transportMeans;
+	}
+
+	public void setTransportMeans(String transportMeans) {
+		this.transportMeans = transportMeans;
+	}
+
+	public String getBillOfLoading() {
+		return billOfLoading;
+	}
+
+	public void setBillOfLoading(String billOfLoading) {
+		this.billOfLoading = billOfLoading;
+	}
+
+	public String getController() {
+		if (controller == null || controller.isEmpty()){
+			if (controlerList != null && controlerList.size() > 0){
+				controller = new StringBuilder(controlerList.get(0).getName()).append(" / ").append(controlerList.get(0).getQuality()).append(" / ").append(controlerList.get(0).getService()).toString();
+			}
+		}
+		return controller;
+	}
+
+	public void setController(String controller) {
+		this.controller = controller;
+	}
+
+	public String getSender() {
+		return sender;
+	}
+
+	public void setSender(String sender) {
+		this.sender = sender;
+	}
+
+	public String getRecipient() {
+		return recipient;
+	}
+
+	public void setRecipient(String recipient) {
+		this.recipient = recipient;
+	}
+
+	public Date getProductionDate() {
+		return productionDate;
+	}
+
+	public void setProductionDate(Date productionDate) {
+		this.productionDate = productionDate;
+	}
+
+	public Date getExpirationDate() {
+		return expirationDate;
+	}
+
+	public void setExpirationDate(Date expirationDate) {
+		this.expirationDate = expirationDate;
+	}
+
+	public String getImportLicenceNumber() {
+		return importLicenceNumber;
+	}
+
+	public void setImportLicenceNumber(String importLicenceNumber) {
+		this.importLicenceNumber = importLicenceNumber;
+	}
+
+	public Date getImportLicenceDate() {
+		return importLicenceDate;
+	}
+
+	public void setImportLicenceDate(Date importLicenceDate) {
+		this.importLicenceDate = importLicenceDate;
+	}
+
+	public String getImportLicenceDeliver() {
+		return importLicenceDeliver;
+	}
+
+	public void setImportLicenceDeliver(String importLicenceDeliver) {
+		this.importLicenceDeliver = importLicenceDeliver;
+	}
+
+	public String getRespectNorme() {
+		return respectNorme;
+	}
+
+	public void setRespectNorme(String respectNorme) {
+		this.respectNorme = respectNorme;
+	}
+
+	public String getSourcePropagationPeste() {
+		return sourcePropagationPeste;
+	}
+
+	public void setSourcePropagationPeste(String sourcePropagationPeste) {
+		this.sourcePropagationPeste = sourcePropagationPeste;
+	}
+
+	public String getAutocontrolDocument() {
+		return autocontrolDocument;
+	}
+
+	public void setAutocontrolDocument(String autocontrolDocument) {
+		this.autocontrolDocument = autocontrolDocument;
+	}
+
+	public String getAutocontrolEquipement() {
+		return autocontrolEquipement;
+	}
+
+	public void setAutocontrolEquipement(String autocontrolEquipement) {
+		this.autocontrolEquipement = autocontrolEquipement;
+	}
+
+	public String getProcessAnalyse() {
+		return processAnalyse;
+	}
+
+	public void setProcessAnalyse(String processAnalyse) {
+		this.processAnalyse = processAnalyse;
+	}
+
+	public String getCasque() {
+		return casque;
+	}
+
+	public void setCasque(String casque) {
+		this.casque = casque;
+	}
+
+	public String getGants() {
+		return gants;
+	}
+
+	public void setGants(String gants) {
+		this.gants = gants;
+	}
+
+	public String getCombinaison() {
+		return combinaison;
+	}
+
+	public void setCombinaison(String combinaison) {
+		this.combinaison = combinaison;
+	}
+
+	public String getChaussureSecurite() {
+		return chaussureSecurite;
+	}
+
+	public void setChaussureSecurite(String chaussureSecurite) {
+		this.chaussureSecurite = chaussureSecurite;
+	}
+
+	public String getWater() {
+		return water;
+	}
+
+	public void setWater(String water) {
+		this.water = water;
+	}
+
+	public String getDechet() {
+		return dechet;
+	}
+
+	public void setDechet(String dechet) {
+		this.dechet = dechet;
+	}
+
+	public String getProcedure() {
+		return procedure;
+	}
+
+	public void setProcedure(String procedure) {
+		this.procedure = procedure;
+	}
+
+	public String getController2() {
+		if (controller2 == null || controller2.isEmpty()){
+			if (controlerList != null && controlerList.size() > 1 ){
+				controller2 = new StringBuilder(controlerList.get(1).getName()).append(" / ").append(controlerList.get(1).getQuality()).append(" / ").append(controlerList.get(1).getService()).toString();
+			}
+		}
+		return controller2;
+	}
+
+	public void setController2(String controller2) {
+		this.controller2 = controller2;
+	}
+	
+	
+	
 }

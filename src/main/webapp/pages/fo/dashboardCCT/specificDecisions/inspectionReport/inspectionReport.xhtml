@@ -56,7 +56,7 @@
 
 					<p:column headerText="#{bundle['ConstatEchantillonsNumCont']}">
 						<h:panelGroup>
-							<p:inputText id="sampleNumCont" value="#{item.containerNumber}" required="true"
+							<p:inputText id="sampleNumCont" value="#{item.containerNumber}" required="false"
 								requiredMessage="#{bundle['ConstatNumContSampleRequiredMessage']}"
 								converterMessage="#{bundle['ConstatNumContSampleConverterMessage']}">
 							</p:inputText>
@@ -311,6 +311,60 @@
 					</h:panelGroup>
 				</p:panelGrid>
 
+			</p:tab>
+			<p:tab titletip="#{bundle['InspectionArticleReglemente']}" title="#{bundle['InspectionArticleReglemente']}">
+				<h:panelGrid columns="4" styleClass="table-decision">
+					<h:outputLabel for="respectNorme" value="#{bundle['respectNorme']}" />
+					<p:selectBooleanCheckbox id="respectNorme" value="#{fileItemCctDetailController.inspectionReportData.respectNorme}" />
+					
+					<h:outputLabel for="sourcePropagationPeste" value="#{bundle['sourcePropagationPeste']}" />
+					<p:selectBooleanCheckbox id="sourcePropagationPeste" value="#{fileItemCctDetailController.inspectionReportData.sourcePropagationPeste}" />
+					
+					<h:outputLabel for="autocontrolDocument" value="#{bundle['autocontrolDocument']}" />
+					<h:panelGroup>
+						<p:inputText required="false" id="autocontrolDocument"
+							value="#{fileItemCctDetailController.inspectionReportData.autocontrolDocument}" />
+						<p:message for="autocontrolDocument" />
+					</h:panelGroup>
+					<h:outputLabel for="autocontrolEquipement" value="#{bundle['autocontrolEquipement']}" />
+					<h:panelGroup>
+						<p:inputText required="false" id="autocontrolEquipement"
+							value="#{fileItemCctDetailController.inspectionReportData.autocontrolEquipement}" />
+						<p:message for="autocontrolEquipement" />
+					</h:panelGroup>
+					<h:outputLabel for="processAnalyse" value="#{bundle['processAnalyse']}" />
+					<h:panelGroup>
+						<p:inputText required="false" id="processAnalyse"
+							value="#{fileItemCctDetailController.inspectionReportData.processAnalyse}" />
+						<p:message for="processAnalyse" />
+					</h:panelGroup>
+					<h:outputLabel for="casque" value="#{bundle['casque']}" />
+					<p:selectBooleanCheckbox id="casque" value="#{fileItemCctDetailController.inspectionReportData.casque}" />
+					<h:outputLabel for="gants" value="#{bundle['gants']}" />
+					<p:selectBooleanCheckbox id="gants" value="#{fileItemCctDetailController.inspectionReportData.gants}" />
+					<h:outputLabel for="combinaison" value="#{bundle['combinaison']}" />
+					<p:selectBooleanCheckbox id="combinaison" value="#{fileItemCctDetailController.inspectionReportData.combinaison}" />
+					<h:outputLabel for="chaussureSecurite" value="#{bundle['chaussureSecurite']}" />
+					<p:selectBooleanCheckbox id="chaussureSecurite" value="#{fileItemCctDetailController.inspectionReportData.chaussureSecurite}" />
+					<h:outputLabel for="water" value="#{bundle['water']}" />
+					<h:panelGroup>
+						<p:inputText required="false" id="water"
+									 value="#{fileItemCctDetailController.inspectionReportData.water}" />
+						<p:message for="water" />
+					</h:panelGroup>
+					<h:outputLabel for="dechet" value="#{bundle['dechet']}" />
+					<h:panelGroup>
+						<p:inputText required="false" id="dechet"
+									 value="#{fileItemCctDetailController.inspectionReportData.dechet}" />
+						<p:message for="dechet" />
+					</h:panelGroup>
+					<h:outputLabel for="procedure" value="#{bundle['procedure']}" />
+					<h:panelGroup>
+						<p:inputText required="false" id="procedure"
+									 value="#{fileItemCctDetailController.inspectionReportData.procedure}" />
+						<p:message for="procedure" />
+					</h:panelGroup>
+				</h:panelGrid>
 			</p:tab>
 		</p:tabView>
 	</p:scrollPanel>

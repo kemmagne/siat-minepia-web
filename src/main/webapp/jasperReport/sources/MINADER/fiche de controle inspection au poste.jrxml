@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fiche de controle inspection au poste" language="groovy" pageWidth="650" pageHeight="842" columnWidth="640" leftMargin="5" rightMargin="5" topMargin="20" bottomMargin="20" uuid="449ef4f1-5b3f-4f16-a5cf-a1457844c887">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="272"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="99f6d370-cd80-49b7-8b5f-b099c3afe821"/>
+	<field name="date" class="java.lang.String"/>
+	<field name="importateur" class="java.lang.String"/>
+	<field name="nat" class="java.lang.String"/>
+	<field name="bp" class="java.lang.String"/>
+	<field name="tel" class="java.lang.String"/>
+	<field name="email" class="java.lang.String"/>
+	<field name="activity" class="java.lang.String"/>
+	<field name="recommandation" class="java.lang.String"/>
+	<field name="type" class="java.lang.String"/>
+	<field name="qte" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="182" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="a8f7ddf1-5e22-4595-9bd1-f7cc6af83cc9" x="0" y="0" width="295" height="106"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[                              REPUBLIQUE DU CAMEROUN
+                                    Paix – travail – Patrie
+                                            ---------------
+                                REGION DU LITTORAL
+                                             --------------
+     DELEGATION REGIONALE DE L’ENVIRONNEMENT, DE LA
+ PROTECTIONDE LA NATURE ET DU DEVELOPPEMENT DURABLE
+                                       ------------------------
+         BRIGADE DES INSPECTIONS ENVIRONNEMENTALES
+
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cb4edadf-bcc9-4f0c-a0af-a19a26a427ff" x="360" y="0" width="280" height="106"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[                   REPUBLIC OF CAMEROON
+                    Peace – Word – Fatherland
+                                 ---------------
+                           LITTORAL REGION
+                                  ---------------
+REGIONAL DELEGATION OF ENVIRONMENT, PROTECTION OF
+              NATURE AND SUSTAINABLE DEVELOPMENT
+                                ------------------------
+        BRIGADE OF ENVIRONMENTAL  INSPECTIONS
+]]></text>
+			</staticText>
+			<image>
+				<reportElement uuid="c7c01187-ee65-471e-8b31-bc83a463ebc7" x="295" y="6" width="65" height="80"/>
+				<imageExpression><![CDATA["C:\\Users\\HP\\Documents\\YouCam\\fffff.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="2b055102-c010-4927-8605-0fbc1e7038f1" x="192" y="121" width="265" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[FICHE DE CONTROLE/INSPECTION AU POSTE ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c587c8cb-6346-413d-ab01-982bdf7ed94e" x="393" y="158" width="37" height="20"/>
+				<textElement/>
+				<text><![CDATA[DATE :]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="8ad46f8c-9041-41a6-a0a9-5d54f0296553" x="430" y="158" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="585" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="018e8b7f-0f18-4386-a320-591dadcc25db" x="0" y="0" width="640" height="96"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[- Vu les Conventions et Accords Internationaux ratifiés par le Cameroun ;
+- Vu la Loi n° 96/12 du 5 aout 1996 portant loi-cadre relative à la Gestion de l’Environnement ;
+- Vu la Loi 2003/006 du 21 avril 2003 portant Régime de Sécurité en Matière de Biotechnologie Moderne ;
+- Vu le Décret 2011/2581/PM du 23 aout 2011 portant règlementation des Substances Chimiques, Nocives et/ou Dangereuses ;
+- Vu le Décret N°2012/2809/PM du 26 septembre 2012 fixant les conditions de tri, de collecte, de stockage, de transport, de recyclage, de traitement et d’élimination finale des déchets, se annexe et les textes d’application ;
+- Vu l’Arrêté N°029/CAB/PM du 04 avril 2014 fixant les modalités d’inspections et de contrôles des marchandises par les services techniques de l’Etat au Port de Douala.
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5b52e553-4e27-4bc5-865a-38e248a0e9c0" x="0" y="96" width="137" height="20"/>
+				<textElement/>
+				<text><![CDATA[Nous sommes inspectés : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5aa053d7-0bc2-4576-bf80-2480b29e6f95" x="0" y="116" width="571" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[I- IDENTIFICATION DE L’IMPORTATEUR/EXPORTATEUR (PERSONNE MORALE OU L’ENTREPRISE)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f9305033-c5e1-4bda-af66-db1633c2e5e7" x="0" y="136" width="91" height="20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Nom de l’importateur]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="49b38e7c-1932-4906-9a23-d12e2326885f" x="0" y="156" width="56" height="20"/>
+				<textElement/>
+				<text><![CDATA[Nationalité]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5f8313c2-1288-4cbe-bff6-949c62c99e69" x="0" y="176" width="46" height="20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Adresse :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="68deda64-699c-4713-9541-a956b441725a" x="46" y="176" width="22" height="20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[B.P]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c2e0d7eb-7462-4495-99a5-c8d852a34e30" x="175" y="176" width="17" height="20"/>
+				<textElement/>
+				<text><![CDATA[Tel]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="07a8c916-5a0e-4570-be7c-25b357fc9ddb" x="348" y="176" width="26" height="20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Email]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="1e3b92f7-1155-4949-8cb8-4c11401e8d69" x="68" y="176" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{bp}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="b549f896-a0aa-4d73-aba7-ddbb49158a5b" x="195" y="176" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{tel}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="985a4631-5018-450e-83b6-9f8ddda556a6" x="374" y="175" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="20e79e2d-6f65-467b-b354-368635b84994" x="56" y="156" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{nat}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="87f80b34-e4dc-4a87-a4c6-5b04fdf8206f" x="91" y="136" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{importateur}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="cfe9da22-3ca3-4c85-af14-1b9140b0430c" x="0" y="196" width="91" height="20"/>
+				<textElement/>
+				<text><![CDATA[Activité principale]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="7f430a24-3097-4162-ba2e-c0a6c233aebe" x="92" y="196" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{activity}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f7bb5440-e811-45bf-8b8a-dc28c4c5681a" x="0" y="216" width="221" height="13"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[II- LE(S) PRODUIT(S) IMPORTE(S)/EXPORTER(S)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5b076bf0-f406-4f87-b238-2846a86b47ea" x="0" y="229" width="80" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Type de produit(s)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="400964f8-e5a5-42db-b04d-c8dc282933ea" x="0" y="242" width="92" height="12"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Quantité de produit(s)(en nombre, volume ou poids]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3070b71d-d477-4908-910a-6b959087ab8f" x="0" y="254" width="245" height="15"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Conventions/Protocole, Lois, Décrets, Arrêtés y relatifs : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3a887ece-0715-48b1-b1f9-36a0168beb89" x="242" y="254" width="70" height="15"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Vienne/Montréal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1e9c1b4d-3403-47e7-897b-15be1a1b86ff" x="411" y="251" width="19" height="15"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Bale]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="987aa6af-d346-4359-9feb-339deab91040" x="464" y="251" width="38" height="15"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Bamako]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="43e9263f-33ca-40a1-a998-2aa1e371842c" x="330" y="252" width="63" height="14"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Rotterdam]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a6688169-cb0a-4ef7-aec4-7e53395de8be" x="530" y="254" width="52" height="12"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Carthagène]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="06e583c0-6792-437e-b7ec-1b2f6777a7ce" x="0" y="269" width="35" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Nagoya]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9d4772ee-0ac0-4d7b-a293-25c7efa1a35d" x="68" y="269" width="100" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Décret 2011/2581/PM          ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3eee0167-4857-4e1c-8796-3c14eeae0a69" x="212" y="269" width="118" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Décret N°2012/2809/PM         ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3eba4553-2ae4-44a5-b6de-f3b6093bd1a5" x="356" y="269" width="77" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Arrêtés 001 – 005       ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="08abf2b5-eac2-4f37-9ec8-06530386eaf2" x="0" y="485" width="102" height="20"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[IV RECOMMENDATION]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="b5958ad4-86d3-4d88-81e0-968c74fb26dd" x="102" y="485" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{recommandation}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="6e053d47-830e-4b4f-b0ca-5bc566f51b6f" x="91" y="241" width="100" height="11"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qte}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4d33f234-69e5-49b5-b250-34948fde23e7" x="80" y="229" width="100" height="12"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{type}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="e1822793-2356-457a-9569-b34f83563046" x="0" y="294" width="137" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[III- DOCUMENTS REQUIS]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement uuid="b42c7071-0eec-4559-9376-ca74fc579b66" key="table" style="table" x="0" y="314" width="582" height="115"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Table Dataset 1" uuid="c8a69987-0c6a-4252-aef0-a39ed4e0ee3d">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.JREmptyDataSource(1)]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="90" uuid="85e47490-2a08-46c4-ab21-3d6842ba24c7">
+						<jr:columnHeader style="table_CH" height="30"/>
+						<jr:detailCell style="table_TD" height="20"/>
+					</jr:column>
+					<jr:column width="90" uuid="eb482731-9f0b-4661-9153-6e9aebeb0b0b">
+						<jr:columnHeader style="table_CH" height="30"/>
+						<jr:detailCell style="table_TD" height="20"/>
+					</jr:column>
+					<jr:column width="90" uuid="0357806e-02cb-4105-8e8d-5bd5acfd60a8">
+						<jr:columnHeader style="table_CH" height="30"/>
+						<jr:detailCell style="table_TD" height="20"/>
+					</jr:column>
+					<jr:column width="90" uuid="9a12832b-1325-44fb-8e6c-4081697cf660">
+						<jr:columnHeader style="table_CH" height="30"/>
+						<jr:detailCell style="table_TD" height="20"/>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+</jasperReport>

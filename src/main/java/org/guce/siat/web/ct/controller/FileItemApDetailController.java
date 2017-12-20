@@ -447,6 +447,13 @@ public class FileItemApDetailController implements Serializable {
 	 * The cotation allowed.
 	 */
 	private Boolean cotationAllowed;
+	
+	/**
+	 * The 
+	 */
+	private Boolean decisionAllowedAtCotationLevel;
+	
+	private Boolean decisionAtCotationLevel;
 
 	/**
 	 * The dision system allowed.
@@ -472,6 +479,11 @@ public class FileItemApDetailController implements Serializable {
 	 * The destination flows from current step.
 	 */
 	private List<Flow> destinationFlowsFromCurrentStep;
+	
+	/**
+	 * The destination flows from current coatation step
+	 */
+	private List<Flow> destinationFlowsFromCurrentCotationStep;
 
 	/**
 	 * The roll back decisions allowed.
@@ -750,6 +762,20 @@ public class FileItemApDetailController implements Serializable {
 			FlowCode.FL_AP_103.name(), FlowCode.FL_AP_104.name(), FlowCode.FL_AP_105.name(), FlowCode.FL_AP_106.name());
 
 	/**
+	 * Constant DECISION_FLOWS_AT_COTATION_STEP.
+	 */
+	private static final List<String> DECISION_FLOWS_AT_COTATION_STEP = Arrays.asList(FlowCode.FL_AP_169.name(), FlowCode.FL_AP_170.name(), 
+			FlowCode.FL_AP_171.name(), FlowCode.FL_AP_172.name(), FlowCode.FL_AP_173.name(), FlowCode.FL_AP_174.name(),
+			FlowCode.FL_AP_175.name(),FlowCode.FL_AP_176.name(),FlowCode.FL_AP_177.name(),FlowCode.FL_AP_178.name(),FlowCode.FL_AP_179.name(),
+			FlowCode.FL_AP_180.name(),FlowCode.FL_AP_181.name(),FlowCode.FL_AP_182.name(),FlowCode.FL_AP_183.name(),FlowCode.FL_AP_184.name(),
+			FlowCode.FL_AP_185.name(),FlowCode.FL_AP_186.name());
+	
+	/**
+	 *  
+	 */
+	private static final List<FileTypeCode> PROCESS_ALLOWING_DECISION_AT_COTATION_STEP = Arrays.asList(FileTypeCode.VTD_MINSANTE, FileTypeCode.VTP_MINSANTE, 
+			FileTypeCode.AI_MINSANTE, FileTypeCode.AT_MINSANTE);
+	/**
 	 * The transaction manager.
 	 */
 	@ManagedProperty(value = "#{transactionManager}")
@@ -887,6 +913,7 @@ public class FileItemApDetailController implements Serializable {
 		analyseResultApList = null;
 		testResultApList = null;
 		acceptationDecisionFileType = null;
+		decisionAtCotationLevel = Boolean.FALSE;
 		isPayment = Boolean.FALSE;
 		if (CollectionUtils.isNotEmpty(currentFile.getFileItemsList()) && currentFile.getFileItemsList().get(0) != null
 				&& !currentFile.getFileItemsList().get(0).getDraft()) {
@@ -936,12 +963,75 @@ public class FileItemApDetailController implements Serializable {
 			}
 
 		} else {
+			decisionAtCotationLevel = Boolean.FALSE;
 			final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 					ControllerConstants.Bundle.Messages.ROLLBACK_BEFORE_DECISION);
 			JsfUtil.addErrorMessage(msg);
 		}
 	}
 
+	/**
+	 * Prepare special decision at cotation level
+	 */
+	public void prepareDecisionsAtCotation() {
+		analyseResultApList = null;
+		testResultApList = null;
+		acceptationDecisionFileType = null;
+		isPayment = Boolean.FALSE;
+		decisionAtCotationLevel = Boolean.TRUE;
+		if (CollectionUtils.isNotEmpty(currentFile.getFileItemsList()) && currentFile.getFileItemsList().get(0) != null
+				&& !currentFile.getFileItemsList().get(0).getDraft()) {
+			// this methode is for RISK MANAGMENT
+			for (final FileTypeStep fileTypeStep : currentFile.getFileType().getFileTypeStepList()) {
+				if (fileTypeStep.getIsApDecision() != null && fileTypeStep.getIsApDecision()
+						&& currentFile.getFileItemsList().get(0).getStep().getId().equals(fileTypeStep.getStep().getId())) {
+					setDisionSystemAllowed(true);
+					break;
+				}
+			}
+
+			if (currentFile.getFileItemsList().isEmpty()) {
+				final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
+						.getString(ControllerConstants.Bundle.Messages.CHOOSE_DECISION_ERROR);
+				JsfUtil.addErrorMessage(msg);
+			}
+
+			//Tester sur le Current file si tout les file Item appartiennent à la meme step (Controle important pour la decision)
+			final FileItem referenceFileItem = currentFile.getFileItemsList().get(0);
+			if (referenceFileItem.getStep() != null) {
+				boolean equalsSteps = true;
+				for (final FileItem fileItem : currentFile.getFileItemsList()) {
+					if (fileItem.getStep() == null || !referenceFileItem.getStep().getId().equals(fileItem.getStep().getId())) {
+						equalsSteps = false;
+						break;
+					}
+				}
+
+				if (equalsSteps) {
+					//Pour la Retreive Seulement une seule decision
+					flows = destinationFlowsFromCurrentCotationStep;
+					if (comeFromRetrieveAp != null && comeFromRetrieveAp) {
+						selectedFlow = flowService.findFlowByCurrentStep(apDecisionStep);
+					} //Pour la decision et la cotation
+					else {
+						selectedFlow = null;
+					}
+					decisionDiv.getChildren().clear();
+					final RequestContext requestContext = RequestContext.getCurrentInstance();
+					requestContext.execute("PF('" + DECISION_DIALOG + "').show();");
+				} else {
+					final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
+							.getString(ControllerConstants.Bundle.Messages.SAME_STEPS_ERROR);
+					JsfUtil.addErrorMessage(msg);
+				}
+			}
+
+		} else {
+			final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
+					ControllerConstants.Bundle.Messages.ROLLBACK_BEFORE_DECISION);
+			JsfUtil.addErrorMessage(msg);
+		}
+	}
 	/**
 	 * Show attachment Pour afficher la liste des attachement du File Courrant.
 	 */
@@ -1001,6 +1091,10 @@ public class FileItemApDetailController implements Serializable {
 		cotationAllowed = false;
 		fileItemHasDraft = false;
 		rejctDispatchAllowed = false;
+		decisionAllowedAtCotationLevel = false;
+		boolean returnAllowed;
+		boolean acceptationFlowFound;
+		Flow decisionAtCotationFlow = null;
 		if (currentFile.getFileItemsList() == null) {
 			currentFile.setFileItemsList(fileItemService.findFileItemsByFile(currentFile));
 
@@ -1028,7 +1122,9 @@ public class FileItemApDetailController implements Serializable {
 			// Ici, on va remplir la liste des flow qui vont apparaitre dans la view Decision ainsi setter les variable boolean pour l'affichage des button
 			if (stepListByFileType != null && stepListByFileType.contains(currentStep) && currentStep.getFromStepFlowsList() != null) {
 				destinationFlowsFromCurrentStep = new ArrayList<Flow>();
-
+				destinationFlowsFromCurrentCotationStep = new ArrayList<Flow>();
+				returnAllowed = false;
+				acceptationFlowFound = false;
 				for (final Flow flow : currentStep.getFromStepFlowsList()) {
 					//to redefine flows labelFr, and labelEn
 					final FileTypeFlow fileTypeFlow = fileTypeFlowService.findByFlowAndFileType(currentFile.getFileType(), flow);
@@ -1050,26 +1146,41 @@ public class FileItemApDetailController implements Serializable {
 							decisionAllowed = true;
 						}
 						cotationAllowed = false;
-						if (!flow.getFromStep().equals(apDecisionStep)
+						if (!flow.getFromStep().equals(apDecisionStep) && !returnAllowed
 								&& Arrays.asList(FlowCode.FL_AP_155.name(), FlowCode.FL_AP_156.name(), FlowCode.FL_AP_157.name(),
 										FlowCode.FL_AP_158.name(), FlowCode.FL_AP_159.name()).contains(flow.getCode())) {
-							destinationFlowsFromCurrentStep = Collections.singletonList(flow);
+//							destinationFlowsFromCurrentStep = Collections.singletonList(flow);
+							destinationFlowsFromCurrentStep = new ArrayList<Flow>();
+							destinationFlowsFromCurrentStep.add(flow);
 							cotationAllowed = true;
 							decisionAllowed = false;
-							break;
+							returnAllowed = true;
+//							break;
 						}
-						if (flow.getToStep() != null && apDecisionStepCode.contains(flow.getToStep().getStepCode())
-								&& flow.getToStep().getId().equals(apDecisionStep.getId())) {
+						if (flow.getToStep() != null && apDecisionStepCode.contains(flow.getToStep().getStepCode()) && !returnAllowed
+								&& flow.getToStep().getId().equals(apDecisionStep.getId())
+							&& !DECISION_FLOWS_AT_COTATION_STEP.contains(flow.getCode())) {
 
 							destinationFlowsFromCurrentStep.add(flow);
-						} else if ((flow.getToStep() != null && !apDecisionStepCode.contains(flow.getToStep().getStepCode()))
-								|| flow.getToStep() == null) {
+						} else if ((flow.getToStep() != null && !apDecisionStepCode.contains(flow.getToStep().getStepCode())) && !returnAllowed
+							&& !DECISION_FLOWS_AT_COTATION_STEP.contains(flow.getCode()) || flow.getToStep() == null) {
 							destinationFlowsFromCurrentStep.add(flow);
 						}
 					}
-					if (comeFromRetrieveAp != null && comeFromRetrieveAp) {
+					if (comeFromRetrieveAp != null && comeFromRetrieveAp && !PROCESS_ALLOWING_DECISION_AT_COTATION_STEP.contains(currentFile.getFileType().getCode())
+							&& !DECISION_FLOWS_AT_COTATION_STEP.contains(flow.getCode())) {
 						cotationAllowed = false;
 						decisionAllowed = false;
+					}
+					if (ACCEPTATION_FLOWS.contains(flow.getCode())){
+						acceptationFlowFound = true;
+					}
+					if (!acceptationFlowFound && PROCESS_ALLOWING_DECISION_AT_COTATION_STEP.contains(currentFile.getFileType().getCode()) && !flow.getIsCota() && DECISION_FLOWS_AT_COTATION_STEP.contains(flow.getCode()) && stepListByFileType.contains(flow.getToStep())) {
+						if (!destinationFlowsFromCurrentCotationStep.contains(flow)){
+							destinationFlowsFromCurrentCotationStep.add(flow);
+							decisionAtCotationFlow = flow;
+						}
+						decisionAllowedAtCotationLevel = Boolean.TRUE;
 					}
 				}
 
@@ -1802,14 +1913,16 @@ public class FileItemApDetailController implements Serializable {
 		final TransactionStatus status = transactionManager.getTransaction(def);
 		try {
 			// Cotation case
-			if (currentFile.getFileItemsList() != null && cotationAllowed != null && cotationAllowed) {
+			if (currentFile.getFileItemsList() != null && cotationAllowed != null && cotationAllowed && ((decisionAtCotationLevel != null && !decisionAtCotationLevel) || decisionAtCotationLevel == null)) {
+				System.out.println("Cotation case");
 				itemFlowService.sendDecisionsToDispatchFile(currentFile);
 
 				JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
 						getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.SEND_SUCCESS));
 				goToDetailPage();
 			} // Decision case
-			else if (decisionAllowed || (comeFromRetrieveAp != null && comeFromRetrieveAp)) {
+			else if (decisionAllowed || (comeFromRetrieveAp != null && comeFromRetrieveAp) || (decisionAtCotationLevel != null && decisionAtCotationLevel)) {
+				System.out.println("Decision case");
 				if (currentFile.getFileItemsList() != null && !currentFile.getFileItemsList().isEmpty()) {
 					final Map<FileItem, Flow> map = itemFlowService.sendDecisions(currentFile.getFileItemsList().get(0).getFile(),
 							currentFile.getFileItemsList());
@@ -1826,36 +1939,65 @@ public class FileItemApDetailController implements Serializable {
 						final String service = StringUtils.EMPTY;
 						final String documentType = StringUtils.EMPTY;
 						final Flow flowToSend = map.get(fileItemList.get(0));
-						
-						ItemFlow decisionFlow = null;
-						if (currentFile.getFileType().getCode().equals(FileTypeCode.VTP_MINSANTE)){
-							decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_103);
-						} else if (currentFile.getFileType().getCode().equals(FileTypeCode.VTD_MINSANTE)){
-							decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_105);
-						}
-						if (decisionFlow != null) {
-							final List<ItemFlowData> itemFlowDataList = decisionFlow.getItemFlowsDataList();
-								for (final ItemFlowData ifd : itemFlowDataList) {
-									if (ifd.getDataType().getLabel().equalsIgnoreCase("Date validité")) {
-										final FileField dateValidityField = fileFieldService.findFileFieldByCodeAndFileType(
-											validityDateFieldName, currentFile.getFileType().getCode());
-										if (dateValidityField != null) {
-											FileFieldValue nff = new FileFieldValue();
-											nff.setFile(currentFile);
-											nff.setFileField(dateValidityField);
-											nff.setValue(ifd.getValue());
-											currentFile.getFileFieldValueList().add(nff);
-											fileFieldValueService.save(nff);
-										}
-										break;
-									}
-								}
-						}
+						System.out.println("executedFlow : " + executedFlow.toString());
+						System.out.println("flowToSend : " + flowToSend.toString());
 						//generate report
 						Map<String, byte[]> attachedByteFiles = null;
 						try {
 							String reportNumber = StringUtils.EMPTY;
-							if (FlowCode.FL_AP_107.name().equals(flowToSend.getCode())) {
+							if (FlowCode.FL_AP_107.name().equals(flowToSend.getCode()) || FlowCode.FL_AP_169.name().equals(flowToSend.getCode())) {
+								
+								ItemFlow decisionFlow = null;
+								if (currentFile.getFileType().getCode().equals(FileTypeCode.VTP_MINSANTE)){
+									decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_103);
+									if (decisionFlow == null){
+										decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_169);
+									}
+									if (decisionFlow == null){
+										decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_170);
+									}
+									if (decisionFlow == null){
+										decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_171);
+									}
+									if (decisionFlow == null){
+										decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_172);
+									}
+									if (decisionFlow == null){
+										decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_173);
+									}
+								} else if (currentFile.getFileType().getCode().equals(FileTypeCode.VTD_MINSANTE)){
+									decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_105);
+									if (decisionFlow == null){
+										decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_169);
+									}
+									if (decisionFlow == null){
+										decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_170);
+									}
+								}
+								if (decisionFlow != null) {
+									final List<ItemFlowData> itemFlowDataList = decisionFlow.getItemFlowsDataList();
+										for (final ItemFlowData ifd : itemFlowDataList) {
+											if (ifd.getDataType().getLabel().equalsIgnoreCase("Date validité")) {
+												final FileField dateValidityField = fileFieldService.findFileFieldByCodeAndFileType(
+													validityDateFieldName, currentFile.getFileType().getCode());
+												if (dateValidityField != null) {
+													FileFieldValue dateValidityFieldValue = fileFieldValueService.findValueByFileFieldAndFile(dateValidityField.getCode(), currentFile);
+													if (dateValidityFieldValue != null){
+														dateValidityFieldValue.setValue(ifd.getValue());
+														fileFieldValueService.update(dateValidityFieldValue);
+													} else {
+														dateValidityFieldValue = new FileFieldValue();
+														dateValidityFieldValue.setFile(currentFile);
+														dateValidityFieldValue.setFileField(dateValidityField);
+														dateValidityFieldValue.setValue(ifd.getValue());
+														currentFile.getFileFieldValueList().add(dateValidityFieldValue);
+														fileFieldValueService.save(dateValidityFieldValue);
+													}	
+												}
+												break;
+											}
+										}
+								}
 								attachedByteFiles = new HashMap<String, byte[]>();
 
 								final List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<FileTypeFlowReport>();
@@ -1880,12 +2022,15 @@ public class FileItemApDetailController implements Serializable {
 									reportNumber = (reportOrganism.getSequence() + 1)
 											+ (reportOrganism.getValue() != null ? reportOrganism.getValue() : StringUtils.EMPTY);
 									if (reportField != null) {
-										final FileFieldValue reportFieldValue = new FileFieldValue();
-										reportFieldValue.setFile(currentFile);
-										reportFieldValue.setFileField(reportField);
-										reportFieldValue.setValue(reportNumber);
-										currentFile.getFileFieldValueList().add(reportFieldValue);
-										fileFieldValueService.save(reportFieldValue);
+										FileFieldValue reportFieldValue = fileFieldValueService.findValueByFileFieldAndFile(reportField.getCode(), currentFile);
+										if (reportFieldValue == null){
+											reportFieldValue = new FileFieldValue();
+											reportFieldValue.setFile(currentFile);
+											reportFieldValue.setFileField(reportField);
+											reportFieldValue.setValue(reportNumber);
+											currentFile.getFileFieldValueList().add(reportFieldValue);
+											fileFieldValueService.save(reportFieldValue);
+										}
 									}
 									//End Add new field value with report Number
 
@@ -3142,6 +3287,24 @@ public class FileItemApDetailController implements Serializable {
 	public void setDecisionAllowed(final Boolean decisionAllowed) {
 		this.decisionAllowed = decisionAllowed;
 	}
+	
+	/**
+	 * Gets the decisionAllowedAtCotationLevel allowed.
+	 *
+	 * @return the decisionAllowedAtCotationLevel allowed
+	 */
+	public Boolean getDecisionAllowedAtCotationLevel() {
+		return decisionAllowedAtCotationLevel;
+	}
+
+	/**
+	 * Sets the decisionAllowedAtCotationLevel.
+	 *
+	 * @param decisionAllowedAtCotationLevel the new decisionAllowedAtCotationLevel
+	 */
+	public void setDecisionAllowedAtCotationLevel(final Boolean decisionAllowedAtCotationLevel) {
+		this.decisionAllowedAtCotationLevel = decisionAllowedAtCotationLevel;
+	}
 
 	/**
 	 * Gets the recommandation service.
@@ -3404,6 +3567,10 @@ public class FileItemApDetailController implements Serializable {
 	 */
 	public List<Flow> getDestinationFlowsFromCurrentStep() {
 		return destinationFlowsFromCurrentStep;
+	}
+
+	public List<Flow> getDestinationFlowsFromCurrentCotationStep() {
+		return destinationFlowsFromCurrentCotationStep;
 	}
 
 	/**

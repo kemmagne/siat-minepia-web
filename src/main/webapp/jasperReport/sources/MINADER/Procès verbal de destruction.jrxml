@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Procès verbal de destruction" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e08cc5e3-f842-4fdc-9f05-31fa4c05f528">
+	<property name="ireport.zoom" value="0.9090909090909091"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#FFBFBF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="cb576445-d170-45d9-8358-e5fcc20a735d"/>
+	<subDataset name="Table Dataset 2" uuid="c1abc868-1487-43be-86c0-634bec322112"/>
+	<subDataset name="Table Dataset 3" uuid="eec53953-bb50-4cff-9462-8133804b539c"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="189" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="cf68f528-3b5b-4d40-8e31-9ba98fad63da" x="34" y="0" width="156" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPUBLIQUE DU CAMEROUN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4e1737a9-652b-4b45-a5a1-872cdfba1071" x="63" y="15" width="100" height="14"/>
+				<textElement/>
+				<text><![CDATA[Paix-Travail-Patrie]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="73" y="29" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a636c9c4-e227-4fb3-a0d8-e8c09b5869c9" x="11" y="44" width="210" height="26"/>
+				<textElement/>
+				<text><![CDATA[MINISTERE DE L'AGRICULTURE  ET DU
+           DEVELOPPEMENT RURAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="73" y="70" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="29cfc738-8c19-4054-b0d4-beb2db502541" x="46" y="85" width="132" height="20"/>
+				<textElement/>
+				<text><![CDATA[SECRETARIAT GENERAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="73" y="105" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7605a21b-d3bf-4ed1-8d9b-83125377d0ae" x="0" y="120" width="241" height="49"/>
+				<textElement/>
+				<text><![CDATA[DIRECTION DE LA REGLEMENTATION ET DU
+CONTROLE DE LA QUALITE DES INTRANTS DES
+                   PRODUITS AGRICOLES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="73" y="169" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a636c9c4-e227-4fb3-a0d8-e8c09b5869c9" x="313" y="44" width="227" height="26"/>
+				<textElement/>
+				<text><![CDATA[MINISTRY OF AGRICULTURE  AND RURAL
+                  DEVELOPMENT ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="374" y="105" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="374" y="29" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="374" y="169" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="29cfc738-8c19-4054-b0d4-beb2db502541" x="351" y="85" width="132" height="20"/>
+				<textElement/>
+				<text><![CDATA[GENERAL SECRETARIAT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7605a21b-d3bf-4ed1-8d9b-83125377d0ae" x="295" y="120" width="260" height="49"/>
+				<textElement/>
+				<text><![CDATA[DEPARTEMENTAL OF REGULATION AND QUALITY
+  CONTROL OF INPUTS AND AGRICULTURAL
+                                 PRODUCTS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="374" y="70" width="73" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------------------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cf68f528-3b5b-4d40-8e31-9ba98fad63da" x="341" y="0" width="142" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPUBLIC OF CAMEROON]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4e1737a9-652b-4b45-a5a1-872cdfba1071" x="351" y="15" width="120" height="14"/>
+				<textElement/>
+				<text><![CDATA[Peace-Work-Fatherland]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="539" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="7afbd7b6-2b1f-44e5-bef5-2da7bbd08d35" x="146" y="10" width="315" height="35"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[       PROCES VERBAL DE DESTRUCTION
+N° ______________________PVD/MINADER/SG/DRCQ
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d18dba5b-4fb2-49ff-ae2a-67afaec6e19c" x="1" y="89" width="110" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Nature du produit :]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement uuid="2999f1cd-9d2d-4ed9-9a3e-684f019770da" key="table 2" style="table 2" x="0" y="381" width="540" height="50"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Table Dataset 3" uuid="94450b9e-0927-47d2-929e-437cf410f959">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.JREmptyDataSource(1)]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="90" uuid="41a136b1-eaf6-488b-916e-1c1be1570c9b">
+						<jr:columnHeader style="table 2_CH" height="30"/>
+						<jr:detailCell style="table 2_TD" height="20"/>
+					</jr:column>
+					<jr:column width="90" uuid="fde0a64b-6427-48f8-95da-457f0caf6ebc">
+						<jr:columnHeader style="table 2_CH" height="30"/>
+						<jr:detailCell style="table 2_TD" height="20"/>
+					</jr:column>
+					<jr:column width="90" uuid="a1b6edac-e9c5-4558-bb45-3c65724923dd">
+						<jr:columnHeader style="table 2_CH" height="30"/>
+						<jr:detailCell style="table 2_TD" height="20"/>
+					</jr:column>
+					<jr:column width="90" uuid="8eed3692-1375-493d-935d-999cc626577f">
+						<jr:columnHeader style="table 2_CH" height="30"/>
+						<jr:detailCell style="table 2_TD" height="20"/>
+					</jr:column>
+					<jr:column width="90" uuid="05e28a2a-11df-4c42-9079-4a604fe17dcd">
+						<jr:columnHeader style="table 2_CH" height="30"/>
+						<jr:detailCell style="table 2_TD" height="20"/>
+					</jr:column>
+					<jr:column width="90" uuid="c551a364-cff3-4196-8394-07cd43208287">
+						<jr:columnHeader style="table 2_CH" height="30"/>
+						<jr:detailCell style="table 2_TD" height="20"/>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<staticText>
+				<reportElement uuid="fbaf9935-71f8-4099-94dc-5dc1738c90fd" x="0" y="151" width="85" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Présentation :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="99aa1e96-7ff7-4c31-bbc5-a73664df8aac" x="1" y="59" width="135" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Importateur/Exportateur :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fbaf9935-71f8-4099-94dc-5dc1738c90fd" x="0" y="183" width="98" height="16"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Autre à préciser :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4cc441fb-9feb-41db-84b0-bd25a190cad3" x="1" y="120" width="63" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Origine :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fbaf9935-71f8-4099-94dc-5dc1738c90fd" x="0" y="241" width="163" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Quantité  importée/ exportée :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fbaf9935-71f8-4099-94dc-5dc1738c90fd" x="0" y="331" width="190" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Date, lieu et heure de destruction :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fbaf9935-71f8-4099-94dc-5dc1738c90fd" x="0" y="361" width="85" height="20"/>
+				<textElement>
+					<font size="12" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Commission :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fbaf9935-71f8-4099-94dc-5dc1738c90fd" x="1" y="210" width="110" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Conditionnement  :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a2b403c6-4045-4c40-96c1-9bd7ac7ad7f9" x="0" y="448" width="540" height="91"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Ont procédé, conformément à l'article 32 de la loi 2003/003 du 06 Avril 2003 portant Protection Phytosanitaire
+et de l'article 22 du décret 2005/0771/PM du 06 Avril 2005 fixant les modalités d'exécution des opérations  de
+quarantaine végétale d'une part à la destruction de ____________et à la sécurisation des emballages en vue
+de leur recyclage d'autre part.
+En foi de quoi le présent procès-verbal est dressé et signé par toutes les parties en présence pour servir et
+valoir ce que de droit.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fbaf9935-71f8-4099-94dc-5dc1738c90fd" x="0" y="271" width="135" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Motif de la destruction :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6d95ed04-e697-4da5-845e-191cc4d72520" x="221" y="120" width="77" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Destination :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fbaf9935-71f8-4099-94dc-5dc1738c90fd" x="1" y="301" width="135" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Mode opératoire :]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<pageFooter>
+		<band height="74" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="f979b159-7c97-4f9d-9c73-745b19bbae73" x="295" y="0" width="11" height="20"/>
+				<textElement/>
+				<text><![CDATA[A ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f979b159-7c97-4f9d-9c73-745b19bbae73" x="406" y="0" width="17" height="20"/>
+				<textElement/>
+				<text><![CDATA[,Le]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="dd2eabab-2260-4f37-971d-6a932f95baca" x="11" y="43" width="100" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Le propriétaire]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="dd2eabab-2260-4f37-971d-6a932f95baca" x="361" y="43" width="100" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Le chef de poste]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

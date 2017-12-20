@@ -21,6 +21,13 @@ import org.guce.siat.web.reports.vo.CtCctControllerDataVo;
 import org.guce.siat.web.reports.vo.CtCctDataVo;
 
 import com.google.common.base.Objects;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.guce.siat.common.model.FileFieldValue;
+import org.guce.siat.common.service.FileFieldValueService;
+import org.guce.siat.common.service.impl.FileFieldValueServiceImpl;
 
 
 
@@ -32,7 +39,7 @@ public class CtCctExporter extends AbstractReportInvoker
 {
 
 	/** The inspection report. */
-	private final InspectionReport inspectionReport;
+	private InspectionReport inspectionReport;
 	protected static final String LOCAL_BUNDLE_NAME = "org.guce.siat.messages.locale";
 	private static final String CONSTAT_BUNDLE_TRUE = "constatBundleTrue";
 	private static final String CONSTAT_BUNDLE_FALSE = "constatBundleFalse";
@@ -43,9 +50,14 @@ public class CtCctExporter extends AbstractReportInvoker
 	 * @param inspectionReport
 	 *           the inspection report
 	 */
-	public CtCctExporter(final InspectionReport inspectionReport)
+	public CtCctExporter(InspectionReport inspectionReport)
 	{
 		super("CT_CCT", "CT_CCT");
+		this.inspectionReport = inspectionReport;
+	}
+	
+	public CtCctExporter(String jasperFileName, String pdfFileName, InspectionReport inspectionReport){
+		super(jasperFileName, pdfFileName);
 		this.inspectionReport = inspectionReport;
 	}
 
@@ -58,7 +70,7 @@ public class CtCctExporter extends AbstractReportInvoker
 	public JRBeanCollectionDataSource getReportDataSource()
 	{
 		final CtCctDataVo entryInspectionFindingDataVo = new CtCctDataVo();
-
+		System.out.println("inspectionReport : " + inspectionReport);
 		if ((inspectionReport != null))
 		{
 			final List<CtCctControllerDataVo> controllerDataVoList = new ArrayList<CtCctControllerDataVo>();
@@ -105,7 +117,7 @@ public class CtCctExporter extends AbstractReportInvoker
 			{
 				entryInspectionFindingDataVo.setLibelle(inspectionReport.getLabel());
 			}
-			if (inspectionReport.getStandardCompliance() == true)
+			if (inspectionReport.getStandardCompliance() != null && inspectionReport.getStandardCompliance() == true)
 			{
 				entryInspectionFindingDataVo.setNormeRespect(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale())
 						.getString(CONSTAT_BUNDLE_TRUE));
@@ -234,6 +246,91 @@ public class CtCctExporter extends AbstractReportInvoker
 			if (CollectionUtils.isNotEmpty(controllerDataVoList))
 			{
 				entryInspectionFindingDataVo.setControlerList(controllerDataVoList);
+			}
+			if (inspectionReport.getFileItem().getFile().getDestinataire().equalsIgnoreCase("MINADER")){
+				// Specific field for MINADER
+				if (inspectionReport.getFileItem().getFile().getCountryOfProvenance() != null){
+					entryInspectionFindingDataVo.setNativeCountry(inspectionReport.getFileItem().getFile().getCountryOfProvenance().getCountryName());
+				}
+				if (inspectionReport.getFileItem().getFile().getCountryOfOrigin() != null){
+					entryInspectionFindingDataVo.setOriginCountry(inspectionReport.getFileItem().getFile().getCountryOfOrigin().getCountryName());
+				}
+				entryInspectionFindingDataVo.setSender(new StringBuilder(inspectionReport.getFileItem().getFile().getClient().getCompanyName()).append(" ").append(inspectionReport.getFileItem().getFile().getClient().getFullAddress()).toString());
+				entryInspectionFindingDataVo.setGants(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale())
+						.getString(CONSTAT_BUNDLE_FALSE));
+				if (inspectionReport.getGants() != null && inspectionReport.getGants()){
+					entryInspectionFindingDataVo.setGants(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale())
+						.getString(CONSTAT_BUNDLE_TRUE));
+				}
+				entryInspectionFindingDataVo.setCasque(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale())
+						.getString(CONSTAT_BUNDLE_FALSE));
+				if (inspectionReport.getCasque() != null && inspectionReport.getCasque()){
+					entryInspectionFindingDataVo.setCasque(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale())
+							.getString(CONSTAT_BUNDLE_TRUE));
+				}				
+				entryInspectionFindingDataVo.setChaussureSecurite(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale())
+						.getString(CONSTAT_BUNDLE_FALSE));
+				if (inspectionReport.getChaussureSecurite() != null && inspectionReport.getChaussureSecurite()){
+					entryInspectionFindingDataVo.setChaussureSecurite(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale())
+							.getString(CONSTAT_BUNDLE_TRUE));
+				}
+				entryInspectionFindingDataVo.setRespectNorme(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale())
+						.getString(CONSTAT_BUNDLE_FALSE));
+				if (inspectionReport.getRespectNorme() != null && inspectionReport.getRespectNorme()){
+					entryInspectionFindingDataVo.setRespectNorme(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale())
+							.getString(CONSTAT_BUNDLE_TRUE));
+				}
+				entryInspectionFindingDataVo.setChaussureSecurite(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale())
+						.getString(CONSTAT_BUNDLE_FALSE));
+				if (inspectionReport.getChaussureSecurite() != null && inspectionReport.getChaussureSecurite()){
+					entryInspectionFindingDataVo.setChaussureSecurite(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale())
+							.getString(CONSTAT_BUNDLE_TRUE));
+				}
+				entryInspectionFindingDataVo.setSourcePropagationPeste(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale())
+						.getString(CONSTAT_BUNDLE_FALSE));
+				if (inspectionReport.getSourcePropagationPeste() != null && inspectionReport.getSourcePropagationPeste()){
+					entryInspectionFindingDataVo.setSourcePropagationPeste(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale())
+							.getString(CONSTAT_BUNDLE_TRUE));
+				}
+				entryInspectionFindingDataVo.setCombinaison(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale())
+						.getString(CONSTAT_BUNDLE_FALSE));
+				if (inspectionReport.getCombinaison() != null && inspectionReport.getCombinaison()){
+					entryInspectionFindingDataVo.setCombinaison(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale())
+							.getString(CONSTAT_BUNDLE_TRUE));
+				}
+				entryInspectionFindingDataVo.setWater(inspectionReport.getWater());
+				entryInspectionFindingDataVo.setAutocontrolDocument(inspectionReport.getAutocontrolDocument());
+				entryInspectionFindingDataVo.setDechet(inspectionReport.getDechet());
+				entryInspectionFindingDataVo.setProcedure(inspectionReport.getProcedure());
+				entryInspectionFindingDataVo.setProcessAnalyse(inspectionReport.getProcessAnalyse());
+				for (FileFieldValue fileFieldValue : inspectionReport.getFileItem().getFile().getFileFieldValueList()){
+					if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("DESTINATAIRE_RAISONSOCIALE")){
+						entryInspectionFindingDataVo.setRecipient(fileFieldValue.getValue());
+					}
+					if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("INFORMATIONS_GENERALES_PERMIS_DATE") && !fileFieldValue.getValue().equalsIgnoreCase("-")){
+						try {
+							entryInspectionFindingDataVo.setImportLicenceDate(new SimpleDateFormat("dd/MM/YYYY").parse(fileFieldValue.getValue()));
+						} catch (ParseException ex) {
+							Logger.getLogger(CtCctExporter.class.getName()).log(Level.SEVERE, null, ex);
+						}
+					}
+					if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("INFORMATIONS_GENERALES_PERMIS_DELIVREUR_RAISONSOCIALE")){
+						entryInspectionFindingDataVo.setImportLicenceDeliver(fileFieldValue.getValue());
+					}
+					if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("INFORMATIONS_GENERALES_PERMIS_NUMERO_PERMIS")){
+						entryInspectionFindingDataVo.setImportLicenceNumber(fileFieldValue.getValue());
+					}
+
+					if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("INFORMATIONS_GENERALES_TRANSPORT_MOYEN_TRANSPORT_LIBELLE")){
+						entryInspectionFindingDataVo.setTransportMeans(fileFieldValue.getValue());
+					}
+					if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("INFORMATIONS_GENERALES_TRANSPORT_NUM_CONNAISSEMENT_LTA")){
+						entryInspectionFindingDataVo.setBillOfLoading(fileFieldValue.getValue());
+					}
+//					if (StringUtils.isNotEmpty(entryInspectionFindingDataVo.getTransportMeans()) && StringUtils.isNotEmpty(entryInspectionFindingDataVo.getBillOfLoading())){
+//						break;
+//					}
+				}
 			}
 		}
 

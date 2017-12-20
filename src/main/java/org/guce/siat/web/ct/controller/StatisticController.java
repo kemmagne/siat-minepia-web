@@ -649,13 +649,14 @@ public class StatisticController extends AbstractController<FileItem>
 		//Certificat de contrôle technique
 		final List<String> cct = Arrays.asList(FlowCode.FL_CT_08.name(), FlowCode.FL_CT_89.name());
 		//Autorisation préalable d’enlèvement
-		final List<String> ap = Arrays.asList(FlowCode.FL_AP_107.name());
+		final List<String> ap = Arrays.asList(FlowCode.FL_AP_107.name(), FlowCode.FL_AP_169.name());
 		//Refoulement/destruction
 		final List<String> rf = Arrays.asList(FlowCode.FL_CT_14.name(), FlowCode.FL_CT_74.name());
 		//Rejet
 		final List<String> rejet = Arrays.asList(FlowCode.FL_CT_04.name(), FlowCode.FL_CT_91.name(), FlowCode.FL_AP_87.name(),
 				FlowCode.FL_AP_95.name(), FlowCode.FL_AP_96.name(), FlowCode.FL_AP_97.name(), FlowCode.FL_AP_98.name(),
-				FlowCode.FL_AP_99.name(), FlowCode.FL_AP_100.name());
+				FlowCode.FL_AP_99.name(), FlowCode.FL_AP_100.name(),FlowCode.FL_AP_175.name(),FlowCode.FL_AP_177.name(),
+				FlowCode.FL_AP_179.name(),FlowCode.FL_AP_181.name(),FlowCode.FL_AP_183.name(),FlowCode.FL_AP_185.name());
 		//Annulation
 		final List<String> annulation = Arrays.asList(FlowCode.FL_CT_62.name(), FlowCode.FL_AP_152.name());
 		final List<String> flowCodeList = new ArrayList<String>();

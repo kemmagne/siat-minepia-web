@@ -96,7 +96,66 @@ public class InspectionReportData implements Serializable
 
 	/** The decisions suite visite. */
 	private DecisionsSuiteVisite decisionsSuiteVisite;
+	
+	/**
+	 * Respect des normes nationales et internationales
+	 */
+	private Boolean respectNorme;
+	
+	/**
+	 * Source de propagation de la peste
+	 */
+	private Boolean sourcePropagationPeste;
+	
+	/**
+	 * Existence des documents d'auto-controle
+	 */
+	private String autocontrolDocument;
+	
+	/**
+	 * Suivi des équipements d'auto-controle
+	 */
+	private String autocontrolEquipement;
+	
+	/**
+	 * Analyse du processus
+	 */
+	private String processAnalyse;
 
+	/**
+	 * Existance Casque
+	 */
+	private Boolean casque;
+	
+	/**
+	 * Gants
+	 */
+	private Boolean gants;
+	
+	/**
+	 * Combinaison
+	 */
+	private Boolean combinaison;
+	
+	/**
+	 * Chaussures de sécurités
+	 */
+	private Boolean chaussureSecurite;
+	
+	/**
+	 * Eau
+	 */
+	private String water;
+	
+	/**
+	 * Evacuation des déchet
+	 */
+	private String dechet;
+	
+	/**
+	 * Procédures
+	 */
+	private String procedure;
 	/**
 	 * Transform to report list.
 	 *
@@ -131,6 +190,17 @@ public class InspectionReportData implements Serializable
 			inspectionReport.setSanitaryVetCertificate(this.sanitaryVetCertificate);
 			inspectionReport.setWholesomenessCertificate(this.wholesomenessCertificate);
 			inspectionReport.setConformityCertificate(this.conformityCertificate);
+			inspectionReport.setAutocontrolDocument(this.autocontrolDocument);
+			inspectionReport.setAutocontrolEquipement(this.autocontrolEquipement);
+			inspectionReport.setDechet(this.dechet);
+			inspectionReport.setWater(this.water);
+			inspectionReport.setCasque(this.casque);
+			inspectionReport.setGants(this.gants);
+			inspectionReport.setCombinaison(this.combinaison);
+			inspectionReport.setRespectNorme(this.respectNorme);
+			inspectionReport.setSourcePropagationPeste(this.sourcePropagationPeste);
+			inspectionReport.setProcedure(this.procedure);
+			inspectionReport.setProcessAnalyse(this.processAnalyse);
 
 			final InspectionReportTemperatureVo temperatureVo = ((List<InspectionReportTemperatureVo>) CollectionUtils.select(
 					this.temperatureList, new Predicate()
@@ -701,6 +771,103 @@ public class InspectionReportData implements Serializable
 	{
 		this.otherGoodness = otherGoodness;
 	}
+
+	public Boolean getRespectNorme() {
+		return respectNorme;
+	}
+
+	public void setRespectNorme(Boolean respectNorme) {
+		this.respectNorme = respectNorme;
+	}
+
+	public Boolean getSourcePropagationPeste() {
+		return sourcePropagationPeste;
+	}
+
+	public void setSourcePropagationPeste(Boolean sourcePropagationPeste) {
+		this.sourcePropagationPeste = sourcePropagationPeste;
+	}
+
+	public String getAutocontrolDocument() {
+		return autocontrolDocument;
+	}
+
+	public void setAutocontrolDocument(String autocontrolDocument) {
+		this.autocontrolDocument = autocontrolDocument;
+	}
+
+	public String getAutocontrolEquipement() {
+		return autocontrolEquipement;
+	}
+
+	public void setAutocontrolEquipement(String autocontrolEquipement) {
+		this.autocontrolEquipement = autocontrolEquipement;
+	}
+
+	public String getProcessAnalyse() {
+		return processAnalyse;
+	}
+
+	public void setProcessAnalyse(String processAnalyse) {
+		this.processAnalyse = processAnalyse;
+	}
+
+	public Boolean getCasque() {
+		return casque;
+	}
+
+	public void setCasque(Boolean casque) {
+		this.casque = casque;
+	}
+
+	public Boolean getGants() {
+		return gants;
+	}
+
+	public void setGants(Boolean gants) {
+		this.gants = gants;
+	}
+
+	public Boolean getCombinaison() {
+		return combinaison;
+	}
+
+	public void setCombinaison(Boolean combinaison) {
+		this.combinaison = combinaison;
+	}
+
+	public Boolean getChaussureSecurite() {
+		return chaussureSecurite;
+	}
+
+	public void setChaussureSecurite(Boolean chaussureSecurite) {
+		this.chaussureSecurite = chaussureSecurite;
+	}
+
+	public String getWater() {
+		return water;
+	}
+
+	public void setWater(String water) {
+		this.water = water;
+	}
+
+	public String getDechet() {
+		return dechet;
+	}
+
+	public void setDechet(String dechet) {
+		this.dechet = dechet;
+	}
+
+	public String getProcedure() {
+		return procedure;
+	}
+
+	public void setProcedure(String procedure) {
+		this.procedure = procedure;
+	}
+	
 
 	/*
 	 * (non-Javadoc)

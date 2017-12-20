@@ -1,0 +1,1130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="saisie conservatoire à l&apos;importation, a l&apos;exportation ou à la reexportation" language="groovy" pageWidth="650" pageHeight="1000" columnWidth="610" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e1ebdf6d-6261-4e1c-bdf2-af9896dcbebd">
+	<property name="ireport.zoom" value="1.3310000000000013"/>
+	<property name="ireport.x" value="9"/>
+	<property name="ireport.y" value="880"/>
+	<field name="place" class="java.lang.String"/>
+	<field name="date" class="java.util.Date"/>
+	<field name="hour" class="java.lang.String"/>
+	<field name="quantity" class="java.lang.String"/>
+	<field name="containerNumber" class="java.lang.String"/>
+	<field name="lotNumber" class="java.lang.String"/>
+	<field name="controlerList" class="java.util.List"/>
+	<field name="libelle" class="java.lang.String"/>
+	<field name="normeRespect" class="java.lang.String"/>
+	<field name="labellingNumber" class="java.lang.String"/>
+	<field name="temperature" class="java.lang.String"/>
+	<field name="aspect" class="java.lang.String"/>
+	<field name="origineCertificate" class="java.lang.String"/>
+	<field name="generalPhytosanitaryCertificate" class="java.lang.String"/>
+	<field name="specialPhytosanitaryCertificate" class="java.lang.String"/>
+	<field name="qualityCertification" class="java.lang.String"/>
+	<field name="veterinaryHealthCertificate" class="java.lang.String"/>
+	<field name="healthCertificate" class="java.lang.String"/>
+	<field name="conformityCertificate" class="java.lang.String"/>
+	<field name="otherQualityCertificate" class="java.lang.String"/>
+	<field name="decision" class="java.lang.String"/>
+	<field name="observation" class="java.lang.String"/>
+	<field name="motif" class="java.lang.String"/>
+	<field name="inspectionFeeFcfa" class="java.lang.String"/>
+	<field name="processingFee" class="java.lang.String"/>
+	<field name="specialOtherFees" class="java.lang.String"/>
+	<field name="nature" class="java.lang.String"/>
+	<field name="packageQuality" class="java.lang.String"/>
+	<field name="nativeCountry" class="java.lang.String"/>
+	<field name="originCountry" class="java.lang.String"/>
+	<field name="transportMeans" class="java.lang.String"/>
+	<field name="billOfLoading" class="java.lang.String"/>
+	<field name="controller" class="java.lang.String"/>
+	<field name="sender" class="java.lang.String"/>
+	<field name="recipient" class="java.lang.String"/>
+	<field name="productionDate" class="java.util.Date"/>
+	<field name="expirationDate" class="java.util.Date"/>
+	<field name="importLicenceDate" class="java.util.Date"/>
+	<field name="importLicenceNumber" class="java.lang.String"/>
+	<field name="importLicenceDeliver" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="209" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="7605a21b-d3bf-4ed1-8d9b-83125377d0ae" x="0" y="93" width="250" height="49"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[DIRECTION DE LA REGLEMENTATION ET DU CONTROLE DE LA QUALITE DES INTRANTS DES PRODUITS AGRICOLES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cf68f528-3b5b-4d40-8e31-9ba98fad63da" x="0" y="1" width="250" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPUBLIQUE DU CAMEROUN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="afc168d7-85e5-4ba6-91cf-b5fc7b19e0fa" x="71" y="-53" width="100" height="15"/>
+				<textElement>
+					<font isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Paix-Travail-Patrie]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2dea2939-5c57-4a23-aef7-c2032ff81121" x="0" y="157" width="610" height="16"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PROCES-VERBAL D'INSPECTION PHYTOSANITAIRE A L'IMPORTATION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="afc168d7-85e5-4ba6-91cf-b5fc7b19e0fa" x="0" y="16" width="250" height="15"/>
+				<textElement textAlignment="Center">
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Paix-Travail-Patrie]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="0" y="58" width="250" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[----------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a636c9c4-e227-4fb3-a0d8-e8c09b5869c9" x="0" y="36" width="250" height="26"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[MINISTERE DE L'AGRICULTURE  ET DU DEVELOPPEMENT RURAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="29cfc738-8c19-4054-b0d4-beb2db502541" x="0" y="68" width="250" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[SECRETARIAT GENERAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="0" y="81" width="250" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[----------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2e4a2493-d2ef-41b7-9f46-9fba3ee0d2d4" x="0" y="173" width="610" height="14"/>
+				<textElement textAlignment="Center">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[PHYTOSANITARY INSPECTION'REPORT ON IMPORTED OR EXPORTED GOODS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="19476a68-6b04-491e-b7ba-833d5dffc1ac" x="0" y="187" width="610" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[N°_________________________/MINADER/PVIPIE/SG/DRCQ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="0" y="25" width="250" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[----------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="0" y="130" width="250" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[----------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cf68f528-3b5b-4d40-8e31-9ba98fad63da" x="360" y="1" width="250" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPUBLIC OF CAMEROON]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="afc168d7-85e5-4ba6-91cf-b5fc7b19e0fa" x="360" y="16" width="250" height="15"/>
+				<textElement textAlignment="Center">
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Peace - Work - Fatherland]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="360" y="25" width="250" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[----------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a636c9c4-e227-4fb3-a0d8-e8c09b5869c9" x="360" y="36" width="250" height="26"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[MINISTRY OF AGRICULUTRE AND RURAL DEVELOPMENT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="360" y="58" width="250" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[----------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="29cfc738-8c19-4054-b0d4-beb2db502541" x="360" y="68" width="250" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[GENERAL SECRETARIAT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="360" y="81" width="250" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[----------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7605a21b-d3bf-4ed1-8d9b-83125377d0ae" x="360" y="93" width="250" height="49"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e3966fc-cc01-4f9b-a1bb-d3b0af187804" x="360" y="130" width="250" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[----------]]></text>
+			</staticText>
+		</band>
+		<band height="960" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="5b1801b5-7b2c-4a4c-a465-1af64abb8d5d" x="466" y="424" width="22" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="5b1801b5-7b2c-4a4c-a465-1af64abb8d5d" x="295" y="423" width="22" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="5b1801b5-7b2c-4a4c-a465-1af64abb8d5d" x="116" y="423" width="22" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="5b1801b5-7b2c-4a4c-a465-1af64abb8d5d" x="4" y="424" width="22" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="5b1801b5-7b2c-4a4c-a465-1af64abb8d5d" x="411" y="258" width="22" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="d553ae76-7ee0-4a9e-a115-65fe13448b3a" x="0" y="1" width="610" height="14"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Je soussigné (nom et fonction dans le service) : _____________________________________________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d553ae76-7ee0-4a9e-a115-65fe13448b3a" x="1" y="14" width="609" height="14"/>
+				<textElement>
+					<font size="9" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[I undersigned (name and position in the service)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d553ae76-7ee0-4a9e-a115-65fe13448b3a" x="0" y="27" width="256" height="15"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Certifie avoir examiné ce jour l'envoie ci-dessous décrit/]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d553ae76-7ee0-4a9e-a115-65fe13448b3a" x="0" y="54" width="610" height="15"/>
+				<textElement>
+					<font size="9" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Name and address of the sender (despatching company)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5449abc5-dbcf-4a55-9d4b-e1822f537ead" x="256" y="27" width="354" height="15"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[certify to have inspected this day the consignment hereby described as follows:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="edaa9cc4-d4aa-46dd-9252-bba3c0e69373" x="0" y="43" width="610" height="14"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nom et aresse de l'expéditeur :_________________________________________________________________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3fb33500-5f7c-482e-b24d-5f8d494e4eb2" x="0" y="134" width="610" height="15"/>
+				<textElement>
+					<font size="9" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Type of packeting]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d553ae76-7ee0-4a9e-a115-65fe13448b3a" x="0" y="71" width="610" height="15"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nom et adresse du destinataire :_________________________________________________________________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5449abc5-dbcf-4a55-9d4b-e1822f537ead" x="0" y="84" width="290" height="14"/>
+				<textElement>
+					<font size="9" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Name and address of the receiver (receiving company)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="edaa9cc4-d4aa-46dd-9252-bba3c0e69373" x="0" y="99" width="610" height="14"/>
+				<textElement>
+					<font size="9" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Nature et quantité (kgs) des colis :_______________________________________________________________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="dc031c05-87e1-45e5-bb4f-69e46d913eca" x="0" y="110" width="610" height="15"/>
+				<textElement>
+					<font size="9" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Nature and quantity (kgs) of parcels]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="dc031c05-87e1-45e5-bb4f-69e46d913eca" x="16" y="395" width="594" height="15"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Des certificats ou attestions suivants du pays d'origine (1)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d51f5e9a-ee80-4899-ab67-d8cec7eb485f" x="16" y="407" width="594" height="15"/>
+				<textElement>
+					<font size="9" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[And the following certificates or testimonials of the country at origin]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="edaa9cc4-d4aa-46dd-9252-bba3c0e69373" x="0" y="123" width="610" height="14"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Type de conditionnement:__________________________________________________________________________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3fb33500-5f7c-482e-b24d-5f8d494e4eb2" x="0" y="162" width="610" height="15"/>
+				<textElement>
+					<font size="9" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Packet quality]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="edaa9cc4-d4aa-46dd-9252-bba3c0e69373" x="0" y="150" width="610" height="14"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qualité de l'emballage : ___________________________________________________________________________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3fb33500-5f7c-482e-b24d-5f8d494e4eb2" x="0" y="191" width="610" height="15"/>
+				<textElement>
+					<font size="9" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Coming from]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="edaa9cc4-d4aa-46dd-9252-bba3c0e69373" x="0" y="178" width="610" height="14"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pays de provenance:_______________________________________________________________________________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="edaa9cc4-d4aa-46dd-9252-bba3c0e69373" x="0" y="203" width="610" height="14"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pays d'origine:______________________________________________________________________________________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3fb33500-5f7c-482e-b24d-5f8d494e4eb2" x="0" y="216" width="610" height="15"/>
+				<textElement>
+					<font size="9" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Country origin]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3fb33500-5f7c-482e-b24d-5f8d494e4eb2" x="0" y="244" width="212" height="15"/>
+				<textElement>
+					<font size="9" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Means of transport]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="edaa9cc4-d4aa-46dd-9252-bba3c0e69373" x="0" y="230" width="212" height="14"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Moyen de transport:_____________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3fb33500-5f7c-482e-b24d-5f8d494e4eb2" x="0" y="272" width="360" height="15"/>
+				<textElement>
+					<font size="9" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Camerounian or international norm on ticket]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="edaa9cc4-d4aa-46dd-9252-bba3c0e69373" x="0" y="258" width="401" height="14"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Norme camerounaise ou internationale sur l'équetage, respecter ou pas:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3fb33500-5f7c-482e-b24d-5f8d494e4eb2" x="0" y="328" width="212" height="15"/>
+				<textElement>
+					<font size="9" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[This consignment is beign sent along with:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="edaa9cc4-d4aa-46dd-9252-bba3c0e69373" x="0" y="314" width="153" height="14"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cet envoie etant accompagné:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3fb33500-5f7c-482e-b24d-5f8d494e4eb2" x="0" y="356" width="610" height="15"/>
+				<textElement>
+					<font size="9" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[An import licence N°                                                                                     issued at]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="edaa9cc4-d4aa-46dd-9252-bba3c0e69373" x="0" y="343" width="610" height="14"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[du permis d'importation N°_____________________________________ delivré à_________________________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3fb33500-5f7c-482e-b24d-5f8d494e4eb2" x="0" y="381" width="106" height="15"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[By]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="edaa9cc4-d4aa-46dd-9252-bba3c0e69373" x="0" y="371" width="610" height="15"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Par:_________________________________________________________________________________________________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="dc031c05-87e1-45e5-bb4f-69e46d913eca" x="28" y="422" width="90" height="15"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Certificat d'origne]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d51f5e9a-ee80-4899-ab67-d8cec7eb485f" x="29" y="435" width="90" height="15"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Certificat of origin]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="edaa9cc4-d4aa-46dd-9252-bba3c0e69373" x="0" y="455" width="610" height="14"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Autres certificats de qualité à préciser:_____________________________________________________________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3fb33500-5f7c-482e-b24d-5f8d494e4eb2" x="1" y="467" width="609" height="15"/>
+				<textElement>
+					<font size="9" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Other certificates to be precides:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d51f5e9a-ee80-4899-ab67-d8cec7eb485f" x="37" y="494" width="48" height="15"/>
+				<textElement>
+					<font size="9" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Good]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="dc031c05-87e1-45e5-bb4f-69e46d913eca" x="37" y="482" width="48" height="15"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[est bon]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="edaa9cc4-d4aa-46dd-9252-bba3c0e69373" x="211" y="230" width="399" height="14"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Connaissement:/lettre de voiture/lettre de transport N° :__________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3fb33500-5f7c-482e-b24d-5f8d494e4eb2" x="211" y="244" width="399" height="15"/>
+				<textElement>
+					<font size="9" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Bill of loading N°]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="edaa9cc4-d4aa-46dd-9252-bba3c0e69373" x="0" y="286" width="610" height="14"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Norme camerounaise sur le produit N°: ___________________________________________________________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3fb33500-5f7c-482e-b24d-5f8d494e4eb2" x="0" y="300" width="610" height="15"/>
+				<textElement>
+					<font size="9" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Number of cameroonian norm on the product]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d51f5e9a-ee80-4899-ab67-d8cec7eb485f" x="140" y="435" width="176" height="15"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[a general phytosanitary certificate]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="dc031c05-87e1-45e5-bb4f-69e46d913eca" x="140" y="422" width="119" height="15"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Certificat phytosanitaire]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d51f5e9a-ee80-4899-ab67-d8cec7eb485f" x="319" y="435" width="160" height="15"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[a special phytosanitary certificate]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="dc031c05-87e1-45e5-bb4f-69e46d913eca" x="318" y="422" width="150" height="15"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Certificat phytosanitaire spécial]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d51f5e9a-ee80-4899-ab67-d8cec7eb485f" x="490" y="435" width="120" height="15"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[quality testimonial]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="dc031c05-87e1-45e5-bb4f-69e46d913eca" x="490" y="422" width="120" height="15"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Attestation de qualité]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d51f5e9a-ee80-4899-ab67-d8cec7eb485f" x="136" y="494" width="76" height="15"/>
+				<textElement>
+					<font size="9" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[not good]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="dc031c05-87e1-45e5-bb4f-69e46d913eca" x="136" y="482" width="75" height="15"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[n'est pas bon]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d51f5e9a-ee80-4899-ab67-d8cec7eb485f" x="299" y="494" width="61" height="15"/>
+				<textElement>
+					<font size="9" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[bad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="dc031c05-87e1-45e5-bb4f-69e46d913eca" x="299" y="482" width="86" height="15"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[est mauvais]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d51f5e9a-ee80-4899-ab67-d8cec7eb485f" x="441" y="494" width="48" height="15"/>
+				<textElement>
+					<font size="9" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[doubtful (2)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="dc031c05-87e1-45e5-bb4f-69e46d913eca" x="441" y="482" width="88" height="15"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[est douteux (2)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="98f4e8e6-9369-454e-9892-74055429799d" x="0" y="523" width="84" height="18"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Date of fabrication]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="98f4e8e6-9369-454e-9892-74055429799d" x="278" y="521" width="84" height="20"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[expiring date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6a121a24-2f25-4908-9e48-7d79321da538" x="0" y="512" width="610" height="20"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Date de production______________________________________date de péremption____________________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="0" y="543" width="610" height="14"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Etant donné son état et conformément aux règles en vigueur, j'ai décidé (3)                                         Observations]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="2" y="555" width="608" height="14"/>
+				<textElement>
+					<font size="9" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Considering the state of the consignment and in accordance with the regulations in farce, i decided on following (3)     Remarks]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="98f4e8e6-9369-454e-9892-74055429799d" x="27" y="575" width="190" height="20"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[la remise immediate à l'importateur ...]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="26" y="587" width="233" height="14"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[immediate delivery of the goods to the importer]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="98f4e8e6-9369-454e-9892-74055429799d" x="360" y="575" width="250" height="20"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[la delivrance à l'importateur après traitement]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="360" y="587" width="250" height="14"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[delivery of the goods to the importer after treatment]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="98f4e8e6-9369-454e-9892-74055429799d" x="26" y="603" width="314" height="20"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[le prélèvement d'échantillons pour examen au laboratoire]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="27" y="615" width="255" height="14"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[the taking of samples for a laboratory examination]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="98f4e8e6-9369-454e-9892-74055429799d" x="360" y="603" width="250" height="20"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[la destruction de l'envoi aux frais de l'importateur]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="360" y="615" width="233" height="14"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[the destruction of consignment at the importer's expenses]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="98f4e8e6-9369-454e-9892-74055429799d" x="27" y="630" width="234" height="20"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[la culture en quarantaine (indiquer le lieu)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="28" y="641" width="233" height="14"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[culture in quarantine (state where)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="98f4e8e6-9369-454e-9892-74055429799d" x="301" y="630" width="309" height="20"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[le refoulement vers le pays d'origine aux frais de l'importateur]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="293" y="641" width="317" height="14"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[the returning of goods to the country of origin at the imorter's expenses]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="0" y="665" width="610" height="14"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Motif (4) :__________________________________________________________________________________________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="0" y="676" width="610" height="14"/>
+				<textElement>
+					<font size="9" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Reason]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="98f4e8e6-9369-454e-9892-74055429799d" x="0" y="698" width="197" height="20"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Signature du contrôleur]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="0" y="707" width="197" height="14"/>
+				<textElement>
+					<font size="9" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Signature of the inspector]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="98f4e8e6-9369-454e-9892-74055429799d" x="0" y="748" width="610" height="20"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Frais d'inspection (F cfa) : _________________________________________________________________________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="0" y="759" width="197" height="14"/>
+				<textElement>
+					<font size="9" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Inspection charges (cfa f)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="98f4e8e6-9369-454e-9892-74055429799d" x="1" y="773" width="610" height="20"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Autres frais (special) : __________________________________________________________________________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="1" y="784" width="197" height="14"/>
+				<textElement>
+					<font size="9" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Other charges (special)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="98f4e8e6-9369-454e-9892-74055429799d" x="1" y="798" width="70" height="20"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Frais totaux /]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="71" y="798" width="65" height="14"/>
+				<textElement>
+					<font size="9" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[total charges :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="98f4e8e6-9369-454e-9892-74055429799d" x="136" y="798" width="474" height="20"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[______________________________________________________________________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="98f4e8e6-9369-454e-9892-74055429799d" x="256" y="842" width="177" height="20"/>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Fait à : _______________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="98f4e8e6-9369-454e-9892-74055429799d" x="433" y="842" width="177" height="20"/>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[le ____________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="98f4e8e6-9369-454e-9892-74055429799d" x="0" y="862" width="256" height="20"/>
+				<textElement>
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Durée de validité : ________________________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="0" y="872" width="256" height="14"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Valid up to]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="0" y="887" width="610" height="14"/>
+				<textElement>
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Rayer les mentions inutiles et annexer les copies des certificats au procès-verbal d'inspection]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="0" y="895" width="610" height="14"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Delete where unnecessary and attach a copy of certificate to the phytosanitary inspection report]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="0" y="906" width="153" height="14"/>
+				<textElement>
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[1)	Cocher la mention utile]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="0" y="916" width="153" height="14"/>
+				<textElement>
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[2)	Cocher la mdecision exacte]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="0" y="927" width="609" height="14"/>
+				<textElement>
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[3)	En cas de décision autre que la remise à l'importateur, indiquer le motif]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="-1" y="945" width="609" height="14"/>
+				<textElement>
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Conformément à l'article 6 du décret N° 2005/0771/PM du 06 Avril 2005]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="152" y="906" width="264" height="14"/>
+				<textElement>
+					<font size="8" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[/ tick where appropriate]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="150" y="916" width="151" height="14"/>
+				<textElement>
+					<font size="8" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[/ tick the exact decision]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3494fdd0-9c33-41e4-b5e5-ef960598af9e" x="0" y="936" width="330" height="14"/>
+				<textElement>
+					<font size="8" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[in case of a decision other than hand back to the importer, indicate clearly the reason]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="cd03c296-5c80-4a9c-ac64-7fc886523bf7" x="184" y="99" width="100" height="12"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="3b607a71-ff52-4df7-952f-6dbcceebc8b7" x="50" y="660" width="558" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{motif} != null  && $F{motif}.trim().length()>0 ? $F{motif} : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a5250700-044f-4f97-ae89-c16b618034f6" x="133" y="745" width="435" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{inspectionFeeFcfa} != null  && $F{inspectionFeeFcfa}.trim().length()>0 ? $F{inspectionFeeFcfa} : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="02979329-fc5f-4002-96f2-b182f8f41d51" x="124" y="770" width="435" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{specialOtherFees} != null  && $F{specialOtherFees}.trim().length()>0 ? $F{specialOtherFees} : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="b61a3619-6a85-4c6f-b15e-8e4e00618dd9" x="411" y="258" width="22" height="21"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{normeRespect} != null  && $F{normeRespect}.trim().length()>0  && ($F{normeRespect}.equalsIgnoreCase("Oui") || $F{normeRespect}.equalsIgnoreCase("Yes")) ? "X" : "")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="3102dcdc-dc35-4cd1-b686-1578ba00056f" x="147" y="122" width="412" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{libelle} != null  && $F{libelle}.trim().length()>0 ? $F{libelle} : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="c0b4b8d7-e08e-491e-a43d-3d2871c3bc6c" x="6" y="425" width="18" height="18"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{origineCertificate} != null  && $F{origineCertificate}.trim().length()>0 && ($F{origineCertificate}.equalsIgnoreCase("Oui") || $F{origineCertificate}.equalsIgnoreCase("Yes"))? "X" : "")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="30b3215e-e99f-4f70-8ad9-197a7b045499" x="118" y="425" width="18" height="18"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{generalPhytosanitaryCertificate} != null  && $F{generalPhytosanitaryCertificate}.trim().length()>0 && ($F{generalPhytosanitaryCertificate}.equalsIgnoreCase("Oui") || $F{generalPhytosanitaryCertificate}.equalsIgnoreCase("Yes")) ? "X" : "")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="1f00a714-988c-4c93-a0b2-8eb03af3e4c4" x="296" y="424" width="22" height="18"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{specialPhytosanitaryCertificate} != null  && $F{specialPhytosanitaryCertificate}.trim().length()>0 && ($F{specialPhytosanitaryCertificate}.equalsIgnoreCase("Oui") || $F{specialPhytosanitaryCertificate}.equalsIgnoreCase("Yes"))? "X" : "")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="53c2f927-6a46-4a2b-a4c4-00bbe9cd1c9b" x="466" y="424" width="22" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{qualityCertification} != null  && $F{qualityCertification}.trim().length()>0 && ($F{qualityCertification}.equalsIgnoreCase("Oui") || $F{qualityCertification}.equalsIgnoreCase("Yes")) ? "X" : "")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="264b28e0-6848-4d2f-980f-a3c6575dcc01" x="209" y="454" width="401" height="12"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{otherQualityCertificate} != null  && $F{otherQualityCertificate}.trim().length()>0 ? $F{otherQualityCertificate} : "-")]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="fb2c1c49-6942-4daf-8ccb-1f77cb1265a1" x="163" y="42" width="419" height="12"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sender}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="5a07a034-e5cb-4533-a3c0-47294377edf2" x="170" y="68" width="412" height="12"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{recipient}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="07531c17-3320-4838-a9b6-535ef74e084f" x="124" y="149" width="435" height="12"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{packageQuality}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="b9b8ad92-5960-46fd-9d8d-43996e378cdb" x="109" y="177" width="450" height="12"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nativeCountry}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="a157575d-53df-4394-afb9-54ec18723c03" x="84" y="201" width="475" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{originCountry}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="24de5489-7665-473e-90af-9ae9789f16b5" x="106" y="228" width="106" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{transportMeans}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="71958f49-cdd5-4239-9c0b-df83e5509b44" x="500" y="228" width="108" height="14"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{billOfLoading}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="67c91f1a-4c13-4ae4-8f79-4ad35a35fd60" x="141" y="341" width="171" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{importLicenceNumber}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="d7499fca-0350-45f2-a0cf-a8f4aa853c9e" x="369" y="341" width="213" height="12"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{importLicenceDate}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="5f0bfdc4-ec23-48d2-bc2b-daef93e1cd83" x="24" y="369" width="558" height="12"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{importLicenceDeliver}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="e6202b7f-b204-4680-bbe9-ea72b212b9b2" x="249" y="0" width="333" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{controller}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement uuid="5b1801b5-7b2c-4a4c-a465-1af64abb8d5d" x="10" y="483" width="22" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="5b1801b5-7b2c-4a4c-a465-1af64abb8d5d" x="109" y="483" width="22" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="5b1801b5-7b2c-4a4c-a465-1af64abb8d5d" x="271" y="483" width="22" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="5b1801b5-7b2c-4a4c-a465-1af64abb8d5d" x="414" y="483" width="22" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="5b1801b5-7b2c-4a4c-a465-1af64abb8d5d" x="516" y="259" width="22" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="a4e681f0-6139-4a10-8948-ef0d9007a0e9" x="436" y="258" width="64" height="20"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Oui]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="53f9ef5d-94d0-47a5-bda2-10b6dedbb2d3" x="543" y="259" width="45" height="20"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Non]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="390ba789-1f32-4209-8ef8-93ea2efc148a" x="437" y="268" width="51" height="20"/>
+				<textElement>
+					<font size="9" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Yes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="dd15aff9-d064-4065-8251-830332f0688c" x="543" y="268" width="45" height="18"/>
+				<textElement>
+					<font size="9" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[No]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="b61a3619-6a85-4c6f-b15e-8e4e00618dd9" x="516" y="259" width="22" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{normeRespect} != null  && $F{normeRespect}.trim().length()>0  && ($F{normeRespect}.equalsIgnoreCase("Non") || $F{normeRespect}.equalsIgnoreCase("No")) ? "X" : "")]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement uuid="5b1801b5-7b2c-4a4c-a465-1af64abb8d5d" x="2" y="575" width="22" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="5b1801b5-7b2c-4a4c-a465-1af64abb8d5d" x="2" y="606" width="22" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="5b1801b5-7b2c-4a4c-a465-1af64abb8d5d" x="3" y="633" width="22" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="5b1801b5-7b2c-4a4c-a465-1af64abb8d5d" x="334" y="575" width="22" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="5b1801b5-7b2c-4a4c-a465-1af64abb8d5d" x="334" y="606" width="22" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="5b1801b5-7b2c-4a4c-a465-1af64abb8d5d" x="268" y="633" width="22" height="20"/>
+			</rectangle>
+			<textField>
+				<reportElement uuid="4c64f083-82a4-4f4b-bb44-7485976c0791" x="3" y="575" width="21" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{decision} != null && $F{decision}.equalsIgnoreCase("la remise immediate à l'importateur") ? "X" : "")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4c64f083-82a4-4f4b-bb44-7485976c0791" x="334" y="575" width="21" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{decision} != null && $F{decision}.equalsIgnoreCase("la delivrance à l'importateur après traitement") ? "X" : "")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4c64f083-82a4-4f4b-bb44-7485976c0791" x="3" y="606" width="21" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{decision} != null && $F{decision}.equalsIgnoreCase("le prélèvement d'échantillons pour examen au laboratoire") ? "X" : "")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4c64f083-82a4-4f4b-bb44-7485976c0791" x="335" y="606" width="21" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{decision} != null && $F{decision}.equalsIgnoreCase("la destruction de l'envoi aux frais de l'importateur") ? "X" : "")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4c64f083-82a4-4f4b-bb44-7485976c0791" x="3" y="635" width="21" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{decision} != null && $F{decision}.equalsIgnoreCase("la culture en quarantaine (indiquer le lieu)") ? "X" : "")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4c64f083-82a4-4f4b-bb44-7485976c0791" x="269" y="633" width="21" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{decision} != null && $F{decision}.equalsIgnoreCase("le refoulement vers le pays d'origine aux frais de l'importateur") ? "X" : "")]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+</jasperReport>
