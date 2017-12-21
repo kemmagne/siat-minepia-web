@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VT_MINEPDED" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c454e72f-a03a-48c3-b1ea-f7425947e4b7">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="396"/>
+	<property name="ireport.y" value="417"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -52,7 +52,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="200" splitType="Stretch">
+		<band height="230" splitType="Stretch">
 			<frame>
 				<reportElement x="0" y="0" width="555" height="150" uuid="317ccfd6-fab5-41cb-ae2a-080e2c2d119e"/>
 				<staticText>
@@ -67,7 +67,7 @@ ET DU DEVELOPPEMENT DURABLE
 --------
 SECRETARIAT GENERAL
 -----
-DIRECTION DES NORMES ET DU CONTROLE
+BUREAU NATIONAL DE L'OZONE
 ---------------]]></text>
 				</staticText>
 				<staticText>
@@ -82,19 +82,23 @@ SUSTAINABIE  DEVELOPMENT
 ---------
 SECRETARIAT GENERAL
 ------
-DEPARTMENT OF STANDARDS AND CONTROL
+NATIONAL OZONE OFFICE
 ------------------]]></text>
 				</staticText>
-				<image hAlign="Center" vAlign="Middle">
-					<reportElement x="212" y="8" width="130" height="130" uuid="f7d08b77-c07f-4a4a-8645-0d911d127d7b"/>
-					<imageExpression><![CDATA["logo_minepded.png"]]></imageExpression>
-				</image>
 			</frame>
 			<frame>
-				<reportElement x="87" y="150" width="380" height="50" uuid="c8298d88-8cff-4b36-aa0a-3ed60ea89de7"/>
+				<reportElement x="0" y="150" width="555" height="80" uuid="c8298d88-8cff-4b36-aa0a-3ed60ea89de7"/>
 				<image hAlign="Center" vAlign="Middle">
-					<reportElement x="0" y="0" width="380" height="50" uuid="8385fe7d-ab92-49a2-b77f-ed3672810370"/>
+					<reportElement x="110" y="12" width="350" height="50" uuid="8385fe7d-ab92-49a2-b77f-ed3672810370"/>
 					<imageExpression><![CDATA["visa_titre.png"]]></imageExpression>
+				</image>
+				<image hAlign="Center" vAlign="Middle">
+					<reportElement x="18" y="0" width="80" height="80" uuid="f7d08b77-c07f-4a4a-8645-0d911d127d7b"/>
+					<imageExpression><![CDATA["logo_minepded.png"]]></imageExpression>
+				</image>
+				<image hAlign="Center" vAlign="Middle">
+					<reportElement x="469" y="0" width="80" height="80" uuid="33cea3c4-4958-434d-8940-f1528522a791"/>
+					<imageExpression><![CDATA["logo_bno.png"]]></imageExpression>
 				</image>
 			</frame>
 		</band>
@@ -106,26 +110,26 @@ DEPARTMENT OF STANDARDS AND CONTROL
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="321" splitType="Stretch">
+		<band height="312" splitType="Stretch">
 			<frame>
-				<reportElement x="0" y="0" width="555" height="40" uuid="96e3804b-a0c4-45ed-a49d-7af42f43293f"/>
+				<reportElement x="0" y="2" width="555" height="28" uuid="96e3804b-a0c4-45ed-a49d-7af42f43293f"/>
 				<textField isBlankWhenNull="true">
-					<reportElement x="0" y="0" width="555" height="40" uuid="6c138923-19b5-41e1-9600-28c5d9c8fc49"/>
+					<reportElement x="0" y="0" width="555" height="28" uuid="6c138923-19b5-41e1-9600-28c5d9c8fc49"/>
 					<textElement textAlignment="Center" verticalAlignment="Top">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["N° " + $F{decisionNumber} + "/SG/DNC/SDNAV du " + new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{decisionDate}) + " pour le contrôle de la qualité des équipements/appareils électriques et électroniques"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["N° " + $F{decisionNumber} + "/SG/BNO du " + new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{decisionDate}) + " pour le contrôle de la qualité des équipements/appareils, matériels et substances chimiques néfastes à la couche d’ozone"]]></textFieldExpression>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="40" width="555" height="42" uuid="48d9cffa-8a3b-4c96-8d84-8ff10a2a6f4b"/>
+				<reportElement x="0" y="31" width="555" height="40" uuid="48d9cffa-8a3b-4c96-8d84-8ff10a2a6f4b"/>
 				<image>
-					<reportElement x="28" y="0" width="521" height="42" uuid="a8719ec2-5f01-463a-9143-b1cdfa4dc361"/>
-					<imageExpression><![CDATA["visa_minepded_titre.png"]]></imageExpression>
+					<reportElement x="28" y="0" width="521" height="40" uuid="a8719ec2-5f01-463a-9143-b1cdfa4dc361"/>
+					<imageExpression><![CDATA["visa_minepded_bno_titre.png"]]></imageExpression>
 				</image>
 			</frame>
 			<frame>
-				<reportElement x="18" y="82" width="531" height="132" uuid="a5a0aa13-b2ad-4661-9ccb-8f7d64ec4e01"/>
+				<reportElement x="18" y="72" width="531" height="132" uuid="a5a0aa13-b2ad-4661-9ccb-8f7d64ec4e01"/>
 				<staticText>
 					<reportElement x="36" y="0" width="495" height="128" uuid="bb79ae77-6884-40f9-8828-72343584f7f7"/>
 					<textElement>
@@ -156,7 +160,7 @@ Vu]]></text>
 				</staticText>
 			</frame>
 			<frame>
-				<reportElement x="18" y="214" width="531" height="106" uuid="c78d124f-21ab-48e2-b746-8d9167549926"/>
+				<reportElement x="18" y="205" width="531" height="106" uuid="c78d124f-21ab-48e2-b746-8d9167549926"/>
 				<staticText>
 					<reportElement x="0" y="0" width="120" height="15" uuid="a4044a05-554c-49e0-9298-44713007fcdf"/>
 					<text><![CDATA[Nom de l'importateur :]]></text>
@@ -247,7 +251,7 @@ Vu]]></text>
 					<text><![CDATA[En foi de quoi le présent visa technique est délivré pour servir et valoir ce que de droit.]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="80" y="0" width="449" height="20" uuid="62dbef98-63e5-45ee-b9f9-e6bbbf693c20"/>
+					<reportElement x="66" y="0" width="449" height="20" uuid="62dbef98-63e5-45ee-b9f9-e6bbbf693c20"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="11" isBold="true"/>
 					</textElement>
@@ -379,15 +383,8 @@ Vu]]></text>
 					<imageExpression><![CDATA["annexe_visa_minepded.png"]]></imageExpression>
 				</image>
 			</frame>
-			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="70" width="555" height="40" uuid="ff54e81e-e5c9-410a-beca-5b5b599b8393"/>
-				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font size="11"/>
-				</textElement>
-				<textFieldExpression><![CDATA["N° " + $F{decisionNumber} + "/SG/DNC/SDNAV du " + new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{decisionDate}) + " pour le contrôle de la qualité des équipements/appareils électriques et électroniques"]]></textFieldExpression>
-			</textField>
 			<componentElement>
-				<reportElement key="table" style="table" x="0" y="110" width="555" height="90" uuid="515cd074-002d-4ebe-939f-2bee01f0fc2f"/>
+				<reportElement key="table" style="table" x="0" y="101" width="555" height="90" uuid="515cd074-002d-4ebe-939f-2bee01f0fc2f"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="itemsDataSet" uuid="79ead8ae-6916-47f2-b3ca-16b8ccb7a948">
 						<datasetParameter name="TOTAL_QUANTITY">
@@ -476,6 +473,13 @@ Vu]]></text>
 					</jr:column>
 				</jr:table>
 			</componentElement>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="71" width="555" height="28" uuid="54e8d1fe-e154-48c3-a83c-62589350b56b"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA["N° " + $F{decisionNumber} + "/SG/BNO du " + new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{decisionDate}) + " pour le contrôle de la qualité des équipements/appareils, matériels et substances chimiques néfastes à la couche d’ozone"]]></textFieldExpression>
+			</textField>
 		</band>
 	</summary>
 </jasperReport>
