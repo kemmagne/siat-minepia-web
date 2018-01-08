@@ -1,372 +1,437 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
-
-	<p:scrollPanel mode="native" styleClass="decisionForm">
-
-		<p:messages autoUpdate="true" />
-		<p:tabView scrollable="true" prependId="false" id="tabViewConstat">
-
-			<p:tab title="#{bundle['ConstatGeneralInformation']}" titletip="#{bundle['ConstatGeneralInformation']}">
-
-				<h:panelGrid columns="2">
-
-					<h:outputLabel value="#{bundle['ConstatPlace']}" for="constatPlace" />
-					<h:panelGroup>
-						<p:inputText value="#{fileItemCctDetailController.inspectionReportData.inspectionPlace}" id="constatPlace" required="true"
-							requiredMessage="#{bundle['ConstatPlaceRequiredMessage']}" />
-						<p:message for="constatPlace" />
-					</h:panelGroup>
-
-					<h:outputLabel value="#{bundle['ConstatDate']}" for="constatDate" />
-					<h:panelGroup>
-						<p:calendar navigator="true" readonlyInput="true" pattern="dd/MM/yyyy"
-							value="#{fileItemCctDetailController.inspectionReportData.inspectionDate}" showOn="button" id="constatDate" required="true"
-							requiredMessage="#{bundle['ConstatDateRequiredMessage']}" />
-						<p:message for="constatDate" />
-					</h:panelGroup>
-
-					<h:outputLabel value="#{bundle['ConstatHour']}" for="constatHour" />
-					<h:panelGroup>
-						<p:calendar navigator="true" readonlyInput="true" showOn="button"
-							value="#{fileItemCctDetailController.inspectionReportData.inspectionTime}" timeOnly="true" pattern="HH:mm" id="constatHour"
-							required="true" requiredMessage="#{bundle['ConstatHourRequiredMessage']}" widgetVar="wconstatHour" />
-						<p:message for="constatHour" />
-					</h:panelGroup>
-
-				</h:panelGrid>
-			</p:tab>
-
-
-			<p:tab title="#{bundle['ConstatEchantillons']}" titletip="#{bundle['ConstatEchantillons']}">
-
-				<p:dataTable widgetVar="sampleDTWdg" id="sampleDT" var="item" value="#{fileItemCctDetailController.inspectionReportData.samples}">
-
-					<p:column headerText="#{bundle['ConstatEchantillonsArticle']}">
-						<h:outputText value="#{facesContext.viewRoot.locale eq 'fr' ? item.fileItem.nsh.goodsItemDesc : item.fileItem.nsh.goodsItemDescEn}" />
-					</p:column>
-
-					<p:column headerText="#{bundle['ConstatEchantillonsQte']}">
-						<h:panelGroup>
-							<p:inputText id="sampleQte" value="#{item.takenQuantity}" required="true"
-								requiredMessage="#{bundle['ConstatQteSampleRequiredMessage']}" converterMessage="#{bundle['ConstatQteSampleValidationMessage']}">
-							</p:inputText>
-							<p:message id="sampleQteMsg" for="sampleQte" />
-						</h:panelGroup>
-					</p:column>
-
-					<p:column headerText="#{bundle['ConstatEchantillonsNumCont']}">
-						<h:panelGroup>
-							<p:inputText id="sampleNumCont" value="#{item.containerNumber}" required="false"
-								requiredMessage="#{bundle['ConstatNumContSampleRequiredMessage']}"
-								converterMessage="#{bundle['ConstatNumContSampleConverterMessage']}">
-							</p:inputText>
-							<p:message id="sampleNumContMsg" for="sampleNumCont" />
-						</h:panelGroup>
-					</p:column>
-
-					<p:column headerText="#{bundle['ConstatEchantillonsNumLot']}">
-						<p:inputText value="#{item.lotNumber}" converterMessage="#{bundle['ConstatEchantillonsNumLotConverterMessage']}" />
-					</p:column>
-				</p:dataTable>
-
-			</p:tab>
-
-			<p:tab title="#{bundle['ConstatControllers']}" titletip="#{bundle['ConstatControllers']}">
-
-				<h:panelGroup id="controllersGroup">
-					<p:dataTable widgetVar="controllersDTWdg" id="controllersDT" var="item" emptyMessage="#{bundle['ConstatControllersEmptyMessage']}"
-						value="#{fileItemCctDetailController.inspectionControllers}">
-
-						<p:column headerText="#{bundle['ConstatControllersName']}">
-							<h:outputText title="#{bundle['ConstatControllersName']}" value="#{item.name}" />
-						</p:column>
-
-						<p:column headerText="#{bundle['ConstatControllersPosition']}">
-							<h:outputText title="#{item.position}" value="#{item.position}" />
-						</p:column>
-
-						<p:column headerText="#{bundle['ConstatControllersService']}">
-							<h:outputText title="#{bundle['ConstatControllersService']}" value="#{item.service}" />
-						</p:column>
-
-						<p:column headerText="" width="6%">
-							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" styleClass="controll-box"
-								actionListener="#{fileItemCctDetailController.removeControllerInspectionReport(item)}" oncomplete="PF('controllersDTWdg').filter();"
-								immediate="true" icon="ui-icon-close" iconPos="notext" update="controllersGroup" />
-						</p:column>
-					</p:dataTable>
-				</h:panelGroup>
-
-				<div class="btn-bloc">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" immediate="true"
-						value="#{bundle['ConstatControllersSaveBtn']}" actionListener="#{fileItemCctDetailController.prepareAdd}"
-						update=":addController:addRowPg controllersDT" oncomplete="PF('controllerDialog').show()" />
-				</div>
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <p:scrollPanel mode="native" styleClass="decisionForm">
+
+        <p:messages autoUpdate="true" />
+        <p:tabView scrollable="true" prependId="false" id="tabViewConstat">
+
+            <p:tab title="#{bundle['ConstatGeneralInformation']}" titletip="#{bundle['ConstatGeneralInformation']}">
+
+                <h:panelGrid columns="2">
+
+                    <h:outputLabel value="#{bundle['ConstatPlace']}" for="constatPlace" />
+                    <h:panelGroup>
+                        <p:inputText value="#{fileItemCctDetailController.inspectionReportData.inspectionPlace}" id="constatPlace" required="true"
+                                     requiredMessage="#{bundle['ConstatPlaceRequiredMessage']}" />
+                        <p:message for="constatPlace" />
+                    </h:panelGroup>
+
+                    <h:outputLabel value="#{bundle['ConstatDate']}" for="constatDate" />
+                    <h:panelGroup>
+                        <p:calendar navigator="true" readonlyInput="true" pattern="dd/MM/yyyy"
+                                    value="#{fileItemCctDetailController.inspectionReportData.inspectionDate}" showOn="button" id="constatDate" required="true"
+                                    requiredMessage="#{bundle['ConstatDateRequiredMessage']}" />
+                        <p:message for="constatDate" />
+                    </h:panelGroup>
+
+                    <h:outputLabel value="#{bundle['ConstatHour']}" for="constatHour" />
+                    <h:panelGroup>
+                        <p:calendar navigator="true" readonlyInput="true" showOn="button"
+                                    value="#{fileItemCctDetailController.inspectionReportData.inspectionTime}" timeOnly="true" pattern="HH:mm" id="constatHour"
+                                    required="true" requiredMessage="#{bundle['ConstatHourRequiredMessage']}" widgetVar="wconstatHour" />
+                        <p:message for="constatHour" />
+                    </h:panelGroup>
+
+                </h:panelGrid>
+            </p:tab>
+
+
+            <p:tab title="#{bundle['ConstatEchantillons']}" titletip="#{bundle['ConstatEchantillons']}">
+
+                <p:dataTable widgetVar="sampleDTWdg" id="sampleDT" var="item" value="#{fileItemCctDetailController.inspectionReportData.samples}">
+
+                    <p:column headerText="#{bundle['ConstatEchantillonsArticle']}">
+                        <h:outputText value="#{facesContext.viewRoot.locale eq 'fr' ? item.fileItem.nsh.goodsItemDesc : item.fileItem.nsh.goodsItemDescEn}" />
+                    </p:column>
+
+                    <p:column headerText="#{bundle['ConstatEchantillonsQte']}">
+                        <h:panelGroup>
+                            <p:inputText id="sampleQte" value="#{item.takenQuantity}" required="true"
+                                         requiredMessage="#{bundle['ConstatQteSampleRequiredMessage']}" converterMessage="#{bundle['ConstatQteSampleValidationMessage']}">
+                            </p:inputText>
+                            <p:message id="sampleQteMsg" for="sampleQte" />
+                        </h:panelGroup>
+                    </p:column>
+
+                    <p:column headerText="#{bundle['ConstatEchantillonsNumCont']}">
+                        <h:panelGroup>
+                            <p:inputText id="sampleNumCont" value="#{item.containerNumber}" required="false"
+                                         requiredMessage="#{bundle['ConstatNumContSampleRequiredMessage']}"
+                                         converterMessage="#{bundle['ConstatNumContSampleConverterMessage']}">
+                            </p:inputText>
+                            <p:message id="sampleNumContMsg" for="sampleNumCont" />
+                        </h:panelGroup>
+                    </p:column>
+
+                    <p:column headerText="#{bundle['ConstatEchantillonsNumLot']}">
+                        <p:inputText value="#{item.lotNumber}" converterMessage="#{bundle['ConstatEchantillonsNumLotConverterMessage']}" />
+                    </p:column>
+                </p:dataTable>
+
+            </p:tab>
+
+            <p:tab title="#{bundle['ConstatControllers']}" titletip="#{bundle['ConstatControllers']}">
+
+                <h:panelGroup id="controllersGroup">
+                    <p:dataTable widgetVar="controllersDTWdg" id="controllersDT" var="item" emptyMessage="#{bundle['ConstatControllersEmptyMessage']}"
+                                 value="#{fileItemCctDetailController.inspectionControllers}">
+
+                        <p:column headerText="#{bundle['ConstatControllersName']}">
+                            <h:outputText title="#{bundle['ConstatControllersName']}" value="#{item.name}" />
+                        </p:column>
+
+                        <p:column headerText="#{bundle['ConstatControllersPosition']}">
+                            <h:outputText title="#{item.position}" value="#{item.position}" />
+                        </p:column>
+
+                        <p:column headerText="#{bundle['ConstatControllersService']}">
+                            <h:outputText title="#{bundle['ConstatControllersService']}" value="#{item.service}" />
+                        </p:column>
+
+                        <p:column headerText="" width="6%">
+                            <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" styleClass="controll-box"
+                                             actionListener="#{fileItemCctDetailController.removeControllerInspectionReport(item)}" oncomplete="PF('controllersDTWdg').filter();"
+                                             immediate="true" icon="ui-icon-close" iconPos="notext" update="controllersGroup" />
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGroup>
+
+                <div class="btn-bloc">
+                    <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" immediate="true"
+                                     value="#{bundle['ConstatControllersSaveBtn']}" actionListener="#{fileItemCctDetailController.prepareAdd}"
+                                     update=":addController:addRowPg controllersDT" oncomplete="PF('controllerDialog').show()" />
+                </div>
 
-			</p:tab>
+            </p:tab>
 
-			<p:tab title="#{bundle['ConstatEtiquetage']}" titletip="#{bundle['ConstatEtiquetage']}">
+            <p:tab title="#{bundle['ConstatEtiquetage']}" titletip="#{bundle['ConstatEtiquetage']}">
 
-				<p:dataTable widgetVar="etiquitageDTWdg" id="etiquitageDT" var="item"
-					value="#{fileItemCctDetailController.inspectionReportData.etiquetageList}">
+                <p:dataTable widgetVar="etiquitageDTWdg" id="etiquitageDT" var="item"
+                             value="#{fileItemCctDetailController.inspectionReportData.etiquetageList}">
 
-					<p:column headerText="#{bundle['ConstatEtiquetageArticle']}">
-						<h:outputText title="#{bundle['ConstatEtiquetageArticle']}"
-							value="#{facesContext.viewRoot.locale eq 'fr' ? item.fileItem.nsh.goodsItemDesc : item.fileItem.nsh.goodsItemDescEn}" />
-					</p:column>
+                    <p:column headerText="#{bundle['ConstatEtiquetageArticle']}">
+                        <h:outputText title="#{bundle['ConstatEtiquetageArticle']}"
+                                      value="#{facesContext.viewRoot.locale eq 'fr' ? item.fileItem.nsh.goodsItemDesc : item.fileItem.nsh.goodsItemDescEn}" />
+                    </p:column>
 
-					<p:column headerText="#{bundle['ConstatEtiquetageLabel']}">
-						<p:inputText title="#{bundle['ConstatEtiquetageLabel']}" value="#{item.label}" />
-					</p:column>
+                    <p:column headerText="#{bundle['ConstatEtiquetageLabel']}">
+                        <p:inputText title="#{bundle['ConstatEtiquetageLabel']}" value="#{item.label}" />
+                    </p:column>
 
-					<p:column headerText="#{bundle['ConstatEtiquetageNorme']}">
-						<p:selectOneRadio id="constatEtiquetageNorme" value="#{item.standardCompliance}">
-							<f:selectItem itemLabel="#{bundle['ConstatEtiquetageNormeYes']}" itemValue="true" />
-							<f:selectItem itemLabel="#{bundle['ConstatEtiquetageNormeNo']}" itemValue="false" />
-						</p:selectOneRadio>
-					</p:column>
-
-					<p:column headerText="#{bundle['ConstatEtiquetageNormeNumber']}">
-						<p:inputText title="#{bundle['ConstatEtiquetageNormeNumber']}" value="#{item.standardNumber}"
-							converterMessage="#{bundle['ConstatEtiquetageNormeNumberValidationMessage']}" />
-					</p:column>
-
-				</p:dataTable>
-
-			</p:tab>
-
-			<p:tab titletip="#{bundle['ConstatTemperature']}" title="#{bundle['ConstatTemperature']}">
-
-				<p:dataTable widgetVar="tempratureDTWdg" id="temperatureDT" var="item"
-					value="#{fileItemCctDetailController.inspectionReportData.temperatureList}">
-
-					<p:column headerText="#{bundle['ConstatTemperatureArticle']}">
-						<h:outputText title="#{bundle['ConstatTemperatureArticle']}"
-							value="#{facesContext.viewRoot.locale eq 'fr' ? item.fileItem.nsh.goodsItemDesc : item.fileItem.nsh.goodsItemDescEn}" />
-					</p:column>
-
-					<p:column headerText="#{bundle['ConstatTemperatureValue']}">
-						<h:panelGroup>
-							<p:inputText id="constatTemperatureValue" title="#{bundle['ConstatTemperatureValue']}" value="#{item.value}" required="true"
-								requiredMessage="#{bundle['ConstatTemperatureValueRequiredMessage']}"
-								converterMessage="#{bundle['ConstatTemperatureValueValidationMessage']}">
-							</p:inputText>
-							<p:message id="constatTemperatureValueMsg" for="constatTemperatureValue" />
-						</h:panelGroup>
-					</p:column>
+                    <p:column headerText="#{bundle['ConstatEtiquetageNorme']}">
+                        <p:selectOneRadio id="constatEtiquetageNorme" value="#{item.standardCompliance}">
+                            <f:selectItem itemLabel="#{bundle['ConstatEtiquetageNormeYes']}" itemValue="true" />
+                            <f:selectItem itemLabel="#{bundle['ConstatEtiquetageNormeNo']}" itemValue="false" />
+                        </p:selectOneRadio>
+                    </p:column>
+
+                    <p:column headerText="#{bundle['ConstatEtiquetageNormeNumber']}">
+                        <p:inputText title="#{bundle['ConstatEtiquetageNormeNumber']}" value="#{item.standardNumber}"
+                                     converterMessage="#{bundle['ConstatEtiquetageNormeNumberValidationMessage']}" />
+                    </p:column>
+
+                </p:dataTable>
+
+            </p:tab>
+
+            <p:tab titletip="#{bundle['ConstatTemperature']}" title="#{bundle['ConstatTemperature']}">
+
+                <p:dataTable widgetVar="tempratureDTWdg" id="temperatureDT" var="item"
+                             value="#{fileItemCctDetailController.inspectionReportData.temperatureList}">
+
+                    <p:column headerText="#{bundle['ConstatTemperatureArticle']}">
+                        <h:outputText title="#{bundle['ConstatTemperatureArticle']}"
+                                      value="#{facesContext.viewRoot.locale eq 'fr' ? item.fileItem.nsh.goodsItemDesc : item.fileItem.nsh.goodsItemDescEn}" />
+                    </p:column>
+
+                    <p:column headerText="#{bundle['ConstatTemperatureValue']}">
+                        <h:panelGroup>
+                            <p:inputText id="constatTemperatureValue" title="#{bundle['ConstatTemperatureValue']}" value="#{item.value}" required="true"
+                                         requiredMessage="#{bundle['ConstatTemperatureValueRequiredMessage']}"
+                                         converterMessage="#{bundle['ConstatTemperatureValueValidationMessage']}">
+                            </p:inputText>
+                            <p:message id="constatTemperatureValueMsg" for="constatTemperatureValue" />
+                        </h:panelGroup>
+                    </p:column>
 
-					<p:column headerText="#{bundle['ConstatTemperatureAspect']}">
-						<p:inputText title="#{bundle['ConstatTemperatureAspect']}" value="#{item.aspect}" />
-					</p:column>
+                    <p:column headerText="#{bundle['ConstatTemperatureAspect']}">
+                        <p:inputText title="#{bundle['ConstatTemperatureAspect']}" value="#{item.aspect}" />
+                    </p:column>
 
-				</p:dataTable>
+                </p:dataTable>
 
-			</p:tab>
-			<p:tab titletip="#{bundle['ConstatCertificats']}" title="#{bundle['ConstatCertificats']}">
+            </p:tab>
+            <p:tab titletip="#{bundle['ConstatCertificats']}" title="#{bundle['ConstatCertificats']}">
 
-				<h:panelGrid columns="4" styleClass="table-decision">
-					<h:outputLabel for="constatCertificatOrgine" value="#{bundle['ConstatCertificatOrgine']}" />
-					<p:selectBooleanCheckbox id="constatCertificatOrgine" value="#{fileItemCctDetailController.inspectionReportData.originCertificate}" />
+                <h:panelGrid columns="4" styleClass="table-decision">
+                    <h:outputLabel for="constatCertificatOrgine" value="#{bundle['ConstatCertificatOrgine']}" />
+                    <p:selectBooleanCheckbox id="constatCertificatOrgine" value="#{fileItemCctDetailController.inspectionReportData.originCertificate}" />
 
-					<h:outputLabel for="constatCertificatPhytosanitaireGeneral" value="#{bundle['ConstatCertificatPhytosanitaireGeneral']}" />
-					<p:selectBooleanCheckbox id="constatCertificatPhytosanitaireGeneral"
-						value="#{fileItemCctDetailController.inspectionReportData.phytoGeneralCertificate}" />
+                    <h:outputLabel for="constatCertificatPhytosanitaireGeneral" value="#{bundle['ConstatCertificatPhytosanitaireGeneral']}" />
+                    <p:selectBooleanCheckbox id="constatCertificatPhytosanitaireGeneral"
+                                             value="#{fileItemCctDetailController.inspectionReportData.phytoGeneralCertificate}" />
 
-					<h:outputLabel for="constatCertificatPhytosanitaireSpecial" value="#{bundle['ConstatCertificatPhytosanitaireSpecial']}" />
-					<p:selectBooleanCheckbox id="constatCertificatPhytosanitaireSpecial"
-						value="#{fileItemCctDetailController.inspectionReportData.phytoSpecialCertificate}" />
+                    <h:outputLabel for="constatCertificatPhytosanitaireSpecial" value="#{bundle['ConstatCertificatPhytosanitaireSpecial']}" />
+                    <p:selectBooleanCheckbox id="constatCertificatPhytosanitaireSpecial"
+                                             value="#{fileItemCctDetailController.inspectionReportData.phytoSpecialCertificate}" />
 
-					<h:outputLabel for="constatAttestationQualite" value="#{bundle['ConstatAttestationQualite']}" />
-					<p:selectBooleanCheckbox id="constatAttestationQualite" value="#{fileItemCctDetailController.inspectionReportData.qualityAttestation}" />
+                    <h:outputLabel for="constatAttestationQualite" value="#{bundle['ConstatAttestationQualite']}" />
+                    <p:selectBooleanCheckbox id="constatAttestationQualite" value="#{fileItemCctDetailController.inspectionReportData.qualityAttestation}" />
 
-					<h:outputLabel for="constatCertificatSanitaireVeterinaire" value="#{bundle['ConstatCertificatSanitaireVeterinaire']}" />
-					<p:selectBooleanCheckbox id="constatCertificatSanitaireVeterinaire"
-						value="#{fileItemCctDetailController.inspectionReportData.sanitaryVetCertificate}" />
+                    <h:outputLabel for="constatCertificatSanitaireVeterinaire" value="#{bundle['ConstatCertificatSanitaireVeterinaire']}" />
+                    <p:selectBooleanCheckbox id="constatCertificatSanitaireVeterinaire"
+                                             value="#{fileItemCctDetailController.inspectionReportData.sanitaryVetCertificate}" />
 
-					<h:outputLabel for="constatCertificatSalubrite" value="#{bundle['ConstatCertificatSalubrite']}" />
-					<p:selectBooleanCheckbox id="constatCertificatSalubrite"
-						value="#{fileItemCctDetailController.inspectionReportData.wholesomenessCertificate}" />
+                    <h:outputLabel for="constatCertificatSalubrite" value="#{bundle['ConstatCertificatSalubrite']}" />
+                    <p:selectBooleanCheckbox id="constatCertificatSalubrite"
+                                             value="#{fileItemCctDetailController.inspectionReportData.wholesomenessCertificate}" />
 
-					<h:outputLabel for="constatCertificatConfirmite" value="#{bundle['ConstatCertificatConfirmite']}" />
-					<p:selectBooleanCheckbox id="constatCertificatConfirmite"
-						value="#{fileItemCctDetailController.inspectionReportData.conformityCertificate}" />
+                    <h:outputLabel for="constatCertificatConfirmite" value="#{bundle['ConstatCertificatConfirmite']}" />
+                    <p:selectBooleanCheckbox id="constatCertificatConfirmite"
+                                             value="#{fileItemCctDetailController.inspectionReportData.conformityCertificate}" />
 
 
-				</h:panelGrid>
-				<h:panelGrid columns="4" styleClass="table-decision">
-					<h:outputLabel for="autreCertficatsQualite" value="#{bundle['ConstatAutreCertificatQualite']}" />
+                </h:panelGrid>
+                <h:panelGrid columns="4" styleClass="table-decision">
+                    <h:outputLabel for="autreCertficatsQualite" value="#{bundle['ConstatAutreCertificatQualite']}" />
 
-					<h:panelGroup styleClass="col-right">
-						<p:inputText id="autreCertficatsQualite" value="#{fileItemCctDetailController.inspectionReportData.otherCertificate}" />
+                    <h:panelGroup styleClass="col-right">
+                        <p:inputText id="autreCertficatsQualite" value="#{fileItemCctDetailController.inspectionReportData.otherCertificate}" />
 
-						<p:selectOneRadio id="goodness" value="#{fileItemCctDetailController.inspectionReportData.otherGoodness}" layout="grid" columns="2">
-							<f:selectItems value="#{fileItemCctDetailController.otherCertficatGoodness}" var="item"
-								itemLabel="#{facesContext.viewRoot.locale eq 'fr' ? item.labelFr : item.labelEn}" itemValue="#{item}" />
-						</p:selectOneRadio>
+                        <p:selectOneRadio id="goodness" value="#{fileItemCctDetailController.inspectionReportData.otherGoodness}" layout="grid" columns="2">
+                            <f:selectItems value="#{fileItemCctDetailController.otherCertficatGoodness}" var="item"
+                                           itemLabel="#{facesContext.viewRoot.locale eq 'fr' ? item.labelFr : item.labelEn}" itemValue="#{item}" />
+                        </p:selectOneRadio>
 
-					</h:panelGroup>
+                    </h:panelGroup>
 
-				</h:panelGrid>
-				<br />
-			</p:tab>
+                </h:panelGrid>
+                <br />
+            </p:tab>
 
-			<p:tab titletip="#{bundle['ConstatDecision']}" title="#{bundle['ConstatDecision']}">
+            <p:tab titletip="#{bundle['ConstatDecision']}" title="#{bundle['ConstatDecision']}">
 
-				<p:panelGrid columns="2">
-					<h:outputLabel for="constatDecision" value="#{bundle['ConstatDecision']}" />
-					<h:panelGroup>
-						<p:selectOneMenu id="constatDecision" value="#{fileItemCctDetailController.inspectionReportData.controllerDecision}"
-							panelStyle="width:180px" effect="fade" var="t" style="width:160px" filter="true" filterMatchMode="startsWith" required="true"
-							requiredMessage="#{bundle['ConstatDecisionRequiredMessage']}">
-							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" itemValue="#{null}" />
-							<f:selectItems value="#{fileItemCctDetailController.decisionsSuiteVisite}" var="decision" itemLabel="#{decision.labelFr}"
-								itemValue="#{decision.labelFr}" />
-							<p:ajax event="change" update="quarantinedCulturePlaceLabel quarantinedCulturePlaceValue" />
-						</p:selectOneMenu>
-						<p:message for="constatDecision" />
-					</h:panelGroup>
-					<h:panelGroup id="quarantinedCulturePlaceLabel">
-						<h:outputLabel for="quarantinedCulturePlace" value="#{bundle['QuarantinedCulturePlace']}"
-							rendered="#{fileItemCctDetailController.inspectionReportData.controllerDecision eq 'Culture quarantaine'}" />
-					</h:panelGroup>
-					<h:panelGroup id="quarantinedCulturePlaceValue">
-						<p:inputText rendered="#{fileItemCctDetailController.inspectionReportData.controllerDecision eq 'Culture quarantaine'}"
-							id="quarantinedCulturePlace" title="#{bundle['QuarantinedCulturePlaceTitle']}"
-							value="#{fileItemCctDetailController.inspectionReportData.quarantinedCulturePlace}" />
-					</h:panelGroup>
-				</p:panelGrid>
-
-			</p:tab>
-
-			<p:tab titletip="#{bundle['ConstatObservation']}" title="#{bundle['ConstatObservation']}">
-
-				<p:panelGrid columns="2">
-
-					<h:outputLabel for="constatObservation" value="#{bundle['ConstatObservation']}" />
-
-					<p:inputTextarea title="#{bundle['ConstatObservation']}" id="constatObservation"
-						value="#{fileItemCctDetailController.inspectionReportData.observation}" />
-
-				</p:panelGrid>
-
-			</p:tab>
-
-			<p:tab titletip="#{bundle['ConstatMotif']}" title="#{bundle['ConstatMotif']}">
-
-				<p:panelGrid columns="2">
-
-					<h:outputLabel for="constatMotif" value="#{bundle['ConstatMotif']}" />
-					<p:inputTextarea title="#{bundle['ConstatMotif']}" id="constatMotif" value="#{fileItemCctDetailController.inspectionReportData.motif}" />
-
-				</p:panelGrid>
-
-			</p:tab>
-			<p:tab titletip="#{bundle['ConstatFrais']}" title="#{bundle['ConstatFrais']}">
-
-				<h:panelGrid columns="2">
-
-					<h:outputLabel for="constatFraisInspection" value="#{bundle['ConstatFraisInspection']}" />
-					<h:panelGroup>
-						<p:inputText required="true" requiredMessage="#{bundle['ConstatFraisInspectionRequiredMessage']}" id="constatFraisInspection"
-							value="#{fileItemCctDetailController.inspectionReportData.inspectionFeesFCFA}" />
-						<p:message for="constatFraisInspection" />
-					</h:panelGroup>
-
-					<h:outputLabel for="constatFraisTraitement" value="#{bundle['ConstatFraisTraitement']}" />
-					<h:panelGroup>
-						<p:inputText required="true" requiredMessage="#{bundle['ConstatFraisTraitementRequiredMessage']}" id="constatFraisTraitement"
-							value="#{fileItemCctDetailController.inspectionReportData.inspectionFees}" />
-						<p:message for="constatFraisTraitement" />
-					</h:panelGroup>
-
-					<h:outputLabel for="constatFraisAutres" value="#{bundle['ConstatFraisAutres']}" />
-					<p:inputText id="constatFraisAutres" value="#{fileItemCctDetailController.inspectionReportData.otherSpecialFees}" />
-
-				</h:panelGrid>
-
-			</p:tab>
-
-			<p:tab titletip="#{bundle['ConstatInfraction']}" title="#{bundle['ConstatInfraction']}">
-
-				<h:panelGrid rendered="#{!fileItemCctDetailController.checkMinepdedMinistry}" columns="2">
-
-					<h:outputLabel for="constatInfrationNature" value="#{bundle['ConstatInfractionInfraction']}" />
-
-					<p:inputTextarea id="constatInfrationNature" title="#{bundle['ConstatObservation']}" value="#{fileItemCctDetailController.inspectionReportData.infraction}" />
-
-				</h:panelGrid>
-
-				<p:panelGrid rendered="#{fileItemCctDetailController.checkMinepdedMinistry}" columns="2">
-					<h:outputLabel for="constatInfration" value="#{bundle['ConstatInfractionInfraction']}" />
-					<h:panelGroup>
-						<p:selectOneMenu id="constatInfration" value="#{fileItemCctDetailController.infraction}" panelStyle="width:180px"
-							style="width:160px">
-							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" itemValue="#{null}" />
-							<f:selectItems value="#{fileItemCctDetailController.infractionList}" var="infraction"
-								itemLabel="#{facesContext.viewRoot.locale eq 'en' ? infraction.infractionDescEn : infraction.infractionDesc}"
-								itemValue="#{infraction.infractionDesc}" />
-							<f:converter binding="#{infractionConverter}" />
-						</p:selectOneMenu>
-						<p:message for="constatInfration" />
-					</h:panelGroup>
-				</p:panelGrid>
-
-			</p:tab>
-			<p:tab titletip="#{bundle['InspectionArticleReglemente']}" title="#{bundle['InspectionArticleReglemente']}">
-				<h:panelGrid columns="4" styleClass="table-decision">
-					<h:outputLabel for="respectNorme" value="#{bundle['respectNorme']}" />
-					<p:selectBooleanCheckbox id="respectNorme" value="#{fileItemCctDetailController.inspectionReportData.respectNorme}" />
-					
-					<h:outputLabel for="sourcePropagationPeste" value="#{bundle['sourcePropagationPeste']}" />
-					<p:selectBooleanCheckbox id="sourcePropagationPeste" value="#{fileItemCctDetailController.inspectionReportData.sourcePropagationPeste}" />
-					
-					<h:outputLabel for="autocontrolDocument" value="#{bundle['autocontrolDocument']}" />
-					<h:panelGroup>
-						<p:inputText required="false" id="autocontrolDocument"
-							value="#{fileItemCctDetailController.inspectionReportData.autocontrolDocument}" />
-						<p:message for="autocontrolDocument" />
-					</h:panelGroup>
-					<h:outputLabel for="autocontrolEquipement" value="#{bundle['autocontrolEquipement']}" />
-					<h:panelGroup>
-						<p:inputText required="false" id="autocontrolEquipement"
-							value="#{fileItemCctDetailController.inspectionReportData.autocontrolEquipement}" />
-						<p:message for="autocontrolEquipement" />
-					</h:panelGroup>
-					<h:outputLabel for="processAnalyse" value="#{bundle['processAnalyse']}" />
-					<h:panelGroup>
-						<p:inputText required="false" id="processAnalyse"
-							value="#{fileItemCctDetailController.inspectionReportData.processAnalyse}" />
-						<p:message for="processAnalyse" />
-					</h:panelGroup>
-					<h:outputLabel for="casque" value="#{bundle['casque']}" />
-					<p:selectBooleanCheckbox id="casque" value="#{fileItemCctDetailController.inspectionReportData.casque}" />
-					<h:outputLabel for="gants" value="#{bundle['gants']}" />
-					<p:selectBooleanCheckbox id="gants" value="#{fileItemCctDetailController.inspectionReportData.gants}" />
-					<h:outputLabel for="combinaison" value="#{bundle['combinaison']}" />
-					<p:selectBooleanCheckbox id="combinaison" value="#{fileItemCctDetailController.inspectionReportData.combinaison}" />
-					<h:outputLabel for="chaussureSecurite" value="#{bundle['chaussureSecurite']}" />
-					<p:selectBooleanCheckbox id="chaussureSecurite" value="#{fileItemCctDetailController.inspectionReportData.chaussureSecurite}" />
-					<h:outputLabel for="water" value="#{bundle['water']}" />
-					<h:panelGroup>
-						<p:inputText required="false" id="water"
-									 value="#{fileItemCctDetailController.inspectionReportData.water}" />
-						<p:message for="water" />
-					</h:panelGroup>
-					<h:outputLabel for="dechet" value="#{bundle['dechet']}" />
-					<h:panelGroup>
-						<p:inputText required="false" id="dechet"
-									 value="#{fileItemCctDetailController.inspectionReportData.dechet}" />
-						<p:message for="dechet" />
-					</h:panelGroup>
-					<h:outputLabel for="procedure" value="#{bundle['procedure']}" />
-					<h:panelGroup>
-						<p:inputText required="false" id="procedure"
-									 value="#{fileItemCctDetailController.inspectionReportData.procedure}" />
-						<p:message for="procedure" />
-					</h:panelGroup>
-				</h:panelGrid>
-			</p:tab>
-		</p:tabView>
-	</p:scrollPanel>
+                <p:panelGrid columns="2">
+                    <h:outputLabel for="constatDecision" value="#{bundle['ConstatDecision']}" />
+                    <h:panelGroup>
+                        <p:selectOneMenu id="constatDecision" value="#{fileItemCctDetailController.inspectionReportData.controllerDecision}"
+                                         panelStyle="width:180px" effect="fade" var="t" style="width:160px" filter="true" filterMatchMode="startsWith" required="true"
+                                         requiredMessage="#{bundle['ConstatDecisionRequiredMessage']}">
+                            <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" itemValue="#{null}" />
+                            <f:selectItems value="#{fileItemCctDetailController.decisionsSuiteVisite}" var="decision" itemLabel="#{decision.labelFr}"
+                                           itemValue="#{decision.labelFr}" />
+                            <p:ajax event="change" update="quarantinedCulturePlaceLabel quarantinedCulturePlaceValue" />
+                        </p:selectOneMenu>
+                        <p:message for="constatDecision" />
+                    </h:panelGroup>
+                    <h:panelGroup id="quarantinedCulturePlaceLabel">
+                        <h:outputLabel for="quarantinedCulturePlace" value="#{bundle['QuarantinedCulturePlace']}"
+                                       rendered="#{fileItemCctDetailController.inspectionReportData.controllerDecision eq 'Culture quarantaine'}" />
+                    </h:panelGroup>
+                    <h:panelGroup id="quarantinedCulturePlaceValue">
+                        <p:inputText rendered="#{fileItemCctDetailController.inspectionReportData.controllerDecision eq 'Culture quarantaine'}"
+                                     id="quarantinedCulturePlace" title="#{bundle['QuarantinedCulturePlaceTitle']}"
+                                     value="#{fileItemCctDetailController.inspectionReportData.quarantinedCulturePlace}" />
+                    </h:panelGroup>
+                </p:panelGrid>
+
+            </p:tab>
+
+            <p:tab titletip="#{bundle['ConstatObservation']}" title="#{bundle['ConstatObservation']}">
+
+                <p:panelGrid columns="2">
+
+                    <h:outputLabel for="constatObservation" value="#{bundle['ConstatObservation']}" />
+
+                    <p:inputTextarea title="#{bundle['ConstatObservation']}" id="constatObservation"
+                                     value="#{fileItemCctDetailController.inspectionReportData.observation}" />
+
+                </p:panelGrid>
+
+            </p:tab>
+
+            <p:tab titletip="#{bundle['ConstatMotif']}" title="#{bundle['ConstatMotif']}">
+
+                <p:panelGrid columns="2">
+
+                    <h:outputLabel for="constatMotif" value="#{bundle['ConstatMotif']}" />
+                    <p:inputTextarea title="#{bundle['ConstatMotif']}" id="constatMotif" value="#{fileItemCctDetailController.inspectionReportData.motif}" />
+
+                </p:panelGrid>
+
+            </p:tab>
+            <p:tab titletip="#{bundle['ConstatFrais']}" title="#{bundle['ConstatFrais']}">
+
+                <h:panelGrid columns="2">
+
+                    <h:outputLabel for="constatFraisInspection" value="#{bundle['ConstatFraisInspection']}" />
+                    <h:panelGroup>
+                        <p:inputText required="true" requiredMessage="#{bundle['ConstatFraisInspectionRequiredMessage']}" id="constatFraisInspection"
+                                     value="#{fileItemCctDetailController.inspectionReportData.inspectionFeesFCFA}" />
+                        <p:message for="constatFraisInspection" />
+                    </h:panelGroup>
+
+                    <h:outputLabel for="constatFraisTraitement" value="#{bundle['ConstatFraisTraitement']}" />
+                    <h:panelGroup>
+                        <p:inputText required="true" requiredMessage="#{bundle['ConstatFraisTraitementRequiredMessage']}" id="constatFraisTraitement"
+                                     value="#{fileItemCctDetailController.inspectionReportData.inspectionFees}" />
+                        <p:message for="constatFraisTraitement" />
+                    </h:panelGroup>
+
+                    <h:outputLabel for="constatFraisAutres" value="#{bundle['ConstatFraisAutres']}" />
+                    <p:inputText id="constatFraisAutres" value="#{fileItemCctDetailController.inspectionReportData.otherSpecialFees}" />
+
+                </h:panelGrid>
+
+            </p:tab>
+
+            <p:tab titletip="#{bundle['ConstatInfraction']}" title="#{bundle['ConstatInfraction']}">
+
+                <h:panelGrid rendered="#{!fileItemCctDetailController.checkMinepdedMinistry}" columns="2">
+
+                    <h:outputLabel for="constatInfrationNature" value="#{bundle['ConstatInfractionInfraction']}" />
+
+                    <p:inputTextarea id="constatInfrationNature" title="#{bundle['ConstatObservation']}" value="#{fileItemCctDetailController.inspectionReportData.infraction}" />
+
+                </h:panelGrid>
+
+                <p:panelGrid rendered="#{fileItemCctDetailController.checkMinepdedMinistry}" columns="2">
+                    <h:outputLabel for="constatInfration" value="#{bundle['ConstatInfractionInfraction']}" />
+                    <h:panelGroup>
+                        <p:selectOneMenu id="constatInfration" value="#{fileItemCctDetailController.infraction}" panelStyle="width:180px"
+                                         style="width:160px">
+                            <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" itemValue="#{null}" />
+                            <f:selectItems value="#{fileItemCctDetailController.infractionList}" var="infraction"
+                                           itemLabel="#{facesContext.viewRoot.locale eq 'en' ? infraction.infractionDescEn : infraction.infractionDesc}"
+                                           itemValue="#{infraction.infractionDesc}" />
+                            <f:converter binding="#{infractionConverter}" />
+                        </p:selectOneMenu>
+                        <p:message for="constatInfration" />
+                    </h:panelGroup>
+                </p:panelGrid>
+
+            </p:tab>
+            <p:tab titletip="#{bundle['InspectionArticleReglemente']}" title="#{bundle['InspectionArticleReglemente']}">
+                <h:panelGrid columns="4" styleClass="table-decision">
+                    <h:outputLabel for="respectNorme" value="#{bundle['respectNorme']}" />
+                    <p:selectBooleanCheckbox id="respectNorme" value="#{fileItemCctDetailController.inspectionReportData.respectNorme}" />
+
+                    <h:outputLabel for="sourcePropagationPeste" value="#{bundle['sourcePropagationPeste']}" />
+                    <p:selectBooleanCheckbox id="sourcePropagationPeste" value="#{fileItemCctDetailController.inspectionReportData.sourcePropagationPeste}" />
+
+                    <h:outputLabel for="autocontrolDocument" value="#{bundle['autocontrolDocument']}" />
+                    <h:panelGroup>
+                        <p:inputText required="false" id="autocontrolDocument"
+                                     value="#{fileItemCctDetailController.inspectionReportData.autocontrolDocument}" />
+                        <p:message for="autocontrolDocument" />
+                    </h:panelGroup>
+                    <h:outputLabel for="autocontrolEquipement" value="#{bundle['autocontrolEquipement']}" />
+                    <h:panelGroup>
+                        <p:inputText required="false" id="autocontrolEquipement"
+                                     value="#{fileItemCctDetailController.inspectionReportData.autocontrolEquipement}" />
+                        <p:message for="autocontrolEquipement" />
+                    </h:panelGroup>
+                    <h:outputLabel for="processAnalyse" value="#{bundle['processAnalyse']}" />
+                    <h:panelGroup>
+                        <p:inputText required="false" id="processAnalyse"
+                                     value="#{fileItemCctDetailController.inspectionReportData.processAnalyse}" />
+                        <p:message for="processAnalyse" />
+                    </h:panelGroup>
+                    <h:outputLabel for="casque" value="#{bundle['casque']}" />
+                    <p:selectBooleanCheckbox id="casque" value="#{fileItemCctDetailController.inspectionReportData.casque}" />
+                    <h:outputLabel for="gants" value="#{bundle['gants']}" />
+                    <p:selectBooleanCheckbox id="gants" value="#{fileItemCctDetailController.inspectionReportData.gants}" />
+                    <h:outputLabel for="combinaison" value="#{bundle['combinaison']}" />
+                    <p:selectBooleanCheckbox id="combinaison" value="#{fileItemCctDetailController.inspectionReportData.combinaison}" />
+                    <h:outputLabel for="chaussureSecurite" value="#{bundle['chaussureSecurite']}" />
+                    <p:selectBooleanCheckbox id="chaussureSecurite" value="#{fileItemCctDetailController.inspectionReportData.chaussureSecurite}" />
+                    <h:outputLabel for="water" value="#{bundle['water']}" />
+                    <h:panelGroup>
+                        <p:inputText required="false" id="water"
+                                     value="#{fileItemCctDetailController.inspectionReportData.water}" />
+                        <p:message for="water" />
+                    </h:panelGroup>
+                    <h:outputLabel for="dechet" value="#{bundle['dechet']}" />
+                    <h:panelGroup>
+                        <p:inputText required="false" id="dechet"
+                                     value="#{fileItemCctDetailController.inspectionReportData.dechet}" />
+                        <p:message for="dechet" />
+                    </h:panelGroup>
+                    <h:outputLabel for="procedure" value="#{bundle['procedure']}" />
+                    <h:panelGroup>
+                        <p:inputText required="false" id="procedure"
+                                     value="#{fileItemCctDetailController.inspectionReportData.procedure}" />
+                        <p:message for="procedure" />
+                    </h:panelGroup>
+                </h:panelGrid>
+            </p:tab>
+            <!--<ui:include src="procesVerbalInspection.xhtml"/>-->
+            <p:tab titletip="#{bundle['procesVerbalInspection']}" title="#{bundle['procesVerbalInspection']}">
+                <h:panelGroup styleClass="table-decision">
+                    <h:panelGrid columns="3" styleClass="table-decision">
+                        <p:outputLabel for="produitUtilise" value="#{bundle['produitUtilise']}" />
+                        <p:inputText id="produitUtilise" required="true" requiredMessage="#{bundle['produitUtiliseRequis']}"
+                                     value="#{fileItemCctDetailController.inspectionReportData.produitUtilise}" />
+                        <p:message for="produitUtilise" />
+                    </h:panelGrid>
+                    <h:panelGrid columns="3" styleClass="table-decision">
+                        <p:outputLabel for="dosage" value="#{bundle['dosage']}" />
+                        <p:inputText id="dosage" required="true" requiredMessage="#{bundle['dosageRequis']}"
+                                     value="#{fileItemCctDetailController.inspectionReportData.dosage}" />
+                        <p:message for="dosage" />
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" styleClass="table-decision">
+                        <p:outputLabel for="typeTraitement" value="#{bundle['typeTraitement']}" />
+                        <p:selectOneRadio required="true" id="typeTraitement" value="#{fileItemCctDetailController.inspectionReportData.typeTraitement}">
+                            <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}"/>
+                        </p:selectOneRadio>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" styleClass="table-decision">
+                        <p:outputLabel for="typeTraitement" value="#{bundle['typeTraitement']}" />
+                        <p:selectOneRadio required="true" id="typeTraitement" value="#{fileItemCctDetailController.inspectionReportData.typeTraitement}">
+                            <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}"/>
+                        </p:selectOneRadio>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" styleClass="table-decision">
+                        <p:outputLabel for="lastTreatmentDateState" value="#{bundle['lastTreatmentDateState']}" />
+                        <p:selectOneRadio required="true" id="lastTreatmentDateState" value="#{fileItemCctDetailController.inspectionReportData.etatDateDernierTraitement}">
+                            <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}"/>
+                        </p:selectOneRadio>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" styleClass="table-decision">
+                        <p:outputLabel for="storageEnv" value="#{bundle['storageEnv']}" />
+                        <p:selectOneRadio required="true" id="storageEnv" value="#{fileItemCctDetailController.inspectionReportData.environnementStockage}">
+                            <f:selectItems value="#{fileItemCctDetailController.pivStorageEnvs}"/>
+                        </p:selectOneRadio>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" styleClass="table-decision">
+                        <p:outputLabel for="transportEnv" value="#{bundle['transportEnv']}" />
+                        <p:selectOneRadio required="true" id="transportEnv" value="#{fileItemCctDetailController.inspectionReportData.environnementTransport}">
+                            <f:selectItems value="#{fileItemCctDetailController.pivTransportEnvs}"/>
+                        </p:selectOneRadio>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" styleClass="table-decision">
+                        <p:outputLabel for="weatherCondition" value="#{bundle['weatherCondition']}" />
+                        <p:selectOneRadio required="true" id="weatherCondition" value="#{fileItemCctDetailController.inspectionReportData.conditionClimatique}">
+                            <f:selectItems value="#{fileItemCctDetailController.pivWeatherConditions}"/>
+                        </p:selectOneRadio>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" styleClass="table-decision">
+                        <p:outputLabel for="protectionMeasure" value="#{bundle['protectionMeasure']}" />
+                        <p:selectOneRadio required="true" id="protectionMeasure" value="#{fileItemCctDetailController.inspectionReportData.mesureProtection}">
+                            <f:selectItems value="#{fileItemCctDetailController.pivProtectionMeasures}"/>
+                        </p:selectOneRadio>
+                    </h:panelGrid>
+                    <h:panelGrid columns="3" styleClass="table-decision">
+                        <p:outputLabel for="observations" value="Observations" />
+                        <p:inputTextarea required="true" id="observations" value="#{fileItemCctDetailController.inspectionReportData.observations}"
+                                         autoResize="true" rows="5"/>
+                        <p:message for="observations" />
+                    </h:panelGrid>
+                </h:panelGroup>
+            </p:tab>
+        </p:tabView>
+    </p:scrollPanel>
 
 </ui:composition>

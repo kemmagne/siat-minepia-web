@@ -1,6 +1,3 @@
-/*
- *
- */
 package org.guce.siat.web.reports.exporter;
 
 import java.util.ArrayList;
@@ -65,7 +62,7 @@ public class CtCctExporter extends AbstractReportInvoker {
         final CtCctDataVo entryInspectionFindingDataVo = new CtCctDataVo();
         System.out.println("inspectionReport : " + inspectionReport);
         if ((inspectionReport != null)) {
-            final List<CtCctControllerDataVo> controllerDataVoList = new ArrayList<CtCctControllerDataVo>();
+            final List<CtCctControllerDataVo> controllerDataVoList = new ArrayList<>();
             //General Information
             if (StringUtils.isNotBlank(inspectionReport.getPlace())) {
                 entryInspectionFindingDataVo.setPlace(inspectionReport.getPlace());
@@ -252,6 +249,17 @@ public class CtCctExporter extends AbstractReportInvoker {
                 entryInspectionFindingDataVo.setDechet(inspectionReport.getDechet());
                 entryInspectionFindingDataVo.setProcedure(inspectionReport.getProcedure());
                 entryInspectionFindingDataVo.setProcessAnalyse(inspectionReport.getProcessAnalyse());
+                //
+                entryInspectionFindingDataVo.setSignatairePVIPhyto(controllerDataVoList.get(0).getName());
+                entryInspectionFindingDataVo.setTypeTraitement(inspectionReport.getTypeTraitement());
+                entryInspectionFindingDataVo.setEtatDateDernierTraitement(inspectionReport.getEtatDateDernierTraitement());
+                entryInspectionFindingDataVo.setProduitUtilise(inspectionReport.getProduitUtilise());
+                entryInspectionFindingDataVo.setDosage(inspectionReport.getDosage());
+                entryInspectionFindingDataVo.setEnvironnementStockage(inspectionReport.getEnvironnementStockage());
+                entryInspectionFindingDataVo.setEnvironnementTransport(inspectionReport.getEnvironnementTransport());
+                entryInspectionFindingDataVo.setConditionClimatique(inspectionReport.getConditionClimatique());
+                entryInspectionFindingDataVo.setMesureProtection(inspectionReport.getMesureProtection());
+                entryInspectionFindingDataVo.setObservations(inspectionReport.getObservations());
                 for (FileFieldValue fileFieldValue : inspectionReport.getFileItem().getFile().getFileFieldValueList()) {
                     if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("DESTINATAIRE_RAISONSOCIALE")) {
                         entryInspectionFindingDataVo.setRecipient(fileFieldValue.getValue());

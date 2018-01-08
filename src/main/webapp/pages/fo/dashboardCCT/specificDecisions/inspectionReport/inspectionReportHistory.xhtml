@@ -1,188 +1,243 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
 
-	<h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR}">
+    <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR}">
 
-		<p:tabView scrollable="true">
+        <p:tabView scrollable="true">
 
-			<p:tab title="#{bundle['ConstatGeneralInformation']}">
-				<h:panelGrid columns="2">
-					<h:outputLabel value="#{bundle['ConstatPlace']}" />
-					<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.place}" />
-					<h:outputLabel value="#{bundle['ConstatDate']}" />
-					<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.reportDate}" />
-					<h:outputLabel value="#{bundle['ConstatHour']}" />
-					<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.reportTime}" />
-				</h:panelGrid>
-			</p:tab>
+            <p:tab title="#{bundle['ConstatGeneralInformation']}">
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle['ConstatPlace']}" />
+                    <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.place}" />
+                    <h:outputLabel value="#{bundle['ConstatDate']}" />
+                    <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.reportDate}" />
+                    <h:outputLabel value="#{bundle['ConstatHour']}" />
+                    <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.reportTime}" />
+                </h:panelGrid>
+            </p:tab>
 
-			<p:tab title="#{bundle['ConstatEchantillons']}">
-				<h:panelGrid columns="2">
-					<h:outputLabel value="#{bundle['ConstatEchantillonsQte']}" />
-					<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.sample.takenQuantity}" />
-					<h:outputLabel value="#{bundle['ConstatEchantillonsNumCont']}" />
-					<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.sample.containerNumber}" />
-					<h:outputLabel value="#{bundle['ConstatEchantillonsNumLot']}" />
-					<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.sample.lotNumber}" />
-				</h:panelGrid>
-			</p:tab>
+            <p:tab title="#{bundle['ConstatEchantillons']}">
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle['ConstatEchantillonsQte']}" />
+                    <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.sample.takenQuantity}" />
+                    <h:outputLabel value="#{bundle['ConstatEchantillonsNumCont']}" />
+                    <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.sample.containerNumber}" />
+                    <h:outputLabel value="#{bundle['ConstatEchantillonsNumLot']}" />
+                    <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.sample.lotNumber}" />
+                </h:panelGrid>
+            </p:tab>
 
-			<p:tab title="#{bundle['ConstatControllers']}">
-				<p:dataTable widgetVar="controllersDTWdg" id="controllersDT" var="item"
-					value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.inspectionControllerList}">
-					<p:column headerText="#{bundle['ConstatControllersName']}">
-						<h:outputLabel value="#{item.name}" />
-					</p:column>
-					<p:column headerText="#{bundle['ConstatControllersPosition']}">
-						<h:outputLabel value="#{item.position}" />
-					</p:column>
-					<p:column headerText="#{bundle['ConstatControllersService']}">
-						<h:outputLabel value="#{item.service}" />
-					</p:column>
-				</p:dataTable>
-			</p:tab>
+            <p:tab title="#{bundle['ConstatControllers']}">
+                <p:dataTable widgetVar="controllersDTWdg" id="controllersDT" var="item"
+                             value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.inspectionControllerList}">
+                    <p:column headerText="#{bundle['ConstatControllersName']}">
+                        <h:outputLabel value="#{item.name}" />
+                    </p:column>
+                    <p:column headerText="#{bundle['ConstatControllersPosition']}">
+                        <h:outputLabel value="#{item.position}" />
+                    </p:column>
+                    <p:column headerText="#{bundle['ConstatControllersService']}">
+                        <h:outputLabel value="#{item.service}" />
+                    </p:column>
+                </p:dataTable>
+            </p:tab>
 
-			<p:tab title="#{bundle['ConstatEtiquetage']}">
-				<h:panelGrid columns="2">
-					<h:outputLabel value="#{bundle['ConstatEtiquetageLabel']}" />
-					<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.label}" />
-					<h:outputLabel value="#{bundle['ConstatEtiquetageNorme']}" />
-					<h:outputLabel
-						value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.standardCompliance ? bundle['ConstatEtiquetageNormeNumberYes']:bundle['ConstatEtiquetageNormeNumberNo']}" />
-					<h:outputLabel value="#{bundle['ConstatEtiquetageNormeNumber']}" />
-					<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.standardNumber}" />
-				</h:panelGrid>
-			</p:tab>
+            <p:tab title="#{bundle['ConstatEtiquetage']}">
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle['ConstatEtiquetageLabel']}" />
+                    <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.label}" />
+                    <h:outputLabel value="#{bundle['ConstatEtiquetageNorme']}" />
+                    <h:outputLabel
+                        value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.standardCompliance ? bundle['ConstatEtiquetageNormeNumberYes']:bundle['ConstatEtiquetageNormeNumberNo']}" />
+                    <h:outputLabel value="#{bundle['ConstatEtiquetageNormeNumber']}" />
+                    <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.standardNumber}" />
+                </h:panelGrid>
+            </p:tab>
 
-			<p:tab title="#{bundle['ConstatTemperature']}">
-				<h:panelGrid columns="2">
-					<h:outputLabel value="#{bundle['ConstatTemperatureValue']}" />
-					<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.temperature}" />
-					<h:outputLabel value="#{bundle['ConstatTemperatureAspect']}" />
-					<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.aspect}" />
-				</h:panelGrid>
-			</p:tab>
+            <p:tab title="#{bundle['ConstatTemperature']}">
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle['ConstatTemperatureValue']}" />
+                    <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.temperature}" />
+                    <h:outputLabel value="#{bundle['ConstatTemperatureAspect']}" />
+                    <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.aspect}" />
+                </h:panelGrid>
+            </p:tab>
 
-			<p:tab title="#{bundle['ConstatCertificats']}">
-				<h:panelGrid columns="2">
-					<h:outputLabel value="#{bundle['ConstatCertificatOrgine']}" />
-					<p:selectBooleanCheckbox disabled="true"
-						value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.originCertificate}" />
-					<h:outputLabel value="#{bundle['ConstatCertificatPhytosanitaireGeneral']}" />
-					<p:selectBooleanCheckbox disabled="true"
-						value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.phytoGeneralCertificate}" />
-					<h:outputLabel value="#{bundle['ConstatCertificatPhytosanitaireSpecial']}" />
-					<p:selectBooleanCheckbox disabled="true"
-						value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.phytoSpecialCertificate}" />
-					<h:outputLabel value="#{bundle['ConstatAttestationQualite']}" />
-					<p:selectBooleanCheckbox disabled="true"
-						value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.qualityAttestation}" />
-					<h:outputLabel value="#{bundle['ConstatCertificatSanitaireVeterinaire']}" />
-					<p:selectBooleanCheckbox disabled="true"
-						value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.sanitaryVetCertificate}" />
-					<h:outputLabel value="#{bundle['ConstatCertificatSalubrite']}" />
-					<p:selectBooleanCheckbox disabled="true"
-						value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.wholesomenessCertificate}" />
-					<h:outputLabel value="#{bundle['ConstatCertificatConfirmite']}" />
-					<p:selectBooleanCheckbox disabled="true"
-						value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.conformityCertificate}" />
-					<h:outputLabel value="#{bundle['ConstatAutreCertificatQualite']}" />
-					<p:selectBooleanCheckbox disabled="true"
-						value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.otherCertificate}" />
+            <p:tab title="#{bundle['ConstatCertificats']}">
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle['ConstatCertificatOrgine']}" />
+                    <p:selectBooleanCheckbox disabled="true"
+                                             value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.originCertificate}" />
+                    <h:outputLabel value="#{bundle['ConstatCertificatPhytosanitaireGeneral']}" />
+                    <p:selectBooleanCheckbox disabled="true"
+                                             value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.phytoGeneralCertificate}" />
+                    <h:outputLabel value="#{bundle['ConstatCertificatPhytosanitaireSpecial']}" />
+                    <p:selectBooleanCheckbox disabled="true"
+                                             value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.phytoSpecialCertificate}" />
+                    <h:outputLabel value="#{bundle['ConstatAttestationQualite']}" />
+                    <p:selectBooleanCheckbox disabled="true"
+                                             value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.qualityAttestation}" />
+                    <h:outputLabel value="#{bundle['ConstatCertificatSanitaireVeterinaire']}" />
+                    <p:selectBooleanCheckbox disabled="true"
+                                             value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.sanitaryVetCertificate}" />
+                    <h:outputLabel value="#{bundle['ConstatCertificatSalubrite']}" />
+                    <p:selectBooleanCheckbox disabled="true"
+                                             value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.wholesomenessCertificate}" />
+                    <h:outputLabel value="#{bundle['ConstatCertificatConfirmite']}" />
+                    <p:selectBooleanCheckbox disabled="true"
+                                             value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.conformityCertificate}" />
+                    <h:outputLabel value="#{bundle['ConstatAutreCertificatQualite']}" />
+                    <p:selectBooleanCheckbox disabled="true"
+                                             value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.otherCertificate}" />
 
-					<h:outputLabel value="#{bundle['ConstatAutreCertificatQualite']} : " />
-					<h:panelGroup>
-						<h:outputLabel
-							value="(#{facesContext.viewRoot.locale eq 'fr' ? fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.otherGoodness.labelFr:fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.otherGoodness.labelEn}) " />
-						<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.otherCertificate}" />
-					</h:panelGroup>
+                    <h:outputLabel value="#{bundle['ConstatAutreCertificatQualite']} : " />
+                    <h:panelGroup>
+                        <h:outputLabel
+                            value="(#{facesContext.viewRoot.locale eq 'fr' ? fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.otherGoodness.labelFr:fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.otherGoodness.labelEn}) " />
+                        <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.otherCertificate}" />
+                    </h:panelGroup>
 
-				</h:panelGrid>
-			</p:tab>
+                </h:panelGrid>
+            </p:tab>
 
-			<p:tab title="#{bundle['ConstatDecision']}">
-				<h:panelGrid columns="2">
-					<h:outputLabel for="constatDecision" value="#{bundle['ConstatDecision']}" />
-					<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.controllerDecision}" />
-				</h:panelGrid>
-			</p:tab>
+            <p:tab title="#{bundle['ConstatDecision']}">
+                <h:panelGrid columns="2">
+                    <h:outputLabel for="constatDecision" value="#{bundle['ConstatDecision']}" />
+                    <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.controllerDecision}" />
+                </h:panelGrid>
+            </p:tab>
 
-			<p:tab title="#{bundle['ConstatObservation']}">
-				<h:panelGrid columns="2">
-					<h:outputLabel for="constatObservation" value="#{bundle['ConstatObservation']}" />
-					<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.observation}" />
-				</h:panelGrid>
-			</p:tab>
+            <p:tab title="#{bundle['ConstatObservation']}">
+                <h:panelGrid columns="2">
+                    <h:outputLabel for="constatObservation" value="#{bundle['ConstatObservation']}" />
+                    <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.observation}" />
+                </h:panelGrid>
+            </p:tab>
 
-			<p:tab title="#{bundle['ConstatMotif']}">
-				<h:panelGrid columns="2">
-					<h:outputLabel for="constatMotif" value="#{bundle['ConstatMotif']}" />
-					<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.motif}" />
-				</h:panelGrid>
-			</p:tab>
+            <p:tab title="#{bundle['ConstatMotif']}">
+                <h:panelGrid columns="2">
+                    <h:outputLabel for="constatMotif" value="#{bundle['ConstatMotif']}" />
+                    <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.motif}" />
+                </h:panelGrid>
+            </p:tab>
 
-			<p:tab title="#{bundle['ConstatFrais']}">
-				<h:panelGrid columns="2">
-					<h:outputLabel value="#{bundle['ConstatFraisInspection']}" />
-					<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.inspectionFeesFCFA}" />
-					<h:outputLabel value="#{bundle['ConstatFraisTraitement']}" />
-					<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.inspectionFees}" />
-					<h:outputLabel value="#{bundle['ConstatFraisAutres']}" />
-					<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.otherSpecialFees}" />
-				</h:panelGrid>
-			</p:tab>
+            <p:tab title="#{bundle['ConstatFrais']}">
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle['ConstatFraisInspection']}" />
+                    <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.inspectionFeesFCFA}" />
+                    <h:outputLabel value="#{bundle['ConstatFraisTraitement']}" />
+                    <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.inspectionFees}" />
+                    <h:outputLabel value="#{bundle['ConstatFraisAutres']}" />
+                    <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.otherSpecialFees}" />
+                </h:panelGrid>
+            </p:tab>
 
-			<p:tab title="#{bundle['ConstatInfraction']}">
-				<h:panelGrid columns="2">
-					<h:outputLabel value="#{bundle['ConstatInfractionInfraction']}" />
-					<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.infraction}" />
-				</h:panelGrid>
-			</p:tab>
-			
-			<p:tab title="#{bundle['InspectionArticleReglemente']}" rendered="#{fileItemCctDetailController.checkMinaderMinistry}">
-				<h:panelGrid columns="2">
-					<h:outputLabel  value="#{bundle['respectNorme']} : " />
-					<p:selectBooleanCheckbox disabled="true"
-											 value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.respectNorme}" />
-					<h:outputLabel  value="#{bundle['sourcePropagationPeste']} : " />
-					<p:selectBooleanCheckbox disabled="true"
-						value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.sourcePropagationPeste}"/>
-					<h:outputLabel  value="#{bundle['autocontrolDocument']} : " />
-					<h:outputLabel  value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.autocontrolDocument}" />
-					<h:outputLabel  value="#{bundle['autocontrolEquipement']} : " />
-					<h:outputLabel  value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.autocontrolEquipement}" />
-					<h:outputLabel value="#{bundle['processAnalyse']} : " />
-					<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.processAnalyse}" /> 
-					<h:outputLabel  value="#{bundle['casque']} : " />
-					<p:selectBooleanCheckbox disabled="true"
-						value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.casque}"/>
-					<h:outputLabel  value="#{bundle['gants']} : " />
-					<p:selectBooleanCheckbox disabled="true"
-						value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.gants}"/>
-					<h:outputLabel value="#{bundle['combinaison']} : " />
-					<p:selectBooleanCheckbox disabled="true"
-						value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.combinaison}"/>
-					<h:outputLabel  value="#{bundle['chaussureSecurite']} : " />
-					<p:selectBooleanCheckbox disabled="true"
-						value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.chaussureSecurite}"/>
-					<h:outputLabel  value="#{bundle['water']}" />
-					<h:outputLabel  value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.water}" />
-					<h:outputLabel  value="#{bundle['dechet']}" />
-					<h:outputLabel  value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.dechet}" />
-					<h:outputLabel value="#{bundle['procedure']}" />
-					<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.procedure}" />
-				</h:panelGrid>
-			</p:tab>
-		</p:tabView>
+            <p:tab title="#{bundle['ConstatInfraction']}">
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle['ConstatInfractionInfraction']}" />
+                    <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.infraction}" />
+                </h:panelGrid>
+            </p:tab>
 
-		<div class="btn-bloc">
-			<p:splitButton ajax="false" actionListener="#{fileItemCctDetailController.generateCctReportConstatHistory}"
-				value="#{bundle['ConstatReportdownloadBtn']}">
-                <p:menuitem value="#{bundle['PVIPARdownloadBtn']}" ajax="false" rendered="#{fileItemCctDetailController.checkMinaderMinistry}"
-							actionListener="#{fileItemCctDetailController.generatePvInspArtReglementeHistory}">
-                </p:menuitem>
+            <p:tab title="#{bundle['InspectionArticleReglemente']}" rendered="#{fileItemCctDetailController.checkMinaderMinistry}">
+                <h:panelGrid columns="2">
+                    <h:outputLabel  value="#{bundle['respectNorme']} : " />
+                    <p:selectBooleanCheckbox disabled="true"
+                                             value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.respectNorme}" />
+                    <h:outputLabel  value="#{bundle['sourcePropagationPeste']} : " />
+                    <p:selectBooleanCheckbox disabled="true"
+                                             value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.sourcePropagationPeste}"/>
+                    <h:outputLabel  value="#{bundle['autocontrolDocument']} : " />
+                    <h:outputLabel  value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.autocontrolDocument}" />
+                    <h:outputLabel  value="#{bundle['autocontrolEquipement']} : " />
+                    <h:outputLabel  value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.autocontrolEquipement}" />
+                    <h:outputLabel value="#{bundle['processAnalyse']} : " />
+                    <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.processAnalyse}" />
+                    <h:outputLabel  value="#{bundle['casque']} : " />
+                    <p:selectBooleanCheckbox disabled="true"
+                                             value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.casque}"/>
+                    <h:outputLabel  value="#{bundle['gants']} : " />
+                    <p:selectBooleanCheckbox disabled="true"
+                                             value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.gants}"/>
+                    <h:outputLabel value="#{bundle['combinaison']} : " />
+                    <p:selectBooleanCheckbox disabled="true"
+                                             value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.combinaison}"/>
+                    <h:outputLabel  value="#{bundle['chaussureSecurite']} : " />
+                    <p:selectBooleanCheckbox disabled="true"
+                                             value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.chaussureSecurite}"/>
+                    <h:outputLabel  value="#{bundle['water']}" />
+                    <h:outputLabel  value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.water}" />
+                    <h:outputLabel  value="#{bundle['dechet']}" />
+                    <h:outputLabel  value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.dechet}" />
+                    <h:outputLabel value="#{bundle['procedure']}" />
+                    <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.procedure}" />
+                </h:panelGrid>
+            </p:tab>
+            <p:tab titletip="#{bundle['procesVerbalInspection']}" title="#{bundle['procesVerbalInspection']}">
+                <h:panelGroup styleClass="table-decision">
+                    <h:panelGrid columns="2" styleClass="table-decision">
+                        <p:outputLabel value="#{bundle['produitUtilise']}" />
+                        <p:outputLabel value="#{fileItemCctDetailController.inspectionReportData.produitUtilise}" />
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" styleClass="table-decision">
+                        <p:outputLabel value="#{bundle['dosage']}" />
+                        <p:outputLabel value="#{fileItemCctDetailController.inspectionReportData.dosage}" />
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" styleClass="table-decision">
+                        <p:outputLabel for="typeTraitement" value="#{bundle['typeTraitement']}" />
+                        <p:selectOneRadio disabled="true" id="typeTraitement" value="#{fileItemCctDetailController.inspectionReportData.typeTraitement}">
+                            <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}"/>
+                        </p:selectOneRadio>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" styleClass="table-decision">
+                        <p:outputLabel for="typeTraitement" value="#{bundle['typeTraitement']}" />
+                        <p:selectOneRadio disabled="true" id="typeTraitement" value="#{fileItemCctDetailController.inspectionReportData.typeTraitement}">
+                            <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}"/>
+                        </p:selectOneRadio>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" styleClass="table-decision">
+                        <p:outputLabel for="lastTreatmentDateState" value="#{bundle['lastTreatmentDateState']}" />
+                        <p:selectOneRadio disabled="true" id="lastTreatmentDateState" value="#{fileItemCctDetailController.inspectionReportData.etatDateDernierTraitement}">
+                            <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}"/>
+                        </p:selectOneRadio>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" styleClass="table-decision">
+                        <p:outputLabel for="storageEnv" value="#{bundle['storageEnv']}" />
+                        <p:selectOneRadio disabled="true" id="storageEnv" value="#{fileItemCctDetailController.inspectionReportData.environnementStockage}">
+                            <f:selectItems value="#{fileItemCctDetailController.pivStorageEnvs}"/>
+                        </p:selectOneRadio>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" styleClass="table-decision">
+                        <p:outputLabel for="transportEnv" value="#{bundle['transportEnv']}" />
+                        <p:selectOneRadio disabled="true" id="transportEnv" value="#{fileItemCctDetailController.inspectionReportData.environnementTransport}">
+                            <f:selectItems value="#{fileItemCctDetailController.pivTransportEnvs}"/>
+                        </p:selectOneRadio>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" styleClass="table-decision">
+                        <p:outputLabel for="weatherCondition" value="#{bundle['weatherCondition']}" />
+                        <p:selectOneRadio disabled="true" id="weatherCondition" value="#{fileItemCctDetailController.inspectionReportData.conditionClimatique}">
+                            <f:selectItems value="#{fileItemCctDetailController.pivWeatherConditions}"/>
+                        </p:selectOneRadio>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" styleClass="table-decision">
+                        <p:outputLabel for="protectionMeasure" value="#{bundle['protectionMeasure']}" />
+                        <p:selectOneRadio disabled="true" id="protectionMeasure" value="#{fileItemCctDetailController.inspectionReportData.mesureProtection}">
+                            <f:selectItems value="#{fileItemCctDetailController.pivProtectionMeasures}"/>
+                        </p:selectOneRadio>
+                    </h:panelGrid>
+                </h:panelGroup>
+            </p:tab>
+        </p:tabView>
+
+        <div class="btn-bloc">
+            <p:splitButton ajax="false" value="#{bundle['ConstatReportdownloadBtn']}"
+                           actionListener="#{fileItemCctDetailController.generateCctReportConstatHistory}">
+                <p:menuitem ajax="false" value="#{bundle['PVIPARdownloadBtn']}" rendered="#{fileItemCctDetailController.checkMinaderMinistry}"
+                            actionListener="#{fileItemCctDetailController.generatePvInspArtReglementeHistory}"></p:menuitem>
+                <p:menuitem ajax="false" value="#{bundle['PVIPhytodownloadBtn']}" rendered="#{fileItemCctDetailController.checkMinaderMinistry}"
+                            actionListener="#{fileItemCctDetailController.generatePvInspPhytoHistory}"></p:menuitem>
             </p:splitButton>
-		</div>
+        </div>
 
-	</h:panelGroup>
+    </h:panelGroup>
 </ui:composition>

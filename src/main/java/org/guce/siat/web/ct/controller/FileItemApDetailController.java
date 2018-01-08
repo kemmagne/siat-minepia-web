@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -127,7 +126,6 @@ import org.guce.siat.web.ct.controller.util.JsfUtil;
 import org.guce.siat.web.ct.controller.util.ReportGeneratorUtils;
 import org.guce.siat.web.ct.controller.util.enums.DataTypeEnnumeration;
 import org.guce.siat.web.ct.controller.util.enums.PersistenceActions;
-import org.guce.siat.web.reports.exporter.AbstractReportInvoker;
 import org.guce.siat.web.reports.exporter.CpMinepdedExporter;
 import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.message.Message;
@@ -2900,7 +2898,7 @@ public class FileItemApDetailController implements Serializable {
      * @return the streamed content
      */
     public StreamedContent downloadReport() {
-        final List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<FileTypeFlowReport>();
+        final List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<>();
 
         final Flow reportingFlow = flowService.findByToStep(selectedFileItem.getStep());
         final List<FileTypeFlowReport> fileTypeFlowReportsList = reportingFlow.getFileTypeFlowReportsList();
@@ -2919,15 +2917,11 @@ public class FileItemApDetailController implements Serializable {
             try {
                 final String nomClasse = fileTypeFlowReport.getReportClassName();
                 @SuppressWarnings("rawtypes")
-                Class classe;
-
-                classe = Class.forName(nomClasse);
-
-                @SuppressWarnings(
-                        {"rawtypes", "unchecked"})
-                final Constructor c1 = classe.getConstructor(File.class);
-
-                final byte[] report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile));
+                Class classe = Class.forName(nomClasse);
+                @SuppressWarnings({"rawtypes", "unchecked"})
+//                final Constructor c1 = classe.getConstructor(File.class);
+//                final byte[] report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile));
+                final byte[] report = ReportGeneratorUtils.generateReportBytes(fileFieldValueService, classe, currentFile);
                 final InputStream is = new ByteArrayInputStream(report);
                 final StreamedContent fileToDownload = new DefaultStreamedContent(is, "application/pdf",
                         currentFile.getReferenceSiat() + '_' + fileTypeFlowReport.getReportName());
@@ -4931,6 +4925,22 @@ public class FileItemApDetailController implements Serializable {
      */
     public void setInvoiceTotalTtcAmount(final Long invoiceTotalTtcAmount) {
         this.invoiceTotalTtcAmount = invoiceTotalTtcAmount;
+    }
+
+    public boolean isVtTypeSelectionViewable() {
+        return vtTypeSelectionViewable;
+    }
+
+    public FileField getVtTypeFileField() {
+        return vtTypeFileField;
+    }
+
+    public String getMinepdedVtType() {
+        return minepdedVtType;
+    }
+
+    public void setMinepdedVtType(String minepdedVtType) {
+        this.minepdedVtType = minepdedVtType;
     }
 
 }
