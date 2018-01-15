@@ -1,83 +1,85 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 
-	<p:dialog closeOnEscape="true" id="decisionDlg" widgetVar="decisionDialog" modal="true" resizable="true" appendTo="@(body)"
-		header="#{facesContext.viewRoot.locale eq 'en' ? fileItemCctDetailController.currentFileItem.redefinedLabelEn : fileItemCctDetailController.currentFileItem.redefinedLabelFr}"
-		height="auto" width="auto" position="top" dynamic="true">
+    <p:dialog closeOnEscape="true" id="decisionDlg" widgetVar="decisionDialog" modal="true" resizable="true" appendTo="@(body)"
+              header="#{facesContext.viewRoot.locale eq 'en' ? fileItemCctDetailController.currentFileItem.redefinedLabelEn : fileItemCctDetailController.currentFileItem.redefinedLabelFr}"
+              height="auto" width="auto" position="top" dynamic="true">
 
-		<ui:include src="../gr/systemDecision.xhtml" />
+        <ui:include src="../gr/systemDecision.xhtml" />
 
-		<h:form id="decisionForm" prependId="false" enctype="multipart/form-data">
+        <h:form id="decisionForm" prependId="false" enctype="multipart/form-data">
 
-			<p:messages id="messages" redisplay="true" for="checkArticle" />
-			<h:panelGroup id="acc" stylClass="decisionForm decisionDlg">
-				<p:scrollPanel mode="native">
+            <p:messages id="messages" redisplay="true" for="checkArticle" />
+            <h:panelGroup id="acc" stylClass="decisionForm decisionDlg">
+                <p:scrollPanel mode="native">
 
-					<h:panelGroup rendered="#{!fileItemCctDetailController.productsHaveSameRDDStatus}" styleClass="alert-drd-message">
-						<h:outputLabel value="#{bundle['rdd_check_alert_message']}" />
-						<br />
-						<br />
-					</h:panelGroup>
+                    <h:panelGroup rendered="#{!fileItemCctDetailController.productsHaveSameRDDStatus}" styleClass="alert-drd-message">
+                        <h:outputLabel value="#{bundle['rdd_check_alert_message']}" />
+                        <br />
+                        <br />
+                    </h:panelGroup>
 
-					<h:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight">
+                    <h:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight">
 
-						<h:outputLabel value="#{bundle['Flow_newDecision']} : " />
-						<h:panelGroup>
-							<p:selectOneMenu id="flow" value="#{fileItemCctDetailController.selectedFlow}" required="true"
-								requiredMessage="#{bundle['FlowRequiredMessage_possibleDecision']}">
-								<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-								<f:selectItems value="#{fileItemCctDetailController.flows}" var="flowItem" itemValue="#{flowItem}"
-									itemLabel="#{facesContext.viewRoot.locale eq 'en' ? flowItem.redefinedLabelEn : flowItem.redefinedLabelFr }" />
-								<f:converter binding="#{flowConverter}" />
-								<p:ajax event="change" listener="#{fileItemCctDetailController.changeDecisionHandler}" update="dataTypeRepeater :decisionForm" />
-							</p:selectOneMenu>
-							<p:message for="flow" />
-						</h:panelGroup>
-					</h:panelGrid>
+                        <h:outputLabel value="#{bundle['Flow_newDecision']} : " />
+                        <h:panelGroup>
+                            <p:selectOneMenu id="flow" value="#{fileItemCctDetailController.selectedFlow}" required="true"
+                                             requiredMessage="#{bundle['FlowRequiredMessage_possibleDecision']}">
+                                <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+                                <f:selectItems value="#{fileItemCctDetailController.flows}" var="flowItem" itemValue="#{flowItem}"
+                                               itemLabel="#{facesContext.viewRoot.locale eq 'en' ? flowItem.redefinedLabelEn : flowItem.redefinedLabelFr }" />
+                                <f:converter binding="#{flowConverter}" />
+                                <p:ajax event="change" listener="#{fileItemCctDetailController.changeDecisionHandler}" update="dataTypeRepeater :decisionForm" />
+                            </p:selectOneMenu>
+                            <p:message for="flow" />
+                        </h:panelGroup>
+                    </h:panelGrid>
 
-					<br />
+                    <br />
 
-					<h:panelGrid id="dataTypeRepeater" binding="#{fileItemCctDetailController.decisionDiv}" columns="2" />
+                    <h:panelGrid id="dataTypeRepeater" binding="#{fileItemCctDetailController.decisionDiv}" columns="2" />
 
-					<p:panel rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'APP'}">
-						<ui:include src="../specificDecisions/appointment/calendar.xhtml" />
-					</p:panel>
+                    <p:panel rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'APP'}">
+                        <ui:include src="../specificDecisions/appointment/calendar.xhtml" />
+                    </p:panel>
 
-					<p:panel rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'IR'}">
-						<ui:include src="../specificDecisions/inspectionReport/inspectionReport.xhtml" />
-					</p:panel>
+                    <p:panel rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'IR'}">
+                        <ui:include src="../specificDecisions/inspectionReport/inspectionReport.xhtml" />
+                    </p:panel>
 
-					<ui:include src="../specificDecisions/analyseRequest/analyseRequest.xhtml" />
+                    <ui:include src="../specificDecisions/analyseRequest/analyseRequest.xhtml" />
 
-					<ui:include src="../specificDecisions/analyseResult/analyseResult.xhtml" />
+                    <ui:include src="../specificDecisions/analyseResult/analyseResult.xhtml" />
 
-					<ui:include src="../specificDecisions/treatmentRequest/treatmentRequest.xhtml" />
+                    <ui:include src="../specificDecisions/treatmentRequest/treatmentRequest.xhtml" />
 
-					<ui:include src="../specificDecisions/treatmentResult/treatmentResult.xhtml" />
-					
-					<p:panel rendered="#{fileItemCctDetailController.isPayment}">
-						<ui:include src="../specificDecisions/paymentValidation/payment.xhtml" />
-					</p:panel>
-				</p:scrollPanel>
+                    <p:panel header="#{bundle['TreatmentResultHeader']}" rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'TRR' and checkMinaderMinistry}">
+                        <ui:include src="../specificDecisions/treatmentResult/treatmentResult.xhtml" />
+                    </p:panel>
+
+                    <p:panel rendered="#{fileItemCctDetailController.isPayment}">
+                        <ui:include src="../specificDecisions/paymentValidation/payment.xhtml" />
+                    </p:panel>
+                </p:scrollPanel>
 
 
 
-				<div class="btn-bloc">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"
-						actionListener="#{fileItemCctDetailController.saveDecision}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
-						update=":productInformationForm :productInformationForm dataTypeRepeater acc :decisionForm" ajax="true"
-						oncomplete="handleSubmit(xhr,status,args,decisionDlg,'datalistTable');" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" value="#{bundle['Cancel']}"
-						styleClass="ui-priority-primary" onclick="PF('decisionDialog').hide();" immediate="true" />
-				</div>
+                <div class="btn-bloc">
+                    <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"
+                                     actionListener="#{fileItemCctDetailController.saveDecision}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+                                     update=":productInformationForm :productInformationForm dataTypeRepeater acc :decisionForm" ajax="true"
+                                     oncomplete="handleSubmit(xhr,status,args,decisionDlg,'datalistTable');" />
+                    <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" value="#{bundle['Cancel']}"
+                                     styleClass="ui-priority-primary" onclick="PF('decisionDialog').hide();" immediate="true" />
+                </div>
 
-			</h:panelGroup>
-		</h:form>
+            </h:panelGroup>
+        </h:form>
 
-	</p:dialog>
+    </p:dialog>
 
-	<ui:include src="../specificDecisions/appointment/calendarDialog.xhtml" />
+    <ui:include src="../specificDecisions/appointment/calendarDialog.xhtml" />
 
-	<ui:include src="../specificDecisions/inspectionReport/controllersList.xhtml" />
+    <ui:include src="../specificDecisions/inspectionReport/controllersList.xhtml" />
 
 </ui:composition>

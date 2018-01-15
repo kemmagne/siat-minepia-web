@@ -1,13 +1,14 @@
 package org.guce.siat.web.ct.controller.util.enums;
 
 /**
- * The Enum LocaleValues.
+ *
+ * @author tadzotsa
  */
-public enum PVIStorageEnv {
+public enum TRConditioning {
 
+    CONTENEUR("conteneur"),
     AIR_LIBRE("airLibre"),
-    MAGASIN("magasin"),
-    CONTENEUR("conteneur");
+    SOUS_BACHE("SousBache");
 
     /**
      * The label.
@@ -19,7 +20,7 @@ public enum PVIStorageEnv {
      *
      * @param code the code
      */
-    private PVIStorageEnv(final String label) {
+    private TRConditioning(final String label) {
         this.label = label.intern();
     }
 

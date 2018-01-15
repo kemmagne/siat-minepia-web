@@ -32,7 +32,7 @@ public class CtCctExporter extends AbstractReportInvoker {
     /**
      * The inspection report.
      */
-    private InspectionReport inspectionReport;
+    private final InspectionReport inspectionReport;
     protected static final String LOCAL_BUNDLE_NAME = "org.guce.siat.messages.locale";
     private static final String CONSTAT_BUNDLE_TRUE = "constatBundleTrue";
     private static final String CONSTAT_BUNDLE_FALSE = "constatBundleFalse";

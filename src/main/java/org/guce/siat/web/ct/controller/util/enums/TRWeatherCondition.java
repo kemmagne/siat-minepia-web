@@ -3,11 +3,10 @@ package org.guce.siat.web.ct.controller.util.enums;
 /**
  * The Enum LocaleValues.
  */
-public enum PVIStorageEnv {
+public enum TRWeatherCondition {
 
-    AIR_LIBRE("airLibre"),
-    MAGASIN("magasin"),
-    CONTENEUR("conteneur");
+    SAISON_SECHE("saisonSeche"),
+    SAISON_PLUVIEUSE("saisonPluvieuse");
 
     /**
      * The label.
@@ -19,7 +18,7 @@ public enum PVIStorageEnv {
      *
      * @param code the code
      */
-    private PVIStorageEnv(final String label) {
+    private TRWeatherCondition(final String label) {
         this.label = label.intern();
     }
 
@@ -31,5 +30,4 @@ public enum PVIStorageEnv {
     public String getLabel() {
         return this.label;
     }
-
 }

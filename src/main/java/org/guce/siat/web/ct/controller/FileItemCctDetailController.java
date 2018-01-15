@@ -166,6 +166,7 @@ import org.guce.siat.web.common.ControllerConstants;
 import org.guce.siat.web.common.util.CctSpecificDecision;
 import org.guce.siat.web.common.util.CctSpecificDecisionHistory;
 import org.guce.siat.web.common.util.UploadFileManager;
+import org.guce.siat.web.ct.controller.util.CustumMap;
 import org.guce.siat.web.ct.controller.util.FileItemCheck;
 import org.guce.siat.web.ct.controller.util.InspectionReportData;
 import org.guce.siat.web.ct.controller.util.InspectionReportEtiquetageVo;
@@ -180,6 +181,12 @@ import org.guce.siat.web.ct.controller.util.enums.PVITransportEnv;
 import org.guce.siat.web.ct.controller.util.enums.PVITreatmentType;
 import org.guce.siat.web.ct.controller.util.enums.PVIWeatherConditions;
 import org.guce.siat.web.ct.controller.util.enums.PersistenceActions;
+import org.guce.siat.web.ct.controller.util.enums.TRConditioning;
+import org.guce.siat.web.ct.controller.util.enums.TRProductUsed;
+import org.guce.siat.web.ct.controller.util.enums.TRProtectionEquipement;
+import org.guce.siat.web.ct.controller.util.enums.TRTreatmentEnvironment;
+import org.guce.siat.web.ct.controller.util.enums.TRStoragePlace;
+import org.guce.siat.web.ct.controller.util.enums.TRWeatherCondition;
 import org.guce.siat.web.ct.data.AnalyseTypeDto;
 import org.guce.siat.web.ct.data.TreatmentTypeDto;
 import org.guce.siat.web.gr.controller.RiskController;
@@ -187,6 +194,7 @@ import org.guce.siat.web.gr.util.GrUtilsWeb;
 import org.guce.siat.web.gr.util.ScenarioType;
 import org.guce.siat.web.reports.exporter.AbstractReportInvoker;
 import org.guce.siat.web.reports.exporter.CtCctExporter;
+import org.guce.siat.web.reports.exporter.CtCctTreatmentExporter;
 import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.message.Message;
 import org.primefaces.context.RequestContext;
@@ -1065,7 +1073,7 @@ public class FileItemCctDetailController implements Serializable {
 
         checkGenerateReportAllowed();
 
-        tabList = new ArrayList<Tab>();
+        tabList = new ArrayList<>();
         tabIndexList = concatenateActiveIndexString(tabList);
 
         authoritiesList = new DualListModel<Authority>(new ArrayList<Authority>(), new ArrayList<Authority>());
@@ -1537,7 +1545,7 @@ public class FileItemCctDetailController implements Serializable {
             // IF THE FILEITEMS HAS THE SAME STEPCODE
             if (decisionByFile && errorDecisionByFile) {
                 decisionByFileAllowed = Boolean.TRUE;
-                final List<FileItemCheck> fileItemChecks = new ArrayList<FileItemCheck>();
+                final List<FileItemCheck> fileItemChecks = new ArrayList<>();
                 for (final FileItem fileItem : productInfoItems) {
                     final FileItemCheck fileItemCheck = new FileItemCheck(fileItem, false, false, false);
                     fileItemChecks.add(fileItemCheck);
@@ -1663,7 +1671,7 @@ public class FileItemCctDetailController implements Serializable {
             infractionList = infractionService.findAll();
             specificDecision = CctSpecificDecision.IR;
             controllerForInspectionReport = null;
-            inspectionControllers = new ArrayList<InspectionController>();
+            inspectionControllers = new ArrayList<>();
             final String dataTableId = ComponentUtils.findComponentClientId("controllersDT");
             RequestContext.getCurrentInstance().update(dataTableId);
             inspectionReportData = new InspectionReportData();
@@ -1725,9 +1733,9 @@ public class FileItemCctDetailController implements Serializable {
                 final AnalyseOrder lastAnalyseOrder = analyseOrderService.findByItemFlow(lastDecisions);
                 analyseResult = new AnalyseResult();
                 analyseResult.setAnalyseOrder(lastAnalyseOrder);
-                analysesFileManagers = new ArrayList<UploadFileManager<AnalysePart>>();
+                analysesFileManagers = new ArrayList<>();
                 for (final AnalysePart analysePart : lastAnalyseOrder.getAnalysePartsList()) {
-                    final UploadFileManager<AnalysePart> fileManager = new UploadFileManager<AnalysePart>();
+                    final UploadFileManager<AnalysePart> fileManager = new UploadFileManager<>();
                     fileManager.setPart(analysePart);
                     analysesFileManagers.add(fileManager);
                 }
@@ -1743,9 +1751,9 @@ public class FileItemCctDetailController implements Serializable {
                 final TreatmentOrder lastTreatmentOrder = treatmentOrderService.findTreatmentOrderByItemFlow(lastDecisions);
                 treatmentResult = new TreatmentResult();
                 treatmentResult.setTreatmentOrder(lastTreatmentOrder);
-                treatmentFileManagers = new ArrayList<UploadFileManager<TreatmentPart>>();
+                treatmentFileManagers = new ArrayList<>();
                 for (final TreatmentPart tratmentPart : lastTreatmentOrder.getTreatmentPartsList()) {
-                    final UploadFileManager<TreatmentPart> fileManager = new UploadFileManager<TreatmentPart>();
+                    final UploadFileManager<TreatmentPart> fileManager = new UploadFileManager<>();
                     fileManager.setPart(tratmentPart);
                     treatmentFileManagers.add(fileManager);
                 }
@@ -1950,7 +1958,7 @@ public class FileItemCctDetailController implements Serializable {
      * @param partsList the parts list
      */
     private void downloadAttachment(final List<? extends Object> partsList) {
-        reportMap = new HashMap<Long, StreamedContent>();
+        reportMap = new HashMap<>();
         Session sessionCmisClient = null;
         try {
             sessionCmisClient = CmisSession.getInstance();
@@ -1959,7 +1967,7 @@ public class FileItemCctDetailController implements Serializable {
             try {
                 final String senderMail = mailService.getReplyToValue();
                 final String templateFileName = CMIS_CONNEXION_ERROR;
-                final Map<String, String> map = new HashMap<String, String>();
+                final Map<String, String> map = new HashMap<>();
                 map.put(MailConstants.SUBJECT, "[SIAT-CT] : Connexion Cmis échoué");
                 map.put(MailConstants.FROM, mailService.getFromValue());
                 map.put(MailConstants.EMAIL, senderMail);
@@ -1969,7 +1977,7 @@ public class FileItemCctDetailController implements Serializable {
             } catch (Exception ex) {
                 LOG.error(ex.getMessage(), ex);
             } finally {
-                return;
+                //return;
             }
         }
 
@@ -2003,7 +2011,7 @@ public class FileItemCctDetailController implements Serializable {
      * Load product history list.
      */
     private void loadProductHistoryList() {
-        itemFlowHistoryDtoList = new ArrayList<ItemFlowDto>();
+        itemFlowHistoryDtoList = new ArrayList<>();
         final List<ItemFlow> itemFlowHistoryList = itemFlowService.findItemFlowByFileItem(selectedFileItemCheck.getFileItem());
         if (CollectionUtils.isNotEmpty(itemFlowHistoryList)) {
             for (int i = 0; i < itemFlowHistoryList.size(); i++) {
@@ -2137,6 +2145,14 @@ public class FileItemCctDetailController implements Serializable {
         JsfUtil.generateReport(new CtCctExporter("PV_INSPECTION_PHYTOSANITAIRE", "PV_INSPECTION_PHYTOSANITAIRE", specificDecisionsHistory.getLastDecisionIR()));
     }
 
+    public void generateAttestationOfTreat() {
+        JsfUtil.generateReport(new CtCctTreatmentExporter(currentFile, "ATTESTATION_TRAITEMENT_PHYTO", treatmentResult));
+    }
+
+    public void generateSheetOfTreatmentSup() {
+        JsfUtil.generateReport(new CtCctTreatmentExporter(currentFile, "FICHE_SUPERVISION_TRAIT_PHYTO", treatmentResult));
+    }
+
     /**
      * Save decision.
      *
@@ -2177,7 +2193,7 @@ public class FileItemCctDetailController implements Serializable {
                         ControllerConstants.Bundle.Messages.CHECK_PRODUCTS_DECISION_MSG);
             } // Demande de Traitement
             else if (FlowCode.FL_CT_64.name().equals(selectedFlow.getCode()) && chckedListSize == Constants.ONE) {
-                treatmentPartsList = new ArrayList<TreatmentPart>();
+                treatmentPartsList = new ArrayList<>();
                 treatmentOrder.setTreatmentCompany(selectedTreatmentCompany);
                 treatmentOrder.setDate(java.util.Calendar.getInstance().getTime());
 
@@ -2352,7 +2368,7 @@ public class FileItemCctDetailController implements Serializable {
                 // Recuperate the values of DataType (Observation text area ...)
                 List<ItemFlowData> flowDatas = null;
 
-                flowDatas = new ArrayList<ItemFlowData>();
+                flowDatas = new ArrayList<>();
                 for (final DataType dataType : selectedFlow.getDataTypeList()) {
                     final ItemFlowData itemFlowData = new ItemFlowData();
                     itemFlowData.setDataType(dataType);
@@ -2773,13 +2789,16 @@ public class FileItemCctDetailController implements Serializable {
                                                     if (getCurrentOrganism().getId() == 3) {
                                                         final FileFieldValue typeDemande = fileService.findFileFieldValueByFieldCode(
                                                                 currentFile, "TYPE_DEMANDE");
-                                                        if (typeDemande.getValue().equals("IMPORT")
+                                                        if (isCheckMinaderMinistry()
+                                                                && "CERTIFICAT_PHYTOSANITAIRE.pdf".equals(fileTypeFlowReport.getReportName())) {
+                                                            fileTypeFlowReports.add(fileTypeFlowReport);
+                                                            break;
+                                                        } else if (typeDemande.getValue().equals("IMPORT")
                                                                 || FileTypeCode.CCT_CT.equals(currentFile.getFileType().getCode())) {
                                                             if ("CT_CCT_CP_I.pdf".equals(fileTypeFlowReport.getReportName())) {
                                                                 fileTypeFlowReports.add(fileTypeFlowReport);
                                                                 break;
                                                             }
-
                                                         } else if (typeDemande.getValue().equals("EXPORT")
                                                                 || FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode())) {
                                                             if ("CT_CCT_CP_E.pdf".equals(fileTypeFlowReport.getReportName())) {
@@ -2819,9 +2838,15 @@ public class FileItemCctDetailController implements Serializable {
                                         @SuppressWarnings("rawtypes")
                                         final Class classe = Class.forName(nomClasse);
                                         @SuppressWarnings({"rawtypes", "unchecked"})
-                                        final Constructor c1 = classe.getConstructor(File.class);
-
-                                        final byte[] report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile));
+                                        Constructor c1;
+                                        byte[] report;
+                                        if (!isCheckMinaderMinistry()) {
+                                            c1 = classe.getConstructor(File.class);
+                                            report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile));
+                                        } else {
+                                            c1 = classe.getConstructor(File.class, String.class, String.class);
+                                            report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile, "CERTIFICAT_PHYTOSANITAIRE", "CERTIFICAT_PHYTOSANITAIRE.pdf"));
+                                        }
                                         attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
 
                                         /**
@@ -2831,12 +2856,9 @@ public class FileItemCctDetailController implements Serializable {
                                                 applicationPropretiesService.getAttachementFolder() + "%s%s", java.io.File.separator,
                                                 fileTypeFlowReport.getReportName()));
 
-                                        final FileOutputStream fileOuputStream = new FileOutputStream(targetAttachment);
-                                        fileOuputStream.write(report);
-                                        fileOuputStream.close();
-                                        /**
-                                         *
-                                         */
+                                        try (FileOutputStream fileOuputStream = new FileOutputStream(targetAttachment)) {
+                                            fileOuputStream.write(report);
+                                        }
 
                                         //Update report sequence
                                         reportOrganism.setSequence(reportOrganism.getSequence() + 1);
@@ -6329,52 +6351,100 @@ public class FileItemCctDetailController implements Serializable {
         this.invoiceOtherAmount = invoiceOtherAmount;
     }
 
-    public Map<String, String> getPivTreatmentTypes() {
-        Map<String, String> treatmentTypes = new HashMap<>();
+    public List<CustumMap> getPivTreatmentTypes() {
+        List<CustumMap> treatmentTypes = new ArrayList<>();
         for (PVITreatmentType treatmentType : PVITreatmentType.values()) {
-            treatmentTypes.put(treatmentType.name(), treatmentType.getLabel());
+            treatmentTypes.add(new CustumMap(treatmentType.name(), treatmentType.getLabel()));
         }
         return treatmentTypes;
     }
 
-    public Map<String, String> getPivLastTreatmentDateStates() {
-        Map<String, String> lastTreatmentDateStates = new HashMap<>();
+    public List<CustumMap> getPivLastTreatmentDateStates() {
+        List<CustumMap> lastTreatmentDateStates = new ArrayList<>();
         for (PVILastTreatmentDateState lastTreatmentDateState : PVILastTreatmentDateState.values()) {
-            lastTreatmentDateStates.put(lastTreatmentDateState.name(), lastTreatmentDateState.getLabel());
+            lastTreatmentDateStates.add(new CustumMap(lastTreatmentDateState.name(), lastTreatmentDateState.getLabel()));
         }
         return lastTreatmentDateStates;
     }
 
-    public Map<String, String> getPivStorageEnvs() {
-        Map<String, String> storageEnvs = new HashMap<>();
+    public List<CustumMap> getPivStorageEnvs() {
+        List<CustumMap> storageEnvs = new ArrayList<>();
         for (PVIStorageEnv storageEnv : PVIStorageEnv.values()) {
-            storageEnvs.put(storageEnv.name(), storageEnv.getLabel());
+            storageEnvs.add(new CustumMap(storageEnv.name(), storageEnv.getLabel()));
         }
         return storageEnvs;
     }
 
-    public Map<String, String> getPivTransportEnvs() {
-        Map<String, String> transportEnvs = new HashMap<>();
+    public List<CustumMap> getPivTransportEnvs() {
+        List<CustumMap> transportEnvs = new ArrayList<>();
         for (PVITransportEnv transportEnv : PVITransportEnv.values()) {
-            transportEnvs.put(transportEnv.name(), transportEnv.getLabel());
+            transportEnvs.add(new CustumMap(transportEnv.name(), transportEnv.getLabel()));
         }
         return transportEnvs;
     }
 
-    public Map<String, String> getPivWeatherConditions() {
-        Map<String, String> weatherConditions = new HashMap<>();
+    public List<CustumMap> getPivWeatherConditions() {
+        List<CustumMap> weatherConditions = new ArrayList<>();
         for (PVIWeatherConditions weatherCondition : PVIWeatherConditions.values()) {
-            weatherConditions.put(weatherCondition.name(), weatherCondition.getLabel());
+            weatherConditions.add(new CustumMap(weatherCondition.name(), weatherCondition.getLabel()));
         }
         return weatherConditions;
     }
 
-    public Map<String, String> getPivProtectionMeasures() {
-        Map<String, String> protectionMeasures = new HashMap<>();
+    public List<CustumMap> getPivProtectionMeasures() {
+        List<CustumMap> protectionMeasures = new ArrayList<>();
         for (PVIProtectionMeasures protectionMeasure : PVIProtectionMeasures.values()) {
-            protectionMeasures.put(protectionMeasure.name(), protectionMeasure.getLabel());
+            protectionMeasures.add(new CustumMap(protectionMeasure.name(), protectionMeasure.getLabel()));
         }
         return protectionMeasures;
+    }
+
+    public List<CustumMap> getTrProductsUsed() {
+        List<CustumMap> productsUsed = new ArrayList<>();
+        for (TRProductUsed productUsed : TRProductUsed.values()) {
+            productsUsed.add(new CustumMap(productUsed.name(), productUsed.getLabel()));
+        }
+        return productsUsed;
+    }
+
+    public List<CustumMap> getTrTreatmentEnvironments() {
+        List<CustumMap> productsUsed = new ArrayList<>();
+        for (TRTreatmentEnvironment te : TRTreatmentEnvironment.values()) {
+            productsUsed.add(new CustumMap(te.name(), te.getLabel()));
+        }
+        return productsUsed;
+    }
+
+    public List<CustumMap> getTrStoragePlaces() {
+        List<CustumMap> productsUsed = new ArrayList<>();
+        for (TRStoragePlace storagePlace : TRStoragePlace.values()) {
+            productsUsed.add(new CustumMap(storagePlace.name(), storagePlace.getLabel()));
+        }
+        return productsUsed;
+    }
+
+    public List<CustumMap> getTrConditionings() {
+        List<CustumMap> conditionings = new ArrayList<>();
+        for (TRConditioning conditioning : TRConditioning.values()) {
+            conditionings.add(new CustumMap(conditioning.name(), conditioning.getLabel()));
+        }
+        return conditionings;
+    }
+
+    public List<CustumMap> getTrProtectionEquipments() {
+        List<CustumMap> protectionEquipments = new ArrayList<>();
+        for (TRProtectionEquipement pe : TRProtectionEquipement.values()) {
+            protectionEquipments.add(new CustumMap(pe.name(), pe.getLabel()));
+        }
+        return protectionEquipments;
+    }
+
+    public List<CustumMap> getTrWeatherConditions() {
+        List<CustumMap> weatherConditions = new ArrayList<>();
+        for (TRWeatherCondition wc : TRWeatherCondition.values()) {
+            weatherConditions.add(new CustumMap(wc.name(), wc.getLabel()));
+        }
+        return weatherConditions;
     }
 
 }

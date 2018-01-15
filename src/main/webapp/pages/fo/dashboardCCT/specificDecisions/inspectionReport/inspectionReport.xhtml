@@ -371,61 +371,55 @@
                 <h:panelGroup styleClass="table-decision">
                     <h:panelGrid columns="3" styleClass="table-decision">
                         <p:outputLabel for="produitUtilise" value="#{bundle['produitUtilise']}" />
-                        <p:inputText id="produitUtilise" required="true" requiredMessage="#{bundle['produitUtiliseRequis']}"
+                        <p:inputText id="produitUtilise" requiredMessage="#{bundle['produitUtiliseRequis']}"
                                      value="#{fileItemCctDetailController.inspectionReportData.produitUtilise}" />
                         <p:message for="produitUtilise" />
                     </h:panelGrid>
                     <h:panelGrid columns="3" styleClass="table-decision">
                         <p:outputLabel for="dosage" value="#{bundle['dosage']}" />
-                        <p:inputText id="dosage" required="true" requiredMessage="#{bundle['dosageRequis']}"
+                        <p:inputText id="dosage" requiredMessage="#{bundle['dosageRequis']}"
                                      value="#{fileItemCctDetailController.inspectionReportData.dosage}" />
                         <p:message for="dosage" />
                     </h:panelGrid>
                     <h:panelGrid columns="2" styleClass="table-decision">
                         <p:outputLabel for="typeTraitement" value="#{bundle['typeTraitement']}" />
-                        <p:selectOneRadio required="true" id="typeTraitement" value="#{fileItemCctDetailController.inspectionReportData.typeTraitement}">
-                            <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}"/>
-                        </p:selectOneRadio>
-                    </h:panelGrid>
-                    <h:panelGrid columns="2" styleClass="table-decision">
-                        <p:outputLabel for="typeTraitement" value="#{bundle['typeTraitement']}" />
-                        <p:selectOneRadio required="true" id="typeTraitement" value="#{fileItemCctDetailController.inspectionReportData.typeTraitement}">
-                            <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}"/>
-                        </p:selectOneRadio>
+                        <p:selectOneMenu id="typeTraitement" value="#{fileItemCctDetailController.inspectionReportData.typeTraitement}">
+                            <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}" var="tt" itemLabel="#{bundle[tt.label]}" itemValue="#{tt.value}"/>
+                        </p:selectOneMenu>
                     </h:panelGrid>
                     <h:panelGrid columns="2" styleClass="table-decision">
                         <p:outputLabel for="lastTreatmentDateState" value="#{bundle['lastTreatmentDateState']}" />
-                        <p:selectOneRadio required="true" id="lastTreatmentDateState" value="#{fileItemCctDetailController.inspectionReportData.etatDateDernierTraitement}">
-                            <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}"/>
-                        </p:selectOneRadio>
+                        <p:selectOneMenu id="lastTreatmentDateState" value="#{fileItemCctDetailController.inspectionReportData.etatDateDernierTraitement}">
+                            <f:selectItems value="#{fileItemCctDetailController.pivLastTreatmentDateStates}" var="ltds" itemLabel="#{bundle[ltds.label]}" itemValue="#{ltds.value}"/>
+                        </p:selectOneMenu>
                     </h:panelGrid>
                     <h:panelGrid columns="2" styleClass="table-decision">
                         <p:outputLabel for="storageEnv" value="#{bundle['storageEnv']}" />
-                        <p:selectOneRadio required="true" id="storageEnv" value="#{fileItemCctDetailController.inspectionReportData.environnementStockage}">
-                            <f:selectItems value="#{fileItemCctDetailController.pivStorageEnvs}"/>
-                        </p:selectOneRadio>
+                        <p:selectOneMenu id="storageEnv" value="#{fileItemCctDetailController.inspectionReportData.environnementStockage}">
+                            <f:selectItems value="#{fileItemCctDetailController.pivStorageEnvs}" var="se" itemLabel="#{bundle[se.label]}" itemValue="#{se.value}"/>
+                        </p:selectOneMenu>
                     </h:panelGrid>
                     <h:panelGrid columns="2" styleClass="table-decision">
                         <p:outputLabel for="transportEnv" value="#{bundle['transportEnv']}" />
-                        <p:selectOneRadio required="true" id="transportEnv" value="#{fileItemCctDetailController.inspectionReportData.environnementTransport}">
-                            <f:selectItems value="#{fileItemCctDetailController.pivTransportEnvs}"/>
-                        </p:selectOneRadio>
+                        <p:selectOneMenu id="transportEnv" value="#{fileItemCctDetailController.inspectionReportData.environnementTransport}">
+                            <f:selectItems value="#{fileItemCctDetailController.pivTransportEnvs}" var="te" itemLabel="#{bundle[te.label]}" itemValue="#{te.value}"/>
+                        </p:selectOneMenu>
                     </h:panelGrid>
                     <h:panelGrid columns="2" styleClass="table-decision">
                         <p:outputLabel for="weatherCondition" value="#{bundle['weatherCondition']}" />
-                        <p:selectOneRadio required="true" id="weatherCondition" value="#{fileItemCctDetailController.inspectionReportData.conditionClimatique}">
-                            <f:selectItems value="#{fileItemCctDetailController.pivWeatherConditions}"/>
-                        </p:selectOneRadio>
+                        <p:selectOneMenu id="weatherCondition" value="#{fileItemCctDetailController.inspectionReportData.conditionClimatique}">
+                            <f:selectItems value="#{fileItemCctDetailController.pivWeatherConditions}" var="wc" itemLabel="#{bundle[wc.label]}" itemValue="#{wc.value}"/>
+                        </p:selectOneMenu>
                     </h:panelGrid>
                     <h:panelGrid columns="2" styleClass="table-decision">
                         <p:outputLabel for="protectionMeasure" value="#{bundle['protectionMeasure']}" />
-                        <p:selectOneRadio required="true" id="protectionMeasure" value="#{fileItemCctDetailController.inspectionReportData.mesureProtection}">
-                            <f:selectItems value="#{fileItemCctDetailController.pivProtectionMeasures}"/>
-                        </p:selectOneRadio>
+                        <p:selectOneMenu id="protectionMeasure" value="#{fileItemCctDetailController.inspectionReportData.mesureProtection}">
+                            <f:selectItems value="#{fileItemCctDetailController.pivProtectionMeasures}" var="pm" itemLabel="#{bundle[pm.label]}" itemValue="#{pm.value}"/>
+                        </p:selectOneMenu>
                     </h:panelGrid>
                     <h:panelGrid columns="3" styleClass="table-decision">
                         <p:outputLabel for="observations" value="Observations" />
-                        <p:inputTextarea required="true" id="observations" value="#{fileItemCctDetailController.inspectionReportData.observations}"
+                        <p:inputTextarea id="observations" value="#{fileItemCctDetailController.inspectionReportData.observations}"
                                          autoResize="true" rows="5"/>
                         <p:message for="observations" />
                     </h:panelGrid>
