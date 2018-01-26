@@ -156,10 +156,10 @@
 
         <div class="btn-bloc">
             <p:commandButton ajax="false" value="#{bundle['TreatAttestBtn']}"
-                             actionListener="#{fileItemCctDetailController.generateAttestationOfTreat}"
+                             actionListener="#{fileItemCctDetailController.generateAttestationOfTreatHistory}"
                              rendered="#{fileItemCctDetailController.checkMinaderMinistry}" />
             <p:commandButton ajax="false" value="#{bundle['TreatSupPhytoSheetBtn']}"
-                             actionListener="#{fileItemCctDetailController.generateSheetOfTreatmentSup}"
+                             actionListener="#{fileItemCctDetailController.generateSheetOfTreatmentSupHistory}"
                              rendered="#{fileItemCctDetailController.checkMinaderMinistry}"/>
         </div>
     </p:scrollPanel>
@@ -214,6 +214,7 @@
     </h:panelGroup>
 
 </ui:composition>
+
 
 
 

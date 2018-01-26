@@ -21,18 +21,17 @@ import org.guce.siat.web.reports.vo.CtCctTreatmentFileVo;
  */
 public class CtCctTreatmentExporter extends AbstractReportInvoker {
 
-    private final File file;
     private final TreatmentResult treatmentResult;
 
-    public CtCctTreatmentExporter(final File file, String jasperFileName, TreatmentResult treatmentResult) {
+    public CtCctTreatmentExporter(String jasperFileName, TreatmentResult treatmentResult) {
         super(jasperFileName, jasperFileName);
-        this.file = file;
         this.treatmentResult = treatmentResult;
     }
 
     @Override
     protected JRBeanCollectionDataSource getReportDataSource() {
         CtCctTreatmentFileVo treatmentVo = new CtCctTreatmentFileVo();
+        File file = treatmentResult.getItemFlow().getFileItem().getFile();
         treatmentVo.setFileNumber(file.getNumeroDossier());
         if (null != file.getClient()) {
             treatmentVo.setExporterName(file.getClient().getCompanyName());

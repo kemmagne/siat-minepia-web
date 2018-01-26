@@ -1,7 +1,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
 
-    <p:scrollPanel mode="native" styleClass="decisionForm" rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult}">
+    <p:scrollPanel mode="native" styleClass="decisionForm">
 
         <p:messages autoUpdate="true" />
         <p:tabView scrollable="true" prependId="false" id="tabViewConstatTrRd">
@@ -165,7 +165,7 @@
         </div>
     </p:scrollPanel>
 
-    <h:panelGroup rendered="#{false and not empty fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult}">
+    <h:panelGroup rendered="#{false}">
 
         <p:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight">
 
@@ -215,6 +215,7 @@
     </h:panelGroup>
 
 </ui:composition>
+
 
 
 

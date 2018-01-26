@@ -85,11 +85,11 @@
                                 </ui:repeat>
                             </h:panelGroup>
 
-                            <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR }">
+                            <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR}">
                                 <ui:include src="../specificDecisions/inspectionReport/inspectionReportHistory.xhtml" />
                             </h:panelGroup>
 
-                            <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsApp }">
+                            <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsApp}">
                                 <ui:include src="../specificDecisions/appointment/appointmentHistory.xhtml" />
                             </h:panelGroup>
 
@@ -125,3 +125,6 @@
     </p:dialog>
 
 </ui:composition>
+
+
+

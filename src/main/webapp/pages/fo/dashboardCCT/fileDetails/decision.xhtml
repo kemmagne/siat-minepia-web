@@ -57,9 +57,9 @@
                         <ui:include src="../specificDecisions/treatmentResult/treatmentResult.xhtml" />
                     </p:panel>
 
-                    <p:panel rendered="#{fileItemCctDetailController.fillInterceptionNotification}">
+                    <h:panelGroup rendered="#{fileItemCctDetailController.selectedFlow ne null and (fileItemCctDetailController.selectedFlow.code eq 'FL_CT_29' or fileItemCctDetailController.selectedFlow.code eq 'FL_CT_33' or fileItemCctDetailController.selectedFlow.code eq 'FL_CT_64')}">
                         <ui:include src="../specificDecisions/notificationInterception/notificationInterception.xhtml" />
-                    </p:panel>
+                    </h:panelGroup>
 
                     <p:panel rendered="#{fileItemCctDetailController.isPayment}">
                         <ui:include src="../specificDecisions/paymentValidation/payment.xhtml" />
@@ -87,6 +87,11 @@
     <ui:include src="../specificDecisions/inspectionReport/controllersList.xhtml" />
 
 </ui:composition>
+
+
+
+
+
 
 
 

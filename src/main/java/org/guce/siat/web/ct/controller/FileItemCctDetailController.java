@@ -197,6 +197,7 @@ import org.guce.siat.web.gr.util.GrUtilsWeb;
 import org.guce.siat.web.gr.util.ScenarioType;
 import org.guce.siat.web.reports.exporter.AbstractReportInvoker;
 import org.guce.siat.web.reports.exporter.CtCctExporter;
+import org.guce.siat.web.reports.exporter.CtCctNiExporter;
 import org.guce.siat.web.reports.exporter.CtCctTreatmentExporter;
 import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.message.Message;
@@ -1027,6 +1028,7 @@ public class FileItemCctDetailController implements Serializable {
      */
     public void init() {
         checkMinaderMinistry = false;
+        fillInterceptionNotification = false;
         currentFile = currentFileItem.getFile();
         loggedUser = getLoggedUser();
         allowedRecommandation = checkIsAllowadRecommandation();
@@ -1363,7 +1365,7 @@ public class FileItemCctDetailController implements Serializable {
      * @return the checked roll backs file item check list
      */
     public List<Long> getCheckedRollBacksFileItemCheckList() {
-        List<FileItemCheck> checks = new ArrayList<FileItemCheck>();
+        List<FileItemCheck> checks = new ArrayList<>();
         if (BooleanUtils.isTrue(cotationAllowed) && currentFile.getFileItemsList() != null) {
             for (final FileItem fileItem : currentFile.getFileItemsList()) {
                 final FileItemCheck check = new FileItemCheck(fileItem, false, true, false);
@@ -1378,7 +1380,7 @@ public class FileItemCctDetailController implements Serializable {
             checks = productInfoChecks;
         }
 
-        final List<Long> returnedList = new ArrayList<Long>();
+        final List<Long> returnedList = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(checks)) {
 
             for (final FileItemCheck fileItemCheck : checks) {
@@ -1856,13 +1858,14 @@ public class FileItemCctDetailController implements Serializable {
             }
         }
         // Décision Suite Contrôle && MINADER  ???
-        fillInterceptionNotification = StepCode.ST_CT_13.equals(currentFile.getFileItemsList().get(0).getStep().getStepCode())
-                && isCheckMinaderMinistry() && (FlowCode.FL_CT_29.name().equals(selectedFlow.getCode())
+//        fillInterceptionNotification = StepCode.ST_CT_13.equals(currentFile.getFileItemsList().get(0).getStep().getStepCode())
+//                && isCheckMinaderMinistry() && (FlowCode.FL_CT_29.name().equals(selectedFlow.getCode())
+//                || FlowCode.FL_CT_33.name().equals(selectedFlow.getCode())
+//                || FlowCode.FL_CT_64.name().equals(selectedFlow.getCode()));
+        fillInterceptionNotification = FlowCode.FL_CT_29.name().equals(selectedFlow.getCode())
                 || FlowCode.FL_CT_33.name().equals(selectedFlow.getCode())
-                || FlowCode.FL_CT_64.name().equals(selectedFlow.getCode()));
-        if (fillInterceptionNotification) {
-            interceptionNotification = new InterceptionNotification();
-        }
+                || FlowCode.FL_CT_64.name().equals(selectedFlow.getCode());
+        interceptionNotification = !fillInterceptionNotification ? null : new InterceptionNotification();
     }
 
     /**
@@ -2156,19 +2159,27 @@ public class FileItemCctDetailController implements Serializable {
     }
 
     public void generatePvInspPhytoHistory() {
-        generatePvInspPhyto();
+        JsfUtil.generateReport(new CtCctExporter("PV_INSPECTION_PHYTOSANITAIRE", "PV_INSPECTION_PHYTOSANITAIRE", specificDecisionsHistory.getDecisionDetailsIR()));
     }
 
     public void generatePvInspPhyto() {
         JsfUtil.generateReport(new CtCctExporter("PV_INSPECTION_PHYTOSANITAIRE", "PV_INSPECTION_PHYTOSANITAIRE", specificDecisionsHistory.getLastDecisionIR()));
     }
 
+    public void generateAttestationOfTreatHistory() {
+        JsfUtil.generateReport(new CtCctTreatmentExporter("ATTESTATION_TRAITEMENT_PHYTO", specificDecisionsHistory.getDecisionDetailsTR()));
+    }
+
     public void generateAttestationOfTreat() {
-        JsfUtil.generateReport(new CtCctTreatmentExporter(currentFile, "ATTESTATION_TRAITEMENT_PHYTO", treatmentResult));
+        JsfUtil.generateReport(new CtCctTreatmentExporter("ATTESTATION_TRAITEMENT_PHYTO", specificDecisionsHistory.getLastTreatmentResult()));
+    }
+
+    public void generateSheetOfTreatmentSupHistory() {
+        JsfUtil.generateReport(new CtCctTreatmentExporter("FICHE_SUPERVISION_TRAIT_PHYTO", specificDecisionsHistory.getDecisionDetailsTR()));
     }
 
     public void generateSheetOfTreatmentSup() {
-        JsfUtil.generateReport(new CtCctTreatmentExporter(currentFile, "FICHE_SUPERVISION_TRAIT_PHYTO", treatmentResult));
+        JsfUtil.generateReport(new CtCctTreatmentExporter("FICHE_SUPERVISION_TRAIT_PHYTO", specificDecisionsHistory.getLastTreatmentResult()));
     }
 
     /**
@@ -2798,10 +2809,20 @@ public class FileItemCctDetailController implements Serializable {
                             //generate report
                             Map<String, byte[]> attachedByteFiles = null;
                             try {
+
+                                if (fillInterceptionNotification) {
+                                    attachedByteFiles = new HashMap<>();
+                                    byte[] intNotifReport = JsfUtil.getReport(new CtCctNiExporter(interceptionNotification));
+                                    attachedByteFiles.put("NOTIFICATION_INTERCEPTION", intNotifReport);
+                                }
+
                                 String reportNumber;
                                 if (FlowCode.FL_CT_89.name().equals(flowToSend.getCode())
                                         || FlowCode.FL_CT_08.name().equals(flowToSend.getCode())) {
-                                    attachedByteFiles = new HashMap<>();
+
+                                    if (null == attachedByteFiles) {
+                                        attachedByteFiles = new HashMap<>();
+                                    }
 
                                     final List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<>();
 
@@ -6491,6 +6512,14 @@ public class FileItemCctDetailController implements Serializable {
 
     public void setInterceptionNotification(InterceptionNotification interceptionNotification) {
         this.interceptionNotification = interceptionNotification;
+    }
+
+    public InterceptionNotificationService getInterceptionNotificationService() {
+        return interceptionNotificationService;
+    }
+
+    public void setInterceptionNotificationService(final InterceptionNotificationService interceptionNotificationService) {
+        this.interceptionNotificationService = interceptionNotificationService;
     }
 
 }
