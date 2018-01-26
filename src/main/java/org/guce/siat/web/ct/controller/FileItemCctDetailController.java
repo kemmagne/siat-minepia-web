@@ -136,6 +136,7 @@ import org.guce.siat.core.ct.model.AnalyseResult;
 import org.guce.siat.core.ct.model.Infraction;
 import org.guce.siat.core.ct.model.InspectionController;
 import org.guce.siat.core.ct.model.InspectionReport;
+import org.guce.siat.core.ct.model.InterceptionNotification;
 import org.guce.siat.core.ct.model.Laboratory;
 import org.guce.siat.core.ct.model.PaymentData;
 import org.guce.siat.core.ct.model.PaymentItemFlow;
@@ -150,6 +151,7 @@ import org.guce.siat.core.ct.service.AnalysePartService;
 import org.guce.siat.core.ct.service.AnalyseResultService;
 import org.guce.siat.core.ct.service.CommonService;
 import org.guce.siat.core.ct.service.InspectionReportService;
+import org.guce.siat.core.ct.service.InterceptionNotificationService;
 import org.guce.siat.core.ct.service.LaboratoryService;
 import org.guce.siat.core.ct.service.PaymentDataService;
 import org.guce.siat.core.ct.service.TreatmentCompanyService;
@@ -174,6 +176,7 @@ import org.guce.siat.web.ct.controller.util.InspectionReportTemperatureVo;
 import org.guce.siat.web.ct.controller.util.JsfUtil;
 import org.guce.siat.web.ct.controller.util.enums.DataTypeEnnumeration;
 import org.guce.siat.web.ct.controller.util.enums.DecisionsSuiteVisite;
+import org.guce.siat.web.ct.controller.util.enums.NITakenMeasure;
 import org.guce.siat.web.ct.controller.util.enums.PVILastTreatmentDateState;
 import org.guce.siat.web.ct.controller.util.enums.PVIProtectionMeasures;
 import org.guce.siat.web.ct.controller.util.enums.PVIStorageEnv;
@@ -544,6 +547,9 @@ public class FileItemCctDetailController implements Serializable {
     @ManagedProperty(value = "#{paymentDataService}")
     private PaymentDataService paymentDataService;
 
+    @ManagedProperty(value = "#{interceptionNotificationService}")
+    private InterceptionNotificationService interceptionNotificationService;
+
     /**
      * The send decision allowed.
      */
@@ -582,7 +588,7 @@ public class FileItemCctDetailController implements Serializable {
     /**
      * The field groups items.
      */
-    private List<FieldGroup> fieldGroupsItems = new ArrayList<FieldGroup>();
+    private List<FieldGroup> fieldGroupsItems = new ArrayList<>();
     /**
      * The file field group dtos.
      */
@@ -1003,6 +1009,10 @@ public class FileItemCctDetailController implements Serializable {
      * The invoice other amount.
      */
     private Long invoiceOtherAmount;
+
+    private boolean fillInterceptionNotification;
+
+    private InterceptionNotification interceptionNotification;
 
     private final String MINADER_MINISTRY = "MINADER";
 
@@ -1588,7 +1598,7 @@ public class FileItemCctDetailController implements Serializable {
      * Change laboratory handler.
      */
     public void changeLaboratoryHandler() {
-        analyseTypeDtosList = new ArrayList<AnalyseTypeDto>();
+        analyseTypeDtosList = new ArrayList<>();
         for (final AnalyseType analyseType : selectedLaboratory.getAnalyseTypeList()) {
             final AnalyseTypeDto analyseTypeDto = new AnalyseTypeDto();
             analyseTypeDto.setAnalyseType(analyseType);
@@ -1601,7 +1611,7 @@ public class FileItemCctDetailController implements Serializable {
      * Change laboratory handler.
      */
     public void changeTreatmentCompanyHandler() {
-        treatmentTypeDtosList = new ArrayList<TreatmentTypeDto>();
+        treatmentTypeDtosList = new ArrayList<>();
 
         for (final TreatmentType treatmentType : selectedTreatmentCompany.getTreatmentTypeList()) {
             final TreatmentTypeDto analyseTypeDto = new TreatmentTypeDto();
@@ -1845,6 +1855,14 @@ public class FileItemCctDetailController implements Serializable {
                 decisionDiv.getChildren().add(htmlPanelGroup);
             }
         }
+        // Décision Suite Contrôle && MINADER  ???
+        fillInterceptionNotification = StepCode.ST_CT_13.equals(currentFile.getFileItemsList().get(0).getStep().getStepCode())
+                && isCheckMinaderMinistry() && (FlowCode.FL_CT_29.name().equals(selectedFlow.getCode())
+                || FlowCode.FL_CT_33.name().equals(selectedFlow.getCode())
+                || FlowCode.FL_CT_64.name().equals(selectedFlow.getCode()));
+        if (fillInterceptionNotification) {
+            interceptionNotification = new InterceptionNotification();
+        }
     }
 
     /**
@@ -1926,7 +1944,7 @@ public class FileItemCctDetailController implements Serializable {
             specificDecisionsHistory.setDecisionDetailsIR(inspectionReportService
                     .findLastInspectionReportsByFileItem(selectedItemFlowDto.getItemFlow().getFileItem()));
         } else if (APPOINTMENT_DECISIONS_LIST.contains(selectedItemFlowDto.getItemFlow().getFlow().getCode())) {
-            final List<ItemFlow> listItemFlow = new ArrayList<ItemFlow>();
+            final List<ItemFlow> listItemFlow = new ArrayList<>();
             listItemFlow.add(selectedItemFlowDto.getItemFlow());
             specificDecisionsHistory.setDecisionDetailsApp(appointmentService.findAppointmentsByItemFlow(selectedItemFlowDto
                     .getItemFlow()));
@@ -2159,6 +2177,10 @@ public class FileItemCctDetailController implements Serializable {
      * @throws ParseException the parse exception
      */
     public void saveDecision() throws ParseException {
+        final DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+        def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+        def.setReadOnly(false);
+        final TransactionStatus status = transactionManager.getTransaction(def);
         try {
             if (FlowCode.FL_CT_29.name().equals(selectedFlow.getCode()) && chckedListSize != Constants.ONE) {
                 showErrorFacesMessage(ControllerConstants.Bundle.Messages.CHECK_ANALYSE_DECISION_ERROR,
@@ -2244,7 +2266,7 @@ public class FileItemCctDetailController implements Serializable {
                 }
             }
 
-            final List<ItemFlow> itemFlowsToAdd = new ArrayList<ItemFlow>();
+            final List<ItemFlow> itemFlowsToAdd = new ArrayList<>();
 
             // IF Decision enable by FILE, ALL fileItem must has the same
             // Decision (ItemFlow)
@@ -2364,9 +2386,12 @@ public class FileItemCctDetailController implements Serializable {
                 commonService.takeDecisionAndSaveTreatmentResult(treatmentResult, itemFlowsToAdd);
                 // Attachment --> Alfresco
             } // Geniric (affichage des itemFlowData)
-            else {
+            // sauvegarde de la notification d'interception
+            else if (fillInterceptionNotification) {
+                commonService.takeDecisionAndSaveInterceptionNotification(interceptionNotification, itemFlowsToAdd);
+            } else {
                 // Recuperate the values of DataType (Observation text area ...)
-                List<ItemFlowData> flowDatas = null;
+                List<ItemFlowData> flowDatas;
 
                 flowDatas = new ArrayList<>();
                 for (final DataType dataType : selectedFlow.getDataTypeList()) {
@@ -2401,9 +2426,11 @@ public class FileItemCctDetailController implements Serializable {
                 }
                 decisionDiv.getChildren().clear();
             }
+            transactionManager.commit(status);
 
         } catch (final Exception ex) {
             showErrorFacesMessage(ex.getMessage(), null);
+            transactionManager.rollback(status);
         }
 
         resetDataGridInofrmationProducts();
@@ -2763,7 +2790,6 @@ public class FileItemCctDetailController implements Serializable {
                     if (!mapWithinAllFileItemAndFlowsToSend.isEmpty()) {
                         final Map<Flow, List<FileItem>> groupedFlow = groupFileItemsToSendByFlow(mapWithinAllFileItemAndFlowsToSend);
                         for (final Flow flowToSend : groupedFlow.keySet()) {
-
                             final List<FileItem> fileItemList = groupedFlow.get(flowToSend);
                             final List<ItemFlow> itemFlowList = itemFlowService.findLastItemFlowsByFileItemList(fileItemList);
                             final String service = StringUtils.EMPTY;
@@ -2780,7 +2806,6 @@ public class FileItemCctDetailController implements Serializable {
                                     final List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<>();
 
                                     final List<FileTypeFlowReport> fileTypeFlowReportsList = flowToSend.getFileTypeFlowReportsList();
-
                                     if (fileTypeFlowReportsList != null) {
                                         for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
                                             if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType())) {
@@ -2789,16 +2814,13 @@ public class FileItemCctDetailController implements Serializable {
                                                     if (getCurrentOrganism().getId() == 3) {
                                                         final FileFieldValue typeDemande = fileService.findFileFieldValueByFieldCode(
                                                                 currentFile, "TYPE_DEMANDE");
-                                                        if (isCheckMinaderMinistry()
-                                                                && "CERTIFICAT_PHYTOSANITAIRE.pdf".equals(fileTypeFlowReport.getReportName())) {
-                                                            fileTypeFlowReports.add(fileTypeFlowReport);
-                                                            break;
-                                                        } else if (typeDemande.getValue().equals("IMPORT")
+                                                        if (typeDemande.getValue().equals("IMPORT")
                                                                 || FileTypeCode.CCT_CT.equals(currentFile.getFileType().getCode())) {
                                                             if ("CT_CCT_CP_I.pdf".equals(fileTypeFlowReport.getReportName())) {
                                                                 fileTypeFlowReports.add(fileTypeFlowReport);
                                                                 break;
                                                             }
+
                                                         } else if (typeDemande.getValue().equals("EXPORT")
                                                                 || FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode())) {
                                                             if ("CT_CCT_CP_E.pdf".equals(fileTypeFlowReport.getReportName())) {
@@ -2818,7 +2840,6 @@ public class FileItemCctDetailController implements Serializable {
                                         }
                                     }
                                     for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
-
                                         //Begin Add new field value with report Number
                                         final ReportOrganism reportOrganism = reportOrganismService
                                                 .findReportByFileTypeFlowReport(fileTypeFlowReport);
@@ -2840,12 +2861,12 @@ public class FileItemCctDetailController implements Serializable {
                                         @SuppressWarnings({"rawtypes", "unchecked"})
                                         Constructor c1;
                                         byte[] report;
-                                        if (!isCheckMinaderMinistry()) {
+                                        if (!checkMinaderMinistry) {
                                             c1 = classe.getConstructor(File.class);
                                             report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile));
                                         } else {
-                                            c1 = classe.getConstructor(File.class, String.class, String.class);
-                                            report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile, "CERTIFICAT_PHYTOSANITAIRE", "CERTIFICAT_PHYTOSANITAIRE.pdf"));
+                                            c1 = classe.getConstructor(File.class, String.class);
+                                            report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile, "CERTIFICAT_PHYTOSANITAIRE"));
                                         }
                                         attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
 
@@ -3813,7 +3834,7 @@ public class FileItemCctDetailController implements Serializable {
      */
     public void refreshRecommandationArticleList() {
         recommandationArticleList = recommandationService.findRecommandationByFileItemAndAuthorties(
-                selectedFileItemCheck.getFileItem(), (new ArrayList<Authority>(getLoggedUser().getAuthorities())));
+                selectedFileItemCheck.getFileItem(), (new ArrayList<>(getLoggedUser().getAuthorities())));
     }
 
     /**
@@ -3823,7 +3844,6 @@ public class FileItemCctDetailController implements Serializable {
         generateReportAllowed = false;
         final Flow reportingFlow = flowService.findByToStep(currentFileItem.getStep());
         final List<FileTypeFlowReport> fileTypeFlowReportsList = reportingFlow.getFileTypeFlowReportsList();
-
         if (StepCode.ST_CT_06.name().equals(currentFileItem.getStep().getStepCode().name())
                 && CollectionUtils.isNotEmpty(fileTypeFlowReportsList)) {
 
@@ -3855,8 +3875,9 @@ public class FileItemCctDetailController implements Serializable {
                 }
             }
         }
+        System.out.println("org.guce.siat.web.ct.controller.FileItemCctDetailController.downloadReport()");
+        System.out.println(fileTypeFlowReports);
         for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
-
             //Begin Add new field value with report Number
             try {
                 final String nomClasse = fileTypeFlowReport.getReportClassName();
@@ -3865,11 +3886,16 @@ public class FileItemCctDetailController implements Serializable {
 
                 classe = Class.forName(nomClasse);
 
-                @SuppressWarnings(
-                        {"rawtypes", "unchecked"})
-                final Constructor c1 = classe.getConstructor(File.class);
-
-                final byte[] report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile));
+                @SuppressWarnings({"rawtypes", "unchecked"})
+                Constructor c1;
+                byte[] report;
+                if (!checkMinaderMinistry) {
+                    c1 = classe.getConstructor(File.class);
+                    report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile));
+                } else {
+                    c1 = classe.getConstructor(File.class, String.class);
+                    report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile, "CERTIFICAT_PHYTOSANITAIRE"));
+                }
                 final InputStream is = new ByteArrayInputStream(report);
                 final StreamedContent fileToDownload = new DefaultStreamedContent(is, "application/pdf",
                         currentFile.getReferenceSiat() + '_' + fileTypeFlowReport.getReportName());
@@ -6447,4 +6473,25 @@ public class FileItemCctDetailController implements Serializable {
         return weatherConditions;
     }
 
+    public List<CustumMap> getNiTakenMeasures() {
+        List<CustumMap> takenMeasures = new ArrayList<>();
+        for (NITakenMeasure takenMeasure : NITakenMeasure.values()) {
+            takenMeasures.add(new CustumMap(takenMeasure.name(), takenMeasure.getLabel()));
+        }
+        return takenMeasures;
+    }
+
+    public boolean isFillInterceptionNotification() {
+        return fillInterceptionNotification;
+    }
+
+    public InterceptionNotification getInterceptionNotification() {
+        return interceptionNotification;
+    }
+
+    public void setInterceptionNotification(InterceptionNotification interceptionNotification) {
+        this.interceptionNotification = interceptionNotification;
+    }
+
 }
+

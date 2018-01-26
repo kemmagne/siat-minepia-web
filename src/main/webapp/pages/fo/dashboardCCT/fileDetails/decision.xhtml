@@ -10,7 +10,7 @@
         <h:form id="decisionForm" prependId="false" enctype="multipart/form-data">
 
             <p:messages id="messages" redisplay="true" for="checkArticle" />
-            <h:panelGroup id="acc" stylClass="decisionForm decisionDlg">
+            <h:panelGroup id="acc" styleClass="decisionForm decisionDlg">
                 <p:scrollPanel mode="native">
 
                     <h:panelGroup rendered="#{!fileItemCctDetailController.productsHaveSameRDDStatus}" styleClass="alert-drd-message">
@@ -53,8 +53,12 @@
 
                     <ui:include src="../specificDecisions/treatmentRequest/treatmentRequest.xhtml" />
 
-                    <p:panel header="#{bundle['TreatmentResultHeader']}" rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'TRR' and checkMinaderMinistry}">
+                    <p:panel rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'TRR'}">
                         <ui:include src="../specificDecisions/treatmentResult/treatmentResult.xhtml" />
+                    </p:panel>
+
+                    <p:panel rendered="#{fileItemCctDetailController.fillInterceptionNotification}">
+                        <ui:include src="../specificDecisions/notificationInterception/notificationInterception.xhtml" />
                     </p:panel>
 
                     <p:panel rendered="#{fileItemCctDetailController.isPayment}">
@@ -83,3 +87,12 @@
     <ui:include src="../specificDecisions/inspectionReport/controllersList.xhtml" />
 
 </ui:composition>
+
+
+
+
+
+
+
+
+

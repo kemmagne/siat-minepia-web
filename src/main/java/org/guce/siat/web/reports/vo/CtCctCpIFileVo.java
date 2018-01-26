@@ -130,6 +130,12 @@ public class CtCctCpIFileVo extends AbstractFileVo<CtCctCpIFileItemVo> {
 
     private String packagedOrRepackaged;
 
+    private String packagingMark;
+    private String numberOfPackages;
+    private String packageNature;
+    private String productName;
+    private String botanicalNameOfPlants;
+
     /**
      * Gets the consignor name.
      *
@@ -590,4 +596,45 @@ public class CtCctCpIFileVo extends AbstractFileVo<CtCctCpIFileItemVo> {
         this.packingMode = packingMode;
     }
 
+    public String getPackagingMark() {
+        return packagingMark;
+    }
+
+    public void setPackagingMark(String packagingMark) {
+        this.packagingMark = packagingMark;
+    }
+
+    public String getNumberOfPackages() {
+        return numberOfPackages;
+    }
+
+    public void setNumberOfPackages(String numberOfPackages) {
+        this.numberOfPackages = numberOfPackages;
+    }
+
+    public String getPackageNature() {
+        return packageNature;
+    }
+
+    public void setPackageNature(String packageNature) {
+        this.packageNature = packageNature;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getBotanicalNameOfPlants() {
+        return botanicalNameOfPlants;
+    }
+
+    public void setBotanicalNameOfPlants(String botanicalNameOfPlants) {
+        this.botanicalNameOfPlants = botanicalNameOfPlants;
+    }
+
 }
+

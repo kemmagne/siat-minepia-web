@@ -260,6 +260,16 @@ public class CtCctExporter extends AbstractReportInvoker {
                 entryInspectionFindingDataVo.setConditionClimatique(inspectionReport.getConditionClimatique());
                 entryInspectionFindingDataVo.setMesureProtection(inspectionReport.getMesureProtection());
                 entryInspectionFindingDataVo.setObservations(inspectionReport.getObservations());
+                entryInspectionFindingDataVo.setNumeroDecisionPVI(null);
+                entryInspectionFindingDataVo.setArticleReglemente(inspectionReport.getArticleReglemente());
+                entryInspectionFindingDataVo.setExporterName(inspectionReport.getItemFlow().getFileItem().getFile().getClient().getCompanyName());
+                entryInspectionFindingDataVo.setPviCouvertDoc(inspectionReport.isPviCouvertDoc());
+                entryInspectionFindingDataVo.setPviDestination(inspectionReport.getPviDestination());
+                entryInspectionFindingDataVo.setPviDispositionsPrises(inspectionReport.getPviDispositionsPrises());
+                entryInspectionFindingDataVo.setPviNatureArticleInspecte(inspectionReport.getPviNatureArticleInspecte());
+                entryInspectionFindingDataVo.setPviQuantite(inspectionReport.getPviQuantite());
+                entryInspectionFindingDataVo.setPviReference(inspectionReport.getItemFlow().getFileItem().getFile().getNumeroDossier());
+                entryInspectionFindingDataVo.setPviSituationArticle(inspectionReport.getPviSituationArticle());
                 for (FileFieldValue fileFieldValue : inspectionReport.getFileItem().getFile().getFileFieldValueList()) {
                     if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("DESTINATAIRE_RAISONSOCIALE")) {
                         entryInspectionFindingDataVo.setRecipient(fileFieldValue.getValue());
@@ -313,3 +323,4 @@ public class CtCctExporter extends AbstractReportInvoker {
     }
 
 }
+

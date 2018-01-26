@@ -9,7 +9,7 @@ import org.junit.Test;
  */
 public class EnumTest {
 
-    @Test
+//    @Test
     @Ignore
     public void testEnum() {
         System.out.println(DataTypeEnnumeration.CALENDAR.name());
@@ -17,3 +17,4 @@ public class EnumTest {
     }
 
 }
+

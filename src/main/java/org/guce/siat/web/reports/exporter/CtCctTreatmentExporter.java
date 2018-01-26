@@ -25,7 +25,7 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
     private final TreatmentResult treatmentResult;
 
     public CtCctTreatmentExporter(final File file, String jasperFileName, TreatmentResult treatmentResult) {
-        super(jasperFileName, jasperFileName + ".pdf");
+        super(jasperFileName, jasperFileName);
         this.file = file;
         this.treatmentResult = treatmentResult;
     }
@@ -33,7 +33,7 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
     @Override
     protected JRBeanCollectionDataSource getReportDataSource() {
         CtCctTreatmentFileVo treatmentVo = new CtCctTreatmentFileVo();
-        treatmentVo.setFileNumber(file.getReferenceGuce());
+        treatmentVo.setFileNumber(file.getNumeroDossier());
         if (null != file.getClient()) {
             treatmentVo.setExporterName(file.getClient().getCompanyName());
             treatmentVo.setExporterBp(file.getClient().getPostalCode());
@@ -136,3 +136,4 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
     }
 
 }
+

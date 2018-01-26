@@ -173,71 +173,80 @@
                     <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.procedure}" />
                 </h:panelGrid>
             </p:tab>
-            <p:tab titletip="#{bundle['procesVerbalInspection']}" title="#{bundle['procesVerbalInspection']}">
-                <h:panelGroup styleClass="table-decision">
-                    <h:panelGrid columns="2" styleClass="table-decision">
-                        <p:outputLabel value="#{bundle['produitUtilise']}" />
-                        <p:outputLabel value="#{fileItemCctDetailController.inspectionReportData.produitUtilise}" />
-                    </h:panelGrid>
-                    <h:panelGrid columns="2" styleClass="table-decision">
-                        <p:outputLabel value="#{bundle['dosage']}" />
-                        <p:outputLabel value="#{fileItemCctDetailController.inspectionReportData.dosage}" />
-                    </h:panelGrid>
-                    <h:panelGrid columns="2" styleClass="table-decision">
-                        <p:outputLabel for="typeTraitement" value="#{bundle['typeTraitement']}" />
-                        <p:selectOneRadio disabled="true" id="typeTraitement" value="#{fileItemCctDetailController.inspectionReportData.typeTraitement}">
-                            <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}"/>
-                        </p:selectOneRadio>
-                    </h:panelGrid>
-                    <h:panelGrid columns="2" styleClass="table-decision">
-                        <p:outputLabel for="typeTraitement" value="#{bundle['typeTraitement']}" />
-                        <p:selectOneRadio disabled="true" id="typeTraitement" value="#{fileItemCctDetailController.inspectionReportData.typeTraitement}">
-                            <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}"/>
-                        </p:selectOneRadio>
-                    </h:panelGrid>
-                    <h:panelGrid columns="2" styleClass="table-decision">
-                        <p:outputLabel for="lastTreatmentDateState" value="#{bundle['lastTreatmentDateState']}" />
-                        <p:selectOneRadio disabled="true" id="lastTreatmentDateState" value="#{fileItemCctDetailController.inspectionReportData.etatDateDernierTraitement}">
-                            <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}"/>
-                        </p:selectOneRadio>
-                    </h:panelGrid>
-                    <h:panelGrid columns="2" styleClass="table-decision">
-                        <p:outputLabel for="storageEnv" value="#{bundle['storageEnv']}" />
-                        <p:selectOneRadio disabled="true" id="storageEnv" value="#{fileItemCctDetailController.inspectionReportData.environnementStockage}">
-                            <f:selectItems value="#{fileItemCctDetailController.pivStorageEnvs}"/>
-                        </p:selectOneRadio>
-                    </h:panelGrid>
-                    <h:panelGrid columns="2" styleClass="table-decision">
-                        <p:outputLabel for="transportEnv" value="#{bundle['transportEnv']}" />
-                        <p:selectOneRadio disabled="true" id="transportEnv" value="#{fileItemCctDetailController.inspectionReportData.environnementTransport}">
-                            <f:selectItems value="#{fileItemCctDetailController.pivTransportEnvs}"/>
-                        </p:selectOneRadio>
-                    </h:panelGrid>
-                    <h:panelGrid columns="2" styleClass="table-decision">
-                        <p:outputLabel for="weatherCondition" value="#{bundle['weatherCondition']}" />
-                        <p:selectOneRadio disabled="true" id="weatherCondition" value="#{fileItemCctDetailController.inspectionReportData.conditionClimatique}">
-                            <f:selectItems value="#{fileItemCctDetailController.pivWeatherConditions}"/>
-                        </p:selectOneRadio>
-                    </h:panelGrid>
-                    <h:panelGrid columns="2" styleClass="table-decision">
-                        <p:outputLabel for="protectionMeasure" value="#{bundle['protectionMeasure']}" />
-                        <p:selectOneRadio disabled="true" id="protectionMeasure" value="#{fileItemCctDetailController.inspectionReportData.mesureProtection}">
-                            <f:selectItems value="#{fileItemCctDetailController.pivProtectionMeasures}"/>
-                        </p:selectOneRadio>
-                    </h:panelGrid>
-                </h:panelGroup>
+
+            <p:tab rendered="#{fileItemCctDetailController.checkMinaderMinistry}" titletip="#{bundle['procesVerbalInspection']}" title="#{bundle['procesVerbalInspection']}">
+                <h:panelGrid columns="2" styleClass="table-decision">
+                    <p:outputLabel value="#{bundle['articleReglemente']}" />
+                    <p:outputLabel value="#{fileItemCctDetailController.inspectionReportData.articleReglemente}" />
+
+                    <p:outputLabel value="Destination / Utilisation" />
+                    <p:outputLabel value="#{fileItemCctDetailController.inspectionReportData.pviDestination}" />
+
+                    <p:outputLabel value="#{bundle['situationArticle']}" />
+                    <p:outputLabel value="#{fileItemCctDetailController.inspectionReportData.pviSituationArticle}" />
+
+                    <p:outputLabel value="#{bundle['couvertDoc']}" />
+                    <p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.inspectionReportData.pviCouvertDoc}" />
+
+                    <p:outputLabel value="#{bundle['natureArticleInspecte']}" />
+                    <p:outputLabel value="#{fileItemCctDetailController.inspectionReportData.pviNatureArticleInspecte}" />
+
+                    <p:outputLabel value="#{bundle['quantite']}" />
+                    <p:outputLabel value="#{fileItemCctDetailController.inspectionReportData.pviQuantite}" />
+
+                    <p:outputLabel value="#{bundle['DispositionsPrises']}" />
+                    <p:outputLabel value="#{fileItemCctDetailController.inspectionReportData.pviDispositionsPrises}" />
+
+                    <p:outputLabel value="#{bundle['produitUtilise']}" />
+                    <p:outputLabel value="#{fileItemCctDetailController.inspectionReportData.produitUtilise}" />
+
+                    <p:outputLabel value="#{bundle['dosage']}" />
+                    <p:outputLabel value="#{fileItemCctDetailController.inspectionReportData.dosage}" />
+
+                    <p:outputLabel for="typeTraitement" value="#{bundle['typeTraitement']}" />
+                    <p:selectOneMenu disabled="true" id="typeTraitement" value="#{fileItemCctDetailController.inspectionReportData.typeTraitement}">
+                        <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}" var="tt" itemLabel="#{bundle[tt.label]}" itemValue="#{tt.value}" />
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="lastTreatmentDateState" value="#{bundle['lastTreatmentDateState']}" />
+                    <p:selectOneMenu disabled="true" id="lastTreatmentDateState" value="#{fileItemCctDetailController.inspectionReportData.etatDateDernierTraitement}">
+                        <f:selectItems value="#{fileItemCctDetailController.pivLastTreatmentDateStates}" var="ltds" itemLabel="#{bundle[ltds.label]}" itemValue="#{ltds.value}" />
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="storageEnv" value="#{bundle['storageEnv']}" />
+                    <p:selectOneMenu disabled="true" id="storageEnv" value="#{fileItemCctDetailController.inspectionReportData.environnementStockage}">
+                        <f:selectItems value="#{fileItemCctDetailController.pivStorageEnvs}" var="se" itemLabel="#{bundle[se.label]}" itemValue="#{se.value}" />
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="transportEnv" value="#{bundle['transportEnv']}" />
+                    <p:selectOneMenu disabled="true" id="transportEnv" value="#{fileItemCctDetailController.inspectionReportData.environnementTransport}">
+                        <f:selectItems value="#{fileItemCctDetailController.pivTransportEnvs}" var="te" itemLabel="#{bundle[te.label]}" itemValue="#{te.value}" />
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="weatherCondition" value="#{bundle['weatherCondition']}" />
+                    <p:selectOneMenu disabled="true" id="weatherCondition" value="#{fileItemCctDetailController.inspectionReportData.conditionClimatique}">
+                        <f:selectItems value="#{fileItemCctDetailController.pivWeatherConditions}" var="wc" itemLabel="#{bundle[wc.label]}" itemValue="#{wc.value}" />
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="protectionMeasure" value="#{bundle['protectionMeasure']}" />
+                    <p:selectOneMenu disabled="true" id="protectionMeasure" value="#{fileItemCctDetailController.inspectionReportData.mesureProtection}">
+                        <f:selectItems value="#{fileItemCctDetailController.pivProtectionMeasures}" var="pm" itemLabel="#{bundle[pm.label]}" itemValue="#{pm.value}" />
+                    </p:selectOneMenu>
+                </h:panelGrid>
             </p:tab>
         </p:tabView>
 
         <div class="btn-bloc">
-            <p:splitButton ajax="false" value="#{bundle['ConstatReportdownloadBtn']}"
-                           actionListener="#{fileItemCctDetailController.generateCctReportConstatHistory}">
-                <p:menuitem ajax="false" value="#{bundle['PVIPARdownloadBtn']}" rendered="#{fileItemCctDetailController.checkMinaderMinistry}"
-                            actionListener="#{fileItemCctDetailController.generatePvInspArtReglementeHistory}"></p:menuitem>
-                <p:menuitem ajax="false" value="#{bundle['PVIPhytodownloadBtn']}" rendered="#{fileItemCctDetailController.checkMinaderMinistry}"
-                            actionListener="#{fileItemCctDetailController.generatePvInspPhytoHistory}"></p:menuitem>
-            </p:splitButton>
+            <p:commandButton ajax="false" rendered="#{fileItemCctDetailController.checkMinaderMinistry}" value="#{bundle['PVIPhytodownloadBtn']}"
+                             actionListener="#{fileItemCctDetailController.generatePvInspPhytoHistory}" />
         </div>
 
     </h:panelGroup>
 </ui:composition>
+
+
+
+
+
+
+

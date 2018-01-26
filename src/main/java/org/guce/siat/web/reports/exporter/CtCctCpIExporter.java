@@ -36,8 +36,8 @@ public class CtCctCpIExporter extends AbstractReportInvoker {
         this.file = file;
     }
 
-    public CtCctCpIExporter(final File file, String jasperFileName, String pdfFileName) {
-        super(jasperFileName, pdfFileName);
+    public CtCctCpIExporter(final File file, String jasperFileName) {
+        super(jasperFileName, jasperFileName + ".pdf");
         this.file = file;
     }
 
@@ -168,3 +168,4 @@ public class CtCctCpIExporter extends AbstractReportInvoker {
     }
 
 }
+

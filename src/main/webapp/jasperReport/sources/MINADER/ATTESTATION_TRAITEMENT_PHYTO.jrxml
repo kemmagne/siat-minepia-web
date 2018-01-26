@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ATTESTATION_TRAITEMENT_PHYTO" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3f27f79b-e6ae-419b-aa77-db95164ce974">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="288"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -23,7 +23,13 @@
 			<pen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
-	<subDataset name="Table Dataset 1" uuid="ef8bef7d-8967-4f4a-a7a3-4c958a2f3895"/>
+	<subDataset name="fileItemListDataset" uuid="ef8bef7d-8967-4f4a-a7a3-4c958a2f3895">
+		<field name="code" class="java.lang.String"/>
+		<field name="number" class="java.lang.String"/>
+		<field name="nature" class="java.lang.String"/>
+		<field name="volume" class="java.lang.String"/>
+		<field name="weight" class="java.lang.String"/>
+	</subDataset>
 	<field name="decisionNumber" class="java.lang.String"/>
 	<field name="exporterName" class="java.lang.String"/>
 	<field name="exporterBp" class="java.lang.String"/>
@@ -92,8 +98,8 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 			<componentElement>
 				<reportElement key="table" style="table" x="0" y="200" width="550" height="60" uuid="37ccefb1-3f65-4140-853c-6ad85aa933ab"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="Table Dataset 1" uuid="20021209-5e05-41dd-b1c2-02ce904770c3">
-						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.JREmptyDataSource(1)]]></dataSourceExpression>
+					<datasetRun subDataset="fileItemListDataset" uuid="20021209-5e05-41dd-b1c2-02ce904770c3">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{fileItemList})]]></dataSourceExpression>
 					</datasetRun>
 					<jr:column width="120" uuid="aeb439c8-e918-4036-a65e-96c894fbd9ae">
 						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
@@ -105,7 +111,15 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 								<text><![CDATA[N° contrat(1) N° code, lot]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="table_TD" height="29" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="29" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="120" height="29" uuid="f2b0cf1b-6a05-4833-ab90-b0fec4c275ac"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="11"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
 					</jr:column>
 					<jr:column width="250" uuid="e0bc4aa1-ea59-4991-86be-45542909234a">
 						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
@@ -117,7 +131,15 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 								<text><![CDATA[Nombre et nature du produit]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="table_TD" height="29" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="29" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="250" height="29" uuid="9eab722e-125d-4cd5-851c-949550d3b36a"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="11"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{number} + ", " + $F{nature}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
 					</jr:column>
 					<jr:column width="90" uuid="adf79721-4e9d-435e-9091-875ac83879f3">
 						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
@@ -129,7 +151,15 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 								<text><![CDATA[Volume]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="table_TD" height="29" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="29" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="29" uuid="2f7f1a21-d0d7-4177-b6eb-65977a5049cd"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="11"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{volume}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
 					</jr:column>
 					<jr:column width="90" uuid="a17cda20-8482-469e-b85d-c7b0cd95069c">
 						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
@@ -141,7 +171,15 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 								<text><![CDATA[Poids]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="table_TD" height="29" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="29" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="29" uuid="bad84b26-6fd1-44df-b2b9-7f8724f6e3cd"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="11"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{weight}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
 					</jr:column>
 				</jr:table>
 			</componentElement>

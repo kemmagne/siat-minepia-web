@@ -1,12 +1,12 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
 
-    <p:scrollPanel mode="native" styleClass="decisionForm" rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTR}">
+    <p:scrollPanel mode="native" styleClass="decisionForm" rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult}">
 
         <p:messages autoUpdate="true" />
-        <p:tabView scrollable="true" prependId="false" id="tabViewConstat">
+        <p:tabView scrollable="true" prependId="false" id="tabViewConstatTrRd">
 
-            <p:tab title="#{bundle['AttestationTraitement']}" titletip="#{bundle['AttestationTraitement']}">
+            <p:tab rendered="#{fileItemCctDetailController.checkMinaderMinistry}" title="#{bundle['AttestationTraitement']}" titletip="#{bundle['AttestationTraitement']}">
 
                 <h:panelGrid columns="2">
 
@@ -28,7 +28,7 @@
                 </h:panelGrid>
             </p:tab>
 
-            <p:tab title="#{bundle['FicheSupervisionTraitPhyto']}" titletip="#{bundle['FicheSupervisionTraitPhyto']}">
+            <p:tab rendered="#{fileItemCctDetailController.checkMinaderMinistry}" title="#{bundle['FicheSupervisionTraitPhyto']}" titletip="#{bundle['FicheSupervisionTraitPhyto']}">
 
                 <h:panelGrid columns="2">
 
@@ -38,6 +38,7 @@
                     <h:outputLabel value="#{bundle['TreatmentMode']}" />
                     <h:panelGroup>
                         <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.treatmentResult.treatmentMode}">
+                            <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
                             <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}" var="tt" itemLabel="#{bundle[tt.label]}" itemValue="#{tt.value}"/>
                         </p:selectOneMenu>
                     </h:panelGroup>
@@ -48,6 +49,7 @@
                     <h:outputLabel value="#{bundle['ProduitUtilise']}" />
                     <h:panelGroup>
                         <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.treatmentResult.productUsed}">
+                            <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
                             <f:selectItems value="#{fileItemCctDetailController.trProductsUsed}" var="pu" itemLabel="#{bundle[pu.label]}" itemValue="#{pu.value}" />
                         </p:selectOneMenu>
                     </h:panelGroup>
@@ -82,6 +84,7 @@
                     <h:outputLabel value="#{bundle['EnvironnementStockage']}" />
                     <h:panelGroup>
                         <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.treatmentResult.treatmentEnvironment}">
+                            <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
                             <f:selectItems value="#{fileItemCctDetailController.trTreatmentEnvironments}" var="se" itemLabel="#{bundle[se.label]}" itemValue="#{se.value}" />
                         </p:selectOneMenu>
                     </h:panelGroup>
@@ -95,6 +98,7 @@
                     <h:outputLabel value="#{bundle['LieuStockage']}" />
                     <h:panelGroup>
                         <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.treatmentResult.storagePlace}">
+                            <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
                             <f:selectItems value="#{fileItemCctDetailController.trStoragePlaces}" var="sp" itemLabel="#{bundle[sp.label]}" itemValue="#{sp.value}" />
                         </p:selectOneMenu>
                     </h:panelGroup>
@@ -114,6 +118,7 @@
                     <h:outputLabel value="#{bundle['weatherCondition']}" />
                     <h:panelGroup>
                         <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.treatmentResult.weatherCondition}">
+                            <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
                             <f:selectItems value="#{fileItemCctDetailController.trWeatherConditions}" var="wc" itemLabel="#{bundle[wc.label]}" itemValue="#{wc.value}" />
                         </p:selectOneMenu>
                     </h:panelGroup>
@@ -210,3 +215,6 @@
     </h:panelGroup>
 
 </ui:composition>
+
+
+

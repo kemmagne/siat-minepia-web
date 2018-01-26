@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PV_INSPECTION_PHYTOSANITAIRE" pageWidth="650" pageHeight="1000" columnWidth="610" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="815c4d67-1776-454d-b1df-c04d5a7d281b">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="432"/>
+	<property name="ireport.y" value="41"/>
 	<field name="observations" class="java.lang.String"/>
 	<field name="signatairePVIPhyto" class="java.lang.String"/>
 	<field name="typeTraitement" class="java.lang.String"/>
@@ -13,31 +13,12 @@
 	<field name="environnementTransport" class="java.lang.String"/>
 	<field name="conditionClimatique" class="java.lang.String"/>
 	<field name="mesureProtection" class="java.lang.String"/>
+	<field name="numeroDecisionPVI" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
 		<band height="185" splitType="Stretch">
-			<staticText>
-				<reportElement x="24" y="166" width="324" height="16" uuid="2dea2939-5c57-4a23-aef7-c2032ff81121"/>
-				<textElement>
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[PROCES-VERBAL D'INSPECTION  PHYTOSANITAIRE N° ]]></text>
-			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="348" y="166" width="73" height="16" uuid="ca642782-b19f-4b44-a775-4ba1ee00388e"/>
-				<textElement>
-					<font size="12" isBold="true" isUnderline="true"/>
-				</textElement>
-			</textField>
-			<staticText>
-				<reportElement x="421" y="166" width="125" height="16" uuid="b064f33f-fdab-4a57-9661-402dc183c61a"/>
-				<textElement>
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[/PVIP/MINADER/SG/DRCQ]]></text>
-			</staticText>
 			<frame>
 				<reportElement x="0" y="0" width="610" height="160" uuid="474799a6-9c9e-43a3-a128-5b824686dc88"/>
 				<staticText>
@@ -93,6 +74,13 @@ DEPARTEMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCT
 ---------]]></text>
 				</staticText>
 			</frame>
+			<textField>
+				<reportElement x="50" y="164" width="500" height="20" uuid="5722f70a-7f7c-440a-bad7-3afd25c35c7e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>PROCES-VERBAL D'INSPECTION PHYTOSANITAIRE N° <u>" + $F{numeroDecisionPVI} + "</u>/PVIP/MINADER/SG/DRCQ</b>"]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageFooter>
@@ -345,7 +333,7 @@ végétale.]]></text>
 			</textField>
 			<staticText>
 				<reportElement x="8" y="355" width="26" height="20" uuid="a3b01a06-28ea-4109-a860-2cabc7f4ffc5">
-					<printWhenExpression><![CDATA["PULVERISATION" == $F{typeTraitement}]]></printWhenExpression>
+					<printWhenExpression><![CDATA["PULVERISATION".equalsIgnoreCase($F{typeTraitement})]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
@@ -354,7 +342,7 @@ végétale.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="207" y="355" width="26" height="20" uuid="b1544395-c04b-4a5d-af28-4df68a88c434">
-					<printWhenExpression><![CDATA["TREMPAGE" == $F{typeTraitement}]]></printWhenExpression>
+					<printWhenExpression><![CDATA["TREMPAGE".equalsIgnoreCase($F{typeTraitement})]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
@@ -363,7 +351,7 @@ végétale.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="8" y="374" width="26" height="20" uuid="8970e7f8-b04c-4348-8e26-1e84b0f628e5">
-					<printWhenExpression><![CDATA["FUMIGRATION" == $F{typeTraitement}]]></printWhenExpression>
+					<printWhenExpression><![CDATA["FUMIGRATION".equalsIgnoreCase($F{typeTraitement})]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
@@ -372,7 +360,7 @@ végétale.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="205" y="374" width="26" height="20" uuid="bf11125d-51e1-4c99-9284-7e1c5694dad3">
-					<printWhenExpression><![CDATA["CHALEUR" == $F{typeTraitement}]]></printWhenExpression>
+					<printWhenExpression><![CDATA["CHALEUR".equalsIgnoreCase($F{typeTraitement})]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
@@ -381,7 +369,7 @@ végétale.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="419" y="355" width="26" height="20" uuid="2e3377ec-b21b-45bf-9519-c45b0121c843">
-					<printWhenExpression><![CDATA["DECLARED" == $F{etatDateDernierTraitement}]]></printWhenExpression>
+					<printWhenExpression><![CDATA["DECLARED".equalsIgnoreCase($F{etatDateDernierTraitement})]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
@@ -390,7 +378,7 @@ végétale.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="508" y="354" width="26" height="20" uuid="97789647-f09b-4daf-aebd-151066b143a3">
-					<printWhenExpression><![CDATA["DONE" == $F{etatDateDernierTraitement}]]></printWhenExpression>
+					<printWhenExpression><![CDATA["DONE".equalsIgnoreCase($F{etatDateDernierTraitement})]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
@@ -399,7 +387,7 @@ végétale.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="6" y="469" width="26" height="20" uuid="cdb2d598-16ef-4e65-aef4-69187126dc45">
-					<printWhenExpression><![CDATA["AIR_LIBRE" == $F{environnementStockage}]]></printWhenExpression>
+					<printWhenExpression><![CDATA["AIR_LIBRE".equalsIgnoreCase($F{environnementStockage})]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
@@ -408,7 +396,7 @@ végétale.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="81" y="469" width="26" height="20" uuid="82aa5623-6f2b-4c7e-863c-6888add7f8ef">
-					<printWhenExpression><![CDATA["MAGASIN" == $F{environnementStockage}]]></printWhenExpression>
+					<printWhenExpression><![CDATA["MAGASIN".equalsIgnoreCase($F{environnementStockage})]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
@@ -417,7 +405,7 @@ végétale.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="163" y="469" width="26" height="20" uuid="eb6021a6-d024-498f-b64b-0af67e2a8d23">
-					<printWhenExpression><![CDATA["CONTENEUR" == $F{environnementStockage}]]></printWhenExpression>
+					<printWhenExpression><![CDATA["CONTENEUR".equalsIgnoreCase($F{environnementStockage})]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
@@ -426,7 +414,7 @@ végétale.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="369" y="469" width="26" height="20" uuid="306f2e1c-4450-4bd1-9b77-d9610a49ab76">
-					<printWhenExpression><![CDATA["VRAC" == $F{environnementTransport}]]></printWhenExpression>
+					<printWhenExpression><![CDATA["VRAC".equalsIgnoreCase($F{environnementTransport})]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
@@ -435,7 +423,7 @@ végétale.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="447" y="469" width="26" height="20" uuid="e55957ef-698e-441d-8660-b9718075a21a">
-					<printWhenExpression><![CDATA["CONTENEUR" == $F{environnementTransport}]]></printWhenExpression>
+					<printWhenExpression><![CDATA["CONTENEUR".equalsIgnoreCase($F{environnementTransport})]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
@@ -444,7 +432,7 @@ végétale.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="2" y="520" width="26" height="20" uuid="d007d358-c15a-4bb0-9b69-03abc84c018a">
-					<printWhenExpression><![CDATA["SAISON_SECHE" == $F{conditionClimatique}]]></printWhenExpression>
+					<printWhenExpression><![CDATA["SAISON_SECHE".equalsIgnoreCase($F{conditionClimatique})]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
@@ -453,7 +441,7 @@ végétale.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="79" y="520" width="26" height="20" uuid="e79c05c8-c65b-4b0d-93bb-51e989745946">
-					<printWhenExpression><![CDATA["SAISON_PLUVIEUSE" == $F{conditionClimatique}]]></printWhenExpression>
+					<printWhenExpression><![CDATA["SAISON_PLUVIEUSE".equalsIgnoreCase($F{conditionClimatique})]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
@@ -462,7 +450,7 @@ végétale.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="205" y="521" width="26" height="20" uuid="f752deb0-ab9f-4774-b5f0-f0d042996368">
-					<printWhenExpression><![CDATA["PRESENCE_VENT" == $F{conditionClimatique}]]></printWhenExpression>
+					<printWhenExpression><![CDATA["PRESENCE_VENT".equalsIgnoreCase($F{conditionClimatique})]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
@@ -471,7 +459,7 @@ végétale.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="368" y="521" width="26" height="20" uuid="9125cefb-cc46-48ec-94c8-95f74513918e">
-					<printWhenExpression><![CDATA["INFORMATION" == $F{mesureProtection}]]></printWhenExpression>
+					<printWhenExpression><![CDATA["INFORMATION".equalsIgnoreCase($F{mesureProtection})]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>
@@ -480,7 +468,7 @@ végétale.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="461" y="520" width="26" height="20" uuid="4368d9ad-2dbc-40f8-ac11-c2889cfd3a13">
-					<printWhenExpression><![CDATA["SIGNALISATION" == $F{mesureProtection}]]></printWhenExpression>
+					<printWhenExpression><![CDATA["SIGNALISATION".equalsIgnoreCase($F{mesureProtection})]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12"/>

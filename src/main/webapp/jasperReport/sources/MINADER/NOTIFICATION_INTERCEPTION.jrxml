@@ -2,8 +2,34 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="NOTIFICATION_INTERCEPTION" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7d054348-1813-4311-a099-dbbed19b28d1">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="404"/>
+	<property name="ireport.y" value="336"/>
 	<field name="decisionNumber" class="java.lang.String"/>
+	<field name="contaminatedProduct" class="java.lang.Boolean"/>
+	<field name="contaminationAgent" class="java.lang.String"/>
+	<field name="prohibitedProduct" class="java.lang.Boolean"/>
+	<field name="activeIngredient" class="java.lang.String"/>
+	<field name="phytoAbsent" class="java.lang.Boolean"/>
+	<field name="phytoUnacceptable" class="java.lang.Boolean"/>
+	<field name="phytoReasons" class="java.lang.String"/>
+	<field name="tmDestruction" class="java.lang.Boolean"/>
+	<field name="otherTakenMeasure" class="java.lang.String"/>
+	<field name="itemNature" class="java.lang.String"/>
+	<field name="itemQuantity" class="java.lang.String"/>
+	<field name="vegetalName" class="java.lang.String"/>
+	<field name="commodityCategory" class="java.lang.String"/>
+	<field name="shipmentQuantity" class="java.lang.String"/>
+	<field name="shipmentDetails" class="java.lang.String"/>
+	<field name="sender" class="java.lang.String"/>
+	<field name="recipient" class="java.lang.String"/>
+	<field name="packagesMark" class="java.lang.String"/>
+	<field name="meanOfTransport" class="java.lang.String"/>
+	<field name="phytoNumber" class="java.lang.String"/>
+	<field name="inspectionPlace" class="java.lang.String"/>
+	<field name="inspectionDate" class="java.util.Date"/>
+	<field name="tmQuarantine" class="java.lang.Boolean"/>
+	<field name="tmSuppression" class="java.lang.Boolean"/>
+	<field name="tmElimination" class="java.lang.Boolean"/>
+	<field name="tmTreatment" class="java.lang.Boolean"/>
 	<title>
 		<band height="200" splitType="Stretch">
 			<frame>
@@ -39,7 +65,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 					<textElement textAlignment="Center" markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["<em>Notification d'interception<b>N° <u>" + $F{decisionNumber} + "</u>/NI/MINADER/SG/DRCQ</b></em>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["<em>Notification d'interception <b>N° <u>" + $F{decisionNumber} + "</u>/NI/MINADER/SG/DRCQ</b></em>"]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>
@@ -65,10 +91,12 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						<textElement markup="html">
 							<font size="11"/>
 						</textElement>
-						<textFieldExpression><![CDATA["Produits reconnus contaminés par : <u>...</u>"]]></textFieldExpression>
+						<textFieldExpression><![CDATA["Produits reconnus contaminés par : <u>" + $F{contaminationAgent} + "</u>"]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement x="0" y="0" width="15" height="15" uuid="642749c6-f766-4b31-abfb-21dcf237c2fe"/>
+						<reportElement x="0" y="0" width="15" height="15" uuid="642749c6-f766-4b31-abfb-21dcf237c2fe">
+							<printWhenExpression><![CDATA[$F{contaminatedProduct}]]></printWhenExpression>
+						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle"/>
 						<text><![CDATA[X]]></text>
 					</staticText>
@@ -83,10 +111,12 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						<textElement markup="html">
 							<font size="11"/>
 						</textElement>
-						<textFieldExpression><![CDATA["Produits dont l'impotation est interdite. Nom de la matière active du produit : <u>...</u>"]]></textFieldExpression>
+						<textFieldExpression><![CDATA["Produits dont l'impotation est interdite. Nom de la matière active du produit : <u>" + $F{activeIngredient} + "</u>"]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement x="0" y="0" width="15" height="15" uuid="1d90a23e-ab7f-4266-9bb2-e68334e99676"/>
+						<reportElement x="0" y="0" width="15" height="15" uuid="1d90a23e-ab7f-4266-9bb2-e68334e99676">
+							<printWhenExpression><![CDATA[$F{prohibitedProduct}]]></printWhenExpression>
+						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle"/>
 						<text><![CDATA[X]]></text>
 					</staticText>
@@ -104,7 +134,9 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						<textFieldExpression><![CDATA["Absence de certificat phytosanitaire / manque passeport phytosanitaire"]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement x="0" y="0" width="15" height="15" uuid="9fdb2f60-64d9-4f53-94c4-a494c7c1a008"/>
+						<reportElement x="0" y="0" width="15" height="15" uuid="9fdb2f60-64d9-4f53-94c4-a494c7c1a008">
+							<printWhenExpression><![CDATA[$F{phytoAbsent}]]></printWhenExpression>
+						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle"/>
 						<text><![CDATA[X]]></text>
 					</staticText>
@@ -122,7 +154,9 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						<textFieldExpression><![CDATA["Certificat phytosanitaire inacceptable pour les raisons suivantes"]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement x="0" y="0" width="15" height="15" uuid="340a6225-64dd-474b-987e-756fd3f4e506"/>
+						<reportElement x="0" y="0" width="15" height="15" uuid="340a6225-64dd-474b-987e-756fd3f4e506">
+							<printWhenExpression><![CDATA[$F{phytoUnacceptable}]]></printWhenExpression>
+						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle"/>
 						<text><![CDATA[X]]></text>
 					</staticText>
@@ -132,7 +166,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Motifs phytosanitaires : <u>...</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Motifs phytosanitaires : <u>" + $F{phytoReasons} + "</u>"]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="0" y="125" width="100" height="15" uuid="27677dba-41e5-4634-b53d-63eb309b1ca2"/>
@@ -154,7 +188,9 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						<text><![CDATA[Destruction]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="0" y="0" width="15" height="15" uuid="0765a4b0-3e4d-476e-80d3-cf4d16dd0ecd"/>
+						<reportElement x="0" y="0" width="15" height="15" uuid="0765a4b0-3e4d-476e-80d3-cf4d16dd0ecd">
+							<printWhenExpression><![CDATA[$F{tmDestruction}]]></printWhenExpression>
+						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle"/>
 						<text><![CDATA[X]]></text>
 					</staticText>
@@ -169,7 +205,9 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						<text><![CDATA[Mise en quarantaine]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="91" y="0" width="15" height="15" uuid="536f9f83-17f8-4d9a-81c4-6a1246a02522"/>
+						<reportElement x="91" y="0" width="15" height="15" uuid="536f9f83-17f8-4d9a-81c4-6a1246a02522">
+							<printWhenExpression><![CDATA[$F{tmQuarantine}]]></printWhenExpression>
+						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle"/>
 						<text><![CDATA[X]]></text>
 					</staticText>
@@ -184,7 +222,9 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						<text><![CDATA[Refoulment]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="223" y="0" width="15" height="15" uuid="995a47e9-9100-4671-afef-e5ab8d35a690"/>
+						<reportElement x="223" y="0" width="15" height="15" uuid="995a47e9-9100-4671-afef-e5ab8d35a690">
+							<printWhenExpression><![CDATA[$F{tmSuppression}]]></printWhenExpression>
+						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle"/>
 						<text><![CDATA[X]]></text>
 					</staticText>
@@ -199,7 +239,9 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						<text><![CDATA[Partie(s) infestées éliminées de l'envoi]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="315" y="0" width="15" height="15" uuid="2f05168d-3403-4051-8aab-82f6500ee0ab"/>
+						<reportElement x="315" y="0" width="15" height="15" uuid="2f05168d-3403-4051-8aab-82f6500ee0ab">
+							<printWhenExpression><![CDATA[$F{tmElimination}]]></printWhenExpression>
+						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle"/>
 						<text><![CDATA[X]]></text>
 					</staticText>
@@ -214,7 +256,9 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						<text><![CDATA[Traitement]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="0" y="20" width="15" height="15" uuid="fc7a3e62-a54a-4358-8724-96cc9a38368b"/>
+						<reportElement x="0" y="20" width="15" height="15" uuid="fc7a3e62-a54a-4358-8724-96cc9a38368b">
+							<printWhenExpression><![CDATA[$F{tmTreatment}]]></printWhenExpression>
+						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle"/>
 						<text><![CDATA[X]]></text>
 					</staticText>
@@ -224,21 +268,21 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Autres : <u>...</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Autres : <u>" + $F{otherTakenMeasure} + "</u>"]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="0" y="200" width="555" height="15" uuid="ec913c3a-b772-400b-a155-684b7f1dbd04"/>
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Nature et quantité de la marchandise soumise aux mesures susmentionnées : <u>...</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Nature et quantité de la marchandise soumise aux mesures susmentionnées : <u>" + $F{itemNature} + "; " + $F{itemQuantity} + "</u>"]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="0" y="215" width="555" height="15" uuid="ce87e94c-64e6-4d86-9f4e-d416f580e80e"/>
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Nom du végétal (ou des végétaux) Nom botanique et/ou codes <b>BAYER</b> : <u>...</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Nom du végétal (ou des végétaux) Nom botanique et/ou codes <b>BAYER</b> : <u>" + $F{vegetalName} + "</u>"]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="0" y="235" width="155" height="15" uuid="67e6bbb4-3a1e-4693-8a63-973fed235688"/>
@@ -260,7 +304,9 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						<text><![CDATA[Végétaux destinés à la plantation y compris des boutures]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="0" y="0" width="15" height="15" uuid="c6b3d920-1ea4-4eb1-806a-1b7a85ff355d"/>
+						<reportElement x="0" y="0" width="15" height="15" uuid="c6b3d920-1ea4-4eb1-806a-1b7a85ff355d">
+							<printWhenExpression><![CDATA["VEGETAUX_PLANTATION".equals($F{commodityCategory})]]></printWhenExpression>
+						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle"/>
 						<text><![CDATA[X]]></text>
 					</staticText>
@@ -275,7 +321,9 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						<text><![CDATA[Fruits et légumes]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="200" y="0" width="15" height="15" uuid="abae7cf0-26aa-4855-93ed-6d2351ebe219"/>
+						<reportElement x="200" y="0" width="15" height="15" uuid="abae7cf0-26aa-4855-93ed-6d2351ebe219">
+							<printWhenExpression><![CDATA["FRUITS_LEGUMES".equals($F{commodityCategory})]]></printWhenExpression>
+						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle"/>
 						<text><![CDATA[X]]></text>
 					</staticText>
@@ -290,7 +338,9 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						<text><![CDATA[Plantes en pots]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="365" y="0" width="15" height="15" uuid="3bd71587-414d-49ce-a962-08cc0cc16b1d"/>
+						<reportElement x="365" y="0" width="15" height="15" uuid="3bd71587-414d-49ce-a962-08cc0cc16b1d">
+							<printWhenExpression><![CDATA["PLANTES_POTS".equals($F{commodityCategory})]]></printWhenExpression>
+						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle"/>
 						<text><![CDATA[X]]></text>
 					</staticText>
@@ -305,7 +355,9 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						<text><![CDATA[Fleures et rameaux coupés]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="0" y="35" width="15" height="15" uuid="8979a0a1-954c-4e25-840e-9b5066788fc5"/>
+						<reportElement x="0" y="35" width="15" height="15" uuid="8979a0a1-954c-4e25-840e-9b5066788fc5">
+							<printWhenExpression><![CDATA["FLEURES_RAMEAUX".equals($F{commodityCategory})]]></printWhenExpression>
+						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle"/>
 						<text><![CDATA[X]]></text>
 					</staticText>
@@ -320,7 +372,9 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						<text><![CDATA[Bulbes et tubercules à fleurs]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="200" y="35" width="15" height="15" uuid="8b0cc0d5-b021-421d-a7b3-b0ef099db1aa"/>
+						<reportElement x="200" y="35" width="15" height="15" uuid="8b0cc0d5-b021-421d-a7b3-b0ef099db1aa">
+							<printWhenExpression><![CDATA["BULBES_TUBERCULES".equals($F{commodityCategory})]]></printWhenExpression>
+						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle"/>
 						<text><![CDATA[X]]></text>
 					</staticText>
@@ -335,7 +389,9 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						<text><![CDATA[Semences]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="365" y="35" width="15" height="15" uuid="2b2ec1d2-d2eb-4c85-99ed-f61e50c965bb"/>
+						<reportElement x="365" y="35" width="15" height="15" uuid="2b2ec1d2-d2eb-4c85-99ed-f61e50c965bb">
+							<printWhenExpression><![CDATA["SEMENCES".equals($F{commodityCategory})]]></printWhenExpression>
+						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle"/>
 						<text><![CDATA[X]]></text>
 					</staticText>
@@ -350,7 +406,9 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						<text><![CDATA[Pommes de terre de semence]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="0" y="55" width="15" height="15" uuid="92187238-4dec-445d-a1db-e3c0e05d79b9"/>
+						<reportElement x="0" y="55" width="15" height="15" uuid="92187238-4dec-445d-a1db-e3c0e05d79b9">
+							<printWhenExpression><![CDATA["POMMES_TERRE_SEMENCE".equals($F{commodityCategory})]]></printWhenExpression>
+						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle"/>
 						<text><![CDATA[X]]></text>
 					</staticText>
@@ -365,7 +423,9 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						<text><![CDATA[Terre de milieu de culture]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="1" y="75" width="15" height="15" uuid="4cf9da45-e619-4fc6-9520-48e52f063a68"/>
+						<reportElement x="1" y="75" width="15" height="15" uuid="4cf9da45-e619-4fc6-9520-48e52f063a68">
+							<printWhenExpression><![CDATA["TERRE_MILIEU_CULTURE".equals($F{commodityCategory})]]></printWhenExpression>
+						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle"/>
 						<text><![CDATA[X]]></text>
 					</staticText>
@@ -380,7 +440,9 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						<text><![CDATA[Bois et écorce]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="200" y="55" width="15" height="15" uuid="edbd4784-c716-4470-a01b-3776445dfdf4"/>
+						<reportElement x="200" y="55" width="15" height="15" uuid="edbd4784-c716-4470-a01b-3776445dfdf4">
+							<printWhenExpression><![CDATA["BOIS_ECORCE".equals($F{commodityCategory})]]></printWhenExpression>
+						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle"/>
 						<text><![CDATA[X]]></text>
 					</staticText>
@@ -395,7 +457,9 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						<text><![CDATA[Pommes de terre de consommation]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="365" y="55" width="15" height="15" uuid="b798bece-cb83-447d-88d1-e878ef18a3fc"/>
+						<reportElement x="365" y="55" width="15" height="15" uuid="b798bece-cb83-447d-88d1-e878ef18a3fc">
+							<printWhenExpression><![CDATA["POMMES_TERRE_CONSO".equals($F{commodityCategory})]]></printWhenExpression>
+						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle"/>
 						<text><![CDATA[X]]></text>
 					</staticText>
@@ -410,7 +474,9 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						<text><![CDATA[Culture de tissus]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="200" y="75" width="15" height="15" uuid="2e9ac0f9-ec71-499c-9d4e-5aaa174d4be9"/>
+						<reportElement x="200" y="75" width="15" height="15" uuid="2e9ac0f9-ec71-499c-9d4e-5aaa174d4be9">
+							<printWhenExpression><![CDATA["CULTURE_TISSUS".equals($F{commodityCategory})]]></printWhenExpression>
+						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle"/>
 						<text><![CDATA[X]]></text>
 					</staticText>
@@ -425,7 +491,9 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						<reportElement x="365" y="75" width="15" height="15" uuid="f110b822-1131-4ae0-90a1-2062fd3858cb"/>
 					</rectangle>
 					<staticText>
-						<reportElement x="365" y="75" width="15" height="15" uuid="00d6e391-f7d0-43a1-ac2e-ccc47f18da0f"/>
+						<reportElement x="365" y="75" width="15" height="15" uuid="00d6e391-f7d0-43a1-ac2e-ccc47f18da0f">
+							<printWhenExpression><![CDATA["DENREES_STOCKEES".equals($F{commodityCategory})]]></printWhenExpression>
+						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle"/>
 						<text><![CDATA[X]]></text>
 					</staticText>
@@ -435,7 +503,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Quantité de l'envoi : <u>...</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Quantité de l'envoi : <u>" + $F{shipmentQuantity} + "</u>"]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="0" y="380" width="555" height="15" uuid="b567dc9c-e841-4f08-a39d-3efa9a49b740"/>
@@ -448,53 +516,53 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 					<reportElement x="0" y="400" width="555" height="1" uuid="32ccd276-190b-4dd1-9271-adac15181989"/>
 				</line>
 				<textField>
-					<reportElement x="0" y="405" width="554" height="15" uuid="6f9c3486-42af-4081-bca7-bb148249c58c"/>
+					<reportElement x="0" y="405" width="555" height="15" uuid="6f9c3486-42af-4081-bca7-bb148249c58c"/>
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Détails de l'envoi : <u>...</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Détails de l'envoi : <u>" + $F{shipmentDetails} + "</u>"]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="0" y="420" width="554" height="15" uuid="2e3cfec1-c7fd-4e5a-918d-172141d8f8bc"/>
+					<reportElement x="0" y="420" width="555" height="15" uuid="2e3cfec1-c7fd-4e5a-918d-172141d8f8bc"/>
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Expéditeur : <u>...</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Expéditeur : <u>" + $F{sender} + "</u>"]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="0" y="435" width="554" height="15" uuid="da70dd2a-0c96-49b1-b673-8c797eb005e2"/>
+					<reportElement x="0" y="435" width="555" height="15" uuid="da70dd2a-0c96-49b1-b673-8c797eb005e2"/>
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Destinaire : <u>...</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Destinaire : <u>" + $F{recipient} + "</u>"]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="1" y="450" width="554" height="15" uuid="dcd821a3-3656-4987-a43f-e9c7ee6357d4"/>
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Marque de colis : <u>...</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Marque de colis : <u>" + $F{packagesMark} + "</u>"]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="1" y="465" width="554" height="15" uuid="93d5e0e6-a9c7-4195-857f-b35e9db65f31"/>
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Moyent de transport : <u>...</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Moyent de transport : <u>" + $F{meanOfTransport} + "</u>"]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="1" y="480" width="554" height="15" uuid="55b56288-7aea-40dd-b96a-608666acf6c6"/>
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Certificat phytosanitaire N° : <u>...</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Certificat phytosanitaire N° : <u>" + $F{phytoNumber} + "</u>"]]></textFieldExpression>
 				</textField>
-				<textField>
-					<reportElement x="0" y="500" width="554" height="15" uuid="dacf974a-b6bb-4568-a57f-3eb9dc09a172"/>
+				<textField isBlankWhenNull="true">
+					<reportElement x="0" y="500" width="555" height="15" uuid="dacf974a-b6bb-4568-a57f-3eb9dc09a172"/>
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Envoi à inspecter à : <u>...</u> le <u>...</u> à <u>...</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Envoi à inspecter à : <u>" + $F{inspectionPlace} + "</u> le <u>" + new java.text.SimpleDateFormat("EEEEE dd MMMMM yyyy").format($F{inspectionDate}) + "</u> à <u>...</u>"]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="0" y="525" width="303" height="20" uuid="75f1def4-da9b-48d0-a8d7-4e92e346d5e9"/>

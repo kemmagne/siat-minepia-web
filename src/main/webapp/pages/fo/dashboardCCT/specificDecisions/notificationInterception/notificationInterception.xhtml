@@ -1,0 +1,93 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+    <h:panelGroup id="acc" styleClass="decisionForm decisionDlg">
+        <p:scrollPanel mode="native">
+            <p:messages autoUpdate="true" />
+            <h:panelGrid columns="2">
+                <h:outputLabel value="#{bundle['contaminatedProduct']}" for="contaminatedProduct" />
+                <p:selectBooleanCheckbox id="contaminatedProduct" value="#{fileItemCctDetailController.interceptionNotification.contaminatedProduct}">
+                    <p:ajax event="change" process="@this" update="contaminationAgent contaminationAgentLab" />
+                </p:selectBooleanCheckbox>
+
+                <h:outputLabel id="contaminationAgentLab"
+                               rendered="#{fileItemCctDetailController.interceptionNotification.contaminatedProduct}"
+                               value="#{bundle['contaminationAgent']}" for="contaminationAgent" />
+                <p:inputText id="contaminationAgent"
+                             rendered="#{fileItemCctDetailController.interceptionNotification.contaminatedProduct}"
+                             value="#{fileItemCctDetailController.interceptionNotification.contaminationAgent}" />
+
+                <h:outputLabel value="#{bundle['prohibitedProduct']}" for="prohibitedProduct" />
+                <p:selectBooleanCheckbox id="prohibitedProduct" value="#{fileItemCctDetailController.interceptionNotification.prohibitedProduct}" />
+
+                <h:outputLabel value="#{bundle['activeIngredient']}" for="activeIngredient" />
+                <p:inputText id="activeIngredient" value="#{fileItemCctDetailController.interceptionNotification.activeIngredient}" />
+
+                <h:outputLabel value="#{bundle['phytoAbsent']}" for="phytoAbsent" />
+                <p:selectBooleanCheckbox id="phytoAbsent" value="#{fileItemCctDetailController.interceptionNotification.phytoAbsent}" />
+
+                <h:outputLabel value="#{bundle['phytoUnacceptable']}" for="phytoUnacceptable" />
+                <p:selectBooleanCheckbox id="phytoUnacceptable" value="#{fileItemCctDetailController.interceptionNotification.phytoUnacceptable}" />
+
+                <h:outputLabel value="#{bundle['phytoReasons']}" for="phytoReasons" />
+                <p:inputText id="phytoReasons" value="#{fileItemCctDetailController.interceptionNotification.phytoReasons}" />
+
+                <h3>#{bundle['takenMeasures']}</h3>
+
+                <h:outputLabel value="#{bundle['Destruction']}" for="tmDestruction" />
+                <p:selectBooleanCheckbox id="tmDestruction" value="#{fileItemCctDetailController.interceptionNotification.tmDestruction}" />
+
+                <h:outputLabel value="#{bundle['Quarantaine']}" for="tmQuarantine" />
+                <p:selectBooleanCheckbox id="tmQuarantine" value="#{fileItemCctDetailController.interceptionNotification.tmQuarantine}" />
+
+                <h:outputLabel value="#{bundle['Refoulement']}" for="tmSuppression" />
+                <p:selectBooleanCheckbox id="tmSuppression" value="#{fileItemCctDetailController.interceptionNotification.tmSuppression}" />
+
+                <h:outputLabel value="#{bundle['PartiesInfestees']}" for="tmElimination" />
+                <p:selectBooleanCheckbox id="tmElimination" value="#{fileItemCctDetailController.interceptionNotification.tmElimination}" />
+
+                <h:outputLabel value="#{bundle['Traitement']}" for="tmTreatment" />
+                <p:selectBooleanCheckbox id="tmTreatment" value="#{fileItemCctDetailController.interceptionNotification.tmTreatment}" />
+
+                <h:outputLabel value="#{bundle['Autre']} #{bundle['takenMeasure']}" for="AutreMesurePrise" />
+                <p:inputText id="AutreMesurePrise" value="#{fileItemCctDetailController.interceptionNotification.otherTakenMeasure}" />
+
+                <h:outputLabel value="#{bundle['shipmentQuantity']}" for="shipmentQuantity" />
+                <p:inputText id="shipmentQuantity" value="#{fileItemCctDetailController.interceptionNotification.shipmentQuantity}" />
+
+                <h:outputLabel value="#{bundle['shipmentDetails']}" for="shipmentDetails" />
+                <p:inputText id="shipmentDetails" value="#{fileItemCctDetailController.interceptionNotification.shipmentDetails}" />
+
+                <h:outputLabel value="#{bundle['sender']}" for="sender" />
+                <p:inputText id="sender" value="#{fileItemCctDetailController.interceptionNotification.sender}" />
+
+                <h:outputLabel value="#{bundle['recipient']}" for="recipient" />
+                <p:inputText id="recipient" value="#{fileItemCctDetailController.interceptionNotification.recipient}" />
+
+                <h:outputLabel value="#{bundle['packagesMark']}" for="packagesMark" />
+                <p:inputText id="packagesMark" value="#{fileItemCctDetailController.interceptionNotification.packagesMark}" />
+
+                <h:outputLabel value="#{bundle['meanOfTransport']}" for="meanOfTransport" />
+                <p:inputText id="meanOfTransport" value="#{fileItemCctDetailController.interceptionNotification.meanOfTransport}" />
+
+                <h:outputLabel value="#{bundle['phytoNumber']}" for="phytoNumber" />
+                <p:inputText id="phytoNumber" value="#{fileItemCctDetailController.interceptionNotification.phytoNumber}" />
+
+                <h:outputLabel value="#{bundle['inspectionPlace']}" for="inspectionPlace" />
+                <p:inputText id="inspectionPlace" value="#{fileItemCctDetailController.interceptionNotification.inspectionPlace}" />
+
+                <h:outputLabel value="#{bundle['inspectionPlace']}" for="inspectionPlace" />
+                <p:calendar navigator="true" value="#{fileItemCctDetailController.interceptionNotification.inspectionPlace}" showOn="button"
+                            pattern="dd/MM/yyyy" readonlyInput="true" id="inspectionPlace" title="#{bundle['inspectionPlace']}" />
+            </h:panelGrid>
+        </p:scrollPanel>
+    </h:panelGroup>
+
+</ui:composition>
+
+
+
+
+
+
+
