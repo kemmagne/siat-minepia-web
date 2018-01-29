@@ -112,6 +112,10 @@
                             <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPayData}">
                                 <ui:include src="../specificDecisions/paymentValidation/paymentValidationHistory.xhtml" />
                             </h:panelGroup>
+
+                            <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsNI}">
+                                <ui:include src="../specificDecisions/notificationInterception/notificationInterceptionHistory.xhtml" />
+                            </h:panelGroup>
                         </p:panel>
 
                     </h:panelGroup>
@@ -125,6 +129,7 @@
     </p:dialog>
 
 </ui:composition>
+
 
 
 

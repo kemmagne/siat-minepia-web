@@ -52,6 +52,9 @@
                 <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastPaymentData}">
                     <ui:include src="../specificDecisions/paymentValidation/paymentValidationRemindDecision.xhtml" />
                 </h:panelGroup>
+                <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastInterceptionNotification}">
+                    <ui:include src="../specificDecisions/notificationInterception/notificationInterceptionRemindDecision.xhtml" />
+                </h:panelGroup>
 
             </p:tab>
 
@@ -60,6 +63,14 @@
     </h:form>
 
 </ui:composition>
+
+
+
+
+
+
+
+
 
 
 

@@ -35,6 +35,7 @@ public class CtCctTreatmentFileVo {
     private String activeIngredient;
     private String exporterAddress;
     private String treatmentMode;
+    private String otherTreatmentMode;
     private String tssConcentration;
     private String applicationDose;
     private String consigneeCountry;
@@ -215,6 +216,14 @@ public class CtCctTreatmentFileVo {
 
     public void setTreatmentMode(String treatmentMode) {
         this.treatmentMode = treatmentMode;
+    }
+
+    public String getOtherTreatmentMode() {
+        return otherTreatmentMode;
+    }
+
+    public void setOtherTreatmentMode(String otherTreatmentMode) {
+        this.otherTreatmentMode = otherTreatmentMode;
     }
 
     public String getTssConcentration() {
@@ -453,3 +462,4 @@ public class CtCctTreatmentFileVo {
      *
      */
 }
+

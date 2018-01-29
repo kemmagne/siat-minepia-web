@@ -1011,8 +1011,6 @@ public class FileItemCctDetailController implements Serializable {
      */
     private Long invoiceOtherAmount;
 
-    private boolean fillInterceptionNotification;
-
     private InterceptionNotification interceptionNotification;
 
     private final String MINADER_MINISTRY = "MINADER";
@@ -1028,7 +1026,6 @@ public class FileItemCctDetailController implements Serializable {
      */
     public void init() {
         checkMinaderMinistry = false;
-        fillInterceptionNotification = false;
         currentFile = currentFileItem.getFile();
         loggedUser = getLoggedUser();
         allowedRecommandation = checkIsAllowadRecommandation();
@@ -1858,14 +1855,7 @@ public class FileItemCctDetailController implements Serializable {
             }
         }
         // Décision Suite Contrôle && MINADER  ???
-//        fillInterceptionNotification = StepCode.ST_CT_13.equals(currentFile.getFileItemsList().get(0).getStep().getStepCode())
-//                && isCheckMinaderMinistry() && (FlowCode.FL_CT_29.name().equals(selectedFlow.getCode())
-//                || FlowCode.FL_CT_33.name().equals(selectedFlow.getCode())
-//                || FlowCode.FL_CT_64.name().equals(selectedFlow.getCode()));
-        fillInterceptionNotification = FlowCode.FL_CT_29.name().equals(selectedFlow.getCode())
-                || FlowCode.FL_CT_33.name().equals(selectedFlow.getCode())
-                || FlowCode.FL_CT_64.name().equals(selectedFlow.getCode());
-        interceptionNotification = !fillInterceptionNotification ? null : new InterceptionNotification();
+        interceptionNotification = isFillInterceptionNotification(selectedFlow) && isCheckMinaderMinistry() ? new InterceptionNotification() : null;
     }
 
     /**
@@ -1932,7 +1922,9 @@ public class FileItemCctDetailController implements Serializable {
             specificDecisionsHistory.setLastPaymentData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
             //	specificDecisionsHistory.setDecisionDetailsPayData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
         }
-
+        if (isFillInterceptionNotification(lastDecisions.getFlow())) {
+            specificDecisionsHistory.setLastInterceptionNotification(interceptionNotificationService.findByLastItemFlow(lastDecisions));
+        }
     }
 
     /**
@@ -1970,6 +1962,9 @@ public class FileItemCctDetailController implements Serializable {
             downloadAttachment(treatmentParts);
         } else if (FlowCode.FL_CT_93.name().equals(lastDecisions.getFlow().getCode())) {
             specificDecisionsHistory.setDecisionDetailsPayData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
+        }
+        if (isFillInterceptionNotification(lastDecisions.getFlow())) {
+            specificDecisionsHistory.setDecisionDetailsNI(interceptionNotificationService.findByLastItemFlow(lastDecisions));
         }
     }
 
@@ -2180,6 +2175,14 @@ public class FileItemCctDetailController implements Serializable {
 
     public void generateSheetOfTreatmentSup() {
         JsfUtil.generateReport(new CtCctTreatmentExporter("FICHE_SUPERVISION_TRAIT_PHYTO", specificDecisionsHistory.getLastTreatmentResult()));
+    }
+
+    public void generateInterceptionNotif() {
+        JsfUtil.generateReport(new CtCctNiExporter(specificDecisionsHistory.getLastInterceptionNotification()));
+    }
+
+    public void generateInterceptionNotifHistory() {
+        JsfUtil.generateReport(new CtCctNiExporter(specificDecisionsHistory.getDecisionDetailsNI()));
     }
 
     /**
@@ -2398,9 +2401,7 @@ public class FileItemCctDetailController implements Serializable {
                 // Attachment --> Alfresco
             } // Geniric (affichage des itemFlowData)
             // sauvegarde de la notification d'interception
-            else if (fillInterceptionNotification) {
-                commonService.takeDecisionAndSaveInterceptionNotification(interceptionNotification, itemFlowsToAdd);
-            } else {
+            else {
                 // Recuperate the values of DataType (Observation text area ...)
                 List<ItemFlowData> flowDatas;
 
@@ -2437,6 +2438,10 @@ public class FileItemCctDetailController implements Serializable {
                 }
                 decisionDiv.getChildren().clear();
             }
+            if (isFillInterceptionNotification(selectedFlow) && isCheckMinaderMinistry()) {
+                commonService.takeDecisionAndSaveInterceptionNotification(interceptionNotification, itemFlowsToAdd);
+            }
+
             transactionManager.commit(status);
 
         } catch (final Exception ex) {
@@ -2669,14 +2674,14 @@ public class FileItemCctDetailController implements Serializable {
     public Map<Flow, List<FileItem>> groupFileItemsToSendByFlow(final Map<FileItem, Flow> mapToGroup) {
         // grouper les flow par file items (pour generer après plusieurs
         // fichiers ebxml au cas ou il ya plusieurs flux sortant par articles)
-        final Map<Flow, List<FileItem>> returnedMap = new HashMap<Flow, List<FileItem>>();
+        final Map<Flow, List<FileItem>> returnedMap = new HashMap<>();
 
         for (final FileItem fileItem : mapToGroup.keySet()) {
             if (returnedMap.containsKey(mapToGroup.get(fileItem))) {
                 returnedMap.get(mapToGroup.get(fileItem)).add(fileItem);
 
             } else {
-                final List<FileItem> groupedFileItemsToAdd = new ArrayList<FileItem>();
+                final List<FileItem> groupedFileItemsToAdd = new ArrayList<>();
                 groupedFileItemsToAdd.add(fileItem);
                 returnedMap.put(mapToGroup.get(fileItem), groupedFileItemsToAdd);
             }
@@ -2809,20 +2814,19 @@ public class FileItemCctDetailController implements Serializable {
                             //generate report
                             Map<String, byte[]> attachedByteFiles = null;
                             try {
-
-                                if (fillInterceptionNotification) {
-                                    attachedByteFiles = new HashMap<>();
-                                    byte[] intNotifReport = JsfUtil.getReport(new CtCctNiExporter(interceptionNotification));
-                                    attachedByteFiles.put("NOTIFICATION_INTERCEPTION", intNotifReport);
-                                }
+//                                System.out.println("est-ce qu'on insère la pj NOTIFICATION_INTERCEPTION dans le map");
+//                                if (null != interceptionNotification) {
+//                                    System.out.println("ajout de la pj NOTIFICATION_INTERCEPTION dans le map");
+//                                    attachedByteFiles = new HashMap<>();
+//                                    byte[] intNotifReport = JsfUtil.getReport(new CtCctNiExporter(interceptionNotification));
+//                                    attachedByteFiles.put("NOTIFICATION_INTERCEPTION", intNotifReport);
+//                                }
 
                                 String reportNumber;
                                 if (FlowCode.FL_CT_89.name().equals(flowToSend.getCode())
                                         || FlowCode.FL_CT_08.name().equals(flowToSend.getCode())) {
 
-                                    if (null == attachedByteFiles) {
-                                        attachedByteFiles = new HashMap<>();
-                                    }
+                                    attachedByteFiles = new HashMap<>();
 
                                     final List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<>();
 
@@ -2882,12 +2886,12 @@ public class FileItemCctDetailController implements Serializable {
                                         @SuppressWarnings({"rawtypes", "unchecked"})
                                         Constructor c1;
                                         byte[] report;
-                                        if (!checkMinaderMinistry) {
-                                            c1 = classe.getConstructor(File.class);
-                                            report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile));
-                                        } else {
+                                        if (checkMinaderMinistry && FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode())) {
                                             c1 = classe.getConstructor(File.class, String.class);
                                             report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile, "CERTIFICAT_PHYTOSANITAIRE"));
+                                        } else {
+                                            c1 = classe.getConstructor(File.class);
+                                            report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile));
                                         }
                                         attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
 
@@ -3896,8 +3900,6 @@ public class FileItemCctDetailController implements Serializable {
                 }
             }
         }
-        System.out.println("org.guce.siat.web.ct.controller.FileItemCctDetailController.downloadReport()");
-        System.out.println(fileTypeFlowReports);
         for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
             //Begin Add new field value with report Number
             try {
@@ -6502,8 +6504,11 @@ public class FileItemCctDetailController implements Serializable {
         return takenMeasures;
     }
 
-    public boolean isFillInterceptionNotification() {
-        return fillInterceptionNotification;
+    public boolean isFillInterceptionNotification(Flow flow) {
+        return FlowCode.FL_CT_29.name().equals(flow.getCode())
+                || FlowCode.FL_CT_33.name().equals(flow.getCode())
+                || FlowCode.FL_CT_35.name().equals(flow.getCode())
+                || FlowCode.FL_CT_64.name().equals(flow.getCode());
     }
 
     public InterceptionNotification getInterceptionNotification() {

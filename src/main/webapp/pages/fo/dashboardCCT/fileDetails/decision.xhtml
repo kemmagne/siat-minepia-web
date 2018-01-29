@@ -57,7 +57,7 @@
                         <ui:include src="../specificDecisions/treatmentResult/treatmentResult.xhtml" />
                     </p:panel>
 
-                    <h:panelGroup rendered="#{fileItemCctDetailController.selectedFlow ne null and (fileItemCctDetailController.selectedFlow.code eq 'FL_CT_29' or fileItemCctDetailController.selectedFlow.code eq 'FL_CT_33' or fileItemCctDetailController.selectedFlow.code eq 'FL_CT_64')}">
+                    <h:panelGroup rendered="#{fileItemCctDetailController.selectedFlow ne null and fileItemCctDetailController.checkMinaderMinistry and (fileItemCctDetailController.selectedFlow.code eq 'FL_CT_29' or fileItemCctDetailController.selectedFlow.code eq 'FL_CT_33' or fileItemCctDetailController.selectedFlow.code eq 'FL_CT_35' or fileItemCctDetailController.selectedFlow.code eq 'FL_CT_64')}">
                         <ui:include src="../specificDecisions/notificationInterception/notificationInterception.xhtml" />
                     </h:panelGroup>
 
@@ -87,6 +87,7 @@
     <ui:include src="../specificDecisions/inspectionReport/controllersList.xhtml" />
 
 </ui:composition>
+
 
 
 

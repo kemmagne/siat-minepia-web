@@ -90,6 +90,7 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
         treatmentVo.setTssConcentration(treatmentResult.getTsfConcentration());
         treatmentVo.setUncoveringDate(treatmentResult.getUncoveringDate());
         treatmentVo.setWeatherCondition(treatmentResult.getWeatherCondition());
+        treatmentVo.setOtherTreatmentMode(treatmentResult.getOtherTreatmentMode());
         treatmentVo.setTreatmentCompanyAddress(treatmentResult.getTreatmentOrder().getTreatmentCompany().getAddress());
         treatmentVo.setTreatmentCompanyName(treatmentResult.getTreatmentOrder().getTreatmentCompany().getLabelFr());
 
