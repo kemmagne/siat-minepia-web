@@ -1,64 +1,80 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 
-	<br />
+    <br />
 
-	<h:form id="remindDecisionForm">
+    <h:form id="remindDecisionForm">
 
-		<p:accordionPanel rendered="#{fileItemCctDetailController.showRemindDecisionForm}">
+        <p:accordionPanel rendered="#{fileItemCctDetailController.showRemindDecisionForm}">
 
-			<p:tab title="#{bundle['RemindDecisionLabel']}" dynamic="true" cache="true" titleStyleClass="titleColor">
-				<h:panelGrid styleClass="remindDecision" columns="2" columnClasses="labelColumnLeft, labelColumnRight" cellspacing="4">
-					<h:outputLabel value="#{bundle['RemaindDecision_decisionLabel']}" title="#{bundle['RemaindDecision_decisionTitle']}" />
-					<h:outputLabel
-						value="#{facesContext.viewRoot.locale eq 'en' ? fileItemCctDetailController.lastDecisions.flow.redefinedLabelEn : fileItemCctDetailController.lastDecisions.flow.redefinedLabelFr}" />
-				</h:panelGrid>
+            <p:tab title="#{bundle['RemindDecisionLabel']}" dynamic="true" cache="true" titleStyleClass="titleColor">
+                <h:panelGrid styleClass="remindDecision" columns="2" columnClasses="labelColumnLeft, labelColumnRight" cellspacing="4">
+                    <h:outputLabel value="#{bundle['RemaindDecision_decisionLabel']}" title="#{bundle['RemaindDecision_decisionTitle']}" />
+                    <h:outputLabel
+                        value="#{facesContext.viewRoot.locale eq 'en' ? fileItemCctDetailController.lastDecisions.flow.redefinedLabelEn : fileItemCctDetailController.lastDecisions.flow.redefinedLabelFr}" />
+                </h:panelGrid>
 
-				<h:panelGroup
-					rendered="#{empty fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR and empty fileItemCctDetailController.specificDecisionsHistory.lastDecisionApp and empty fileItemCctDetailController.specificDecisionsHistory.lastAnalyseOrder and empty fileItemCctDetailController.specificDecisionsHistory.lastTreatmentOrder and empty fileItemCctDetailController.specificDecisionsHistory.lastAnalyseResult and empty fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult}">
-					<ui:repeat value="#{fileItemCctDetailController.lastDecisions.itemFlowsDataList}" var="itemFlowData" varStatus="status">
-						<h:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight" cellspacing="4">
-							<h:outputLabel value="#{itemFlowData.dataType.label} : " title="#{itemFlowData.dataType.label}" />
-							<h:outputLabel
-								value="#{itemFlowData.dataType.type == 'selectBooleanCheckbox' ? (itemFlowData.value ? bundle['Oui'] : bundle['Non']) : itemFlowData.value}" />
-						</h:panelGrid>
-					</ui:repeat>
-				</h:panelGroup>
+                <h:panelGroup
+                    rendered="#{empty fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR and empty fileItemCctDetailController.specificDecisionsHistory.lastDecisionApp and empty fileItemCctDetailController.specificDecisionsHistory.lastAnalyseOrder and empty fileItemCctDetailController.specificDecisionsHistory.lastTreatmentOrder and empty fileItemCctDetailController.specificDecisionsHistory.lastAnalyseResult and empty fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult}">
+                    <ui:repeat value="#{fileItemCctDetailController.lastDecisions.itemFlowsDataList}" var="itemFlowData" varStatus="status">
+                        <h:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight" cellspacing="4">
+                            <h:outputLabel value="#{itemFlowData.dataType.label} : " title="#{itemFlowData.dataType.label}" />
+                            <h:outputLabel
+                                value="#{itemFlowData.dataType.type == 'selectBooleanCheckbox' ? (itemFlowData.value ? bundle['Oui'] : bundle['Non']) : itemFlowData.value}" />
+                        </h:panelGrid>
+                    </ui:repeat>
+                </h:panelGroup>
 
-				<h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR}">
-					<ui:include src="../specificDecisions/inspectionReport/inspectionReportRemindDecision.xhtml" />
-				</h:panelGroup>
+                <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR}">
+                    <ui:include src="../specificDecisions/inspectionReport/inspectionReportRemindDecision.xhtml" />
+                </h:panelGroup>
 
-				<h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastDecisionApp}">
-					<ui:include src="../specificDecisions/appointment/appointmentRemindDecision.xhtml" />
-				</h:panelGroup>
+                <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastDecisionApp}">
+                    <ui:include src="../specificDecisions/appointment/appointmentRemindDecision.xhtml" />
+                </h:panelGroup>
 
-				<h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastAnalyseOrder}">
-					<ui:include src="../specificDecisions/analyseRequest/analyseRequestRemindDecision.xhtml" />
-				</h:panelGroup>
+                <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastAnalyseOrder}">
+                    <ui:include src="../specificDecisions/analyseRequest/analyseRequestRemindDecision.xhtml" />
+                </h:panelGroup>
 
-				<h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastTreatmentOrder}">
-					<ui:include src="../specificDecisions/treatmentRequest/treatmentRequestRemindDecision.xhtml" />
-				</h:panelGroup>
+                <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastTreatmentOrder}">
+                    <ui:include src="../specificDecisions/treatmentRequest/treatmentRequestRemindDecision.xhtml" />
+                </h:panelGroup>
 
-				<h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastAnalyseResult}">
-					<ui:include src="../specificDecisions/analyseResult/analyseResultRemindDecision.xhtml" />
-				</h:panelGroup>
+                <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastAnalyseResult}">
+                    <ui:include src="../specificDecisions/analyseResult/analyseResultRemindDecision.xhtml" />
+                </h:panelGroup>
 
-				<h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult}">
-					<ui:include src="../specificDecisions/treatmentResult/treatmentResultRemindDecision.xhtml" />
-				</h:panelGroup>
+                <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult}">
+                    <ui:include src="../specificDecisions/treatmentResult/treatmentResultRemindDecision.xhtml" />
+                </h:panelGroup>
 
-				<h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastPaymentData}">
-					<ui:include src="../specificDecisions/paymentValidation/paymentValidationRemindDecision.xhtml" />
-				</h:panelGroup>
+                <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastPaymentData}">
+                    <ui:include src="../specificDecisions/paymentValidation/paymentValidationRemindDecision.xhtml" />
+                </h:panelGroup>
+                <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastInterceptionNotification}">
+                    <ui:include src="../specificDecisions/notificationInterception/notificationInterceptionRemindDecision.xhtml" />
+                </h:panelGroup>
 
-			</p:tab>
+            </p:tab>
 
-		</p:accordionPanel>
+        </p:accordionPanel>
 
-	</h:form>
+    </h:form>
 
 </ui:composition>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

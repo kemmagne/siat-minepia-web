@@ -231,6 +231,14 @@ public class InspectionReportData implements Serializable {
     private String mesureProtection;
 
     private String observations;
+    private String articleReglemente;
+    private String pviDestination;
+    private String pviSituationArticle;
+    private boolean pviCouvertDoc;
+    private String pviReference;
+    private String pviNatureArticleInspecte;
+    private String pviQuantite;
+    private String pviDispositionsPrises;
 
     /**
      * Transform to report list.
@@ -284,6 +292,13 @@ public class InspectionReportData implements Serializable {
             inspectionReport.setConditionClimatique(conditionClimatique);
             inspectionReport.setMesureProtection(mesureProtection);
             inspectionReport.setObservations(observations);
+            inspectionReport.setArticleReglemente(articleReglemente);
+            inspectionReport.setPviCouvertDoc(pviCouvertDoc);
+            inspectionReport.setPviDestination(pviDestination);
+            inspectionReport.setPviDispositionsPrises(pviDispositionsPrises);
+            inspectionReport.setPviNatureArticleInspecte(pviNatureArticleInspecte);
+            inspectionReport.setPviQuantite(pviQuantite);
+            inspectionReport.setPviSituationArticle(pviSituationArticle);
 
             final InspectionReportTemperatureVo temperatureVo = ((List<InspectionReportTemperatureVo>) CollectionUtils.select(
                     this.temperatureList, new Predicate() {
@@ -942,6 +957,70 @@ public class InspectionReportData implements Serializable {
         this.observations = observations;
     }
 
+    public String getArticleReglemente() {
+        return articleReglemente;
+    }
+
+    public void setArticleReglemente(String articleReglemente) {
+        this.articleReglemente = articleReglemente;
+    }
+
+    public String getPviDestination() {
+        return pviDestination;
+    }
+
+    public void setPviDestination(String pviDestination) {
+        this.pviDestination = pviDestination;
+    }
+
+    public String getPviSituationArticle() {
+        return pviSituationArticle;
+    }
+
+    public void setPviSituationArticle(String pviSituationArticle) {
+        this.pviSituationArticle = pviSituationArticle;
+    }
+
+    public boolean isPviCouvertDoc() {
+        return pviCouvertDoc;
+    }
+
+    public void setPviCouvertDoc(boolean pviCouvertDoc) {
+        this.pviCouvertDoc = pviCouvertDoc;
+    }
+
+    public String getPviReference() {
+        return pviReference;
+    }
+
+    public void setPviReference(String pviReference) {
+        this.pviReference = pviReference;
+    }
+
+    public String getPviNatureArticleInspecte() {
+        return pviNatureArticleInspecte;
+    }
+
+    public void setPviNatureArticleInspecte(String pviNatureArticleInspecte) {
+        this.pviNatureArticleInspecte = pviNatureArticleInspecte;
+    }
+
+    public String getPviQuantite() {
+        return pviQuantite;
+    }
+
+    public void setPviQuantite(String pviQuantite) {
+        this.pviQuantite = pviQuantite;
+    }
+
+    public String getPviDispositionsPrises() {
+        return pviDispositionsPrises;
+    }
+
+    public void setPviDispositionsPrises(String pviDispositionsPrises) {
+        this.pviDispositionsPrises = pviDispositionsPrises;
+    }
+
     /**
      * (non-Javadoc)
      *
@@ -961,3 +1040,4 @@ public class InspectionReportData implements Serializable {
     }
 
 }
+

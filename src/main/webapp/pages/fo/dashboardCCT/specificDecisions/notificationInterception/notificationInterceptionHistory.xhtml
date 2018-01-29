@@ -1,0 +1,89 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+    <p:separator />
+    <p:panel header="#{bundle['NotificationInterception']}">
+        <p:spacer />
+        <h:panelGrid columns="2">
+            <h:outputLabel value="#{bundle['contaminatedProduct']}" />
+            <p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsNI.contaminatedProduct}" />
+
+            <h:outputLabel value="#{bundle['contaminationAgent']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsNI.contaminationAgent}" />
+
+            <h:outputLabel value="#{bundle['prohibitedProduct']}" />
+            <p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsNI.prohibitedProduct}" />
+
+            <h:outputLabel value="#{bundle['activeIngredient']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsNI.activeIngredient}" />
+
+            <h:outputLabel value="#{bundle['phytoAbsent']}" />
+            <p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsNI.phytoAbsent}" />
+
+            <h:outputLabel value="#{bundle['phytoUnacceptable']}" />
+            <p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsNI.phytoUnacceptable}" />
+
+            <h:outputLabel value="#{bundle['phytoReasons']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsNI.phytoReasons}" />
+
+            <h:outputLabel value="#{bundle['Destruction']}" for="tmDestruction" />
+            <p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsNI.tmDestruction}" />
+
+            <h:outputLabel value="#{bundle['Quarantaine']}" />
+            <p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsNI.tmQuarantine}" />
+
+            <h:outputLabel value="#{bundle['Refoulement']}" for="tmSuppression" />
+            <p:selectBooleanCheckbox id="tmSuppression"
+                                     value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsNI.tmSuppression}" />
+
+            <h:outputLabel value="#{bundle['PartiesInfestees']}" for="tmElimination" />
+            <p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsNI.tmElimination}" />
+
+            <h:outputLabel value="#{bundle['Traitement']}" for="tmTreatment" />
+            <p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsNI.tmTreatment}" />
+
+            <h:outputLabel value="#{bundle['Autre']} #{bundle['takenMeasure']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsNI.otherTakenMeasure}" />
+
+            <h:outputLabel value="#{bundle['shipmentQuantity']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsNI.shipmentQuantity}" />
+
+            <h:outputLabel value="#{bundle['shipmentDetails']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsNI.shipmentDetails}" />
+
+            <h:outputLabel value="#{bundle['sender']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsNI.sender}" />
+
+            <h:outputLabel value="#{bundle['recipient']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsNI.recipient}" />
+
+            <h:outputLabel value="#{bundle['packagesMark']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsNI.packagesMark}" />
+
+            <h:outputLabel value="#{bundle['meanOfTransport']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsNI.meanOfTransport}" />
+
+            <h:outputLabel value="#{bundle['phytoNumber']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsNI.phytoNumber}" />
+
+            <h:outputLabel value="#{bundle['inspectionPlace']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsNI.inspectionPlace}" />
+
+            <h:outputLabel value="#{bundle['inspectionDate']}" />
+            <p:calendar navigator="true" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsNI.inspectionDate}"
+                        showOn="button" pattern="dd/MM/yyyy" readonlyInput="true"
+                        title="#{bundle['inspectionPlace']}" readonly="true" />
+        </h:panelGrid>
+
+        <div class="btn-bloc">
+            <p:commandButton ajax="false" value="#{bundle['NotificationInterception']}" actionListener="#{fileItemCctDetailController.generateInterceptionNotifHistory}" />
+        </div>
+    </p:panel>
+
+</ui:composition>
+
+
+
+
+
+
+

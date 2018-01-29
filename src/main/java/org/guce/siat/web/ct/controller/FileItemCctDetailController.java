@@ -136,6 +136,7 @@ import org.guce.siat.core.ct.model.AnalyseResult;
 import org.guce.siat.core.ct.model.Infraction;
 import org.guce.siat.core.ct.model.InspectionController;
 import org.guce.siat.core.ct.model.InspectionReport;
+import org.guce.siat.core.ct.model.InterceptionNotification;
 import org.guce.siat.core.ct.model.Laboratory;
 import org.guce.siat.core.ct.model.PaymentData;
 import org.guce.siat.core.ct.model.PaymentItemFlow;
@@ -150,6 +151,7 @@ import org.guce.siat.core.ct.service.AnalysePartService;
 import org.guce.siat.core.ct.service.AnalyseResultService;
 import org.guce.siat.core.ct.service.CommonService;
 import org.guce.siat.core.ct.service.InspectionReportService;
+import org.guce.siat.core.ct.service.InterceptionNotificationService;
 import org.guce.siat.core.ct.service.LaboratoryService;
 import org.guce.siat.core.ct.service.PaymentDataService;
 import org.guce.siat.core.ct.service.TreatmentCompanyService;
@@ -166,6 +168,7 @@ import org.guce.siat.web.common.ControllerConstants;
 import org.guce.siat.web.common.util.CctSpecificDecision;
 import org.guce.siat.web.common.util.CctSpecificDecisionHistory;
 import org.guce.siat.web.common.util.UploadFileManager;
+import org.guce.siat.web.ct.controller.util.CustumMap;
 import org.guce.siat.web.ct.controller.util.FileItemCheck;
 import org.guce.siat.web.ct.controller.util.InspectionReportData;
 import org.guce.siat.web.ct.controller.util.InspectionReportEtiquetageVo;
@@ -173,6 +176,7 @@ import org.guce.siat.web.ct.controller.util.InspectionReportTemperatureVo;
 import org.guce.siat.web.ct.controller.util.JsfUtil;
 import org.guce.siat.web.ct.controller.util.enums.DataTypeEnnumeration;
 import org.guce.siat.web.ct.controller.util.enums.DecisionsSuiteVisite;
+import org.guce.siat.web.ct.controller.util.enums.NITakenMeasure;
 import org.guce.siat.web.ct.controller.util.enums.PVILastTreatmentDateState;
 import org.guce.siat.web.ct.controller.util.enums.PVIProtectionMeasures;
 import org.guce.siat.web.ct.controller.util.enums.PVIStorageEnv;
@@ -180,6 +184,12 @@ import org.guce.siat.web.ct.controller.util.enums.PVITransportEnv;
 import org.guce.siat.web.ct.controller.util.enums.PVITreatmentType;
 import org.guce.siat.web.ct.controller.util.enums.PVIWeatherConditions;
 import org.guce.siat.web.ct.controller.util.enums.PersistenceActions;
+import org.guce.siat.web.ct.controller.util.enums.TRConditioning;
+import org.guce.siat.web.ct.controller.util.enums.TRProductUsed;
+import org.guce.siat.web.ct.controller.util.enums.TRProtectionEquipement;
+import org.guce.siat.web.ct.controller.util.enums.TRTreatmentEnvironment;
+import org.guce.siat.web.ct.controller.util.enums.TRStoragePlace;
+import org.guce.siat.web.ct.controller.util.enums.TRWeatherCondition;
 import org.guce.siat.web.ct.data.AnalyseTypeDto;
 import org.guce.siat.web.ct.data.TreatmentTypeDto;
 import org.guce.siat.web.gr.controller.RiskController;
@@ -190,6 +200,8 @@ import org.guce.siat.web.reports.exporter.CtCctCpIExporter;
 import org.guce.siat.web.reports.exporter.CtCctExporter;
 import org.guce.siat.web.reports.exporter.CtCctPvpeExporter;
 import org.guce.siat.web.reports.exporter.CtCctSeizureExporter;
+import org.guce.siat.web.reports.exporter.CtCctNiExporter;
+import org.guce.siat.web.reports.exporter.CtCctTreatmentExporter;
 import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.message.Message;
 import org.primefaces.context.RequestContext;
@@ -539,6 +551,9 @@ public class FileItemCctDetailController implements Serializable {
     @ManagedProperty(value = "#{paymentDataService}")
     private PaymentDataService paymentDataService;
 
+    @ManagedProperty(value = "#{interceptionNotificationService}")
+    private InterceptionNotificationService interceptionNotificationService;
+
     /**
      * The send decision allowed.
      */
@@ -577,7 +592,7 @@ public class FileItemCctDetailController implements Serializable {
     /**
      * The field groups items.
      */
-    private List<FieldGroup> fieldGroupsItems = new ArrayList<FieldGroup>();
+    private List<FieldGroup> fieldGroupsItems = new ArrayList<>();
     /**
      * The file field group dtos.
      */
@@ -999,6 +1014,8 @@ public class FileItemCctDetailController implements Serializable {
      */
     private Long invoiceOtherAmount;
 
+    private InterceptionNotification interceptionNotification;
+
     private final String MINADER_MINISTRY = "MINADER";
 
     /**
@@ -1068,7 +1085,7 @@ public class FileItemCctDetailController implements Serializable {
 
         checkGenerateReportAllowed();
 
-        tabList = new ArrayList<Tab>();
+        tabList = new ArrayList<>();
         tabIndexList = concatenateActiveIndexString(tabList);
 
         authoritiesList = new DualListModel<Authority>(new ArrayList<Authority>(), new ArrayList<Authority>());
@@ -1348,7 +1365,7 @@ public class FileItemCctDetailController implements Serializable {
      * @return the checked roll backs file item check list
      */
     public List<Long> getCheckedRollBacksFileItemCheckList() {
-        List<FileItemCheck> checks = new ArrayList<FileItemCheck>();
+        List<FileItemCheck> checks = new ArrayList<>();
         if (BooleanUtils.isTrue(cotationAllowed) && currentFile.getFileItemsList() != null) {
             for (final FileItem fileItem : currentFile.getFileItemsList()) {
                 final FileItemCheck check = new FileItemCheck(fileItem, false, true, false);
@@ -1363,7 +1380,7 @@ public class FileItemCctDetailController implements Serializable {
             checks = productInfoChecks;
         }
 
-        final List<Long> returnedList = new ArrayList<Long>();
+        final List<Long> returnedList = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(checks)) {
 
             for (final FileItemCheck fileItemCheck : checks) {
@@ -1540,7 +1557,7 @@ public class FileItemCctDetailController implements Serializable {
             // IF THE FILEITEMS HAS THE SAME STEPCODE
             if (decisionByFile && errorDecisionByFile) {
                 decisionByFileAllowed = Boolean.TRUE;
-                final List<FileItemCheck> fileItemChecks = new ArrayList<FileItemCheck>();
+                final List<FileItemCheck> fileItemChecks = new ArrayList<>();
                 for (final FileItem fileItem : productInfoItems) {
                     final FileItemCheck fileItemCheck = new FileItemCheck(fileItem, false, false, false);
                     fileItemChecks.add(fileItemCheck);
@@ -1583,7 +1600,7 @@ public class FileItemCctDetailController implements Serializable {
      * Change laboratory handler.
      */
     public void changeLaboratoryHandler() {
-        analyseTypeDtosList = new ArrayList<AnalyseTypeDto>();
+        analyseTypeDtosList = new ArrayList<>();
         for (final AnalyseType analyseType : selectedLaboratory.getAnalyseTypeList()) {
             final AnalyseTypeDto analyseTypeDto = new AnalyseTypeDto();
             analyseTypeDto.setAnalyseType(analyseType);
@@ -1596,7 +1613,7 @@ public class FileItemCctDetailController implements Serializable {
      * Change laboratory handler.
      */
     public void changeTreatmentCompanyHandler() {
-        treatmentTypeDtosList = new ArrayList<TreatmentTypeDto>();
+        treatmentTypeDtosList = new ArrayList<>();
 
         for (final TreatmentType treatmentType : selectedTreatmentCompany.getTreatmentTypeList()) {
             final TreatmentTypeDto analyseTypeDto = new TreatmentTypeDto();
@@ -1666,7 +1683,7 @@ public class FileItemCctDetailController implements Serializable {
             infractionList = infractionService.findAll();
             specificDecision = CctSpecificDecision.IR;
             controllerForInspectionReport = null;
-            inspectionControllers = new ArrayList<InspectionController>();
+            inspectionControllers = new ArrayList<>();
             final String dataTableId = ComponentUtils.findComponentClientId("controllersDT");
             RequestContext.getCurrentInstance().update(dataTableId);
             inspectionReportData = new InspectionReportData();
@@ -1728,9 +1745,9 @@ public class FileItemCctDetailController implements Serializable {
                 final AnalyseOrder lastAnalyseOrder = analyseOrderService.findByItemFlow(lastDecisions);
                 analyseResult = new AnalyseResult();
                 analyseResult.setAnalyseOrder(lastAnalyseOrder);
-                analysesFileManagers = new ArrayList<UploadFileManager<AnalysePart>>();
+                analysesFileManagers = new ArrayList<>();
                 for (final AnalysePart analysePart : lastAnalyseOrder.getAnalysePartsList()) {
-                    final UploadFileManager<AnalysePart> fileManager = new UploadFileManager<AnalysePart>();
+                    final UploadFileManager<AnalysePart> fileManager = new UploadFileManager<>();
                     fileManager.setPart(analysePart);
                     analysesFileManagers.add(fileManager);
                 }
@@ -1746,9 +1763,9 @@ public class FileItemCctDetailController implements Serializable {
                 final TreatmentOrder lastTreatmentOrder = treatmentOrderService.findTreatmentOrderByItemFlow(lastDecisions);
                 treatmentResult = new TreatmentResult();
                 treatmentResult.setTreatmentOrder(lastTreatmentOrder);
-                treatmentFileManagers = new ArrayList<UploadFileManager<TreatmentPart>>();
+                treatmentFileManagers = new ArrayList<>();
                 for (final TreatmentPart tratmentPart : lastTreatmentOrder.getTreatmentPartsList()) {
-                    final UploadFileManager<TreatmentPart> fileManager = new UploadFileManager<TreatmentPart>();
+                    final UploadFileManager<TreatmentPart> fileManager = new UploadFileManager<>();
                     fileManager.setPart(tratmentPart);
                     treatmentFileManagers.add(fileManager);
                 }
@@ -1840,6 +1857,8 @@ public class FileItemCctDetailController implements Serializable {
                 decisionDiv.getChildren().add(htmlPanelGroup);
             }
         }
+        // Décision Suite Contrôle && MINADER  ???
+        interceptionNotification = isFillInterceptionNotification(selectedFlow) && isCheckMinaderMinistry() ? new InterceptionNotification() : null;
     }
 
     /**
@@ -1906,7 +1925,9 @@ public class FileItemCctDetailController implements Serializable {
             specificDecisionsHistory.setLastPaymentData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
             //	specificDecisionsHistory.setDecisionDetailsPayData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
         }
-
+        if (isFillInterceptionNotification(lastDecisions.getFlow())) {
+            specificDecisionsHistory.setLastInterceptionNotification(interceptionNotificationService.findByLastItemFlow(lastDecisions));
+        }
     }
 
     /**
@@ -1921,7 +1942,7 @@ public class FileItemCctDetailController implements Serializable {
             specificDecisionsHistory.setDecisionDetailsIR(inspectionReportService
                     .findLastInspectionReportsByFileItem(selectedItemFlowDto.getItemFlow().getFileItem()));
         } else if (APPOINTMENT_DECISIONS_LIST.contains(selectedItemFlowDto.getItemFlow().getFlow().getCode())) {
-            final List<ItemFlow> listItemFlow = new ArrayList<ItemFlow>();
+            final List<ItemFlow> listItemFlow = new ArrayList<>();
             listItemFlow.add(selectedItemFlowDto.getItemFlow());
             specificDecisionsHistory.setDecisionDetailsApp(appointmentService.findAppointmentsByItemFlow(selectedItemFlowDto
                     .getItemFlow()));
@@ -1945,6 +1966,9 @@ public class FileItemCctDetailController implements Serializable {
         } else if (FlowCode.FL_CT_93.name().equals(lastDecisions.getFlow().getCode())) {
             specificDecisionsHistory.setDecisionDetailsPayData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
         }
+        if (isFillInterceptionNotification(lastDecisions.getFlow())) {
+            specificDecisionsHistory.setDecisionDetailsNI(interceptionNotificationService.findByLastItemFlow(lastDecisions));
+        }
     }
 
     /**
@@ -1953,7 +1977,7 @@ public class FileItemCctDetailController implements Serializable {
      * @param partsList the parts list
      */
     private void downloadAttachment(final List<? extends Object> partsList) {
-        reportMap = new HashMap<Long, StreamedContent>();
+        reportMap = new HashMap<>();
         Session sessionCmisClient = null;
         try {
             sessionCmisClient = CmisSession.getInstance();
@@ -1962,7 +1986,7 @@ public class FileItemCctDetailController implements Serializable {
             try {
                 final String senderMail = mailService.getReplyToValue();
                 final String templateFileName = CMIS_CONNEXION_ERROR;
-                final Map<String, String> map = new HashMap<String, String>();
+                final Map<String, String> map = new HashMap<>();
                 map.put(MailConstants.SUBJECT, "[SIAT-CT] : Connexion Cmis échoué");
                 map.put(MailConstants.FROM, mailService.getFromValue());
                 map.put(MailConstants.EMAIL, senderMail);
@@ -1972,7 +1996,7 @@ public class FileItemCctDetailController implements Serializable {
             } catch (Exception ex) {
                 LOG.error(ex.getMessage(), ex);
             } finally {
-                return;
+                //return;
             }
         }
 
@@ -2006,7 +2030,7 @@ public class FileItemCctDetailController implements Serializable {
      * Load product history list.
      */
     private void loadProductHistoryList() {
-        itemFlowHistoryDtoList = new ArrayList<ItemFlowDto>();
+        itemFlowHistoryDtoList = new ArrayList<>();
         final List<ItemFlow> itemFlowHistoryList = itemFlowService.findItemFlowByFileItem(selectedFileItemCheck.getFileItem());
         if (CollectionUtils.isNotEmpty(itemFlowHistoryList)) {
             for (int i = 0; i < itemFlowHistoryList.size(); i++) {
@@ -2141,11 +2165,35 @@ public class FileItemCctDetailController implements Serializable {
 	}
 
     public void generatePvInspPhytoHistory() {
-        generatePvInspPhyto();
+        JsfUtil.generateReport(new CtCctExporter("PV_INSPECTION_PHYTOSANITAIRE", "PV_INSPECTION_PHYTOSANITAIRE", specificDecisionsHistory.getDecisionDetailsIR()));
     }
 
     public void generatePvInspPhyto() {
         JsfUtil.generateReport(new CtCctExporter("PV_INSPECTION_PHYTOSANITAIRE", "PV_INSPECTION_PHYTOSANITAIRE", specificDecisionsHistory.getLastDecisionIR()));
+    }
+
+    public void generateAttestationOfTreatHistory() {
+        JsfUtil.generateReport(new CtCctTreatmentExporter("ATTESTATION_TRAITEMENT_PHYTO", specificDecisionsHistory.getDecisionDetailsTR()));
+    }
+
+    public void generateAttestationOfTreat() {
+        JsfUtil.generateReport(new CtCctTreatmentExporter("ATTESTATION_TRAITEMENT_PHYTO", specificDecisionsHistory.getLastTreatmentResult()));
+    }
+
+    public void generateSheetOfTreatmentSupHistory() {
+        JsfUtil.generateReport(new CtCctTreatmentExporter("FICHE_SUPERVISION_TRAIT_PHYTO", specificDecisionsHistory.getDecisionDetailsTR()));
+    }
+
+    public void generateSheetOfTreatmentSup() {
+        JsfUtil.generateReport(new CtCctTreatmentExporter("FICHE_SUPERVISION_TRAIT_PHYTO", specificDecisionsHistory.getLastTreatmentResult()));
+    }
+
+    public void generateInterceptionNotif() {
+        JsfUtil.generateReport(new CtCctNiExporter(specificDecisionsHistory.getLastInterceptionNotification()));
+    }
+
+    public void generateInterceptionNotifHistory() {
+        JsfUtil.generateReport(new CtCctNiExporter(specificDecisionsHistory.getDecisionDetailsNI()));
     }
 	
 	public void generatePvptReport(){
@@ -2162,6 +2210,10 @@ public class FileItemCctDetailController implements Serializable {
      * @throws ParseException the parse exception
      */
     public void saveDecision() throws ParseException {
+        final DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+        def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+        def.setReadOnly(false);
+        final TransactionStatus status = transactionManager.getTransaction(def);
         try {
             if (FlowCode.FL_CT_29.name().equals(selectedFlow.getCode()) && chckedListSize != Constants.ONE) {
                 showErrorFacesMessage(ControllerConstants.Bundle.Messages.CHECK_ANALYSE_DECISION_ERROR,
@@ -2196,7 +2248,7 @@ public class FileItemCctDetailController implements Serializable {
                         ControllerConstants.Bundle.Messages.CHECK_PRODUCTS_DECISION_MSG);
             } // Demande de Traitement
             else if (FlowCode.FL_CT_64.name().equals(selectedFlow.getCode()) && chckedListSize == Constants.ONE) {
-                treatmentPartsList = new ArrayList<TreatmentPart>();
+                treatmentPartsList = new ArrayList<>();
                 treatmentOrder.setTreatmentCompany(selectedTreatmentCompany);
                 treatmentOrder.setDate(java.util.Calendar.getInstance().getTime());
 
@@ -2247,7 +2299,7 @@ public class FileItemCctDetailController implements Serializable {
                 }
             }
 
-            final List<ItemFlow> itemFlowsToAdd = new ArrayList<ItemFlow>();
+            final List<ItemFlow> itemFlowsToAdd = new ArrayList<>();
 
             // IF Decision enable by FILE, ALL fileItem must has the same
             // Decision (ItemFlow)
@@ -2371,11 +2423,12 @@ public class FileItemCctDetailController implements Serializable {
                 commonService.takeDecisionAndSaveTreatmentResult(treatmentResult, itemFlowsToAdd);
                 // Attachment --> Alfresco
             } // Geniric (affichage des itemFlowData)
+            // sauvegarde de la notification d'interception
             else {
                 // Recuperate the values of DataType (Observation text area ...)
-                List<ItemFlowData> flowDatas = null;
+                List<ItemFlowData> flowDatas;
 
-                flowDatas = new ArrayList<ItemFlowData>();
+                flowDatas = new ArrayList<>();
                 for (final DataType dataType : selectedFlow.getDataTypeList()) {
                     final ItemFlowData itemFlowData = new ItemFlowData();
                     itemFlowData.setDataType(dataType);
@@ -2408,9 +2461,15 @@ public class FileItemCctDetailController implements Serializable {
                 }
                 decisionDiv.getChildren().clear();
             }
+            if (isFillInterceptionNotification(selectedFlow) && isCheckMinaderMinistry()) {
+                commonService.takeDecisionAndSaveInterceptionNotification(interceptionNotification, itemFlowsToAdd);
+            }
+
+            transactionManager.commit(status);
 
         } catch (final Exception ex) {
             showErrorFacesMessage(ex.getMessage(), null);
+            transactionManager.rollback(status);
         }
 
         resetDataGridInofrmationProducts();
@@ -2638,14 +2697,14 @@ public class FileItemCctDetailController implements Serializable {
     public Map<Flow, List<FileItem>> groupFileItemsToSendByFlow(final Map<FileItem, Flow> mapToGroup) {
         // grouper les flow par file items (pour generer après plusieurs
         // fichiers ebxml au cas ou il ya plusieurs flux sortant par articles)
-        final Map<Flow, List<FileItem>> returnedMap = new HashMap<Flow, List<FileItem>>();
+        final Map<Flow, List<FileItem>> returnedMap = new HashMap<>();
 
         for (final FileItem fileItem : mapToGroup.keySet()) {
             if (returnedMap.containsKey(mapToGroup.get(fileItem))) {
                 returnedMap.get(mapToGroup.get(fileItem)).add(fileItem);
 
             } else {
-                final List<FileItem> groupedFileItemsToAdd = new ArrayList<FileItem>();
+                final List<FileItem> groupedFileItemsToAdd = new ArrayList<>();
                 groupedFileItemsToAdd.add(fileItem);
                 returnedMap.put(mapToGroup.get(fileItem), groupedFileItemsToAdd);
             }
@@ -2770,7 +2829,6 @@ public class FileItemCctDetailController implements Serializable {
                     if (!mapWithinAllFileItemAndFlowsToSend.isEmpty()) {
                         final Map<Flow, List<FileItem>> groupedFlow = groupFileItemsToSendByFlow(mapWithinAllFileItemAndFlowsToSend);
                         for (final Flow flowToSend : groupedFlow.keySet()) {
-
                             final List<FileItem> fileItemList = groupedFlow.get(flowToSend);
                             final List<ItemFlow> itemFlowList = itemFlowService.findLastItemFlowsByFileItemList(fileItemList);
                             final String service = StringUtils.EMPTY;
@@ -2779,15 +2837,23 @@ public class FileItemCctDetailController implements Serializable {
                             //generate report
                             Map<String, byte[]> attachedByteFiles = null;
                             try {
+//                                System.out.println("est-ce qu'on insère la pj NOTIFICATION_INTERCEPTION dans le map");
+//                                if (null != interceptionNotification) {
+//                                    System.out.println("ajout de la pj NOTIFICATION_INTERCEPTION dans le map");
+//                                    attachedByteFiles = new HashMap<>();
+//                                    byte[] intNotifReport = JsfUtil.getReport(new CtCctNiExporter(interceptionNotification));
+//                                    attachedByteFiles.put("NOTIFICATION_INTERCEPTION", intNotifReport);
+//                                }
+
                                 String reportNumber;
                                 if (FlowCode.FL_CT_89.name().equals(flowToSend.getCode())
                                         || FlowCode.FL_CT_08.name().equals(flowToSend.getCode())) {
+
                                     attachedByteFiles = new HashMap<>();
 
                                     final List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<>();
 
                                     final List<FileTypeFlowReport> fileTypeFlowReportsList = flowToSend.getFileTypeFlowReportsList();
-
                                     if (fileTypeFlowReportsList != null) {
                                         for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
                                             if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType())) {
@@ -2822,7 +2888,6 @@ public class FileItemCctDetailController implements Serializable {
                                         }
                                     }
                                     for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
-
                                         //Begin Add new field value with report Number
                                         final ReportOrganism reportOrganism = reportOrganismService
                                                 .findReportByFileTypeFlowReport(fileTypeFlowReport);
@@ -2842,9 +2907,15 @@ public class FileItemCctDetailController implements Serializable {
                                         @SuppressWarnings("rawtypes")
                                         final Class classe = Class.forName(nomClasse);
                                         @SuppressWarnings({"rawtypes", "unchecked"})
-                                        final Constructor c1 = classe.getConstructor(File.class);
-
-                                        final byte[] report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile));
+                                        Constructor c1;
+                                        byte[] report;
+                                        if (checkMinaderMinistry && FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode())) {
+                                            c1 = classe.getConstructor(File.class, String.class);
+                                            report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile, "CERTIFICAT_PHYTOSANITAIRE"));
+                                        } else {
+                                            c1 = classe.getConstructor(File.class);
+                                            report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile));
+                                        }
                                         attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
 
                                         /**
@@ -2854,12 +2925,9 @@ public class FileItemCctDetailController implements Serializable {
                                                 applicationPropretiesService.getAttachementFolder() + "%s%s", java.io.File.separator,
                                                 fileTypeFlowReport.getReportName()));
 
-                                        final FileOutputStream fileOuputStream = new FileOutputStream(targetAttachment);
-                                        fileOuputStream.write(report);
-                                        fileOuputStream.close();
-                                        /**
-                                         *
-                                         */
+                                        try (FileOutputStream fileOuputStream = new FileOutputStream(targetAttachment)) {
+                                            fileOuputStream.write(report);
+                                        }
 
                                         //Update report sequence
                                         reportOrganism.setSequence(reportOrganism.getSequence() + 1);
@@ -3814,7 +3882,7 @@ public class FileItemCctDetailController implements Serializable {
      */
     public void refreshRecommandationArticleList() {
         recommandationArticleList = recommandationService.findRecommandationByFileItemAndAuthorties(
-                selectedFileItemCheck.getFileItem(), (new ArrayList<Authority>(getLoggedUser().getAuthorities())));
+                selectedFileItemCheck.getFileItem(), (new ArrayList<>(getLoggedUser().getAuthorities())));
     }
 
     /**
@@ -3824,7 +3892,6 @@ public class FileItemCctDetailController implements Serializable {
         generateReportAllowed = false;
         final Flow reportingFlow = flowService.findByToStep(currentFileItem.getStep());
         final List<FileTypeFlowReport> fileTypeFlowReportsList = reportingFlow.getFileTypeFlowReportsList();
-
         if (StepCode.ST_CT_06.name().equals(currentFileItem.getStep().getStepCode().name())
                 && CollectionUtils.isNotEmpty(fileTypeFlowReportsList)) {
 
@@ -3857,7 +3924,6 @@ public class FileItemCctDetailController implements Serializable {
             }
         }
         for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
-
             //Begin Add new field value with report Number
             try {
                 final String nomClasse = fileTypeFlowReport.getReportClassName();
@@ -3866,11 +3932,16 @@ public class FileItemCctDetailController implements Serializable {
 
                 classe = Class.forName(nomClasse);
 
-                @SuppressWarnings(
-                        {"rawtypes", "unchecked"})
-                final Constructor c1 = classe.getConstructor(File.class);
-
-                final byte[] report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile));
+                @SuppressWarnings({"rawtypes", "unchecked"})
+                Constructor c1;
+                byte[] report;
+                if (!checkMinaderMinistry) {
+                    c1 = classe.getConstructor(File.class);
+                    report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile));
+                } else {
+                    c1 = classe.getConstructor(File.class, String.class);
+                    report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile, "CERTIFICAT_PHYTOSANITAIRE"));
+                }
                 final InputStream is = new ByteArrayInputStream(report);
                 final StreamedContent fileToDownload = new DefaultStreamedContent(is, "application/pdf",
                         currentFile.getReferenceSiat() + '_' + fileTypeFlowReport.getReportName());
@@ -6352,52 +6423,132 @@ public class FileItemCctDetailController implements Serializable {
         this.invoiceOtherAmount = invoiceOtherAmount;
     }
 
-    public Map<String, String> getPivTreatmentTypes() {
-        Map<String, String> treatmentTypes = new HashMap<>();
+    public List<CustumMap> getPivTreatmentTypes() {
+        List<CustumMap> treatmentTypes = new ArrayList<>();
         for (PVITreatmentType treatmentType : PVITreatmentType.values()) {
-            treatmentTypes.put(treatmentType.name(), treatmentType.getLabel());
+            treatmentTypes.add(new CustumMap(treatmentType.name(), treatmentType.getLabel()));
         }
         return treatmentTypes;
     }
 
-    public Map<String, String> getPivLastTreatmentDateStates() {
-        Map<String, String> lastTreatmentDateStates = new HashMap<>();
+    public List<CustumMap> getPivLastTreatmentDateStates() {
+        List<CustumMap> lastTreatmentDateStates = new ArrayList<>();
         for (PVILastTreatmentDateState lastTreatmentDateState : PVILastTreatmentDateState.values()) {
-            lastTreatmentDateStates.put(lastTreatmentDateState.name(), lastTreatmentDateState.getLabel());
+            lastTreatmentDateStates.add(new CustumMap(lastTreatmentDateState.name(), lastTreatmentDateState.getLabel()));
         }
         return lastTreatmentDateStates;
     }
 
-    public Map<String, String> getPivStorageEnvs() {
-        Map<String, String> storageEnvs = new HashMap<>();
+    public List<CustumMap> getPivStorageEnvs() {
+        List<CustumMap> storageEnvs = new ArrayList<>();
         for (PVIStorageEnv storageEnv : PVIStorageEnv.values()) {
-            storageEnvs.put(storageEnv.name(), storageEnv.getLabel());
+            storageEnvs.add(new CustumMap(storageEnv.name(), storageEnv.getLabel()));
         }
         return storageEnvs;
     }
 
-    public Map<String, String> getPivTransportEnvs() {
-        Map<String, String> transportEnvs = new HashMap<>();
+    public List<CustumMap> getPivTransportEnvs() {
+        List<CustumMap> transportEnvs = new ArrayList<>();
         for (PVITransportEnv transportEnv : PVITransportEnv.values()) {
-            transportEnvs.put(transportEnv.name(), transportEnv.getLabel());
+            transportEnvs.add(new CustumMap(transportEnv.name(), transportEnv.getLabel()));
         }
         return transportEnvs;
     }
 
-    public Map<String, String> getPivWeatherConditions() {
-        Map<String, String> weatherConditions = new HashMap<>();
+    public List<CustumMap> getPivWeatherConditions() {
+        List<CustumMap> weatherConditions = new ArrayList<>();
         for (PVIWeatherConditions weatherCondition : PVIWeatherConditions.values()) {
-            weatherConditions.put(weatherCondition.name(), weatherCondition.getLabel());
+            weatherConditions.add(new CustumMap(weatherCondition.name(), weatherCondition.getLabel()));
         }
         return weatherConditions;
     }
 
-    public Map<String, String> getPivProtectionMeasures() {
-        Map<String, String> protectionMeasures = new HashMap<>();
+    public List<CustumMap> getPivProtectionMeasures() {
+        List<CustumMap> protectionMeasures = new ArrayList<>();
         for (PVIProtectionMeasures protectionMeasure : PVIProtectionMeasures.values()) {
-            protectionMeasures.put(protectionMeasure.name(), protectionMeasure.getLabel());
+            protectionMeasures.add(new CustumMap(protectionMeasure.name(), protectionMeasure.getLabel()));
         }
         return protectionMeasures;
     }
 
+    public List<CustumMap> getTrProductsUsed() {
+        List<CustumMap> productsUsed = new ArrayList<>();
+        for (TRProductUsed productUsed : TRProductUsed.values()) {
+            productsUsed.add(new CustumMap(productUsed.name(), productUsed.getLabel()));
+        }
+        return productsUsed;
+    }
+
+    public List<CustumMap> getTrTreatmentEnvironments() {
+        List<CustumMap> productsUsed = new ArrayList<>();
+        for (TRTreatmentEnvironment te : TRTreatmentEnvironment.values()) {
+            productsUsed.add(new CustumMap(te.name(), te.getLabel()));
+        }
+        return productsUsed;
+    }
+
+    public List<CustumMap> getTrStoragePlaces() {
+        List<CustumMap> productsUsed = new ArrayList<>();
+        for (TRStoragePlace storagePlace : TRStoragePlace.values()) {
+            productsUsed.add(new CustumMap(storagePlace.name(), storagePlace.getLabel()));
+        }
+        return productsUsed;
+    }
+
+    public List<CustumMap> getTrConditionings() {
+        List<CustumMap> conditionings = new ArrayList<>();
+        for (TRConditioning conditioning : TRConditioning.values()) {
+            conditionings.add(new CustumMap(conditioning.name(), conditioning.getLabel()));
+        }
+        return conditionings;
+    }
+
+    public List<CustumMap> getTrProtectionEquipments() {
+        List<CustumMap> protectionEquipments = new ArrayList<>();
+        for (TRProtectionEquipement pe : TRProtectionEquipement.values()) {
+            protectionEquipments.add(new CustumMap(pe.name(), pe.getLabel()));
+        }
+        return protectionEquipments;
+    }
+
+    public List<CustumMap> getTrWeatherConditions() {
+        List<CustumMap> weatherConditions = new ArrayList<>();
+        for (TRWeatherCondition wc : TRWeatherCondition.values()) {
+            weatherConditions.add(new CustumMap(wc.name(), wc.getLabel()));
+        }
+        return weatherConditions;
+    }
+
+    public List<CustumMap> getNiTakenMeasures() {
+        List<CustumMap> takenMeasures = new ArrayList<>();
+        for (NITakenMeasure takenMeasure : NITakenMeasure.values()) {
+            takenMeasures.add(new CustumMap(takenMeasure.name(), takenMeasure.getLabel()));
+        }
+        return takenMeasures;
+    }
+
+    public boolean isFillInterceptionNotification(Flow flow) {
+        return FlowCode.FL_CT_29.name().equals(flow.getCode())
+                || FlowCode.FL_CT_33.name().equals(flow.getCode())
+                || FlowCode.FL_CT_35.name().equals(flow.getCode())
+                || FlowCode.FL_CT_64.name().equals(flow.getCode());
+    }
+
+    public InterceptionNotification getInterceptionNotification() {
+        return interceptionNotification;
+    }
+
+    public void setInterceptionNotification(InterceptionNotification interceptionNotification) {
+        this.interceptionNotification = interceptionNotification;
+    }
+
+    public InterceptionNotificationService getInterceptionNotificationService() {
+        return interceptionNotificationService;
+    }
+
+    public void setInterceptionNotificationService(final InterceptionNotificationService interceptionNotificationService) {
+        this.interceptionNotificationService = interceptionNotificationService;
+    }
+
 }
+

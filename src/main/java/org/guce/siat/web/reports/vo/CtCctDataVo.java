@@ -273,6 +273,17 @@ public class CtCctDataVo {
      */
     private String controller2;
 
+    private String numeroDecisionPVI;
+    private String articleReglemente;
+    private String exporterName;
+    private String pviDestination;
+    private String pviSituationArticle;
+    private boolean pviCouvertDoc;
+    private String pviReference;
+    private String pviNatureArticleInspecte;
+    private String pviQuantite;
+    private String pviDispositionsPrises;
+
     /**
      * pulvérisation
      */
@@ -1088,4 +1099,85 @@ public class CtCctDataVo {
         this.signatairePVIPhyto = signatairePVIPhyto;
     }
 
+    public String getNumeroDecisionPVI() {
+        return numeroDecisionPVI;
+    }
+
+    public void setNumeroDecisionPVI(String numeroDecisionPVI) {
+        this.numeroDecisionPVI = numeroDecisionPVI;
+    }
+
+    public String getArticleReglemente() {
+        return articleReglemente;
+    }
+
+    public void setArticleReglemente(String articleReglemente) {
+        this.articleReglemente = articleReglemente;
+    }
+
+    public String getExporterName() {
+        return exporterName;
+    }
+
+    public void setExporterName(String exporterName) {
+        this.exporterName = exporterName;
+    }
+
+    public String getPviDestination() {
+        return pviDestination;
+    }
+
+    public void setPviDestination(String pviDestination) {
+        this.pviDestination = pviDestination;
+    }
+
+    public String getPviSituationArticle() {
+        return pviSituationArticle;
+    }
+
+    public void setPviSituationArticle(String pviSituationArticle) {
+        this.pviSituationArticle = pviSituationArticle;
+    }
+
+    public boolean isPviCouvertDoc() {
+        return pviCouvertDoc;
+    }
+
+    public void setPviCouvertDoc(boolean pviCouvertDoc) {
+        this.pviCouvertDoc = pviCouvertDoc;
+    }
+
+    public String getPviReference() {
+        return pviReference;
+    }
+
+    public void setPviReference(String pviReference) {
+        this.pviReference = pviReference;
+    }
+
+    public String getPviNatureArticleInspecte() {
+        return pviNatureArticleInspecte;
+    }
+
+    public void setPviNatureArticleInspecte(String pviNatureArticleInspecte) {
+        this.pviNatureArticleInspecte = pviNatureArticleInspecte;
+    }
+
+    public String getPviQuantite() {
+        return pviQuantite;
+    }
+
+    public void setPviQuantite(String pviQuantite) {
+        this.pviQuantite = pviQuantite;
+    }
+
+    public String getPviDispositionsPrises() {
+        return pviDispositionsPrises;
+    }
+
+    public void setPviDispositionsPrises(String pviDispositionsPrises) {
+        this.pviDispositionsPrises = pviDispositionsPrises;
+    }
+
 }
+

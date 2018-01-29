@@ -16,4 +16,21 @@ public class EnumTest {
         System.out.println(DataTypeEnnumeration.CALENDAR.getCode());
     }
 
+    @Test
+    @Ignore
+    public void test() {
+        int nb = 6;
+        int id = 5654;
+        System.out.println("PR" + repeat("0", nb - Integer.toString(id).length()) + Integer.toString(id));
+    }
+
+    private String repeat(String c, int length) {
+        String s = "";
+        for (int i = 0; i < length; i++) {
+            s += c;
+        }
+        return s;
+    }
+
 }
+

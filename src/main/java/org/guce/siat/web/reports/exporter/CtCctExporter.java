@@ -32,7 +32,7 @@ public class CtCctExporter extends AbstractReportInvoker {
     /**
      * The inspection report.
      */
-    private InspectionReport inspectionReport;
+    private final InspectionReport inspectionReport;
     protected static final String LOCAL_BUNDLE_NAME = "org.guce.siat.messages.locale";
     private static final String CONSTAT_BUNDLE_TRUE = "constatBundleTrue";
     private static final String CONSTAT_BUNDLE_FALSE = "constatBundleFalse";
@@ -253,6 +253,9 @@ public class CtCctExporter extends AbstractReportInvoker {
 				if (controllerDataVoList != null && !controllerDataVoList.isEmpty()){
 					entryInspectionFindingDataVo.setSignatairePVIPhyto(controllerDataVoList.get(0).getName());
 				}
+                if (!controllerDataVoList.isEmpty()) {
+                    entryInspectionFindingDataVo.setSignatairePVIPhyto(controllerDataVoList.get(0).getName());
+                }
                 entryInspectionFindingDataVo.setTypeTraitement(inspectionReport.getTypeTraitement());
                 entryInspectionFindingDataVo.setEtatDateDernierTraitement(inspectionReport.getEtatDateDernierTraitement());
                 entryInspectionFindingDataVo.setProduitUtilise(inspectionReport.getProduitUtilise());
@@ -262,6 +265,16 @@ public class CtCctExporter extends AbstractReportInvoker {
                 entryInspectionFindingDataVo.setConditionClimatique(inspectionReport.getConditionClimatique());
                 entryInspectionFindingDataVo.setMesureProtection(inspectionReport.getMesureProtection());
                 entryInspectionFindingDataVo.setObservations(inspectionReport.getObservations());
+                entryInspectionFindingDataVo.setNumeroDecisionPVI(null);
+                entryInspectionFindingDataVo.setArticleReglemente(inspectionReport.getArticleReglemente());
+                entryInspectionFindingDataVo.setExporterName(inspectionReport.getItemFlow().getFileItem().getFile().getClient().getCompanyName());
+                entryInspectionFindingDataVo.setPviCouvertDoc(inspectionReport.isPviCouvertDoc());
+                entryInspectionFindingDataVo.setPviDestination(inspectionReport.getPviDestination());
+                entryInspectionFindingDataVo.setPviDispositionsPrises(inspectionReport.getPviDispositionsPrises());
+                entryInspectionFindingDataVo.setPviNatureArticleInspecte(inspectionReport.getPviNatureArticleInspecte());
+                entryInspectionFindingDataVo.setPviQuantite(inspectionReport.getPviQuantite());
+                entryInspectionFindingDataVo.setPviReference(inspectionReport.getItemFlow().getFileItem().getFile().getNumeroDossier());
+                entryInspectionFindingDataVo.setPviSituationArticle(inspectionReport.getPviSituationArticle());
                 for (FileFieldValue fileFieldValue : inspectionReport.getFileItem().getFile().getFileFieldValueList()) {
                     if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("DESTINATAIRE_RAISONSOCIALE")) {
                         entryInspectionFindingDataVo.setRecipient(fileFieldValue.getValue());
@@ -315,3 +328,4 @@ public class CtCctExporter extends AbstractReportInvoker {
     }
 
 }
+
