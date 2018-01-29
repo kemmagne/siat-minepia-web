@@ -16,34 +16,19 @@ import org.guce.siat.common.model.FileItemFieldValue;
 import org.guce.siat.web.reports.vo.CtCctCpIFileItemVo;
 import org.guce.siat.web.reports.vo.CtCctCpIFileVo;
 
+
+
+
+
 /**
  * The Class CtCctCpIExporter.
  */
-public class CtCctCpIExporter extends AbstractReportInvoker {
-
-    /**
-     * The file.
-     */
-    private final File file;
-
-    /**
-     * Instantiates a new ct cct cp i exporter.
-     *
-     * @param file the file
-     */
-    public CtCctCpIExporter(final File file) {
-        super("CT_CCT_CP_I", "CT_CCT_CP_I");
-        this.file = file;
-    }
-
-    public CtCctCpIExporter(final File file, String jasperFileName) {
-        super(jasperFileName, jasperFileName + ".pdf");
-        this.file = file;
-    }
+public class CtCctCpIExporter extends AbstractReportInvoker
+{
 
 
 	/** The file. */
-	private final File file;
+    private final File file;
 
 
 
@@ -176,8 +161,10 @@ public class CtCctCpIExporter extends AbstractReportInvoker {
         return new JRBeanCollectionDataSource(Collections.singleton(ctCctCpIFileVo));
     }
 
+
     @Override
-    protected Map<String, Object> getJRParameters() {
+	protected Map<String, Object> getJRParameters()
+	{
         final Map<String, Object> jRParameters = super.getJRParameters();
         jRParameters.put("MINADER_LOGO", getRealPath(IMAGES_PATH, "minader", "jpg"));
         return jRParameters;
@@ -188,9 +175,9 @@ public class CtCctCpIExporter extends AbstractReportInvoker {
      *
      * @return the file
      */
-    public File getFile() {
+	public File getFile()
+	{
         return file;
     }
 
 }
-
