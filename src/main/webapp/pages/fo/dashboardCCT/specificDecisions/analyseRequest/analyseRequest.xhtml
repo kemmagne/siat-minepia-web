@@ -7,11 +7,11 @@
 		<h:panelGrid columns="2">
 
 			<h:outputLabel value="#{bundle['AnalyseOrder_SampleLabel']} : " />
-			<h:outputText readonly="true"
+			<h:outputText
 				value="#{facesContext.viewRoot.locale eq 'fr' ? fileItemCctDetailController.analyseOrder.sample.fileItem.nsh.goodsItemDesc : fileItemCctDetailController.analyseOrder.sample.fileItem.nsh.goodsItemDescEn}" />
 
 			<h:outputLabel value="#{bundle['AnalyseOrder_QuantityTakenLabel']} : " />
-			<h:outputText readonly="true" value="#{fileItemCctDetailController.analyseOrder.sample.takenQuantity}" />
+			<h:outputText  value="#{fileItemCctDetailController.analyseOrder.sample.takenQuantity}" />
 
 			<h:outputLabel value="#{bundle['AnalyseOrder_AnalysedQuantityLabel']} : " />
 			<h:panelGroup>

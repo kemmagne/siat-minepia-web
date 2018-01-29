@@ -1,6 +1,42 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
 
+	<p:panel header="#{bundle['SampleCollectionHeader']}" rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'ANR' and fileItemCctDetailController.checkMinaderMinistry}">
+		<p:panelGrid columns="2">
+			<h:outputLabel for="reconditionningMode" value="#{bundle['ReconditionningMode']} : " />
+			<h:panelGroup>
+				<p:inputText value="#{fileItemCctDetailController.analyseResult.analyseOrder.sample.reconditionningMode}"
+						 required="true" id="reconditionningMode" requiredMessage="#{bundle['ReconditionningModeRequired']}"/>
+				<p:message for="reconditionningMode" />
+			</h:panelGroup>
+			<h:outputLabel for="transportMeans" value="#{bundle['TransportMeans']} : " />
+			<h:panelGroup>
+				<p:inputText value="#{fileItemCctDetailController.analyseResult.analyseOrder.sample.transportMeans}"
+						 required="true" id="transportMeans" requiredMessage="#{bundle['TransportMeansModeRequired']}"/>
+				<p:message for="transportMeans" />
+			</h:panelGroup>
+			<h:outputLabel for="samplingDate" value="#{bundle['SamplingDate']} : " />
+
+			<h:panelGroup>
+				<p:calendar  navigator="true" value="#{fileItemCctDetailController.analyseResult.analyseOrder.sample.samplingDate}" pattern="dd/MM/yyyy" showOn="button" readonlyInput="true"
+					id="samplingDate" required="true" requiredMessage="#{bundle['SamplingDateRequiredMessage']}"
+					title="#{bundle['SamplingDate']}" />
+				<p:message  for="samplingDate" />
+			</h:panelGroup>
+			<h:outputLabel for="storagePlace" value="#{bundle['StoragePlace']} : " />
+			<h:panelGroup>
+				<p:inputText value="#{fileItemCctDetailController.analyseResult.analyseOrder.sample.storagePlace}"
+						 required="true" id="storagePlace" requiredMessage="#{bundle['StoragePlaceModeRequired']}"/>
+				<p:message for="storagePlace" />
+			</h:panelGroup>
+			<h:outputLabel for="reconditionningUnity" value="#{bundle['ReconditionningUnity']} : " />
+			<h:panelGroup>
+				<p:inputText value="#{fileItemCctDetailController.analyseResult.analyseOrder.sample.reconditionningUnity}"
+						 required="true" id="reconditionningUnity" requiredMessage="#{bundle['ReconditionningUnityRequired']}"/>
+				<p:message for="reconditionningUnity" />
+			</h:panelGroup>
+		</p:panelGrid>
+	</p:panel>
 	<p:panel header="#{bundle['AnalyseResultHeader']}" rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'ANR'}">
 		<p:panelGrid columns="2">
 

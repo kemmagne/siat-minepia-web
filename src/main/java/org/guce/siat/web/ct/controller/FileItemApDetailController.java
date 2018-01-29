@@ -775,13 +775,14 @@ public class FileItemApDetailController implements Serializable {
             FlowCode.FL_AP_171.name(), FlowCode.FL_AP_172.name(), FlowCode.FL_AP_173.name(), FlowCode.FL_AP_174.name(),
             FlowCode.FL_AP_175.name(), FlowCode.FL_AP_176.name(), FlowCode.FL_AP_177.name(), FlowCode.FL_AP_178.name(), FlowCode.FL_AP_179.name(),
             FlowCode.FL_AP_180.name(), FlowCode.FL_AP_181.name(), FlowCode.FL_AP_182.name(), FlowCode.FL_AP_183.name(), FlowCode.FL_AP_184.name(),
-            FlowCode.FL_AP_185.name(), FlowCode.FL_AP_186.name());
+            FlowCode.FL_AP_185.name(), FlowCode.FL_AP_186.name(), FlowCode.FL_AP_193.name(), FlowCode.FL_AP_194.name());
 
     /**
      *
      */
     private static final List<FileTypeCode> PROCESS_ALLOWING_DECISION_AT_COTATION_STEP = Arrays.asList(FileTypeCode.VTD_MINSANTE, FileTypeCode.VTP_MINSANTE,
-            FileTypeCode.AI_MINSANTE, FileTypeCode.AT_MINSANTE);
+            FileTypeCode.AI_MINSANTE, FileTypeCode.AT_MINSANTE, FileTypeCode.AE_MINADER, FileTypeCode.AE_MINMIDT, FileTypeCode.AIE_MINADER, FileTypeCode.AI_MINMIDT, FileTypeCode.AS_MINADER,
+			FileTypeCode.AS_MINFOF, FileTypeCode.AS_MINCOMMERCE, FileTypeCode.AT_MINEPIA, FileTypeCode.VT_MINEPIA, FileTypeCode.VT_MINEPDED, FileTypeCode.CP_MINEPDED);
     /**
      * The transaction manager.
      */
@@ -1328,7 +1329,8 @@ public class FileItemApDetailController implements Serializable {
         isPayment = Boolean.FALSE;
         //paiement;FlowCode.FL_CO_155.name().equals(selectedFlow.getCode())
         if (Arrays.asList(FlowCode.FL_AP_160.name(), FlowCode.FL_AP_161.name(), FlowCode.FL_AP_162.name(),
-                FlowCode.FL_AP_163.name(), FlowCode.FL_AP_164.name(), FlowCode.FL_AP_165.name(), FlowCode.FL_AP_167.name()).contains(
+                FlowCode.FL_AP_163.name(), FlowCode.FL_AP_164.name(), FlowCode.FL_AP_165.name(), FlowCode.FL_AP_167.name(),
+				FlowCode.FL_AP_193.name(), FlowCode.FL_AP_194.name()).contains(
                 selectedFlow.getCode())) {
             isPayment = Boolean.TRUE;
             paymentData = new PaymentData();

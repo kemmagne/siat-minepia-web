@@ -186,12 +186,6 @@
                         </p:selectOneRadio>
                     </h:panelGrid>
                     <h:panelGrid columns="2" styleClass="table-decision">
-                        <p:outputLabel for="typeTraitement" value="#{bundle['typeTraitement']}" />
-                        <p:selectOneRadio disabled="true" id="typeTraitement" value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.typeTraitement}">
-                            <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}"/>
-                        </p:selectOneRadio>
-                    </h:panelGrid>
-                    <h:panelGrid columns="2" styleClass="table-decision">
                         <p:outputLabel for="lastTreatmentDateState" value="#{bundle['lastTreatmentDateState']}" />
                         <p:selectOneRadio disabled="true" id="lastTreatmentDateState" value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.etatDateDernierTraitement}">
                             <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}"/>
@@ -226,14 +220,17 @@
         </p:tabView>
 
         <div class="btn-bloc">
-            <p:splitButton ajax="false" value="#{bundle['ConstatReportdownloadBtn']}"
-                           actionListener="#{fileItemCctDetailController.generateCctReportConstat}">
-                <p:menuitem  ajax="false" rendered="#{fileItemCctDetailController.checkMinaderMinistry}" value="#{bundle['PVIPARdownloadBtn']}"
-                             actionListener="#{fileItemCctDetailController.generatePvInspArtReglemente}"></p:menuitem>
-                <p:menuitem  ajax="false" rendered="#{fileItemCctDetailController.checkMinaderMinistry}" value="#{bundle['PVIPhytodownloadBtn']}"
-                             actionListener="#{fileItemCctDetailController.generatePvInspPhyto}"></p:menuitem>
-            </p:splitButton>
-        </div>
+           <p:commandButton ajax="false" actionListener="#{fileItemCctDetailController.generateCctReportConstat}"
+               value="#{bundle['ConstatReportdownloadBtn']}" styleClass="ui-priority-primary" />
+		   <p:outputPanel rendered="#{fileItemCctDetailController.checkMinaderMinistry}">
+			<div class="btn-bloc">
+				<p:commandButton ajax="false" actionListener="#{fileItemCctDetailController.generatePvInspArtReglemente}"
+					value="#{bundle['PVIPARdownloadBtn']}" styleClass="ui-priority-primary" />
+				<p:commandButton ajax="false" actionListener="#{fileItemCctDetailController.generatePvInspPhyto}"
+					value="#{bundle['PVIPhytodownloadBtn']}" styleClass="ui-priority-primary" />
+			</div>
+		</p:outputPanel>
+       </div>
 
     </h:panelGroup>
 

@@ -35,9 +35,10 @@
                 <db.username>siat_ct</db.username>
                 <db.password>siat</db.password>
                 <!--<db.url>jdbc:oracle:thin:@guce.preprod:1510:GUCE</db.url>-->
-                <db.url>jdbc:oracle:thin:@localhost:1521:XE</db.url>
-                <ged.url>http://172.24.2.134:8080</ged.url>
+                <db.url>jdbc:oracle:thin:@yserver:1521:XE</db.url>
+                <ged.url>http://guce.preprod:8080</ged.url>
                 <jms.url>tcp://guce.preprod:61616</jms.url>
+                <!--<jms.url>tcp://fuse.server:61616</jms.url>-->
                 <version>${application.version}</version>
                 <ged.username>admin</ged.username>
                 <ged.password>admin</ged.password>
@@ -45,6 +46,9 @@
                 <uri.out>SIAT</uri.out>
                 <uri.dead.in>direct:dead</uri.dead.in>
                 <uri.dead.out>amq:SIAT</uri.dead.out>
+<!--                <ebxml.folder>c:/users/yenke/Siat/eGuce/ebxml</ebxml.folder>
+                <xml.folder>c:/users/yenke/Siat/eGuce/xml</xml.folder>
+                <attachement.folder>c:/users/yenke/eGuce/attachement</attachement.folder>-->
                 <ebxml.folder>/home/yenke/Siat/eGuce/ebxml</ebxml.folder>
                 <xml.folder>/home/yenke/Siat/eGuce/xml</xml.folder>
                 <attachement.folder>/home/yenke/eGuce/attachement</attachement.folder>
@@ -156,7 +160,7 @@
                 <!-- <ged.url>http://localhost:8080</ged.url> -->
                 <ged.url>http://siat-ged:8080</ged.url>
                 <!-- <jms.url>tcp://localhost:61616</jms.url> -->
-                <jms.url>tcp://siat-esb0:61616</jms.url>
+                <jms.url>tcp://siat-esb0:61618</jms.url>
                 <version>${application.version}</version>
                 <ged.username>admin</ged.username>
                 <ged.password>admin</ged.password>

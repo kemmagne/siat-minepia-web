@@ -186,7 +186,10 @@ import org.guce.siat.web.gr.controller.RiskController;
 import org.guce.siat.web.gr.util.GrUtilsWeb;
 import org.guce.siat.web.gr.util.ScenarioType;
 import org.guce.siat.web.reports.exporter.AbstractReportInvoker;
+import org.guce.siat.web.reports.exporter.CtCctCpIExporter;
 import org.guce.siat.web.reports.exporter.CtCctExporter;
+import org.guce.siat.web.reports.exporter.CtCctPvpeExporter;
+import org.guce.siat.web.reports.exporter.CtCctSeizureExporter;
 import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.message.Message;
 import org.primefaces.context.RequestContext;
@@ -2126,8 +2129,16 @@ public class FileItemCctDetailController implements Serializable {
     }
 
     public void generatePvInspArtReglementeHistory() {
-        generatePvInspArtReglemente();
+        JsfUtil.generateReport(new CtCctExporter("PV_INSPECTION_PHYTOSANITAIRE_ARTICLE_REGLEMENTE", "PV_INSPECTION_PHYTOSANITAIRE_ARTICLE_REGLEMENTE", specificDecisionsHistory.getDecisionDetailsIR()));
     }
+	
+	public void generatePvpeReportHistory(){
+		JsfUtil.generateReport(new CtCctPvpeExporter(specificDecisionsHistory.getDecisionDetailsAR().getAnalyseOrder()));
+	}
+	
+	public void generatePvpeReport(){
+		JsfUtil.generateReport(new CtCctPvpeExporter(specificDecisionsHistory.getLastAnalyseResult().getAnalyseOrder()));
+	}
 
     public void generatePvInspPhytoHistory() {
         generatePvInspPhyto();
@@ -2136,6 +2147,14 @@ public class FileItemCctDetailController implements Serializable {
     public void generatePvInspPhyto() {
         JsfUtil.generateReport(new CtCctExporter("PV_INSPECTION_PHYTOSANITAIRE", "PV_INSPECTION_PHYTOSANITAIRE", specificDecisionsHistory.getLastDecisionIR()));
     }
+	
+	public void generatePvptReport(){
+		JsfUtil.generateReport(new CtCctCpIExporter(currentFile, "CT_CCT_PVPT", "CT_CCT_PVPT"));
+	}
+	
+	public void generateTemporarySeizure(){
+		JsfUtil.generateReport(new CtCctSeizureExporter("SAISIE_CONS_EXP_REEXP", "SAISIE_CONS_EXP_REEXP", currentFile));
+	}
 
     /**
      * Save decision.
@@ -2265,6 +2284,8 @@ public class FileItemCctDetailController implements Serializable {
             }
             // Demande de d'analyse
             if (FlowCode.FL_CT_29.name().equals(selectedFlow.getCode()) && chckedListSize == Constants.ONE) {
+				System.out.println("analysePartsList : " + analysePartsList.size());
+				System.out.println("analyseOrder : " + analyseOrder);
                 if (CollectionUtils.isNotEmpty(analysePartsList)) {
                     commonService.takeDecisionAndSaveAnalyseRequest(analysePartsList, analyseOrder, itemFlowsToAdd);
                 }
@@ -2320,6 +2341,8 @@ public class FileItemCctDetailController implements Serializable {
                         }
                     }
                 }
+				System.out.println("analyseResult : " + analyseResult);
+				System.out.println("analyseOrder : " + analyseOrder);
                 commonService.takeDecisionAndSaveAnalyzeResult(analyseResult, itemFlowsToAdd);
                 // Attachment --> Alfresco
             } // Envoie Résultat de Traitement

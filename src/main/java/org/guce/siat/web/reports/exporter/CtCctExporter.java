@@ -250,7 +250,9 @@ public class CtCctExporter extends AbstractReportInvoker {
                 entryInspectionFindingDataVo.setProcedure(inspectionReport.getProcedure());
                 entryInspectionFindingDataVo.setProcessAnalyse(inspectionReport.getProcessAnalyse());
                 //
-                entryInspectionFindingDataVo.setSignatairePVIPhyto(controllerDataVoList.get(0).getName());
+				if (controllerDataVoList != null && !controllerDataVoList.isEmpty()){
+					entryInspectionFindingDataVo.setSignatairePVIPhyto(controllerDataVoList.get(0).getName());
+				}
                 entryInspectionFindingDataVo.setTypeTraitement(inspectionReport.getTypeTraitement());
                 entryInspectionFindingDataVo.setEtatDateDernierTraitement(inspectionReport.getEtatDateDernierTraitement());
                 entryInspectionFindingDataVo.setProduitUtilise(inspectionReport.getProduitUtilise());

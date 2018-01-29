@@ -388,12 +388,6 @@
                         </p:selectOneRadio>
                     </h:panelGrid>
                     <h:panelGrid columns="2" styleClass="table-decision">
-                        <p:outputLabel for="typeTraitement" value="#{bundle['typeTraitement']}" />
-                        <p:selectOneRadio required="true" id="typeTraitement" value="#{fileItemCctDetailController.inspectionReportData.typeTraitement}">
-                            <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}"/>
-                        </p:selectOneRadio>
-                    </h:panelGrid>
-                    <h:panelGrid columns="2" styleClass="table-decision">
                         <p:outputLabel for="lastTreatmentDateState" value="#{bundle['lastTreatmentDateState']}" />
                         <p:selectOneRadio required="true" id="lastTreatmentDateState" value="#{fileItemCctDetailController.inspectionReportData.etatDateDernierTraitement}">
                             <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}"/>

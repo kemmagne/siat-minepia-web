@@ -44,6 +44,11 @@ public class CtCctCpIExporter extends AbstractReportInvoker
 		super("CT_CCT_CP_I", "CT_CCT_CP_I");
 		this.file = file;
 	}
+	
+	public CtCctCpIExporter(File file, String jasperFileName, String pdfFileName){
+		super(jasperFileName, pdfFileName);
+		this.file = file;
+	}
 
 
 	/*
