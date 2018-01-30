@@ -26,6 +26,14 @@
             <h:outputLabel value="#{bundle['phytoReasons']}" />
             <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastInterceptionNotification.phytoReasons}" />
 
+        </h:panelGrid>
+
+        <br/>
+        <h:outputLabel value="#{bundle['takenDecisons']}" />
+        <br/>
+
+        <h:panelGrid columns="2">
+
             <h:outputLabel value="#{bundle['Destruction']}" for="tmDestruction" />
             <p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastInterceptionNotification.tmDestruction}" />
 
@@ -43,7 +51,13 @@
             <p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastInterceptionNotification.tmTreatment}" />
 
             <h:outputLabel value="#{bundle['Autre']} #{bundle['takenMeasure']}" />
-            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastInterceptionNotification.otherTakenMeasure}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastInterceptionNotification.otherTakenMeasure}"/>
+
+        </h:panelGrid>
+
+        <br/>
+
+        <h:panelGrid columns="2">
 
             <h:outputLabel value="#{bundle['shipmentQuantity']}" />
             <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastInterceptionNotification.shipmentQuantity}" />
@@ -70,9 +84,8 @@
             <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastInterceptionNotification.inspectionPlace}" />
 
             <h:outputLabel value="#{bundle['inspectionDate']}" />
-            <p:calendar navigator="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastInterceptionNotification.inspectionPlace}"
-                        showOn="button" pattern="dd/MM/yyyy" readonlyInput="true"
-                        title="#{bundle['inspectionPlace']}" readonly="true" />
+            <p:calendar value="#{fileItemCctDetailController.specificDecisionsHistory.lastInterceptionNotification.inspectionDate}"
+                        pattern="dd/MM/yyyy" readonly="true" />
         </h:panelGrid>
 
         <div class="btn-bloc">
@@ -81,6 +94,10 @@
     </p:panel>
 
 </ui:composition>
+
+
+
+
 
 
 

@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PV_INSPECTION_PHYTOSANITAIRE" pageWidth="650" pageHeight="1000" columnWidth="610" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="815c4d67-1776-454d-b1df-c04d5a7d281b">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="34"/>
+	<property name="ireport.y" value="68"/>
 	<field name="observations" class="java.lang.String"/>
 	<field name="signatairePVIPhyto" class="java.lang.String"/>
 	<field name="typeTraitement" class="java.lang.String"/>
@@ -491,7 +491,7 @@ DEPARTEMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCT
 				<textElement verticalAlignment="Middle" markup="html">
 					<font size="11" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Certifie avoir inspecté le <u>" + $F{signatairePVIPhyto} + "</u> du <u>" + $F{signatairePVIPhyto} + "</u> à <u>" + $F{signatairePVIPhyto} + "</u> au <u>" + $F{signatairePVIPhyto} + "</u>"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Certifie avoir inspecté le <u>...</u> du <u>...</u> à <u>...</u> au <u>...</u>"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="95" width="610" height="15" uuid="697fafc4-806f-4dcf-88d6-18017410162a"/>

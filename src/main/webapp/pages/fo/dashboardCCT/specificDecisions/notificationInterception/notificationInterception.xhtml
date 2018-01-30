@@ -62,7 +62,7 @@
                                              value="#{fileItemCctDetailController.interceptionNotification.tmTreatment}" />
 
                     <h:outputLabel value="#{bundle['Autre']}s #{bundle['takenDecisons']}" for="AutreMesurePrise" />
-                    <p:inputText id="AutreMesurePrise" value="#{fileItemCctDetailController.interceptionNotification.otherTakenMeasure}" />
+                    <p:inputText id="AutreMesurePrise" value="#{fileItemCctDetailController.interceptionNotification.otherTakenMeasure}"/>
 
                 </h:panelGrid>
 
@@ -97,13 +97,15 @@
                     <h:outputLabel value="#{bundle['inspectionDate']}" for="inspectionDateNI" />
                     <p:calendar navigator="true" value="#{fileItemCctDetailController.interceptionNotification.inspectionDate}"
                                 showOn="button" pattern="dd/MM/yyyy" readonlyInput="true"
-                                id="inspectionDateNI" title="#{bundle['inspectionPlace']}" />
+                                id="inspectionDateNI" title="#{bundle['inspectionDate']}" />
                 </h:panelGrid>
             </p:scrollPanel>
         </h:panelGroup>
     </p:panel>
 
 </ui:composition>
+
+
 
 
 
