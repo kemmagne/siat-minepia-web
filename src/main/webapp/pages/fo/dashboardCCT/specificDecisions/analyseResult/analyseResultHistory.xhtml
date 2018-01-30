@@ -2,7 +2,27 @@
 	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
 
 	<h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAR}">
+		<h:outputLabel value="#{bundle['SampleCollectionHeader']} " styleClass="analyseResult" rendered="#{fileItemCctDetailController.checkMinaderMinistry}"/>
+			<br />
+		<p:panelGrid columns="2" rendered="#{fileItemCctDetailController.checkMinaderMinistry}">
+			<h:outputLabel value="#{bundle['ReconditionningMode']} : " />
+			<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAR.analyseOrder.sample.reconditionningMode}" />
+			
+			<h:outputLabel value="#{bundle['TransportMeans']} : " />
+			<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAR.analyseOrder.sample.transportMeans}" />
+			
+			<h:outputLabel value="#{bundle['SamplingDate']} : " />
+			<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAR.analyseOrder.sample.samplingDate}" />
+			
+			<h:outputLabel value="#{bundle['StoragePlace']} : " />
+			<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAR.analyseOrder.sample.storagePlace}" />
+			
+			<h:outputLabel value="#{bundle['ReconditionningUnity']} : " />
+			<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAR.analyseOrder.sample.reconditionningUnity}" />
+		</p:panelGrid>
+			<h:outputLabel value="#{bundle['AnalyseResultHeader']} " styleClass="analyseResult" />
 
+			<br />
 		<p:panelGrid columns="2">
 
 			<h:outputLabel value="#{bundle['AnalyseResultDateLabel']} : " />
@@ -57,7 +77,10 @@
 			</p:tab>
 
 		</p:tabView>
-
+		<div class="btn-bloc">
+           <p:commandButton ajax="false" actionListener="#{fileItemCctDetailController.generatePvpeReportHistory}"
+               value="#{bundle['PvpeReportdownloadBtn']}" styleClass="ui-priority-primary" />
+       </div>
 	</h:panelGroup>
 
 </ui:composition>

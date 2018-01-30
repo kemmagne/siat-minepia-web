@@ -271,4 +271,4 @@ public class ResetPasswordBean extends AbstractController<Serializable>
 		this.mailService = mailService;
 	}
 
-}
+	}

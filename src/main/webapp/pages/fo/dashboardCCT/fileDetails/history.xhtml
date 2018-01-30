@@ -62,16 +62,20 @@
 
                         <br />
 
-                        <p:panel rendered="#{not empty fileItemCctDetailController.selectedItemFlowDto.itemFlow}" header="#{bundle['RemindDecisionLabel']}">
-
-                            <h:panelGrid styleClass="remindDecision" columns="2" columnClasses="labelColumnLeft, labelColumnRight" cellspacing="4"
-                                         rendered="#{not empty fileItemCctDetailController.selectedItemFlowDto.itemFlow}">
-                                <h:outputLabel value="#{bundle['RemaindDecision_decisionLabel']}" title="#{bundle['RemaindDecision_decisionTitle']}" />
-                                <h:outputLabel
-                                    value="#{facesContext.viewRoot.locale eq 'en' ? fileItemCctDetailController.selectedItemFlowDto.itemFlow.flow.redefinedLabelEn : fileItemCctDetailController.selectedItemFlowDto.itemFlow.flow.redefinedLabelFr}" />
-                            </h:panelGrid>
-
-                            <br />
+						<p:panel rendered="#{not empty fileItemCctDetailController.selectedItemFlowDto.itemFlow}" header="#{bundle['RemindDecisionLabel']}">
+							<h:panelGroup>
+							<h:panelGrid styleClass="remindDecision" columns="2" columnClasses="labelColumnLeft, labelColumnRight" cellspacing="4"
+								rendered="#{not empty fileItemCctDetailController.selectedItemFlowDto.itemFlow}">
+								<h:outputLabel value="#{bundle['RemaindDecision_decisionLabel']}" title="#{bundle['RemaindDecision_decisionTitle']}" />
+								<h:outputLabel
+									value="#{facesContext.viewRoot.locale eq 'en' ? fileItemCctDetailController.selectedItemFlowDto.itemFlow.flow.redefinedLabelEn : fileItemCctDetailController.selectedItemFlowDto.itemFlow.flow.redefinedLabelFr}" />
+							</h:panelGrid>
+								<div class="btn-bloc">
+									<p:commandButton ajax="false" actionListener="#{fileItemCctDetailController.generateTemporarySeizure}"
+										value="#{bundle['TemporarySeizureReportdownloadBtn']}" styleClass="ui-priority-primary" />
+								</div>
+							</h:panelGroup>
+							<br />
 
                             <h:panelGroup
                                 rendered="#{empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsApp and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAO and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTO and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAR and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTR}">

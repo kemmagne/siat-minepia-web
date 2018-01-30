@@ -1,6 +1,6 @@
 package org.guce.siat.web.ct.controller.util.enums;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -10,7 +10,7 @@ import org.junit.Test;
 public class EnumTest {
 
     @Test
-    @Ignore
+//    @Ignore
     public void testEnum() {
         System.out.println(DataTypeEnnumeration.CALENDAR.name());
         System.out.println(DataTypeEnnumeration.CALENDAR.getCode());

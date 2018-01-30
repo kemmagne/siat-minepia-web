@@ -2,7 +2,18 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="165498ce-6d5a-42c9-b900-e120e7584cfb">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="432"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="MINADER_LOGO" class="java.lang.String"/>
+	<field name="referenceNumber" class="java.lang.String"/>
+	<field name="managerName" class="java.lang.String"/>
+	<field name="lotName" class="java.lang.String"/>
+	<field name="storagePlace" class="java.lang.String"/>
+	<field name="customerName" class="java.lang.String"/>
+	<field name="billOfLoading" class="java.lang.String"/>
+	<field name="origin" class="java.lang.String"/>
+	<field name="meansOfTransport" class="java.lang.String"/>
+	<field name="storeKeeper" class="java.lang.String"/>
+	<field name="customsAgent" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -142,6 +153,10 @@
 				</textElement>
 				<text><![CDATA[Detention for exportation or for re-exportation]]></text>
 			</staticText>
+			<image>
+				<reportElement uuid="985b5a8f-b2c3-441a-ae72-7a3922dc99e8" x="253" y="47" width="48" height="45"/>
+				<imageExpression><![CDATA[new java.io.File($P{MINADER_LOGO})]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>
@@ -330,10 +345,30 @@ by the owner]]></text>
 				<textElement/>
 				<text><![CDATA[Yours truity]]></text>
 			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="601887f7-20b9-4d52-b8a8-461f344736a3" x="133" y="-3" width="120" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{referenceNumber}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="542dec7c-1922-488a-8ce5-2dcd0c275c38" x="189" y="34" width="367" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{managerName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="cbe8efc0-3deb-4359-8409-175da5e9b987" x="73" y="99" width="482" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{lotName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="e908a8b1-8a41-4e38-95fa-b81c8b4ffda3" x="82" y="132" width="473" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{storagePlace}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="2" splitType="Stretch"/>
+		<band height="19" splitType="Stretch"/>
 	</columnHeader>
 	<pageFooter>
 		<band height="149" splitType="Stretch">
@@ -361,7 +396,7 @@ by the owner]]></text>
 				<textElement>
 					<font size="9"/>
 				</textElement>
-				<text><![CDATA[The Customers Officer]]></text>
+				<text><![CDATA[The Customs Officer]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="f1fe0345-09ee-42e0-900c-d2cd7d8c595a" x="388" y="59" width="100" height="13"/>
@@ -406,6 +441,21 @@ by the owner]]></text>
 				<textElement/>
 				<text><![CDATA[(1) (2) (3) (4) (5)]]></text>
 			</staticText>
+			<textField>
+				<reportElement uuid="2031149f-dafb-4f37-a587-ab135f02328d" x="1" y="39" width="206" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{storeKeeper}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="35396671-be0a-418b-9177-3fbff6254972" x="0" y="85" width="212" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{customsAgent}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="1725e04f-6fa7-410d-97b6-4a1b34de8222" x="388" y="85" width="167" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{customerName}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageFooter>
 	<summary>

@@ -47,15 +47,26 @@ public class CtCctCpIFileVo extends AbstractFileVo<CtCctCpIFileItemVo> {
      */
     private String consigneeCountry;
 
-    /**
-     * The means of transport.
-     */
-    private String meansOfTransport;
+	/** The means of transport. */
+	private String meansOfTransport;
+	
+	/** The means of transport during the transit */
+	private String meansOfTransportDuringTransit;
 
-    /**
-     * The point of entry.
-     */
-    private String pointOfEntry;
+	/** The point of out */
+	private String pointOfOut;
+	
+	/** The product categroy */
+	private String productCategory;
+	
+	/** The net weight*/
+	private String netWeight;
+	
+	/** The gross weight*/
+	private String grossWeight;
+	
+	/** The point of entry. */
+	private String pointOfEntry;
 
     /**
      * The local plant protection organisation.
@@ -632,9 +643,47 @@ public class CtCctCpIFileVo extends AbstractFileVo<CtCctCpIFileItemVo> {
         return botanicalNameOfPlants;
     }
 
-    public void setBotanicalNameOfPlants(String botanicalNameOfPlants) {
-        this.botanicalNameOfPlants = botanicalNameOfPlants;
-    }
+	public String getMeansOfTransportDuringTransit() {
+		return meansOfTransportDuringTransit;
+	}
+
+	public void setMeansOfTransportDuringTransit(String meansOfTransportDuringTransit) {
+		this.meansOfTransportDuringTransit = meansOfTransportDuringTransit;
+	}
+
+	public String getPointOfOut() {
+		return pointOfOut;
+	}
+
+	public void setPointOfOut(String pointOfOut) {
+		this.pointOfOut = pointOfOut;
+	}
+
+	public String getProductCategory() {
+		return productCategory;
+	}
+
+	public void setProductCategory(String productCategory) {
+		this.productCategory = productCategory;
+	}
+
+	public String getNetWeight() {
+		return netWeight;
+	}
+
+	public void setNetWeight(String netWeight) {
+		this.netWeight = netWeight;
+	}
+
+	public String getGrossWeight() {
+		return grossWeight;
+	}
+
+	public void setGrossWeight(String grossWeight) {
+		this.grossWeight = grossWeight;
+	}
+
+	
 
 }
 
