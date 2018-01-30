@@ -2,7 +2,8 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Notification d&apos;interception" pageWidth="650" pageHeight="1100" columnWidth="610" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="88b9e062-9516-48d3-8736-e76bc26e1c86">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="402"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="MINADER_LOGO" class="java.lang.String"/>
 	<field name="place" class="java.lang.String"/>
 	<field name="date" class="java.util.Date"/>
 	<field name="hour" class="java.lang.String"/>
@@ -167,6 +168,10 @@ CONTROLE DE LA QUALITE DES INTRANTS DES
 				</textElement>
 				<text><![CDATA[N°_______________________/PVIPAR /MINADER/SG/DRCQ]]></text>
 			</staticText>
+			<image>
+				<reportElement uuid="985b5a8f-b2c3-441a-ae72-7a3922dc99e8" x="264" y="43" width="71" height="75"/>
+				<imageExpression><![CDATA[new java.io.File($P{MINADER_LOGO})]]></imageExpression>
+			</image>
 		</band>
 		<band height="1038" splitType="Stretch">
 			<rectangle>

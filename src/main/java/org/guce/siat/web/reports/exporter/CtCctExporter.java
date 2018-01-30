@@ -20,9 +20,11 @@ import org.guce.siat.web.reports.vo.CtCctDataVo;
 import com.google.common.base.Objects;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.guce.siat.common.model.FileFieldValue;
+import static org.guce.siat.web.reports.exporter.ReportCommand.IMAGES_PATH;
 
 /**
  * The Class CtCctExporter.
@@ -61,7 +63,8 @@ public class CtCctExporter extends AbstractReportInvoker {
     public JRBeanCollectionDataSource getReportDataSource() {
         final CtCctDataVo entryInspectionFindingDataVo = new CtCctDataVo();
         System.out.println("inspectionReport : " + inspectionReport);
-        if ((inspectionReport != null)) {
+		try {
+			if ((inspectionReport != null)) {
             final List<CtCctControllerDataVo> controllerDataVoList = new ArrayList<>();
             //General Information
             if (StringUtils.isNotBlank(inspectionReport.getPlace())) {
@@ -305,6 +308,10 @@ public class CtCctExporter extends AbstractReportInvoker {
                 }
             }
         }
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+        
 
         return new JRBeanCollectionDataSource(Collections.singleton(entryInspectionFindingDataVo));
     }
@@ -326,6 +333,18 @@ public class CtCctExporter extends AbstractReportInvoker {
     public Locale getCurrentLocale() {
         return FacesContext.getCurrentInstance().getViewRoot().getLocale();
     }
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getJRParameters()
+	 */
+	@Override
+	protected Map<String, Object> getJRParameters() {
+		final Map<String, Object> jRParameters = super.getJRParameters();
+		jRParameters.put("MINADER_LOGO", getRealPath(IMAGES_PATH, "minader", "jpg"));
+		return jRParameters;
+	}
 
 }
 

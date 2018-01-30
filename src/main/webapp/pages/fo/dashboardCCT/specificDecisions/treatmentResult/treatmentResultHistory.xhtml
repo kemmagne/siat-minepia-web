@@ -201,10 +201,10 @@
         <div class="btn-bloc">
             <p:commandButton ajax="false" value="#{bundle['TreatAttestBtn']}"
                              actionListener="#{fileItemCctDetailController.generateAttestationOfTreatHistory}"
-                             rendered="#{fileItemCctDetailController.checkMinaderMinistry}" />
-            <p:commandButton ajax="false" value="#{bundle['TreatSupPhytoSheetBtn']}"
+                             rendered="#{fileItemCctDetailController.checkMinaderMinistry}" styleClass="ui-priority-primary" />
+			<p:commandButton ajax="false" value="#{bundle['TreatSupPhytoSheetBtn']}"
                              actionListener="#{fileItemCctDetailController.generateSheetOfTreatmentSupHistory}"
-                             rendered="#{fileItemCctDetailController.checkMinaderMinistry}"/>
+                             rendered="#{fileItemCctDetailController.checkMinaderMinistry}" styleClass="ui-priority-primary"/>
         </div>
 
     </h:panelGroup>

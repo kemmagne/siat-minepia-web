@@ -2203,6 +2203,10 @@ public class FileItemCctDetailController implements Serializable {
 	public void generateTemporarySeizure(){
 		JsfUtil.generateReport(new CtCctSeizureExporter("SAISIE_CONS_EXP_REEXP", "SAISIE_CONS_EXP_REEXP", currentFile));
 	}
+	
+	public void generateDefinitiveSeizure(){
+		JsfUtil.generateReport(new CtCctSeizureExporter("SAISIE_DEF_IMP_EXP_REEXP", "SAISIE_DEF_IMP_EXP_REEXP", currentFile));
+	}
 
     /**
      * Save decision.
@@ -6549,6 +6553,15 @@ public class FileItemCctDetailController implements Serializable {
     public void setInterceptionNotificationService(final InterceptionNotificationService interceptionNotificationService) {
         this.interceptionNotificationService = interceptionNotificationService;
     }
+	
+	public boolean seizurePrintable(){
+		if (selectedItemFlowDto == null || selectedItemFlowDto.getItemFlow() == null){
+			return false;
+		}
+		return (selectedItemFlowDto.getItemFlow().getFlow().getCode().equals(FlowCode.FL_CT_19.name())
+				|| selectedItemFlowDto.getItemFlow().getFlow().getCode().equals(FlowCode.FL_CT_20.name())
+				|| selectedItemFlowDto.getItemFlow().getFlow().getCode().equals(FlowCode.FL_CT_21.name()));
+	}
 
 }
 

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="saisie conservatoire à l&apos;importation, a l&apos;exportation ou à la reexportation" language="groovy" pageWidth="650" pageHeight="1000" columnWidth="610" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e1ebdf6d-6261-4e1c-bdf2-af9896dcbebd">
 	<property name="ireport.zoom" value="1.3310000000000013"/>
-	<property name="ireport.x" value="9"/>
-	<property name="ireport.y" value="880"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="MINADER_LOGO" class="java.lang.String"/>
 	<field name="place" class="java.lang.String"/>
 	<field name="date" class="java.util.Date"/>
 	<field name="hour" class="java.lang.String"/>
@@ -190,6 +191,10 @@
 				</textElement>
 				<text><![CDATA[----------]]></text>
 			</staticText>
+			<image>
+				<reportElement uuid="985b5a8f-b2c3-441a-ae72-7a3922dc99e8" x="270" y="40" width="71" height="75"/>
+				<imageExpression><![CDATA[new java.io.File($P{MINADER_LOGO})]]></imageExpression>
+			</image>
 		</band>
 		<band height="960" splitType="Stretch">
 			<rectangle>

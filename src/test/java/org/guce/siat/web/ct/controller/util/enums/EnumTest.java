@@ -17,7 +17,7 @@ public class EnumTest {
     }
 
     @Test
-    @Ignore
+//    @Ignore
     public void test() {
         int nb = 6;
         int id = 5654;
