@@ -70,10 +70,6 @@
 								<h:outputLabel
 									value="#{facesContext.viewRoot.locale eq 'en' ? fileItemCctDetailController.selectedItemFlowDto.itemFlow.flow.redefinedLabelEn : fileItemCctDetailController.selectedItemFlowDto.itemFlow.flow.redefinedLabelFr}" />
 							</h:panelGrid>
-								<div class="btn-bloc">
-									<p:commandButton ajax="false" actionListener="#{fileItemCctDetailController.generateTemporarySeizure}"
-										value="#{bundle['TemporarySeizureReportdownloadBtn']}" styleClass="ui-priority-primary" />
-								</div>
 							</h:panelGroup>
 							<br />
 
@@ -87,6 +83,14 @@
                                             value="#{itemFlowData.dataType.type == 'selectBooleanCheckbox' ? (itemFlowData.value ? bundle['Oui'] : bundle['Non']) : itemFlowData.value}" />
                                     </h:panelGrid>
                                 </ui:repeat>
+								<p:outputPanel rendered="#{fileItemCctDetailController.checkMinaderMinistry and fileItemCctDetailController.seizurePrintable()}">
+									<div class="btn-bloc">
+										<p:commandButton ajax="false" actionListener="#{fileItemCctDetailController.generateTemporarySeizure}"
+											value="#{bundle['TemporarySeizureReportdownloadBtn']}" styleClass="ui-priority-primary" />
+										<p:commandButton ajax="false" actionListener="#{fileItemCctDetailController.generateDefinitiveSeizure()}"
+											value="#{bundle['DefinitiveSeizureReportdownloadBtn']}" styleClass="ui-priority-primary" />
+									</div>
+								</p:outputPanel>
                             </h:panelGroup>
 
                             <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR}">

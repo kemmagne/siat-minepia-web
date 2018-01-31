@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -12,6 +13,7 @@ import org.guce.siat.common.model.FileFieldValue;
 import org.guce.siat.common.model.FileItem;
 import org.guce.siat.common.model.FileItemFieldValue;
 import org.guce.siat.core.ct.model.TreatmentResult;
+import static org.guce.siat.web.reports.exporter.ReportCommand.IMAGES_PATH;
 import org.guce.siat.web.reports.vo.CtCctTreatmentFileItemVo;
 import org.guce.siat.web.reports.vo.CtCctTreatmentFileVo;
 
@@ -134,6 +136,18 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
 
         return new JRBeanCollectionDataSource(Collections.singleton(treatmentVo));
     }
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getJRParameters()
+	 */
+	@Override
+	protected Map<String, Object> getJRParameters() {
+		final Map<String, Object> jRParameters = super.getJRParameters();
+		jRParameters.put("MINADER_LOGO", getRealPath(IMAGES_PATH, "minader", "jpg"));
+		return jRParameters;
+	}
 
 }
 
