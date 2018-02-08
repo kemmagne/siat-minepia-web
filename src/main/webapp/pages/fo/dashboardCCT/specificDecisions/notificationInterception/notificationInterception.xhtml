@@ -34,7 +34,15 @@
                     <h:outputLabel value="#{bundle['phytoReasons']}" for="phytoReasons" />
                     <p:inputText id="phytoReasons" value="#{fileItemCctDetailController.interceptionNotification.phytoReasons}" />
 
-                    <h:outputLabel value="#{bundle['Destruction']}" for="tmDestruction" />
+                </h:panelGrid>
+
+                <br/>
+                <h:outputLabel value="#{bundle['takenDecisons']}" />
+                <br/>
+
+                <h:panelGrid columns="2">
+
+                    <h:outputLabel value="Destruction" for="tmDestruction" />
                     <p:selectBooleanCheckbox id="tmDestruction"
                                              value="#{fileItemCctDetailController.interceptionNotification.tmDestruction}" />
 
@@ -53,13 +61,19 @@
                     <p:selectBooleanCheckbox id="tmTreatment"
                                              value="#{fileItemCctDetailController.interceptionNotification.tmTreatment}" />
 
-                    <h:outputLabel value="#{bundle['Autre']} #{bundle['takenMeasure']}" for="AutreMesurePrise" />
-                    <p:inputText id="AutreMesurePrise" value="#{fileItemCctDetailController.interceptionNotification.otherTakenMeasure}" />
+                    <h:outputLabel value="#{bundle['Autre']}s #{bundle['takenDecisons']}" for="AutreMesurePrise" />
+                    <p:inputText id="AutreMesurePrise" value="#{fileItemCctDetailController.interceptionNotification.otherTakenMeasure}"/>
+
+                </h:panelGrid>
+
+                <br/>
+
+                <h:panelGrid columns="2">
 
                     <h:outputLabel value="#{bundle['shipmentQuantity']}" for="shipmentQuantity" />
                     <p:inputText id="shipmentQuantity" value="#{fileItemCctDetailController.interceptionNotification.shipmentQuantity}" />
 
-                    <h:outputLabel value="#{bundle['shipmentDetails']}" for="shipmentDetails" />
+                    <h:outputLabel value="#{bundle['sendingDetails']}" for="shipmentDetails" />
                     <p:inputText id="shipmentDetails" value="#{fileItemCctDetailController.interceptionNotification.shipmentDetails}" />
 
                     <h:outputLabel value="#{bundle['sender']}" for="sender" />
@@ -83,13 +97,24 @@
                     <h:outputLabel value="#{bundle['inspectionDate']}" for="inspectionDateNI" />
                     <p:calendar navigator="true" value="#{fileItemCctDetailController.interceptionNotification.inspectionDate}"
                                 showOn="button" pattern="dd/MM/yyyy" readonlyInput="true"
-                                id="inspectionDateNI" title="#{bundle['inspectionPlace']}" />
+                                id="inspectionDateNI" title="#{bundle['inspectionDate']}" />
                 </h:panelGrid>
             </p:scrollPanel>
         </h:panelGroup>
     </p:panel>
 
 </ui:composition>
+
+
+
+
+
+
+
+
+
+
+
 
 
 

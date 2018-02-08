@@ -367,7 +367,7 @@
                 </h:panelGrid>
             </p:tab>
             <p:tab rendered="#{fileItemCctDetailController.checkMinaderMinistry}" titletip="#{bundle['procesVerbalInspection']}" title="#{bundle['procesVerbalInspection']}">
-                <h:panelGrid styleClass="table-decision">
+                <h:panelGrid columns="2" styleClass="table-decision">
                     <p:outputLabel for="articleReglemente" value="#{bundle['articleReglemente']}" />
                     <p:inputText id="articleReglemente" value="#{fileItemCctDetailController.inspectionReportData.articleReglemente}" />
 
