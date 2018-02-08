@@ -23,6 +23,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -43,6 +44,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.xml.bind.JAXBException;
 
 import org.apache.activemq.util.ByteArrayInputStream;
 import org.apache.chemistry.opencmis.client.api.Session;
@@ -122,6 +124,7 @@ import org.guce.siat.common.utils.RepetableUtil;
 import org.guce.siat.common.utils.SiatUtils;
 import org.guce.siat.common.utils.Tab;
 import org.guce.siat.common.utils.ebms.ESBConstants;
+import org.guce.siat.common.utils.ebms.UtilitiesException;
 import org.guce.siat.common.utils.enums.AperakType;
 import org.guce.siat.common.utils.enums.AuthorityConstants;
 import org.guce.siat.common.utils.enums.FileTypeCode;
@@ -215,6 +218,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.xml.sax.SAXException;
 
 /**
  * The Class FileItemCctDetailController.
@@ -6561,6 +6565,157 @@ public class FileItemCctDetailController implements Serializable {
 		return (selectedItemFlowDto.getItemFlow().getFlow().getCode().equals(FlowCode.FL_CT_19.name())
 				|| selectedItemFlowDto.getItemFlow().getFlow().getCode().equals(FlowCode.FL_CT_20.name())
 				|| selectedItemFlowDto.getItemFlow().getFlow().getCode().equals(FlowCode.FL_CT_21.name()));
+	}
+	
+	public boolean resendMessageAllowed(){
+		return selectedItemFlowDto != null &&
+				selectedItemFlowDto.getItemFlow() != null && 
+				selectedItemFlowDto.getItemFlow().getFlow() != null &&
+				selectedItemFlowDto.getItemFlow().getFlow().getOutgoing() != null &&
+				selectedItemFlowDto.getItemFlow().getFlow().getOutgoing() > 0;
+	}
+	
+	
+    public void sendMessage() throws JAXBException, IOException, UtilitiesException {
+		try {
+			if (selectedItemFlowDto != null && selectedItemFlowDto.getItemFlow() != null) {
+				Flow currentSelectedFlow = selectedItemFlowDto.getItemFlow().getFlow();
+				final List<FileItem> fileItemList = currentFile.getFileItemsList();
+				final String service = org.apache.commons.lang.StringUtils.EMPTY;
+				final String documentType = org.apache.commons.lang.StringUtils.EMPTY;
+				final List<ItemFlow> itemFlowList = itemFlowService.findLastItemFlowsByFileItemList(fileItemList);
+				if (currentSelectedFlow.getOutgoing() != null && currentSelectedFlow.getOutgoing() > 0) {
+					//generate report
+					Map<String, byte[]> attachedByteFiles = null;
+					try {
+						String reportNumber = org.apache.commons.lang.StringUtils.EMPTY;
+						if (FlowCode.FL_CT_89.name().equals(currentSelectedFlow.getCode())
+                                        || FlowCode.FL_CT_08.name().equals(currentSelectedFlow.getCode())) {
+
+                                    attachedByteFiles = new HashMap<>();
+
+                                    final List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<>();
+
+                                    final List<FileTypeFlowReport> fileTypeFlowReportsList = currentSelectedFlow.getFileTypeFlowReportsList();
+                                    if (fileTypeFlowReportsList != null) {
+                                        for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
+                                            if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType())) {
+                                                if (getCurrentOrganism().getId() == 111 || getCurrentOrganism().getId() == 28
+                                                        || getCurrentOrganism().getId() == 3) {
+                                                    if (getCurrentOrganism().getId() == 3) {
+                                                        final FileFieldValue typeDemande = fileService.findFileFieldValueByFieldCode(
+                                                                currentFile, "TYPE_DEMANDE");
+                                                        if (typeDemande.getValue().equals("IMPORT")
+                                                                || FileTypeCode.CCT_CT.equals(currentFile.getFileType().getCode())) {
+                                                            if ("CT_CCT_CP_I.pdf".equals(fileTypeFlowReport.getReportName())) {
+                                                                fileTypeFlowReports.add(fileTypeFlowReport);
+                                                                break;
+                                                            }
+
+                                                        } else if (typeDemande.getValue().equals("EXPORT")
+                                                                || FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode())) {
+                                                            if ("CT_CCT_CP_E.pdf".equals(fileTypeFlowReport.getReportName())) {
+                                                                fileTypeFlowReports.add(fileTypeFlowReport);
+                                                                break;
+                                                            }
+                                                        }
+                                                    } else if (getCurrentOrganism().equals(fileTypeFlowReport.getOrganism())) {
+                                                        fileTypeFlowReports.add(fileTypeFlowReport);
+                                                    }
+                                                } else {
+                                                    if (fileTypeFlowReport.getOrganism() == null) {
+                                                        fileTypeFlowReports.add(fileTypeFlowReport);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
+                                        final String nomClasse = fileTypeFlowReport.getReportClassName();
+                                        @SuppressWarnings("rawtypes")
+                                        final Class classe = Class.forName(nomClasse);
+                                        @SuppressWarnings({"rawtypes", "unchecked"})
+                                        Constructor c1;
+                                        byte[] report;
+                                        if (checkMinaderMinistry && FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode())) {
+                                            c1 = classe.getConstructor(File.class, String.class);
+                                            report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile, "CERTIFICAT_PHYTOSANITAIRE"));
+                                        } else {
+                                            c1 = classe.getConstructor(File.class);
+                                            report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile));
+                                        }
+                                        attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
+
+                                        /**
+                                         * *
+                                         */
+                                        final java.io.File targetAttachment = new java.io.File(String.format(
+                                                applicationPropretiesService.getAttachementFolder() + "%s%s", java.io.File.separator,
+                                                fileTypeFlowReport.getReportName()));
+
+                                        try (FileOutputStream fileOuputStream = new FileOutputStream(targetAttachment)) {
+                                            fileOuputStream.write(report);
+                                        }
+                                    }
+                                }
+					} catch (final Exception e) {
+						LOG.error("Error occured when loading report: " + e.getMessage(), e);
+						attachedByteFiles = null;
+					}
+
+					// convert file to document
+					final Serializable documentSerializable = xmlConverterService.convertFileToDocument(fileItemList.get(0)
+							.getFile(), currentFile.getFileItemsList(), itemFlowList, currentSelectedFlow);
+
+					// prepare document to send
+					final java.io.File xmlFile = SendDocumentUtils.prepareCctDocument(documentSerializable,
+							ebxmlPropertiesService.getEbxmlFolder(), service, documentType);
+					if (CollectionUtils.isNotEmpty(currentSelectedFlow.getCopyRecipientsList())) {
+						final List<CopyRecipient> copyRecipients = currentSelectedFlow.getCopyRecipientsList();
+						for (final CopyRecipient copyRecipient : copyRecipients) {
+							LOG.info("SEND COPY RECIPIENT TO {}", copyRecipient.getToAuthority().getRole());
+							final Map<String, Object> data = new HashMap<String, Object>();
+							final Path path = Paths.get(xmlFile.getAbsolutePath());
+							final byte[] ebxml = Files.readAllBytes(path);
+							data.put(ESBConstants.FLOW, ebxml);
+							data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
+							data.put(ESBConstants.TYPE_DOCUMENT, documentType);
+							data.put(ESBConstants.SERVICE, service);
+							data.put(ESBConstants.MESSAGE, null);
+							data.put(ESBConstants.EBXML_TYPE, "STANDARD");
+							data.put(ESBConstants.TO_PARTY_ID, copyRecipient.getToAuthority().getRole());
+							data.put(ESBConstants.DEAD, "0");
+							fileProducer.sendFile(data);
+							LOG.info("Message sent to OUT queue");
+
+						}
+					} else {
+						final Map<String, Object> data = new HashMap<String, Object>();
+						final Path path = Paths.get(xmlFile.getAbsolutePath());
+						final byte[] ebxml = Files.readAllBytes(path);
+						data.put(ESBConstants.FLOW, ebxml);
+						data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
+						data.put(ESBConstants.TYPE_DOCUMENT, documentType);
+						data.put(ESBConstants.SERVICE, service);
+						data.put(ESBConstants.MESSAGE, null);
+						data.put(ESBConstants.EBXML_TYPE, "STANDARD");
+						data.put(ESBConstants.TO_PARTY_ID, ebxmlPropertiesService.getToPartyId());
+						data.put(ESBConstants.DEAD, "0");
+						fileProducer.sendFile(data);
+						LOG.info("Message sent to OUT queue");
+					}
+
+				}
+//				JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
+//						getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.SEND_SUCCESS));
+				LOG.info("####SEND DECISION Transaction commited####");
+
+			}
+		} catch (SAXException ex) {
+			java.util.logging.Logger.getLogger(FileItemApDetailController.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (ParseException ex) {
+			java.util.logging.Logger.getLogger(FileItemApDetailController.class.getName()).log(Level.SEVERE, null, ex);
+		}
 	}
 
 }

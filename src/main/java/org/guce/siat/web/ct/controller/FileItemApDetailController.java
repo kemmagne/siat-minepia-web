@@ -20,6 +20,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -104,6 +105,7 @@ import org.guce.siat.common.utils.RepetableUtil;
 import org.guce.siat.common.utils.SiatUtils;
 import org.guce.siat.common.utils.Tab;
 import org.guce.siat.common.utils.ebms.ESBConstants;
+import org.guce.siat.common.utils.ebms.UtilitiesException;
 import org.guce.siat.common.utils.enums.AperakType;
 import org.guce.siat.common.utils.enums.AuthorityConstants;
 import org.guce.siat.common.utils.enums.FileTypeCode;
@@ -139,6 +141,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.xml.sax.SAXException;
 
 /**
  * The Class FileItemApDetailController.
@@ -768,7 +771,9 @@ public class FileItemApDetailController implements Serializable {
     private static final List<String> ACCEPTATION_FLOWS = Arrays.asList(FlowCode.FL_AP_101.name(), FlowCode.FL_AP_102.name(),
             FlowCode.FL_AP_103.name(), FlowCode.FL_AP_104.name(), FlowCode.FL_AP_105.name(), FlowCode.FL_AP_106.name());
 
-    /**
+    private static final List<String> ACCPETATION_FLOWS_COTATION_STEP = Arrays.asList(FlowCode.FL_AP_169.name(), FlowCode.FL_AP_170.name(),
+			FlowCode.FL_AP_171.name(), FlowCode.FL_AP_172.name(), FlowCode.FL_AP_173.name(), FlowCode.FL_AP_174.name());
+	/**
      * Constant DECISION_FLOWS_AT_COTATION_STEP.
      */
     private static final List<String> DECISION_FLOWS_AT_COTATION_STEP = Arrays.asList(FlowCode.FL_AP_169.name(), FlowCode.FL_AP_170.name(),
@@ -1104,6 +1109,7 @@ public class FileItemApDetailController implements Serializable {
         boolean returnAllowed;
         boolean acceptationFlowFound;
         Flow decisionAtCotationFlow = null;
+		List<Flow> acceptedFlow = currentFile.getFileType().getFlowList();
         if (currentFile.getFileItemsList() == null) {
             currentFile.setFileItemsList(fileItemService.findFileItemsByFile(currentFile));
 
@@ -1185,6 +1191,7 @@ public class FileItemApDetailController implements Serializable {
                         acceptationFlowFound = true;
                     }
                     if (!acceptationFlowFound && PROCESS_ALLOWING_DECISION_AT_COTATION_STEP.contains(currentFile.getFileType().getCode()) && !flow.getIsCota() && DECISION_FLOWS_AT_COTATION_STEP.contains(flow.getCode()) && stepListByFileType.contains(flow.getToStep())) {
+//                        if (!destinationFlowsFromCurrentCotationStep.contains(flow) && acceptedFlow.contains(flow)) {
                         if (!destinationFlowsFromCurrentCotationStep.contains(flow)) {
                             destinationFlowsFromCurrentCotationStep.add(flow);
                             decisionAtCotationFlow = flow;
@@ -1210,9 +1217,20 @@ public class FileItemApDetailController implements Serializable {
                             while (it.hasNext()) {
                                 final Flow flx = it.next();
                                 if (Arrays.asList(FlowCode.FL_AP_160.name(), FlowCode.FL_AP_161.name(), FlowCode.FL_AP_162.name(),
-                                        FlowCode.FL_AP_163.name(), FlowCode.FL_AP_164.name(), FlowCode.FL_AP_165.name()).contains(
+                                        FlowCode.FL_AP_163.name(), FlowCode.FL_AP_164.name(), FlowCode.FL_AP_165.name(),
+										FlowCode.FL_AP_193.name(), FlowCode.FL_AP_194.name()).contains(
                                         flx.getCode())) {
                                     it.remove();
+                                }
+                            }
+							final Iterator<Flow> it1 = destinationFlowsFromCurrentCotationStep.iterator();
+                            while (it1.hasNext()) {
+                                final Flow flx = it1.next();
+                                if (Arrays.asList(FlowCode.FL_AP_160.name(), FlowCode.FL_AP_161.name(), FlowCode.FL_AP_162.name(),
+                                        FlowCode.FL_AP_163.name(), FlowCode.FL_AP_164.name(), FlowCode.FL_AP_165.name(),
+										FlowCode.FL_AP_193.name(), FlowCode.FL_AP_194.name()).contains(
+                                        flx.getCode())) {
+                                    it1.remove();
                                 }
                             }
                             break hist;
@@ -1225,6 +1243,13 @@ public class FileItemApDetailController implements Serializable {
                             final Flow flx = it.next();
                             if (!flx.getIsCota() && ACCEPTATION_FLOWS.contains(flx.getCode())) {
                                 it.remove();
+                            }
+                        }
+						final Iterator<Flow> it1 = destinationFlowsFromCurrentCotationStep.iterator();
+                        while (it1.hasNext()) {
+                            final Flow flx = it1.next();
+                            if (!flx.getIsCota() && ACCPETATION_FLOWS_COTATION_STEP.contains(flx.getCode())) {
+                                it1.remove();
                             }
                         }
                     }
@@ -1755,7 +1780,8 @@ public class FileItemApDetailController implements Serializable {
                 }
 
                 if (Arrays.asList(FlowCode.FL_AP_160.name(), FlowCode.FL_AP_161.name(), FlowCode.FL_AP_162.name(),
-                        FlowCode.FL_AP_163.name(), FlowCode.FL_AP_164.name(), FlowCode.FL_AP_165.name(), FlowCode.FL_AP_167.name())
+                        FlowCode.FL_AP_163.name(), FlowCode.FL_AP_164.name(), FlowCode.FL_AP_165.name(), FlowCode.FL_AP_167.name(),
+						FlowCode.FL_AP_193.name(), FlowCode.FL_AP_194.name())
                         .contains(selectedFlow.getCode())) {
                     commonService.takeDacisionAndSavePayment(itemFlowsToAdd, paymentData);
                 } else {
@@ -4944,5 +4970,171 @@ public class FileItemApDetailController implements Serializable {
     public void setMinepdedVtType(String minepdedVtType) {
         this.minepdedVtType = minepdedVtType;
     }
+	
+	public boolean resendMessageAllowed(){
+		return selectedItemFlowDto != null &&
+				selectedItemFlowDto.getItemFlow() != null && 
+				selectedItemFlowDto.getItemFlow().getFlow() != null &&
+				selectedItemFlowDto.getItemFlow().getFlow().getOutgoing() != null &&
+				selectedItemFlowDto.getItemFlow().getFlow().getOutgoing() > 0;
+	}
+	
+	@SuppressWarnings("unused")
+    public void sendMessage() throws JAXBException, IOException, UtilitiesException {
+		try {
+			if (selectedItemFlowDto != null && selectedItemFlowDto.getItemFlow() != null) {
+				Flow currentSelectedFlow = selectedItemFlowDto.getItemFlow().getFlow();
+				final List<FileItem> fileItemList = currentFile.getFileItemsList();
+				final String service = StringUtils.EMPTY;
+				final String documentType = StringUtils.EMPTY;
+				final List<ItemFlow> itemFlowList = itemFlowService.findLastItemFlowsByFileItemList(fileItemList);
+				if (currentSelectedFlow.getOutgoing() != null && currentSelectedFlow.getOutgoing() > 0) {
+					//generate report
+					Map<String, byte[]> attachedByteFiles = null;
+					try {
+						String reportNumber = StringUtils.EMPTY;
+						if (FlowCode.FL_AP_107.name().equals(currentSelectedFlow.getCode()) || FlowCode.FL_AP_169.name().equals(currentSelectedFlow.getCode())) {
 
+							ItemFlow decisionFlow = null;
+//							if (currentFile.getFileType().getCode().equals(FileTypeCode.VTP_MINSANTE)) {
+//								decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_103);
+//								if (decisionFlow == null) {
+//									decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_169);
+//								}
+//								if (decisionFlow == null) {
+//									decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_170);
+//								}
+//								if (decisionFlow == null) {
+//									decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_171);
+//								}
+//								if (decisionFlow == null) {
+//									decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_172);
+//								}
+//								if (decisionFlow == null) {
+//									decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_173);
+//								}
+//							} else if (currentFile.getFileType().getCode().equals(FileTypeCode.VTD_MINSANTE)) {
+//								decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_105);
+//								if (decisionFlow == null) {
+//									decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_169);
+//								}
+//								if (decisionFlow == null) {
+//									decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_170);
+//								}
+//							}
+//							if (decisionFlow != null) {
+//								final List<ItemFlowData> itemFlowDataList = decisionFlow.getItemFlowsDataList();
+//								for (final ItemFlowData ifd : itemFlowDataList) {
+//									if (ifd.getDataType().getLabel().equalsIgnoreCase("Date validité")) {
+//										final FileField dateValidityField = fileFieldService.findFileFieldByCodeAndFileType(
+//												validityDateFieldName, currentFile.getFileType().getCode());
+//										if (dateValidityField != null) {
+//											FileFieldValue dateValidityFieldValue = fileFieldValueService.findValueByFileFieldAndFile(dateValidityField.getCode(), currentFile);
+//											if (dateValidityFieldValue != null) {
+//												dateValidityFieldValue.setValue(ifd.getValue());
+//												fileFieldValueService.update(dateValidityFieldValue);
+//											} else {
+//												dateValidityFieldValue = new FileFieldValue();
+//												dateValidityFieldValue.setFile(currentFile);
+//												dateValidityFieldValue.setFileField(dateValidityField);
+//												dateValidityFieldValue.setValue(ifd.getValue());
+//												currentFile.getFileFieldValueList().add(dateValidityFieldValue);
+//												fileFieldValueService.save(dateValidityFieldValue);
+//											}
+//										}
+//										break;
+//									}
+//								}
+//							}
+							attachedByteFiles = new HashMap<>();
+
+							final List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<>();
+
+							final List<FileTypeFlowReport> fileTypeFlowReportsList = currentSelectedFlow.getFileTypeFlowReportsList();
+
+							if (fileTypeFlowReportsList != null) {
+
+								for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
+									if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType())) {
+										fileTypeFlowReports.add(fileTypeFlowReport);
+									}
+								}
+							}
+							for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
+								final String nomClasse = fileTypeFlowReport.getReportClassName();
+								@SuppressWarnings("rawtypes")
+								final Class classe = Class.forName(nomClasse);
+								@SuppressWarnings({"rawtypes", "unchecked"})
+
+								final byte[] report = ReportGeneratorUtils.generateReportBytes(fileFieldValueService, classe, currentFile);
+								attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
+
+								final java.io.File targetAttachment = new java.io.File(String.format(
+										applicationPropretiesService.getAttachementFolder() + "%s%s", java.io.File.separator,
+										fileTypeFlowReport.getReportName()));
+
+								final FileOutputStream fileOuputStream = new FileOutputStream(targetAttachment);
+								fileOuputStream.write(report);
+								fileOuputStream.close();
+							}
+						}
+					} catch (final Exception e) {
+						LOG.error("Error occured when loading report: " + e.getMessage(), e);
+						attachedByteFiles = null;
+					}
+
+					// convert file to document
+					final Serializable documentSerializable = xmlConverterService.convertFileToDocument(fileItemList.get(0)
+							.getFile(), currentFile.getFileItemsList(), itemFlowList, currentSelectedFlow);
+
+					// prepare document to send
+					final java.io.File xmlFile = SendDocumentUtils.prepareApDocument(documentSerializable,
+							ebxmlPropertiesService.getEbxmlFolder(), service, documentType);
+					if (CollectionUtils.isNotEmpty(currentSelectedFlow.getCopyRecipientsList())) {
+						final List<CopyRecipient> copyRecipients = currentSelectedFlow.getCopyRecipientsList();
+						for (final CopyRecipient copyRecipient : copyRecipients) {
+							LOG.info("SEND COPY RECIPIENT TO {}", copyRecipient.getToAuthority().getRole());
+							final Map<String, Object> data = new HashMap<String, Object>();
+							final Path path = Paths.get(xmlFile.getAbsolutePath());
+							final byte[] ebxml = Files.readAllBytes(path);
+							data.put(ESBConstants.FLOW, ebxml);
+							data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
+							data.put(ESBConstants.TYPE_DOCUMENT, documentType);
+							data.put(ESBConstants.SERVICE, service);
+							data.put(ESBConstants.MESSAGE, null);
+							data.put(ESBConstants.EBXML_TYPE, "STANDARD");
+							data.put(ESBConstants.TO_PARTY_ID, copyRecipient.getToAuthority().getRole());
+							data.put(ESBConstants.DEAD, "0");
+							fileProducer.sendFile(data);
+							LOG.info("Message sent to OUT queue");
+
+						}
+					} else {
+						final Map<String, Object> data = new HashMap<String, Object>();
+						final Path path = Paths.get(xmlFile.getAbsolutePath());
+						final byte[] ebxml = Files.readAllBytes(path);
+						data.put(ESBConstants.FLOW, ebxml);
+						data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
+						data.put(ESBConstants.TYPE_DOCUMENT, documentType);
+						data.put(ESBConstants.SERVICE, service);
+						data.put(ESBConstants.MESSAGE, null);
+						data.put(ESBConstants.EBXML_TYPE, "STANDARD");
+						data.put(ESBConstants.TO_PARTY_ID, ebxmlPropertiesService.getToPartyId());
+						data.put(ESBConstants.DEAD, "0");
+						fileProducer.sendFile(data);
+						LOG.info("Message sent to OUT queue");
+					}
+
+				}
+//				JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
+//						getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.SEND_SUCCESS));
+				LOG.info("####SEND DECISION Transaction commited####");
+
+			}
+		} catch (SAXException ex) {
+			java.util.logging.Logger.getLogger(FileItemApDetailController.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (ParseException ex) {
+			java.util.logging.Logger.getLogger(FileItemApDetailController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
 }

@@ -67,8 +67,16 @@
 							<h:panelGrid styleClass="remindDecision" columns="2" columnClasses="labelColumnLeft, labelColumnRight" cellspacing="4"
 								rendered="#{not empty fileItemCctDetailController.selectedItemFlowDto.itemFlow}">
 								<h:outputLabel value="#{bundle['RemaindDecision_decisionLabel']}" title="#{bundle['RemaindDecision_decisionTitle']}" />
-								<h:outputLabel
-									value="#{facesContext.viewRoot.locale eq 'en' ? fileItemCctDetailController.selectedItemFlowDto.itemFlow.flow.redefinedLabelEn : fileItemCctDetailController.selectedItemFlowDto.itemFlow.flow.redefinedLabelFr}" />
+								<h:panelGroup>
+									<h:outputLabel
+										value="#{facesContext.viewRoot.locale eq 'en' ? fileItemCctDetailController.selectedItemFlowDto.itemFlow.flow.redefinedLabelEn : fileItemCctDetailController.selectedItemFlowDto.itemFlow.flow.redefinedLabelFr}" />
+							
+									<p:commandLink title="#{bundle['ReSend']}" process="@this"
+												   rendered="#{(request.isUserInRole('ROOT') or request.isUserInRole('ADMIN_MIN') or request.isUserInRole('ADMIN_ORG') or request.isUserInRole('SUPER')) and fileItemCctDetailController.resendMessageAllowed()}"
+										   action="#{fileItemCctDetailController.sendMessage()}" ajax="false" >
+										<p:graphicImage value="/images/send.png" width="20" height="20" />
+									</p:commandLink>
+								</h:panelGroup>
 							</h:panelGrid>
 							</h:panelGroup>
 							<br />
