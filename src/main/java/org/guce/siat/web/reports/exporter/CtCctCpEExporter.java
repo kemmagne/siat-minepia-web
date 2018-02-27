@@ -125,6 +125,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                                     break;
                                 case "QUANTITE_TOTALE":
                                     fileItemVo.setDeclaredQuantity(fileItemFieldValue.getValue());
+                                    ctCctCpEFileVo.setQuantity(fileItemFieldValue.getValue());
                                     break;
                                 case "PAYS_ORIGINE_NOM_PAYS":
                                     ctCctCpEFileVo.setOrigin(fileItemFieldValue.getValue());
@@ -162,3 +163,4 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
     }
 
 }
+

@@ -1204,9 +1204,13 @@ public class FileItemCctDetailController implements Serializable {
                     }
 
                     if (equalsSteps) {
-
-                        flows = flowService.findFlowsByFromStepAndFileType(referenceFileItemCheck.getStep(), referenceFileItemCheck
-                                .getFile().getFileType());
+                        if (isCheckMinaderMinistry() && (FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode()) || FileTypeCode.CCT_CT.equals(currentFile.getFileType().getCode()))) {
+                            flows = flowService.findFlowsByFromStepAndFileType2(referenceFileItemCheck.getStep(), referenceFileItemCheck
+                                    .getFile().getFileType());
+                        } else {
+                            flows = flowService.findFlowsByFromStepAndFileType(referenceFileItemCheck.getStep(), referenceFileItemCheck
+                                    .getFile().getFileType());
+                        }
 
                         productsHaveSameRDDStatus = productsHaveSameRDDStatus(chckedProductInfoChecksList);
 
@@ -2155,14 +2159,14 @@ public class FileItemCctDetailController implements Serializable {
     public void generatePvInspArtReglementeHistory() {
         JsfUtil.generateReport(new CtCctExporter("PV_INSPECTION_PHYTOSANITAIRE_ARTICLE_REGLEMENTE", "PV_INSPECTION_PHYTOSANITAIRE_ARTICLE_REGLEMENTE", specificDecisionsHistory.getDecisionDetailsIR()));
     }
-	
-	public void generatePvpeReportHistory(){
-		JsfUtil.generateReport(new CtCctPvpeExporter(specificDecisionsHistory.getDecisionDetailsAR().getAnalyseOrder()));
-	}
-	
-	public void generatePvpeReport(){
-		JsfUtil.generateReport(new CtCctPvpeExporter(specificDecisionsHistory.getLastAnalyseResult().getAnalyseOrder()));
-	}
+
+    public void generatePvpeReportHistory() {
+        JsfUtil.generateReport(new CtCctPvpeExporter(specificDecisionsHistory.getDecisionDetailsAR().getAnalyseOrder()));
+    }
+
+    public void generatePvpeReport() {
+        JsfUtil.generateReport(new CtCctPvpeExporter(specificDecisionsHistory.getLastAnalyseResult().getAnalyseOrder()));
+    }
 
     public void generatePvInspPhytoHistory() {
         JsfUtil.generateReport(new CtCctExporter("PV_INSPECTION_PHYTOSANITAIRE", "PV_INSPECTION_PHYTOSANITAIRE", specificDecisionsHistory.getDecisionDetailsIR()));
@@ -2195,18 +2199,18 @@ public class FileItemCctDetailController implements Serializable {
     public void generateInterceptionNotifHistory() {
         JsfUtil.generateReport(new CtCctNiExporter(specificDecisionsHistory.getDecisionDetailsNI()));
     }
-	
-	public void generatePvptReport(){
-		JsfUtil.generateReport(new CtCctCpIExporter(currentFile, "CT_CCT_PVPT", "CT_CCT_PVPT"));
-	}
-	
-	public void generateTemporarySeizure(){
-		JsfUtil.generateReport(new CtCctSeizureExporter("SAISIE_CONS_EXP_REEXP", "SAISIE_CONS_EXP_REEXP", currentFile));
-	}
-	
-	public void generateDefinitiveSeizure(){
-		JsfUtil.generateReport(new CtCctSeizureExporter("SAISIE_DEF_IMP_EXP_REEXP", "SAISIE_DEF_IMP_EXP_REEXP", currentFile));
-	}
+
+    public void generatePvptReport() {
+        JsfUtil.generateReport(new CtCctCpIExporter(currentFile, "CT_CCT_PVPT", "CT_CCT_PVPT"));
+    }
+
+    public void generateTemporarySeizure() {
+        JsfUtil.generateReport(new CtCctSeizureExporter("SAISIE_CONS_EXP_REEXP", "SAISIE_CONS_EXP_REEXP", currentFile));
+    }
+
+    public void generateDefinitiveSeizure() {
+        JsfUtil.generateReport(new CtCctSeizureExporter("SAISIE_DEF_IMP_EXP_REEXP", "SAISIE_DEF_IMP_EXP_REEXP", currentFile));
+    }
 
     /**
      * Save decision.
@@ -2340,8 +2344,8 @@ public class FileItemCctDetailController implements Serializable {
             }
             // Demande de d'analyse
             if (FlowCode.FL_CT_29.name().equals(selectedFlow.getCode()) && chckedListSize == Constants.ONE) {
-				System.out.println("analysePartsList : " + analysePartsList.size());
-				System.out.println("analyseOrder : " + analyseOrder);
+                System.out.println("analysePartsList : " + analysePartsList.size());
+                System.out.println("analyseOrder : " + analyseOrder);
                 if (CollectionUtils.isNotEmpty(analysePartsList)) {
                     commonService.takeDecisionAndSaveAnalyseRequest(analysePartsList, analyseOrder, itemFlowsToAdd);
                 }
@@ -2397,8 +2401,8 @@ public class FileItemCctDetailController implements Serializable {
                         }
                     }
                 }
-				System.out.println("analyseResult : " + analyseResult);
-				System.out.println("analyseOrder : " + analyseOrder);
+                System.out.println("analyseResult : " + analyseResult);
+                System.out.println("analyseOrder : " + analyseOrder);
                 commonService.takeDecisionAndSaveAnalyzeResult(analyseResult, itemFlowsToAdd);
                 // Attachment --> Alfresco
             } // Envoie Résultat de Traitement
@@ -6553,15 +6557,14 @@ public class FileItemCctDetailController implements Serializable {
     public void setInterceptionNotificationService(final InterceptionNotificationService interceptionNotificationService) {
         this.interceptionNotificationService = interceptionNotificationService;
     }
-	
-	public boolean seizurePrintable(){
-		if (selectedItemFlowDto == null || selectedItemFlowDto.getItemFlow() == null){
-			return false;
-		}
-		return (selectedItemFlowDto.getItemFlow().getFlow().getCode().equals(FlowCode.FL_CT_19.name())
-				|| selectedItemFlowDto.getItemFlow().getFlow().getCode().equals(FlowCode.FL_CT_20.name())
-				|| selectedItemFlowDto.getItemFlow().getFlow().getCode().equals(FlowCode.FL_CT_21.name()));
-	}
+
+    public boolean seizurePrintable() {
+        if (selectedItemFlowDto == null || selectedItemFlowDto.getItemFlow() == null) {
+            return false;
+        }
+        return (selectedItemFlowDto.getItemFlow().getFlow().getCode().equals(FlowCode.FL_CT_19.name())
+                || selectedItemFlowDto.getItemFlow().getFlow().getCode().equals(FlowCode.FL_CT_20.name())
+                || selectedItemFlowDto.getItemFlow().getFlow().getCode().equals(FlowCode.FL_CT_21.name()));
+    }
 
 }
-
