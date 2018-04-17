@@ -1,6 +1,16 @@
 package org.guce.siat.web.ct.controller.util.enums;
 
-import org.apache.commons.lang3.StringUtils;
+import java.io.IOException;
+import java.io.StringReader;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Properties;
+import org.apache.commons.lang.StringUtils;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -10,13 +20,114 @@ import org.junit.Test;
  */
 public class EnumTest {
 
-    @Test
     @Ignore
+    @Test
     public void test() {
-        int nb = 6;
-        int id = 5654;
-        System.out.println("PR" + StringUtils.repeat('0', nb - Integer.toString(id).length()) + Integer.toString(id));
+        String reportNumber = (5 + 1) + "/" + java.util.Calendar.getInstance().get(java.util.Calendar.YEAR) + "/2015/CCT/CPE/MINADER";
+        System.out.println(reportNumber);
+    }
+
+    @Ignore
+    @Test
+    public void testStringBuilder() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("POIDS_BRUT");
+        Assert.assertTrue(builder.length() > 0);
+        builder.delete(0, builder.length());
+        Assert.assertTrue(builder.length() == 0);
+    }
+
+    @Ignore
+    @Test
+    public void testPattern() {
+        String dataTypeProps = "pattern=dd-MM-yyyy HH:mm";
+        String pattern = "dd-MM-yyyy";
+        Properties properties = new Properties();
+        try {
+            properties.load(new StringReader(dataTypeProps));
+            pattern = properties.getProperty(DataTypePropEnnum.PATTERN.getCode(), pattern);
+        } catch (IOException ex) {
+            System.err.println("Problem occured when trying to load properties of data type : ");
+        }
+        System.out.println(pattern);
+        System.out.println(new SimpleDateFormat(pattern).format(new Date()));
+    }
+
+    @Ignore
+    @Test
+    public void testFormat() {
+        //new DecimalFormat(formatPrefix + "000000").format(addedFile.getId())
+
+    }
+
+    @Ignore
+    @Test
+    public void testSplit() {
+        final String containersNumbers = "Numéro,Type,Scellés,Volume,Tonnage,Marque,Quantité colis,Essence;ERDE9869858,10,SC785,74,51,SC8712,10,DEN;DERF9875896,20,SC9586,74,85,SC,10,DEN41;EASZ9856325,10,SC45,485,84,SC,10,DEN;";
+        final String[] tab1 = containersNumbers.split(";");
+        final int size = tab1.length;
+        final int positionScelle = "Type".equalsIgnoreCase(tab1[0].split(",")[1]) ? 2 : 1;
+        final StringBuilder builder = new StringBuilder();
+        for (int i = 1; i < size; i++) {
+            if (StringUtils.isBlank(tab1[i])) {
+                continue;
+            }
+            final String[] tab2 = tab1[i].split(",");
+            builder.append(tab2[0]).append("/").append(tab2[positionScelle]).append(" ");
+        }
+        System.out.println(builder.substring(0, builder.lastIndexOf(" ")));
+    }
+
+    @Ignore
+    @Test
+    public void testOrder() {
+        List<TestObject> objects = new ArrayList<>();
+        objects.add(new TestObject(1, "a"));
+        objects.add(new TestObject(10, "a"));
+        objects.add(new TestObject(5, "a"));
+        objects.add(new TestObject(4, "a"));
+        objects.add(new TestObject(3, "a"));
+        System.out.println(objects);
+        Collections.sort(objects, new Comparator<TestObject>() {
+            @Override
+            public int compare(TestObject o1, TestObject o2) {
+                return o2.getId() - o1.getId();
+            }
+        });
+        System.out.println(objects);
+    }
+
+    private class TestObject {
+
+        private int id;
+        private String value;
+
+        public TestObject(int id, String value) {
+            this.id = id;
+            this.value = value;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return id + "";
+        }
+
     }
 
 }
-

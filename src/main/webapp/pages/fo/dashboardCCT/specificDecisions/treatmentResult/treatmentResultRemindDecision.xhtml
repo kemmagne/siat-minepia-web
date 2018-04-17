@@ -70,7 +70,7 @@
             </h:panelGrid>
         </p:tab>
 
-        <p:tab rendered="#{fileItemCctDetailController.checkMinaderMinistry}" title="#{bundle['FicheSupervisionTraitPhyto']}" titletip="#{bundle['FicheSupervisionTraitPhyto']}">
+        <p:tab rendered="#{false and fileItemCctDetailController.checkMinaderMinistry}" title="#{bundle['FicheSupervisionTraitPhyto']}" titletip="#{bundle['FicheSupervisionTraitPhyto']}">
 
             <h:panelGrid columns="2">
 
@@ -197,18 +197,20 @@
         </p:tab>
     </p:tabView>
 
-	<p:outputPanel rendered="#{fileItemCctDetailController.checkMinaderMinistry}">
-			<div class="btn-bloc">
-				<p:commandButton ajax="false" value="#{bundle['TreatAttestBtn']}"
-                         actionListener="#{fileItemCctDetailController.generateAttestationOfTreat}" />
-				</div>
-		<div class="btn-bloc">
-		<p:commandButton ajax="false" value="#{bundle['TreatSupPhytoSheetBtn']}"
-                         actionListener="#{fileItemCctDetailController.generateSheetOfTreatmentSup}"/>
-			</div>
-		</p:outputPanel>
+    <p:outputPanel rendered="#{false and fileItemCctDetailController.checkMinaderMinistry}">
+        <div class="btn-bloc">
+            <p:commandButton ajax="false" value="#{bundle['TreatAttestBtn']}"
+                             actionListener="#{fileItemCctDetailController.generateAttestationOfTreat}" />
+        </div>
+        <div class="btn-bloc">
+            <p:commandButton ajax="false" value="#{bundle['TreatSupPhytoSheetBtn']}"
+                             actionListener="#{fileItemCctDetailController.generateSheetOfTreatmentSup}"/>
+        </div>
+    </p:outputPanel>
 
 </ui:composition>
+
+
 
 
 

@@ -240,6 +240,8 @@ public class InspectionReportData implements Serializable {
     private String pviQuantite;
     private String pviDispositionsPrises;
 
+    private String controllerName;
+
     /**
      * Transform to report list.
      *
@@ -249,7 +251,94 @@ public class InspectionReportData implements Serializable {
     @SuppressWarnings("unchecked")
     public List<InspectionReport> transformToReportList(final Appointment appointment) {
         final List<InspectionReport> inspectionReports = new ArrayList<>();
-        for (final Sample echantillon : this.samples) {
+        if (this.samples != null) {
+            for (final Sample echantillon : this.samples) {
+                final InspectionReport inspectionReport = new InspectionReport();
+                inspectionReport.setPlace(this.inspectionPlace);
+                inspectionReport.setReportDate(this.inspectionDate);
+                inspectionReport.setReportTime(this.inspectionTime);
+                inspectionReport.setControllerDecision(this.controllerDecision);
+                inspectionReport.setQuarantinedCulturePlace(this.quarantinedCulturePlace);
+                inspectionReport.setOtherGoodness(this.otherGoodness);
+                inspectionReport.setObservation(this.observation);
+                inspectionReport.setMotif(this.motif);
+                inspectionReport.setInspectionFees(this.inspectionFees);
+                inspectionReport.setOtherCertificate(this.otherCertificate);
+                inspectionReport.setInspectionFeesFCFA(this.inspectionFeesFCFA);
+                inspectionReport.setQuarantinedCulturePlace(this.getQuarantinedCulturePlace());
+                inspectionReport.setOtherSpecialFees(this.otherSpecialFees);
+                inspectionReport.setOriginCertificate(this.originCertificate);
+                inspectionReport.setPhytoGeneralCertificate(this.phytoGeneralCertificate);
+                inspectionReport.setPhytoSpecialCertificate(this.phytoSpecialCertificate);
+                inspectionReport.setQualityAttestation(this.qualityAttestation);
+                inspectionReport.setSanitaryVetCertificate(this.sanitaryVetCertificate);
+                inspectionReport.setWholesomenessCertificate(this.wholesomenessCertificate);
+                inspectionReport.setConformityCertificate(this.conformityCertificate);
+                inspectionReport.setAutocontrolDocument(this.autocontrolDocument);
+                inspectionReport.setAutocontrolEquipement(this.autocontrolEquipement);
+                inspectionReport.setDechet(this.dechet);
+                inspectionReport.setWater(this.water);
+                inspectionReport.setCasque(this.casque);
+                inspectionReport.setGants(this.gants);
+                inspectionReport.setCombinaison(this.combinaison);
+                inspectionReport.setRespectNorme(this.respectNorme);
+                inspectionReport.setSourcePropagationPeste(this.sourcePropagationPeste);
+                inspectionReport.setProcedure(this.procedure);
+                inspectionReport.setProcessAnalyse(this.processAnalyse);
+                //
+                inspectionReport.setTypeTraitement(typeTraitement);
+                inspectionReport.setEtatDateDernierTraitement(etatDateDernierTraitement);
+                inspectionReport.setProduitUtilise(produitUtilise);
+                inspectionReport.setDosage(dosage);
+                inspectionReport.setEnvironnementStockage(environnementStockage);
+                inspectionReport.setEnvironnementTransport(environnementTransport);
+                inspectionReport.setConditionClimatique(conditionClimatique);
+                inspectionReport.setMesureProtection(mesureProtection);
+                inspectionReport.setObservations(observations);
+                inspectionReport.setArticleReglemente(articleReglemente);
+                inspectionReport.setPviCouvertDoc(pviCouvertDoc);
+                inspectionReport.setPviDestination(pviDestination);
+                inspectionReport.setPviDispositionsPrises(pviDispositionsPrises);
+                inspectionReport.setPviNatureArticleInspecte(pviNatureArticleInspecte);
+                inspectionReport.setPviQuantite(pviQuantite);
+                inspectionReport.setPviSituationArticle(pviSituationArticle);
+                inspectionReport.setControllerName(controllerName);
+
+                final InspectionReportTemperatureVo temperatureVo = ((List<InspectionReportTemperatureVo>) CollectionUtils.select(
+                        this.temperatureList, new Predicate() {
+                    @Override
+                    public boolean evaluate(final Object object) {
+                        return ((InspectionReportTemperatureVo) object).getFileItem().getId()
+                                .equals(echantillon.getFileItem().getId());
+                    }
+                })).get(0);
+                inspectionReport.setAspect(temperatureVo.getAspect());
+                inspectionReport.setTemperature(temperatureVo.getValue());
+                final InspectionReportEtiquetageVo etiquetageVo = ((List<InspectionReportEtiquetageVo>) CollectionUtils.select(
+                        this.etiquetageList, new Predicate() {
+                    @Override
+                    public boolean evaluate(final Object object) {
+                        return ((InspectionReportEtiquetageVo) object).getFileItem().getId()
+                                .equals(echantillon.getFileItem().getId());
+                    }
+                })).get(0);
+                inspectionReport.setLabel(etiquetageVo.getLabel());
+                inspectionReport.setStandardCompliance(etiquetageVo.getStandardCompliance());
+                inspectionReport.setStandardNumber(etiquetageVo.getStandardNumber());
+                inspectionReport.setOriginCertificate(this.originCertificate);
+                inspectionReport.setSample(echantillon);
+                inspectionReport.setInfraction(this.infraction);
+                inspectionReport.setInspectionControllerList(this.controllers);
+                for (final InspectionController controller : controllers) {
+                    controller.setInspection(inspectionReport);
+                }
+                inspectionReport.setFileItem(echantillon.getFileItem());
+
+                inspectionReport.setAppointment(appointment);
+
+                inspectionReports.add(inspectionReport);
+            }
+        } else {
             final InspectionReport inspectionReport = new InspectionReport();
             inspectionReport.setPlace(this.inspectionPlace);
             inspectionReport.setReportDate(this.inspectionDate);
@@ -299,39 +388,8 @@ public class InspectionReportData implements Serializable {
             inspectionReport.setPviNatureArticleInspecte(pviNatureArticleInspecte);
             inspectionReport.setPviQuantite(pviQuantite);
             inspectionReport.setPviSituationArticle(pviSituationArticle);
-
-            final InspectionReportTemperatureVo temperatureVo = ((List<InspectionReportTemperatureVo>) CollectionUtils.select(
-                    this.temperatureList, new Predicate() {
-                @Override
-                public boolean evaluate(final Object object) {
-                    return ((InspectionReportTemperatureVo) object).getFileItem().getId()
-                            .equals(echantillon.getFileItem().getId());
-                }
-            })).get(0);
-            inspectionReport.setAspect(temperatureVo.getAspect());
-            inspectionReport.setTemperature(temperatureVo.getValue());
-            final InspectionReportEtiquetageVo etiquetageVo = ((List<InspectionReportEtiquetageVo>) CollectionUtils.select(
-                    this.etiquetageList, new Predicate() {
-                @Override
-                public boolean evaluate(final Object object) {
-                    return ((InspectionReportEtiquetageVo) object).getFileItem().getId()
-                            .equals(echantillon.getFileItem().getId());
-                }
-            })).get(0);
-            inspectionReport.setLabel(etiquetageVo.getLabel());
-            inspectionReport.setStandardCompliance(etiquetageVo.getStandardCompliance());
-            inspectionReport.setStandardNumber(etiquetageVo.getStandardNumber());
-            inspectionReport.setOriginCertificate(this.originCertificate);
-            inspectionReport.setSample(echantillon);
-            inspectionReport.setInfraction(this.infraction);
-            inspectionReport.setInspectionControllerList(this.controllers);
-            for (final InspectionController controller : controllers) {
-                controller.setInspection(inspectionReport);
-            }
-            inspectionReport.setFileItem(echantillon.getFileItem());
-
-            inspectionReport.setAppointment(appointment);
-
+            inspectionReport.setControllerName(controllerName);
+            //
             inspectionReports.add(inspectionReport);
         }
 
@@ -1021,6 +1079,14 @@ public class InspectionReportData implements Serializable {
         this.pviDispositionsPrises = pviDispositionsPrises;
     }
 
+    public String getControllerName() {
+        return controllerName;
+    }
+
+    public void setControllerName(String controllerName) {
+        this.controllerName = controllerName;
+    }
+
     /**
      * (non-Javadoc)
      *
@@ -1040,4 +1106,3 @@ public class InspectionReportData implements Serializable {
     }
 
 }
-

@@ -1,7 +1,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
-    <p:separator />
-    <p:panel header="#{bundle['NotificationInterception']}">
+    <p:separator rendered="false" />
+    <p:panel rendered="false" header="#{bundle['NotificationInterception']}">
         <p:spacer />
         <h:panelGrid columns="2">
             <h:outputLabel value="#{bundle['contaminatedProduct']}" />
@@ -93,6 +93,7 @@
     </p:panel>
 
 </ui:composition>
+
 
 
 

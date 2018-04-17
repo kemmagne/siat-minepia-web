@@ -10,7 +10,8 @@
     <artifactId>siat-ct-web</artifactId>
     <packaging>war</packaging>
     <name>siat-ct-web</name>
-    <version>1.2.2</version>
+    <!-- -TEST -->
+    <version>1.3.10a</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <resource.dir>src/main/resources</resource.dir>
@@ -37,8 +38,7 @@
                 <!--<db.url>jdbc:oracle:thin:@vm:1521:GUCE</db.url>-->
                 <db.url>jdbc:oracle:thin:@dev:1510:GUCE</db.url>
                 <ged.url>http://172.24.2.134:8080</ged.url>
-                <jms.url>failover:(tcp://dev:61616)</jms.url>
-                <!--<jms.url>failover:(tcp://localhost:61616)</jms.url>-->
+                <jms.url>failover:(tcp://brokerurl:61616)</jms.url>
                 <version>${application.version}</version>
                 <ged.username>admin</ged.username>
                 <ged.password>admin</ged.password>
@@ -269,7 +269,7 @@
         <dependency>
             <groupId>org.guce.siat</groupId>
             <artifactId>siat-ct-core</artifactId>
-            <version>1.2.2</version>
+            <version>1.3.2</version>
         </dependency>
 
         <dependency>
@@ -338,11 +338,17 @@
                 </configuration>
             </plugin>
             <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.0.2</version>
-                <configuration>
-                    <encoding>ISO-8859-1</encoding>
-                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>

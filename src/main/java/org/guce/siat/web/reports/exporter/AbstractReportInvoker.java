@@ -61,8 +61,6 @@ public abstract class AbstractReportInvoker implements ReportCommand {
             // the method for generating the document in pdf format
             final JasperPrint jasperPrint = JasperFillManager.fillReport(getRealPath(REPORTS_PATH, jasperFileName, "jasper"),
                     getJRParameters(), getReportDataSource());
-            System.out.println("org.guce.siat.web.reports.exporter.AbstractReportInvoker.exportReportToPdf()");
-            System.out.println("bytes");
             final byte[] bytes = JasperExportManager.exportReportToPdf(jasperPrint);
             final HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance()
                     .getExternalContext().getResponse();

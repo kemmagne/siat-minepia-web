@@ -1,0 +1,64 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+    <p:panel rendered="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfos.delivrableType eq 'CCT_CT_E' or fileItemCctDetailController.phytoTransitFile}">
+        <h:panelGrid columns="2">
+            <h:outputLabel value="#{bundle['additionnalDeclaration']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfos.additionnalDeclaration}" />
+        </h:panelGrid>
+    </p:panel>
+
+    <p:panel rendered="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfos.delivrableType eq 'CQ_CT'}">
+        <h:panelGrid columns="2">
+            <p:outputLabel value="#{bundle['commodityCaterory']}" />
+            <p:selectOneMenu value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfos.commodityCaterory}" disabled="true">
+                <f:selectItem itemValue="I" itemLabel="I" />
+                <f:selectItem itemValue="II" itemLabel="II" />
+                <f:selectItem itemValue="III" itemLabel="III" />
+                <f:selectItem itemValue="IV" itemLabel="IV" />
+            </p:selectOneMenu>
+
+            <h:outputLabel value="#{bundle['validity']} *" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfos.validity}" />
+
+            <h:outputLabel value="#{bundle['TOPackagerOnPackaging']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfos.packagerOnPackaging}" />
+
+            <h:outputLabel value="#{bundle['TOConservationTemp']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfos.conservationTemperature}" />
+        </h:panelGrid>
+    </p:panel>
+
+    <!-- TreatmentInfos -->
+    <p:panel header="#{bundle['TreatmentInfos']}" rendered="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfos.delivrableType eq 'CCT_CT_E' or fileItemCctDetailController.phytoTransitFile}">
+        <h:panelGrid columns="2">
+            <h:outputLabel value="#{bundle['TypeOfTreatment']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfos.typeOfTreatment}" />
+
+            <h:outputLabel value="#{bundle['chemicalProduct']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfos.chemicalProduct}" />
+
+            <h:outputLabel value="#{bundle['duration']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfos.duration}" />
+
+            <h:outputLabel value="#{bundle['temperature']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfos.temperature}" />
+
+            <h:outputLabel value="#{bundle['concentration']} *" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfos.concentration}" />
+
+            <h:outputLabel value="#{bundle['treatmentsCarriedOut']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfos.treatmentsCarriedOut}" />
+
+            <h:outputLabel value="#{bundle['additionalInfos']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfos.additionalInfos}" />
+
+            <h:outputLabel value="#{bundle['fumigation']}" />
+            <p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfos.fumigation}" />
+
+            <h:outputLabel value="#{bundle['disinfection']}" />
+            <p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfos.disinfection}" />
+        </h:panelGrid>
+    </p:panel>
+
+</ui:composition>

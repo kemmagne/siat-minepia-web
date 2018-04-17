@@ -47,19 +47,23 @@
                         <ui:include src="../specificDecisions/inspectionReport/inspectionReport.xhtml" />
                     </p:panel>
 
+                    <p:panel rendered="#{fileItemCctDetailController.isPviReadyForSignature(fileItemCctDetailController.selectedFlow)}">
+                        <ui:include src="../specificDecisions/pviInfos/pviInfos.xhtml" />
+                    </p:panel>
+
                     <ui:include src="../specificDecisions/analyseRequest/analyseRequest.xhtml" />
 
                     <ui:include src="../specificDecisions/analyseResult/analyseResult.xhtml" />
 
                     <ui:include src="../specificDecisions/treatmentRequest/treatmentRequest.xhtml" />
 
-                    <p:panel rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'TRR'}">
-                        <ui:include src="../specificDecisions/treatmentResult/treatmentResult.xhtml" />
+                    <p:panel rendered="#{fileItemCctDetailController.isPhytoReadyForSignature(fileItemCctDetailController.selectedFlow)}">
+                        <ui:include src="../specificDecisions/treatmentInfos/treatmentInfos.xhtml" />
                     </p:panel>
 
-                    <h:panelGroup rendered="#{fileItemCctDetailController.selectedFlow ne null and fileItemCctDetailController.checkMinaderMinistry and (fileItemCctDetailController.selectedFlow.code eq 'FL_CT_29' or fileItemCctDetailController.selectedFlow.code eq 'FL_CT_33' or fileItemCctDetailController.selectedFlow.code eq 'FL_CT_35' or fileItemCctDetailController.selectedFlow.code eq 'FL_CT_64')}">
-                        <ui:include src="../specificDecisions/notificationInterception/notificationInterception.xhtml" />
-                    </h:panelGroup>
+                    <p:panel rendered="#{(fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'TRR') or (fileItemCctDetailController.isFstpReadyForSignature(fileItemCctDetailController.selectedFlow) or fileItemCctDetailController.isAtReadyForSignature(fileItemCctDetailController.selectedFlow))}">
+                        <ui:include src="../specificDecisions/treatmentResult/treatmentResult.xhtml" />
+                    </p:panel>
 
                     <p:panel rendered="#{fileItemCctDetailController.isPayment}">
                         <ui:include src="../specificDecisions/paymentValidation/payment.xhtml" />
@@ -87,18 +91,3 @@
     <ui:include src="../specificDecisions/inspectionReport/controllersList.xhtml" />
 
 </ui:composition>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

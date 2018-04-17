@@ -8,6 +8,7 @@ import org.guce.siat.core.ct.model.AnalyseResult;
 import org.guce.siat.core.ct.model.InspectionReport;
 import org.guce.siat.core.ct.model.InterceptionNotification;
 import org.guce.siat.core.ct.model.PaymentData;
+import org.guce.siat.core.ct.model.TreatmentInfos;
 import org.guce.siat.core.ct.model.TreatmentOrder;
 import org.guce.siat.core.ct.model.TreatmentResult;
 
@@ -95,6 +96,10 @@ public class CctSpecificDecisionHistory implements Serializable {
     private InterceptionNotification lastInterceptionNotification;
 
     private InterceptionNotification decisionDetailsNI;
+
+    private TreatmentInfos lastTreatmentInfos;
+
+    private TreatmentInfos decisionDetailsTI;
 
     /**
      * Gets the last decision ir.
@@ -364,5 +369,20 @@ public class CctSpecificDecisionHistory implements Serializable {
         this.decisionDetailsNI = decisionDetailsNI;
     }
 
-}
+    public TreatmentInfos getLastTreatmentInfos() {
+        return lastTreatmentInfos;
+    }
 
+    public void setLastTreatmentInfos(final TreatmentInfos lastTreatmentInfos) {
+        this.lastTreatmentInfos = lastTreatmentInfos;
+    }
+
+    public TreatmentInfos getDecisionDetailsTI() {
+        return decisionDetailsTI;
+    }
+
+    public void setDecisionDetailsTI(final TreatmentInfos decisionDetailsTI) {
+        this.decisionDetailsTI = decisionDetailsTI;
+    }
+
+}

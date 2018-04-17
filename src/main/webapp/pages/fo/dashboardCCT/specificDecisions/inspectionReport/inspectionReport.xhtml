@@ -4,7 +4,8 @@
     <p:scrollPanel mode="native" styleClass="decisionForm">
 
         <p:messages autoUpdate="true" />
-        <p:tabView scrollable="true" prependId="false" id="tabViewConstat">
+        <p:tabView scrollable="true" prependId="false" id="tabViewConstat" rendered="false"
+                   style="display: #{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'IR' ? 'block' : 'none'}">
 
             <p:tab title="#{bundle['ConstatGeneralInformation']}" titletip="#{bundle['ConstatGeneralInformation']}">
 
@@ -312,126 +313,9 @@
                 </p:panelGrid>
 
             </p:tab>
-            <p:tab titletip="#{bundle['InspectionArticleReglemente']}" title="#{bundle['InspectionArticleReglemente']}">
-                <h:panelGrid columns="4" styleClass="table-decision">
-                    <h:outputLabel for="respectNorme" value="#{bundle['respectNorme']}" />
-                    <p:selectBooleanCheckbox id="respectNorme" value="#{fileItemCctDetailController.inspectionReportData.respectNorme}" />
-
-                    <h:outputLabel for="sourcePropagationPeste" value="#{bundle['sourcePropagationPeste']}" />
-                    <p:selectBooleanCheckbox id="sourcePropagationPeste" value="#{fileItemCctDetailController.inspectionReportData.sourcePropagationPeste}" />
-
-                    <h:outputLabel for="autocontrolDocument" value="#{bundle['autocontrolDocument']}" />
-                    <h:panelGroup>
-                        <p:inputText required="false" id="autocontrolDocument"
-                                     value="#{fileItemCctDetailController.inspectionReportData.autocontrolDocument}" />
-                        <p:message for="autocontrolDocument" />
-                    </h:panelGroup>
-                    <h:outputLabel for="autocontrolEquipement" value="#{bundle['autocontrolEquipement']}" />
-                    <h:panelGroup>
-                        <p:inputText required="false" id="autocontrolEquipement"
-                                     value="#{fileItemCctDetailController.inspectionReportData.autocontrolEquipement}" />
-                        <p:message for="autocontrolEquipement" />
-                    </h:panelGroup>
-                    <h:outputLabel for="processAnalyse" value="#{bundle['processAnalyse']}" />
-                    <h:panelGroup>
-                        <p:inputText required="false" id="processAnalyse"
-                                     value="#{fileItemCctDetailController.inspectionReportData.processAnalyse}" />
-                        <p:message for="processAnalyse" />
-                    </h:panelGroup>
-                    <h:outputLabel for="casque" value="#{bundle['casque']}" />
-                    <p:selectBooleanCheckbox id="casque" value="#{fileItemCctDetailController.inspectionReportData.casque}" />
-                    <h:outputLabel for="gants" value="#{bundle['gants']}" />
-                    <p:selectBooleanCheckbox id="gants" value="#{fileItemCctDetailController.inspectionReportData.gants}" />
-                    <h:outputLabel for="combinaison" value="#{bundle['combinaison']}" />
-                    <p:selectBooleanCheckbox id="combinaison" value="#{fileItemCctDetailController.inspectionReportData.combinaison}" />
-                    <h:outputLabel for="chaussureSecurite" value="#{bundle['chaussureSecurite']}" />
-                    <p:selectBooleanCheckbox id="chaussureSecurite" value="#{fileItemCctDetailController.inspectionReportData.chaussureSecurite}" />
-                    <h:outputLabel for="water" value="#{bundle['water']}" />
-                    <h:panelGroup>
-                        <p:inputText required="false" id="water"
-                                     value="#{fileItemCctDetailController.inspectionReportData.water}" />
-                        <p:message for="water" />
-                    </h:panelGroup>
-                    <h:outputLabel for="dechet" value="#{bundle['dechet']}" />
-                    <h:panelGroup>
-                        <p:inputText required="false" id="dechet"
-                                     value="#{fileItemCctDetailController.inspectionReportData.dechet}" />
-                        <p:message for="dechet" />
-                    </h:panelGroup>
-                    <h:outputLabel for="procedure" value="#{bundle['procedure']}" />
-                    <h:panelGroup>
-                        <p:inputText required="false" id="procedure"
-                                     value="#{fileItemCctDetailController.inspectionReportData.procedure}" />
-                        <p:message for="procedure" />
-                    </h:panelGroup>
-                </h:panelGrid>
-            </p:tab>
-            <p:tab rendered="#{fileItemCctDetailController.checkMinaderMinistry}" titletip="#{bundle['procesVerbalInspection']}" title="#{bundle['procesVerbalInspection']}">
-                <h:panelGrid columns="2" styleClass="table-decision">
-                    <p:outputLabel for="articleReglemente" value="#{bundle['articleReglemente']}" />
-                    <p:inputText id="articleReglemente" value="#{fileItemCctDetailController.inspectionReportData.articleReglemente}" />
-
-                    <p:outputLabel for="pviDestination" value="Destination / Utilisation" />
-                    <p:inputText id="pviDestination" value="#{fileItemCctDetailController.inspectionReportData.pviDestination}" />
-
-                    <p:outputLabel for="situationArticle" value="#{bundle['situationArticle']}" />
-                    <p:inputText id="situationArticle" value="#{fileItemCctDetailController.inspectionReportData.pviSituationArticle}" />
-
-                    <p:outputLabel for="couvertDoc" value="#{bundle['couvertDoc']}" />
-                    <p:selectBooleanCheckbox id="couvertDoc" value="#{fileItemCctDetailController.inspectionReportData.pviCouvertDoc}" />
-
-                    <p:outputLabel for="natureArticleInspecte" value="#{bundle['natureArticleInspecte']}" />
-                    <p:inputText id="natureArticleInspecte" value="#{fileItemCctDetailController.inspectionReportData.pviNatureArticleInspecte}" />
-
-                    <p:outputLabel for="pviQuantite" value="#{bundle['quantite']}" />
-                    <p:inputText id="pviQuantite" value="#{fileItemCctDetailController.inspectionReportData.pviQuantite}" />
-
-                    <p:outputLabel for="DispositionsPrises" value="#{bundle['DispositionsPrises']}" />
-                    <p:inputText id="DispositionsPrises" value="#{fileItemCctDetailController.inspectionReportData.pviDispositionsPrises}" />
-
-                    <p:outputLabel for="produitUtilise" value="#{bundle['produitUtilise']}" />
-                    <p:inputText id="produitUtilise" value="#{fileItemCctDetailController.inspectionReportData.produitUtilise}" />
-
-                    <p:outputLabel for="dosage" value="#{bundle['dosage']}" />
-                    <p:inputText id="dosage" value="#{fileItemCctDetailController.inspectionReportData.dosage}" />
-
-                    <p:outputLabel for="typeTraitement" value="#{bundle['typeTraitement']}" />
-                    <p:selectOneMenu id="typeTraitement" value="#{fileItemCctDetailController.inspectionReportData.typeTraitement}">
-                        <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}" var="tt" itemLabel="#{bundle[tt.label]}" itemValue="#{tt.value}" />
-                    </p:selectOneMenu>
-
-                    <p:outputLabel for="lastTreatmentDateState" value="#{bundle['lastTreatmentDateState']}" />
-                    <p:selectOneMenu id="lastTreatmentDateState" value="#{fileItemCctDetailController.inspectionReportData.etatDateDernierTraitement}">
-                        <f:selectItems value="#{fileItemCctDetailController.pivLastTreatmentDateStates}" var="ltds" itemLabel="#{bundle[ltds.label]}" itemValue="#{ltds.value}" />
-                    </p:selectOneMenu>
-
-                    <p:outputLabel for="storageEnv" value="#{bundle['storageEnv']}" />
-                    <p:selectOneMenu id="storageEnv" value="#{fileItemCctDetailController.inspectionReportData.environnementStockage}">
-                        <f:selectItems value="#{fileItemCctDetailController.pivStorageEnvs}" var="se" itemLabel="#{bundle[se.label]}" itemValue="#{se.value}" />
-                    </p:selectOneMenu>
-
-                    <p:outputLabel for="transportEnv" value="#{bundle['transportEnv']}" />
-                    <p:selectOneMenu id="transportEnv" value="#{fileItemCctDetailController.inspectionReportData.environnementTransport}">
-                        <f:selectItems value="#{fileItemCctDetailController.pivTransportEnvs}" var="te" itemLabel="#{bundle[te.label]}" itemValue="#{te.value}" />
-                    </p:selectOneMenu>
-
-                    <p:outputLabel for="weatherCondition" value="#{bundle['weatherCondition']}" />
-                    <p:selectOneMenu id="weatherCondition" value="#{fileItemCctDetailController.inspectionReportData.conditionClimatique}">
-                        <f:selectItems value="#{fileItemCctDetailController.pivWeatherConditions}" var="wc" itemLabel="#{bundle[wc.label]}" itemValue="#{wc.value}" />
-                    </p:selectOneMenu>
-
-                    <p:outputLabel for="protectionMeasure" value="#{bundle['protectionMeasure']}" />
-                    <p:selectOneMenu id="protectionMeasure" value="#{fileItemCctDetailController.inspectionReportData.mesureProtection}">
-                        <f:selectItems value="#{fileItemCctDetailController.pivProtectionMeasures}" var="pm" itemLabel="#{bundle[pm.label]}" itemValue="#{pm.value}" />
-                    </p:selectOneMenu>
-
-                    <p:outputLabel for="observations" value="Observations" />
-                    <p:inputTextarea id="observations" value="#{fileItemCctDetailController.inspectionReportData.observations}" autoResize="true" rows="5"/>
-                </h:panelGrid>
-            </p:tab>
         </p:tabView>
-    </p:scrollPanel>
 
+    </p:scrollPanel>
 </ui:composition>
 
 

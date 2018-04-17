@@ -64,10 +64,19 @@
 
 							<h:panelGrid styleClass="remindDecision" columns="2" columnClasses="labelColumnLeft, labelColumnRight" cellspacing="4">
 								<h:outputLabel value="#{bundle['RemaindDecision_decisionLabel']}" title="#{bundle['RemaindDecision_decisionTitle']}" />
-								<h:outputLabel
-									value="#{facesContext.viewRoot.locale eq 'en' ? fileItemApDetailController.selectedItemFlowDto.itemFlow.flow.redefinedLabelEn : fileItemApDetailController.selectedItemFlowDto.itemFlow.flow.redefinedLabelFr }" />
+								<h:panelGroup>
+									<h:outputLabel
+										value="#{facesContext.viewRoot.locale eq 'en' ? fileItemApDetailController.selectedItemFlowDto.itemFlow.flow.redefinedLabelEn : fileItemApDetailController.selectedItemFlowDto.itemFlow.flow.redefinedLabelFr }" />
+							
+									<p:commandLink title="#{bundle['ReSend']}" process="@this"
+												   rendered="#{(request.isUserInRole('ROOT') or request.isUserInRole('ADMIN_MIN') or request.isUserInRole('ADMIN_ORG') or request.isUserInRole('SUPER')) and fileItemApDetailController.resendMessageAllowed()}"
+										   action="#{fileItemApDetailController.sendMessage()}" ajax="false" >
+										<p:graphicImage value="/images/send.png" width="20" height="20" />
+									</p:commandLink>
+								</h:panelGroup>
+								
 							</h:panelGrid>
-
+							
 							<ui:repeat value="#{fileItemApDetailController.selectedItemFlowDto.itemFlow.itemFlowsDataList}" var="itemFlowData" varStatus="status">
 
 								<h:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight" cellspacing="4">

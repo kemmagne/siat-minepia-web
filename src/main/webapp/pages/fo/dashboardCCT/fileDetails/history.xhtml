@@ -62,16 +62,24 @@
 
                         <br />
 
-						<p:panel rendered="#{not empty fileItemCctDetailController.selectedItemFlowDto.itemFlow}" header="#{bundle['RemindDecisionLabel']}">
-							<h:panelGroup>
-							<h:panelGrid styleClass="remindDecision" columns="2" columnClasses="labelColumnLeft, labelColumnRight" cellspacing="4"
-								rendered="#{not empty fileItemCctDetailController.selectedItemFlowDto.itemFlow}">
-								<h:outputLabel value="#{bundle['RemaindDecision_decisionLabel']}" title="#{bundle['RemaindDecision_decisionTitle']}" />
-								<h:outputLabel
-									value="#{facesContext.viewRoot.locale eq 'en' ? fileItemCctDetailController.selectedItemFlowDto.itemFlow.flow.redefinedLabelEn : fileItemCctDetailController.selectedItemFlowDto.itemFlow.flow.redefinedLabelFr}" />
-							</h:panelGrid>
-							</h:panelGroup>
-							<br />
+                        <p:panel rendered="#{not empty fileItemCctDetailController.selectedItemFlowDto.itemFlow}" header="#{bundle['RemindDecisionLabel']}">
+                            <h:panelGroup>
+                                <h:panelGrid styleClass="remindDecision" columns="2" columnClasses="labelColumnLeft, labelColumnRight" cellspacing="4"
+                                             rendered="#{not empty fileItemCctDetailController.selectedItemFlowDto.itemFlow}">
+                                    <h:outputLabel value="#{bundle['RemaindDecision_decisionLabel']}" title="#{bundle['RemaindDecision_decisionTitle']}" />
+                                    <h:panelGroup>
+                                        <h:outputLabel
+                                            value="#{facesContext.viewRoot.locale eq 'en' ? fileItemCctDetailController.selectedItemFlowDto.itemFlow.flow.redefinedLabelEn : fileItemCctDetailController.selectedItemFlowDto.itemFlow.flow.redefinedLabelFr}" />
+
+                                        <p:commandLink title="#{bundle['ReSend']}" process="@this"
+                                                       rendered="#{(request.isUserInRole('ROOT') or request.isUserInRole('ADMIN_MIN') or request.isUserInRole('ADMIN_ORG') or request.isUserInRole('SUPER')) and fileItemCctDetailController.resendMessageAllowed()}"
+                                                       action="#{fileItemCctDetailController.sendMessage()}" ajax="false" >
+                                            <p:graphicImage value="/images/send.png" width="20" height="20" />
+                                        </p:commandLink>
+                                    </h:panelGroup>
+                                </h:panelGrid>
+                            </h:panelGroup>
+                            <br />
 
                             <h:panelGroup
                                 rendered="#{empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsApp and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAO and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTO and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAR and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTR}">
@@ -83,18 +91,22 @@
                                             value="#{itemFlowData.dataType.type == 'selectBooleanCheckbox' ? (itemFlowData.value ? bundle['Oui'] : bundle['Non']) : itemFlowData.value}" />
                                     </h:panelGrid>
                                 </ui:repeat>
-								<p:outputPanel rendered="#{fileItemCctDetailController.checkMinaderMinistry and fileItemCctDetailController.seizurePrintable()}">
-									<div class="btn-bloc">
-										<p:commandButton ajax="false" actionListener="#{fileItemCctDetailController.generateTemporarySeizure}"
-											value="#{bundle['TemporarySeizureReportdownloadBtn']}" styleClass="ui-priority-primary" />
-										<p:commandButton ajax="false" actionListener="#{fileItemCctDetailController.generateDefinitiveSeizure()}"
-											value="#{bundle['DefinitiveSeizureReportdownloadBtn']}" styleClass="ui-priority-primary" />
-									</div>
-								</p:outputPanel>
+                                <p:outputPanel rendered="#{fileItemCctDetailController.checkMinaderMinistry and fileItemCctDetailController.seizurePrintable()}">
+                                    <div class="btn-bloc">
+                                        <p:commandButton ajax="false" actionListener="#{fileItemCctDetailController.generateTemporarySeizure}"
+                                                         value="#{bundle['TemporarySeizureReportdownloadBtn']}" styleClass="ui-priority-primary" />
+                                        <p:commandButton ajax="false" actionListener="#{fileItemCctDetailController.generateDefinitiveSeizure()}"
+                                                         value="#{bundle['DefinitiveSeizureReportdownloadBtn']}" styleClass="ui-priority-primary" />
+                                    </div>
+                                </p:outputPanel>
                             </h:panelGroup>
 
                             <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR}">
                                 <ui:include src="../specificDecisions/inspectionReport/inspectionReportHistory.xhtml" />
+                            </h:panelGroup>
+
+                            <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR}">
+                                <ui:include src="../specificDecisions/pviInfos/pviInfosHistory.xhtml" />
                             </h:panelGroup>
 
                             <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsApp}">
@@ -121,8 +133,8 @@
                                 <ui:include src="../specificDecisions/paymentValidation/paymentValidationHistory.xhtml" />
                             </h:panelGroup>
 
-                            <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsNI}">
-                                <ui:include src="../specificDecisions/notificationInterception/notificationInterceptionHistory.xhtml" />
+                            <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTI}">
+                                <ui:include src="../specificDecisions/treatmentInfos/treatmentInfosHistory.xhtml" />
                             </h:panelGroup>
                         </p:panel>
 

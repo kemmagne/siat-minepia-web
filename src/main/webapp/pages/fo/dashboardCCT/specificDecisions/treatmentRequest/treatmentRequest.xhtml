@@ -1,49 +1,92 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
 
-	<h:panelGroup rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'TR'}">
+    <h:panelGroup rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'TR'}">
 
-		<h:panelGrid columns="2">
+        <h:panelGrid columns="2">
 
-			<h:outputLabel value="#{bundle['TreatmentOrder_ObservationLabel']} : " />
-			<p:inputTextarea id="TreatmentObservation" title="#{bundle['TreatmentOrder_ObservationTitle']}"
-				value="#{fileItemCctDetailController.treatmentOrder.observation}" required="true"
-				requiredMessage="#{bundle['TreatmentOrder_TreatmentObservationRequiredMessage']}" />
+            <h:outputLabel value="#{bundle['TreatmentOrder_ObservationLabel']} : " />
+            <p:inputTextarea id="TreatmentObservation" title="#{bundle['TreatmentOrder_ObservationTitle']}"
+                             value="#{fileItemCctDetailController.treatmentOrder.observation}" required="true"
+                             requiredMessage="#{bundle['TreatmentOrder_TreatmentObservationRequiredMessage']}" />
 
-			<h:outputLabel value="#{bundle['TreatmentOrder_TreatmentCompanyLabel']} : " />
-			<h:panelGroup>
-				<p:selectOneMenu filter="true" id="TreatmentCompany" title="#{bundle['TreatmentOrder_TreatmentCompanyTitle']}" required="true"
-					requiredMessage="#{bundle['TreatmentOrder_CompanyRequiredMessage']}" value="#{fileItemCctDetailController.selectedTreatmentCompany}">
-					<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-					<f:selectItems id="TreatmentTreatmentCompany" value="#{fileItemCctDetailController.treatmentCompanys}" var="lab" itemValue="#{lab}"
-						itemLabel="#{facesContext.viewRoot.locale eq 'en' ? lab.labelEn : lab.labelFr}" />
-					<f:converter binding="#{treatmentCompanyConverter}" />
-					<p:ajax event="change" listener="#{fileItemCctDetailController.changeTreatmentCompanyHandler}" update="TreatmentTypeDT" />
-				</p:selectOneMenu>
-				<p:message for="TreatmentTreatmentCompany" />
-			</h:panelGroup>
+            <h:outputLabel value="#{bundle['TreatmentOrder_TreatmentCompanyLabel']} : " />
+            <h:panelGroup>
+                <p:selectOneMenu filter="true" id="TreatmentCompany" title="#{bundle['TreatmentOrder_TreatmentCompanyTitle']}" required="true"
+                                 requiredMessage="#{bundle['TreatmentOrder_CompanyRequiredMessage']}" value="#{fileItemCctDetailController.selectedTreatmentCompany}">
+                    <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+                    <f:selectItems id="TreatmentTreatmentCompany" value="#{fileItemCctDetailController.treatmentCompanys}" var="lab" itemValue="#{lab}"
+                                   itemLabel="#{facesContext.viewRoot.locale eq 'en' ? lab.labelEn : lab.labelFr}" />
+                    <f:converter binding="#{treatmentCompanyConverter}" />
+                    <p:ajax event="change" listener="#{fileItemCctDetailController.changeTreatmentCompanyHandler}" update="TreatmentTypeDT" />
+                </p:selectOneMenu>
+                <p:message for="TreatmentTreatmentCompany" />
+            </h:panelGroup>
 
-			<h:outputLabel value="#{bundle['TreatmentOrder_TypeLabel']} : " />
-			<p:dataTable id="TreatmentTypeDT" var="item" value="#{fileItemCctDetailController.treatmentTypeDtosList}"
-				emptyMessage="#{bundle['AucuneResultat']}">
+            <h:outputLabel value="#{bundle['TreatmentOrder_TypeLabel']} : " />
+            <p:dataTable id="TreatmentTypeDT" var="item" value="#{fileItemCctDetailController.treatmentTypeDtosList}"
+                         emptyMessage="#{bundle['AucuneResultat']}">
 
-				<p:column headerText="#{bundle['TreatmentOrder_ChekedLabel']}">
-					<p:selectBooleanCheckbox value="#{item.checked}" required="true" requiredMessage="#{bundle['TreatmentTypeRequiredMessage']}" />
-				</p:column>
+                <p:column headerText="#{bundle['TreatmentOrder_ChekedLabel']}">
+                    <p:selectBooleanCheckbox value="#{item.checked}" required="true" requiredMessage="#{bundle['TreatmentTypeRequiredMessage']}" />
+                </p:column>
 
-				<p:column headerText="#{bundle['TreatmentOrder_TypeLabel']}">
-					<h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? item.treatmentType.labelEn : item.treatmentType.labelFr}" />
-				</p:column>
+                <p:column headerText="#{bundle['TreatmentOrder_TypeLabel']}">
+                    <h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? item.treatmentType.labelEn : item.treatmentType.labelFr}" />
+                </p:column>
 
-				<p:column headerText="#{bundle['TreatmentOrder_DurationTitre']}">
-					<h:outputText value="#{item.treatmentType.duration}" />
-				</p:column>
+                <p:column headerText="#{bundle['TreatmentOrder_DurationTitre']}">
+                    <h:outputText value="#{item.treatmentType.duration}" />
+                </p:column>
 
-			</p:dataTable>
+            </p:dataTable>
 
-		</h:panelGrid>
-	</h:panelGroup>
+        </h:panelGrid>
 
-	<p:messages id="checktreatmentType" redisplay="false" for="checktreatmentType" globalOnly="true" showDetail="false" autoUpdate="false" />
+    </h:panelGroup>
+
+    <p:messages id="checktreatmentType" redisplay="false" for="checktreatmentType" globalOnly="true" showDetail="false" autoUpdate="false" />
 
 </ui:composition>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

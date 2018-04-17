@@ -139,7 +139,7 @@
                 </h:panelGrid>
             </p:tab>
 
-            <p:tab title="#{bundle['InspectionArticleReglemente']}" rendered="#{fileItemCctDetailController.checkMinaderMinistry}">
+            <p:tab title="#{bundle['InspectionArticleReglemente']}" rendered="#{false and fileItemCctDetailController.checkMinaderMinistry}">
                 <h:panelGrid columns="2">
                     <h:outputLabel  value="#{bundle['respectNorme']} : " />
                     <p:selectBooleanCheckbox disabled="true"
@@ -235,19 +235,19 @@
                 </h:panelGrid>
             </p:tab>
         </p:tabView>
-		
-		<div class="btn-bloc">
-           <p:commandButton ajax="false" actionListener="#{fileItemCctDetailController.generateCctReportConstatHistory}"
-               value="#{bundle['ConstatReportdownloadBtn']}" styleClass="ui-priority-primary" />
-       </div>
-		<p:outputPanel rendered="#{fileItemCctDetailController.checkMinaderMinistry}">
-			<div class="btn-bloc">
-				<p:commandButton ajax="false" actionListener="#{fileItemCctDetailController.generatePvInspArtReglementeHistory}"
-					value="#{bundle['PVIPARdownloadBtn']}" styleClass="ui-priority-primary" />
-				<p:commandButton ajax="false" actionListener="#{fileItemCctDetailController.generatePvInspPhytoHistory}"
-					value="#{bundle['PVIPhytodownloadBtn']}" styleClass="ui-priority-primary" />
-			</div>
-		</p:outputPanel>
+
+        <div class="btn-bloc">
+            <p:commandButton ajax="false" actionListener="#{fileItemCctDetailController.generateCctReportConstatHistory}"
+                             value="#{bundle['ConstatReportdownloadBtn']}" styleClass="ui-priority-primary" />
+        </div>
+        <p:outputPanel rendered="#{fileItemCctDetailController.checkMinaderMinistry}">
+            <div class="btn-bloc">
+                <p:commandButton ajax="false" rendered="false" actionListener="#{fileItemCctDetailController.generatePvInspArtReglementeHistory}"
+                                 value="#{bundle['PVIPARdownloadBtn']}" styleClass="ui-priority-primary" />
+                <p:commandButton ajax="false" rendered="false" actionListener="#{fileItemCctDetailController.generatePvInspPhytoHistory}"
+                                 value="#{bundle['PVIPhytodownloadBtn']}" styleClass="ui-priority-primary" />
+            </div>
+        </p:outputPanel>
 
     </h:panelGroup>
 </ui:composition>

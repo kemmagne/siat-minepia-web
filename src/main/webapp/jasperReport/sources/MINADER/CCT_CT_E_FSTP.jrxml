@@ -2,7 +2,8 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="FICHE_SUPERVISION_TRAIT_PHYTO" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ef3f7670-4c4d-4516-9c0e-2e9a11db29bd">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="404"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="MINADER_LOGO" class="java.lang.String"/>
 	<field name="decisionNumber" class="java.lang.String"/>
 	<field name="exporterName" class="java.lang.String"/>
 	<field name="exporterAddress" class="java.lang.String"/>
@@ -85,8 +86,12 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 					<textElement textAlignment="Center" markup="html">
 						<font size="11" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA["<b>N° <u>" + $F{decisionNumber} + "</u>/PSTP/MINADER/SG/DRCQ</b>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["<b>N° <u>" + $F{decisionNumber}]]></textFieldExpression>
 				</textField>
+				<image>
+					<reportElement x="245" y="55" width="58" height="45" uuid="0a6a2abe-afce-40dd-8755-f3e3e563fae9"/>
+					<imageExpression><![CDATA[new java.io.File($P{MINADER_LOGO})]]></imageExpression>
+				</image>
 			</frame>
 		</band>
 	</title>

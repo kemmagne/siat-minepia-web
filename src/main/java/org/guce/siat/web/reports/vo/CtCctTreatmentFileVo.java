@@ -61,6 +61,10 @@ public class CtCctTreatmentFileVo {
     private boolean residentsInformations;
     private String treatmentCompanyName;
     private String treatmentCompanyAddress;
+    private String treatmentCompanyBp;
+    private String treatmentCompanyTel;
+    private String treatmentCompanyFax;
+    private String treatmentCompanyEmail;
     private String staffSecurityNature;
     private String protectionEquipements;
     private boolean preventionPlaquePresent;
@@ -458,8 +462,39 @@ public class CtCctTreatmentFileVo {
         this.generalObservations = generalObservations;
     }
 
+    public String getTreatmentCompanyTel() {
+        return treatmentCompanyTel;
+    }
+
+    public void setTreatmentCompanyTel(String treatmentCompanyTel) {
+        this.treatmentCompanyTel = treatmentCompanyTel;
+    }
+
+    public String getTreatmentCompanyFax() {
+        return treatmentCompanyFax;
+    }
+
+    public void setTreatmentCompanyFax(String treatmentCompanyFax) {
+        this.treatmentCompanyFax = treatmentCompanyFax;
+    }
+
+    public String getTreatmentCompanyEmail() {
+        return treatmentCompanyEmail;
+    }
+
+    public void setTreatmentCompanyEmail(String treatmentCompanyEmail) {
+        this.treatmentCompanyEmail = treatmentCompanyEmail;
+    }
+
+    public String getTreatmentCompanyBp() {
+        return treatmentCompanyBp;
+    }
+
+    public void setTreatmentCompanyBp(String treatmentCompanyBp) {
+        this.treatmentCompanyBp = treatmentCompanyBp;
+    }
+
     /**
      *
      */
 }
-

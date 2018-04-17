@@ -1,141 +1,142 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 
-	<p:outputPanel>
+    <p:outputPanel>
 
-		<h:form id="productInformationForm" styleClass="productInformationForm">
-			<p:growl id="growlSend" />
+        <h:form id="productInformationForm" styleClass="productInformationForm">
+            <p:growl id="growlSend" />
 
-			<p:accordionPanel id="accRec">
+            <p:accordionPanel id="accRec">
 
-				<p:tab title="#{bundle['FileItemInformation']}" titleStyleClass="title" dynamic="true" cache="true">
+                <p:tab title="#{bundle['FileItemInformation']}" titleStyleClass="title" dynamic="true" cache="true">
 
-					<p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable" value="#{fileItemCctDetailController.productInfoChecks}"
-						filteredValue="#{fileItemCctDetailController.productInfoChecksfiltred}" var="item" styleClass="datalist-checkbtn"
-						selection="#{fileItemCctDetailController.selectedFileItemCheck}" rowKey="#{item.fileItem.id}" rows="5" paginator="true"
-						rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}"
-						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-						currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})"
-						rowStyleClass="#{fileItemCctDetailController.getDisabledRow(item.fileItem) ? 'disabled-row' : null}">
+                    <p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable" value="#{fileItemCctDetailController.productInfoChecks}"
+                                 filteredValue="#{fileItemCctDetailController.productInfoChecksfiltred}" var="item" styleClass="datalist-checkbtn"
+                                 selection="#{fileItemCctDetailController.selectedFileItemCheck}" rowKey="#{item.fileItem.id}" rows="5" paginator="true"
+                                 rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}"
+                                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                 currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})"
+                                 rowStyleClass="#{fileItemCctDetailController.getDisabledRow(item.fileItem) ? 'disabled-row' : null}">
 
-						<p:ajax event="rowSelectRadio" listener="#{fileItemCctDetailController.changeProductSelection}" onstart="PF('statusDialog1').block()"
-							onsuccess="PF('statusDialog1').unblock()"
-							update=":detail :remindDecisionForm :productDetailsForm :listRecommandationArticleForm :showAttachmentForm :ListAttachmentForm :productInformationForm" />
-						<p:column selectionMode="single" />
+                        <p:ajax event="rowSelectRadio" listener="#{fileItemCctDetailController.changeProductSelection}" onstart="PF('statusDialog1').block()"
+                                onsuccess="PF('statusDialog1').unblock()"
+                                update=":detail :remindDecisionForm :productDetailsForm :listRecommandationArticleForm :showAttachmentForm :ListAttachmentForm :productInformationForm" />
+                        <p:column selectionMode="single" />
 
-						<p:column sortBy="#{item.fileItem.id}" filterBy="#{item.fileItem.id}" filterMatchMode="contains">
-							<f:facet name="header">
-								<h:outputText value="#{bundle['FileItemInformationLabel_numero']}" title="#{bundle['FileItemInformationTitle_numero']}" />
-							</f:facet>
-							<h:outputText value="#{item.fileItem.lineNumber}" />
-						</p:column>
+                        <p:column sortBy="#{item.fileItem.id}" filterBy="#{item.fileItem.id}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle['FileItemInformationLabel_numero']}" title="#{bundle['FileItemInformationTitle_numero']}" />
+                            </f:facet>
+                            <h:outputText value="#{item.fileItem.lineNumber}" />
+                        </p:column>
 
-						<p:column sortBy="#{item.fileItem.nsh.goodsItemCode}" filterBy="#{item.fileItem.nsh.goodsItemCode}" filterMatchMode="contains">
-							<f:facet name="header">
-								<h:outputText value="#{bundle['FileItemInformationLabel_nsh']}" title="#{bundle['FileItemInformationTitle_nsh']}" />
-							</f:facet>
-							<h:outputText value="#{item.fileItem.nsh.goodsItemCode}" />
-						</p:column>
+                        <p:column sortBy="#{item.fileItem.nsh.goodsItemCode}" filterBy="#{item.fileItem.nsh.goodsItemCode}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle['FileItemInformationLabel_nsh']}" title="#{bundle['FileItemInformationTitle_nsh']}" />
+                            </f:facet>
+                            <h:outputText value="#{item.fileItem.nsh.goodsItemCode}" />
+                        </p:column>
 
-						<p:column sortBy="#{facesContext.viewRoot.locale eq 'en' ? item.fileItem.redefinedLabelEn : item.fileItem.redefinedLabelFr }"
-							filterBy="#{facesContext.viewRoot.locale eq 'en' ? item.fileItem.redefinedLabelEn : item.fileItem.redefinedLabelFr }"
-							filterMatchMode="contains">
-							<f:facet name="header">
-								<h:outputText value="#{bundle['FileItemInformationLabel_step']}" title="#{bundle['FileItemInformationTitle_step']}" />
-							</f:facet>
-							<h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? item.fileItem.redefinedLabelEn : item.fileItem.redefinedLabelFr }" />
-						</p:column>
+                        <p:column sortBy="#{facesContext.viewRoot.locale eq 'en' ? item.fileItem.redefinedLabelEn : item.fileItem.redefinedLabelFr }"
+                                  filterBy="#{facesContext.viewRoot.locale eq 'en' ? item.fileItem.redefinedLabelEn : item.fileItem.redefinedLabelFr }"
+                                  filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle['FileItemInformationLabel_step']}" title="#{bundle['FileItemInformationTitle_step']}" />
+                            </f:facet>
+                            <h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? item.fileItem.redefinedLabelEn : item.fileItem.redefinedLabelFr }" />
+                        </p:column>
 
-						<p:column filterBy="#{item.fileItem.draft}" headerText="#{bundle['FileItemInformationLabel_draft']}" filterMatchMode="equals">
-							<f:facet name="filter">
-								<p:selectOneButton onchange="PF('datalistTable').filter()">
-									<f:converter converterId="javax.faces.Boolean" />
-									<f:selectItem itemLabel="#{bundle['Tous']}" itemValue="" />
-									<f:selectItem itemLabel="#{bundle['Oui']}" itemValue="true" />
-									<f:selectItem itemLabel="#{bundle['Non']}" itemValue="false" />
-								</p:selectOneButton>
-							</f:facet>
-							<h:outputText value="#{item.fileItem.draft ? bundle['Oui'] : bundle['Non']}" />
-						</p:column>
+                        <p:column filterBy="#{item.fileItem.draft}" headerText="#{bundle['FileItemInformationLabel_draft']}" filterMatchMode="equals">
+                            <f:facet name="filter">
+                                <p:selectOneButton onchange="PF('datalistTable').filter()">
+                                    <f:converter converterId="javax.faces.Boolean" />
+                                    <f:selectItem itemLabel="#{bundle['Tous']}" itemValue="" />
+                                    <f:selectItem itemLabel="#{bundle['Oui']}" itemValue="true" />
+                                    <f:selectItem itemLabel="#{bundle['Non']}" itemValue="false" />
+                                </p:selectOneButton>
+                            </f:facet>
+                            <h:outputText value="#{item.fileItem.draft ? bundle['Oui'] : bundle['Non']}" />
+                        </p:column>
 
-						<p:column style="text-align:center;"
-							rendered="#{fileItemCctDetailController.decisionAllowed == 'true' and fileItemCctDetailController.decisionByFileAllowed == 'false'}">
+                        <p:column style="text-align:center;"
+                                  rendered="#{fileItemCctDetailController.decisionAllowed == 'true' and fileItemCctDetailController.decisionByFileAllowed == 'false'}">
 
-							<f:facet name="header">
-								<h:outputText value="#{bundle['FileItemInformationTitle_decision']}" title="#{bundle['FileItemInformationTitle_decision']}" />
-								<br />
-								<p:selectBooleanCheckbox label="select All" value="#{fileItemCctDetailController.selectAllDecisions}">
-									<p:ajax event="change" update="datalist" listener="#{fileItemCctDetailController.selectAllDecisionsHandler}" />
-								</p:selectBooleanCheckbox>
-							</f:facet>
-							<p:selectBooleanCheckbox value="#{item.decisionCheck}" rendered="#{item.fileItem.draft == 'false'  and item.enabledCheck =='true'}" />
-						</p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle['FileItemInformationTitle_decision']}" title="#{bundle['FileItemInformationTitle_decision']}" />
+                                <br />
+                                <p:selectBooleanCheckbox label="select All" value="#{fileItemCctDetailController.selectAllDecisions}">
+                                    <p:ajax event="change" update="datalist" listener="#{fileItemCctDetailController.selectAllDecisionsHandler}" />
+                                </p:selectBooleanCheckbox>
+                            </f:facet>
+                            <p:selectBooleanCheckbox value="#{item.decisionCheck}" rendered="#{item.fileItem.draft == 'false'  and item.enabledCheck =='true'}" />
+                        </p:column>
 
-						<p:column style="text-align:center;"
-							rendered="#{fileItemCctDetailController.decisionAllowed == 'true' and fileItemCctDetailController.decisionByFileAllowed == 'false'}">
-							<f:facet name="header">
-								<h:outputText value="#{bundle['FileItemInformationTitle_annuler']}" title="#{bundle['FileItemInformationTitle_annuler']}" />
-								<br />
-								<p:selectBooleanCheckbox label="select All" value="#{fileItemCctDetailController.selectAllRollBack }">
-									<p:ajax event="change" update="datalist" listener="#{fileItemCctDetailController.selectAllRollsBackHandler}" />
-								</p:selectBooleanCheckbox>
-							</f:facet>
-							<p:selectBooleanCheckbox value="#{item.rollbackCheck}" rendered="#{item.fileItem.draft == 'true' and item.enabledCheck =='true'}" />
-						</p:column>
+                        <p:column style="text-align:center;"
+                                  rendered="#{fileItemCctDetailController.decisionAllowed == 'true' and fileItemCctDetailController.decisionByFileAllowed == 'false'}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle['FileItemInformationTitle_annuler']}" title="#{bundle['FileItemInformationTitle_annuler']}" />
+                                <br />
+                                <p:selectBooleanCheckbox label="select All" value="#{fileItemCctDetailController.selectAllRollBack }">
+                                    <p:ajax event="change" update="datalist" listener="#{fileItemCctDetailController.selectAllRollsBackHandler}" />
+                                </p:selectBooleanCheckbox>
+                            </f:facet>
+                            <p:selectBooleanCheckbox value="#{item.rollbackCheck}" rendered="#{item.fileItem.draft == 'true' and item.enabledCheck =='true'}" />
+                        </p:column>
 
-						<f:facet name="footer">
-							<p:commandButton id="rollBackButton" value="#{bundle['FileItemInformationTitle_annuler']}"
-								rendered="#{fileItemCctDetailController.rollBackDecisionsAllowed  == 'true' and fileItemCctDetailController.showDecisionButton == 'true'}" onstart="PF('statusDialog1').block()"
-								onsuccess="PF('statusDialog1').unblock()" actionListener="#{fileItemCctDetailController.prepareRollBackDecisions}"
-								update=":growl datalist"  />
+                        <f:facet name="footer">
+                            <p:commandButton id="rollBackButton" value="#{bundle['FileItemInformationTitle_annuler']}"
+                                             rendered="#{fileItemCctDetailController.rollBackDecisionsAllowed  == 'true' and fileItemCctDetailController.showDecisionButton == 'true'}" onstart="PF('statusDialog1').block()"
+                                             onsuccess="PF('statusDialog1').unblock()" actionListener="#{fileItemCctDetailController.prepareRollBackDecisions}"
+                                             update=":growl datalist"  />
 
-							<p:commandButton id="decideButton" value="#{bundle['FileItemInformationTitle_decider']}"
-								rendered="#{fileItemCctDetailController.decisionButtonAllowed == 'true' and fileItemCctDetailController.showDecisionButton == 'true'}" onstart="PF('statusDialog1').block(); disableBtn()"
-								onsuccess="PF('statusDialog1').unblock(); enableBtn()" actionListener="#{fileItemCctDetailController.prepareDecisions}"
-								update=":growl :decisionForm :systemDecisionForm" resetValues="true"  styleClass="disBtn"/>
+                            <p:commandButton id="decideButton" value="#{bundle['FileItemInformationTitle_decider']}"
+                                             rendered="#{fileItemCctDetailController.decisionButtonAllowed == 'true' and fileItemCctDetailController.showDecisionButton == 'true'}" onstart="PF('statusDialog1').block(); disableBtn()"
+                                             onsuccess="PF('statusDialog1').unblock(); enableBtn()" actionListener="#{fileItemCctDetailController.prepareDecisions}"
+                                             update=":growl :decisionForm :systemDecisionForm" resetValues="true"  styleClass="disBtn"/>
 
-							<p:commandButton id="markButton" value="#{bundle['FileItemInformationTitle_dispatch']}"
-								rendered="#{fileItemCctDetailController.cotationButtonAllowed == 'true' and fileItemCctDetailController.showDecisionButton == 'true'}" onstart="PF('statusDialog1').block()"
-								onsuccess="PF('statusDialog1').unblock()" actionListener="#{fileItemCctDetailController.prepareDispatchFile}"
-								update=":growl :decisionForm :dispatchForm" oncomplete="PF('dispatchDialog').show();" />
+                            <p:commandButton id="markButton" value="#{bundle['FileItemInformationTitle_dispatch']}"
+                                             rendered="#{fileItemCctDetailController.cotationButtonAllowed == 'true' and fileItemCctDetailController.showDecisionButton == 'true'}" onstart="PF('statusDialog1').block()"
+                                             onsuccess="PF('statusDialog1').unblock()" actionListener="#{fileItemCctDetailController.prepareDispatchFile}"
+                                             update=":growl :decisionForm :dispatchForm" oncomplete="PF('dispatchDialog').show();" />
 
-							<p:commandButton id="sendButton" value="#{bundle['FileItemInformationTitle_send']}" onstart="disableBtn()" styleClass="disBtn"
-								rendered="#{fileItemCctDetailController.sendDecisionAllowed == 'true' and fileItemCctDetailController.showDecisionButton == 'true'}" onsuccess="enableBtn()"
-								actionListener="#{fileItemCctDetailController.sendDecisions}" update=":growl :decisionForm " ajax="false" />
+                            <p:commandButton id="sendButton" value="#{bundle['FileItemInformationTitle_send']}" onstart="disableBtn()" styleClass="disBtn"
+                                             rendered="#{fileItemCctDetailController.sendDecisionAllowed == 'true' and fileItemCctDetailController.showDecisionButton == 'true'}" onsuccess="enableBtn()"
+                                             actionListener="#{fileItemCctDetailController.sendDecisions}" update=":growl :decisionForm " ajax="false" />
 
-							<p:commandButton ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" id="reporting"
-								value="#{bundle['BouttonGenerateReport']}" styleClass="ui-priority-primary" rendered="#{fileItemCctDetailController.generateReportAllowed}">
-						      <p:fileDownload value="#{fileItemCctDetailController.downloadReport()}" />
-    						</p:commandButton>
-							<p:commandButton ajax="false"  id="reporting1" actionListener="#{fileItemCctDetailController.generatePvptReport}"
-											 value="#{bundle['BouttonGeneratePVPTReport']}" styleClass="ui-priority-primary" rendered="#{fileItemCctDetailController.generateReportAllowed and fileItemCctDetailController.checkMinaderMinistry}" />
-						
-						</f:facet>
+                            <p:commandButton ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" id="reporting"
+                                             value="#{bundle['BouttonGenerateReport']}" styleClass="ui-priority-primary" rendered="#{fileItemCctDetailController.generateReportAllowed}">
+                                <p:fileDownload value="#{fileItemCctDetailController.downloadReport()}" />
+                            </p:commandButton>
+                            <p:commandButton ajax="false"  id="reporting1" actionListener="#{fileItemCctDetailController.generatePvptReport}"
+                                             value="#{bundle['BouttonGeneratePVPTReport']}" styleClass="ui-priority-primary" rendered="#{false and fileItemCctDetailController.generateReportAllowed and fileItemCctDetailController.checkMinaderMinistry}" />
 
-					</p:dataTable>
+                        </f:facet>
 
-				</p:tab>
+                    </p:dataTable>
 
-			</p:accordionPanel>
+                </p:tab>
+
+            </p:accordionPanel>
 
 
 
-		</h:form>
+        </h:form>
 
-	</p:outputPanel>
+    </p:outputPanel>
 
-	<p:confirmDialog closeOnEscape="true" id="diagSupp" message="#{bundle['popup_confirm_delete_message']}"
-		header="#{bundle['popup_confirm_delete_header']}" widgetVar="confirmation" appendTo="@(body)" global="true">
-		<div align="right">
-			<h:form id="diagForm">
-				<p:commandButton id="confirm" value="#{bundle['popup_confirm_delete_message_oui']}" update=":growl :productInformationForm"
-					oncomplete="PF('confirmation').hide();document.getElementById('diagForm:confirm').disabled=false;PF('datalistTable').filter();"
-					onclick="document.getElementById('diagForm:confirm').disabled=true;" actionListener="#{fileItemCctDetailController.annulerDecisions}"
-					styleClass="ui-priority-primary" onsuccess="PF('datalistTable').filter();" />
-				<p:commandButton id="decline" value="#{bundle['popup_confirm_delete_message_pas_maintenant']}" onclick="PF('confirmation').hide()"
-					update=":growl :productInformationForm" styleClass="ui-priority-primary" />
-			</h:form>
-		</div>
-	</p:confirmDialog>
+    <p:confirmDialog closeOnEscape="true" id="diagSupp" message="#{bundle['popup_confirm_delete_message']}"
+                     header="#{bundle['popup_confirm_delete_header']}" widgetVar="confirmation" appendTo="@(body)" global="true">
+        <div align="right">
+            <h:form id="diagForm">
+                <p:commandButton id="confirm" value="#{bundle['popup_confirm_delete_message_oui']}" update=":growl :productInformationForm"
+                                 oncomplete="PF('confirmation').hide();document.getElementById('diagForm:confirm').disabled=false;PF('datalistTable').filter();"
+                                 onclick="document.getElementById('diagForm:confirm').disabled = true;" actionListener="#{fileItemCctDetailController.annulerDecisions}"
+                                 styleClass="ui-priority-primary" onsuccess="PF('datalistTable').filter();" />
+                <p:commandButton id="decline" value="#{bundle['popup_confirm_delete_message_pas_maintenant']}" onclick="PF('confirmation').hide()"
+                                 update=":growl :productInformationForm" styleClass="ui-priority-primary" />
+            </h:form>
+        </div>
+    </p:confirmDialog>
 
 </ui:composition>
+

@@ -1,8 +1,8 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
     <!--not empty fileItemCctDetailController.currentFileItem and 'ST_CT_13' eq fileItemCctDetailController.currentFileItem.step.stepCode and fileItemCctDetailController.checkMinaderMinistry and fileItemCctDetailController.fillInterceptionNotification-->
-    <p:separator />
-    <p:panel header="#{bundle['NotificationInterception']}">
+    <p:separator rendered="false" />
+    <p:panel rendered="false" header="#{bundle['NotificationInterception']}">
         <h:panelGroup styleClass="decisionForm decisionDlg">
             <p:scrollPanel mode="native">
                 <p:messages autoUpdate="true" />
@@ -104,6 +104,7 @@
     </p:panel>
 
 </ui:composition>
+
 
 
 

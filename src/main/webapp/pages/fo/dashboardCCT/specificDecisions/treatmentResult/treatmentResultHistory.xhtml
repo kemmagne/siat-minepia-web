@@ -72,7 +72,7 @@
                 </h:panelGrid>
             </p:tab>
 
-            <p:tab title="#{bundle['FicheSupervisionTraitPhyto']}" titletip="#{bundle['FicheSupervisionTraitPhyto']}" rendered="#{fileItemCctDetailController.checkMinaderMinistry}">
+            <p:tab title="#{bundle['FicheSupervisionTraitPhyto']}" titletip="#{bundle['FicheSupervisionTraitPhyto']}" rendered="#{false and fileItemCctDetailController.checkMinaderMinistry}">
 
                 <h:panelGrid columns="2">
 
@@ -201,15 +201,17 @@
         <div class="btn-bloc">
             <p:commandButton ajax="false" value="#{bundle['TreatAttestBtn']}"
                              actionListener="#{fileItemCctDetailController.generateAttestationOfTreatHistory}"
-                             rendered="#{fileItemCctDetailController.checkMinaderMinistry}" styleClass="ui-priority-primary" />
-			<p:commandButton ajax="false" value="#{bundle['TreatSupPhytoSheetBtn']}"
+                             rendered="#{false and fileItemCctDetailController.checkMinaderMinistry}" styleClass="ui-priority-primary" />
+            <p:commandButton ajax="false" value="#{bundle['TreatSupPhytoSheetBtn']}"
                              actionListener="#{fileItemCctDetailController.generateSheetOfTreatmentSupHistory}"
-                             rendered="#{fileItemCctDetailController.checkMinaderMinistry}" styleClass="ui-priority-primary"/>
+                             rendered="#{false and fileItemCctDetailController.checkMinaderMinistry}" styleClass="ui-priority-primary"/>
         </div>
 
     </h:panelGroup>
 
 </ui:composition>
+
+
 
 
 

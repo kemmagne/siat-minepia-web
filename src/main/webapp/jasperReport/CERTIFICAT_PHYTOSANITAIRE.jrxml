@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CERTIFICAT_PHYTOSANITAIRE" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6f5c0835-9f5c-4b28-b5db-296746e60a32">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="404"/>
+	<property name="ireport.y" value="165"/>
 	<parameter name="MINADER_LOGO" class="java.lang.String"/>
 	<field name="decisionNumber" class="java.lang.String"/>
 	<field name="decisionPlace" class="java.lang.String"/>
@@ -24,27 +24,35 @@
 	<field name="packageNature" class="java.lang.String"/>
 	<field name="productName" class="java.lang.String"/>
 	<field name="botanicalNameOfPlants" class="java.lang.String"/>
+	<field name="fumigation" class="java.lang.Boolean"/>
+	<field name="disenfection" class="java.lang.Boolean"/>
+	<field name="chemicalProduct" class="java.lang.String"/>
+	<field name="duration" class="java.lang.String"/>
+	<field name="temperature" class="java.lang.String"/>
+	<field name="concentration" class="java.lang.String"/>
+	<field name="additionalInfos" class="java.lang.String"/>
+	<field name="destination" class="java.lang.String"/>
+	<field name="deliveryPlace" class="java.lang.String"/>
+	<field name="containersNumbers" class="java.lang.String"/>
+	<field name="lotsNumbers" class="java.lang.String"/>
+	<field name="netWeight" class="java.lang.String"/>
+	<field name="grossWeight" class="java.lang.String"/>
+	<field name="treatmentsCarriedOut" class="java.lang.String"/>
+	<field name="commodities" class="java.lang.String"/>
+	<field name="lotsCount" class="java.lang.String"/>
+	<field name="packaging" class="java.lang.String"/>
+	<field name="names" class="java.lang.String"/>
+	<field name="exporterName" class="java.lang.String"/>
+	<field name="exporterAddress" class="java.lang.String"/>
+	<field name="transit" class="java.lang.Boolean"/>
+	<field name="quantities" class="java.lang.String"/>
 	<title>
-		<band height="350" splitType="Stretch">
+		<band height="316" splitType="Stretch">
 			<frame>
-				<reportElement x="0" y="0" width="555" height="350" uuid="cb109b5d-1f78-40bc-9a1e-a33c2ad45297"/>
+				<reportElement x="0" y="0" width="555" height="316" uuid="cb109b5d-1f78-40bc-9a1e-a33c2ad45297"/>
 				<rectangle>
 					<reportElement x="0" y="0" width="170" height="75" uuid="1d2098c4-2ddf-4d56-81fb-d7c00ac2526b"/>
 				</rectangle>
-				<staticText>
-					<reportElement x="0" y="0" width="170" height="15" uuid="19e19014-7e31-4ef6-ab7d-ebd13a22a5de"/>
-					<textElement>
-						<font size="11" isBold="true"/>
-					</textElement>
-					<text><![CDATA[ CERTIFICAT PHYTOSANITAIRE]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="0" y="11" width="170" height="15" uuid="8fb48323-0bc7-416e-8f46-a943f27ffb7c"/>
-					<textElement>
-						<font isItalic="true" isUnderline="false"/>
-					</textElement>
-					<text><![CDATA[   PHYTOSANITARY CERTICATE]]></text>
-				</staticText>
 				<rectangle>
 					<reportElement x="0" y="75" width="170" height="80" uuid="139aff6d-44bd-410e-8502-5a9034aaec01"/>
 				</rectangle>
@@ -93,7 +101,7 @@ MINISTRY OF AGRICULTURE AND RURAL DEVELOPMENT
 DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS]]></text>
 				</staticText>
 				<rectangle>
-					<reportElement x="0" y="155" width="170" height="100" uuid="70b9663d-e671-4594-992b-d34f3f755dcc"/>
+					<reportElement x="0" y="155" width="170" height="86" uuid="70b9663d-e671-4594-992b-d34f3f755dcc"/>
 				</rectangle>
 				<staticText>
 					<reportElement x="0" y="155" width="170" height="15" uuid="2c733d13-891d-47b4-bd98-fd404f4dfd36"/>
@@ -107,7 +115,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS]
 					<text><![CDATA[   Name and address of consignee]]></text>
 				</staticText>
 				<rectangle>
-					<reportElement x="170" y="155" width="385" height="100" uuid="861ce141-dad0-40f6-8525-0a06a6529af2"/>
+					<reportElement x="170" y="155" width="385" height="86" uuid="861ce141-dad0-40f6-8525-0a06a6529af2"/>
 				</rectangle>
 				<staticText>
 					<reportElement x="175" y="155" width="380" height="15" uuid="3be78479-4178-4303-9009-cf4f0572bf88"/>
@@ -132,102 +140,138 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS]
 					<text><![CDATA[To Plants protection organization of :]]></text>
 				</staticText>
 				<rectangle>
-					<reportElement x="0" y="255" width="170" height="50" uuid="b03a009d-0f88-4b97-9f25-55e0c26865b7"/>
+					<reportElement x="0" y="241" width="170" height="45" uuid="b03a009d-0f88-4b97-9f25-55e0c26865b7"/>
 				</rectangle>
 				<rectangle>
-					<reportElement x="0" y="305" width="170" height="45" uuid="707c7bce-a209-47a4-a7c2-d88c7b42a645"/>
+					<reportElement x="0" y="286" width="170" height="30" uuid="707c7bce-a209-47a4-a7c2-d88c7b42a645"/>
 				</rectangle>
 				<staticText>
-					<reportElement x="5" y="255" width="165" height="15" uuid="2e498579-702d-49ab-87b1-bc8851aae7f6"/>
+					<reportElement x="5" y="241" width="165" height="15" uuid="2e498579-702d-49ab-87b1-bc8851aae7f6"/>
 					<text><![CDATA[Moyen de transport déclaré]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="5" y="267" width="165" height="15" uuid="ad583761-6f35-4ca1-a379-50008cd4641e"/>
+					<reportElement x="5" y="252" width="165" height="15" uuid="ad583761-6f35-4ca1-a379-50008cd4641e"/>
 					<textElement>
 						<font isItalic="true"/>
 					</textElement>
 					<text><![CDATA[Declared means of transport]]></text>
 				</staticText>
 				<rectangle>
-					<reportElement x="170" y="255" width="385" height="95" uuid="d7b0fa62-5ee4-4a90-97e4-d19edbb02515"/>
+					<reportElement x="170" y="240" width="385" height="76" uuid="d7b0fa62-5ee4-4a90-97e4-d19edbb02515"/>
 				</rectangle>
 				<staticText>
-					<reportElement x="5" y="305" width="72" height="15" uuid="8d2a85a2-f144-4c22-a01c-e811b84d350a"/>
+					<reportElement x="5" y="286" width="72" height="15" uuid="8d2a85a2-f144-4c22-a01c-e811b84d350a"/>
 					<text><![CDATA[Point d'entrée /]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="77" y="305" width="72" height="15" uuid="67a83d63-012d-490a-b993-f5098a11f3d2"/>
+					<reportElement x="77" y="286" width="72" height="15" uuid="67a83d63-012d-490a-b993-f5098a11f3d2"/>
 					<textElement>
 						<font isItalic="true"/>
 					</textElement>
 					<text><![CDATA[Point of entry]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="170" y="255" width="100" height="15" uuid="f38db53c-7b5a-487a-acbc-b3e310a86eb1"/>
+					<reportElement x="175" y="241" width="100" height="15" uuid="f38db53c-7b5a-487a-acbc-b3e310a86eb1"/>
 					<text><![CDATA[Provenance]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="170" y="267" width="100" height="15" uuid="be060b8a-0d53-496f-890d-234805ebaf58"/>
+					<reportElement x="176" y="250" width="100" height="15" uuid="be060b8a-0d53-496f-890d-234805ebaf58"/>
 					<textElement>
 						<font isItalic="true"/>
 					</textElement>
 					<text><![CDATA[Origin]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement x="0" y="110" width="170" height="45" uuid="031ac96f-ec74-4c38-9abd-7a55f1fc3761"/>
-					<textFieldExpression><![CDATA[$F{consignorName} + ", " + $F{consignorAddress1}]]></textFieldExpression>
+					<reportElement x="5" y="110" width="165" height="45" uuid="031ac96f-ec74-4c38-9abd-7a55f1fc3761"/>
+					<textElement textAlignment="Center">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{exporterName} + ", " + $F{exporterAddress}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="5" y="182" width="165" height="73" uuid="2e3feed9-6f97-4541-9742-8aa7de3939e2"/>
+					<reportElement x="5" y="182" width="165" height="59" uuid="2e3feed9-6f97-4541-9742-8aa7de3939e2"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
 					<textFieldExpression><![CDATA[$F{consigneeName} + ", " + $F{consigneeAddress1}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="270" y="255" width="285" height="27" uuid="bedfdf25-bb44-4c25-a5e4-b9347ee85d96"/>
+					<reportElement x="275" y="240" width="278" height="27" uuid="bedfdf25-bb44-4c25-a5e4-b9347ee85d96"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
 					<textFieldExpression><![CDATA[$F{origin}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="5" y="282" width="165" height="23" uuid="b4a37e37-b583-4106-95be-872831de2a5f"/>
+					<reportElement x="3" y="267" width="165" height="19" uuid="b4a37e37-b583-4106-95be-872831de2a5f"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
 					<textFieldExpression><![CDATA[$F{meansOfTransport}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="5" y="320" width="165" height="30" uuid="77e8c1dc-4a1f-4ea6-ab4d-30bf81991a75"/>
+					<reportElement x="5" y="301" width="165" height="15" uuid="77e8c1dc-4a1f-4ea6-ab4d-30bf81991a75"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
 					<textFieldExpression><![CDATA[$F{pointOfEntry}]]></textFieldExpression>
 				</textField>
-				<textField>
-					<reportElement x="0" y="26" width="170" height="20" uuid="ab1b2ed0-8cbb-4018-a0a2-0dd9c2930e18"/>
-					<textElement markup="html"/>
+				<textField isBlankWhenNull="true">
+					<reportElement x="5" y="32" width="165" height="20" uuid="ab1b2ed0-8cbb-4018-a0a2-0dd9c2930e18"/>
+					<textElement markup="html">
+						<font isBold="true"/>
+					</textElement>
 					<textFieldExpression><![CDATA["N° <u>" + $F{decisionNumber} + "</u>"]]></textFieldExpression>
 				</textField>
-				<textField>
-					<reportElement x="0" y="46" width="170" height="20" uuid="6d206b09-e369-4a57-9f0c-8c9edb67cd25"/>
-					<textElement markup="html"/>
+				<textField isBlankWhenNull="true">
+					<reportElement x="5" y="53" width="165" height="20" uuid="6d206b09-e369-4a57-9f0c-8c9edb67cd25"/>
+					<textElement markup="html">
+						<font isBold="true"/>
+					</textElement>
 					<textFieldExpression><![CDATA["A <u>" + $F{decisionPlace} + "</u>"]]></textFieldExpression>
 				</textField>
 				<image>
 					<reportElement x="177" y="57" width="58" height="45" uuid="985b5a8f-b2c3-441a-ae72-7a3922dc99e8"/>
 					<imageExpression><![CDATA[new java.io.File($P{MINADER_LOGO})]]></imageExpression>
 				</image>
+				<textField isBlankWhenNull="true">
+					<reportElement x="177" y="221" width="378" height="20" uuid="40491515-aebb-4dd9-9631-885da53d06e6"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{destination}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="0" width="168" height="32" uuid="5f736704-de28-4476-bbc7-83e413ffb94a"/>
+					<textElement textAlignment="Center">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["CERTIFICAT PHYTOSANITAIRE" + (!$F{transit} ? "" : " DE REEXPORTATION")]]></textFieldExpression>
+				</textField>
 			</frame>
 		</band>
 	</title>
 	<detail>
-		<band height="450" splitType="Stretch">
+		<band height="485" splitType="Stretch">
 			<frame>
-				<reportElement x="0" y="0" width="555" height="450" uuid="f4fb2e2b-5496-45ae-9db7-9a6e6de4e89f"/>
+				<reportElement x="0" y="0" width="555" height="485" uuid="f4fb2e2b-5496-45ae-9db7-9a6e6de4e89f"/>
 				<rectangle>
-					<reportElement x="0" y="0" width="400" height="90" uuid="7b6abe5f-6b42-47e9-a87b-983d15fb41a8"/>
+					<reportElement x="0" y="0" width="400" height="123" uuid="7b6abe5f-6b42-47e9-a87b-983d15fb41a8"/>
 				</rectangle>
 				<rectangle>
-					<reportElement x="400" y="0" width="155" height="90" uuid="5ae95ce3-ded3-429d-84c1-f2564ca076c9"/>
+					<reportElement x="400" y="0" width="155" height="123" uuid="5ae95ce3-ded3-429d-84c1-f2564ca076c9"/>
 				</rectangle>
 				<staticText>
-					<reportElement x="5" y="0" width="395" height="26" uuid="b3e8b9af-85ad-4670-99a8-03d3b8273c46"/>
+					<reportElement x="5" y="0" width="395" height="12" uuid="b3e8b9af-85ad-4670-99a8-03d3b8273c46"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
 					<text><![CDATA[Marque des colis, nombre et nature des colis, nom des produits, nom botanique des végétaux]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="5" y="24" width="395" height="26" uuid="897d6a22-3c14-4ba1-af8f-bfe006002c51"/>
+					<reportElement x="5" y="11" width="395" height="12" uuid="897d6a22-3c14-4ba1-af8f-bfe006002c51"/>
 					<textElement>
-						<font isItalic="true"/>
+						<font size="9" isItalic="true"/>
 					</textElement>
 					<text><![CDATA[Distinguish marks, number and description of packages, name of product, botanical name of plants]]></text>
 				</staticText>
@@ -243,217 +287,294 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS]
 					<text><![CDATA[Declared quantity]]></text>
 				</staticText>
 				<rectangle>
-					<reportElement x="0" y="90" width="555" height="93" uuid="15bb6579-91b6-45c7-9272-147e1f30346b"/>
+					<reportElement x="0" y="123" width="555" height="93" uuid="15bb6579-91b6-45c7-9272-147e1f30346b"/>
 				</rectangle>
 				<staticText>
-					<reportElement x="5" y="90" width="550" height="50" uuid="a7b731fb-1599-4074-87a2-99b234fe8015"/>
+					<reportElement x="5" y="123" width="550" height="50" uuid="a7b731fb-1599-4074-87a2-99b234fe8015"/>
 					<textElement>
 						<font size="9"/>
 					</textElement>
-					<text><![CDATA[Il est certifié que les végétaux ou autres articles régelmentés décrits ci-desous ont été inspecté et / ou testés suivant les procédures officiels appropriés et estimés et exempt d'organismes de quarantaine comme spécifié par la partie contractante importatrice et qu'ils sont jugés conformes aux exigences phytosanitaires en vigueur de la partie contractante importatrice, y compris à celle concernant les organismes règlements non de quarantaire. Les végétaux sont réputés pratiquement exempts d'autres organismes nuisibles]]></text>
+					<text><![CDATA[Il est certifié que les végétaux ou autres articles régelmentés décrits ci-desous ont été inspectés et/ou testés suivant les procédures officielles appropriées et estimés et exempt d'organismes de quarantaine comme spécifié par la partie contractante importatrice et qu'ils sont jugés conformes aux exigences phytosanitaires en vigueur de la partie contractante importatrice, y compris à celle concernant les organismes règlementés non de quarantaire. Les végétaux sont réputés pratiquement exempts d'autres organismes nuisibles]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="5" y="137" width="550" height="46" uuid="c1929352-64a1-4cb0-a090-b5bf490d0ec0"/>
+					<reportElement x="7" y="170" width="548" height="46" uuid="c1929352-64a1-4cb0-a090-b5bf490d0ec0"/>
 					<textElement>
 						<font size="9" isItalic="true"/>
 					</textElement>
 					<text><![CDATA[This is to certify that the plant products or other regulated articles described above have been inspected and / or tested acording to appropriate official procedure and are considered to be free from the quarantaine pests specified by the importing contracting party and to confirm with the current phytosanitary requirements of the importing contracting party, including those for regulated non quarantaine pests. They are deemed to be practically free from other pests.]]></text>
 				</staticText>
 				<rectangle>
-					<reportElement x="0" y="183" width="555" height="26" uuid="6949a6cc-9079-4663-8ef9-fb9e33558b1d"/>
+					<reportElement x="0" y="216" width="555" height="26" uuid="6949a6cc-9079-4663-8ef9-fb9e33558b1d"/>
 				</rectangle>
 				<staticText>
-					<reportElement x="5" y="183" width="126" height="13" uuid="bca2c8f8-0e3b-475b-9ac2-facd5917430b"/>
+					<reportElement x="5" y="216" width="126" height="13" uuid="bca2c8f8-0e3b-475b-9ac2-facd5917430b"/>
 					<text><![CDATA[Déclaration additionnelle]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="5" y="195" width="126" height="13" uuid="a85cea86-b0e2-4be2-a97f-b43ddcf92bb5"/>
+					<reportElement x="5" y="228" width="126" height="13" uuid="a85cea86-b0e2-4be2-a97f-b43ddcf92bb5"/>
 					<textElement>
 						<font isItalic="true"/>
 					</textElement>
 					<text><![CDATA[Additionnal information]]></text>
 				</staticText>
 				<rectangle>
-					<reportElement x="0" y="209" width="355" height="28" uuid="dfc86485-c977-466b-9506-3c7f5afc05b0"/>
+					<reportElement x="0" y="242" width="355" height="30" uuid="dfc86485-c977-466b-9506-3c7f5afc05b0"/>
 				</rectangle>
 				<rectangle>
-					<reportElement x="355" y="209" width="200" height="241" uuid="cb902b9e-c2fa-4084-8ce7-3375d57f7c41"/>
+					<reportElement x="355" y="242" width="200" height="243" uuid="cb902b9e-c2fa-4084-8ce7-3375d57f7c41"/>
 				</rectangle>
 				<staticText>
-					<reportElement x="360" y="209" width="95" height="13" uuid="638001a1-d42b-4f74-b796-9e72730749e0"/>
-					<text><![CDATA[Lieu de délivrance /]]></text>
+					<reportElement x="359" y="242" width="193" height="13" uuid="638001a1-d42b-4f74-b796-9e72730749e0"/>
+					<textElement markup="html"/>
+					<text><![CDATA[Lieu de délivrance / <i>Place of issue</i>]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="363" y="259" width="42" height="13" uuid="852adf92-3b1d-422d-aed8-da18c30c26bd"/>
-					<text><![CDATA[Cachet /]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="405" y="259" width="33" height="13" uuid="fc04c8c5-53a5-48f4-a440-36f86dc36f0e"/>
-					<textElement>
-						<font isItalic="true"/>
-					</textElement>
-					<text><![CDATA[Stamp]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="363" y="303" width="29" height="13" uuid="479981cc-dc72-4c51-b3ed-ad66ee5352f7"/>
-					<text><![CDATA[Date /]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="392" y="303" width="23" height="13" uuid="f17111fa-ebd1-4fad-91e4-1ee37bea78ac"/>
-					<textElement>
-						<font isItalic="true"/>
-					</textElement>
-					<text><![CDATA[Date]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="363" y="342" width="145" height="13" uuid="d4faab34-b5bf-466e-9367-598340f2ac94"/>
+					<reportElement x="359" y="370" width="145" height="13" uuid="d4faab34-b5bf-466e-9367-598340f2ac94"/>
 					<text><![CDATA[Nom du fonctionnaire autorisé]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="455" y="208" width="73" height="14" uuid="6b9d187c-9bb6-40b9-940d-e569a71beec6"/>
-					<textElement>
-						<font isItalic="true"/>
-					</textElement>
-					<text><![CDATA[Place of issue]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="363" y="352" width="145" height="13" uuid="654454f8-a21b-4482-8ec6-e29327df57af"/>
+					<reportElement x="359" y="380" width="145" height="13" uuid="654454f8-a21b-4482-8ec6-e29327df57af"/>
 					<textElement>
 						<font isItalic="true"/>
 					</textElement>
 					<text><![CDATA[Name of authorized officer]]></text>
 				</staticText>
-				<staticText>
-					<reportElement x="360" y="397" width="53" height="13" uuid="882da02f-aefd-48d1-b3ed-a3f2b32eb86e"/>
-					<text><![CDATA[Signature / ]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="413" y="397" width="55" height="13" uuid="929a771c-6f91-436c-bcc4-69cc91f4270f"/>
-					<textElement>
-						<font isItalic="true"/>
-					</textElement>
-					<text><![CDATA[Signature]]></text>
-				</staticText>
 				<rectangle>
-					<reportElement x="0" y="237" width="205" height="60" uuid="8c0d9375-858a-4262-b1c7-f9414a454721"/>
+					<reportElement x="0" y="272" width="205" height="60" uuid="8c0d9375-858a-4262-b1c7-f9414a454721"/>
 				</rectangle>
 				<rectangle>
-					<reportElement x="205" y="237" width="150" height="30" uuid="038dfeea-e7b5-4cb6-b8f2-fb046298101a"/>
+					<reportElement x="205" y="272" width="150" height="30" uuid="038dfeea-e7b5-4cb6-b8f2-fb046298101a"/>
 				</rectangle>
 				<staticText>
-					<reportElement x="210" y="238" width="60" height="13" uuid="3d6e097c-5b7b-4778-9a0d-d4241e3d79c6"/>
+					<reportElement x="210" y="273" width="60" height="13" uuid="3d6e097c-5b7b-4778-9a0d-d4241e3d79c6"/>
 					<text><![CDATA[Fumigation /]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="270" y="237" width="60" height="13" uuid="17169224-6f68-4c74-a4d2-c5f0f6125495"/>
+					<reportElement x="210" y="281" width="60" height="13" uuid="17169224-6f68-4c74-a4d2-c5f0f6125495"/>
 					<textElement>
 						<font isItalic="true"/>
 					</textElement>
 					<text><![CDATA[Fumigation]]></text>
 				</staticText>
 				<rectangle>
-					<reportElement x="205" y="267" width="150" height="30" uuid="76d667f0-c148-4452-8935-d458f29f373c"/>
+					<reportElement x="205" y="302" width="150" height="30" uuid="76d667f0-c148-4452-8935-d458f29f373c"/>
 				</rectangle>
 				<staticText>
-					<reportElement x="210" y="267" width="67" height="13" uuid="6afaac44-d016-4fd8-8466-dac412006d81"/>
-					<text><![CDATA[Disenfection /]]></text>
+					<reportElement x="210" y="302" width="67" height="13" uuid="6afaac44-d016-4fd8-8466-dac412006d81"/>
+					<text><![CDATA[Désinfection /]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="277" y="267" width="67" height="13" uuid="2f6281e5-0d39-4aa3-b645-ece704abacc8"/>
+					<reportElement x="210" y="312" width="67" height="13" uuid="2f6281e5-0d39-4aa3-b645-ece704abacc8"/>
 					<textElement>
 						<font isItalic="true"/>
 					</textElement>
 					<text><![CDATA[Disenfection]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="5" y="238" width="98" height="13" uuid="e15dd500-d479-4ba4-8f0d-45dc555b983f"/>
+					<reportElement x="5" y="273" width="98" height="13" uuid="e15dd500-d479-4ba4-8f0d-45dc555b983f"/>
 					<text><![CDATA[Type de traitement /]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="103" y="237" width="87" height="13" uuid="f4576352-586d-4708-b85e-0335643ab8ef"/>
+					<reportElement x="103" y="272" width="87" height="13" uuid="f4576352-586d-4708-b85e-0335643ab8ef"/>
 					<textElement>
 						<font isItalic="true"/>
 					</textElement>
 					<text><![CDATA[Type de traitement]]></text>
 				</staticText>
 				<rectangle>
-					<reportElement x="0" y="297" width="355" height="73" uuid="4abbcc7a-ad37-4baa-b806-539bd5a99119"/>
+					<reportElement x="0" y="332" width="355" height="73" uuid="4abbcc7a-ad37-4baa-b806-539bd5a99119"/>
 				</rectangle>
 				<rectangle>
-					<reportElement x="0" y="400" width="355" height="50" uuid="3bb04f8c-fd38-44c0-99af-9e4a0629eff0"/>
+					<reportElement x="0" y="435" width="355" height="50" uuid="3bb04f8c-fd38-44c0-99af-9e4a0629eff0"/>
 				</rectangle>
 				<staticText>
-					<reportElement x="0" y="400" width="170" height="13" uuid="d30d757a-62ba-4742-baac-930374b5f18d"/>
-					<text><![CDATA[Renseignements complementaires /]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="170" y="400" width="185" height="13" uuid="78c949cd-f3bd-484c-aea5-39e20e24272e"/>
-					<textElement>
-						<font isItalic="true"/>
-					</textElement>
-					<text><![CDATA[Additionnal information]]></text>
+					<reportElement x="5" y="435" width="344" height="13" uuid="d30d757a-62ba-4742-baac-930374b5f18d"/>
+					<textElement markup="html"/>
+					<text><![CDATA[Renseignements complementaires / <i>Additionnal information</i>]]></text>
 				</staticText>
 				<rectangle>
-					<reportElement x="0" y="370" width="355" height="30" uuid="e4cbcc76-006e-4267-aa06-612d471bc4ff"/>
+					<reportElement x="0" y="405" width="355" height="30" uuid="e4cbcc76-006e-4267-aa06-612d471bc4ff"/>
 				</rectangle>
 				<staticText>
-					<reportElement x="5" y="339" width="120" height="13" uuid="772341f0-4245-418b-80f0-7130de5af963"/>
+					<reportElement x="5" y="374" width="120" height="13" uuid="772341f0-4245-418b-80f0-7130de5af963"/>
 					<text><![CDATA[Durée et température]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="5" y="349" width="122" height="13" uuid="8d46934e-2eb7-42e3-992b-045e9b568539"/>
+					<reportElement x="5" y="384" width="122" height="13" uuid="8d46934e-2eb7-42e3-992b-045e9b568539"/>
 					<textElement>
 						<font isItalic="true"/>
 					</textElement>
 					<text><![CDATA[Duration and temperature]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="5" y="370" width="100" height="13" uuid="cb955573-2c75-425f-a8b1-eedeef57fd57"/>
+					<reportElement x="5" y="405" width="100" height="13" uuid="cb955573-2c75-425f-a8b1-eedeef57fd57"/>
 					<text><![CDATA[Concentration]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="5" y="380" width="100" height="13" uuid="9ad01fcc-c9ca-434d-aaa0-a46b11e1d019"/>
+					<reportElement x="5" y="415" width="100" height="13" uuid="9ad01fcc-c9ca-434d-aaa0-a46b11e1d019"/>
 					<textElement>
 						<font isItalic="true"/>
 					</textElement>
 					<text><![CDATA[Concentration]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="5" y="297" width="160" height="13" uuid="2cb59eb7-264d-4926-8a03-3df185c1f0ab"/>
+					<reportElement x="5" y="332" width="160" height="13" uuid="2cb59eb7-264d-4926-8a03-3df185c1f0ab"/>
 					<text><![CDATA[Produit chimique (matière active)]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="5" y="307" width="160" height="13" uuid="a01e9336-d51d-494c-9efa-0c19eb8a8281"/>
+					<reportElement x="5" y="342" width="160" height="13" uuid="a01e9336-d51d-494c-9efa-0c19eb8a8281"/>
 					<textElement>
 						<font isItalic="true"/>
 					</textElement>
 					<text><![CDATA[Chemical product (Activate matter)]]></text>
 				</staticText>
-				<textField>
-					<reportElement x="405" y="30" width="150" height="60" uuid="595839cb-b358-4a90-aef4-b30716ab4287"/>
-					<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
-				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="360" y="230" width="184" height="20" uuid="bcf04da6-4cdb-400e-9faf-f89339189593"/>
-					<textFieldExpression><![CDATA[$F{decisionPlace}]]></textFieldExpression>
+					<reportElement x="359" y="258" width="193" height="15" uuid="bcf04da6-4cdb-400e-9faf-f89339189593"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{deliveryPlace}]]></textFieldExpression>
 				</textField>
 				<textField pattern="EEEEE dd MMMMM yyyy" isBlankWhenNull="true">
-					<reportElement x="363" y="320" width="181" height="15" uuid="f5358dac-70ff-4d2d-b4c8-b04409466297"/>
-					<textElement verticalAlignment="Middle"/>
+					<reportElement x="360" y="349" width="188" height="15" uuid="f5358dac-70ff-4d2d-b4c8-b04409466297"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
 					<textFieldExpression><![CDATA[$F{decisionDate}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="363" y="370" width="192" height="20" uuid="abcfac41-b434-4876-b606-aeb1c652e1ce"/>
+					<reportElement x="359" y="397" width="192" height="15" uuid="abcfac41-b434-4876-b606-aeb1c652e1ce"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
 					<textFieldExpression><![CDATA[$F{signatoryName}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="5" y="259" width="185" height="38" uuid="7f5824b5-33b9-4def-8baf-4e7fdbd7335c"/>
+					<reportElement x="5" y="295" width="185" height="38" uuid="7f5824b5-33b9-4def-8baf-4e7fdbd7335c"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
 					<textFieldExpression><![CDATA[$F{typeOfTreatment}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="145" y="183" width="410" height="26" uuid="7572fb36-a60d-4355-83bf-e8f36339a070"/>
+					<reportElement x="145" y="216" width="410" height="26" uuid="7572fb36-a60d-4355-83bf-e8f36339a070"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
 					<textFieldExpression><![CDATA[$F{additionalDeclaration}]]></textFieldExpression>
 				</textField>
+				<rectangle>
+					<reportElement x="298" y="281" width="15" height="15" uuid="1e96638b-f743-4566-87ad-5fb5a93d4964"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="298" y="281" width="15" height="15" uuid="b3e7ee6e-6bf8-4809-b3ad-6dee0cade2f2">
+						<printWhenExpression><![CDATA[$F{fumigation}]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[X]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement x="298" y="310" width="15" height="15" uuid="3d571d28-58c5-4aac-94c1-432427b0d09f"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="298" y="310" width="15" height="15" uuid="9d4a0172-c989-40b0-a1b5-b4bd9071d176">
+						<printWhenExpression><![CDATA[$F{disenfection}]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[X]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="168" y="335" width="187" height="35" uuid="59782573-e27c-4681-845e-99ab3c5b3465"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{chemicalProduct}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="131" y="377" width="224" height="20" uuid="fd7a9902-45cf-4160-9a0b-0c1679be78d5"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{duration} + ", " + $F{temperature}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="125" y="405" width="224" height="20" uuid="78570e9a-2b01-48f7-90a6-15f213f1d07d"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{concentration}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="5" y="448" width="344" height="37" uuid="bc0fa161-9a51-47fc-88a9-023a4eea146d"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{additionalInfos}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="405" y="30" width="150" height="93" uuid="72013e41-0a92-4b43-95be-71e1e23fa01f"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{quantities}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="5" y="83" width="395" height="40" uuid="250714b0-f608-4b46-88f0-7575ef9ab224"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{containersNumbers}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="5" y="63" width="395" height="20" uuid="f9d4ac49-0104-4bde-ac21-834103fce845"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{lotsNumbers}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="360" y="281" width="185" height="13" uuid="9ec2a24e-d838-4a70-bd5d-671c0ed70b7c"/>
+					<textElement markup="html"/>
+					<text><![CDATA[Cachet / <i>Stamp</i>]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="360" y="332" width="188" height="13" uuid="8c821d2c-721a-4872-9d47-d901e1e0fc41"/>
+					<textElement markup="html"/>
+					<text><![CDATA[Date / <i>Date</i>]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="360" y="418" width="189" height="13" uuid="3e989661-82a7-49d2-a326-df82bf86c9b2"/>
+					<textElement markup="html"/>
+					<text><![CDATA[Signature / <i>Signature</i>]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="7" y="242" width="342" height="13" uuid="fa5cc8be-a68a-4084-b768-ec123bad0e91"/>
+					<text><![CDATA[Traitement(s) effectué(s) / Treatment(s) carried out]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="7" y="255" width="342" height="17" uuid="62dfb024-185f-4ab9-a1d5-a4cba9c58d55"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{treatmentsCarriedOut}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="5" y="23" width="395" height="40" uuid="703a3b6f-fcc0-456e-929f-963839d7506e"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{names}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="7" y="63" width="393" height="1" uuid="20ab5909-0384-4488-8671-46f204accad7"/>
+				</line>
+				<line>
+					<reportElement x="7" y="83" width="393" height="1" uuid="795ce32b-1750-459c-98ff-0a0e397eee5c"/>
+				</line>
 			</frame>
 		</band>
 	</detail>

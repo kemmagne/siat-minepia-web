@@ -1,0 +1,74 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" >
+
+    <h:panelGrid columns="2" styleClass="table-decision">
+        <p:outputLabel value="#{bundle['NomControleur']}" />
+        <p:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.controllerName}" />
+
+        <p:outputLabel value="#{bundle['articleReglemente']}" />
+        <p:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.articleReglemente}" />
+
+        <p:outputLabel value="Destination / Utilisation" />
+        <p:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.pviDestination}" />
+
+        <p:outputLabel value="#{bundle['situationArticle']}" />
+        <p:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.pviSituationArticle}" />
+
+        <p:outputLabel value="#{bundle['couvertDoc']}" />
+        <p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.pviCouvertDoc}" />
+
+        <p:outputLabel value="#{bundle['natureArticleInspecte']}" />
+        <p:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.pviNatureArticleInspecte}" />
+
+        <p:outputLabel value="#{bundle['quantite']}" />
+        <p:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.pviQuantite}" />
+
+        <p:outputLabel value="#{bundle['DispositionsPrises']}" />
+        <p:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.pviDispositionsPrises}" />
+
+        <p:outputLabel value="#{bundle['produitUtilise']}" />
+        <p:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.produitUtilise}" />
+
+        <p:outputLabel value="#{bundle['dosage']}" />
+        <p:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.dosage}" />
+
+        <p:outputLabel value="#{bundle['typeTraitement']}" />
+        <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.typeTraitement}">
+            <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}" var="tt" itemLabel="#{bundle[tt.label]}" itemValue="#{tt.value}" />
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{bundle['lastTreatmentDateState']}" />
+        <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.etatDateDernierTraitement}">
+            <f:selectItems value="#{fileItemCctDetailController.pivLastTreatmentDateStates}" var="ltds" itemLabel="#{bundle[ltds.label]}" itemValue="#{ltds.value}" />
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{bundle['storageEnv']}" />
+        <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.environnementStockage}">
+            <f:selectItems value="#{fileItemCctDetailController.pivStorageEnvs}" var="se" itemLabel="#{bundle[se.label]}" itemValue="#{se.value}" />
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{bundle['transportEnv']}" />
+        <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.environnementTransport}">
+            <f:selectItems value="#{fileItemCctDetailController.pivTransportEnvs}" var="te" itemLabel="#{bundle[te.label]}" itemValue="#{te.value}" />
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{bundle['weatherCondition']}" />
+        <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.conditionClimatique}">
+            <f:selectItems value="#{fileItemCctDetailController.pivWeatherConditions}" var="wc" itemLabel="#{bundle[wc.label]}" itemValue="#{wc.value}" />
+        </p:selectOneMenu>
+
+        <p:outputLabel value="#{bundle['protectionMeasure']}" />
+        <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.mesureProtection}">
+            <f:selectItems value="#{fileItemCctDetailController.pivProtectionMeasures}" var="pm" itemLabel="#{bundle[pm.label]}" itemValue="#{pm.value}" />
+        </p:selectOneMenu>
+
+        <p:outputLabel value="Observations" />
+        <p:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.observations}" />
+    </h:panelGrid>
+
+</ui:composition>
+
+
+
+
+

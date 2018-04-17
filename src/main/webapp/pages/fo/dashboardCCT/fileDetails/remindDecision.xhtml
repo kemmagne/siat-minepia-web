@@ -29,6 +29,10 @@
                     <ui:include src="../specificDecisions/inspectionReport/inspectionReportRemindDecision.xhtml" />
                 </h:panelGroup>
 
+                <p:panel rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR}">
+                    <ui:include src="../specificDecisions/pviInfos/pviInfosRemindDecision.xhtml" />
+                </p:panel>
+
                 <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastDecisionApp}">
                     <ui:include src="../specificDecisions/appointment/appointmentRemindDecision.xhtml" />
                 </h:panelGroup>
@@ -49,11 +53,12 @@
                     <ui:include src="../specificDecisions/treatmentResult/treatmentResultRemindDecision.xhtml" />
                 </h:panelGroup>
 
+                <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfos}">
+                    <ui:include src="../specificDecisions/treatmentInfos/treatmentInfosRemindDecision.xhtml" />
+                </h:panelGroup>
+
                 <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastPaymentData}">
                     <ui:include src="../specificDecisions/paymentValidation/paymentValidationRemindDecision.xhtml" />
-                </h:panelGroup>
-                <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastInterceptionNotification}">
-                    <ui:include src="../specificDecisions/notificationInterception/notificationInterceptionRemindDecision.xhtml" />
                 </h:panelGroup>
 
             </p:tab>

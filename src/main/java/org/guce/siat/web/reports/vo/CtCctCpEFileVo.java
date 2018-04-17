@@ -7,6 +7,10 @@ import java.util.Date;
  */
 public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
 
+    private String exporterName;
+
+    private String exporterAddress;
+
     /**
      * The consignor name.
      */
@@ -92,6 +96,17 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
      */
     private String temperature;
 
+    private boolean fumigation;
+    private boolean disenfection;
+    private String chemicalProduct;
+    private String additionalInfos;
+    private String lotsCount;
+    private String packaging;
+    private String names;
+    private String quantities;
+
+    private boolean transit;
+
     /**
      * The chemical product active matter.
      */
@@ -142,12 +157,23 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
      */
     private String packagedOrRepackaged;
 
+    private String treatmentsCarriedOut;
+
     private String quantity;
     private String packagingMark;
     private String numberOfPackages;
     private String packageNature;
     private String productName;
     private String botanicalNameOfPlants;
+
+    private String destination;
+    private String deliveryPlace;
+
+    private String commodities;
+    private String containersNumbers;
+    private String netWeight;
+    private String grossWeight;
+    private String lotsNumbers;
 
     /**
      * Gets the consignor name.
@@ -686,5 +712,156 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
         this.quantity = quantity;
     }
 
-}
+    public boolean isFumigation() {
+        return fumigation;
+    }
 
+    public void setFumigation(boolean fumigation) {
+        this.fumigation = fumigation;
+    }
+
+    public boolean isDisenfection() {
+        return disenfection;
+    }
+
+    public void setDisenfection(boolean disenfection) {
+        this.disenfection = disenfection;
+    }
+
+    public String getChemicalProduct() {
+        return chemicalProduct;
+    }
+
+    public void setChemicalProduct(String chemicalProduct) {
+        this.chemicalProduct = chemicalProduct;
+    }
+
+    public String getAdditionalInfos() {
+        return additionalInfos;
+    }
+
+    public void setAdditionalInfos(String additionalInfos) {
+        this.additionalInfos = additionalInfos;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public String getDeliveryPlace() {
+        return deliveryPlace;
+    }
+
+    public void setDeliveryPlace(String deliveryPlace) {
+        this.deliveryPlace = deliveryPlace;
+    }
+
+    public String getCommodities() {
+        return commodities;
+    }
+
+    public void setCommodities(String commodities) {
+        this.commodities = commodities;
+    }
+
+    public String getContainersNumbers() {
+        return containersNumbers;
+    }
+
+    public void setContainersNumbers(String containersNumbers) {
+        this.containersNumbers = containersNumbers;
+    }
+
+    public String getNetWeight() {
+        return netWeight;
+    }
+
+    public void setNetWeight(String netWeight) {
+        this.netWeight = netWeight;
+    }
+
+    public String getGrossWeight() {
+        return grossWeight;
+    }
+
+    public void setGrossWeight(String grossWeight) {
+        this.grossWeight = grossWeight;
+    }
+
+    public String getLotsNumbers() {
+        return lotsNumbers;
+    }
+
+    public void setLotsNumbers(String lotsNumbers) {
+        this.lotsNumbers = lotsNumbers;
+    }
+
+    public String getTreatmentsCarriedOut() {
+        return treatmentsCarriedOut;
+    }
+
+    public void setTreatmentsCarriedOut(String treatmentsCarriedOut) {
+        this.treatmentsCarriedOut = treatmentsCarriedOut;
+    }
+
+    public String getLotsCount() {
+        return lotsCount;
+    }
+
+    public void setLotsCount(String lotsCount) {
+        this.lotsCount = lotsCount;
+    }
+
+    public String getPackaging() {
+        return packaging;
+    }
+
+    public void setPackaging(String packaging) {
+        this.packaging = packaging;
+    }
+
+    public String getNames() {
+        return names;
+    }
+
+    public void setNames(String names) {
+        this.names = names;
+    }
+
+    public String getExporterName() {
+        return exporterName;
+    }
+
+    public void setExporterName(String exporterName) {
+        this.exporterName = exporterName;
+    }
+
+    public String getExporterAddress() {
+        return exporterAddress;
+    }
+
+    public void setExporterAddress(String exporterAddress) {
+        this.exporterAddress = exporterAddress;
+    }
+
+    public boolean isTransit() {
+        return transit;
+    }
+
+    public void setTransit(boolean transit) {
+        this.transit = transit;
+    }
+
+    public String getQuantities() {
+        return quantities;
+    }
+
+    public void setQuantities(String quantities) {
+        this.quantities = quantities;
+    }
+
+}

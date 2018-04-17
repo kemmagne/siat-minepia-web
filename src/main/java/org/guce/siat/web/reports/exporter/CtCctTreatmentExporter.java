@@ -2,7 +2,6 @@ package org.guce.siat.web.reports.exporter;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -47,6 +46,16 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
         final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
         for (final FileFieldValue fileFieldValue : fileFieldValueList) {
             switch (fileFieldValue.getFileField().getCode()) {
+                case "NUMERO_CCT_CT_E_AT":
+                    if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
+                        treatmentVo.setDecisionNumber(fileFieldValue.getValue());
+                    }
+                    break;
+                case "NUMERO_CCT_CT_E_FSTP":
+                    if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
+                        treatmentVo.setDecisionNumber(fileFieldValue.getValue());
+                    }
+                    break;
                 case "DESTINATAIRE_RAISONSOCIALE":
                     if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
                         treatmentVo.setConsigneeName(fileFieldValue.getValue());
@@ -64,9 +73,8 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
         treatmentVo.setApplicationDose(treatmentResult.getTreatmentDose());
         treatmentVo.setConcentration(treatmentResult.getAtConcentration());
         treatmentVo.setConditioning(treatmentResult.getConditioning());
-        treatmentVo.setDecisionDate(new Date());
-        treatmentVo.setDecisionNumber("AAA");
-        treatmentVo.setDecisionPlace("YAOUNDE");
+        treatmentVo.setDecisionDate(file.getSignatureDate());
+        treatmentVo.setDecisionPlace(file.getBureau().getLabelFr());
         treatmentVo.setGeneralObservations(treatmentResult.getGeneralObservations());
         treatmentVo.setHomologationNumber(treatmentResult.getHomologationNumber());
         treatmentVo.setOptimalTemperature(treatmentResult.getOptimalTemperature());
@@ -93,8 +101,13 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
         treatmentVo.setUncoveringDate(treatmentResult.getUncoveringDate());
         treatmentVo.setWeatherCondition(treatmentResult.getWeatherCondition());
         treatmentVo.setOtherTreatmentMode(treatmentResult.getOtherTreatmentMode());
-        treatmentVo.setTreatmentCompanyAddress(treatmentResult.getTreatmentOrder().getTreatmentCompany().getAddress());
-        treatmentVo.setTreatmentCompanyName(treatmentResult.getTreatmentOrder().getTreatmentCompany().getLabelFr());
+        treatmentVo.setSupervisor(treatmentResult.getSupervisor());
+        treatmentVo.setTreatmentCompanyAddress(treatmentResult.getTreatmentCompanyAddress());
+        treatmentVo.setTreatmentCompanyName(treatmentResult.getTreatmentCompanyName());
+        treatmentVo.setTreatmentCompanyTel(treatmentResult.getTreatmentCompanyTel());
+        treatmentVo.setTreatmentCompanyFax(treatmentResult.getTreatmentCompanyFax());
+        treatmentVo.setTreatmentCompanyEmail(treatmentResult.getTreatmentCompanyEmail());
+        treatmentVo.setTreatmentCompanyBp(treatmentResult.getTreatmentCompanyBp());
 
         final List<FileItem> fileItemList = file.getFileItemsList();
         List<CtCctTreatmentFileItemVo> fileItemVos = new ArrayList<>(fileItemList.size());
@@ -124,30 +137,32 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
                     }
                 }
                 //
-                //fileItemVo.setCode(fileItem.);
+                if (fileItem.getNsh() != null) {
+                    fileItemVo.setCode(fileItem.getNsh().getGoodsItemCode());
+                }
                 fileItemVo.setNumber(fileItem.getQuantity());
-                //fileItemVo.setNature(fileItem.get)
-                //fileItemVo.setVolume(fileItem.get);
-                //
                 fileItemVos.add(fileItemVo);
+                //fileItem.get
             }
         }
         treatmentVo.setFileItemList(fileItemVos);
+        if (treatmentVo.getItemQuantity() == null) {
+            treatmentVo.setItemQuantity(fileItemVos.get(0).getWeight() + " KG");
+        }
 
         return new JRBeanCollectionDataSource(Collections.singleton(treatmentVo));
     }
-	
-	/*
+
+    /*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getJRParameters()
-	 */
-	@Override
-	protected Map<String, Object> getJRParameters() {
-		final Map<String, Object> jRParameters = super.getJRParameters();
-		jRParameters.put("MINADER_LOGO", getRealPath(IMAGES_PATH, "minader", "jpg"));
-		return jRParameters;
-	}
+     */
+    @Override
+    protected Map<String, Object> getJRParameters() {
+        final Map<String, Object> jRParameters = super.getJRParameters();
+        jRParameters.put("MINADER_LOGO", getRealPath(IMAGES_PATH, "minader", "jpg"));
+        return jRParameters;
+    }
 
 }
-

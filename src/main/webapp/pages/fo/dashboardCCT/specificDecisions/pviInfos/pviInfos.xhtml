@@ -1,0 +1,80 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" >
+
+
+    <p:scrollPanel mode="native" styleClass="decisionForm">
+
+        <p:messages autoUpdate="true" />
+
+        <h:panelGrid columns="2" styleClass="table-decision">
+            <p:outputLabel for="NomControleur" value="#{bundle['NomControleur']}" />
+            <p:inputText id="NomControleur" value="#{fileItemCctDetailController.inspectionReportData.controllerName}" />
+
+            <p:outputLabel for="articleReglemente" value="#{bundle['articleReglemente']}" />
+            <p:inputText id="articleReglemente" value="#{fileItemCctDetailController.inspectionReportData.articleReglemente}" />
+
+            <p:outputLabel for="pviDestination" value="Destination / Utilisation" />
+            <p:inputText id="pviDestination" value="#{fileItemCctDetailController.inspectionReportData.pviDestination}" />
+
+            <p:outputLabel for="situationArticle" value="#{bundle['situationArticle']}" />
+            <p:inputText id="situationArticle" value="#{fileItemCctDetailController.inspectionReportData.pviSituationArticle}" />
+
+            <p:outputLabel for="couvertDoc" value="#{bundle['couvertDoc']}" />
+            <p:selectBooleanCheckbox id="couvertDoc" value="#{fileItemCctDetailController.inspectionReportData.pviCouvertDoc}" />
+
+            <p:outputLabel for="natureArticleInspecte" value="#{bundle['natureArticleInspecte']}" />
+            <p:inputText id="natureArticleInspecte" value="#{fileItemCctDetailController.inspectionReportData.pviNatureArticleInspecte}" />
+
+            <p:outputLabel for="pviQuantite" value="#{bundle['quantite']}" />
+            <p:inputText id="pviQuantite" value="#{fileItemCctDetailController.inspectionReportData.pviQuantite}" />
+
+            <p:outputLabel for="DispositionsPrises" value="#{bundle['DispositionsPrises']}" />
+            <p:inputText id="DispositionsPrises" value="#{fileItemCctDetailController.inspectionReportData.pviDispositionsPrises}" />
+
+            <p:outputLabel for="produitUtilise" value="#{bundle['produitUtilise']}" />
+            <p:inputText id="produitUtilise" value="#{fileItemCctDetailController.inspectionReportData.produitUtilise}" />
+
+            <p:outputLabel for="dosage" value="#{bundle['dosage']}" />
+            <p:inputText id="dosage" value="#{fileItemCctDetailController.inspectionReportData.dosage}" />
+
+            <p:outputLabel for="typeTraitement" value="#{bundle['typeTraitement']}" />
+            <p:selectOneMenu id="typeTraitement" value="#{fileItemCctDetailController.inspectionReportData.typeTraitement}">
+                <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}" var="tt" itemLabel="#{bundle[tt.label]}" itemValue="#{tt.value}" />
+            </p:selectOneMenu>
+
+            <p:outputLabel for="lastTreatmentDateState" value="#{bundle['lastTreatmentDateState']}" />
+            <p:selectOneMenu id="lastTreatmentDateState" value="#{fileItemCctDetailController.inspectionReportData.etatDateDernierTraitement}">
+                <f:selectItems value="#{fileItemCctDetailController.pivLastTreatmentDateStates}" var="ltds" itemLabel="#{bundle[ltds.label]}" itemValue="#{ltds.value}" />
+            </p:selectOneMenu>
+
+            <p:outputLabel for="storageEnv" value="#{bundle['storageEnv']}" />
+            <p:selectOneMenu id="storageEnv" value="#{fileItemCctDetailController.inspectionReportData.environnementStockage}">
+                <f:selectItems value="#{fileItemCctDetailController.pivStorageEnvs}" var="se" itemLabel="#{bundle[se.label]}" itemValue="#{se.value}" />
+            </p:selectOneMenu>
+
+            <p:outputLabel for="transportEnv" value="#{bundle['transportEnv']}" />
+            <p:selectOneMenu id="transportEnv" value="#{fileItemCctDetailController.inspectionReportData.environnementTransport}">
+                <f:selectItems value="#{fileItemCctDetailController.pivTransportEnvs}" var="te" itemLabel="#{bundle[te.label]}" itemValue="#{te.value}" />
+            </p:selectOneMenu>
+
+            <p:outputLabel for="weatherCondition" value="#{bundle['weatherCondition']}" />
+            <p:selectOneMenu id="weatherCondition" value="#{fileItemCctDetailController.inspectionReportData.conditionClimatique}">
+                <f:selectItems value="#{fileItemCctDetailController.pivWeatherConditions}" var="wc" itemLabel="#{bundle[wc.label]}" itemValue="#{wc.value}" />
+            </p:selectOneMenu>
+
+            <p:outputLabel for="protectionMeasure" value="#{bundle['protectionMeasure']}" />
+            <p:selectOneMenu id="protectionMeasure" value="#{fileItemCctDetailController.inspectionReportData.mesureProtection}">
+                <f:selectItems value="#{fileItemCctDetailController.pivProtectionMeasures}" var="pm" itemLabel="#{bundle[pm.label]}" itemValue="#{pm.value}" />
+            </p:selectOneMenu>
+
+            <p:outputLabel for="observations" value="Observations" />
+            <p:inputTextarea id="observations" value="#{fileItemCctDetailController.inspectionReportData.observations}" autoResize="true" rows="5"/>
+        </h:panelGrid>
+    </p:scrollPanel>
+
+</ui:composition>
+
+
+
+
+

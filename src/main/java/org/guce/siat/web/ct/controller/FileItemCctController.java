@@ -54,738 +54,661 @@ import org.guce.siat.web.ct.controller.util.JsfUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * The Class FileItemCctController.
  */
 @ManagedBean(name = "fileItemCctController")
 @ViewScoped
-public class FileItemCctController extends AbstractController<FileItem>
-{
+public class FileItemCctController extends AbstractController<FileItem> {
 
-	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = 4138042330970406266L;
+    /**
+     * The Constant serialVersionUID.
+     */
+    private static final long serialVersionUID = 4138042330970406266L;
 
-	/** The Constant LOG. */
-	private static final Logger LOG = LoggerFactory.getLogger(FileItemCctController.class);
+    /**
+     * The Constant LOG.
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(FileItemCctController.class);
 
-	/** The file type step service. */
-	@ManagedProperty(value = "#{fileTypeStepService}")
-	private FileTypeStepService fileTypeStepService;
+    /**
+     * The file type step service.
+     */
+    @ManagedProperty(value = "#{fileTypeStepService}")
+    private FileTypeStepService fileTypeStepService;
 
-	/** The file item service. */
-	@ManagedProperty(value = "#{fileItemService}")
-	private FileItemService fileItemService;
+    /**
+     * The file item service.
+     */
+    @ManagedProperty(value = "#{fileItemService}")
+    private FileItemService fileItemService;
 
-	/** The item flow service. */
-	@ManagedProperty(value = "#{itemFlowService}")
-	private ItemFlowService itemFlowService;
+    /**
+     * The item flow service.
+     */
+    @ManagedProperty(value = "#{itemFlowService}")
+    private ItemFlowService itemFlowService;
 
-	/** The authority service. */
-	@ManagedProperty(value = "#{authorityService}")
-	private AuthorityService authorityService;
+    /**
+     * The authority service.
+     */
+    @ManagedProperty(value = "#{authorityService}")
+    private AuthorityService authorityService;
 
-	/** The user authority file type service. */
-	@ManagedProperty(value = "#{userAuthorityFileTypeService}")
-	private UserAuthorityFileTypeService userAuthorityFileTypeService;
+    /**
+     * The user authority file type service.
+     */
+    @ManagedProperty(value = "#{userAuthorityFileTypeService}")
+    private UserAuthorityFileTypeService userAuthorityFileTypeService;
 
-	/** The common service. */
-	@ManagedProperty(value = "#{commonService}")
-	private CommonService commonService;
+    /**
+     * The common service.
+     */
+    @ManagedProperty(value = "#{commonService}")
+    private CommonService commonService;
 
-	/** The unread file items list. */
-	private Set<FileItem> unreadFileItemsList;
+    /**
+     * The unread file items list.
+     */
+    private Set<FileItem> unreadFileItemsList;
 
-	/** The draft file items list. */
-	private Set<FileItem> draftFileItemsList;
+    /**
+     * The draft file items list.
+     */
+    private Set<FileItem> draftFileItemsList;
 
-	/** The received befor one day file items list. */
-	private Set<FileItem> receivedBeforOneDayFileItemsList;
+    /**
+     * The received befor one day file items list.
+     */
+    private Set<FileItem> receivedBeforOneDayFileItemsList;
 
-	/** The received more tow day file items list. */
-	private Set<FileItem> receivedMoreTowDayFileItemsList;
+    /**
+     * The received more tow day file items list.
+     */
+    private Set<FileItem> receivedMoreTowDayFileItemsList;
 
-	/** The received beatween tow day file items list. */
-	private Set<FileItem> receivedBeatweenTowDayFileItemsList;
+    /**
+     * The received beatween tow day file items list.
+     */
+    private Set<FileItem> receivedBeatweenTowDayFileItemsList;
 
-	/** The detail page url. */
-	private String detailPageUrl;
+    /**
+     * The detail page url.
+     */
+    private String detailPageUrl;
 
-	/** The list user authority file types. */
-	private List<UserAuthorityFileType> listUserAuthorityFileTypes;
+    /**
+     * The list user authority file types.
+     */
+    private List<UserAuthorityFileType> listUserAuthorityFileTypes;
 
-	/** The granted authorities impl list. */
-	private List<Authority> grantedAuthoritiesImplList;
+    /**
+     * The granted authorities impl list.
+     */
+    private List<Authority> grantedAuthoritiesImplList;
 
-	/** The action filter. */
-	private String actionFilter;
+    /**
+     * The action filter.
+     */
+    private String actionFilter;
 
-	/** The first check. */
-	private Boolean firstCheck;
+    /**
+     * The first check.
+     */
+    private Boolean firstCheck;
 
-	/**
-	 * Instantiates a new file item cct controller.
-	 */
-	public FileItemCctController()
-	{
-		super(FileItem.class);
-	}
+    /**
+     * Instantiates a new file item cct controller.
+     */
+    public FileItemCctController() {
+        super(FileItem.class);
+    }
 
-	/**
-	 * Inits the.
-	 */
-	@PostConstruct
-	public void init()
-	{
-		if (LOG.isDebugEnabled())
-		{
-			LOG.debug(Constants.INIT_LOG_INFO_MESSAGE, FileItemCctController.class.getName());
-		}
-		super.setService(fileItemService);
-		super.setPageUrl(ControllerConstants.Pages.FO.DASHBOARD_CCT_INDEX_PAGE);
-		dashboardCalculate();
-	}
+    /**
+     * Inits the.
+     */
+    @PostConstruct
+    public void init() {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(Constants.INIT_LOG_INFO_MESSAGE, FileItemCctController.class.getName());
+        }
+        super.setService(fileItemService);
+        super.setPageUrl(ControllerConstants.Pages.FO.DASHBOARD_CCT_INDEX_PAGE);
+        dashboardCalculate();
+    }
 
-	/**
-	 * Go to detail page.
-	 */
-	public void goToDetailPage()
-	{
+    /**
+     * Go to detail page.
+     */
+    public void goToDetailPage() {
 
-		for (final FileItem fileItem : selected.getFile().getFileItemsList())
-		{
+        for (final FileItem fileItem : selected.getFile().getFileItemsList()) {
 
+            for (final ItemFlow itemFlow : fileItem.getItemFlowsList()) {
+                if (itemFlow.getUnread() && fileItem.getStep().equals(itemFlow.getFlow().getToStep())) {
+                    itemFlow.setUnread(Boolean.FALSE);
+                    itemFlowService.update(itemFlow);
+                }
+            }
+        }
+        try {
+            setDetailPageUrl(ControllerConstants.Pages.FO.DETAILS_CCT_INDEX_PAGE);
+            refreshItems();
+            final FacesContext context = FacesContext.getCurrentInstance();
+            final ExternalContext extContext = context.getExternalContext();
+            final FileItemCctDetailController fileItemCctDetailController = getInstanceOfPageFileItemCctDetailController();
+            fileItemCctDetailController.setCurrentFileItem(fileItemService.find(selected.getId()));
+            fileItemCctDetailController.init();
 
-			for (final ItemFlow itemFlow : fileItem.getItemFlowsList())
-			{
-				if (itemFlow.getUnread() && fileItem.getStep().equals(itemFlow.getFlow().getToStep()))
-				{
-					itemFlow.setUnread(Boolean.FALSE);
-					itemFlowService.update(itemFlow);
-				}
-			}
-		}
-		try
-		{
-			setDetailPageUrl(ControllerConstants.Pages.FO.DETAILS_CCT_INDEX_PAGE);
-			refreshItems();
-			final FacesContext context = FacesContext.getCurrentInstance();
-			final ExternalContext extContext = context.getExternalContext();
-			final FileItemCctDetailController fileItemCctDetailController = getInstanceOfPageFileItemCctDetailController();
-			fileItemCctDetailController.setCurrentFileItem(fileItemService.find(selected.getId()));
-			fileItemCctDetailController.init();
+            final String url = extContext.encodeActionURL(context.getApplication().getViewHandler()
+                    .getActionURL(context, detailPageUrl));
 
-			final String url = extContext.encodeActionURL(context.getApplication().getViewHandler()
-					.getActionURL(context, detailPageUrl));
+            extContext.redirect(url);
+        } catch (final IOException ex) {
+            LOG.error(ex.getMessage(), ex);
+        }
+    }
 
-			extContext.redirect(url);
-		}
-		catch (final IOException ex)
-		{
-			LOG.error(ex.getMessage(), ex);
-		}
-	}
+    /**
+     * Gets the instance of page file item cct detail controller.
+     *
+     * @return the instance of page file item cct detail controller
+     */
+    public FileItemCctDetailController getInstanceOfPageFileItemCctDetailController() {
+        final FacesContext fctx = FacesContext.getCurrentInstance();
+        final Application application = fctx.getApplication();
+        final ELContext context = fctx.getELContext();
+        final ExpressionFactory expressionFactory = application.getExpressionFactory();
+        final ValueExpression createValueExpression = expressionFactory.createValueExpression(context,
+                "#{fileItemCctDetailController}", FileItemCctDetailController.class);
+        return (FileItemCctDetailController) createValueExpression.getValue(context);
+    }
 
-	/**
-	 * Gets the instance of page file item cct detail controller.
-	 *
-	 * @return the instance of page file item cct detail controller
-	 */
-	public FileItemCctDetailController getInstanceOfPageFileItemCctDetailController()
-	{
-		final FacesContext fctx = FacesContext.getCurrentInstance();
-		final Application application = fctx.getApplication();
-		final ELContext context = fctx.getELContext();
-		final ExpressionFactory expressionFactory = application.getExpressionFactory();
-		final ValueExpression createValueExpression = expressionFactory.createValueExpression(context,
-				"#{fileItemCctDetailController}", FileItemCctDetailController.class);
-		return (FileItemCctDetailController) createValueExpression.getValue(context);
-	}
+    /**
+     * Gets the detail page url.
+     *
+     * @return the detail page url
+     */
+    public String getDetailPageUrl() {
+        return detailPageUrl;
+    }
 
-	/**
-	 * Gets the detail page url.
-	 *
-	 * @return the detail page url
-	 */
-	public String getDetailPageUrl()
-	{
-		return detailPageUrl;
-	}
+    /**
+     * Sets the detail page url.
+     *
+     * @param detailPageUrl the new detail page url
+     */
+    public void setDetailPageUrl(final String detailPageUrl) {
+        this.detailPageUrl = detailPageUrl;
+    }
 
-
-	/**
-	 * Sets the detail page url.
-	 *
-	 * @param detailPageUrl
-	 *           the new detail page url
-	 */
-	public void setDetailPageUrl(final String detailPageUrl)
-	{
-		this.detailPageUrl = detailPageUrl;
-	}
-
-	/**
-	 * Gets the items.
-	 *
-	 * @return the items
-	 */
-	/*
+    /**
+     * Gets the items.
+     *
+     * @return the items
+     */
+    /*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.guce.siat.web.common.AbstractController#getItems()
-	 */
-	@Override
-	public List<FileItem> getItems()
-	{
-		try
-		{
-			if (items == null)
-			{
-				if (Objects.equals(listUserAuthorityFileTypes, null))
-				{
-					listUserAuthorityFileTypes = userAuthorityFileTypeService.findUserAuthorityFileTypeByUserList(getLoggedUser()
-							.getMergedDelegatorList());
-				}
+     */
+    @Override
+    public List<FileItem> getItems() {
+        try {
+            if (items == null) {
+                if (Objects.equals(listUserAuthorityFileTypes, null)) {
+                    listUserAuthorityFileTypes = userAuthorityFileTypeService.findUserAuthorityFileTypeByUserList(getLoggedUser()
+                            .getMergedDelegatorList());
+                }
+                System.out.println("user authority file types : " + listUserAuthorityFileTypes);
 
-				// Merge the logged user and their delegator users list in the list
-				final Set<Administration> adminList = new HashSet<>();
+                // Merge the logged user and their delegator users list in the list
+                final Set<Administration> adminList = new HashSet<>();
 
-				if (getLoggedUser().getMergedDelegatorList() != null)
-				{
-					for (final User user : getLoggedUser().getMergedDelegatorList())
-					{
-						if (user.getAdministration() instanceof Laboratory || user.getAdministration() instanceof TreatmentCompany)
-						{
-							adminList.add(((Entity) user.getAdministration()).getService());
-						}
-						adminList.add(user.getAdministration());
-					}
-				}
-				// get the bureaus  for the administration of the logged user and their delegator users
-				final List<Bureau> bureauList = SiatUtils.findCombinedBureausByAdministrationList(new ArrayList<Administration>(
-						adminList));
+                if (getLoggedUser().getMergedDelegatorList() != null) {
+                    for (final User user : getLoggedUser().getMergedDelegatorList()) {
+                        if (user.getAdministration() instanceof Laboratory || user.getAdministration() instanceof TreatmentCompany) {
+                            adminList.add(((Entity) user.getAdministration()).getService());
+                        }
+                        adminList.add(user.getAdministration());
+                    }
+                }
+                System.out.println("admin list : " + adminList);
+                // get the bureaus  for the administration of the logged user and their delegator users
+                final List<Bureau> bureauList = SiatUtils.findCombinedBureausByAdministrationList(new ArrayList<>(
+                        adminList));
+                System.out.println("bureau list : " + bureauList);
 
-				items = fileItemService.findFileItemByServiceAndAuthoritiesAndFileType(bureauList, getLoggedUser(),
-						InformationSystemCode.CCT, listUserAuthorityFileTypes);
+                items = fileItemService.findFileItemByServiceAndAuthoritiesAndFileType(bureauList, getLoggedUser(),
+                        InformationSystemCode.CCT, listUserAuthorityFileTypes);
 
+            }
+        } catch (final Exception ex) {
+            LOG.error(ex.getMessage(), ex);
+            JsfUtil.addErrorMessage(ex,
+                    ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(PERSISTENCE_ERROR_OCCURED));
+        }
 
+        if (firstCheck) {
+            Collections.sort(items, new Comparator<FileItem>() {
+                @Override
+                public int compare(final FileItem fi1, final FileItem fi2) {
 
-			}
-		}
-		catch (final Exception ex)
-		{
-			LOG.error(ex.getMessage(), ex);
-			JsfUtil.addErrorMessage(ex,
-					ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(PERSISTENCE_ERROR_OCCURED));
-		}
+                    final ItemFlow if1 = itemFlowService.findLastItemFlowByFileItem(fi1);
+                    final ItemFlow if2 = itemFlowService.findLastItemFlowByFileItem(fi2);
 
-		if (firstCheck)
-		{
-			Collections.sort(items, new Comparator<FileItem>()
-			{
-				@Override
-				public int compare(final FileItem fi1, final FileItem fi2)
-				{
+                    if (if1.getCreated().getTime() > if2.getCreated().getTime()) {
+                        return 1;
+                    } else if (if1.getCreated().getTime() < if2.getCreated().getTime()) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                }
+            });
+            final Iterator<FileItem> iter = items.iterator();
+            while (iter.hasNext()) {
+                final FileItem fileItem = iter.next();
+                for (final ItemFlow flow : fileItem.getItemFlowsList()) {
+                    if (fileItem.getStep().equals(flow.getFlow().getToStep())
+                            && !commonService.showEnabledFileItem(fileItem, flow, getLoggedUser())) {
+                        iter.remove();
+                    }
+                }
+            }
+            Collections.reverse(items);
+            setFirstCheck(false);
+        }
+        return items;
+    }
 
-					final ItemFlow if1 = itemFlowService.findLastItemFlowByFileItem(fi1);
-					final ItemFlow if2 = itemFlowService.findLastItemFlowByFileItem(fi2);
+    /**
+     * Dashboard calculate.
+     */
+    public void dashboardCalculate() {
+        setFirstCheck(true);
+        items = null;
+        getItems();
+        final Date systemDate = Calendar.getInstance().getTime();
+        for (final FileItem fileItem : items != null ? items : new ArrayList<FileItem>()) {
+            for (final ItemFlow flow : fileItem.getItemFlowsList()) {
+                if (fileItem.getStep().equals(flow.getFlow().getToStep())) {
+                    if (flow.getUnread()) {
+                        getUnreadFileItemsList().add(fileItem);
+                        break;
+                    } else {
+                        final long diff = systemDate.getTime() - flow.getCreated().getTime();
+                        final long diffDays = diff / (DateUtils.CONST_DURATION_OF_DAY);
+                        if (diffDays <= Constants.ONE) {
+                            getReceivedBeforOneDayFileItemsList().add(fileItem);
+                        } else if (diffDays > Constants.THREE) {
+                            getReceivedMoreTowDayFileItemsList().add(fileItem);
+                        } else if (diffDays > Constants.ONE && diffDays <= Constants.THREE) {
+                            getReceivedBeatweenTowDayFileItemsList().add(fileItem);
+                        }
 
-					if (if1.getCreated().getTime() > if2.getCreated().getTime())
-					{
-						return 1;
-					}
-					else if (if1.getCreated().getTime() < if2.getCreated().getTime())
-					{
-						return -1;
-					}
-					else
-					{
-						return 0;
-					}
-				}
-			});
-			final Iterator<FileItem> iter = items.iterator();
-			while (iter.hasNext())
-			{
-				final FileItem fileItem = iter.next();
-				for (final ItemFlow flow : fileItem.getItemFlowsList())
-				{
-					if (fileItem.getStep().equals(flow.getFlow().getToStep())
-							&& !commonService.showEnabledFileItem(fileItem, flow, getLoggedUser()))
-					{
-						iter.remove();
-					}
-				}
-			}
-			Collections.reverse(items);
-			setFirstCheck(false);
-		}
-		return items;
-	}
+                    }
 
-	/**
-	 * Dashboard calculate.
-	 */
-	public void dashboardCalculate()
-	{
-		setFirstCheck(true);
-		items = null;
-		getItems();
-		final Date systemDate = Calendar.getInstance().getTime();
-		for (final FileItem fileItem : items != null ? items : new ArrayList<FileItem>())
-		{
-			for (final ItemFlow flow : fileItem.getItemFlowsList())
-			{
-				if (fileItem.getStep().equals(flow.getFlow().getToStep()))
-				{
-					if (flow.getUnread())
-					{
-						getUnreadFileItemsList().add(fileItem);
-						break;
-					}
-					else
-					{
-						final long diff = systemDate.getTime() - flow.getCreated().getTime();
-						final long diffDays = diff / (DateUtils.CONST_DURATION_OF_DAY);
-						if (diffDays <= Constants.ONE)
-						{
-							getReceivedBeforOneDayFileItemsList().add(fileItem);
-						}
-						else if (diffDays > Constants.THREE)
-						{
-							getReceivedMoreTowDayFileItemsList().add(fileItem);
-						}
-						else if (diffDays > Constants.ONE && diffDays <= Constants.THREE)
-						{
-							getReceivedBeatweenTowDayFileItemsList().add(fileItem);
-						}
+                }
+                if (!getDraftFileItemsList().contains(fileItem)
+                        && !flow.getSent()
+                        && (fileItem.getStep().equals(flow.getFlow().getToStep()) || fileItem.getStep().equals(
+                        flow.getFlow().getFromStep()))) {
+                    getReceivedBeforOneDayFileItemsList().remove(fileItem);
+                    getReceivedMoreTowDayFileItemsList().remove(fileItem);
+                    getReceivedBeatweenTowDayFileItemsList().remove(fileItem);
+                    getDraftFileItemsList().add(fileItem);
+                    break;
+                }
+            }
+        }
 
-					}
+    }
 
-				}
-				if (!getDraftFileItemsList().contains(fileItem)
-						&& !flow.getSent()
-						&& (fileItem.getStep().equals(flow.getFlow().getToStep()) || fileItem.getStep().equals(
-								flow.getFlow().getFromStep())))
-				{
-					getReceivedBeforOneDayFileItemsList().remove(fileItem);
-					getReceivedMoreTowDayFileItemsList().remove(fileItem);
-					getReceivedBeatweenTowDayFileItemsList().remove(fileItem);
-					getDraftFileItemsList().add(fileItem);
-					break;
-				}
-			}
-		}
+    /**
+     * Checks if is unread file item.
+     *
+     * @param fileItem the file item
+     * @return true, if is unread file item
+     */
+    public boolean isUnreadFileItem(final FileItem fileItem) {
+        return getUnreadFileItemsList().contains(fileItem);
+    }
 
+    /**
+     * Filter form dashboard.
+     */
+    public void filterFormDashboard() {
+        switch (actionFilter) {
+            case "unread":
+                this.items = new ArrayList<FileItem>(unreadFileItemsList);
+                break;
+            case "oneday":
+                this.items = new ArrayList<FileItem>(receivedBeforOneDayFileItemsList);
+                break;
+            case "towday":
+                this.items = new ArrayList<FileItem>(receivedMoreTowDayFileItemsList);
+                break;
+            case "between":
+                this.items = new ArrayList<FileItem>(receivedBeatweenTowDayFileItemsList);
+                break;
+            case "draft":
+                this.items = new ArrayList<FileItem>(draftFileItemsList);
+                break;
+            case "all":
+                this.items = null;
+                break;
+            default:
+                break;
+        }
+    }
 
-	}
+    /**
+     * Extract files form items.
+     *
+     * @param items the items
+     * @return the sets the
+     */
+    public Set<File> extractFilesFormItems(final Collection<FileItem> items) {
+        @SuppressWarnings("unchecked")
+        final List<File> files = (List<File>) CollectionUtils.collect(items != null ? items : new HashSet<FileItem>(),
+                new Transformer() {
+            @Override
+            public Object transform(final Object input) {
+                return ((FileItem) input).getFile();
+            }
+        });
+        if (!Objects.equals(files, null)) {
+            return new HashSet<File>(files);
+        }
+        return Collections.emptySet();
+    }
 
-	/**
-	 * Checks if is unread file item.
-	 *
-	 * @param fileItem
-	 *           the file item
-	 * @return true, if is unread file item
-	 */
-	public boolean isUnreadFileItem(final FileItem fileItem)
-	{
-		return getUnreadFileItemsList().contains(fileItem);
-	}
+    /**
+     * Gets the file item service.
+     *
+     * @return the file item service
+     */
+    public FileItemService getFileItemService() {
+        return fileItemService;
+    }
 
-	/**
-	 * Filter form dashboard.
-	 */
-	public void filterFormDashboard()
-	{
-		switch (actionFilter)
-		{
-			case "unread":
-				this.items = new ArrayList<FileItem>(unreadFileItemsList);
-				break;
-			case "oneday":
-				this.items = new ArrayList<FileItem>(receivedBeforOneDayFileItemsList);
-				break;
-			case "towday":
-				this.items = new ArrayList<FileItem>(receivedMoreTowDayFileItemsList);
-				break;
-			case "between":
-				this.items = new ArrayList<FileItem>(receivedBeatweenTowDayFileItemsList);
-				break;
-			case "draft":
-				this.items = new ArrayList<FileItem>(draftFileItemsList);
-				break;
-			case "all":
-				this.items = null;
-				break;
-			default:
-				break;
-		}
-	}
+    /**
+     * Sets the file item service.
+     *
+     * @param fileItemService the new file item service
+     */
+    public void setFileItemService(final FileItemService fileItemService) {
+        this.fileItemService = fileItemService;
+    }
 
-	/**
-	 * Extract files form items.
-	 *
-	 * @param items
-	 *           the items
-	 * @return the sets the
-	 */
-	public Set<File> extractFilesFormItems(final Collection<FileItem> items)
-	{
-		@SuppressWarnings("unchecked")
-		final List<File> files = (List<File>) CollectionUtils.collect(items != null ? items : new HashSet<FileItem>(),
-				new Transformer()
-				{
-					@Override
-					public Object transform(final Object input)
-					{
-						return ((FileItem) input).getFile();
-					}
-				});
-		if (!Objects.equals(files, null))
-		{
-			return new HashSet<File>(files);
-		}
-		return Collections.emptySet();
-	}
+    /**
+     * Gets the authority service.
+     *
+     * @return the authorityService
+     */
+    public AuthorityService getAuthorityService() {
+        return authorityService;
+    }
 
-	/**
-	 * Gets the file item service.
-	 *
-	 * @return the file item service
-	 */
-	public FileItemService getFileItemService()
-	{
-		return fileItemService;
-	}
+    /**
+     * Sets the authority service.
+     *
+     * @param authorityService the authorityService to set
+     */
+    public void setAuthorityService(final AuthorityService authorityService) {
+        this.authorityService = authorityService;
+    }
 
-	/**
-	 * Sets the file item service.
-	 *
-	 * @param fileItemService
-	 *           the new file item service
-	 */
-	public void setFileItemService(final FileItemService fileItemService)
-	{
-		this.fileItemService = fileItemService;
-	}
+    /**
+     * Gets the granted authorities impl list.
+     *
+     * @return the grantedAuthoritiesImplList
+     */
+    public List<Authority> getGrantedAuthoritiesImplList() {
+        return grantedAuthoritiesImplList;
+    }
 
-	/**
-	 * Gets the authority service.
-	 *
-	 * @return the authorityService
-	 */
-	public AuthorityService getAuthorityService()
-	{
-		return authorityService;
-	}
+    /**
+     * Sets the granted authorities impl list.
+     *
+     * @param grantedAuthoritiesImplList the grantedAuthoritiesImplList to set
+     */
+    public void setGrantedAuthoritiesImplList(final List<Authority> grantedAuthoritiesImplList) {
+        this.grantedAuthoritiesImplList = grantedAuthoritiesImplList;
+    }
 
+    /**
+     * Gets the user authority file type service.
+     *
+     * @return the userAuthorityFileTypeService
+     */
+    public UserAuthorityFileTypeService getUserAuthorityFileTypeService() {
+        return userAuthorityFileTypeService;
+    }
 
-	/**
-	 * Sets the authority service.
-	 *
-	 * @param authorityService
-	 *           the authorityService to set
-	 */
-	public void setAuthorityService(final AuthorityService authorityService)
-	{
-		this.authorityService = authorityService;
-	}
+    /**
+     * Sets the user authority file type service.
+     *
+     * @param userAuthorityFileTypeService the userAuthorityFileTypeService to
+     * set
+     */
+    public void setUserAuthorityFileTypeService(final UserAuthorityFileTypeService userAuthorityFileTypeService) {
+        this.userAuthorityFileTypeService = userAuthorityFileTypeService;
+    }
 
-	/**
-	 * Gets the granted authorities impl list.
-	 *
-	 * @return the grantedAuthoritiesImplList
-	 */
-	public List<Authority> getGrantedAuthoritiesImplList()
-	{
-		return grantedAuthoritiesImplList;
-	}
+    /**
+     * Gets the list user authority file types.
+     *
+     * @return the listUserAuthorityFileTypes
+     */
+    public List<UserAuthorityFileType> getListUserAuthorityFileTypes() {
+        return listUserAuthorityFileTypes;
+    }
 
+    /**
+     * Sets the list user authority file types.
+     *
+     * @param listUserAuthorityFileTypes the listUserAuthorityFileTypes to set
+     */
+    public void setListUserAuthorityFileTypes(final List<UserAuthorityFileType> listUserAuthorityFileTypes) {
+        this.listUserAuthorityFileTypes = listUserAuthorityFileTypes;
+    }
 
-	/**
-	 * Sets the granted authorities impl list.
-	 *
-	 * @param grantedAuthoritiesImplList
-	 *           the grantedAuthoritiesImplList to set
-	 */
-	public void setGrantedAuthoritiesImplList(final List<Authority> grantedAuthoritiesImplList)
-	{
-		this.grantedAuthoritiesImplList = grantedAuthoritiesImplList;
-	}
+    /**
+     * Gets the unread file items list.
+     *
+     * @return the unreadFileItemsList
+     */
+    public Set<FileItem> getUnreadFileItemsList() {
+        if (Objects.equals(unreadFileItemsList, null)) {
+            unreadFileItemsList = new HashSet<FileItem>();
+        }
+        return unreadFileItemsList;
+    }
 
+    /**
+     * Sets the unread file items list.
+     *
+     * @param unreadFileItemsList the unreadFileItemsList to set
+     */
+    public void setUnreadFileItemsList(final Set<FileItem> unreadFileItemsList) {
+        this.unreadFileItemsList = unreadFileItemsList;
+    }
 
-	/**
-	 * Gets the user authority file type service.
-	 *
-	 * @return the userAuthorityFileTypeService
-	 */
-	public UserAuthorityFileTypeService getUserAuthorityFileTypeService()
-	{
-		return userAuthorityFileTypeService;
-	}
+    /**
+     * Gets the draft file items list.
+     *
+     * @return the draftFileItemsList
+     */
+    public Set<FileItem> getDraftFileItemsList() {
+        if (Objects.equals(draftFileItemsList, null)) {
+            draftFileItemsList = new HashSet<FileItem>();
+        }
+        return draftFileItemsList;
+    }
 
+    /**
+     * Sets the draft file items list.
+     *
+     * @param draftFileItemsList the draftFileItemsList to set
+     */
+    public void setDraftFileItemsList(final Set<FileItem> draftFileItemsList) {
+        this.draftFileItemsList = draftFileItemsList;
+    }
 
-	/**
-	 * Sets the user authority file type service.
-	 *
-	 * @param userAuthorityFileTypeService
-	 *           the userAuthorityFileTypeService to set
-	 */
-	public void setUserAuthorityFileTypeService(final UserAuthorityFileTypeService userAuthorityFileTypeService)
-	{
-		this.userAuthorityFileTypeService = userAuthorityFileTypeService;
-	}
+    /**
+     * Gets the received befor one day file items list.
+     *
+     * @return the receivedBeforOneDayFileItemsList
+     */
+    public Set<FileItem> getReceivedBeforOneDayFileItemsList() {
+        if (Objects.equals(receivedBeforOneDayFileItemsList, null)) {
+            receivedBeforOneDayFileItemsList = new HashSet<FileItem>();
+        }
+        return receivedBeforOneDayFileItemsList;
+    }
 
+    /**
+     * Sets the received befor one day file items list.
+     *
+     * @param receivedBeforOneDayFileItemsList the
+     * receivedBeforOneDayFileItemsList to set
+     */
+    public void setReceivedBeforOneDayFileItemsList(final Set<FileItem> receivedBeforOneDayFileItemsList) {
+        this.receivedBeforOneDayFileItemsList = receivedBeforOneDayFileItemsList;
+    }
 
-	/**
-	 * Gets the list user authority file types.
-	 *
-	 * @return the listUserAuthorityFileTypes
-	 */
-	public List<UserAuthorityFileType> getListUserAuthorityFileTypes()
-	{
-		return listUserAuthorityFileTypes;
-	}
+    /**
+     * Gets the received more tow day file items list.
+     *
+     * @return the receivedMoreTowDayFileItemsList
+     */
+    public Set<FileItem> getReceivedMoreTowDayFileItemsList() {
+        if (Objects.equals(receivedMoreTowDayFileItemsList, null)) {
+            receivedMoreTowDayFileItemsList = new HashSet<FileItem>();
+        }
+        return receivedMoreTowDayFileItemsList;
+    }
 
+    /**
+     * Sets the received more tow day file items list.
+     *
+     * @param receivedMoreTowDayFileItemsList the
+     * receivedMoreTowDayFileItemsList to set
+     */
+    public void setReceivedMoreTowDayFileItemsList(final Set<FileItem> receivedMoreTowDayFileItemsList) {
+        this.receivedMoreTowDayFileItemsList = receivedMoreTowDayFileItemsList;
+    }
 
-	/**
-	 * Sets the list user authority file types.
-	 *
-	 * @param listUserAuthorityFileTypes
-	 *           the listUserAuthorityFileTypes to set
-	 */
-	public void setListUserAuthorityFileTypes(final List<UserAuthorityFileType> listUserAuthorityFileTypes)
-	{
-		this.listUserAuthorityFileTypes = listUserAuthorityFileTypes;
-	}
+    /**
+     * Gets the received beatween tow day file items list.
+     *
+     * @return the receivedBeatweenTowDayFileItemsList
+     */
+    public Set<FileItem> getReceivedBeatweenTowDayFileItemsList() {
+        if (Objects.equals(receivedBeatweenTowDayFileItemsList, null)) {
+            receivedBeatweenTowDayFileItemsList = new HashSet<FileItem>();
+        }
+        return receivedBeatweenTowDayFileItemsList;
+    }
 
-	/**
-	 * Gets the unread file items list.
-	 *
-	 * @return the unreadFileItemsList
-	 */
-	public Set<FileItem> getUnreadFileItemsList()
-	{
-		if (Objects.equals(unreadFileItemsList, null))
-		{
-			unreadFileItemsList = new HashSet<FileItem>();
-		}
-		return unreadFileItemsList;
-	}
+    /**
+     * Sets the received beatween tow day file items list.
+     *
+     * @param receivedBeatweenTowDayFileItemsList the
+     * receivedBeatweenTowDayFileItemsList to set
+     */
+    public void setReceivedBeatweenTowDayFileItemsList(final Set<FileItem> receivedBeatweenTowDayFileItemsList) {
 
-	/**
-	 * Sets the unread file items list.
-	 *
-	 * @param unreadFileItemsList
-	 *           the unreadFileItemsList to set
-	 */
-	public void setUnreadFileItemsList(final Set<FileItem> unreadFileItemsList)
-	{
-		this.unreadFileItemsList = unreadFileItemsList;
-	}
+        this.receivedBeatweenTowDayFileItemsList = receivedBeatweenTowDayFileItemsList;
+    }
 
-	/**
-	 * Gets the draft file items list.
-	 *
-	 * @return the draftFileItemsList
-	 */
-	public Set<FileItem> getDraftFileItemsList()
-	{
-		if (Objects.equals(draftFileItemsList, null))
-		{
-			draftFileItemsList = new HashSet<FileItem>();
-		}
-		return draftFileItemsList;
-	}
+    /**
+     * Gets the item flow service.
+     *
+     * @return the itemFlowService
+     */
+    public ItemFlowService getItemFlowService() {
+        return itemFlowService;
+    }
 
-	/**
-	 * Sets the draft file items list.
-	 *
-	 * @param draftFileItemsList
-	 *           the draftFileItemsList to set
-	 */
-	public void setDraftFileItemsList(final Set<FileItem> draftFileItemsList)
-	{
-		this.draftFileItemsList = draftFileItemsList;
-	}
+    /**
+     * Sets the item flow service.
+     *
+     * @param itemFlowService the itemFlowService to set
+     */
+    public void setItemFlowService(final ItemFlowService itemFlowService) {
+        this.itemFlowService = itemFlowService;
+    }
 
-	/**
-	 * Gets the received befor one day file items list.
-	 *
-	 * @return the receivedBeforOneDayFileItemsList
-	 */
-	public Set<FileItem> getReceivedBeforOneDayFileItemsList()
-	{
-		if (Objects.equals(receivedBeforOneDayFileItemsList, null))
-		{
-			receivedBeforOneDayFileItemsList = new HashSet<FileItem>();
-		}
-		return receivedBeforOneDayFileItemsList;
-	}
+    /**
+     * Gets the action filter.
+     *
+     * @return the actionFilter
+     */
+    public String getActionFilter() {
+        return actionFilter;
+    }
 
-	/**
-	 * Sets the received befor one day file items list.
-	 *
-	 * @param receivedBeforOneDayFileItemsList
-	 *           the receivedBeforOneDayFileItemsList to set
-	 */
-	public void setReceivedBeforOneDayFileItemsList(final Set<FileItem> receivedBeforOneDayFileItemsList)
-	{
-		this.receivedBeforOneDayFileItemsList = receivedBeforOneDayFileItemsList;
-	}
+    /**
+     * Sets the action filter.
+     *
+     * @param actionFilter the actionFilter to set
+     */
+    public void setActionFilter(final String actionFilter) {
+        this.actionFilter = actionFilter;
+    }
 
-	/**
-	 * Gets the received more tow day file items list.
-	 *
-	 * @return the receivedMoreTowDayFileItemsList
-	 */
-	public Set<FileItem> getReceivedMoreTowDayFileItemsList()
-	{
-		if (Objects.equals(receivedMoreTowDayFileItemsList, null))
-		{
-			receivedMoreTowDayFileItemsList = new HashSet<FileItem>();
-		}
-		return receivedMoreTowDayFileItemsList;
-	}
+    /**
+     * Gets the file type step service.
+     *
+     * @return the file type step service
+     */
+    public FileTypeStepService getFileTypeStepService() {
+        return fileTypeStepService;
+    }
 
-	/**
-	 * Sets the received more tow day file items list.
-	 *
-	 * @param receivedMoreTowDayFileItemsList
-	 *           the receivedMoreTowDayFileItemsList to set
-	 */
-	public void setReceivedMoreTowDayFileItemsList(final Set<FileItem> receivedMoreTowDayFileItemsList)
-	{
-		this.receivedMoreTowDayFileItemsList = receivedMoreTowDayFileItemsList;
-	}
+    /**
+     * Sets the file type step service.
+     *
+     * @param fileTypeStepService the new file type step service
+     */
+    public void setFileTypeStepService(final FileTypeStepService fileTypeStepService) {
+        this.fileTypeStepService = fileTypeStepService;
+    }
 
-	/**
-	 * Gets the received beatween tow day file items list.
-	 *
-	 * @return the receivedBeatweenTowDayFileItemsList
-	 */
-	public Set<FileItem> getReceivedBeatweenTowDayFileItemsList()
-	{
-		if (Objects.equals(receivedBeatweenTowDayFileItemsList, null))
-		{
-			receivedBeatweenTowDayFileItemsList = new HashSet<FileItem>();
-		}
-		return receivedBeatweenTowDayFileItemsList;
-	}
+    /**
+     * Gets the common service.
+     *
+     * @return the common service
+     */
+    public CommonService getCommonService() {
+        return commonService;
+    }
 
-	/**
-	 * Sets the received beatween tow day file items list.
-	 *
-	 * @param receivedBeatweenTowDayFileItemsList
-	 *           the receivedBeatweenTowDayFileItemsList to set
-	 */
-	public void setReceivedBeatweenTowDayFileItemsList(final Set<FileItem> receivedBeatweenTowDayFileItemsList)
-	{
+    /**
+     * Sets the common service.
+     *
+     * @param commonService the new common service
+     */
+    public void setCommonService(final CommonService commonService) {
+        this.commonService = commonService;
+    }
 
-		this.receivedBeatweenTowDayFileItemsList = receivedBeatweenTowDayFileItemsList;
-	}
+    /**
+     * @return the firstCheck
+     */
+    public Boolean getFirstCheck() {
+        return firstCheck;
+    }
 
-	/**
-	 * Gets the item flow service.
-	 *
-	 * @return the itemFlowService
-	 */
-	public ItemFlowService getItemFlowService()
-	{
-		return itemFlowService;
-	}
-
-	/**
-	 * Sets the item flow service.
-	 *
-	 * @param itemFlowService
-	 *           the itemFlowService to set
-	 */
-	public void setItemFlowService(final ItemFlowService itemFlowService)
-	{
-		this.itemFlowService = itemFlowService;
-	}
-
-	/**
-	 * Gets the action filter.
-	 *
-	 * @return the actionFilter
-	 */
-	public String getActionFilter()
-	{
-		return actionFilter;
-	}
-
-	/**
-	 * Sets the action filter.
-	 *
-	 * @param actionFilter
-	 *           the actionFilter to set
-	 */
-	public void setActionFilter(final String actionFilter)
-	{
-		this.actionFilter = actionFilter;
-	}
-
-	/**
-	 * Gets the file type step service.
-	 *
-	 * @return the file type step service
-	 */
-	public FileTypeStepService getFileTypeStepService()
-	{
-		return fileTypeStepService;
-	}
-
-	/**
-	 * Sets the file type step service.
-	 *
-	 * @param fileTypeStepService
-	 *           the new file type step service
-	 */
-	public void setFileTypeStepService(final FileTypeStepService fileTypeStepService)
-	{
-		this.fileTypeStepService = fileTypeStepService;
-	}
-
-	/**
-	 * Gets the common service.
-	 *
-	 * @return the common service
-	 */
-	public CommonService getCommonService()
-	{
-		return commonService;
-	}
-
-	/**
-	 * Sets the common service.
-	 *
-	 * @param commonService
-	 *           the new common service
-	 */
-	public void setCommonService(final CommonService commonService)
-	{
-		this.commonService = commonService;
-	}
-
-	/**
-	 * @return the firstCheck
-	 */
-	public Boolean getFirstCheck()
-	{
-		return firstCheck;
-	}
-
-	/**
-	 * @param firstCheck
-	 *           the firstCheck to set
-	 */
-	public void setFirstCheck(Boolean firstCheck)
-	{
-		this.firstCheck = firstCheck;
-	}
-
-
+    /**
+     * @param firstCheck the firstCheck to set
+     */
+    public void setFirstCheck(Boolean firstCheck) {
+        this.firstCheck = firstCheck;
+    }
 
 }
+
