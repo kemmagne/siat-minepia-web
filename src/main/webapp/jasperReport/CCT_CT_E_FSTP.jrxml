@@ -2,8 +2,11 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="FICHE_SUPERVISION_TRAIT_PHYTO" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ef3f7670-4c4d-4516-9c0e-2e9a11db29bd">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
-	<parameter name="MINADER_LOGO" class="java.lang.String"/>
+	<property name="ireport.y" value="497"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="MINADER_LOGO" class="java.lang.String">
+		<defaultValueExpression><![CDATA["C:\\Users\\tadzotsa\\NetBeansProjects\\siat-ct-web\\src\\main\\webapp\\images\\reports\\minader.jpg"]]></defaultValueExpression>
+	</parameter>
 	<field name="decisionNumber" class="java.lang.String"/>
 	<field name="exporterName" class="java.lang.String"/>
 	<field name="exporterAddress" class="java.lang.String"/>
@@ -86,7 +89,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 					<textElement textAlignment="Center" markup="html">
 						<font size="11" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA["<b>N° <u>" + $F{decisionNumber}]]></textFieldExpression>
+					<textFieldExpression><![CDATA["<b>N° <u>" + ($F{decisionNumber} != null ? $F{decisionNumber} : "-")]]></textFieldExpression>
 				</textField>
 				<image>
 					<reportElement x="245" y="55" width="58" height="45" uuid="0a6a2abe-afce-40dd-8755-f3e3e563fae9"/>
@@ -104,28 +107,28 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Destination / Situation : <u>" + $F{consigneeCountry} + "</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Destination / Situation : <u>" + ($F{consigneeCountry} != null ? $F{consigneeCountry} : "-") + "</u>"]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="0" y="0" width="555" height="15" uuid="83c0efa5-1122-43cc-a31d-c84d4789b3dd"/>
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Nom et adresse du propriétaire de l'article : <u>" + $F{exporterName} + ", " + $F{exporterAddress} + "</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Nom et adresse du propriétaire de l'article : <u>" + ($F{exporterName} != null ? $F{exporterName} : "-") + ", " + ($F{exporterAddress} != null ? $F{exporterAddress} : "-") + "</u>"]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="0" y="30" width="555" height="15" uuid="99eaf0b9-d28e-4dff-aa84-2db83d238a9e"/>
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Nature de l'article : <u>" + $F{itemNature} + "</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Nature de l'article : <u>" + ($F{itemNature} != null ? $F{itemNature} : "-") + "</u>"]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="0" y="45" width="555" height="15" uuid="1bf0648f-6c05-4bf2-9d14-a8e5708e7d54"/>
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Quantité / Volume de l'article / Superficie : <u>" + $F{itemQuantity} + "</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Quantité / Volume de l'article / Superficie : <u>" + ($F{itemQuantity} != null ? $F{itemQuantity} : "-") + "</u>"]]></textFieldExpression>
 				</textField>
 				<frame>
 					<reportElement x="0" y="60" width="555" height="15" uuid="e0c409aa-b50f-4a45-a629-572f63f22dca"/>
@@ -197,7 +200,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						<reportElement x="458" y="0" width="15" height="15" uuid="e4f0a575-dd38-4022-9c52-ea13cca30aa0"/>
 					</rectangle>
 					<staticText>
-						<reportElement x="478" y="0" width="51" height="15" uuid="21c086cf-d03f-430e-a5ab-f87bccc5cd0a"/>
+						<reportElement x="478" y="0" width="71" height="15" isPrintWhenDetailOverflows="true" uuid="21c086cf-d03f-430e-a5ab-f87bccc5cd0a"/>
 						<textElement>
 							<font size="11"/>
 						</textElement>
@@ -226,7 +229,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						<reportElement x="132" y="0" width="15" height="15" uuid="101060dd-99fd-4d9a-84b6-5a21d1c98de7"/>
 					</rectangle>
 					<staticText>
-						<reportElement x="152" y="0" width="100" height="15" uuid="a3de9e78-0a9f-41b6-9422-ad4a437f5ab2"/>
+						<reportElement x="152" y="0" width="125" height="15" isPrintWhenDetailOverflows="true" uuid="a3de9e78-0a9f-41b6-9422-ad4a437f5ab2"/>
 						<textElement>
 							<font size="11"/>
 						</textElement>
@@ -285,14 +288,14 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Autres traitements (à préciser) : <u>" + null == $F{otherTreatmentMode} ? "-" : $F{otherTreatmentMode} + "</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Autres traitements : <u>" + (null == $F{otherTreatmentMode} ? "-" : $F{otherTreatmentMode}) + "</u>"]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
 					<reportElement x="0" y="105" width="555" height="15" uuid="d2b0b9a7-208a-4d80-9c1e-d0ab066c47dc"/>
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Autres à préciser : <u>" + null == $F{otherProductUsed} ? "-" : $F{otherProductUsed} + "</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Autres : <u>" + (null == $F{otherProductUsed} ? "-" : $F{otherProductUsed}) + "</u>"]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="0" y="120" width="169" height="15" uuid="df804e47-5de4-4288-8b8b-23b06879a057"/>
@@ -306,42 +309,42 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Nom commercial : <u>" + $F{productComName} + "</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Nom commercial : <u>" + ($F{productComName} != null ? $F{productComName} : "-") + "</u>"]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="30" y="150" width="525" height="15" uuid="c97c0f47-a82a-4c58-ab22-798ca0f026ec"/>
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Matière active : <u>" + $F{activeIngredient} + "</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Matière active : <u>" + ($F{activeIngredient} != null ? $F{activeIngredient} : "-") + "</u>"]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="30" y="165" width="525" height="15" uuid="40df6f4b-e6d1-4024-8e28-54b5ae602454"/>
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Concentration : <u>" + $F{tssConcentration} + "</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Concentration : <u>" + ($F{tssConcentration} != null ? $F{tssConcentration} : "-") + "</u>"]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="30" y="180" width="525" height="15" uuid="fc5af4e5-3e90-497d-a764-43957785076d"/>
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Dose d'application : <u>" + $F{applicationDose} + "</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Dose d'application : <u>" + ($F{applicationDose} != null ? $F{applicationDose} : "-") + "</u>"]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="0" y="200" width="555" height="15" uuid="d0b4f02c-cdf0-4009-ad09-c8e78fad205b"/>
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Antidote : <u>" + $F{antidote} + "</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Antidote : <u>" + ($F{antidote}!= null ? $F{antidote} : "-") + "</u>"]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="0" y="215" width="555" height="15" uuid="487fa323-6c44-47ff-8014-452d88fa9560"/>
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Durée de traitement : <u>" + $F{treatmentDuration} + "</u> Heure de traitement : <u>" + new java.text.SimpleDateFormat("HH:mm").format($F{treatmentTime}) + "</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Durée de traitement : <u>" + ($F{treatmentDuration} != null ? $F{treatmentDuration} : "-") + "</u> Heure de traitement : <u>" + ($F{treatmentTime} != null ? new java.text.SimpleDateFormat("HH:mm").format($F{treatmentTime}) : "-") + "</u>"]]></textFieldExpression>
 				</textField>
 				<frame>
 					<reportElement x="0" y="230" width="555" height="15" uuid="9164dee0-ae06-45f7-adb1-b8d83c46d420"/>
@@ -413,7 +416,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						<reportElement x="509" y="0" width="15" height="15" uuid="daed961d-c16a-4e79-827c-78fcf3463d60"/>
 					</rectangle>
 					<staticText>
-						<reportElement x="529" y="0" width="20" height="15" uuid="0a1f8f87-9388-4355-8969-7e9485c73f54"/>
+						<reportElement x="529" y="0" width="26" height="15" uuid="0a1f8f87-9388-4355-8969-7e9485c73f54"/>
 						<textElement>
 							<font size="11"/>
 						</textElement>
@@ -429,19 +432,19 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						<text><![CDATA[X]]></text>
 					</staticText>
 				</frame>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="0" y="245" width="555" height="15" uuid="1ba2b3c4-d0f4-4f7d-b77a-f45639da30b9"/>
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Autres à préciser : <u>" + null ==  $F{otherTreatmentEnvironment} ? "-" : $F{otherTreatmentEnvironment} + "</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Autres : <u>" + (null ==  $F{otherTreatmentEnvironment} ? "-" : $F{otherTreatmentEnvironment}) + "</u>"]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="0" y="260" width="555" height="15" uuid="b87a32b4-ece3-4515-aa13-0f2e661e4e6a"/>
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Température optimale : <u>" + $F{optimalTemperature} + "</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Température optimale : <u>" + ($F{optimalTemperature} != null ? $F{optimalTemperature} : "-") + "</u>"]]></textFieldExpression>
 				</textField>
 				<frame>
 					<reportElement x="0" y="275" width="555" height="15" uuid="8be1ee1e-63fc-4442-9b83-17d82b994070"/>
@@ -509,12 +512,12 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						</textElement>
 						<text><![CDATA[X]]></text>
 					</staticText>
-					<textField>
+					<textField isBlankWhenNull="true">
 						<reportElement x="340" y="0" width="215" height="15" uuid="7f3656b9-45cf-4006-8c62-19ce9b0ce289"/>
 						<textElement markup="html">
 							<font size="11"/>
 						</textElement>
-						<textFieldExpression><![CDATA["Autres à préciser : <u>" + null == $F{otherStoragePlace} ? "-" : $F{otherStoragePlace} + "</u>"]]></textFieldExpression>
+						<textFieldExpression><![CDATA["Autres à préciser : <u>" + (null == $F{otherStoragePlace} ? "-" : $F{otherStoragePlace}) + "</u>"]]></textFieldExpression>
 					</textField>
 				</frame>
 				<frame>
@@ -679,12 +682,12 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						</textElement>
 						<text><![CDATA[X]]></text>
 					</staticText>
-					<textField>
+					<textField isBlankWhenNull="true">
 						<reportElement x="350" y="0" width="205" height="15" uuid="8236b695-ffdd-43e2-9e5b-59e34a5e682a"/>
 						<textElement markup="html">
 							<font size="11"/>
 						</textElement>
-						<textFieldExpression><![CDATA["Autres à préciser : <u>" + null == $F{otherWeatherCondition} ? "-" : $F{otherWeatherCondition} + "</u>"]]></textFieldExpression>
+						<textFieldExpression><![CDATA["Autres à préciser : <u>" + (null == $F{otherWeatherCondition} ? "-" : $F{otherWeatherCondition}) + "</u>"]]></textFieldExpression>
 					</textField>
 				</frame>
 				<frame>
@@ -740,14 +743,14 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Nom et adresse de la société de traitement : <u>" + $F{treatmentCompanyName} + ", " + $F{treatmentCompanyAddress} + "</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Nom et adresse de la société de traitement : <u>" + ($F{treatmentCompanyName} != null ? $F{treatmentCompanyName} : "-") + ($F{treatmentCompanyAddress} != null ? ", " + $F{treatmentCompanyAddress} : "") + "</u>"]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="0" y="365" width="555" height="15" uuid="dab70434-4f3a-4f07-b6ff-785f4f12dfd7"/>
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Date et heure de débâchage s'il y a lieu : <u>" + new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format($F{uncoveringDate}) + "</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Date et heure de débâchage s'il y a lieu : <u>" + ($F{uncoveringDate} != null ? new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format($F{uncoveringDate}) : "-") + "</u>"]]></textFieldExpression>
 				</textField>
 				<frame>
 					<reportElement x="0" y="380" width="555" height="15" uuid="73d1579f-6b56-49d7-a74d-d183ffd69f79"/>
@@ -800,24 +803,24 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 				<frame>
 					<reportElement x="0" y="395" width="555" height="15" uuid="5cf77f2c-7f08-49f0-98fa-d94de3e6b052"/>
 					<staticText>
-						<reportElement x="0" y="0" width="318" height="15" uuid="a1d1296a-9380-4bec-8b9e-00b85828c6ba"/>
+						<reportElement x="0" y="0" width="427" height="15" uuid="a1d1296a-9380-4bec-8b9e-00b85828c6ba"/>
 						<textElement>
 							<font size="11"/>
 						</textElement>
 						<text><![CDATA[Présence de plaque de prévention des risques de traitements :]]></text>
 					</staticText>
 					<rectangle>
-						<reportElement x="351" y="0" width="15" height="15" uuid="d5c982d7-69f0-45a2-9261-b68457afea1b"/>
+						<reportElement x="442" y="0" width="15" height="15" uuid="d5c982d7-69f0-45a2-9261-b68457afea1b"/>
 					</rectangle>
 					<staticText>
-						<reportElement x="371" y="0" width="21" height="15" uuid="37282acc-e92f-405f-b946-bd48ea4011bb"/>
+						<reportElement x="461" y="0" width="21" height="15" uuid="37282acc-e92f-405f-b946-bd48ea4011bb"/>
 						<textElement>
 							<font size="11"/>
 						</textElement>
 						<text><![CDATA[oui]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="351" y="0" width="15" height="15" uuid="c845ce63-a2c2-4fea-9d27-2984ff9da790">
+						<reportElement x="442" y="0" width="15" height="15" uuid="c845ce63-a2c2-4fea-9d27-2984ff9da790">
 							<printWhenExpression><![CDATA[$F{preventionPlaquePresent}]]></printWhenExpression>
 						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -826,17 +829,17 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						<text><![CDATA[X]]></text>
 					</staticText>
 					<rectangle>
-						<reportElement x="453" y="0" width="15" height="15" uuid="2442431e-7295-45d7-b77a-33239db7f622"/>
+						<reportElement x="509" y="0" width="15" height="15" uuid="2442431e-7295-45d7-b77a-33239db7f622"/>
 					</rectangle>
 					<staticText>
-						<reportElement x="473" y="0" width="51" height="15" uuid="edf975bf-5033-40a6-bf81-6582ce57961f"/>
+						<reportElement x="529" y="0" width="26" height="15" uuid="edf975bf-5033-40a6-bf81-6582ce57961f"/>
 						<textElement>
 							<font size="11"/>
 						</textElement>
 						<text><![CDATA[non]]></text>
 					</staticText>
 					<staticText>
-						<reportElement x="453" y="0" width="15" height="15" uuid="71578cff-3a4c-45f7-b12e-f50dd231adcf">
+						<reportElement x="509" y="0" width="15" height="15" uuid="71578cff-3a4c-45f7-b12e-f50dd231adcf">
 							<printWhenExpression><![CDATA[!$F{preventionPlaquePresent}]]></printWhenExpression>
 						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -850,7 +853,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Nature de la sécurité du personnel : <u>" + $F{staffSecurityNature} + "</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Nature de la sécurité du personnel : <u>" + ($F{staffSecurityNature} != null ? $F{staffSecurityNature} : "-") + "</u>"]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="0" y="425" width="194" height="15" uuid="36642b73-d858-4f18-8584-7cd0212605e7"/>
@@ -958,36 +961,36 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 					</staticText>
 				</frame>
 				<textField>
-					<reportElement x="0" y="470" width="555" height="45" uuid="efb069e9-4ec0-4985-a6b4-bc212dfac348"/>
+					<reportElement x="0" y="470" width="555" height="40" uuid="efb069e9-4ec0-4985-a6b4-bc212dfac348"/>
 					<textElement markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Observations générales : " + $F{generalObservations}]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Observations générales : " + ($F{generalObservations} != null ? $F{generalObservations} : "-")]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="355" y="510" width="200" height="15" uuid="34e3f0d6-4450-45c0-9d7a-06ad85f151f3"/>
+					<reportElement x="0" y="510" width="555" height="15" uuid="34e3f0d6-4450-45c0-9d7a-06ad85f151f3"/>
 					<textElement textAlignment="Right" markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["A <u>" + $F{decisionPlace} + "</u> le <u>" + new java.text.SimpleDateFormat("EEEEE dd MMMMM yyyy").format($F{decisionDate}) + "</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["A <u>" + ($F{decisionPlace} != null ? $F{decisionPlace} : "-") + "</u> le <u>" + ($F{decisionDate} != null ? new java.text.SimpleDateFormat("EEEEE dd MMMMM yyyy").format($F{decisionDate}) : "-") + "</u>"]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="2" y="530" width="150" height="30" uuid="c912c15e-dfef-40d0-8848-6180bee498d3"/>
-					<textElement textAlignment="Center">
+					<reportElement x="0" y="530" width="150" height="30" uuid="c912c15e-dfef-40d0-8848-6180bee498d3"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="11" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Société traitante, l'oprateur ou son représentant]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="173" y="530" width="140" height="15" uuid="b5bf227d-03f3-47de-96b8-98bbd87ef93b"/>
-					<textElement>
+					<reportElement x="237" y="530" width="80" height="30" uuid="b5bf227d-03f3-47de-96b8-98bbd87ef93b"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="11" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Le Service Phytosanitaire]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="369" y="530" width="180" height="15" uuid="4f64a78f-1e10-4f9c-9d66-bd577fc1acdb"/>
-					<textElement>
+					<reportElement x="433" y="530" width="122" height="30" uuid="4f64a78f-1e10-4f9c-9d66-bd577fc1acdb"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="11" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Agents chargés de l'inspection]]></text>

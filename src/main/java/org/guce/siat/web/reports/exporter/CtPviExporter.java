@@ -1,6 +1,7 @@
 package org.guce.siat.web.reports.exporter;
 
 import com.google.common.base.Objects;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,9 +17,13 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
+import org.guce.siat.common.model.File;
 import org.guce.siat.common.model.FileFieldValue;
+import org.guce.siat.common.model.FileItem;
+import org.guce.siat.common.model.FileItemFieldValue;
 import org.guce.siat.core.ct.model.InspectionController;
 import org.guce.siat.core.ct.model.InspectionReport;
+import org.guce.siat.web.ct.controller.util.Utils;
 import static org.guce.siat.web.reports.exporter.ReportCommand.IMAGES_PATH;
 import org.guce.siat.web.reports.vo.CtCctControllerDataVo;
 import org.guce.siat.web.reports.vo.CtCctDataVo;
@@ -33,6 +38,7 @@ public class CtPviExporter extends AbstractReportInvoker {
      * The inspection report.
      */
     private final InspectionReport inspectionReport;
+    private final File file;
     protected static final String LOCAL_BUNDLE_NAME = "org.guce.siat.messages.locale";
     private static final String CONSTAT_BUNDLE_TRUE = "constatBundleTrue";
     private static final String CONSTAT_BUNDLE_FALSE = "constatBundleFalse";
@@ -40,6 +46,7 @@ public class CtPviExporter extends AbstractReportInvoker {
     public CtPviExporter(final InspectionReport inspectionReport) {
         super("CCT_CT_E_PVI", "CCT_CT_E_PVI");
         this.inspectionReport = inspectionReport;
+        this.file = inspectionReport.getItemFlow().getFileItem().getFile();
     }
 
     @Override
@@ -254,19 +261,27 @@ public class CtPviExporter extends AbstractReportInvoker {
                 entryInspectionFindingDataVo.setConditionClimatique(inspectionReport.getConditionClimatique());
                 entryInspectionFindingDataVo.setMesureProtection(inspectionReport.getMesureProtection());
                 entryInspectionFindingDataVo.setObservations(inspectionReport.getObservations());
-                entryInspectionFindingDataVo.setNumeroDecisionPVI(null);
                 entryInspectionFindingDataVo.setArticleReglemente(inspectionReport.getArticleReglemente());
                 entryInspectionFindingDataVo.setExporterName(inspectionReport.getItemFlow().getFileItem().getFile().getClient().getCompanyName());
                 entryInspectionFindingDataVo.setPviCouvertDoc(inspectionReport.isPviCouvertDoc());
-                entryInspectionFindingDataVo.setPviDestination(inspectionReport.getPviDestination());
                 entryInspectionFindingDataVo.setPviDispositionsPrises(inspectionReport.getPviDispositionsPrises());
                 entryInspectionFindingDataVo.setPviNatureArticleInspecte(inspectionReport.getPviNatureArticleInspecte());
                 entryInspectionFindingDataVo.setPviQuantite(inspectionReport.getPviQuantite());
                 entryInspectionFindingDataVo.setPviReference(inspectionReport.getItemFlow().getFileItem().getFile().getNumeroDossier());
                 entryInspectionFindingDataVo.setPviSituationArticle(inspectionReport.getPviSituationArticle());
+                String typeProduit = null;
                 for (FileFieldValue fileFieldValue : inspectionReport.getItemFlow().getFileItem().getFile().getFileFieldValueList()) {
                     if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("DESTINATAIRE_RAISONSOCIALE")) {
                         entryInspectionFindingDataVo.setRecipient(fileFieldValue.getValue());
+                    }
+                    if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("NUMERO_CCT_CT_E_PVI")) {
+                        entryInspectionFindingDataVo.setNumeroDecisionPVI(fileFieldValue.getValue());
+                    }
+                    if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("TYPE_PRODUIT_CODE")) {
+                        typeProduit = fileFieldValue.getValue();
+                    }
+                    if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("DESTINATAIRE_ADRESSE_PAYSADDRESS_NOMPAYS")) {
+                        entryInspectionFindingDataVo.setPviDestination(fileFieldValue.getValue());
                     }
                     if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("INFORMATIONS_GENERALES_PERMIS_DATE") && !fileFieldValue.getValue().equalsIgnoreCase("-")) {
                         try {
@@ -292,6 +307,33 @@ public class CtPviExporter extends AbstractReportInvoker {
 //						break;
 //					}
                 }
+
+                final List<FileItem> fileItemList = file.getFileItemsList();
+                BigDecimal quantity = BigDecimal.ZERO;
+                String unite = null;
+                for (final FileItem fileItem : fileItemList) {
+                    final String qtyString = fileItem.getQuantity();
+                    if (StringUtils.isNotBlank(qtyString) && Utils.getCacaProductsTypes().contains(typeProduit)) {
+                        quantity = quantity.add(new BigDecimal(qtyString));
+                        unite = "KG";
+                    }
+                    final List<FileItemFieldValue> fileItemFieldValueList = fileItem.getFileItemFieldValueList();
+                    for (final FileItemFieldValue fileItemFieldValue : fileItemFieldValueList) {
+                        switch (fileItemFieldValue.getFileItemField().getCode()) {
+                            case "VOLUME":
+                                final String volString = fileItemFieldValue.getValue();
+                                if (StringUtils.isNotBlank(volString) && Utils.getWoodProductsTypes().contains(typeProduit)) {
+                                    quantity = quantity.add(new BigDecimal(volString));
+                                    unite = "M3";
+                                }
+                                break;
+                            case "NOM_COMMERCIAL":
+                                entryInspectionFindingDataVo.setPviNatureArticleInspecte(fileItemFieldValue.getValue());
+                                break;
+                        }
+                    }
+                }
+                entryInspectionFindingDataVo.setPviQuantite(quantity.toString() + " " + unite);
             }
         } catch (Exception e) {
             Logger.getLogger(CtPviExporter.class.getName()).log(Level.SEVERE, "Problem occured", e);

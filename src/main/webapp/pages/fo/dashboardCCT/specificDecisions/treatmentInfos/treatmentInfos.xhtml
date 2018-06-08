@@ -4,7 +4,7 @@
     <p:messages autoUpdate="true" />
 
     <h:panelGrid columns="2" rendered="#{!fileItemCctDetailController.phytoTransitFile}">
-        <p:outputLabel for="delivrableType" value="#{bundle['delivrableType']} *" />
+        <p:outputLabel for="delivrableType" value="#{bundle['delivrableType']}" />
         <p:selectOneMenu id="delivrableType" value="#{fileItemCctDetailController.treatmentInfos.delivrableType}"
                          required="true" requiredMessage="#{bundle['delivrableType']} #{bundle['required']}">
             <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
@@ -28,7 +28,7 @@
 
         <p:panel rendered="#{fileItemCctDetailController.treatmentInfos.delivrableType eq 'CQ_CT'}">
             <h:panelGrid columns="2">
-                <p:outputLabel for="commodityCaterory" value="#{bundle['commodityCaterory']} *" />
+                <p:outputLabel for="commodityCaterory" value="#{bundle['commodityCaterory']}" />
                 <p:selectOneMenu id="commodityCaterory" value="#{fileItemCctDetailController.treatmentInfos.commodityCaterory}"
                                  required="true"
                                  requiredMessage="#{bundle['commodityCaterory']} #{bundle['required']}">
@@ -39,19 +39,19 @@
                     <f:selectItem itemValue="IV" itemLabel="IV" />
                 </p:selectOneMenu>
 
-                <h:outputLabel for="TOValidity" value="#{bundle['validity']} *" />
+                <h:outputLabel for="TOValidity" value="#{bundle['validity']}" />
                 <p:inputText id="TOValidity" title="#{bundle['validity']}"
                              value="#{fileItemCctDetailController.treatmentInfos.validity}"
                              required="true"
                              requiredMessage="#{bundle['validity']} #{bundle['required']}" />
 
-                <h:outputLabel for="TOPackagerOnPackaging" value="#{bundle['TOPackagerOnPackaging']} *" />
+                <h:outputLabel for="TOPackagerOnPackaging" value="#{bundle['TOPackagerOnPackaging']}" />
                 <p:inputText id="TOPackagerOnPackaging" title="#{bundle['TOPackagerOnPackaging']}"
                              value="#{fileItemCctDetailController.treatmentInfos.packagerOnPackaging}"
                              required="false"
                              requiredMessage="#{bundle['TOPackagerOnPackaging']} #{bundle['required']}" />
 
-                <h:outputLabel for="TOConservationTemp" value="#{bundle['TOConservationTemp']} *" />
+                <h:outputLabel for="TOConservationTemp" value="#{bundle['TOConservationTemp']}" />
                 <p:inputText id="TOConservationTemp" title="#{bundle['TOConservationTemp']}"
                              value="#{fileItemCctDetailController.treatmentInfos.conservationTemperature}"
                              required="false"
@@ -62,31 +62,31 @@
         <!-- TreatmentInfos -->
         <p:panel header="#{bundle['TreatmentInfos']}" rendered="#{fileItemCctDetailController.treatmentInfos.delivrableType eq 'CCT_CT_E' or fileItemCctDetailController.phytoTransitFile}">
             <h:panelGrid columns="2">
-                <h:outputLabel for="TOTypeOfTreatment" value="#{bundle['TypeOfTreatment']} *" />
+                <h:outputLabel for="TOTypeOfTreatment" value="#{bundle['TypeOfTreatment']}" />
                 <p:inputText id="TOTypeOfTreatment" title="#{bundle['TypeOfTreatment']}"
                              value="#{fileItemCctDetailController.treatmentInfos.typeOfTreatment}"
                              required="true"
                              requiredMessage="#{bundle['TypeOfTreatment']} #{bundle['required']}" />
 
-                <h:outputLabel for="TOduration" value="#{bundle['duration']} *" />
+                <h:outputLabel for="TOduration" value="#{bundle['duration']}" />
                 <p:inputText id="TOduration" title="#{bundle['duration']}"
                              value="#{fileItemCctDetailController.treatmentInfos.duration}"
                              required="true"
                              requiredMessage="#{bundle['duration']} #{bundle['required']}" />
 
-                <h:outputLabel for="TOtemperature" value="#{bundle['temperature']} *" />
+                <h:outputLabel for="TOtemperature" value="#{bundle['temperature']}" />
                 <p:inputText id="TOtemperature" title="#{bundle['temperature']}"
                              value="#{fileItemCctDetailController.treatmentInfos.temperature}"
                              required="true"
                              requiredMessage="#{bundle['temperature']} #{bundle['required']}" />
 
-                <h:outputLabel for="TOtreatmentsCarriedOut" value="#{bundle['treatmentsCarriedOut']} *" />
+                <h:outputLabel for="TOtreatmentsCarriedOut" value="#{bundle['treatmentsCarriedOut']}" />
                 <p:inputText id="TOtreatmentsCarriedOut" title="#{bundle['treatmentsCarriedOut']}"
                              value="#{fileItemCctDetailController.treatmentInfos.treatmentsCarriedOut}"
                              required="true"
                              requiredMessage="#{bundle['treatmentsCarriedOut']} #{bundle['required']}" />
 
-                <h:outputLabel for="TOchemicalProduct" value="#{bundle['chemicalProduct']} *" />
+                <h:outputLabel for="TOchemicalProduct" value="#{bundle['chemicalProduct']}" />
                 <p:inputTextarea id="TOchemicalProduct" title="#{bundle['chemicalProduct']}"
                                  value="#{fileItemCctDetailController.treatmentInfos.chemicalProduct}"
                                  required="true" maxlength="255"
@@ -94,7 +94,7 @@
                     <f:validateLength minimum="1" maximum="255" />
                 </p:inputTextarea>
 
-                <h:outputLabel for="TOconcentration" value="#{bundle['concentration']} *" />
+                <h:outputLabel for="TOconcentration" value="#{bundle['concentration']}" />
                 <p:inputTextarea id="TOconcentration" title="#{bundle['concentration']}"
                                  value="#{fileItemCctDetailController.treatmentInfos.concentration}"
                                  required="true" maxlength="255"

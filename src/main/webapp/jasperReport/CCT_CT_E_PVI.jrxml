@@ -2,8 +2,10 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PV_INSPECTION_PHYTOSANITAIRE" pageWidth="650" pageHeight="1000" columnWidth="610" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="815c4d67-1776-454d-b1df-c04d5a7d281b">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="85"/>
-	<parameter name="MINADER_LOGO" class="java.lang.String"/>
+	<property name="ireport.y" value="460"/>
+	<parameter name="MINADER_LOGO" class="java.lang.String">
+		<defaultValueExpression><![CDATA["C:\\Users\\tadzotsa\\NetBeansProjects\\siat-ct-web\\src\\main\\webapp\\images\\reports\\minader.jpg"]]></defaultValueExpression>
+	</parameter>
 	<field name="observations" class="java.lang.String"/>
 	<field name="signatairePVIPhyto" class="java.lang.String"/>
 	<field name="typeTraitement" class="java.lang.String"/>
@@ -484,12 +486,12 @@ DEPARTEMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCT
 				</textElement>
 				<text><![CDATA[X]]></text>
 			</staticText>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="0" width="610" height="20" uuid="6bba3321-ee65-471b-af5f-11648b4c18df"/>
 				<textElement verticalAlignment="Middle" markup="html">
 					<font size="11" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Je soussigné <u>" + $F{signatairePVIPhyto} != null ? $F{signatairePVIPhyto} : "-" + "</u>"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Je soussigné <u>" + ($F{signatairePVIPhyto} != null ? $F{signatairePVIPhyto} : "-") + "</u>"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="75" width="610" height="15" uuid="9f262fa2-3cbb-4afa-8d0c-6c9d0903a5e7"/>
@@ -498,33 +500,33 @@ DEPARTEMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCT
 				</textElement>
 				<textFieldExpression><![CDATA["Certifie avoir inspecté le − du − à − au −"]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="95" width="610" height="15" uuid="697fafc4-806f-4dcf-88d6-18017410162a"/>
 				<textElement verticalAlignment="Middle" markup="html">
 					<font size="11" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["L'article règlementé <u>" + $F{articleReglemente} != null ? $F{articleReglemente} : "-" + "</u>"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["L'article règlementé <u>" + ($F{articleReglemente} != null ? $F{articleReglemente} : "-") + "</u>"]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="115" width="610" height="15" uuid="d76e0513-b71e-46be-ae82-d043fbcf4b74"/>
 				<textElement verticalAlignment="Middle" markup="html">
 					<font size="11" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Propriétaire : <u>" + $F{exporterName} != null ? $F{exporterName} : "-" + "</u>"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Propriétaire : <u>" + ($F{exporterName} != null ? $F{exporterName} : "-") + "</u>"]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="135" width="610" height="15" uuid="19842eda-0917-43f7-9b3f-664a3f6c51eb"/>
 				<textElement verticalAlignment="Middle" markup="html">
 					<font size="11" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Destination / Utilisation : <u>" + $F{pviDestination} != null ? $F{pviDestination} : "-" + "</u>"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Destination / Utilisation : <u>" + ($F{pviDestination} != null ? $F{pviDestination} : "-") + "</u>"]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="155" width="610" height="15" uuid="7e9d2669-5408-4a96-b25e-5b349e759015"/>
 				<textElement verticalAlignment="Middle" markup="html">
 					<font size="11" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Situation de l'article : <u>" + $F{pviSituationArticle} != null ? $F{pviSituationArticle} : "-" + "</u>"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Situation de l'article : <u>" + ($F{pviSituationArticle} != null ? $F{pviSituationArticle} : "-") + "</u>"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="2" y="175" width="610" height="15" uuid="5498edb5-104d-424c-a5b2-67a85eb9089c"/>
@@ -533,33 +535,33 @@ DEPARTEMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCT
 				</textElement>
 				<textFieldExpression><![CDATA["Couvert par la documentation : <u>" + ($F{pviCouvertDoc} ? "oui" : "non") + "</u>"]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="195" width="610" height="15" uuid="340033f1-1c75-47e3-bbac-0b3f3a421ac4"/>
 				<textElement verticalAlignment="Middle" markup="html">
 					<font size="11" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Référence : <u>" + $F{pviReference} != null ? $F{pviReference}  : "-" + "</u>"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Référence : <u>" + ($F{pviReference} != null ? $F{pviReference}  : "-") + "</u>"]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="215" width="610" height="15" uuid="1b5856a6-43ae-4358-b9cf-4dc04f6dab55"/>
 				<textElement verticalAlignment="Middle" markup="html">
 					<font size="11" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Nature de l'article inspecté : <u>" + $F{pviNatureArticleInspecte} != null ? $F{pviNatureArticleInspecte} : "-" + "</u>"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Nature de l'article inspecté : <u>" + ($F{pviNatureArticleInspecte} != null ? $F{pviNatureArticleInspecte} : "-") + "</u>"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="235" width="610" height="15" uuid="10fa58d0-606d-4d17-92f8-fd3013a2dcb5"/>
 				<textElement verticalAlignment="Middle" markup="html">
 					<font size="11" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Quantié, Nombre ou Dimension : <u>" + $F{pviQuantite} != null ? $F{pviQuantite} : "-" + "</u>"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Quantié, Nombre ou Dimension : <u>" + ($F{pviQuantite} != null ? $F{pviQuantite} : "-") + "</u>"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="255" width="610" height="15" uuid="b06f8917-9ea6-4d54-9a7c-4d061cfb13cc"/>
 				<textElement verticalAlignment="Middle" markup="html">
 					<font size="11" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Dispositions prises : <u>" + $F{pviDispositionsPrises} != null ? $F{pviDispositionsPrises} : "-" + "</u>"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Dispositions prises : <u>" + ($F{pviDispositionsPrises} != null ? $F{pviDispositionsPrises} : "-") + "</u>"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="330" width="610" height="15" uuid="23b20841-9f2b-425b-95a8-194f24d9caf0"/>

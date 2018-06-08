@@ -1,19 +1,19 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core">
 
-	<h:form id="productDetailsForm">
-		<c:forEach var="fileItemFieldGroupDto" items="#{fileItemCctDetailController.fileItemFieldGroupDtos}">
-			<p:fieldset legend="#{facesContext.viewRoot.locale eq 'en' ? fileItemFieldGroupDto.labelEn : fileItemFieldGroupDto.labelFr}"
-				rendered="#{fileItemCctDetailController.showProductDetailsForm}">
-				<h:panelGrid columns="2" cellspacing="6" styleClass="informationPanelGrid tableGeneralInfo">
-					<c:forEach var="value" items="#{fileItemFieldGroupDto.fieldValues}">
-						<h:panelGroup>
-							<h:outputLabel value="#{facesContext.viewRoot.locale eq 'en' ? value.fileItemField.labelEn : value.fileItemField.labelFr}" />
-						</h:panelGroup>
-						<h:outputLabel value="#{value.value}" />
-					</c:forEach>
-				</h:panelGrid>
-			</p:fieldset>
-		</c:forEach>
-	</h:form>
+    <h:form id="productDetailsForm">
+        <c:forEach var="fileItemFieldGroupDto" items="#{fileItemCctDetailController.fileItemFieldGroupDtos}">
+            <p:fieldset legend="#{facesContext.viewRoot.locale eq 'en' ? fileItemFieldGroupDto.labelEn : fileItemFieldGroupDto.labelFr}"
+                        rendered="#{fileItemCctDetailController.showProductDetailsForm}">
+                <h:panelGrid columns="2" cellspacing="6" styleClass="informationPanelGrid tableGeneralInfo">
+                    <c:forEach var="value" items="#{fileItemFieldGroupDto.fieldValues}">
+                        <h:panelGroup>
+                            <h:outputLabel value="#{facesContext.viewRoot.locale eq 'en' ? value.fileItemField.labelEn : value.fileItemField.labelFr}" />
+                        </h:panelGroup>
+                        <h:outputLabel value="#{value.value}" />
+                    </c:forEach>
+                </h:panelGrid>
+            </p:fieldset>
+        </c:forEach>
+    </h:form>
 </ui:composition>

@@ -1,5 +1,6 @@
 package org.guce.siat.web.reports.exporter;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -83,7 +84,6 @@ public class CtCctCqeExporter extends AbstractReportInvoker {
         fileVo.setEguceNumber(file.getNumeroDossier());
         fileVo.setPackager(treatmentInfos.getPackagerOnPackaging());
         fileVo.setPreservationTemperature(treatmentInfos.getConservationTemperature());
-        fileVo.setTotalQuantity(null);
         fileVo.setValidity(treatmentInfos.getValidity());
         fileVo.setProductCategory(treatmentInfos.getCommodityCaterory());
 
@@ -129,18 +129,21 @@ public class CtCctCqeExporter extends AbstractReportInvoker {
         }
 
         final List<FileItem> fileItemList = file.getFileItemsList();
-        if (CollectionUtils.isEmpty(fileItemList)) {
-            return null;
-        }
 
         final List<CtCctCqeFileItemVo> fileItemVos = new ArrayList<>();
         CtCctCqeFileItemVo fileItemVo;
         List<FileItemFieldValue> fileItemFieldValueList;
+        BigDecimal totalQuantity = BigDecimal.ZERO;
+        String measure = " KG";
         for (final FileItem fileItem : fileItemList) {
             fileItemVo = new CtCctCqeFileItemVo();
 
             fileItemVo.setCategory(fileVo.getProductCategory());
-            fileItemVo.setNetWeight(fileItem.getQuantity());
+            final String quantity = fileItem.getQuantity();
+            if (StringUtils.isNotBlank(quantity) && Utils.getCacaProductsTypes().contains(typeProduit)) {
+                fileItemVo.setNetWeight(fileItem.getQuantity());
+                totalQuantity = totalQuantity.add(new BigDecimal(quantity));
+            }
             fileItemVo.setPacking(emballage);
 
             fileItemFieldValueList = fileItem.getFileItemFieldValueList();
@@ -154,8 +157,11 @@ public class CtCctCqeExporter extends AbstractReportInvoker {
                         fileItemVo.setItemNature(fileItemFieldValue.getValue());
                         break;
                     case "VOLUME":
-                        if (StringUtils.isNotBlank(fileItemFieldValue.getValue())) {
-                            fileItemVo.setNetWeight(fileItemFieldValue.getValue() + " (M3)");
+                        final String volume = fileItemFieldValue.getValue();
+                        if (StringUtils.isNotBlank(volume) && Utils.getWoodProductsTypes().contains(typeProduit)) {
+                            fileItemVo.setNetWeight(volume + " (M3)");
+                            totalQuantity = totalQuantity.add(new BigDecimal(volume));
+                            measure = " M3";
                         }
                         break;
                     case "POIDS_BRUT":
@@ -166,6 +172,7 @@ public class CtCctCqeExporter extends AbstractReportInvoker {
 
             fileItemVos.add(fileItemVo);
         }
+        fileVo.setTotalQuantity(totalQuantity.toString() + measure);
         fileVo.setFileItemList(fileItemVos);
 
         return new JRBeanCollectionDataSource(Collections.singleton(fileVo));

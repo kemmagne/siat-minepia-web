@@ -140,11 +140,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                         ctCctCpEFileVo.setTransit("2".equals(fileFieldValue.getValue()));
                         break;
                     case "TYPE_PRODUIT_CODE":
-                        if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
-                            typeProduit = fileFieldValue.getValue();
-                        } else {
-                            typeProduit = "CC";
-                        }
+                        typeProduit = fileFieldValue.getValue();
                         emballage = Utils.getProductTypePackaging().get(typeProduit);
                         break;
                 }
@@ -173,14 +169,15 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
         final StringBuilder commoditiesBuilder = new StringBuilder();
         BigDecimal netWeight = BigDecimal.ZERO;
         BigDecimal grossWeight = BigDecimal.ZERO;
-        String mesure = "KG";
+        String mesure = null;
 
         if (CollectionUtils.isNotEmpty(fileItemList)) {
             for (final FileItem fileItem : fileItemList) {
 
                 final String quantity = fileItem.getQuantity();
-                if (StringUtils.isNotBlank(quantity)) {
+                if (StringUtils.isNotBlank(quantity) && Utils.getCacaProductsTypes().contains(typeProduit)) {
                     netWeight = netWeight.add(new BigDecimal(quantity));
+                    mesure = "KG";
                 }
 
                 final CtCctCpEFileItemVo fileItemVo = new CtCctCpEFileItemVo();
@@ -209,8 +206,10 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                                 mesure = fileItemFieldValue.getValue();
                                 break;
                             case "VOLUME":
-                                if (StringUtils.isNotBlank(fileItemFieldValue.getValue())) {
-                                    netWeight = netWeight.add(new BigDecimal(fileItemFieldValue.getValue()));
+                                final String volString = fileItemFieldValue.getValue();
+                                if (StringUtils.isNotBlank(volString) && Utils.getWoodProductsTypes().contains(typeProduit)) {
+                                    netWeight = netWeight.add(new BigDecimal(volString));
+                                    mesure = "M3";
                                 }
                                 break;
                             case "POIDS_BRUT":
@@ -220,6 +219,10 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                                 break;
                         }
                     }
+                }
+
+                if (!commoditiesBuilder.toString().endsWith("<br/>")) {
+                    commoditiesBuilder.append("<br/>");
                 }
 
                 fileItemVos.add(fileItemVo);
@@ -232,11 +235,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                 builder.append("VN : ");
             }
             builder.append(netWeight);
-            if (Utils.getCacaProductsTypes().contains(typeProduit)) {
-                builder.append(" ").append(mesure);
-            } else {
-                builder.append(" M3");
-            }
+            builder.append(" ").append(mesure);
             builder.append("<br/>").append("PB : ").append(grossWeight.toString()).append(" KG");
             ctCctCpEFileVo.setQuantities(builder.toString());
         }
@@ -261,6 +260,15 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
      */
     public File getFile() {
         return file;
+    }
+
+    public static void main1(String[] args) {
+        StringBuilder commoditiesBuilder = new StringBuilder();
+        if (!commoditiesBuilder.toString().endsWith("<br/>")) {
+            commoditiesBuilder.append("<br/>");
+        }
+        System.out.println(commoditiesBuilder);
+        System.out.println(commoditiesBuilder.substring(0, commoditiesBuilder.lastIndexOf("<br/>")));
     }
 
 }

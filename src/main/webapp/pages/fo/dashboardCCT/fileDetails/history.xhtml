@@ -101,7 +101,7 @@
                                 </p:outputPanel>
                             </h:panelGroup>
 
-                            <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR}">
+                            <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR and !fileItemCctDetailController.isPviReadyForSignature(fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.itemFlow.flow)}">
                                 <ui:include src="../specificDecisions/inspectionReport/inspectionReportHistory.xhtml" />
                             </h:panelGroup>
 
@@ -149,7 +149,3 @@
     </p:dialog>
 
 </ui:composition>
-
-
-
-

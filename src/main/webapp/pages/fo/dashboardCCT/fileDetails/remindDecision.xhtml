@@ -25,7 +25,7 @@
                     </ui:repeat>
                 </h:panelGroup>
 
-                <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR}">
+                <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR and !fileItemCctDetailController.isPviReadyForSignature(fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.itemFlow.flow)}">
                     <ui:include src="../specificDecisions/inspectionReport/inspectionReportRemindDecision.xhtml" />
                 </h:panelGroup>
 
@@ -68,18 +68,3 @@
     </h:form>
 
 </ui:composition>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

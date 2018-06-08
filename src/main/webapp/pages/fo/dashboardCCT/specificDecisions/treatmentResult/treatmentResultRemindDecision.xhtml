@@ -22,11 +22,11 @@
 
     </p:panelGrid>
 
-    <h:outputLabel value="#{bundle['TreatmentResultDetails_TreatmentType']} : " styleClass="analyseResult" />
+    <h:outputLabel rendered="false" value="#{bundle['TreatmentResultDetails_TreatmentType']} : " styleClass="analyseResult" />
 
     <br />
 
-    <p:tabView var="item" scrollable="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.treatmentOrder.treatmentPartsList}">
+    <p:tabView rendered="false" var="item" scrollable="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.treatmentOrder.treatmentPartsList}">
 
         <p:tab title="#{facesContext.viewRoot.locale eq 'en' ? item.treatmentType.labelEn : item.treatmentType.labelFr}">
 
@@ -46,156 +46,155 @@
 
     </p:tabView>
 
-    <p:tabView scrollable="true" prependId="false" id="tabViewConstatTrRd">
+    <p:panel rendered="#{fileItemCctDetailController.checkMinaderMinistry and fileItemCctDetailController.currentFile.fileType.code eq 'CCT_CT_E_ATP'}">
 
-        <p:tab rendered="#{fileItemCctDetailController.checkMinaderMinistry}" title="#{bundle['AttestationTraitement']}" titletip="#{bundle['AttestationTraitement']}">
+        <h:panelGrid columns="2">
 
-            <h:panelGrid columns="2">
+            <h:outputLabel value="#{bundle['TreatmentType']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.treatmentType}" />
 
-                <h:outputLabel value="#{bundle['NumeroAttestation']}" />
-                <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.attestationNumber}" />
+            <h:outputLabel value="#{bundle['HomologationNumber']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.homologationNumber}" />
 
-                <h:outputLabel value="#{bundle['TreatmentType']}" />
-                <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.treatmentType}" />
+            <h:outputLabel value="Concentration" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.atConcentration}" />
 
-                <h:outputLabel value="#{bundle['HomologationNumber']}" />
-                <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.homologationNumber}" />
+            <h:outputLabel value="#{bundle['TreatmentDose']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.dosage}" />
 
-                <h:outputLabel value="Concentration" />
-                <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.atConcentration}" />
+            <h:outputLabel value="#{bundle['SuperviseurTraitement']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.supervisor}" />
 
-                <h:outputLabel value="#{bundle['TreatmentDose']}" />
-                <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.dosage}" />
+            <h:outputLabel value="#{bundle['TreatmentOrder_TreatmentCompanyLabel']}" />
+            <p:selectOneMenu value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.treatmentCompany}" disabled="true">
+                <f:selectItems value="#{fileItemCctDetailController.treatmentCompanys}" var="lab" itemValue="#{lab}"
+                               itemLabel="#{facesContext.viewRoot.locale eq 'en' ? lab.labelEn : lab.labelFr}" />
+                <f:converter binding="#{treatmentCompanyConverter}" />
+            </p:selectOneMenu>
 
-            </h:panelGrid>
-        </p:tab>
+        </h:panelGrid>
 
-        <p:tab rendered="#{false and fileItemCctDetailController.checkMinaderMinistry}" title="#{bundle['FicheSupervisionTraitPhyto']}" titletip="#{bundle['FicheSupervisionTraitPhyto']}">
+    </p:panel>
 
-            <h:panelGrid columns="2">
+    <p:panel rendered="#{fileItemCctDetailController.checkMinaderMinistry and fileItemCctDetailController.currentFile.fileType.code eq 'CCT_CT_E_FSTP'}">
 
-                <h:outputLabel value="#{bundle['NumeroFiche']}" />
-                <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.sheetNumber}" />
+        <h:panelGrid columns="2">
 
-                <h:outputLabel value="#{bundle['TreatmentMode']}" />
-                <h:panelGroup>
-                    <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.treatmentMode}">
-                        <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-                        <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}" var="tt" itemLabel="#{bundle[tt.label]}" itemValue="#{tt.value}"/>
-                    </p:selectOneMenu>
-                </h:panelGroup>
+            <h:outputLabel value="#{bundle['TreatmentMode']}" />
+            <h:panelGroup>
+                <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.treatmentMode}">
+                    <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+                    <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}" var="tt" itemLabel="#{bundle[tt.label]}" itemValue="#{tt.value}"/>
+                </p:selectOneMenu>
+            </h:panelGroup>
 
-                <h:outputLabel value="#{bundle['OtherTreatmentMode']}" />
-                <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.otherTreatmentMode}" />
+            <h:outputLabel value="#{bundle['OtherTreatmentMode']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.otherTreatmentMode}" />
 
-                <h:outputLabel value="#{bundle['ProduitUtilise']}" />
-                <h:panelGroup>
-                    <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.productUsed}">
-                        <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-                        <f:selectItems value="#{fileItemCctDetailController.trProductsUsed}" var="pu" itemLabel="#{bundle[pu.label]}" itemValue="#{pu.value}" />
-                    </p:selectOneMenu>
-                </h:panelGroup>
+            <h:outputLabel value="#{bundle['ProduitUtilise']}" />
+            <h:panelGroup>
+                <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.productUsed}">
+                    <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+                    <f:selectItems value="#{fileItemCctDetailController.trProductsUsed}" var="pu" itemLabel="#{bundle[pu.label]}" itemValue="#{pu.value}" />
+                </p:selectOneMenu>
+            </h:panelGroup>
 
-                <h:outputLabel value="#{bundle['Autre']} #{bundle['ProduitUtilise']}" />
-                <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.otherProductUsed}" />
+            <h:outputLabel value="#{bundle['Autre']} #{bundle['ProduitUtilise']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.otherProductUsed}" />
 
-                <h:outputLabel value="#{bundle['NomCommercial']}" />
-                <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.treatmentProductName}" />
+            <h:outputLabel value="#{bundle['NomCommercial']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.treatmentProductName}" />
 
-                <h:outputLabel value="MatiereActive" />
-                <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.activeIngredient}" />
+            <h:outputLabel value="#{bundle['MatiereActive']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.activeIngredient}" />
 
-                <h:outputLabel value="Concentration" />
-                <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.tsfConcentration}" />
+            <h:outputLabel value="Concentration" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.tsfConcentration}" />
 
-                <h:outputLabel value="#{bundle['TreatmentDose']}" />
-                <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.treatmentDose}" />
+            <h:outputLabel value="#{bundle['TreatmentDose']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.treatmentDose}" />
 
-                <h:outputLabel value="Antidote" for="Antidote" />
-                <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.antidote}" />
+            <h:outputLabel value="Antidote" for="Antidote" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.antidote}" />
 
-                <h:outputLabel value="#{bundle['DureeTraitement']}" />
-                <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.treatmentDuration}" />
+            <h:outputLabel value="#{bundle['DureeTraitement']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.treatmentDuration}" />
 
-                <h:outputLabel value="#{bundle['HeureTraitement']}" />
-                <h:panelGroup>
-                    <p:calendar readonly="true" navigator="true" readonlyInput="true" showOn="button"
-                                value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.treatmentTime}" timeOnly="true" pattern="HH:mm" />
-                </h:panelGroup>
+            <h:outputLabel value="#{bundle['HeureTraitement']}" />
+            <p:calendar disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.treatmentTime}" pattern="HH:mm" />
 
-                <h:outputLabel value="#{bundle['EnvironnementStockage']}" />
-                <h:panelGroup>
-                    <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.treatmentEnvironment}">
-                        <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-                        <f:selectItems value="#{fileItemCctDetailController.trTreatmentEnvironments}" var="se" itemLabel="#{bundle[se.label]}" itemValue="#{se.value}" />
-                    </p:selectOneMenu>
-                </h:panelGroup>
+            <h:outputLabel value="#{bundle['EnvironnementStockage']}" />
+            <h:panelGroup>
+                <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.treatmentEnvironment}">
+                    <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+                    <f:selectItems value="#{fileItemCctDetailController.trTreatmentEnvironments}" var="se" itemLabel="#{bundle[se.label]}" itemValue="#{se.value}" />
+                </p:selectOneMenu>
+            </h:panelGroup>
 
-                <h:outputLabel value="#{bundle['Autre']} #{bundle['EnvironnementStockage']}" />
-                <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.otherTreatmentEnvironment}" />
+            <h:outputLabel value="#{bundle['Autre']} #{bundle['EnvironnementStockage']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.otherTreatmentEnvironment}" />
 
-                <h:outputLabel value="#{bundle['TemperatureOptimale']}" />
-                <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.optimalTemperature}" />
+            <h:outputLabel value="#{bundle['TemperatureOptimale']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.optimalTemperature}" />
 
-                <h:outputLabel value="#{bundle['LieuStockage']}" />
-                <h:panelGroup>
-                    <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.storagePlace}">
-                        <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-                        <f:selectItems value="#{fileItemCctDetailController.trStoragePlaces}" var="sp" itemLabel="#{bundle[sp.label]}" itemValue="#{sp.value}" />
-                    </p:selectOneMenu>
-                </h:panelGroup>
-                <h:outputLabel value="#{bundle['Autre']} #{bundle['LieuStockage']}" />
-                <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.otherStoragePlace}" />
+            <h:outputLabel value="#{bundle['LieuStockage']}" />
+            <h:panelGroup>
+                <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.storagePlace}">
+                    <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+                    <f:selectItems value="#{fileItemCctDetailController.trStoragePlaces}" var="sp" itemLabel="#{bundle[sp.label]}" itemValue="#{sp.value}" />
+                </p:selectOneMenu>
+            </h:panelGroup>
+            <h:outputLabel value="#{bundle['Autre']} #{bundle['LieuStockage']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.otherStoragePlace}" />
 
-                <h:outputLabel value="#{bundle['EtatSanitaireEnvSock']}" />
-                <p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.sanitaryState}" />
+            <h:outputLabel value="#{bundle['EtatSanitaireEnvSock']}" />
+            <p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.sanitaryState}" />
 
-                <h:outputLabel value="#{bundle['Conditionnement']}" />
-                <h:panelGroup>
-                    <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.conditioning}">
-                        <f:selectItems value="#{fileItemCctDetailController.trConditionings}" var="c" itemLabel="#{bundle[c.label]}" itemValue="#{c.value}" />
-                    </p:selectOneMenu>
-                </h:panelGroup>
+            <h:outputLabel value="#{bundle['Conditionnement']}" />
+            <h:panelGroup>
+                <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.conditioning}">
+                    <f:selectItems value="#{fileItemCctDetailController.trConditionings}" var="c" itemLabel="#{bundle[c.label]}" itemValue="#{c.value}" />
+                </p:selectOneMenu>
+            </h:panelGroup>
 
-                <h:outputLabel value="#{bundle['weatherCondition']}" />
-                <h:panelGroup>
-                    <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.weatherCondition}">
-                        <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-                        <f:selectItems value="#{fileItemCctDetailController.trWeatherConditions}" var="wc" itemLabel="#{bundle[wc.label]}" itemValue="#{wc.value}" />
-                    </p:selectOneMenu>
-                </h:panelGroup>
-                <h:outputLabel value="#{bundle['Autre']} #{bundle['weatherCondition']}" />
-                <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.otherWeatherCondition}" />
+            <h:outputLabel value="#{bundle['weatherCondition']}" />
+            <h:panelGroup>
+                <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.weatherCondition}">
+                    <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+                    <f:selectItems value="#{fileItemCctDetailController.trWeatherConditions}" var="wc" itemLabel="#{bundle[wc.label]}" itemValue="#{wc.value}" />
+                </p:selectOneMenu>
+            </h:panelGroup>
+            <h:outputLabel value="#{bundle['Autre']} #{bundle['weatherCondition']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.otherWeatherCondition}" />
 
-                <h:outputLabel value="#{bundle['TreatmentPrevention']}" />
-                <p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.treatmentPrevention}" />
+            <h:outputLabel value="#{bundle['TreatmentPrevention']}" />
+            <p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.treatmentPrevention}" />
 
-                <h:outputLabel value="#{bundle['DateHeureDebachage']}" />
-                <p:calendar readonly="true" navigator="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.uncoveringDate}" showOn="button"
-                            pattern="dd/MM/yyyy HH:mm" readonlyInput="true" />
+            <h:outputLabel value="#{bundle['DateHeureDebachage']}" />
+            <p:calendar disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.uncoveringDate}"
+                        pattern="dd/MM/yyyy HH:mm" />
 
-                <h:outputLabel value="#{bundle['InformationsRiverains']}" />
-                <p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.residentsInformations}" />
+            <h:outputLabel value="#{bundle['InformationsRiverains']}" />
+            <p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.residentsInformations}" />
 
-                <h:outputLabel value="#{bundle['PresencePlaqueProtection']}" />
-                <p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.preventionPlaquePresent}" />
+            <h:outputLabel value="#{bundle['PresencePlaqueProtection']}" />
+            <p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.preventionPlaquePresent}" />
 
-                <h:outputLabel value="#{bundle['NatureSecPersonnel']}" />
-                <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.staffSecurityNature}" />
+            <h:outputLabel value="#{bundle['NatureSecPersonnel']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.staffSecurityNature}" />
 
-                <h:outputLabel value="#{bundle['EquipementsProtection']}" />
-                <h:panelGroup>
-                    <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.protectionEquipements}">
-                        <f:selectItems value="#{fileItemCctDetailController.trProtectionEquipments}" var="pe" itemLabel="#{bundle[pe.label]}" itemValue="#{pe.value}" />
-                    </p:selectOneMenu>
-                </h:panelGroup>
+            <h:outputLabel value="#{bundle['EquipementsProtection']}" />
+            <h:panelGroup>
+                <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.protectionEquipements}">
+                    <f:selectItems value="#{fileItemCctDetailController.trProtectionEquipments}" var="pe" itemLabel="#{bundle[pe.label]}" itemValue="#{pe.value}" />
+                </p:selectOneMenu>
+            </h:panelGroup>
 
-                <h:outputLabel value="#{bundle['ObservationsGenerales']}" />
-                <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.generalObservations}" />
+            <h:outputLabel value="#{bundle['ObservationsGenerales']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.generalObservations}" />
 
-            </h:panelGrid>
-        </p:tab>
-    </p:tabView>
+        </h:panelGrid>
+    </p:panel>
 
     <p:outputPanel rendered="#{false and fileItemCctDetailController.checkMinaderMinistry}">
         <div class="btn-bloc">
@@ -209,14 +208,3 @@
     </p:outputPanel>
 
 </ui:composition>
-
-
-
-
-
-
-
-
-
-
-

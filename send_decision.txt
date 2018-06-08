@@ -1,0 +1,68 @@
+
+//                                            if (getCurrentOrganism().getId() == 111 || getCurrentOrganism().getId() == 28
+//                                                    || getCurrentOrganism().getId() == 3 || getCurrentOrganism().getId() == 209) {
+//                                                if (!(FileTypeCode.CCT_CT_E_PVI.equals(currentFile.getFileType().getCode())
+//                                                        || FileTypeCode.CCT_CT_E_ATP.equals(currentFile.getFileType().getCode())
+//                                                        || FileTypeCode.CCT_CT_E_FSTP.equals(currentFile.getFileType().getCode()))
+//                                                        && getCurrentOrganism().getId() == 3) {
+//                                                    final FileFieldValue typeDemande = fileService.findFileFieldValueByFieldCode(
+//                                                            currentFile, "TYPE_DEMANDE");
+//                                                    if (typeDemande != null) {
+//                                                        if (typeDemande.getValue().equals("IMPORT")
+//                                                                || FileTypeCode.CCT_CT.equals(currentFile.getFileType().getCode())) {
+//                                                            if ("CT_CCT_CP_I.pdf".equals(fileTypeFlowReport.getReportName())) {
+//                                                                fileTypeFlowReports.add(fileTypeFlowReport);
+//                                                                break;
+//                                                            }
+//
+//                                                        } else if (typeDemande.getValue().equals("EXPORT")
+//                                                                || FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode())) {
+//                                                            fileTypeFlowReports.add(fileTypeFlowReport);
+//                                                            break;
+//                                                        }
+//                                                    } else {
+//                                                        fileTypeFlowReports.add(fileTypeFlowReport);
+//                                                    }
+//                                                } else if (getCurrentOrganism().equals(fileTypeFlowReport.getOrganism())) {
+//                                                    fileTypeFlowReports.add(fileTypeFlowReport);
+//                                                }
+//                                            } else if (fileTypeFlowReport.getOrganism() == null) {
+//                                                fileTypeFlowReports.add(fileTypeFlowReport);
+//                                            }
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+
+//                                        if (getCurrentOrganism().getId() == 111 || getCurrentOrganism().getId() == 28
+//                                                || getCurrentOrganism().getId() == 3 || getCurrentOrganism().getId() == 209) {
+//                                            if (!(FileTypeCode.CCT_CT_E_PVI.equals(currentFile.getFileType().getCode())
+//                                                    || FileTypeCode.CCT_CT_E_ATP.equals(currentFile.getFileType().getCode())
+//                                                    || FileTypeCode.CCT_CT_E_FSTP.equals(currentFile.getFileType().getCode())
+//                                                    || FileTypeCode.CCT_CT_E_PVE.equals(currentFile.getFileType().getCode()))
+//                                                    && getCurrentOrganism().getId() == 3) {
+//                                                final FileFieldValue typeDemande = fileService.findFileFieldValueByFieldCode(
+//                                                        currentFile, "TYPE_DEMANDE");
+//                                                if (typeDemande != null) {
+//                                                    if (typeDemande.getValue().equals("IMPORT")
+//                                                            || FileTypeCode.CCT_CT.equals(currentFile.getFileType().getCode())) {
+//                                                        if ("CT_CCT_CP_I.pdf".equals(fileTypeFlowReport.getReportName())) {
+//                                                            fileTypeFlowReports.add(fileTypeFlowReport);
+//                                                            break;
+//                                                        }
+//
+//                                                    } else if (typeDemande.getValue().equals("EXPORT")
+//                                                            || FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode())) {
+//                                                        if ("CT_CCT_CP_E.pdf".equals(fileTypeFlowReport.getReportName())) {
+//                                                            fileTypeFlowReports.add(fileTypeFlowReport);
+//                                                            break;
+//                                                        }
+//                                                    }
+//                                                } else {
+//                                                    fileTypeFlowReports.add(fileTypeFlowReport);
+//                                                }
+//                                            } else if (getCurrentOrganism().equals(fileTypeFlowReport.getOrganism())) {
+//                                                fileTypeFlowReports.add(fileTypeFlowReport);
+//                                            }
+//                                        } else if (fileTypeFlowReport.getOrganism() == null) {
+//                                            fileTypeFlowReports.add(fileTypeFlowReport);
+//                                        }

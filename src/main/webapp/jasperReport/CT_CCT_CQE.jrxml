@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CERTIFICAT_QUALITE_EXPORT" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e78c8757-c75e-4ceb-aa7f-1672653b8297">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="454"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -32,7 +32,9 @@
 		<field name="netWeight" class="java.lang.String"/>
 		<field name="category" class="java.lang.String"/>
 	</subDataset>
-	<parameter name="MINADER_LOGO" class="java.lang.String"/>
+	<parameter name="MINADER_LOGO" class="java.lang.String">
+		<defaultValueExpression><![CDATA["C:\\Users\\tadzotsa\\NetBeansProjects\\siat-ct-web\\src\\main\\webapp\\images\\reports\\minader.jpg"]]></defaultValueExpression>
+	</parameter>
 	<field name="certificateNumber" class="java.lang.String"/>
 	<field name="decisionPlace" class="java.lang.String"/>
 	<field name="exporterName" class="java.lang.String"/>
@@ -159,7 +161,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS]
 		</band>
 	</title>
 	<detail>
-		<band height="400" splitType="Stretch">
+		<band height="360" splitType="Stretch">
 			<frame>
 				<reportElement x="0" y="0" width="555" height="360" uuid="5ad059f8-1a03-4e5d-b837-f745bae8de66"/>
 				<rectangle>
@@ -616,12 +618,6 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS]
 					<textFieldExpression><![CDATA[$F{eguceNumber}]]></textFieldExpression>
 				</textField>
 			</frame>
-			<line direction="BottomUp">
-				<reportElement x="0" y="360" width="1" height="40" uuid="ec35c946-e542-4799-a7a0-1fd5851ad36e"/>
-			</line>
-			<line direction="BottomUp">
-				<reportElement x="555" y="360" width="1" height="40" uuid="8b2baec7-75a9-48ec-ad24-8b6f9d73d000"/>
-			</line>
 		</band>
 		<band height="244">
 			<rectangle>
@@ -743,7 +739,7 @@ vigeur.]]></text>
 				<reportElement x="255" y="189" width="287" height="20" uuid="2d2fb0c1-4cee-4628-9b39-eb281de70e5d"/>
 				<textFieldExpression><![CDATA[$F{officerName}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="5" y="162" width="240" height="47" uuid="137f526d-de90-4156-95bf-aa3b61a0adc2"/>
 				<textFieldExpression><![CDATA[$F{outPhytoPolice} + ", le " + new java.text.SimpleDateFormat("EEEEE dd MMMMM yyyy").format($F{decisionDate})]]></textFieldExpression>
 			</textField>

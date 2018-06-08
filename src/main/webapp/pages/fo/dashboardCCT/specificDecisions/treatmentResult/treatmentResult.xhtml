@@ -10,34 +10,28 @@
             <h:panelGrid columns="2">
 
                 <h:outputLabel value="#{bundle['TreatmentType']}" for="TreatmentType" />
-                <p:inputText id="TreatmentType" value="#{fileItemCctDetailController.treatmentResult.treatmentType}" />
+                <p:inputText id="TreatmentType" value="#{fileItemCctDetailController.treatmentResult.treatmentType}" required="true" />
 
                 <h:outputLabel value="#{bundle['HomologationNumber']}" for="HomologationNumber" />
-                <p:inputText value="#{fileItemCctDetailController.treatmentResult.homologationNumber}" id="HomologationNumber" />
+                <p:inputText value="#{fileItemCctDetailController.treatmentResult.homologationNumber}" id="HomologationNumber" required="true" />
 
                 <h:outputLabel value="Concentration" for="Concentration" />
-                <p:inputText value="#{fileItemCctDetailController.treatmentResult.atConcentration}" id="Concentration" />
+                <p:inputText value="#{fileItemCctDetailController.treatmentResult.atConcentration}" id="Concentration" required="true" />
 
                 <h:outputLabel value="#{bundle['TreatmentDose']}" for="TreatmentDose1" />
-                <p:inputText value="#{fileItemCctDetailController.treatmentResult.dosage}" id="TreatmentDose1" />
-
-                <h:outputLabel value="#{bundle['NomSocieteTraitement']}" for="NomSocieteTraitement" />
-                <p:inputText value="#{fileItemCctDetailController.treatmentResult.treatmentCompanyName}" id="NomSocieteTraitement" />
-
-                <h:outputLabel value="#{bundle['TelSociteteTraitement']}" for="TelSociteteTraitement" />
-                <p:inputText value="#{fileItemCctDetailController.treatmentResult.treatmentCompanyTel}" id="TelSociteteTraitement" />
-
-                <h:outputLabel value="#{bundle['FaxSociteteTraitement']}" for="FaxSociteteTraitement" />
-                <p:inputText value="#{fileItemCctDetailController.treatmentResult.treatmentCompanyFax}" id="FaxSociteteTraitement" />
-
-                <h:outputLabel value="#{bundle['BpSociteteTraitement']}" for="BpSociteteTraitement" />
-                <p:inputText value="#{fileItemCctDetailController.treatmentResult.treatmentCompanyBp}" id="BpSociteteTraitement" />
-
-                <h:outputLabel value="#{bundle['EmailSociteteTraitement']}" for="EmailSociteteTraitement" />
-                <p:inputText value="#{fileItemCctDetailController.treatmentResult.treatmentCompanyEmail}" id="EmailSociteteTraitement" />
+                <p:inputText value="#{fileItemCctDetailController.treatmentResult.dosage}" id="TreatmentDose1" required="true" />
 
                 <h:outputLabel value="#{bundle['SuperviseurTraitement']}" for="SuperviseurTraitement" />
-                <p:inputText value="#{fileItemCctDetailController.treatmentResult.supervisor}" id="SuperviseurTraitement" />
+                <p:inputText value="#{fileItemCctDetailController.treatmentResult.supervisor}" id="SuperviseurTraitement" required="true" />
+
+                <h:outputLabel for="TreatmentCompanyAT" value="#{bundle['TreatmentOrder_TreatmentCompanyLabel']}" />
+                <p:selectOneMenu filter="true" id="TreatmentCompanyAT" title="#{bundle['TreatmentOrder_TreatmentCompanyTitle']}" required="true"
+                                 requiredMessage="#{bundle['TreatmentOrder_CompanyRequiredMessage']}" value="#{fileItemCctDetailController.treatmentResult.treatmentCompany}">
+                    <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+                    <f:selectItems value="#{fileItemCctDetailController.treatmentCompanys}" var="lab" itemValue="#{lab}"
+                                   itemLabel="#{facesContext.viewRoot.locale eq 'en' ? lab.labelEn : lab.labelFr}" />
+                    <f:converter binding="#{treatmentCompanyConverter}" />
+                </p:selectOneMenu>
 
             </h:panelGrid>
 
@@ -65,26 +59,26 @@
                 <h:outputLabel value="#{bundle['Autre']} #{bundle['ProduitUtilise']}" for="AutreProduitUtilise" />
                 <p:inputText value="#{fileItemCctDetailController.treatmentResult.otherProductUsed}" id="AutreProduitUtilise" />
 
-                <h:outputLabel value="NomCommercial" for="NomCommercial" />
-                <p:inputText value="#{fileItemCctDetailController.treatmentResult.treatmentProductName}" id="NomCommercial" />
+                <h:outputLabel value="#{bundle['NomCommercial']}" for="NomCommercial" />
+                <p:inputText required="true" value="#{fileItemCctDetailController.treatmentResult.treatmentProductName}" id="NomCommercial" />
 
-                <h:outputLabel value="MatiereActive" for="MatiereActive" />
-                <p:inputText value="#{fileItemCctDetailController.treatmentResult.activeIngredient}" id="MatiereActive" />
+                <h:outputLabel value="#{bundle['MatiereActive']}" for="MatiereActive" />
+                <p:inputText required="true" value="#{fileItemCctDetailController.treatmentResult.activeIngredient}" id="MatiereActive" />
 
                 <h:outputLabel value="Concentration" for="TRConcentration" />
-                <p:inputText value="#{fileItemCctDetailController.treatmentResult.tsfConcentration}" id="TRConcentration" />
+                <p:inputText required="true" value="#{fileItemCctDetailController.treatmentResult.tsfConcentration}" id="TRConcentration" />
 
                 <h:outputLabel value="#{bundle['TreatmentDose']}" for="TreatmentDose" />
-                <p:inputText value="#{fileItemCctDetailController.treatmentResult.treatmentDose}" id="TreatmentDose" />
+                <p:inputText required="true" value="#{fileItemCctDetailController.treatmentResult.treatmentDose}" id="TreatmentDose" />
 
                 <h:outputLabel value="Antidote" for="Antidote" />
-                <p:inputText value="#{fileItemCctDetailController.treatmentResult.antidote}" id="Antidote" />
+                <p:inputText required="true" value="#{fileItemCctDetailController.treatmentResult.antidote}" id="Antidote" />
 
                 <h:outputLabel value="#{bundle['DureeTraitement']}" for="DureeTraitement" />
-                <p:inputText value="#{fileItemCctDetailController.treatmentResult.treatmentDuration}" id="DureeTraitement" />
+                <p:inputText required="true" value="#{fileItemCctDetailController.treatmentResult.treatmentDuration}" id="DureeTraitement" />
 
                 <h:outputLabel value="#{bundle['HeureTraitement']}" for="HeureTraitement" />
-                <p:calendar navigator="true" readonlyInput="true" showOn="button"
+                <p:calendar navigator="true" readonlyInput="true" showOn="button" required="true"
                             value="#{fileItemCctDetailController.treatmentResult.treatmentTime}"
                             timeOnly="true" pattern="HH:mm" id="HeureTraitement" widgetVar="wHeureTraitement" />
 
@@ -98,7 +92,7 @@
                 <p:inputText value="#{fileItemCctDetailController.treatmentResult.otherTreatmentEnvironment}" id="AutreEnvironnementStockage" />
 
                 <h:outputLabel value="#{bundle['TemperatureOptimale']}" for="TemperatureOptimale" />
-                <p:inputText value="#{fileItemCctDetailController.treatmentResult.optimalTemperature}" id="TemperatureOptimale" />
+                <p:inputText required="true" value="#{fileItemCctDetailController.treatmentResult.optimalTemperature}" id="TemperatureOptimale" />
 
                 <h:outputLabel value="#{bundle['LieuStockage']}" for="LieuStockage" />
                 <p:selectOneMenu id="LieuStockage" value="#{fileItemCctDetailController.treatmentResult.storagePlace}">
@@ -113,7 +107,8 @@
                 <p:selectBooleanCheckbox value="#{fileItemCctDetailController.treatmentResult.sanitaryState}" id="EtatSanitaireEnvSock" />
 
                 <h:outputLabel value="#{bundle['Conditionnement']}" for="Conditionnement" />
-                <p:selectOneMenu id="Conditionnement" value="#{fileItemCctDetailController.treatmentResult.conditioning}">
+                <p:selectOneMenu required="true" id="Conditionnement" value="#{fileItemCctDetailController.treatmentResult.conditioning}">
+                    <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
                     <f:selectItems value="#{fileItemCctDetailController.trConditionings}" var="c" itemLabel="#{bundle[c.label]}" itemValue="#{c.value}" />
                 </p:selectOneMenu>
 
@@ -130,7 +125,7 @@
                 <p:selectBooleanCheckbox value="#{fileItemCctDetailController.treatmentResult.treatmentPrevention}" id="TreatmentPrevention" />
 
                 <h:outputLabel for="DateHeureDebachage" value="#{bundle['DateHeureDebachage']}" />
-                <p:calendar navigator="true" value="#{fileItemCctDetailController.treatmentResult.uncoveringDate}" showOn="button"
+                <p:calendar required="true" navigator="true" value="#{fileItemCctDetailController.treatmentResult.uncoveringDate}" showOn="button"
                             pattern="dd/MM/yyyy HH:mm" readonlyInput="true" id="DateHeureDebachage" title="#{bundle['TreatmentResultDateTitle']}" />
 
                 <h:outputLabel value="#{bundle['InformationsRiverains']}" for="InformationsRiverains" />
@@ -141,10 +136,11 @@
 
                 <h:outputLabel value="#{bundle['NatureSecPersonnel']}" for="NatureSecPersonnel" />
                 <p:inputText value="#{fileItemCctDetailController.treatmentResult.staffSecurityNature}"
-                             id="NatureSecPersonnel" />
+                             id="NatureSecPersonnel" required="true" />
 
                 <h:outputLabel value="#{bundle['EquipementsProtection']}" for="EquipementsProtection" />
-                <p:selectOneMenu id="EquipementsProtection" value="#{fileItemCctDetailController.treatmentResult.protectionEquipements}">
+                <p:selectOneMenu required="true" id="EquipementsProtection" value="#{fileItemCctDetailController.treatmentResult.protectionEquipements}">
+                    <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
                     <f:selectItems value="#{fileItemCctDetailController.trProtectionEquipments}" var="pe" itemLabel="#{bundle[pe.label]}" itemValue="#{pe.value}" />
                 </p:selectOneMenu>
 

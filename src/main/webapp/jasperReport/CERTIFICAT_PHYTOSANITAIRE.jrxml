@@ -3,7 +3,9 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="165"/>
-	<parameter name="MINADER_LOGO" class="java.lang.String"/>
+	<parameter name="MINADER_LOGO" class="java.lang.String">
+		<defaultValueExpression><![CDATA["C:\\Users\\tadzotsa\\NetBeansProjects\\siat-ct-web\\src\\main\\webapp\\images\\reports\\minader.jpg"]]></defaultValueExpression>
+	</parameter>
 	<field name="decisionNumber" class="java.lang.String"/>
 	<field name="decisionPlace" class="java.lang.String"/>
 	<field name="consignorName" class="java.lang.String"/>
@@ -570,10 +572,10 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS]
 					<textFieldExpression><![CDATA[$F{names}]]></textFieldExpression>
 				</textField>
 				<line>
-					<reportElement x="7" y="63" width="393" height="1" uuid="20ab5909-0384-4488-8671-46f204accad7"/>
+					<reportElement x="0" y="63" width="400" height="1" uuid="20ab5909-0384-4488-8671-46f204accad7"/>
 				</line>
 				<line>
-					<reportElement x="7" y="83" width="393" height="1" uuid="795ce32b-1750-459c-98ff-0a0e397eee5c"/>
+					<reportElement x="0" y="83" width="400" height="1" uuid="795ce32b-1750-459c-98ff-0a0e397eee5c"/>
 				</line>
 			</frame>
 		</band>

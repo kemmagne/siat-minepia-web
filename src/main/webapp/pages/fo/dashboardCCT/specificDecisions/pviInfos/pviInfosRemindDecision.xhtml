@@ -8,23 +8,8 @@
         <p:outputLabel value="#{bundle['articleReglemente']}" />
         <p:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.articleReglemente}" />
 
-        <p:outputLabel value="Destination / Utilisation" />
-        <p:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.pviDestination}" />
-
         <p:outputLabel value="#{bundle['situationArticle']}" />
         <p:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.pviSituationArticle}" />
-
-        <p:outputLabel value="#{bundle['couvertDoc']}" />
-        <p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.pviCouvertDoc}" />
-
-        <p:outputLabel value="#{bundle['natureArticleInspecte']}" />
-        <p:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.pviNatureArticleInspecte}" />
-
-        <p:outputLabel value="#{bundle['quantite']}" />
-        <p:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.pviQuantite}" />
-
-        <p:outputLabel value="#{bundle['DispositionsPrises']}" />
-        <p:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.pviDispositionsPrises}" />
 
         <p:outputLabel value="#{bundle['produitUtilise']}" />
         <p:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.produitUtilise}" />
@@ -62,8 +47,14 @@
             <f:selectItems value="#{fileItemCctDetailController.pivProtectionMeasures}" var="pm" itemLabel="#{bundle[pm.label]}" itemValue="#{pm.value}" />
         </p:selectOneMenu>
 
+        <p:outputLabel value="#{bundle['DispositionsPrises']}" />
+        <p:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.pviDispositionsPrises}" />
+
         <p:outputLabel value="Observations" />
         <p:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.observations}" />
+
+        <p:outputLabel value="#{bundle['couvertDoc']}" />
+        <p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.pviCouvertDoc}" />
     </h:panelGrid>
 
 </ui:composition>

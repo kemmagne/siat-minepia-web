@@ -1,132 +1,137 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+      xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
 
-<ui:composition>
+    <ui:composition>
 
-	<p:dialog closeOnEscape="true" id="treatmentCompanyEditDlg" widgetVar="treatmentCompanyEditDialog" modal="true" resizable="false" appendTo="@(body)"
-		header="#{bundle['EditTreatmentCompanyTitle']}">
+        <p:dialog closeOnEscape="true" id="treatmentCompanyEditDlg" widgetVar="treatmentCompanyEditDialog" modal="true" resizable="false" appendTo="@(body)"
+                  header="#{bundle['EditTreatmentCompanyTitle']}">
 
-		<h:form id="treatmentCompanyEditForm">
+            <h:form id="treatmentCompanyEditForm">
 
-			<h:panelGroup id="display" styleClass="inpWidth">
+                <h:panelGroup id="display" styleClass="inpWidth">
 
-				<p:panelGrid columns="4">
+                    <p:panelGrid columns="4">
 
-					<p:outputLabel value="#{bundle['EditTreatmentCompanyLabel_labelFr']}" for="labelFr" />
-					<h:panelGroup>
-						<p:inputText id="labelFr" value="#{treatmentCompanyController.selected.labelFr}"
-							title="#{bundle['EditTreatmentCompanyTitle_labelFr']}" required="true"
-							requiredMessage="#{bundle['EditTreatmentCompanyRequiredMessage_labelFr']}" />
-						<p:message for="labelFr" />
-					</h:panelGroup>
+                        <p:outputLabel value="#{bundle['EditTreatmentCompanyLabel_labelFr']}" for="labelFr" />
+                        <h:panelGroup>
+                            <p:inputText id="labelFr" value="#{treatmentCompanyController.selected.labelFr}"
+                                         title="#{bundle['EditTreatmentCompanyTitle_labelFr']}" required="true"
+                                         requiredMessage="#{bundle['EditTreatmentCompanyRequiredMessage_labelFr']}" />
+                            <p:message for="labelFr" />
+                        </h:panelGroup>
 
-					<p:outputLabel value="#{bundle['EditTreatmentCompanyLabel_labelEn']}" for="labelEn" />
-					<h:panelGroup>
-						<p:inputText id="labelEn" value="#{treatmentCompanyController.selected.labelEn}"
-							title="#{bundle['EditTreatmentCompanyTitle_labelEn']}" required="true"
-							requiredMessage="#{bundle['EditTreatmentCompanyRequiredMessage_labelEn']}" />
-						<p:message for="labelEn" />
-					</h:panelGroup>
+                        <p:outputLabel value="#{bundle['EditTreatmentCompanyLabel_labelEn']}" for="labelEn" />
+                        <h:panelGroup>
+                            <p:inputText id="labelEn" value="#{treatmentCompanyController.selected.labelEn}"
+                                         title="#{bundle['EditTreatmentCompanyTitle_labelEn']}" required="true"
+                                         requiredMessage="#{bundle['EditTreatmentCompanyRequiredMessage_labelEn']}" />
+                            <p:message for="labelEn" />
+                        </h:panelGroup>
 
 
-					<p:outputLabel value="#{bundle['EditTreatmentCompanyLabel_code']}" for="treatmentCompany_code" />
-					<h:panelGroup>
-						<p:inputText id="treatmentCompany_code" value="#{treatmentCompanyController.selected.code}"
-							title="#{bundle['EditTreatmentCompanyTitle_code']}" required="true"
-							requiredMessage="#{bundle['EditTreatmentCompanyRequiredMessage_code']}" />
-						<p:message for="treatmentCompany_code" />
-					</h:panelGroup>
+                        <p:outputLabel value="#{bundle['EditTreatmentCompanyLabel_code']}" for="treatmentCompany_code" />
+                        <h:panelGroup>
+                            <p:inputText id="treatmentCompany_code" value="#{treatmentCompanyController.selected.code}"
+                                         title="#{bundle['EditTreatmentCompanyTitle_code']}" required="true"
+                                         requiredMessage="#{bundle['EditTreatmentCompanyRequiredMessage_code']}" />
+                            <p:message for="treatmentCompany_code" />
+                        </h:panelGroup>
 
-					<p:outputLabel value="#{bundle['EditTreatmentCompanyLabel_address']}" for="treatmentCompany_address" />
-					<h:panelGroup>
-						<p:inputText id="treatmentCompany_address" value="#{treatmentCompanyController.selected.address}"
-							title="#{bundle['EditTreatmentCompanyTitle_address']}" required="true"
-							requiredMessage="#{bundle['EditTreatmentCompanyRequiredMessage_address']}" />
-						<p:message for="treatmentCompany_address" />
-					</h:panelGroup>
+                        <p:outputLabel value="#{bundle['EditTreatmentCompanyLabel_address']}" for="treatmentCompany_address" />
+                        <h:panelGroup>
+                            <p:inputText id="treatmentCompany_address" value="#{treatmentCompanyController.selected.address}"
+                                         title="#{bundle['EditTreatmentCompanyTitle_address']}" required="true"
+                                         requiredMessage="#{bundle['EditTreatmentCompanyRequiredMessage_address']}" />
+                            <p:message for="treatmentCompany_address" />
+                        </h:panelGroup>
 
-					<p:outputLabel value="#{bundle['EditTreatmentCompanyLabel_telephone']}" for="treatmentCompany_telephone" />
-					<p:inputText id="treatmentCompany_telephone" value="#{treatmentCompanyController.selected.telephone}"
-						title="#{bundle['EditTreatmentCompanyTitle_telephone']}" required="false"
-						requiredMessage="#{bundle['EditTreatmentCompanyRequiredMessage_telephone']}" />
+                        <p:outputLabel value="#{bundle['EditTreatmentCompanyLabel_telephone']}" for="treatmentCompany_telephone" />
+                        <p:inputText id="treatmentCompany_telephone" value="#{treatmentCompanyController.selected.telephone}"
+                                     title="#{bundle['EditTreatmentCompanyTitle_telephone']}" required="false"
+                                     requiredMessage="#{bundle['EditTreatmentCompanyRequiredMessage_telephone']}" />
 
-					<p:outputLabel value="#{bundle['EditTreatmentCompanyLabel_fax']}" for="treatmentCompany_fax" />
-					<p:inputText id="treatmentCompany_fax" value="#{treatmentCompanyController.selected.fax}"
-						title="#{bundle['EditTreatmentCompanyTitle_fax']}" required="false"
-						requiredMessage="#{bundle['EditTreatmentCompanyRequiredMessage_fax']}" />
+                        <p:outputLabel value="#{bundle['EditTreatmentCompanyLabel_fax']}" for="treatmentCompany_fax" />
+                        <p:inputText id="treatmentCompany_fax" value="#{treatmentCompanyController.selected.fax}"
+                                     title="#{bundle['EditTreatmentCompanyTitle_fax']}" required="false"
+                                     requiredMessage="#{bundle['EditTreatmentCompanyRequiredMessage_fax']}" />
 
-					<p:outputLabel value="#{bundle['EditTreatmentCompanyLabel_email']}" for="treatmentCompany_email" />
-					<p:inputText id="treatmentCompany_email" value="#{treatmentCompanyController.selected.email}"
-						title="#{bundle['EditTreatmentCompanyTitle_email']}" required="false"
-						requiredMessage="#{bundle['EditTreatmentCompanyRequiredMessage_email']}" validatorMessage="#{bundle['MailValidationFail']}">
-						<f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
-					</p:inputText>
+                        <p:outputLabel value="#{bundle['CreateTreatmentCompanyLabel_bp']}" for="treatmentCompany_bp" />
+                        <p:inputText id="treatmentCompany_bp" value="#{treatmentCompanyController.selected.bp}"
+                                     title="#{bundle['CreateTreatmentCompanyTitle_bp']}" required="false"
+                                     requiredMessage="#{bundle['CreateTreatmentCompanyRequiredMessage_bp']}" />
 
-					<h:outputLabel value="#{bundle['EditTreatmentCompanyLabel_subDepartment']}" for="subDepartment" />
-					<p:selectOneMenu id="subDepartment" value="#{treatmentCompanyController.selectedSubDepartment}" 
-					requiredMessage="#{bundle['CreateTreatmentCompanyRequiredMessage_subdepartment']}" required="true"
-						filter="true" filterMatchMode="contains">
-						<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-						<f:selectItems value="#{treatmentCompanyController.currentOrganism.subDepartmentsList}" var="subDepartment"
-							itemValue="#{subDepartment}" itemLabel="#{facesContext.viewRoot.locale eq 'en' ? subDepartment.labelEn : subDepartment.labelFr}" />
-						<f:converter binding="#{subDepartmentConverter}" />
-						<p:ajax update="service" listener="#{treatmentCompanyController.findServiceListBySelectedSubDepartment}"></p:ajax>
-					</p:selectOneMenu>
+                        <p:outputLabel value="#{bundle['EditTreatmentCompanyLabel_email']}" for="treatmentCompany_email" />
+                        <p:inputText id="treatmentCompany_email" value="#{treatmentCompanyController.selected.email}"
+                                     title="#{bundle['EditTreatmentCompanyTitle_email']}" required="false"
+                                     requiredMessage="#{bundle['EditTreatmentCompanyRequiredMessage_email']}" validatorMessage="#{bundle['MailValidationFail']}">
+                            <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                        </p:inputText>
 
-					<h:outputLabel value="#{bundle['EditTreatmentCompanyLabel_service']}" for="service" />
-					<h:panelGroup>
-						<p:selectOneMenu id="service" value="#{treatmentCompanyController.selected.service}" required="true"
-							requiredMessage="#{bundle['EditTreatmentCompanyRequiredMessage_service']}" disabled="#{empty treatmentCompanyController.selectedSubDepartment ? 'true' : 'false' }">
-							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-							<f:selectItems value="#{treatmentCompanyController.servicesBySubDepartment}" var="service" itemValue="#{service}"
-								itemLabel="#{facesContext.viewRoot.locale eq 'en' ?  service.labelEn : service.labelFr}" />
-							<f:converter binding="#{serviceConverter}" />
-						</p:selectOneMenu>
-						<p:message for="service" />
-					</h:panelGroup>
+                        <h:outputLabel value="#{bundle['EditTreatmentCompanyLabel_subDepartment']}" for="subDepartment" />
+                        <p:selectOneMenu id="subDepartment" value="#{treatmentCompanyController.selectedSubDepartment}"
+                                         requiredMessage="#{bundle['CreateTreatmentCompanyRequiredMessage_subdepartment']}" required="true"
+                                         filter="true" filterMatchMode="contains">
+                            <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+                            <f:selectItems value="#{treatmentCompanyController.currentOrganism.subDepartmentsList}" var="subDepartment"
+                                           itemValue="#{subDepartment}" itemLabel="#{facesContext.viewRoot.locale eq 'en' ? subDepartment.labelEn : subDepartment.labelFr}" />
+                            <f:converter binding="#{subDepartmentConverter}" />
+                            <p:ajax update="service" listener="#{treatmentCompanyController.findServiceListBySelectedSubDepartment}"></p:ajax>
+                        </p:selectOneMenu>
 
-				</p:panelGrid>
+                        <h:outputLabel value="#{bundle['EditTreatmentCompanyLabel_service']}" for="service" />
+                        <h:panelGroup>
+                            <p:selectOneMenu id="service" value="#{treatmentCompanyController.selected.service}" required="true"
+                                             requiredMessage="#{bundle['EditTreatmentCompanyRequiredMessage_service']}" disabled="#{empty treatmentCompanyController.selectedSubDepartment ? 'true' : 'false' }">
+                                <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+                                <f:selectItems value="#{treatmentCompanyController.servicesBySubDepartment}" var="service" itemValue="#{service}"
+                                               itemLabel="#{facesContext.viewRoot.locale eq 'en' ?  service.labelEn : service.labelFr}" />
+                                <f:converter binding="#{serviceConverter}" />
+                            </p:selectOneMenu>
+                            <p:message for="service" />
+                        </h:panelGroup>
 
-				<h:panelGroup styleClass="panel-bloc">
-					<p:outputLabel value="#{bundle['EditTreatmentCompanyLabel_treatmentCompanyTypes']}" for="treatmentCompanyTypesPickList" />
-					<h:panelGroup styleClass="panel-bloc-title">
-						<p:pickList required="true" id="treatmentCompanyTypesPickList" value="#{treatmentCompanyController.treatmentTypesPickList}"
-							var="treatmentType" itemValue="#{treatmentType}"
-							itemLabel="#{facesContext.viewRoot.locale eq 'fr' ? treatmentType.labelFr : treatmentType.labelEn}" showSourceControls="false"
-							showTargetControls="false" showCheckbox="true" showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
-							converter="#{treatmentTypeConverter}">
+                    </p:panelGrid>
 
-							<f:facet name="sourceCaption">
-								<h:outputLabel value="#{bundle['EditTreatmentCompanyLabel_treatmentCompanyTypes_available']}" />
-							</f:facet>
-							<f:facet name="targetCaption">
-								<h:outputLabel value="#{bundle['EditTreatmentCompanyLabel_treatmentCompanyTypes_affected']}" />
-							</f:facet>
+                    <h:panelGroup styleClass="panel-bloc">
+                        <p:outputLabel value="#{bundle['EditTreatmentCompanyLabel_treatmentCompanyTypes']}" for="treatmentCompanyTypesPickList" />
+                        <h:panelGroup styleClass="panel-bloc-title">
+                            <p:pickList required="true" id="treatmentCompanyTypesPickList" value="#{treatmentCompanyController.treatmentTypesPickList}"
+                                        var="treatmentType" itemValue="#{treatmentType}"
+                                        itemLabel="#{facesContext.viewRoot.locale eq 'fr' ? treatmentType.labelFr : treatmentType.labelEn}" showSourceControls="false"
+                                        showTargetControls="false" showCheckbox="true" showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
+                                        converter="#{treatmentTypeConverter}">
 
-							<p:column>
-								<h:outputText value="#{facesContext.viewRoot.locale eq 'fr' ? treatmentType.labelFr : treatmentType.labelEn}" />
-							</p:column>
-						</p:pickList>
-						<p:message for="treatmentCompanyTypesPickList" />
-					</h:panelGroup>
+                                <f:facet name="sourceCaption">
+                                    <h:outputLabel value="#{bundle['EditTreatmentCompanyLabel_treatmentCompanyTypes_available']}" />
+                                </f:facet>
+                                <f:facet name="targetCaption">
+                                    <h:outputLabel value="#{bundle['EditTreatmentCompanyLabel_treatmentCompanyTypes_affected']}" />
+                                </f:facet>
 
-				</h:panelGroup>
+                                <p:column>
+                                    <h:outputText value="#{facesContext.viewRoot.locale eq 'fr' ? treatmentType.labelFr : treatmentType.labelEn}" />
+                                </p:column>
+                            </p:pickList>
+                            <p:message for="treatmentCompanyTypesPickList" />
+                        </h:panelGroup>
 
-				<br />
+                    </h:panelGroup>
 
-				<div class="btn-bloc">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editBtn" actionListener="#{treatmentCompanyController.edit}" value="#{bundle['Save']}"
-						styleClass="ui-priority-primary" update="display,:treatmentCompanyListForm,:growl"
-						oncomplete="handleSubmit(xhr,status,args,treatmentCompanyEditDlg,'datalistTable');" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary"
-						onclick="PF('treatmentCompanyEditDialog').hide();" immediate="true" />
-				</div>
-			</h:panelGroup>
+                    <br />
 
-		</h:form>
+                    <div class="btn-bloc">
+                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editBtn" actionListener="#{treatmentCompanyController.edit}" value="#{bundle['Save']}"
+                                         styleClass="ui-priority-primary" update="display,:treatmentCompanyListForm,:growl"
+                                         oncomplete="handleSubmit(xhr,status,args,treatmentCompanyEditDlg,'datalistTable');" />
+                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary"
+                                         onclick="PF('treatmentCompanyEditDialog').hide();" immediate="true" />
+                    </div>
+                </h:panelGroup>
 
-	</p:dialog>
+            </h:form>
 
-</ui:composition>
+        </p:dialog>
+
+    </ui:composition>
 
 </html>
