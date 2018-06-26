@@ -126,7 +126,7 @@ import org.guce.siat.web.common.ControllerConstants;
 import org.guce.siat.web.common.util.ApSpecificDecisionHistory;
 import org.guce.siat.web.ct.controller.util.JsfUtil;
 import org.guce.siat.web.ct.controller.util.ReportGeneratorUtils;
-import org.guce.siat.web.ct.controller.util.enums.DataTypeEnnumeration;
+import org.guce.siat.web.ct.controller.util.enums.DataTypeEnumeration;
 import org.guce.siat.web.ct.controller.util.enums.PersistenceActions;
 import org.guce.siat.web.reports.exporter.CpMinepdedExporter;
 import org.primefaces.component.calendar.Calendar;
@@ -1385,7 +1385,7 @@ public class FileItemApDetailController implements Serializable {
                 stringId = String.valueOf(dataType.getId());
             }
             HtmlPanelGroup htmlPanelGroup = null;
-            if (!isFimex || dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
+            if (!isFimex || dataType.getType().equals(DataTypeEnumeration.CALENDAR.getCode())) {
                 // Label for the component
                 final HtmlOutputLabel htmlOutputLabel = (HtmlOutputLabel) context.getApplication().createComponent(
                         HtmlOutputLabel.COMPONENT_TYPE);
@@ -1399,7 +1399,7 @@ public class FileItemApDetailController implements Serializable {
 
                 htmlPanelGroup = (HtmlPanelGroup) context.getApplication().createComponent(HtmlPanelGroup.COMPONENT_TYPE);
             }
-            if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode()) && !isFimex) {
+            if (dataType.getType().equals(DataTypeEnumeration.INPUTTEXT.getCode()) && !isFimex) {
                 final HtmlInputText inputText = (HtmlInputText) context.getApplication()
                         .createComponent(HtmlInputText.COMPONENT_TYPE);
                 if (dataType.getRequired()) {
@@ -1411,7 +1411,7 @@ public class FileItemApDetailController implements Serializable {
                 }
                 inputText.setId(ID_DECISION_LABEL + stringId);
                 htmlPanelGroup.getChildren().add(inputText);
-            } else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode()) && !isFimex) {
+            } else if (dataType.getType().equals(DataTypeEnumeration.CHEKBOX.getCode()) && !isFimex) {
                 final HtmlSelectBooleanCheckbox booleanCheckbox = (HtmlSelectBooleanCheckbox) context.getApplication()
                         .createComponent(HtmlSelectBooleanCheckbox.COMPONENT_TYPE);
                 if (dataType.getRequired()) {
@@ -1423,7 +1423,7 @@ public class FileItemApDetailController implements Serializable {
                 }
                 booleanCheckbox.setId(ID_DECISION_LABEL + stringId);
                 htmlPanelGroup.getChildren().add(booleanCheckbox);
-            } else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
+            } else if (dataType.getType().equals(DataTypeEnumeration.CALENDAR.getCode())) {
                 final Calendar calendar = (Calendar) context.getApplication().createComponent(Calendar.COMPONENT_TYPE);
                 calendar.setShowOn("button");
                 if (dataType.getRequired()) {
@@ -1445,7 +1445,7 @@ public class FileItemApDetailController implements Serializable {
                     calendar.setReadonly(true);
                 }
                 htmlPanelGroup.getChildren().add(calendar);
-            } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode()) && !isFimex) {
+            } else if (dataType.getType().equals(DataTypeEnumeration.INPUTTEXTAREA.getCode()) && !isFimex) {
                 final HtmlInputTextarea inputTextarea = (HtmlInputTextarea) context.getApplication().createComponent(
                         HtmlInputTextarea.COMPONENT_TYPE);
                 if (dataType.getRequired()) {
@@ -1459,7 +1459,7 @@ public class FileItemApDetailController implements Serializable {
                 inputTextarea.setId(ID_DECISION_LABEL + stringId);
                 htmlPanelGroup.getChildren().add(inputTextarea);
             }
-            if (!isFimex || dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
+            if (!isFimex || dataType.getType().equals(DataTypeEnumeration.CALENDAR.getCode())) {
                 final Message message = (Message) context.getApplication().createComponent(Message.COMPONENT_TYPE);
                 message.setFor(ID_DECISION_LABEL + stringId);
                 htmlPanelGroup.getChildren().add(message);
@@ -1735,22 +1735,22 @@ public class FileItemApDetailController implements Serializable {
                 final boolean isFimex = currentFile.getFileType().getCode().equals(FileTypeCode.FIMEX_WF)
                         && FlowCode.FL_AP_106.name().equals(selectedFlow.getCode());
 
-                if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode()) && !isFimex) {
+                if (dataType.getType().equals(DataTypeEnumeration.INPUTTEXT.getCode()) && !isFimex) {
 
                     final HtmlInputText valueDataType = (HtmlInputText) decisionDiv.findComponent(ID_DECISION_LABEL + dataType.getId());
 
                     itemFlowData.setValue(valueDataType.getValue().toString());
 
-                } else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode()) && !isFimex) {
+                } else if (dataType.getType().equals(DataTypeEnumeration.CHEKBOX.getCode()) && !isFimex) {
                     final HtmlSelectBooleanCheckbox valueDataType = (HtmlSelectBooleanCheckbox) decisionDiv
                             .findComponent(ID_DECISION_LABEL + dataType.getId());
                     itemFlowData.setValue(valueDataType.getValue().toString());
 
-                } else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
+                } else if (dataType.getType().equals(DataTypeEnumeration.CALENDAR.getCode())) {
                     final Calendar valueDataType = (Calendar) decisionDiv.findComponent(ID_DECISION_LABEL + dataType.getId());
                     itemFlowData.setValue(DateUtils.formatSimpleDateFromObject(DateUtils.FRENCH_DATE, valueDataType.getValue()));
 
-                } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode()) && !isFimex) {
+                } else if (dataType.getType().equals(DataTypeEnumeration.INPUTTEXTAREA.getCode()) && !isFimex) {
                     final HtmlInputTextarea valueDataType = (HtmlInputTextarea) decisionDiv.findComponent(ID_DECISION_LABEL
                             + dataType.getId());
                     itemFlowData.setValue(valueDataType.getValue().toString());
@@ -1834,19 +1834,19 @@ public class FileItemApDetailController implements Serializable {
             final ItemFlowData itemFlowData = new ItemFlowData();
             itemFlowData.setDataType(dataType);
 
-            if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode())) {
+            if (dataType.getType().equals(DataTypeEnumeration.INPUTTEXT.getCode())) {
                 final HtmlInputText valueDataType = (HtmlInputText) dipatchDiv.findComponent(ID_DISPATCH_LABEL + dataType.getId());
                 itemFlowData.setValue(valueDataType.getValue().toString());
-            } else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode())) {
+            } else if (dataType.getType().equals(DataTypeEnumeration.CHEKBOX.getCode())) {
                 final HtmlSelectBooleanCheckbox valueDataType = (HtmlSelectBooleanCheckbox) dipatchDiv
                         .findComponent(ID_DISPATCH_LABEL + dataType.getId());
                 itemFlowData.setValue(valueDataType.getValue().toString());
 
-            } else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
+            } else if (dataType.getType().equals(DataTypeEnumeration.CALENDAR.getCode())) {
                 final Calendar valueDataType = (Calendar) dipatchDiv.findComponent(ID_DISPATCH_LABEL + dataType.getId());
                 itemFlowData.setValue(DateUtils.formatSimpleDateFromObject(DateUtils.FRENCH_DATE, valueDataType.getValue()));
 
-            } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode())) {
+            } else if (dataType.getType().equals(DataTypeEnumeration.INPUTTEXTAREA.getCode())) {
                 final HtmlInputTextarea valueDataType = (HtmlInputTextarea) dipatchDiv.findComponent(ID_DISPATCH_LABEL
                         + dataType.getId());
                 itemFlowData.setValue(valueDataType.getValue().toString());
@@ -1929,7 +1929,7 @@ public class FileItemApDetailController implements Serializable {
 
             dipatchDiv.getChildren().add(htmlPanelGroup);
 
-            if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode())) {
+            if (dataType.getType().equals(DataTypeEnumeration.INPUTTEXT.getCode())) {
                 final HtmlInputText inputText = (HtmlInputText) context.getApplication()
                         .createComponent(HtmlInputText.COMPONENT_TYPE);
                 if (dataType.getRequired()) {
@@ -1938,7 +1938,7 @@ public class FileItemApDetailController implements Serializable {
                 inputText.setId(ID_DISPATCH_LABEL + stringId);
                 inputText.setLabel(dataType.getLabel());
                 dipatchDiv.getChildren().add(inputText);
-            } else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode())) {
+            } else if (dataType.getType().equals(DataTypeEnumeration.CHEKBOX.getCode())) {
                 final HtmlSelectBooleanCheckbox booleanCheckbox = (HtmlSelectBooleanCheckbox) context.getApplication()
                         .createComponent(HtmlSelectBooleanCheckbox.COMPONENT_TYPE);
                 if (dataType.getRequired()) {
@@ -1948,7 +1948,7 @@ public class FileItemApDetailController implements Serializable {
                 booleanCheckbox.setLabel(dataType.getLabel());
                 dipatchDiv.getChildren().add(booleanCheckbox);
 
-            } else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
+            } else if (dataType.getType().equals(DataTypeEnumeration.CALENDAR.getCode())) {
                 final Calendar calendar = (Calendar) context.getApplication().createComponent(Calendar.COMPONENT_TYPE);
                 calendar.setShowOn("button");
                 if (dataType.getRequired()) {
@@ -1961,7 +1961,7 @@ public class FileItemApDetailController implements Serializable {
                 calendar.setLabel(dataType.getLabel());
                 dipatchDiv.getChildren().add(calendar);
 
-            } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode())) {
+            } else if (dataType.getType().equals(DataTypeEnumeration.INPUTTEXTAREA.getCode())) {
                 final HtmlInputTextarea inputTextarea = (HtmlInputTextarea) context.getApplication().createComponent(
                         HtmlInputTextarea.COMPONENT_TYPE);
                 if (dataType.getRequired()) {

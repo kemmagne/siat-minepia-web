@@ -3,7 +3,7 @@ package org.guce.siat.web.ct.controller.util.enums;
 /**
  * The Enum LocaleValues.
  */
-public enum DataTypePropEnnum {
+public enum DataTypePropEnum {
 
     /**
      * The inputtextarea.
@@ -24,7 +24,7 @@ public enum DataTypePropEnnum {
      *
      * @param code the code
      */
-    private DataTypePropEnnum(final String code) {
+    private DataTypePropEnum(final String code) {
         this.code = code.intern();
     }
 

@@ -3,7 +3,7 @@ package org.guce.siat.web.ct.controller.util.enums;
 /**
  * The Enum LocaleValues.
  */
-public enum DataTypeEnnumeration
+public enum DataTypeEnumeration
 {
 
 	/** The inputtext. */
@@ -30,7 +30,7 @@ public enum DataTypeEnnumeration
 	 * @param code
 	 *           the code
 	 */
-	private DataTypeEnnumeration(final String code)
+	private DataTypeEnumeration(final String code)
 	{
 		this.code = code.intern();
 	}

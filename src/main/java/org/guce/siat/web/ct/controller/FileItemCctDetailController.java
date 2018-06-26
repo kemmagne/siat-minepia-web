@@ -76,6 +76,7 @@ import org.guce.siat.common.model.FileFieldValue;
 import org.guce.siat.common.model.FileItem;
 import org.guce.siat.common.model.FileItemField;
 import org.guce.siat.common.model.FileItemFieldValue;
+import org.guce.siat.common.model.FileType;
 import org.guce.siat.common.model.FileTypeFlow;
 import org.guce.siat.common.model.FileTypeFlowReport;
 import org.guce.siat.common.model.FileTypeStep;
@@ -138,6 +139,7 @@ import org.guce.siat.common.utils.ged.CmisSession;
 import org.guce.siat.core.ct.model.AnalyseOrder;
 import org.guce.siat.core.ct.model.AnalysePart;
 import org.guce.siat.core.ct.model.AnalyseResult;
+import org.guce.siat.core.ct.model.DecisionHistory;
 import org.guce.siat.core.ct.model.Infraction;
 import org.guce.siat.core.ct.model.InspectionController;
 import org.guce.siat.core.ct.model.InspectionReport;
@@ -156,6 +158,7 @@ import org.guce.siat.core.ct.service.AnalyseOrderService;
 import org.guce.siat.core.ct.service.AnalysePartService;
 import org.guce.siat.core.ct.service.AnalyseResultService;
 import org.guce.siat.core.ct.service.CommonService;
+import org.guce.siat.core.ct.service.DecisionHistoryService;
 import org.guce.siat.core.ct.service.InspectionReportService;
 import org.guce.siat.core.ct.service.InterceptionNotificationService;
 import org.guce.siat.core.ct.service.LaboratoryService;
@@ -181,23 +184,23 @@ import org.guce.siat.web.ct.controller.util.InspectionReportData;
 import org.guce.siat.web.ct.controller.util.InspectionReportEtiquetageVo;
 import org.guce.siat.web.ct.controller.util.InspectionReportTemperatureVo;
 import org.guce.siat.web.ct.controller.util.JsfUtil;
-import org.guce.siat.web.ct.controller.util.enums.DataTypeEnnumeration;
-import org.guce.siat.web.ct.controller.util.enums.DataTypePropEnnum;
+import org.guce.siat.web.ct.controller.util.enums.DataTypeEnumeration;
+import org.guce.siat.web.ct.controller.util.enums.DataTypePropEnum;
 import org.guce.siat.web.ct.controller.util.enums.DecisionsSuiteVisite;
 import org.guce.siat.web.ct.controller.util.enums.NITakenMeasure;
-import org.guce.siat.web.ct.controller.util.enums.PVILastTreatmentDateState;
-import org.guce.siat.web.ct.controller.util.enums.PVIProtectionMeasures;
-import org.guce.siat.web.ct.controller.util.enums.PVIStorageEnv;
-import org.guce.siat.web.ct.controller.util.enums.PVITransportEnv;
-import org.guce.siat.web.ct.controller.util.enums.PVITreatmentType;
-import org.guce.siat.web.ct.controller.util.enums.PVIWeatherConditions;
+import org.guce.siat.core.ct.util.enums.PVILastTreatmentDateState;
+import org.guce.siat.core.ct.util.enums.PVIProtectionMeasures;
+import org.guce.siat.core.ct.util.enums.PVIStorageEnv;
+import org.guce.siat.core.ct.util.enums.PVITransportEnv;
+import org.guce.siat.core.ct.util.enums.PVITreatmentType;
+import org.guce.siat.core.ct.util.enums.PVIWeatherConditions;
 import org.guce.siat.web.ct.controller.util.enums.PersistenceActions;
-import org.guce.siat.web.ct.controller.util.enums.TRConditioning;
-import org.guce.siat.web.ct.controller.util.enums.TRProductUsed;
-import org.guce.siat.web.ct.controller.util.enums.TRProtectionEquipement;
-import org.guce.siat.web.ct.controller.util.enums.TRTreatmentEnvironment;
-import org.guce.siat.web.ct.controller.util.enums.TRStoragePlace;
-import org.guce.siat.web.ct.controller.util.enums.TRWeatherCondition;
+import org.guce.siat.core.ct.util.enums.TRConditioning;
+import org.guce.siat.core.ct.util.enums.TRProductUsed;
+import org.guce.siat.core.ct.util.enums.TRProtectionEquipement;
+import org.guce.siat.core.ct.util.enums.TRTreatmentEnvironment;
+import org.guce.siat.core.ct.util.enums.TRStoragePlace;
+import org.guce.siat.core.ct.util.enums.TRWeatherCondition;
 import org.guce.siat.web.ct.data.AnalyseTypeDto;
 import org.guce.siat.web.ct.data.TreatmentTypeDto;
 import org.guce.siat.web.gr.controller.RiskController;
@@ -566,6 +569,12 @@ public class FileItemCctDetailController implements Serializable {
 
     @ManagedProperty(value = "#{interceptionNotificationService}")
     private InterceptionNotificationService interceptionNotificationService;
+
+    /**
+     * The file service.
+     */
+    @ManagedProperty(value = "#{decisionHistoryService}")
+    private DecisionHistoryService decisionHistoryService;
 
     /**
      * The send decision allowed.
@@ -1035,6 +1044,8 @@ public class FileItemCctDetailController implements Serializable {
 
     private final String TRANSITE_SUPER_FILE_TYPE = "2";
     private final String TRANSITE_SUPER_FILE_TYPE_KEY = "TYPE_DOSSIER_EGUCE";
+
+    private List<DecisionHistory> decisionHistories;
 
     /**
      * Inits the.
@@ -1817,7 +1828,7 @@ public class FileItemCctDetailController implements Serializable {
                 final HtmlPanelGroup htmlPanelGroup = (HtmlPanelGroup) context.getApplication().createComponent(
                         HtmlPanelGroup.COMPONENT_TYPE);
 
-                if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode())) {
+                if (dataType.getType().equals(DataTypeEnumeration.INPUTTEXT.getCode())) {
                     final HtmlInputText inputText = (HtmlInputText) context.getApplication().createComponent(
                             HtmlInputText.COMPONENT_TYPE);
                     if (dataType.getRequired()) {
@@ -1829,7 +1840,7 @@ public class FileItemCctDetailController implements Serializable {
                     }
                     inputText.setId(ID_DECISION_LABEL + stringId);
                     htmlPanelGroup.getChildren().add(inputText);
-                } else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode())) {
+                } else if (dataType.getType().equals(DataTypeEnumeration.CHEKBOX.getCode())) {
                     final HtmlSelectBooleanCheckbox booleanCheckbox = (HtmlSelectBooleanCheckbox) context.getApplication()
                             .createComponent(HtmlSelectBooleanCheckbox.COMPONENT_TYPE);
                     if (dataType.getRequired()) {
@@ -1841,7 +1852,7 @@ public class FileItemCctDetailController implements Serializable {
                     }
                     booleanCheckbox.setId(ID_DECISION_LABEL + stringId);
                     htmlPanelGroup.getChildren().add(booleanCheckbox);
-                } else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
+                } else if (dataType.getType().equals(DataTypeEnumeration.CALENDAR.getCode())) {
                     final Calendar calendar = (Calendar) context.getApplication().createComponent(Calendar.COMPONENT_TYPE);
                     calendar.setShowOn("button");
                     if (dataType.getRequired()) {
@@ -1858,7 +1869,7 @@ public class FileItemCctDetailController implements Serializable {
                         Properties properties = new Properties();
                         try {
                             properties.load(new StringReader(dataTypeProps));
-                            pattern = properties.getProperty(DataTypePropEnnum.PATTERN.getCode(), pattern);
+                            pattern = properties.getProperty(DataTypePropEnum.PATTERN.getCode(), pattern);
                         } catch (IOException ex) {
                             LOG.debug("Problem occured when trying to load properties of data type : " + dataType, ex);
                         }
@@ -1868,7 +1879,7 @@ public class FileItemCctDetailController implements Serializable {
                     calendar.setNavigator(true);
                     htmlPanelGroup.getChildren().add(calendar);
 
-                } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode())) {
+                } else if (dataType.getType().equals(DataTypeEnumeration.INPUTTEXTAREA.getCode())) {
                     final HtmlInputTextarea inputTextarea = (HtmlInputTextarea) context.getApplication().createComponent(
                             HtmlInputTextarea.COMPONENT_TYPE);
                     if (dataType.getRequired()) {
@@ -1917,6 +1928,7 @@ public class FileItemCctDetailController implements Serializable {
     private void loadAndGroupFileItemFieldValues() {
         fileItemFieldValues = selectedFileItemCheck.getFileItem().getFileItemFieldValueList();
         groupFileItemFieldValues();
+        decisionHistories = decisionHistoryService.findByFile(currentFile);
     }
 
     /**
@@ -2404,20 +2416,20 @@ public class FileItemCctDetailController implements Serializable {
                     final ItemFlowData itemFlowData = new ItemFlowData();
                     itemFlowData.setDataType(dataType);
 
-                    if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode())) {
+                    if (dataType.getType().equals(DataTypeEnumeration.INPUTTEXT.getCode())) {
                         final HtmlInputText valueDataType = (HtmlInputText) decisionDiv.findComponent(ID_DECISION_LABEL
                                 + dataType.getId());
                         if (valueDataType != null) {
                             itemFlowData.setValue(valueDataType.getValue().toString());
                         }
-                    } else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode())) {
+                    } else if (dataType.getType().equals(DataTypeEnumeration.CHEKBOX.getCode())) {
                         final HtmlSelectBooleanCheckbox valueDataType = (HtmlSelectBooleanCheckbox) decisionDiv
                                 .findComponent(ID_DECISION_LABEL + dataType.getId());
                         if (valueDataType != null) {
                             itemFlowData.setValue(valueDataType.getValue().toString());
                         }
 
-                    } else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
+                    } else if (dataType.getType().equals(DataTypeEnumeration.CALENDAR.getCode())) {
                         final Calendar valueDataType = (Calendar) decisionDiv.findComponent(ID_DECISION_LABEL + dataType.getId());
                         final String dataTypeProps = dataType.getProps();
                         String pattern = DateUtils.FRENCH_DATE;
@@ -2425,7 +2437,7 @@ public class FileItemCctDetailController implements Serializable {
                             try {
                                 Properties properties = new Properties();
                                 properties.load(new StringReader(dataTypeProps));
-                                pattern = properties.getProperty(DataTypePropEnnum.PATTERN.getCode(), pattern);
+                                pattern = properties.getProperty(DataTypePropEnum.PATTERN.getCode(), pattern);
                             } catch (IOException ex) {
                                 LOG.debug("Problem occured when trying to load properties of data type : " + dataType, ex);
                             }
@@ -2434,7 +2446,7 @@ public class FileItemCctDetailController implements Serializable {
                             itemFlowData.setValue(DateUtils.formatSimpleDateFromObject(pattern, valueDataType.getValue()));
                         }
 
-                    } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode())) {
+                    } else if (dataType.getType().equals(DataTypeEnumeration.INPUTTEXTAREA.getCode())) {
                         final HtmlInputTextarea valueDataType = (HtmlInputTextarea) decisionDiv.findComponent(ID_DECISION_LABEL
                                 + dataType.getId());
                         if (valueDataType != null) {
@@ -2530,19 +2542,19 @@ public class FileItemCctDetailController implements Serializable {
             final ItemFlowData itemFlowData = new ItemFlowData();
             itemFlowData.setDataType(dataType);
 
-            if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode())) {
+            if (dataType.getType().equals(DataTypeEnumeration.INPUTTEXT.getCode())) {
                 final HtmlInputText valueDataType = (HtmlInputText) dipatchDiv.findComponent(ID_DISPATCH_LABEL + dataType.getId());
                 itemFlowData.setValue(valueDataType.getValue().toString());
-            } else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode())) {
+            } else if (dataType.getType().equals(DataTypeEnumeration.CHEKBOX.getCode())) {
                 final HtmlSelectBooleanCheckbox valueDataType = (HtmlSelectBooleanCheckbox) dipatchDiv
                         .findComponent(ID_DISPATCH_LABEL + dataType.getId());
                 itemFlowData.setValue(valueDataType.getValue().toString());
 
-            } else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
+            } else if (dataType.getType().equals(DataTypeEnumeration.CALENDAR.getCode())) {
                 final Calendar valueDataType = (Calendar) dipatchDiv.findComponent(ID_DISPATCH_LABEL + dataType.getId());
                 itemFlowData.setValue(DateUtils.formatSimpleDateFromObject(DateUtils.FRENCH_DATE, valueDataType.getValue()));
 
-            } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode())) {
+            } else if (dataType.getType().equals(DataTypeEnumeration.INPUTTEXTAREA.getCode())) {
                 final HtmlInputTextarea valueDataType = (HtmlInputTextarea) dipatchDiv.findComponent(ID_DISPATCH_LABEL
                         + dataType.getId());
                 itemFlowData.setValue(valueDataType.getValue().toString());
@@ -2616,7 +2628,7 @@ public class FileItemCctDetailController implements Serializable {
 
             dipatchDiv.getChildren().add(htmlPanelGroup);
 
-            if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode())) {
+            if (dataType.getType().equals(DataTypeEnumeration.INPUTTEXT.getCode())) {
                 final HtmlInputText inputText = (HtmlInputText) context.getApplication()
                         .createComponent(HtmlInputText.COMPONENT_TYPE);
                 if (dataType.getRequired()) {
@@ -2629,7 +2641,7 @@ public class FileItemCctDetailController implements Serializable {
                     inputText.setLabel(dataType.getLabelEn());
                 }
                 dipatchDiv.getChildren().add(inputText);
-            } else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode())) {
+            } else if (dataType.getType().equals(DataTypeEnumeration.CHEKBOX.getCode())) {
                 final HtmlSelectBooleanCheckbox booleanCheckbox = (HtmlSelectBooleanCheckbox) context.getApplication()
                         .createComponent(HtmlSelectBooleanCheckbox.COMPONENT_TYPE);
                 if (dataType.getRequired()) {
@@ -2643,7 +2655,7 @@ public class FileItemCctDetailController implements Serializable {
                 }
                 dipatchDiv.getChildren().add(booleanCheckbox);
 
-            } else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
+            } else if (dataType.getType().equals(DataTypeEnumeration.CALENDAR.getCode())) {
                 final Calendar calendar = (Calendar) context.getApplication().createComponent(Calendar.COMPONENT_TYPE);
                 calendar.setShowOn("button");
                 if (dataType.getRequired()) {
@@ -2660,7 +2672,7 @@ public class FileItemCctDetailController implements Serializable {
                 }
                 dipatchDiv.getChildren().add(calendar);
 
-            } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode())) {
+            } else if (dataType.getType().equals(DataTypeEnumeration.INPUTTEXTAREA.getCode())) {
                 final HtmlInputTextarea inputTextarea = (HtmlInputTextarea) context.getApplication().createComponent(
                         HtmlInputTextarea.COMPONENT_TYPE);
                 if (dataType.getRequired()) {
@@ -6571,6 +6583,14 @@ public class FileItemCctDetailController implements Serializable {
         this.interceptionNotificationService = interceptionNotificationService;
     }
 
+    public DecisionHistoryService getDecisionHistoryService() {
+        return decisionHistoryService;
+    }
+
+    public void setDecisionHistoryService(DecisionHistoryService decisionHistoryService) {
+        this.decisionHistoryService = decisionHistoryService;
+    }
+
     public boolean seizurePrintable() {
         if (selectedItemFlowDto == null || selectedItemFlowDto.getItemFlow() == null) {
             return false;
@@ -6748,6 +6768,26 @@ public class FileItemCctDetailController implements Serializable {
         }
         final String superFileType = fileFieldValue.getValue();
         return checkMinaderMinistry && FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode()) && "2".equals(superFileType);
+    }
+
+    public boolean isPrintRelatedDecisions() {
+        return getShowProductDetailsForm() && CollectionUtils.isNotEmpty(decisionHistories);
+    }
+
+    public Map<FileType, List<DecisionHistory>> getRelatedDecisionHistories() {
+
+        final Map<FileType, List<DecisionHistory>> map = new HashMap<>();
+
+        for (final DecisionHistory decisionHistory : decisionHistories) {
+
+            if (map.get(decisionHistory.getFileType()) == null) {
+                map.put(decisionHistory.getFileType(), new ArrayList<DecisionHistory>());
+            }
+
+            map.get(decisionHistory.getFileType()).add(decisionHistory);
+        }
+
+        return map;
     }
 
 }

@@ -45,7 +45,7 @@ public class EnumTest {
         Properties properties = new Properties();
         try {
             properties.load(new StringReader(dataTypeProps));
-            pattern = properties.getProperty(DataTypePropEnnum.PATTERN.getCode(), pattern);
+            pattern = properties.getProperty(DataTypePropEnum.PATTERN.getCode(), pattern);
         } catch (IOException ex) {
             System.err.println("Problem occured when trying to load properties of data type : ");
         }
