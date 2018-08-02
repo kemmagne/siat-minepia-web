@@ -2,7 +2,6 @@ package org.guce.siat.web.reports.vo;
 
 import java.util.Date;
 import java.util.List;
-import org.guce.siat.core.ct.model.TreatmentCompany;
 
 /**
  *
@@ -70,7 +69,6 @@ public class CtCctTreatmentFileVo {
     private String protectionEquipements;
     private boolean preventionPlaquePresent;
     private String generalObservations;
-    private TreatmentCompany treatmentCompany;
 
     public String getDecisionNumber() {
         return decisionNumber;
@@ -496,12 +494,7 @@ public class CtCctTreatmentFileVo {
         this.treatmentCompanyBp = treatmentCompanyBp;
     }
 
-    public TreatmentCompany getTreatmentCompany() {
-        return treatmentCompany;
-    }
-
-    public void setTreatmentCompany(TreatmentCompany treatmentCompany) {
-        this.treatmentCompany = treatmentCompany;
-    }
-
+    /**
+     *
+     */
 }

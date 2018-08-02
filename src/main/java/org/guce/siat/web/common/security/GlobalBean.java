@@ -443,6 +443,9 @@ public class GlobalBean implements Serializable
 	public void setAppEnv(final String appEnv)
 	{
 		this.appEnv = appEnv;
-	}
+        }
 
+        public boolean loggedUserHasAuthority(String authorityConstantsCode) {
+                return getLoggedUser().getAuthoritiesList().contains(authorityConstantsCode);
+        }
 }

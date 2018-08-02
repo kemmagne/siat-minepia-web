@@ -91,9 +91,9 @@
 								update=":growl :decisionForm " oncomplete="PF('datalistTable').filter();disableBtn()" ajax="false" />
 
 							<p:commandButton ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" id="reporting"
-								value="#{bundle['BouttonGenerateReport']}" styleClass="ui-priority-primary" rendered="#{fileItemApDetailController.generateReportAllowed}">
-						      <p:fileDownload value="#{fileItemApDetailController.downloadReport()}" />
-    						</p:commandButton>
+                                                                        value="#{bundle['BouttonGenerateReport']}" styleClass="ui-priority-primary" rendered="#{fileItemApDetailController.generateReportAllowed}">
+                                                              <p:fileDownload value="#{fileItemApDetailController.downloadReport()}" />
+                                                        </p:commandButton>
 						</f:facet>
 					</p:dataTable>
 				</p:tab>

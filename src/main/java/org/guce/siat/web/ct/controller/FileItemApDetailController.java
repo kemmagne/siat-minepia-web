@@ -1,11 +1,15 @@
 package org.guce.siat.web.ct.controller;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -42,8 +46,11 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.xml.bind.JAXBException;
+import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.commons.data.ContentStream;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.guce.siat.common.data.FieldGroupDto;
 import org.guce.siat.common.data.ItemFlowDto;
@@ -78,6 +85,7 @@ import org.guce.siat.common.model.User;
 import org.guce.siat.common.model.UserAuthorityFileType;
 import org.guce.siat.common.service.AdministrationService;
 import org.guce.siat.common.service.ApplicationPropretiesService;
+import org.guce.siat.common.service.AttachmentService;
 import org.guce.siat.common.service.EbxmlPropertiesService;
 import org.guce.siat.common.service.FieldGroupService;
 import org.guce.siat.common.service.FileFieldService;
@@ -111,6 +119,10 @@ import org.guce.siat.common.utils.enums.AuthorityConstants;
 import org.guce.siat.common.utils.enums.FileTypeCode;
 import org.guce.siat.common.utils.enums.FlowCode;
 import org.guce.siat.common.utils.enums.StepCode;
+import org.guce.siat.common.utils.ged.AlfrescoDirectoriesInitializer;
+import org.guce.siat.common.utils.ged.CmisClient;
+import org.guce.siat.common.utils.ged.CmisSession;
+import org.guce.siat.common.utils.ged.CmisUtils;
 import org.guce.siat.core.ct.model.AnalyseResultAp;
 import org.guce.siat.core.ct.model.EssayTestAP;
 import org.guce.siat.core.ct.model.Laboratory;
@@ -126,15 +138,17 @@ import org.guce.siat.web.common.ControllerConstants;
 import org.guce.siat.web.common.util.ApSpecificDecisionHistory;
 import org.guce.siat.web.ct.controller.util.JsfUtil;
 import org.guce.siat.web.ct.controller.util.ReportGeneratorUtils;
-import org.guce.siat.web.ct.controller.util.enums.DataTypeEnumeration;
+import org.guce.siat.web.ct.controller.util.enums.DataTypeEnnumeration;
 import org.guce.siat.web.ct.controller.util.enums.PersistenceActions;
 import org.guce.siat.web.reports.exporter.CpMinepdedExporter;
 import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.message.Message;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.DualListModel;
 import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -317,7 +331,10 @@ public class FileItemApDetailController implements Serializable {
      * The file type flow service.
      */
     @ManagedProperty(value = "#{fileTypeFlowService}")
-    private FileTypeFlowService fileTypeFlowService;
+        private FileTypeFlowService fileTypeFlowService;
+
+        @ManagedProperty(value = "#{attachmentService}")
+        private AttachmentService attachmentService;
 
     /**
      * The index page url.
@@ -759,6 +776,7 @@ public class FileItemApDetailController implements Serializable {
      *
      */
     private boolean vtTypeSelectionViewable;
+    private boolean aiMinmidtFileType;
     /**
      *
      */
@@ -770,7 +788,13 @@ public class FileItemApDetailController implements Serializable {
      */
     private boolean checkMinepdedMinistry;
 
-    private final String MINEPDED_MINISTRY = "MINEPDED";
+        private final String MINEPDED_MINISTRY = "MINEPDED";
+
+        private String newAttachmentName;
+
+        private java.io.File fileToSave;
+
+        boolean update = true;
 
     /**
      * The Constant ACCEPTATION_FLOWS.
@@ -929,6 +953,7 @@ public class FileItemApDetailController implements Serializable {
         if (currentFile.getDestinataire().equalsIgnoreCase(MINEPDED_MINISTRY)) {
             checkMinepdedMinistry = true;
         }
+        aiMinmidtFileType = FileTypeCode.AI_MINMIDT.equals(currentFile.getFileType().getCode());
     }
 
     /**
@@ -1075,10 +1100,171 @@ public class FileItemApDetailController implements Serializable {
         final AttachmentController attachmentController = getInstanceOfPageAttachmentController();
         attachmentController.setSelectedAttachment(selectedAttachment);
         attachmentController.init();
-    }
+        }
 
-    /**
-     * Gets the instance of page attachment controller.
+        public StreamedContent downloadAttachment() {
+                if (selectedAttachment == null) {
+                        JsfUtil.addWarningMessage("Selectionnez la pièce à télécharger");
+                        return null;
+                }
+                final Session sessionCmisClient = CmisSession.getInstance();
+                ContentStream contentStream = CmisClient.getDocumentByPath(sessionCmisClient, getSelectedAttachment().getPath()
+                                + AlfrescoDirectoriesInitializer.SLASH + getSelectedAttachment().getDocumentName());
+                if (contentStream == null) {
+                        contentStream = CmisClient.getDocumentByPath(sessionCmisClient, getSelectedAttachment().getPath());
+                }
+                if (contentStream == null) {
+                        JsfUtil.addErrorMessage("Impossible de trouver la pièce jointe");
+                        return null;
+                }
+                final BufferedInputStream in = new BufferedInputStream(contentStream.getStream());
+                final ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+                int val = -1;
+                try {
+                        while ((val = in.read()) != -1) {
+                                out.write(val);
+                        }
+                } catch (final IOException e) {
+                        LOG.error(e.getMessage(), e);
+                }
+
+                final byte[] bytes = out.toByteArray();
+
+                return new DefaultStreamedContent(new ByteArrayInputStream(bytes), !StringUtils.isEmpty(contentStream.getMimeType()) ? contentStream.getMimeType() : "application/msword", selectedAttachment.getDocumentName());
+        }
+
+        public byte[] getBytesFromAttachment(Attachment att) {
+                if (att == null) {
+                        return null;
+                }
+                final Session sessionCmisClient = CmisSession.getInstance();
+                ContentStream contentStream = CmisClient.getDocumentByPath(sessionCmisClient, att.getPath()
+                                + AlfrescoDirectoriesInitializer.SLASH + att.getDocumentName());
+                if (contentStream == null) {
+                        contentStream = CmisClient.getDocumentByPath(sessionCmisClient, att.getPath());
+                }
+                if (contentStream == null) {
+                        return null;
+                }
+                final BufferedInputStream in = new BufferedInputStream(contentStream.getStream());
+                final ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+                int val = -1;
+                try {
+                        while ((val = in.read()) != -1) {
+                                out.write(val);
+                        }
+                } catch (final IOException e) {
+                        LOG.error(e.getMessage(), e);
+                }
+
+                return out.toByteArray();
+        }
+
+        static CharsetEncoder asciiEncoder
+                        = Charset.forName("US-ASCII").newEncoder(); // or "ISO-8859-1" for ISO Latin 1
+
+        public static boolean isPureAscii(String v) {
+                return asciiEncoder.canEncode(v);
+        }
+
+        private Attachment findAuthorizationAttachment() {
+                List<Attachment> attachments = attachmentService.findAttachmentsByFile(currentFile);
+                if (attachments != null) {
+                        for (Attachment att : attachments) {
+                                if (att.getAttachmentType().equals("AI_MINMIDT")) {
+                                        return att;
+                                }
+                        }
+                }
+                return null;
+        }
+
+        public void handleFileUpload(FileUploadEvent event) {
+                update = true;
+                selectedAttachment = findAuthorizationAttachment();
+                if (selectedAttachment == null) {
+                        selectedAttachment = new Attachment();
+                        selectedAttachment.setFile(currentFile);
+                        selectedAttachment.setAttachmentType("AI_MINMIDT");
+                        update = false;
+                }
+                UploadedFile file = event.getFile();
+                if (file == null || StringUtils.isEmpty(file.getFileName())) {
+                        fileToSave = null;
+                        return;
+                }
+                String name = file.getFileName();
+                if (isPureAscii(name)) {
+                        String[] s = name.replace("\\", "/").split("[/]+");
+                        if (s != null && s.length > 0) {
+                                name = s[s.length - 1];
+                        }
+                        if (event.getFile().getContents().length > 1024000) {
+                                System.out.println("handerFileUpload, file too large");
+                                JsfUtil.addErrorMessage("La taille du fichier n'est pas supportée");
+                                fileToSave = null;
+                                name = "";
+                        } else {
+                                System.out.println("handerFileUpload, good. Waiting to be saved");
+                                fileToSave = new java.io.File(name.replaceAll("/[^A-Za-z0-9]/", ""));
+                                newAttachmentName = fileToSave.getName();
+                                try {
+                                        FileUtils.writeByteArrayToFile(fileToSave, file.getContents());
+                                } catch (IOException ex) {
+                                        java.util.logging.Logger.getLogger(FileItemApDetailController.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                        }
+                } else {
+                        JsfUtil.addErrorMessage("Le nom de la pièce renseignée est invalide");
+                        file = null;
+                        name = "";
+                }
+
+        }
+
+        public void saveAttachment() {
+                try {
+                        if (fileToSave == null) {
+                                return;
+                        }
+                        final List<java.io.File> attachedFiles = new ArrayList<>();
+                        attachedFiles.add(fileToSave);
+                        CmisUtils.sendDocument(attachedFiles, CmisSession.getInstance(), "/siat");
+                } catch (IOException ex) {
+                        java.util.logging.Logger.getLogger(FileItemApDetailController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                selectedAttachment.setFile(currentFile);
+                selectedAttachment.setDocumentName(fileToSave.getName());
+                selectedAttachment.setPath("/siat/" + fileToSave.getName());
+                if (update) {
+                        attachmentService.update(selectedAttachment);
+                } else {
+                        attachmentService.save(selectedAttachment);
+                }
+                fileToSave = null;
+                newAttachmentName = "";
+        }
+
+        public String getNewAttachmentName() {
+                return newAttachmentName;
+        }
+
+        public void setNewAttachmentName(String newAttachmentName) {
+                this.newAttachmentName = newAttachmentName;
+        }
+
+        public java.io.File getFileToSave() {
+                return fileToSave;
+        }
+
+        public void setFileToSave(java.io.File fileToSave) {
+                this.fileToSave = fileToSave;
+        }
+
+        /**
+         * Gets the instance of page attachment controller.
      *
      * @return the instance of page attachment controller
      */
@@ -1385,7 +1571,7 @@ public class FileItemApDetailController implements Serializable {
                 stringId = String.valueOf(dataType.getId());
             }
             HtmlPanelGroup htmlPanelGroup = null;
-            if (!isFimex || dataType.getType().equals(DataTypeEnumeration.CALENDAR.getCode())) {
+            if (!isFimex || dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
                 // Label for the component
                 final HtmlOutputLabel htmlOutputLabel = (HtmlOutputLabel) context.getApplication().createComponent(
                         HtmlOutputLabel.COMPONENT_TYPE);
@@ -1399,7 +1585,7 @@ public class FileItemApDetailController implements Serializable {
 
                 htmlPanelGroup = (HtmlPanelGroup) context.getApplication().createComponent(HtmlPanelGroup.COMPONENT_TYPE);
             }
-            if (dataType.getType().equals(DataTypeEnumeration.INPUTTEXT.getCode()) && !isFimex) {
+            if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode()) && !isFimex) {
                 final HtmlInputText inputText = (HtmlInputText) context.getApplication()
                         .createComponent(HtmlInputText.COMPONENT_TYPE);
                 if (dataType.getRequired()) {
@@ -1411,7 +1597,7 @@ public class FileItemApDetailController implements Serializable {
                 }
                 inputText.setId(ID_DECISION_LABEL + stringId);
                 htmlPanelGroup.getChildren().add(inputText);
-            } else if (dataType.getType().equals(DataTypeEnumeration.CHEKBOX.getCode()) && !isFimex) {
+            } else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode()) && !isFimex) {
                 final HtmlSelectBooleanCheckbox booleanCheckbox = (HtmlSelectBooleanCheckbox) context.getApplication()
                         .createComponent(HtmlSelectBooleanCheckbox.COMPONENT_TYPE);
                 if (dataType.getRequired()) {
@@ -1423,7 +1609,7 @@ public class FileItemApDetailController implements Serializable {
                 }
                 booleanCheckbox.setId(ID_DECISION_LABEL + stringId);
                 htmlPanelGroup.getChildren().add(booleanCheckbox);
-            } else if (dataType.getType().equals(DataTypeEnumeration.CALENDAR.getCode())) {
+            } else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
                 final Calendar calendar = (Calendar) context.getApplication().createComponent(Calendar.COMPONENT_TYPE);
                 calendar.setShowOn("button");
                 if (dataType.getRequired()) {
@@ -1445,7 +1631,7 @@ public class FileItemApDetailController implements Serializable {
                     calendar.setReadonly(true);
                 }
                 htmlPanelGroup.getChildren().add(calendar);
-            } else if (dataType.getType().equals(DataTypeEnumeration.INPUTTEXTAREA.getCode()) && !isFimex) {
+            } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode()) && !isFimex) {
                 final HtmlInputTextarea inputTextarea = (HtmlInputTextarea) context.getApplication().createComponent(
                         HtmlInputTextarea.COMPONENT_TYPE);
                 if (dataType.getRequired()) {
@@ -1458,8 +1644,8 @@ public class FileItemApDetailController implements Serializable {
                 inputTextarea.setRows(10);
                 inputTextarea.setId(ID_DECISION_LABEL + stringId);
                 htmlPanelGroup.getChildren().add(inputTextarea);
-            }
-            if (!isFimex || dataType.getType().equals(DataTypeEnumeration.CALENDAR.getCode())) {
+                }
+            if (!isFimex || dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
                 final Message message = (Message) context.getApplication().createComponent(Message.COMPONENT_TYPE);
                 message.setFor(ID_DECISION_LABEL + stringId);
                 htmlPanelGroup.getChildren().add(message);
@@ -1735,26 +1921,26 @@ public class FileItemApDetailController implements Serializable {
                 final boolean isFimex = currentFile.getFileType().getCode().equals(FileTypeCode.FIMEX_WF)
                         && FlowCode.FL_AP_106.name().equals(selectedFlow.getCode());
 
-                if (dataType.getType().equals(DataTypeEnumeration.INPUTTEXT.getCode()) && !isFimex) {
+                if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode()) && !isFimex) {
 
                     final HtmlInputText valueDataType = (HtmlInputText) decisionDiv.findComponent(ID_DECISION_LABEL + dataType.getId());
 
                     itemFlowData.setValue(valueDataType.getValue().toString());
 
-                } else if (dataType.getType().equals(DataTypeEnumeration.CHEKBOX.getCode()) && !isFimex) {
+                } else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode()) && !isFimex) {
                     final HtmlSelectBooleanCheckbox valueDataType = (HtmlSelectBooleanCheckbox) decisionDiv
                             .findComponent(ID_DECISION_LABEL + dataType.getId());
                     itemFlowData.setValue(valueDataType.getValue().toString());
 
-                } else if (dataType.getType().equals(DataTypeEnumeration.CALENDAR.getCode())) {
+                } else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
                     final Calendar valueDataType = (Calendar) decisionDiv.findComponent(ID_DECISION_LABEL + dataType.getId());
                     itemFlowData.setValue(DateUtils.formatSimpleDateFromObject(DateUtils.FRENCH_DATE, valueDataType.getValue()));
 
-                } else if (dataType.getType().equals(DataTypeEnumeration.INPUTTEXTAREA.getCode()) && !isFimex) {
+                } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode()) && !isFimex) {
                     final HtmlInputTextarea valueDataType = (HtmlInputTextarea) decisionDiv.findComponent(ID_DECISION_LABEL
                             + dataType.getId());
                     itemFlowData.setValue(valueDataType.getValue().toString());
-                }
+                    }
                 if (!Objects.equals(itemFlowData.getValue(), null)) {
                     flowDatas.add(itemFlowData);
                 }
@@ -1834,23 +2020,23 @@ public class FileItemApDetailController implements Serializable {
             final ItemFlowData itemFlowData = new ItemFlowData();
             itemFlowData.setDataType(dataType);
 
-            if (dataType.getType().equals(DataTypeEnumeration.INPUTTEXT.getCode())) {
+            if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode())) {
                 final HtmlInputText valueDataType = (HtmlInputText) dipatchDiv.findComponent(ID_DISPATCH_LABEL + dataType.getId());
                 itemFlowData.setValue(valueDataType.getValue().toString());
-            } else if (dataType.getType().equals(DataTypeEnumeration.CHEKBOX.getCode())) {
+            } else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode())) {
                 final HtmlSelectBooleanCheckbox valueDataType = (HtmlSelectBooleanCheckbox) dipatchDiv
                         .findComponent(ID_DISPATCH_LABEL + dataType.getId());
                 itemFlowData.setValue(valueDataType.getValue().toString());
 
-            } else if (dataType.getType().equals(DataTypeEnumeration.CALENDAR.getCode())) {
+            } else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
                 final Calendar valueDataType = (Calendar) dipatchDiv.findComponent(ID_DISPATCH_LABEL + dataType.getId());
                 itemFlowData.setValue(DateUtils.formatSimpleDateFromObject(DateUtils.FRENCH_DATE, valueDataType.getValue()));
 
-            } else if (dataType.getType().equals(DataTypeEnumeration.INPUTTEXTAREA.getCode())) {
+            } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode())) {
                 final HtmlInputTextarea valueDataType = (HtmlInputTextarea) dipatchDiv.findComponent(ID_DISPATCH_LABEL
                         + dataType.getId());
                 itemFlowData.setValue(valueDataType.getValue().toString());
-            }
+                }
             flowDatas.add(itemFlowData);
         }
 
@@ -1929,7 +2115,7 @@ public class FileItemApDetailController implements Serializable {
 
             dipatchDiv.getChildren().add(htmlPanelGroup);
 
-            if (dataType.getType().equals(DataTypeEnumeration.INPUTTEXT.getCode())) {
+            if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode())) {
                 final HtmlInputText inputText = (HtmlInputText) context.getApplication()
                         .createComponent(HtmlInputText.COMPONENT_TYPE);
                 if (dataType.getRequired()) {
@@ -1938,7 +2124,7 @@ public class FileItemApDetailController implements Serializable {
                 inputText.setId(ID_DISPATCH_LABEL + stringId);
                 inputText.setLabel(dataType.getLabel());
                 dipatchDiv.getChildren().add(inputText);
-            } else if (dataType.getType().equals(DataTypeEnumeration.CHEKBOX.getCode())) {
+            } else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode())) {
                 final HtmlSelectBooleanCheckbox booleanCheckbox = (HtmlSelectBooleanCheckbox) context.getApplication()
                         .createComponent(HtmlSelectBooleanCheckbox.COMPONENT_TYPE);
                 if (dataType.getRequired()) {
@@ -1948,7 +2134,7 @@ public class FileItemApDetailController implements Serializable {
                 booleanCheckbox.setLabel(dataType.getLabel());
                 dipatchDiv.getChildren().add(booleanCheckbox);
 
-            } else if (dataType.getType().equals(DataTypeEnumeration.CALENDAR.getCode())) {
+            } else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
                 final Calendar calendar = (Calendar) context.getApplication().createComponent(Calendar.COMPONENT_TYPE);
                 calendar.setShowOn("button");
                 if (dataType.getRequired()) {
@@ -1961,7 +2147,7 @@ public class FileItemApDetailController implements Serializable {
                 calendar.setLabel(dataType.getLabel());
                 dipatchDiv.getChildren().add(calendar);
 
-            } else if (dataType.getType().equals(DataTypeEnumeration.INPUTTEXTAREA.getCode())) {
+            } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode())) {
                 final HtmlInputTextarea inputTextarea = (HtmlInputTextarea) context.getApplication().createComponent(
                         HtmlInputTextarea.COMPONENT_TYPE);
                 if (dataType.getRequired()) {
@@ -1971,8 +2157,8 @@ public class FileItemApDetailController implements Serializable {
                 inputTextarea.setId(ID_DISPATCH_LABEL + stringId);
                 inputTextarea.setLabel(dataType.getLabel());
                 dipatchDiv.getChildren().add(inputTextarea);
-            }
-        }
+                        }
+                }
     }
 
     /**
@@ -2108,17 +2294,29 @@ public class FileItemApDetailController implements Serializable {
                                             fileFieldValueService.save(reportFieldValue);
                                         }
                                     }
-                                    //End Add new field value with report Number
-
-                                    final String nomClasse = fileTypeFlowReport.getReportClassName();
-                                    @SuppressWarnings("rawtypes")
-                                    final Class classe = Class.forName(nomClasse);
-                                    @SuppressWarnings({"rawtypes", "unchecked"})
-                                    //final Constructor c1 = classe.getConstructor(File.class);
-                                    //final byte[] report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile));
-                                    final byte[] report = ReportGeneratorUtils.generateReportBytes(fileFieldValueService, classe, currentFile);
-                                    attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
-
+                                        //End Add new field value with report Number
+                                        byte[] report = null;
+                                        
+                                    if (aiMinmidtFileType) {
+                                            Attachment finalAttachment = findAuthorizationAttachment();
+                                            if (finalAttachment == null) {
+                                                    if (fileToSave != null) {
+                                                            JsfUtil.addErrorMessage("Le rapport n'a pu être enregistré, mais sera envoyé");
+                                                            report = FileUtils.readFileToByteArray(fileToSave);
+                                                    } else {
+                                                            JsfUtil.addErrorMessage("Le rapport n'a pu être enregistré");
+                                                            return;
+                                                    }
+                                            } else {
+                                                    report = getBytesFromAttachment(finalAttachment);
+                                            }
+                                        } else {
+                                                final String nomClasse = fileTypeFlowReport.getReportClassName();
+                                                @SuppressWarnings("rawtypes")
+                                                final Class classe = Class.forName(nomClasse);
+                                                report = ReportGeneratorUtils.generateReportBytes(fileFieldValueService, classe, currentFile);
+                                        }
+                                        attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
                                     /**
                                      * *
                                      */
@@ -2937,7 +3135,9 @@ public class FileItemApDetailController implements Serializable {
                     generateReportAllowed = true;
                 }
             }
-
+        }
+        if (aiMinmidtFileType) {
+            generateReportAllowed = false;
         }
     }
 
@@ -2952,8 +3152,7 @@ public class FileItemApDetailController implements Serializable {
         final Flow reportingFlow = flowService.findByToStep(selectedFileItem.getStep());
         final List<FileTypeFlowReport> fileTypeFlowReportsList = reportingFlow.getFileTypeFlowReportsList();
 
-        if (fileTypeFlowReportsList != null) {
-
+        if (fileTypeFlowReportsList != null && !aiMinmidtFileType) {
             for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
                 if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType())) {
                     fileTypeFlowReports.add(fileTypeFlowReport);
@@ -2968,21 +3167,17 @@ public class FileItemApDetailController implements Serializable {
                 @SuppressWarnings("rawtypes")
                 Class classe = Class.forName(nomClasse);
                 @SuppressWarnings({"rawtypes", "unchecked"})
-//                final Constructor c1 = classe.getConstructor(File.class);
-//                final byte[] report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile));
                 final byte[] report = ReportGeneratorUtils.generateReportBytes(fileFieldValueService, classe, currentFile);
                 final InputStream is = new ByteArrayInputStream(report);
                 final StreamedContent fileToDownload = new DefaultStreamedContent(is, "application/pdf",
                         currentFile.getReferenceSiat() + '_' + fileTypeFlowReport.getReportName());
                 return fileToDownload;
-
             } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
                         .getString(ControllerConstants.Bundle.Messages.GENERATE_REPORT_FAILED);
                 JsfUtil.addErrorMessage(msg);
 
             }
-
         }
         return null;
     }
@@ -4197,8 +4392,16 @@ public class FileItemApDetailController implements Serializable {
         this.commonService = commonService;
     }
 
-    /**
-     * Gets the acceptation decision file type.
+        public AttachmentService getAttachmentService() {
+                return attachmentService;
+        }
+
+        public void setAttachmentService(final AttachmentService attachmentService) {
+                this.attachmentService = attachmentService;
+        }
+
+        /**
+         * Gets the acceptation decision file type.
      *
      * @return the acceptationDecisionFileType
      */
@@ -4979,6 +5182,10 @@ public class FileItemApDetailController implements Serializable {
         return vtTypeSelectionViewable;
     }
 
+    public boolean isAiMinmidtFileType() {
+        return aiMinmidtFileType;
+    }
+    
     public FileField getVtTypeFileField() {
         return vtTypeFileField;
     }

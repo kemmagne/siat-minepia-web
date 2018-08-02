@@ -2,7 +2,8 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VT_MINEPDED" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c454e72f-a03a-48c3-b1ea-f7425947e4b7">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="396"/>
+	<property name="ireport.y" value="352"/>
+	<property name="ireport.background.image.properties" value="true,true,0.25,-8,-8,0,0,402,564"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -48,54 +49,100 @@
 	<field name="decisionNumber" class="java.lang.String"/>
 	<field name="decisionDate" class="java.util.Date"/>
 	<field name="decisionPlace" class="java.lang.String"/>
+	<field name="fileCreationDate" class="java.util.Date"/>
 	<background>
-		<band splitType="Stretch"/>
+		<band height="802" splitType="Stretch">
+			<image scaleImage="FillFrame">
+				<reportElement uuid="428f767d-004b-432f-9c64-b8bb657d1b39" x="0" y="15" width="555" height="787"/>
+				<imageExpression><![CDATA["back_minepded.png"]]></imageExpression>
+			</image>
+		</band>
 	</background>
 	<title>
-		<band height="200" splitType="Stretch">
+		<band height="221" splitType="Stretch">
 			<frame>
-				<reportElement x="0" y="0" width="555" height="150" uuid="317ccfd6-fab5-41cb-ae2a-080e2c2d119e"/>
+				<reportElement uuid="317ccfd6-fab5-41cb-ae2a-080e2c2d119e" x="0" y="23" width="555" height="198"/>
 				<staticText>
-					<reportElement x="0" y="0" width="200" height="150" uuid="2b517386-9c96-414d-94f7-4cc02b31b1b5"/>
-					<textElement textAlignment="Center"/>
+					<reportElement uuid="0bad361d-46ee-4f80-b4f5-72e0c3d2aff3" x="315" y="13" width="200" height="40"/>
+					<textElement textAlignment="Center">
+						<font fontName="Century Gothic" size="9"/>
+					</textElement>
+					<text><![CDATA[REPUBLIC OF CAMEROON
+Peace - Work - Fatherland
+------]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="a7f25d60-f169-4d1a-bf7b-b48686d1a337" x="315" y="53" width="200" height="40"/>
+					<textElement textAlignment="Center">
+						<font fontName="Century Gothic" size="9" isBold="true"/>
+					</textElement>
+					<text><![CDATA[MINISTRY OF ENVIRONMENT,
+PROTECTION OF NATURE AND
+SUSTAINABIE  DEVELOPMENT]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="1090da29-e3d3-4786-adf9-23c90f6544da" x="315" y="93" width="200" height="37"/>
+					<textElement textAlignment="Center">
+						<font fontName="Century Gothic" size="9"/>
+					</textElement>
+					<text><![CDATA[--------
+SECRETARIAT GENERAL
+------]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="1090da29-e3d3-4786-adf9-23c90f6544da" x="33" y="93" width="200" height="37"/>
+					<textElement textAlignment="Center">
+						<font fontName="Century Gothic" size="9"/>
+					</textElement>
+					<text><![CDATA[--------
+SECRETARIAT GENERAL
+-----]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="0bad361d-46ee-4f80-b4f5-72e0c3d2aff3" x="33" y="13" width="200" height="40"/>
+					<textElement textAlignment="Center">
+						<font fontName="Century Gothic" size="10"/>
+					</textElement>
 					<text><![CDATA[REPUBLIQUE DU CAMEROUN
 Paix - Travail - Patrie
-------
-MINISTERE DE L'ENVIRONNEMENT
+------]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="a7f25d60-f169-4d1a-bf7b-b48686d1a337" x="33" y="53" width="200" height="40"/>
+					<textElement textAlignment="Center">
+						<font fontName="Century Gothic" size="9" isBold="true"/>
+					</textElement>
+					<text><![CDATA[MINISTERE DE L'ENVIRONNEMENT
 DE LA PROTECTION DE LA NATURE
-ET DU DEVELOPPEMENT DURABLE
---------
-SECRETARIAT GENERAL
------
-DIRECTION DES NORMES ET DU CONTROLE
+ET DU DEVELOPPEMENT DURABLE]]></text>
+				</staticText>
+				<image>
+					<reportElement uuid="c2eb552d-9eb7-4abb-901e-5cb739eff078" x="224" y="35" width="100" height="95"/>
+					<imageExpression><![CDATA["minepded_100.png"]]></imageExpression>
+				</image>
+				<staticText>
+					<reportElement uuid="1090da29-e3d3-4786-adf9-23c90f6544da" x="305" y="130" width="221" height="25"/>
+					<textElement textAlignment="Center">
+						<font fontName="Century Gothic" size="9"/>
+					</textElement>
+					<text><![CDATA[DEPARTMENT OF STANDARDS AND CONTROL
+------------------]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="1090da29-e3d3-4786-adf9-23c90f6544da" x="25" y="130" width="224" height="25"/>
+					<textElement textAlignment="Center">
+						<font fontName="Century Gothic" size="9"/>
+					</textElement>
+					<text><![CDATA[DIRECTION DES NORMES ET DU CONTROLE
 ---------------]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="355" y="0" width="200" height="150" uuid="0bad361d-46ee-4f80-b4f5-72e0c3d2aff3"/>
-					<textElement textAlignment="Center"/>
-					<text><![CDATA[REPUBLIC OF CAMEROON
-Peace - Work - Fatherland
-------
-MINISTRY OF ENVIRONMENT,
-PROTECTION OF NATURE AND
-SUSTAINABIE  DEVELOPMENT
----------
-SECRETARIAT GENERAL
-------
-DEPARTMENT OF STANDARDS AND CONTROL
-------------------]]></text>
+					<reportElement uuid="ede937f1-d94e-4618-9aca-9276fcd99c15" x="128" y="166" width="287" height="31"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" size="26" isBold="true"/>
+					</textElement>
+					<text><![CDATA[VISA TECHNIQUE]]></text>
 				</staticText>
-				<image hAlign="Center" vAlign="Middle">
-					<reportElement x="212" y="8" width="130" height="130" uuid="f7d08b77-c07f-4a4a-8645-0d911d127d7b"/>
-					<imageExpression><![CDATA["logo_minepded.png"]]></imageExpression>
-				</image>
-			</frame>
-			<frame>
-				<reportElement x="87" y="150" width="380" height="50" uuid="c8298d88-8cff-4b36-aa0a-3ed60ea89de7"/>
-				<image hAlign="Center" vAlign="Middle">
-					<reportElement x="0" y="0" width="380" height="50" uuid="8385fe7d-ab92-49a2-b77f-ed3672810370"/>
-					<imageExpression><![CDATA["visa_titre.png"]]></imageExpression>
-				</image>
 			</frame>
 		</band>
 	</title>
@@ -106,41 +153,25 @@ DEPARTMENT OF STANDARDS AND CONTROL
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="321" splitType="Stretch">
+		<band height="320" splitType="Stretch">
 			<frame>
-				<reportElement x="0" y="0" width="555" height="40" uuid="96e3804b-a0c4-45ed-a49d-7af42f43293f"/>
-				<textField isBlankWhenNull="true">
-					<reportElement x="0" y="0" width="555" height="40" uuid="6c138923-19b5-41e1-9600-28c5d9c8fc49"/>
-					<textElement textAlignment="Center" verticalAlignment="Top">
-						<font size="11"/>
-					</textElement>
-					<textFieldExpression><![CDATA["N° " + $F{decisionNumber} + "/SG/DNC/SDNAV du " + new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{decisionDate}) + " pour le contrôle de la qualité des équipements/appareils électriques et électroniques"]]></textFieldExpression>
-				</textField>
-			</frame>
-			<frame>
-				<reportElement x="0" y="40" width="555" height="42" uuid="48d9cffa-8a3b-4c96-8d84-8ff10a2a6f4b"/>
-				<image>
-					<reportElement x="28" y="0" width="521" height="42" uuid="a8719ec2-5f01-463a-9143-b1cdfa4dc361"/>
-					<imageExpression><![CDATA["visa_minepded_titre.png"]]></imageExpression>
-				</image>
-			</frame>
-			<frame>
-				<reportElement x="18" y="82" width="531" height="132" uuid="a5a0aa13-b2ad-4661-9ccb-8f7d64ec4e01"/>
+				<reportElement uuid="a5a0aa13-b2ad-4661-9ccb-8f7d64ec4e01" x="18" y="91" width="531" height="132"/>
 				<staticText>
-					<reportElement x="36" y="0" width="495" height="128" uuid="bb79ae77-6884-40f9-8828-72343584f7f7"/>
+					<reportElement uuid="bb79ae77-6884-40f9-8828-72343584f7f7" x="36" y="0" width="472" height="102"/>
 					<textElement>
+						<font fontName="Century Gothic" size="9"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<text><![CDATA[la Convention de Vienne sur la Protection de la Couche d’Ozone ratifier le 30 Août 1989
 le Protocole de Montréal relatif à des substances appauvrissant la Couche d’Ozone du 16 Septembre 1987 et ses différents amendements
 la loi n° 96/12 du 5 août 1996 portant loi-cadre relative à la gestion de l’environnement
 le décret n° 2012/2809/PM du 26 septembre 2012 fixant les conditions de tri, de collecte, de stockage, de transport, de récupération, de recyclage, de traitement et d’élimination finale des déchets
-l’Arrêté conjoint No 005/ MINEPDED/MINCOMMERCE du  24 octobre 2012   fixant les conditions spécifiques de gestion des équipements  électriques  et électroniques ainsi que de  l’élimination des déchets issus de ces équipements
-le dossier technique introduite le 06 juin 2013  par :]]></text>
+l’Arrêté conjoint No 005/ MINEPDED/MINCOMMERCE du  24 octobre 2012   fixant les conditions spécifiques de gestion des équipements  électriques  et électroniques ainsi que de  l’élimination des déchets issus de ces équipements]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="0" y="0" width="36" height="128" uuid="d652e7aa-2c4f-4a7c-be17-116602449b4e"/>
+					<reportElement uuid="d652e7aa-2c4f-4a7c-be17-116602449b4e" x="13" y="0" width="22" height="118"/>
 					<textElement>
+						<font fontName="Century Gothic" size="9"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<text><![CDATA[Vu
@@ -154,107 +185,149 @@ Vu
 
 Vu]]></text>
 				</staticText>
+				<textField>
+					<reportElement uuid="415b0a8d-f644-4fff-9bef-a06b8173025e" x="36" y="99" width="472" height="20"/>
+					<textElement>
+						<font fontName="Century Gothic" size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA["le dossier technique introduit le " + ($F{fileCreationDate} == null ? "-" : new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{fileCreationDate})) + " par :"]]></textFieldExpression>
+				</textField>
 			</frame>
 			<frame>
-				<reportElement x="18" y="214" width="531" height="106" uuid="c78d124f-21ab-48e2-b746-8d9167549926"/>
+				<reportElement uuid="c78d124f-21ab-48e2-b746-8d9167549926" x="19" y="211" width="517" height="106"/>
 				<staticText>
-					<reportElement x="0" y="0" width="120" height="15" uuid="a4044a05-554c-49e0-9298-44713007fcdf"/>
+					<reportElement uuid="a4044a05-554c-49e0-9298-44713007fcdf" x="11" y="0" width="103" height="15"/>
+					<textElement>
+						<font fontName="Century Gothic" size="9"/>
+					</textElement>
 					<text><![CDATA[Nom de l'importateur :]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="0" y="15" width="120" height="15" uuid="185519c5-6111-4068-bea8-aef664768cb7"/>
+					<reportElement uuid="185519c5-6111-4068-bea8-aef664768cb7" x="11" y="15" width="50" height="15"/>
+					<textElement>
+						<font fontName="Century Gothic" size="9"/>
+					</textElement>
 					<text><![CDATA[Profession :]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="0" y="30" width="120" height="15" uuid="3e51eda2-83a9-4399-8365-3e9487350a68"/>
+					<reportElement uuid="3e51eda2-83a9-4399-8365-3e9487350a68" x="11" y="30" width="46" height="15"/>
+					<textElement>
+						<font fontName="Century Gothic" size="9"/>
+					</textElement>
 					<text><![CDATA[Adresse :]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="0" y="45" width="120" height="15" uuid="4c8d57cb-7d16-47e5-a5de-3fdd628e42f5"/>
+					<reportElement uuid="4c8d57cb-7d16-47e5-a5de-3fdd628e42f5" x="11" y="45" width="70" height="15"/>
+					<textElement>
+						<font fontName="Century Gothic" size="9"/>
+					</textElement>
 					<text><![CDATA[N° de  facture :]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="0" y="60" width="120" height="15" uuid="5ba6343a-8a3c-4422-ad24-b7a837a966aa"/>
+					<reportElement uuid="5ba6343a-8a3c-4422-ad24-b7a837a966aa" x="11" y="60" width="57" height="15"/>
+					<textElement>
+						<font fontName="Century Gothic" size="9"/>
+					</textElement>
 					<text><![CDATA[Fournisseur :]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="0" y="75" width="120" height="15" uuid="04b75234-710e-48aa-9fd8-c0564195285d"/>
+					<reportElement uuid="04b75234-710e-48aa-9fd8-c0564195285d" x="11" y="75" width="70" height="15"/>
+					<textElement>
+						<font fontName="Century Gothic" size="9"/>
+					</textElement>
 					<text><![CDATA[Pays d'origine :]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="0" y="90" width="120" height="15" uuid="75eb3ab6-05c8-4c91-a2fa-997bfcf36b2e"/>
+					<reportElement uuid="75eb3ab6-05c8-4c91-a2fa-997bfcf36b2e" x="11" y="90" width="100" height="15"/>
+					<textElement>
+						<font fontName="Century Gothic" size="9"/>
+					</textElement>
 					<text><![CDATA[Pays de provenance :]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement x="120" y="0" width="400" height="15" uuid="9f394e8a-78a5-4cee-bc00-72219b760f76"/>
+					<reportElement uuid="9f394e8a-78a5-4cee-bc00-72219b760f76" x="114" y="0" width="397" height="15"/>
 					<textElement>
-						<font isUnderline="true"/>
+						<font fontName="Century Gothic" size="9" isBold="true" isUnderline="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{importer}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="120" y="15" width="400" height="15" uuid="8424844e-50cf-4963-9f08-5935d26c7f59"/>
+					<reportElement uuid="8424844e-50cf-4963-9f08-5935d26c7f59" x="62" y="15" width="449" height="15"/>
 					<textElement>
-						<font isUnderline="true"/>
+						<font fontName="Century Gothic" size="9" isBold="true" isItalic="true" isUnderline="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{profession}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="120" y="30" width="400" height="15" uuid="0af3c668-3bee-42c8-856d-c21a47430945"/>
+					<reportElement uuid="0af3c668-3bee-42c8-856d-c21a47430945" x="57" y="30" width="454" height="15"/>
 					<textElement>
-						<font isUnderline="true"/>
+						<font fontName="Century Gothic" size="9" isBold="true" isItalic="true" isUnderline="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="120" y="45" width="400" height="15" uuid="ae3cf8f5-3b4f-4f53-8d2a-dbb9d3352e3b"/>
+					<reportElement uuid="ae3cf8f5-3b4f-4f53-8d2a-dbb9d3352e3b" x="81" y="45" width="430" height="15"/>
 					<textElement>
-						<font isUnderline="true"/>
+						<font fontName="Century Gothic" size="9" isUnderline="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{invoice}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="120" y="60" width="400" height="15" uuid="3016e8f0-125f-4c03-81e8-e66951a26e9a"/>
+					<reportElement uuid="3016e8f0-125f-4c03-81e8-e66951a26e9a" x="68" y="60" width="443" height="15"/>
 					<textElement>
-						<font isUnderline="true"/>
+						<font fontName="Century Gothic" size="9" isBold="true" isItalic="true" isUnderline="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{provider}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="120" y="75" width="400" height="15" uuid="7bddaa01-ba7a-4482-a9d5-f125f31c5de1"/>
+					<reportElement uuid="7bddaa01-ba7a-4482-a9d5-f125f31c5de1" x="81" y="75" width="430" height="15"/>
 					<textElement>
-						<font isUnderline="true"/>
+						<font fontName="Century Gothic" size="9" isUnderline="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{countryOfOrigin}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="120" y="90" width="400" height="15" uuid="83686eb9-7f01-4bc7-bdf0-ab19c752ccbb"/>
+					<reportElement uuid="83686eb9-7f01-4bc7-bdf0-ab19c752ccbb" x="111" y="90" width="400" height="15"/>
 					<textElement>
-						<font isUnderline="true"/>
+						<font fontName="Century Gothic" size="9" isBold="true" isItalic="true" isUnderline="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{countryOfProvenance}]]></textFieldExpression>
 				</textField>
 			</frame>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="6c138923-19b5-41e1-9600-28c5d9c8fc49" x="29" y="9" width="500" height="40"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Century Gothic" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["N° " + ($F{decisionNumber} == null ? "-" : $F{decisionNumber})+ "/SG/DNC/SDNAV du " + ($F{decisionDate} == null ? "-" : new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{decisionDate})) + " pour le contrôle de la qualité des équipements/appareils électriques et électroniques"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="2c70d03b-f178-46b1-8aa9-a312cef372b8" x="29" y="49" width="500" height="40"/>
+				<textElement textAlignment="Center">
+					<font fontName="Century Gothic" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Le Ministre de l’Environnement, de la Protection de la Nature et du Développement Durable]]></text>
+			</staticText>
 		</band>
 		<band height="255">
 			<frame>
-				<reportElement x="0" y="0" width="555" height="255" uuid="ee341e1a-2fbd-4aa2-b6c7-e00e38a6df9d"/>
+				<reportElement uuid="ee341e1a-2fbd-4aa2-b6c7-e00e38a6df9d" x="0" y="0" width="555" height="246"/>
 				<staticText>
-					<reportElement x="12" y="110" width="488" height="20" uuid="cb2ab31a-7508-4ca8-9094-19ecdd1b540c"/>
+					<reportElement uuid="62dbef98-63e5-45ee-b9f9-e6bbbf693c20" x="54" y="4" width="450" height="20"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="11" isBold="true"/>
-					</textElement>
-					<text><![CDATA[En foi de quoi le présent visa technique est délivré pour servir et valoir ce que de droit.]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="80" y="0" width="449" height="20" uuid="62dbef98-63e5-45ee-b9f9-e6bbbf693c20"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="11" isBold="true"/>
+						<font fontName="Century Gothic" size="10" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Atteste que les produits ci-après sont autorisés à être importés au Cameroun :]]></text>
 				</staticText>
+				<staticText>
+					<reportElement uuid="cb2ab31a-7508-4ca8-9094-19ecdd1b540c" x="29" y="129" width="488" height="20"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Century Gothic" size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[En foi de quoi le présent visa technique est délivré pour servir et valoir ce que de droit.]]></text>
+				</staticText>
 				<componentElement>
-					<reportElement key="table" style="table" x="0" y="20" width="555" height="90" uuid="c233e067-7ee4-44b0-a7de-4b76c4abe207"/>
+					<reportElement uuid="c233e067-7ee4-44b0-a7de-4b76c4abe207" key="table" style="table" x="30" y="36" width="496" height="83" forecolor="#FFFFFF"/>
 					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 						<datasetRun subDataset="itemsDataSet" uuid="e500bb7c-900b-453a-8ae1-f7f4e52c8329">
 							<datasetParameter name="TOTAL_QUANTITY">
@@ -265,9 +338,9 @@ Vu]]></text>
 						<jr:column width="50" uuid="f63b42f0-7fa8-4fbe-993b-afc535aa0bea">
 							<jr:columnHeader style="table_CH" height="29" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="50" height="29" uuid="16c8cec0-0f7a-457f-95a1-190bcb87f3f7"/>
+									<reportElement uuid="16c8cec0-0f7a-457f-95a1-190bcb87f3f7" x="0" y="0" width="50" height="29"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
-										<font fontName="Century Gothic" size="12" isBold="true"/>
+										<font fontName="Century Gothic" size="9" isBold="true"/>
 									</textElement>
 									<text><![CDATA[N°]]></text>
 								</staticText>
@@ -275,92 +348,97 @@ Vu]]></text>
 							<jr:columnFooter style="table_CH" height="24" rowSpan="1"/>
 							<jr:detailCell style="table_TD" height="35" rowSpan="1">
 								<textField>
-									<reportElement x="0" y="0" width="50" height="35" uuid="32b4163a-1bee-40f9-8626-f20bb009dd17"/>
+									<reportElement uuid="32b4163a-1bee-40f9-8626-f20bb009dd17" x="0" y="0" width="50" height="35"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
-										<font fontName="Century Gothic"/>
+										<font fontName="Century Gothic" size="9" isBold="true"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{code} == null ? "-" : $F{code}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column width="400" uuid="9686c5d9-354c-4ef3-9ca9-4a4cdd20748f">
+						<jr:column width="340" uuid="9686c5d9-354c-4ef3-9ca9-4a4cdd20748f">
 							<jr:columnHeader style="table_CH" height="29" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="400" height="29" uuid="727575e1-9f79-4232-9c85-8f43a11b9805"/>
+									<reportElement uuid="727575e1-9f79-4232-9c85-8f43a11b9805" x="1" y="0" width="339" height="29"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
-										<font fontName="Century Gothic" size="12" isBold="true"/>
+										<font fontName="Century Gothic" size="9" isBold="true"/>
 									</textElement>
 									<text><![CDATA[Désignation]]></text>
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter style="table_CH" height="24" rowSpan="1">
 								<staticText>
-									<reportElement x="1" y="0" width="399" height="24" uuid="cf4e28b7-e0b3-4261-b698-f913200727d6"/>
+									<reportElement uuid="cf4e28b7-e0b3-4261-b698-f913200727d6" x="1" y="0" width="339" height="24"/>
 									<textElement verticalAlignment="Middle">
-										<font fontName="Century Gothic" size="12" isBold="true"/>
+										<font fontName="Century Gothic" size="9" isBold="false"/>
 									</textElement>
-									<text><![CDATA[Total]]></text>
+									<text><![CDATA[Total ..........................................................................................................................]]></text>
 								</staticText>
 							</jr:columnFooter>
 							<jr:detailCell style="table_TD" height="35" rowSpan="1">
 								<textField>
-									<reportElement x="1" y="0" width="399" height="35" uuid="2d44e005-a106-475f-99af-f7f1b2abf665"/>
+									<reportElement uuid="2d44e005-a106-475f-99af-f7f1b2abf665" x="0" y="0" width="340" height="35"/>
 									<textElement verticalAlignment="Middle">
-										<font fontName="Century Gothic"/>
+										<font fontName="Century Gothic" size="9" isBold="true"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$F{desc}]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{desc} == null ? "-" : $F{desc}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
 						<jr:column width="106" uuid="00b2edf5-0cfe-4874-8e0d-273640305953">
 							<jr:columnHeader style="table_CH" height="29" rowSpan="1">
 								<staticText>
-									<reportElement x="0" y="0" width="105" height="29" uuid="8cf169f8-623b-4bdf-8d33-a2820b73a519"/>
+									<reportElement uuid="8cf169f8-623b-4bdf-8d33-a2820b73a519" x="1" y="0" width="105" height="29"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
-										<font fontName="Century Gothic" size="12" isBold="true"/>
+										<font fontName="Century Gothic" size="9" isBold="true"/>
 									</textElement>
 									<text><![CDATA[Quantité]]></text>
 								</staticText>
 							</jr:columnHeader>
 							<jr:columnFooter style="table_CH" height="24" rowSpan="1">
 								<textField pattern="#,##0.##">
-									<reportElement x="1" y="0" width="105" height="24" uuid="d9d3069e-9dfa-46b2-9a56-bad7ff0dcff8"/>
+									<reportElement uuid="d9d3069e-9dfa-46b2-9a56-bad7ff0dcff8" x="1" y="0" width="105" height="24"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
-										<font fontName="Century Gothic"/>
+										<font fontName="Century Gothic" size="9" isBold="true"/>
 									</textElement>
 									<textFieldExpression><![CDATA[$V{TOTAL_QUANTITY}]]></textFieldExpression>
 								</textField>
 							</jr:columnFooter>
 							<jr:detailCell style="table_TD" height="35" rowSpan="1">
 								<textField pattern="#,##0.##">
-									<reportElement x="1" y="0" width="105" height="35" uuid="584933f5-b937-4246-b893-ca4406aafb81"/>
+									<reportElement uuid="584933f5-b937-4246-b893-ca4406aafb81" x="1" y="0" width="105" height="35"/>
 									<textElement textAlignment="Center" verticalAlignment="Middle">
-										<font fontName="Century Gothic"/>
+										<font fontName="Century Gothic" size="9" isBold="true"/>
 									</textElement>
-									<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
+									<textFieldExpression><![CDATA[$F{quantity} == null ? "-" : $F{quantity}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
 					</jr:table>
 				</componentElement>
 				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-					<reportElement x="12" y="135" width="517" height="15" uuid="98675914-0ca2-4fae-8842-e6290f13e0f8"/>
+					<reportElement uuid="98675914-0ca2-4fae-8842-e6290f13e0f8" x="29" y="154" width="500" height="15"/>
 					<textElement verticalAlignment="Middle" markup="none">
-						<font size="11" isBold="false"/>
+						<font fontName="Century Gothic" size="10" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA["Fait à Yaoundé, le " + new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{decisionDate})]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="12" y="185" width="188" height="20" uuid="cf523fa4-4cde-4891-a12f-ba0fd7e21526"/>
+					<reportElement uuid="cf523fa4-4cde-4891-a12f-ba0fd7e21526" x="29" y="211" width="188" height="20"/>
 					<textElement>
-						<font fontName="Times New Roman" isBold="true"/>
+						<font fontName="Times New Roman" isBold="true" isItalic="true"/>
 					</textElement>
 					<text><![CDATA[NB : Ce document a une validité de trois mois.	]]></text>
 				</staticText>
-				<image>
-					<reportElement x="266" y="152" width="270" height="50" uuid="4d673a85-f331-4509-ad7a-0c3de94638a5"/>
-					<imageExpression><![CDATA["signature_minepded.png"]]></imageExpression>
-				</image>
+				<staticText>
+					<reportElement uuid="b6bdd93f-98fc-4d52-8469-7bea758ef4c6" x="302" y="175" width="227" height="39"/>
+					<textElement>
+						<font fontName="Arial" isBold="true" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[LE MINISTRE DE L’ENVIRONNEMENT, DE LA
+PROTECTION DE LA NATURE ET DU
+DEVELOPPEMENT DURABLE]]></text>
+				</staticText>
 			</frame>
 		</band>
 	</detail>
@@ -371,23 +449,9 @@ Vu]]></text>
 		<band splitType="Stretch"/>
 	</pageFooter>
 	<summary>
-		<band height="200" splitType="Stretch">
-			<frame>
-				<reportElement x="80" y="20" width="380" height="50" uuid="06175fbf-bcb2-4871-a9c7-8b313d752c72"/>
-				<image>
-					<reportElement x="0" y="0" width="380" height="50" uuid="2e75e08a-c5e1-496f-9b2a-e6353da926b9"/>
-					<imageExpression><![CDATA["annexe_visa_minepded.png"]]></imageExpression>
-				</image>
-			</frame>
-			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="70" width="555" height="40" uuid="ff54e81e-e5c9-410a-beca-5b5b599b8393"/>
-				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font size="11"/>
-				</textElement>
-				<textFieldExpression><![CDATA["N° " + $F{decisionNumber} + "/SG/DNC/SDNAV du " + new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{decisionDate}) + " pour le contrôle de la qualité des équipements/appareils électriques et électroniques"]]></textFieldExpression>
-			</textField>
+		<band height="233" splitType="Stretch">
 			<componentElement>
-				<reportElement key="table" style="table" x="0" y="110" width="555" height="90" uuid="515cd074-002d-4ebe-939f-2bee01f0fc2f"/>
+				<reportElement uuid="515cd074-002d-4ebe-939f-2bee01f0fc2f" key="table" style="table" x="30" y="141" width="496" height="90"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="itemsDataSet" uuid="79ead8ae-6916-47f2-b3ca-16b8ccb7a948">
 						<datasetParameter name="TOTAL_QUANTITY">
@@ -398,9 +462,9 @@ Vu]]></text>
 					<jr:column width="50" uuid="9e6b9840-31c8-4c42-95ed-404113cc0edc">
 						<jr:columnHeader style="table_CH" height="29" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="50" height="29" uuid="cb0f7c18-427a-4a4c-9cf7-733140d0c5fc"/>
+								<reportElement uuid="cb0f7c18-427a-4a4c-9cf7-733140d0c5fc" x="0" y="0" width="50" height="29"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Century Gothic" size="12" isBold="true"/>
+									<font fontName="Century Gothic" size="9" isBold="true"/>
 								</textElement>
 								<text><![CDATA[N°]]></text>
 							</staticText>
@@ -408,74 +472,88 @@ Vu]]></text>
 						<jr:columnFooter style="table_CH" height="24" rowSpan="1"/>
 						<jr:detailCell style="table_TD" height="35" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="0" width="50" height="35" uuid="69f8cd35-c729-4706-b8f8-43ea0bd67406"/>
+								<reportElement uuid="69f8cd35-c729-4706-b8f8-43ea0bd67406" x="0" y="0" width="50" height="35"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Century Gothic"/>
+									<font fontName="Century Gothic" size="9"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{code} == null ? "-" : $F{code}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="400" uuid="9d164c3c-793e-4fde-b440-a0b0626574eb">
+					<jr:column width="339" uuid="9d164c3c-793e-4fde-b440-a0b0626574eb">
 						<jr:columnHeader style="table_CH" height="29" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="400" height="29" uuid="d72d476a-7d3d-4c8b-97e3-94e19921dd47"/>
+								<reportElement uuid="d72d476a-7d3d-4c8b-97e3-94e19921dd47" x="0" y="0" width="339" height="29"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Century Gothic" size="12" isBold="true"/>
+									<font fontName="Century Gothic" size="9" isBold="true"/>
 								</textElement>
 								<text><![CDATA[Désignation]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:columnFooter style="table_CH" height="24" rowSpan="1">
 							<staticText>
-								<reportElement x="1" y="0" width="399" height="24" uuid="bc859c00-f0e3-422a-83d4-1cc447c770b5"/>
+								<reportElement uuid="bc859c00-f0e3-422a-83d4-1cc447c770b5" x="1" y="0" width="338" height="24"/>
 								<textElement verticalAlignment="Middle">
-									<font fontName="Century Gothic" size="12" isBold="true"/>
+									<font fontName="Century Gothic" size="9" isBold="false"/>
 								</textElement>
-								<text><![CDATA[Total]]></text>
+								<text><![CDATA[Total ...................................................................................................................]]></text>
 							</staticText>
 						</jr:columnFooter>
 						<jr:detailCell style="table_TD" height="35" rowSpan="1">
 							<textField>
-								<reportElement x="1" y="0" width="399" height="35" uuid="dd95c63b-64b1-445e-a22b-6d0008479b16"/>
+								<reportElement uuid="dd95c63b-64b1-445e-a22b-6d0008479b16" x="1" y="0" width="338" height="35"/>
 								<textElement verticalAlignment="Middle">
-									<font fontName="Century Gothic"/>
+									<font fontName="Century Gothic" size="9"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{desc}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{desc} == null ? "-" : $F{desc}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="106" uuid="192c8b02-d649-4ad8-8bff-3b9091857223">
 						<jr:columnHeader style="table_CH" height="29" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="105" height="29" uuid="26febf4c-8248-49b8-8faf-f73ce13d6592"/>
+								<reportElement uuid="26febf4c-8248-49b8-8faf-f73ce13d6592" x="1" y="0" width="105" height="29"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Century Gothic" size="12" isBold="true"/>
+									<font fontName="Century Gothic" size="9" isBold="true"/>
 								</textElement>
 								<text><![CDATA[Quantité]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:columnFooter style="table_CH" height="24" rowSpan="1">
 							<textField pattern="#,##0.##">
-								<reportElement x="1" y="0" width="105" height="24" uuid="f7c09704-ad89-48f3-bc81-ba00743a1cb5"/>
+								<reportElement uuid="f7c09704-ad89-48f3-bc81-ba00743a1cb5" x="1" y="0" width="105" height="24"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Century Gothic"/>
+									<font fontName="Century Gothic" size="9" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$V{TOTAL_QUANTITY}]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="table_TD" height="35" rowSpan="1">
 							<textField pattern="#,##0.##">
-								<reportElement x="1" y="0" width="105" height="35" uuid="9ce9422a-eec1-4fa8-a89f-3520f20795df"/>
+								<reportElement uuid="9ce9422a-eec1-4fa8-a89f-3520f20795df" x="1" y="0" width="105" height="35"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Century Gothic"/>
+									<font fontName="Century Gothic" size="9"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{quantity} == null ? "-" : $F{quantity}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 				</jr:table>
 			</componentElement>
+			<staticText>
+				<reportElement uuid="6e33fb97-b882-4eed-b8a2-f842d8a29efe" x="87" y="42" width="379" height="38"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="26" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ANNEXE VISA TECHNIQUE]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="7ff2dca8-a7aa-42c6-a36d-be1d83264290" x="33" y="90" width="493" height="35"/>
+				<textElement textAlignment="Center">
+					<font fontName="Century Gothic" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["N° " + ($F{decisionNumber} == null ? "-" : $F{decisionNumber})+ "/SG/DNC/SDNAV du " + ($F{decisionDate} == null ? "-" : new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{decisionDate})) + " pour le contrôle de la qualité des équipements/appareils électriques et électroniques"]]></textFieldExpression>
+			</textField>
 		</band>
 	</summary>
 </jasperReport>

@@ -34,7 +34,7 @@
                 <environment>dev</environment>
                 <db.username>siat_ct</db.username>
                 <db.password>siat</db.password>
-                <db.url>jdbc:oracle:thin:@vm:1521:GUCE</db.url>
+                <db.url>jdbc:oracle:thin:@siatserverdev:1510:GUCE</db.url>
                 <!--<db.url>jdbc:oracle:thin:@dev:1510:GUCE</db.url>-->
                 <ged.url>http://172.24.2.134:8080</ged.url>
                 <jms.url>failover:(tcp://brokerurl:61616)</jms.url>
@@ -45,9 +45,9 @@
                 <uri.out>SIAT</uri.out>
                 <uri.dead.in>direct:dead</uri.dead.in>
                 <uri.dead.out>amq:SIAT</uri.dead.out>
-                <ebxml.folder>C:\Users\tadzotsa\siat\eguce\ebxml</ebxml.folder>
-                <xml.folder>C:\Users\tadzotsa\siat\eguce\xml</xml.folder>
-                <attachement.folder>C:\Users\tadzotsa\siat\eguce\attachement</attachement.folder>
+                <ebxml.folder>C:/Users/leric/siat/ebxml</ebxml.folder>
+                <xml.folder>C:/Users/leric/siat/xml</xml.folder>
+                <attachement.folder>C:/Users/leric/siat/attachement</attachement.folder>
                 <hibernate.default_schema>SIAT_CT</hibernate.default_schema>
                 <jms.username>admin</jms.username>
                 <jms.password>admin</jms.password>
@@ -56,7 +56,7 @@
                 <mailSender.username>guce.technical.notifier</mailSender.username>
                 <mailSender.password>P@ssword2015</mailSender.password>
                 <mailSender.from>guce.technical.notifier@gmail.com</mailSender.from>
-                <mailSender.replyTo>yenkus@gmail.com</mailSender.replyTo>
+                <mailSender.replyTo>lerichgames@gmail.com</mailSender.replyTo>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
