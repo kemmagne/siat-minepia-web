@@ -155,19 +155,19 @@
                                 actionListener="#{trendPerformanceController.goToPage}" />
 
                 </p:submenu>
-                <ui:remove>
-                    <p:submenu id="wfStepsFlowsSubMenu" label="#{bundle['appmenu_wfStepsFlows']}" icon="ui-icon-contact" styleClass="workflow"
-                               rendered="#{request.isUserInRole('ADMIN_ORG')}">
 
-                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="fileTypeMenuItem"
-                                    value="#{bundle['appmenu_configure_fileType']}" actionListener="#{fileTypeController.goToPage}"
-                                    rendered="#{request.isUserInRole('ADMIN_ORG')}" />
-                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="positionAuthorityMenuItem"
-                                    value="#{bundle['appmenu_configure_AuthoritiesPerPosition']}" actionListener="#{positionAuthorityController.goToPage}"
-                                    rendered="#{request.isUserInRole('ADMIN_ORG')}" />
+				<p:submenu id="wfStepsFlowsSubMenu" label="#{bundle['appmenu_wfStepsFlows']}" icon="ui-icon-contact" styleClass="workflow"
+						   rendered="#{request.isUserInRole('ROOT')}">
 
-                    </p:submenu>
-                </ui:remove>
+					<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="fileTypeMenuItem"
+								value="#{bundle['appmenu_configure_fileType']}" actionListener="#{fileTypeController.goToPage}"
+								rendered="#{request.isUserInRole('ROOT')}" />
+					<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="positionAuthorityMenuItem"
+								value="#{bundle['appmenu_configure_AuthoritiesPerPosition']}" actionListener="#{positionAuthorityController.goToPage}"
+								rendered="#{false and request.isUserInRole('ROOT')}" />
+
+				</p:submenu>
+
                 <p:submenu id="searchSubMenu" label="#{bundle['appmenu_search']}" styleClass="searchSubMenu"
                            rendered="#{!request.isUserInRole('ROOT') and !request.isUserInRole('ADMIN_MIN') and !request.isUserInRole('ADMIN_ORG')}">
 

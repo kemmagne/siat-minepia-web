@@ -1,89 +1,109 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+	  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
 
-<ui:composition>
+	<ui:composition>
 
-	<p:dialog closeOnEscape="true" id="fileTypeEditDlg" widgetVar="fileTypeEditDialog" modal="true" resizable="false" appendTo="@(body)"
-		header="#{bundle['EditFileTypeTitle']}">
-		<h:form id="fileTypeEditForm">
-			<h:panelGroup id="display">
+		<p:dialog closeOnEscape="true" id="fileTypeEditDlg" widgetVar="fileTypeEditDialog" modal="true" resizable="false" appendTo="@(body)"
+				  header="#{bundle['EditFileTypeTitle']}">
+			<h:form id="fileTypeEditForm">
+				<p:outputPanel id="display">
+					<p:panelGrid columns="4">
+						<p:outputLabel value="#{bundle['EditFileTypeLabel_labelFr']}" for="fileType_labelFr" />
+						<h:panelGroup>
+							<p:inputText id="fileType_labelFr" value="#{fileTypeController.selected.labelFr}" title="#{bundle['EditFileTypeTitle_labelFr']}"
+										 required="true" requiredMessage="#{bundle['EditFileTypeRequiredMessage_labelFr']}" />
+							<p:message for="fileType_labelFr" />
+						</h:panelGroup>
 
-				<p:panelGrid columns="4">
-					<p:outputLabel value="#{bundle['EditFileTypeLabel_labelFr']}" for="fileType_labelFr" />
-					<h:panelGroup>
-						<p:inputText id="fileType_labelFr" value="#{fileTypeController.selected.labelFr}" title="#{bundle['EditFileTypeTitle_labelFr']}"
-							required="true" requiredMessage="#{bundle['EditFileTypeRequiredMessage_labelFr']}" />
-						<p:message for="fileType_labelFr" />
-					</h:panelGroup>
+						<p:outputLabel value="#{bundle['EditFileTypeLabel_labelEn']}" for="fileType_labelEn" />
+						<h:panelGroup>
+							<p:inputText id="fileType_labelEn" value="#{fileTypeController.selected.labelEn}" title="#{bundle['EditFileTypeTitle_labelEn']}"
+										 required="true" requiredMessage="#{bundle['EditFileTypeRequiredMessage_labelEn']}" />
+							<p:message for="fileType_labelEn" />
+						</h:panelGroup>
+					</p:panelGrid>
+					<p:tabView>
+						<p:tab title="#{bundle['EditFileTypeLabel_roles']}">
+							<h:panelGrid columns="3" styleClass="panel-bloc">
+								<p:outputLabel value="#{bundle['EditFileTypeLabel_roles']}" for="fileTypesRolesPickListEdit" />
+								<h:panelGroup styleClass="panel-bloc-title">
+									<p:pickList id="fileTypesRolesPickListEdit" value="#{fileTypeController.rolePickList}" var="authority" itemValue="#{authority}"
+												itemLabel="facesContext.viewRoot.locale eq 'fr' ? authority.labelFr : authority.labelEn" showSourceControls="false"
+												showTargetControls="false" showCheckbox="true" showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
+												converter="#{grantedAuthorityConverter}" required="true" requiredMessage="#{bundle['EditFileTypeRequiredMessage_roles']}">
 
-					<p:outputLabel value="#{bundle['EditFileTypeLabel_labelEn']}" for="fileType_labelEn" />
-					<h:panelGroup>
-						<p:inputText id="fileType_labelEn" value="#{fileTypeController.selected.labelEn}" title="#{bundle['EditFileTypeTitle_labelEn']}"
-							required="true" requiredMessage="#{bundle['EditFileTypeRequiredMessage_labelEn']}" />
-						<p:message for="fileType_labelEn" />
-					</h:panelGroup>
-				</p:panelGrid>
+										<f:facet name="sourceCaption">#{bundle['EditFileTypeLabel_roles_disponibles']}</f:facet>
+										<f:facet name="targetCaption">#{bundle['EditFileTypeLabel_roles_affectes']} </f:facet>
 
-				<h:panelGrid columns="3" styleClass="panel-bloc">
+										<p:column style="width:75%;">
+											<h:outputText value="#{facesContext.viewRoot.locale eq 'fr' ? authority.labelFr : authority.labelEn}" />
+										</p:column>
+									</p:pickList>
+									<p:message for="fileTypesRolesPickListEdit" />
+								</h:panelGroup>
+							</h:panelGrid>
+						</p:tab>
 
-					<p:outputLabel value="#{bundle['EditFileTypeLabel_roles']}" for="fileTypesRolesPickListEdit" />
-					<h:panelGroup styleClass="panel-bloc-title">
-						<p:pickList id="fileTypesRolesPickListEdit" value="#{fileTypeController.rolePickList}" var="authority" itemValue="#{authority}"
-							itemLabel="facesContext.viewRoot.locale eq 'fr' ? authority.labelFr : authority.labelEn" showSourceControls="false"
-							showTargetControls="false" showCheckbox="true" showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
-							converter="#{grantedAuthorityConverter}" required="true" requiredMessage="#{bundle['EditFileTypeRequiredMessage_roles']}">
+						<p:tab title="#{bundle['EditFileTypeLabel_steps']}">
+							<h:panelGrid columns="3" styleClass="panel-bloc">
+								<p:outputLabel value="#{bundle['EditFileTypeLabel_steps']}" for="fileTypesStepsPickListEdit" />
+								<h:panelGroup styleClass="panel-bloc-title">
+									<p:pickList id="fileTypesStepsPickListEdit" value="#{fileTypeController.stepPickList}" var="step" itemValue="#{step}"
+												itemLabel="step.labelFr" showSourceControls="false" showTargetControls="false" showCheckbox="true" showSourceFilter="true"
+												showTargetFilter="true" filterMatchMode="contains" converter="#{stepConverter}" required="true"
+												requiredMessage="#{bundle['EditFileTypeRequiredMessage_steps']}">
 
-							<f:facet name="sourceCaption">#{bundle['EditFileTypeLabel_roles_disponibles']}</f:facet>
-							<f:facet name="targetCaption">#{bundle['EditFileTypeLabel_roles_affectes']} </f:facet>
+										<f:facet name="sourceCaption">#{bundle['EditFileTypeLabel_steps_disponibles']}</f:facet>
+										<f:facet name="targetCaption">#{bundle['EditFileTypeLabel_steps_affectes']} </f:facet>
 
-							<p:column style="width:75%;">
-								<h:outputText value="#{facesContext.viewRoot.locale eq 'fr' ? authority.labelFr : authority.labelEn}" />
-							</p:column>
-						</p:pickList>
-						<p:message for="fileTypesRolesPickListEdit" />
-					</h:panelGroup>
+										<p:column>
+											<h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? step.labelEn : step.labelFr}" />
+										</p:column>
+									</p:pickList>
+									<p:message for="fileTypesStepsPickListEdit" />
+								</h:panelGroup>
+							</h:panelGrid>
+						</p:tab>
 
+						<p:tab title="#{bundle['EditFileTypeLabel_services']}">
+							<h:panelGrid columns="2" styleClass="panel-bloc">
 
-				</h:panelGrid>
-				<h:panelGrid columns="3" styleClass="panel-bloc">
+								<p:outputLabel value="#{bundle['EditFileTypeLabel_services']}" for="fileTypesServicesPickListEdit" />
+								<h:panelGroup styleClass="panel-bloc-title">
+									<p:pickList id="fileTypesServicesPickListEdit" value="#{fileTypeController.servicePickList}" var="service" itemValue="#{service}"
+												itemLabel="#{fileTypeController.serviceHierarchieName(service)}" showSourceControls="false" showTargetControls="false" showCheckbox="true" showSourceFilter="true"
+												showTargetFilter="true" filterMatchMode="contains" converter="#{serviceConverter}" required="true"
+												requiredMessage="#{bundle['EditFileTypeRequiredMessage_services']}"
+												>
 
-					<p:outputLabel value="#{bundle['EditFileTypeLabel_steps']}" for="fileTypesStepsPickListEdit" />
-					<h:panelGroup styleClass="panel-bloc-title">
-						<p:pickList id="fileTypesStepsPickListEdit" value="#{fileTypeController.stepPickList}" var="step" itemValue="#{step}"
-							itemLabel="step.labelFr" showSourceControls="false" showTargetControls="false" showCheckbox="true" showSourceFilter="true"
-							showTargetFilter="true" filterMatchMode="contains" converter="#{stepConverter}" required="true"
-							requiredMessage="#{bundle['EditFileTypeRequiredMessage_steps']}">
+										<f:facet name="sourceCaption">#{bundle['EditFileTypeLabel_services_disponibles']}</f:facet>
+										<f:facet name="targetCaption">#{bundle['EditFileTypeLabel_services_affectes']} </f:facet>
 
-							<f:facet name="sourceCaption">#{bundle['EditFileTypeLabel_steps_disponibles']}</f:facet>
-							<f:facet name="targetCaption">#{bundle['EditFileTypeLabel_steps_affectes']} </f:facet>
+										<p:column>
+											<h:outputText value="#{fileTypeController.serviceHierarchieName(service)}" />
+										</p:column>
+									</p:pickList>
+									<p:message for="fileTypesServicesPickListEdit" />
+								</h:panelGroup>
+							</h:panelGrid>
+						</p:tab>
+					</p:tabView>
 
-							<p:column>
-								<h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? step.labelEn : step.labelFr}" />
-							</p:column>
-						</p:pickList>
-						<p:message for="fileTypesStepsPickListEdit" />
-					</h:panelGroup>
+					<div class="btn-bloc">
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editBtn"
+										 actionListener="#{fileTypeController.edit}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+										 update="display,:fileTypeListForm,:growl" oncomplete="handleSubmit(xhr,status,args,fileTypeEditDlg,'datalistTable');" />
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="cancelBtn"
+										 value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('fileTypeEditDialog').hide();" immediate="true" />
+					</div>
+				</p:outputPanel>
 
+			</h:form>
 
-				</h:panelGrid>
+		</p:dialog>
 
-
-
-				<div class="btn-bloc">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editBtn"
-						actionListener="#{fileTypeController.edit}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
-						update="display,:fileTypeListForm,:growl" oncomplete="handleSubmit(xhr,status,args,fileTypeEditDlg,'datalistTable');" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="cancelBtn"
-						value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('fileTypeEditDialog').hide();" immediate="true" />
-				</div>
-			</h:panelGroup>
-
-		</h:form>
-
-	</p:dialog>
-
-</ui:composition>
+	</ui:composition>
 
 </html>
