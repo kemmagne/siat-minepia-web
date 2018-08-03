@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns:sec="http://www.springframework.org/schema/security" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:beans="http://www.springframework.org/schema/beans"
-	xsi:schemaLocation="
+			 xmlns:beans="http://www.springframework.org/schema/beans"
+			 xsi:schemaLocation="
      http://www.springframework.org/schema/beans
      http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
     http://www.springframework.org/schema/security
@@ -63,13 +63,13 @@
 		<sec:intercept-url pattern="/pages/bo/subDepartment/**" access="hasRole('ADMIN_ORG')" />
 		<sec:intercept-url pattern="/pages/bo/inspectionWorkDayConfig/**" access="hasRole('ADMIN_ORG')" />
 		<sec:intercept-url pattern="/pages/bo/workflowDesigner/**" access="hasRole('ADMIN_ORG')" />
-		<sec:intercept-url pattern="/pages/bo/fileType/**" access="hasRole('ADMIN_ORG')" />
+		<sec:intercept-url pattern="/pages/bo/fileType/**" access="hasRole('ROOT')" />
 		<sec:intercept-url pattern="/pages/bo/positionAuthority/**" access="hasRole('ADMIN_ORG')" />
 		<sec:intercept-url pattern="/pages/bo/gr/**" access="hasAnyRole('ADMIN_ORG','ROOT')" />
 
 		<!-- USERS WORKFLOW PAGES ACCESS -->
 		<sec:intercept-url pattern="/pages/fo/**"
-			access="hasAnyRole('SUPER', 'CONS', 'AC1', 'AC2', 'AC3', 'AC4', 'AC5', 'AC6', 'AR', 'INS', 'CONT', 'LAB', 'TREAT', 'SIGN', 'RT', 'CA')" />
+						   access="hasAnyRole('SUPER', 'CONS', 'AC1', 'AC2', 'AC3', 'AC4', 'AC5', 'AC6', 'AR', 'INS', 'CONT', 'LAB', 'TREAT', 'SIGN', 'RT', 'CA')" />
 
 		<!-- Open pages if user is not anonymous -->
 		<sec:intercept-url pattern="/**" access="isAuthenticated()" />
