@@ -1,5 +1,6 @@
 package org.guce.siat.web.reports.vo;
 
+import java.util.Date;
 
 
 /**
@@ -32,6 +33,10 @@ public class VtMinepdedFileVo extends AbstractFileVo<VtMinepdedFileItemVo>
 	/** The code. */
 	private String code;
 
+        /**
+        * The record creation date.
+        */
+        private Date fileCreationDate;
 	/**
 	 * Gets the country of origin.
 	 *
@@ -200,4 +205,11 @@ public class VtMinepdedFileVo extends AbstractFileVo<VtMinepdedFileItemVo>
 		this.code = code;
 	}
 
+        public Date getFileCreationDate() {
+            return fileCreationDate;
+        }
+
+        public void setFileCreationDate(Date fileCreationDate) {
+            this.fileCreationDate = fileCreationDate;
+        }
 }

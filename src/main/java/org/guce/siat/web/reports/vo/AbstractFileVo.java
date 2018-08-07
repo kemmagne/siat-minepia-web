@@ -19,7 +19,7 @@ public class AbstractFileVo<T extends AbstractFileItemVo> {
      * The decision date.
      */
     private Date decisionDate;
-
+    
     /**
      * The decision place.
      */
