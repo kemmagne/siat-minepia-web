@@ -97,7 +97,11 @@ public class VtMinepdedExporter extends AbstractReportInvoker {
                         case "SIGNATAIRE_DATE":
                             if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
                                 try {
-                                    vtMinepdedVo.setDecisionDate(new SimpleDateFormat("dd/MM/yyyy").parse(fileFieldValue.getValue()));
+                                    if (fileFieldValue.getValue() != null) {
+                                        vtMinepdedVo.setDecisionDate(new SimpleDateFormat("dd/MM/yyyy").parse(fileFieldValue.getValue()));
+                                    } else {
+                                        vtMinepdedVo.setDecisionDate(java.util.Calendar.getInstance().getTime());
+                                    }
                                 } catch (final ParseException e) {
                                     LOG.error(Objects.toString(e), e);
                                 }
