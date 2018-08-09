@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VT_MINEPDED" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c454e72f-a03a-48c3-b1ea-f7425947e4b7">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="32"/>
 	<property name="ireport.background.image.properties" value="true,true,0.25,-8,-8,0,0,402,564"/>
 	<style name="table">
 		<box>
@@ -145,7 +145,7 @@ ET DU DEVELOPPEMENT DURABLE]]></text>
 				</staticText>
 				<image>
 					<reportElement uuid="2aeea5f9-b289-494b-8aae-72b371195a16" x="411" y="144" width="111" height="86"/>
-					<imageExpression><![CDATA["C:\\Users\\leric\\siat-ct-web-back\\src\\main\\webapp\\jasperReport\\sources\\logo_bno.png"]]></imageExpression>
+					<imageExpression><![CDATA["logo_bno.png"]]></imageExpression>
 				</image>
 			</frame>
 		</band>
