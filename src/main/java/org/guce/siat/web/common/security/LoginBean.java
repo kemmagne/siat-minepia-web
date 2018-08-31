@@ -567,7 +567,7 @@ public class LoginBean implements Serializable {
 		map.put(MailConstants.EMAIL, user.getEmail());
 		map.put("firstName", user.getFirstName());
 		map.put("login", user.getLogin());
-		map.put("dateTentative", DateUtils.formatSimpleDateForOracle(user.getLastAttemptsTime()));
+		map.put("dateTentative", user.getLastAttemptsTime() == null ? null : DateUtils.formatSimpleDateForOracle(user.getLastAttemptsTime()));
 		map.put(MailConstants.VMF, template);
 		return map;
 	}

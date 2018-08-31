@@ -73,8 +73,8 @@ public class VtMinepdedExporter extends AbstractReportInvoker {
             vtMinepdedVo.setDecisionDate(file.getSignatureDate());
             String numeroFacture = null;
             vtMinepdedVo.setInvoice(numeroFacture);
-            vtMinepdedVo.setCountryOfOrigin(null != file.getCountryOfOrigin() ? file.getCountryOfOrigin().getCountryNameFr() : null);
-            vtMinepdedVo.setCountryOfProvenance(null != file.getCountryOfProvenance() ? file.getCountryOfProvenance().getCountryNameFr() : null);
+            vtMinepdedVo.setCountryOfOrigin(null != file.getCountryOfOrigin() ? file.getCountryOfOrigin().getCountryName() : null);
+            vtMinepdedVo.setCountryOfProvenance(null != file.getCountryOfProvenance() ? file.getCountryOfProvenance().getCountryName() : null);
             final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
             if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
                 for (final FileFieldValue fileFieldValue : fileFieldValueList) {

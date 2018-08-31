@@ -227,6 +227,9 @@ public class ItemController extends AbstractController<ServicesItem>
 		}
 
 		final Item item = itemService.findByGoodsItemCode(selectedNSH);
+                if (selected == null) {
+                    selected = new ServicesItem();
+                }
 		selected.setNsh(item);
 		selected.setType('N');
 		selected.setLabel(itemLabel);
