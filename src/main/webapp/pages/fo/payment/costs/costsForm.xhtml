@@ -22,7 +22,7 @@
 								<h:outputText value="#{costsController.currentPaymentData.montantTva}" />
 							</p:panelGrid>
 						</p:fieldset>
-						<p:fieldset legend="#{bundle['payment_invoiceDetail']}">
+						<p:fieldset rendered="#{not empty costsController.currentPaymentData.paymentItemFlowList}" legend="#{bundle['payment_invoiceDetail']}">
 							<br />
 							<p:dataTable widgetVar="PaymentDTWdg" id="paymentDT" var="invoiceLine"
 								value="#{costsController.currentPaymentData.paymentItemFlowList}">
@@ -55,28 +55,28 @@
 								<p:outputLabel value="#{bundle['paymentTitleLabel_sigName']}" for="sigName" />
 								<h:panelGroup>
 									<p:inputText id="sigName" value="#{costsController.currentPaymentData.nomSignature}" title="#{bundle['paymentTitleTitle_sigName']}"
-										required="true" requiredMessage="#{bundle['paymentRequiredMessage_sigName']}" />
+                                                                                     readonly="true" required="true" requiredMessage="#{bundle['paymentRequiredMessage_sigName']}" />
 									<p:message for="sigName" />
 								</h:panelGroup>
 
 								<p:outputLabel value="#{bundle['paymentTitleLabel_sigQuality']}" for="sigQuality" />
 								<h:panelGroup>
 									<p:inputText id="sigQuality" value="#{costsController.currentPaymentData.qualiteSignature}"
-										title="#{bundle['paymentTitleTitle_sigQuality']}" required="true" requiredMessage="#{bundle['paymentRequiredMessage_sigQuality']}" />
+										readonly="true" title="#{bundle['paymentTitleTitle_sigQuality']}" required="true" requiredMessage="#{bundle['paymentRequiredMessage_sigQuality']}" />
 									<p:message for="sigQuality" />
 								</h:panelGroup>
 
 								<p:outputLabel value="#{bundle['paymentTitleLabel_sigPlace']}" for="sigPlace" />
 								<h:panelGroup>
 									<p:inputText id="sigPlace" value="#{costsController.currentPaymentData.lieuSignature}"
-										title="#{bundle['paymentTitleTitle_sigPlace']}" required="true" requiredMessage="#{bundle['paymentRequiredMessage_sigPlace']}" />
+										readonly="true" title="#{bundle['paymentTitleTitle_sigPlace']}" required="true" requiredMessage="#{bundle['paymentRequiredMessage_sigPlace']}" />
 									<p:message for="sigPlace" />
 								</h:panelGroup>
 
 								<p:outputLabel value="#{bundle['paymentTitleLabel_sigDate']}" for="sigDate" />
 								<h:panelGroup>
 									<p:calendar id="sigDate" value="#{costsController.currentPaymentData.dateSignature}" title="#{bundle['paymentTitleTitle_sigDate']}"
-										showOn="button" pattern="dd/MM/yyyy" readonlyInput="true">
+										disabled="true" showOn="button" pattern="dd/MM/yyyy" readonlyInput="true">
 										<p:message for="sigDate" />
 									</p:calendar>
 								</h:panelGroup>
@@ -94,7 +94,7 @@
 								<p:outputLabel value="#{bundle['paymentTitleLabel_dateEnc']}" for="dateEnc" />
 								<h:panelGroup>
 									<p:calendar id="dateEnc" value="#{costsController.currentPaymentData.dateEncaissement}"
-										title="#{bundle['paymentTitleTitle_dateEnc']}" showOn="button" pattern="dd/MM/yyyy" readonlyInput="true">
+										title="#{bundle['paymentTitleTitle_dateEnc']}" disabled="true" showOn="button" pattern="dd/MM/yyyy" readonlyInput="true">
 										<p:message for="dateEnc" />
 									</p:calendar>
 								</h:panelGroup>
@@ -102,13 +102,13 @@
 								<p:outputLabel value="#{bundle['paymentTitleLabel_partVers']}" for="partVers" />
 								<h:panelGroup>
 									<p:inputText id="partVers" value="#{costsController.currentPaymentData.partVersCont}"
-										title="#{bundle['paymentTitleTitle_partVers']}" />
+										readonly="true" title="#{bundle['paymentTitleTitle_partVers']}" />
 									<p:message for="partVers" />
 								</h:panelGroup>
 								<p:outputLabel value="#{bundle['paymentTitleLabel_partVersRs']}" for="partVersRs" />
 								<h:panelGroup>
 									<p:inputText id="partVersRs" value="#{costsController.currentPaymentData.partVersRs}"
-										title="#{bundle['paymentTitleLabel_partVersRs']}" />
+										readonly="true" title="#{bundle['paymentTitleLabel_partVersRs']}" />
 									<p:message for="partVersRs" />
 								</h:panelGroup>
 								<p:outputLabel value="#{bundle['paymentTitleLabel_montantEnc']}" for="montantEnc" />
@@ -122,7 +122,7 @@
 								<p:outputLabel value="#{bundle['paymentTitleLabel_natureEnc']}" for="natureEnc" />
 								<h:panelGroup>
 									<p:inputText id="natureEnc" value="#{costsController.currentPaymentData.natureEncaissement}"
-										title="#{bundle['paymentTitleTitle_natureEnc']}" required="true" requiredMessage="#{bundle['paymentRequiredMessage_natureEnc']}" />
+										readonly="true" title="#{bundle['paymentTitleTitle_natureEnc']}" required="true" requiredMessage="#{bundle['paymentRequiredMessage_natureEnc']}" />
 									<p:message for="natureEnc" />
 								</h:panelGroup>
 

@@ -38,6 +38,7 @@ import org.guce.siat.common.service.ItemFlowService;
 import org.guce.siat.common.service.ServiceService;
 import org.guce.siat.common.service.UserAuthorityFileTypeService;
 import org.guce.siat.common.utils.Constants;
+import org.guce.siat.common.utils.enums.FileTypeCode;
 import org.guce.siat.core.ct.filter.PaymentFilter;
 import org.guce.siat.core.ct.model.PaymentData;
 import org.guce.siat.core.ct.service.CommonService;
@@ -135,7 +136,9 @@ public class PaymentController extends AbstractController<FileItem>
 	/** The Constant PREFIXE_QUITTANCE. */
 	public static final String PREFIXE_QUITTANCE = "QUIT-";
 
+        public static final String NATURE_FRAIS_VT = "Frais visa technique";
 
+        public static final String NATURE_FRAIS_CP = "Frais consentement préalable";
 	/**
 	 * Instantiates a new payment controller.
 	 */
@@ -205,25 +208,30 @@ public class PaymentController extends AbstractController<FileItem>
 			final ItemFlow lastItemFlow = itemFlowService.findLastSentItemFlowByFileItem(selectedFileItem);
 			final PaymentData paymentData = paymentDataService.findPaymentDataByItemFlow(lastItemFlow);
 
-			if (StringUtils.isBlank(paymentData.getRefFacture()))
-			{
+			if (paymentData != null) {
+                            if (StringUtils.isBlank(paymentData.getRefFacture())) {
 				paymentData.setRefFacture(new DecimalFormat(PREFIXE_FACTURE + "SIAT" + "-000000")
-						.format(paymentData.getId()));
-			}
+                                                        .format(paymentData.getId()));
+                                }
 
-			if (StringUtils.isBlank(paymentData.getNumRecu()))
-			{
-				paymentData.setNumRecu(new DecimalFormat(PREFIXE_RECU + "SIAT" + "-000000")
-						.format(paymentData.getId()));
-			}
+                                if (StringUtils.isBlank(paymentData.getNumRecu())) {
+                                        paymentData.setNumRecu(new DecimalFormat(PREFIXE_RECU + "SIAT" + "-000000")
+                                                        .format(paymentData.getId()));
+                                }
+                                
+                                User user = getLoggedUser();
+                                paymentData.setNomSignature(user.getFirstName() + " " + user.getLastName());
+                                paymentData.setDateSignature(java.util.Calendar.getInstance().getTime());
+                                paymentData.setDateEncaissement(java.util.Calendar.getInstance().getTime());
+                                paymentData.setQualiteSignature(user.getPosition().getLabelFr());
+                                paymentData.setLieuSignature(user.getAdministration().getLabelFr());
 
-			if (StringUtils.isBlank(paymentData.getNumQuittance()))
-			{
-				paymentData.setNumQuittance(new DecimalFormat(PREFIXE_QUITTANCE + "SIAT" + "-000000")
-						.format(paymentData.getId()));
-			}
-
-
+                                if (selectedFile.getFile().getClient() != null) {
+                                    paymentData.setPartVersCont(selectedFile.getFile().getClient().getNumContribuable());
+                                    paymentData.setPartVersRs(selectedFile.getFile().getClient().getCompanyName());
+                                }
+                                paymentData.setNatureEncaissement(FileTypeCode.VT_MINEPDED.equals(selectedFile.getFile().getFileType().getCode()) ? NATURE_FRAIS_VT : NATURE_FRAIS_CP);
+                        }
 			setCostsPageUrl(ControllerConstants.Pages.FO.COSTS_INDEX_PAGE);
 			final FacesContext context = FacesContext.getCurrentInstance();
 			final ExternalContext extContext = context.getExternalContext();
