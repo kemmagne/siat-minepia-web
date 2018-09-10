@@ -14,6 +14,19 @@
 				<h:panelGrid columns="2" styleClass="tableInitial tabIn">
 					<h:panelGroup id="center" styleClass="tablelistinitial costscontent">	
 						<ui:include src="costsForm.xhtml" />
+						<ui:include src="attachments.xhtml" />
+					</h:panelGroup>
+					<h:panelGroup id="detail">
+						<p:panel deferred="true" id="right" styleClass="tableInitialRight" resizable="true" collapsible="true">
+							<f:facet name="header">
+								<h:outputText value="#{bundle['Attachment_title']}" />
+							</f:facet>
+							<h:panelGrid columns="2" styleClass="tableSeparate">
+								<h:panelGroup styleClass="side">
+									<ui:include src="pdfViewer.xhtml" />
+								</h:panelGroup>
+							</h:panelGrid>
+						</p:panel>
 					</h:panelGroup>
 				</h:panelGrid>
 			</p:panel>

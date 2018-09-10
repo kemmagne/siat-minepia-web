@@ -27,6 +27,13 @@
 					<h:outputText value="#{file.referenceSiat}" />
 				</p:column>
 
+                                <p:column sortBy="#{file.numeroDossier}" filterBy="#{file.numeroDossier}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_num_dossier']}" title="#{bundle['FileTitle_num_dossier']}" />
+					</f:facet>
+                                    <h:outputText value="#{file.numeroDossier}" />
+				</p:column>
+                                
 				<p:column sortBy="#{file.referenceGuce}" filterBy="#{file.referenceGuce}" filterMatchMode="contains">
 					<f:facet name="header">
 						<h:outputText value="#{bundle['FileLabel_num_eguce']}" title="#{bundle['FileTitle_num_eguce']}" />

@@ -1,0 +1,39 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions">
+
+    <br />
+
+    <h:form id="showAttachmentForm">
+        <h:panelGroup id="accordAttachment">
+
+            <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  rendered="#{attachmentController.showPanelViewJpeg or attachmentController.showPanelViewPdf}"
+                             value="#{bundle['ButtonDetachment']}" icon="ui-icon-extlink" update="attachmentShowDialog"
+                             actionListener="#{attachmentController.detachAttachment}" process="@this" />
+
+            <p:commandButton icon="ui-icon-arrowrefresh-1-s" update="showAttachmentForm"
+                             actionListener="#{attachmentController.init}"/>
+
+            <p:panel visible="#{attachmentController.showPanelViewPdf}">
+                <pe:documentViewer id="documentViewer" height="500" value="#{attachmentController.streamPdf}" />
+            </p:panel>
+
+            <p:panel visible="#{attachmentController.showPanelViewJpeg}">
+                <p:graphicImage cache="false" value="#{attachmentController.streamJpeg}" style="height: 100%; width: 100%" />
+            </p:panel>
+            
+        </h:panelGroup>
+
+    </h:form>
+
+
+    <p:dialog closeOnEscape="true" id="attachmentShowDialog" styleClass="difDlg"  width="900px" height="555px" position="center" resizable="false" widgetVar="attachmentShowDialogWidVar" header="#{attachmentController.selectedAttachment.documentName}">
+        <p:panel visible="#{attachmentController.showPanelViewPdf}">
+            <pe:documentViewer height="500" value="#{attachmentController.streamPdf}" />
+        </p:panel>
+
+        <p:panel visible="#{attachmentController.showPanelViewJpeg}">
+            <p:graphicImage cache="false" value="#{attachmentController.streamJpeg}" style="height: 100%; width: 100%" />
+        </p:panel>
+    </p:dialog>
+
+</ui:composition>

@@ -36,7 +36,7 @@
                 <db.password>siat</db.password>
                 <db.url>jdbc:oracle:thin:@siatserverdev:1510:GUCE</db.url>
                 <!--<db.url>jdbc:oracle:thin:@dev:1510:GUCE</db.url>-->
-                <ged.url>http://172.24.2.134:8080</ged.url>
+                <ged.url>http://localhost:8989</ged.url>
                 <jms.url>failover:(tcp://brokerurl:61616)</jms.url>
                 <version>${application.version}</version>
                 <ged.username>admin</ged.username>

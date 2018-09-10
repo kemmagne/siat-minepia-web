@@ -1,0 +1,89 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+
+    <p:outputPanel>
+
+        <h:form id="ListAttachmentForm">
+
+            <p:accordionPanel>
+
+                <p:tab title="#{bundle['Attachment_title']}" dynamic="true" cache="true" titleStyleClass="title attachment-tab-class">
+
+                    <p:outputPanel id="attachments">
+                    
+                    <p:dataTable id="attachmentDatalist" value="#{costsController.attachmentList}"
+                                 filteredValue="" var="item"
+                                 selection="#{costsController.selectedAttachment}" rowKey="#{item.id}" rows="5" paginator="true"
+                                 rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}" styleClass="newui-datatable fixeColumnWidth"
+                                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                 currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})" widgetVar="attachmentDatalistTable">
+                        <p:ajax event="rowSelectRadio" listener="#{costsController.showAttachment}" onstart="PF('statusDialog1').block()"
+                                onsuccess="PF('statusDialog1').unblock()"
+                                update=":showAttachmentForm :showAttachmentForm:accordAttachment" />
+
+                        <p:column selectionMode="single" style="width:5%" />
+                        <p:column sortBy="#{item.documentName}" filterBy="#{item.documentName}" filterMatchMode="contains" style="width:55%">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle['AttachmentLabel_documentName']}" title="#{bundle['AttachmentTitle_documentName']}" />
+                            </f:facet>
+                            <h:outputText value="#{item.documentName}" />
+                        </p:column>
+
+                        <p:column sortBy="#{item.attachmentType}" filterBy="#{item.attachmentType}" filterMatchMode="contains" style="width:20%">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle['AttachmentLabel_type']}" title="#{bundle['AttachmentTitle_type']}" />
+                            </f:facet>
+                            <h:outputText value="#{item.attachmentType}" />
+                        </p:column>
+                        <ui:remove>
+                            <p:column  style="width:20%" >
+                                <p:commandButton ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" id="testreporting" value="#{bundle['Telecharger']}" icon="ui-icon-arrowthick-1-s">
+                                    <p:fileDownload value="#{fileItemApDetailController.downloadAttachment()}" />
+                                </p:commandButton>
+                            </p:column>
+                        </ui:remove>
+                    </p:dataTable>
+
+                        </p:outputPanel>
+                </p:tab>
+
+            </p:accordionPanel>
+
+        </h:form>
+
+        <h:form id="RapportJointForm">
+            <p:outputPanel id="piecejointetab" rendered="#{globalBean.loggedUserHasAuthority('CA') and costsController.vtMinepdedFileType}">
+                <h:panelGrid id="tab_att" columns="4" cellspacing="5" style="width:100%;">
+                    <h:panelGroup>
+                        <p:fileUpload auto="true"
+                                      cancelLabel="#{bundle['Cancel_upload']}"
+                                      label="#{bundle['Choose_upload']}"
+                                      fileUploadListener="#{costsController.handleFileUpload}"
+                                      update="pieceLabel,@this"
+                                      process="@this"
+                                      id="file"
+                                      multiple="false"
+                                      required="true"
+                                      mode="advanced"
+                                      invalidFileMessage="#{bundle['Invalid_upload']}"
+                                      invalidSizeMessage="#{bundle['Invalid_size_upload']}"
+                                      sizeLimit="1048576"
+                                      allowTypes="/(\.|\/)(DOC|doc|DOCX|docx|DOT|dot|PDF|pdf)$/"
+                                      />
+                    </h:panelGroup>
+                    <h:outputLabel  id="pieceLabel" value="#{costsController.newAttachmentName}" style="width:90px;display: block;" />
+                    <p:selectOneMenu id="attachmentType" required="true" requiredMessage="#{bundle['Select_caisse_file_type']}" value="#{costsController.attachmentType}">
+                        <f:selectItem itemValue="#{null}" itemLabel="-Select-"/>
+                        <f:selectItem itemValue="QUITTANCE" itemLabel="#{bundle['paymentType_quittance']}"/>
+                        <f:selectItem itemValue="RECU" itemLabel="#{bundle['paymentType_recu']}"/>
+                    </p:selectOneMenu>
+                    <p:commandButton value="#{bundle['Add_upload']}" action="#{costsController.saveAttachment()}" process=":RapportJointForm:piecejointetab" update="@(.attachment-tab-class) :RapportJointForm:piecejointetab" >
+                    </p:commandButton>
+                </h:panelGrid>
+            </p:outputPanel>
+        </h:form>
+
+    </p:outputPanel>
+
+</ui:composition>

@@ -778,18 +778,12 @@ public class FileItemApDetailController implements Serializable {
 	 */
 	private boolean vtTypeSelectionViewable;
 	private boolean aiMinmidtFileType;
+        private boolean vtMinepdedFileType;
 	/**
 	 *
 	 */
 	private FileField vtTypeFileField;
 	private String minepdedVtType;
-
-	/**
-	 * The is minepded ministry.
-	 */
-	private boolean checkMinepdedMinistry;
-
-	private final String MINEPDED_MINISTRY = "MINEPDED";
 
 	private String newAttachmentName;
 
@@ -873,8 +867,6 @@ public class FileItemApDetailController implements Serializable {
 			LOG.debug(Constants.INIT_LOG_INFO_MESSAGE, FileItemApDetailController.class.getName());
 		}
 
-		checkMinepdedMinistry = false;
-
 		selectedFileItem = CollectionUtils.isNotEmpty(currentFile.getFileItemsList()) ? currentFile.getFileItemsList().get(0)
 				: null;
 
@@ -950,11 +942,9 @@ public class FileItemApDetailController implements Serializable {
 		}
 		rejctDispatchAllowed = (cotationAllowed && !apDecisionStep.equals(currentFile.getFileItemsList().get(0).getStep()) && !StepCode.ST_AP_47
 				.equals(currentFile.getFileItemsList().get(0).getStep().getStepCode()));
-
-		if (currentFile.getDestinataire().equalsIgnoreCase(MINEPDED_MINISTRY)) {
-			checkMinepdedMinistry = true;
-		}
+                
 		aiMinmidtFileType = FileTypeCode.AI_MINMIDT.equals(currentFile.getFileType().getCode());
+                vtMinepdedFileType = FileTypeCode.VT_MINEPDED.equals(currentFile.getFileType().getCode());
 	}
 
 	/**
@@ -1180,6 +1170,35 @@ public class FileItemApDetailController implements Serializable {
 			}
 		}
 		return null;
+	}
+        
+        private List<Attachment> findAttachmentsToSend(FileTypeCode fileTypeCode) {
+                List<Attachment> attachmentsToSend = new ArrayList<>();
+		List<Attachment> attachments = attachmentService.findAttachmentsByFile(currentFile);
+		if (attachments == null) {
+                    return null;
+                }
+                switch (fileTypeCode) {
+                    case AI_MINMIDT: {
+                        for (Attachment att : attachments) {
+                            if (att.getAttachmentType().equals(FileTypeCode.AI_MINMIDT.name())) {
+                                attachmentsToSend.add(att);
+                            }
+                        }
+                        break;
+                    }
+                    case VT_MINEPDED: {
+                        for (Attachment att : attachments) {
+                            if (att.getAttachmentType().equals("RECU") || att.getAttachmentType().equals("QUITTANCE")) {
+                                attachmentsToSend.add(att);
+                            }
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                return attachmentsToSend.isEmpty() ? null : attachmentsToSend;
 	}
 
 	public void handleFileUpload(FileUploadEvent event) {
@@ -2339,6 +2358,10 @@ public class FileItemApDetailController implements Serializable {
 										report = ReportGeneratorUtils.generateReportBytes(fileFieldValueService, classe, currentFile);
 									}
 									attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
+                                                                        List<Attachment> filesToSend = findAttachmentsToSend(currentFile.getFileType().getCode());
+                                                                        for (Attachment att : (List<Attachment>) safe(filesToSend)) {
+                                                                            attachedByteFiles.put(att.getAttachmentType(), getBytesFromAttachment(att));
+                                                                        }
 									/**
 									 * *
 									 */
@@ -5208,6 +5231,10 @@ public class FileItemApDetailController implements Serializable {
 		return aiMinmidtFileType;
 	}
 
+        public boolean isVtMinepdedFileType() {
+                return vtMinepdedFileType;
+        }
+
 	public FileField getVtTypeFileField() {
 		return vtTypeFileField;
 	}
@@ -5386,4 +5413,8 @@ public class FileItemApDetailController implements Serializable {
 			java.util.logging.Logger.getLogger(FileItemApDetailController.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
+        
+        public static List safe(List list) {
+            return list == null ? java.util.Collections.EMPTY_LIST : list;
+        }
 }
