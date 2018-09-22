@@ -1686,7 +1686,7 @@ public class FileItemCctDetailController implements Serializable {
                     && currentFileItem.getSubfamily().getService().getSubDepartment().getOrganism() != null
                     && currentFileItem.getSubfamily().getService().getSubDepartment().getOrganism().getMinistry() != null
                     && currentFileItem.getSubfamily().getService().getSubDepartment().getOrganism().getMinistry().getLabelFr()
-                    .equals(Constants.MINEPDED_MINISTRY)) {
+                            .equals(Constants.MINEPDED_MINISTRY)) {
                 checkMinepdedMinistry = true;
             }
             infraction = new Infraction();
@@ -1820,7 +1820,7 @@ public class FileItemCctDetailController implements Serializable {
                         inputText.setRequiredMessage(dataType.getLabel()
                                 + Constants.SPACE
                                 + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                                "RequiredMessage_standard"));
+                                        "RequiredMessage_standard"));
                     }
                     inputText.setId(ID_DECISION_LABEL + stringId);
                     htmlPanelGroup.getChildren().add(inputText);
@@ -1832,7 +1832,7 @@ public class FileItemCctDetailController implements Serializable {
                         booleanCheckbox.setRequiredMessage(dataType.getLabel()
                                 + Constants.SPACE
                                 + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                                "RequiredMessage_standard"));
+                                        "RequiredMessage_standard"));
                     }
                     booleanCheckbox.setId(ID_DECISION_LABEL + stringId);
                     htmlPanelGroup.getChildren().add(booleanCheckbox);
@@ -1844,7 +1844,7 @@ public class FileItemCctDetailController implements Serializable {
                         calendar.setRequiredMessage(dataType.getLabel()
                                 + Constants.SPACE
                                 + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                                "RequiredMessage_standard"));
+                                        "RequiredMessage_standard"));
                     }
                     calendar.setId(ID_DECISION_LABEL + stringId);
                     final String dataTypeProps = dataType.getProps();
@@ -1871,7 +1871,7 @@ public class FileItemCctDetailController implements Serializable {
                         inputTextarea.setRequiredMessage(dataType.getLabel()
                                 + Constants.SPACE
                                 + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                                "RequiredMessage_standard"));
+                                        "RequiredMessage_standard"));
                     }
                     inputTextarea.setRows(10);
                     inputTextarea.setId(ID_DECISION_LABEL + stringId);
@@ -2130,14 +2130,14 @@ public class FileItemCctDetailController implements Serializable {
                 duration.append(days
                         + " "
                         + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                        ControllerConstants.Bundle.Messages.HISTORY_DURATION_DAYS) + ", ");
+                                ControllerConstants.Bundle.Messages.HISTORY_DURATION_DAYS) + ", ");
             }
 
             if (hours > 0) {
                 duration.append(hours
                         + " "
                         + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                        ControllerConstants.Bundle.Messages.HISTORY_DURATION_HOURS));
+                                ControllerConstants.Bundle.Messages.HISTORY_DURATION_HOURS));
             }
         }
         return duration.toString();
@@ -2914,6 +2914,8 @@ public class FileItemCctDetailController implements Serializable {
                                         final java.io.File targetAttachment = new java.io.File(String.format(
                                                 applicationPropretiesService.getAttachementFolder() + "%s%s", java.io.File.separator,
                                                 fileTypeFlowReport.getReportName()));
+                                        //   /file_type/file_number/flow/file_name
+                                        final String s = "%s%s%s/";
 
                                         try (FileOutputStream fileOuputStream = new FileOutputStream(targetAttachment)) {
                                             fileOuputStream.write(report);
@@ -3091,25 +3093,25 @@ public class FileItemCctDetailController implements Serializable {
             }
         } // Cas de La decision MIXTE
         else // Tous les FileItem sont en Draft Mode
-         if (allFileItemInListAreDraft(productInfoItemsEnabled)) {
-                rollBackDecisionsAllowed = true;
-                sendDecisionAllowed = true;
-                decisionButtonAllowed = false;
-            } // Les FileItem appartenant à ce dossier contienne un ou plus en
-            // mode DRAFT
-            else if (oneFileItemInListIsDraft(productInfoItemsEnabled)) {
-                rollBackDecisionsAllowed = true;
-                sendDecisionAllowed = true;
-                decisionButtonAllowed = true;
-            } // Les FileItem n'ont pas de DRAFT
-            else if (CollectionUtils.isNotEmpty(productInfoItemsEnabled)) {
-                // Dans l'affichage du button Decider : pas de controle sur la
-                // selection des cases à cocher car il n'y a pas de handler
-                // l'ors de l'unchek des checkbox pour detecter l'action
-                rollBackDecisionsAllowed = false;
-                sendDecisionAllowed = false;
-                decisionButtonAllowed = true;
-            }
+        if (allFileItemInListAreDraft(productInfoItemsEnabled)) {
+            rollBackDecisionsAllowed = true;
+            sendDecisionAllowed = true;
+            decisionButtonAllowed = false;
+        } // Les FileItem appartenant à ce dossier contienne un ou plus en
+        // mode DRAFT
+        else if (oneFileItemInListIsDraft(productInfoItemsEnabled)) {
+            rollBackDecisionsAllowed = true;
+            sendDecisionAllowed = true;
+            decisionButtonAllowed = true;
+        } // Les FileItem n'ont pas de DRAFT
+        else if (CollectionUtils.isNotEmpty(productInfoItemsEnabled)) {
+            // Dans l'affichage du button Decider : pas de controle sur la
+            // selection des cases à cocher car il n'y a pas de handler
+            // l'ors de l'unchek des checkbox pour detecter l'action
+            rollBackDecisionsAllowed = false;
+            sendDecisionAllowed = false;
+            decisionButtonAllowed = true;
+        }
     }
 
     /**
