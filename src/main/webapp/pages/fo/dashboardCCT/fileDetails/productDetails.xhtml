@@ -15,22 +15,25 @@
                 </h:panelGrid>
             </p:fieldset>
         </c:forEach>
-        <p:fieldset legend="#{bundle['Relatated_Proc_Decisions']}"
-                    rendered="#{fileItemCctDetailController.printRelatedDecisions}">
-            <c:forEach var="fileType" items="#{fileItemCctDetailController.relatedDecisionHistories.keySet()}">
-                <p:fieldset legend="#{facesContext.viewRoot.locale eq 'en' ? fileType.labelEn : fileType.labelFr}">
-                    <h:panelGrid columns="2" cellspacing="6" styleClass="informationPanelGrid tableGeneralInfo">
-                        <c:forEach var="decisionHistory" items="#{fileItemCctDetailController.relatedDecisionHistories.get(fileType)}">
-                            <h:panelGroup>
-                                <h:outputLabel value="#{facesContext.viewRoot.locale eq 'en' ? decisionHistory.labelEn : decisionHistory.labelFr}" />
-                            </h:panelGroup>
-                            <h:outputLabel value="#{decisionHistory.value}" />
-                        </c:forEach>
-                    </h:panelGrid>
-                </p:fieldset>
-            </c:forEach>
-        </p:fieldset>
+
+        <!--        <p:fieldset legend="{bundle['Relatated_Proc_Decisions']}"
+                            rendered="{fileItemCctDetailController.printRelatedDecisions}">
+                    <c:forEach var="fileType" items="{fileItemCctDetailController.relatedDecisionHistories.keySet()}">
+                        <p:fieldset legend="{facesContext.viewRoot.locale eq 'en' ? fileType.labelEn : fileType.labelFr}">
+                            <h:panelGrid columns="2" cellspacing="6" styleClass="informationPanelGrid tableGeneralInfo">
+                                <c:forEach var="decisionHistory" items="{fileItemCctDetailController.relatedDecisionHistories.get(fileType)}">
+                                    <h:panelGroup>
+                                        <h:outputLabel value="{facesContext.viewRoot.locale eq 'en' ? decisionHistory.labelEn : decisionHistory.labelFr}" />
+                                    </h:panelGroup>
+                                    <h:outputLabel value="{decisionHistory.value}" />
+                                </c:forEach>
+                            </h:panelGrid>
+                        </p:fieldset>
+                    </c:forEach>
+                </p:fieldset>-->
     </h:form>
 </ui:composition>
+
+
 
 

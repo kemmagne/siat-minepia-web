@@ -10,7 +10,7 @@
     <artifactId>siat-ct-web</artifactId>
     <packaging>war</packaging>
     <name>siat-ct-web</name>
-    <version>1.3.17-TESTSIAT</version>
+    <version>1.3.19-TEST</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <resource.dir>src/main/resources</resource.dir>
@@ -38,14 +38,14 @@
                 <db.url>jdbc:oracle:thin:@agserver:1521:GUCE</db.url>
                 <!--<ged.url>http://localhost:8989</ged.url>-->
                 <ged.url>http://gedurl:48080</ged.url>
-                <jms.url>failover:(tcp://agserver:61616)</jms.url>
+                <jms.url>failover:(tcp://brokerurl:61616)</jms.url>
                 <version>${application.version}</version>
                 <ged.username>admin</ged.username>
                 <ged.password>admin</ged.password>
                 <uri.in>amq:CT</uri.in>
                 <uri.out>SIAT</uri.out>
                 <uri.dead.in>direct:dead</uri.dead.in>
-                <uri.dead.out>amq:SIAT</uri.dead.out>
+                <uri.dead.out>amq:deadQueue</uri.dead.out>
                 <!--<ebxml.folder>C:/Users/leric/siat/ebxml</ebxml.folder>-->
                 <ebxml.folder>/root/siat/eguce/ebxml</ebxml.folder>
                 <!--<xml.folder>C:/Users/leric/siat/xml</xml.folder>-->
@@ -88,7 +88,7 @@
                 <uri.in>amq:CT</uri.in>
                 <uri.out>SIAT</uri.out>
                 <uri.dead.in>direct:dead</uri.dead.in>
-                <uri.dead.out>amq:SIAT</uri.dead.out>
+                <uri.dead.out>amq:deadQueue</uri.dead.out>
                 <ebxml.folder>/eGuce/ebxml</ebxml.folder>
                 <xml.folder>/eGuce/xml</xml.folder>
                 <attachement.folder>/eGuce/attachement</attachement.folder>
@@ -110,9 +110,9 @@
             </activation>
         </profile>
         <profile>
-            <id>profile-preprod</id>
+            <id>profile-production</id>
             <properties>
-                <environment>preprod</environment>
+                <environment>production</environment>
                 <db.username>siat_ct</db.username>
                 <db.password>siat</db.password>
                 <!-- <db.url>jdbc:oracle:thin:@172.24.3.23:1528:SIAT</db.url> -->
@@ -144,21 +144,21 @@
             <activation>
                 <property>
                     <name>environment</name>
-                    <value>preprod</value>
+                    <value>production</value>
                 </property>
             </activation>
         </profile>
         <!-- User Acceptance Testing (UAT) -->
         <profile>
-            <id>profile-uat</id>
+            <id>profile-test</id>
             <properties>
-                <environment>uat</environment>
+                <environment>test</environment>
                 <db.username>SIAT_CT</db.username>
                 <db.password>siat</db.password>
                 <!-- <db.url>jdbc:oracle:thin:@172.20.3.31:1518:GUCETEST</db.url> -->
                 <db.url>jdbc:oracle:thin:@siat-db:1518:GUCETEST</db.url>
                 <!-- <ged.url>http://localhost:8080</ged.url> -->
-                <ged.url>http://siat-ged:8080</ged.url>
+                <ged.url>http://siat-ged:18080</ged.url>
                 <!-- <jms.url>tcp://localhost:61616</jms.url> -->
                 <jms.url>tcp://siat-esb0:61618</jms.url>
                 <version>${application.version}</version>
@@ -167,7 +167,7 @@
                 <uri.in>amq:CT</uri.in>
                 <uri.out>SIAT</uri.out>
                 <uri.dead.in>direct:dead</uri.dead.in>
-                <uri.dead.out>amq:SIAT</uri.dead.out>
+                <uri.dead.out>amq:deadQueue</uri.dead.out>
                 <ebxml.folder>/siat/eGuce/ebxml</ebxml.folder>
                 <xml.folder>/siat/eGuce/xml</xml.folder>
                 <attachement.folder>/siat/eGuce/attachement</attachement.folder>
@@ -184,7 +184,7 @@
             <activation>
                 <property>
                     <name>environment</name>
-                    <value>uat</value>
+                    <value>test</value>
                 </property>
             </activation>
         </profile>
@@ -273,7 +273,7 @@
         <dependency>
             <groupId>org.guce.siat</groupId>
             <artifactId>siat-ct-core</artifactId>
-            <version>1.3.6</version>
+            <version>1.3.7</version>
         </dependency>
 
         <dependency>

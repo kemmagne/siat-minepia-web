@@ -459,6 +459,11 @@ public interface ControllerConstants {
             String SEND_ERROR = "SendError";
 
             /**
+             * The Constant SEND_ERROR.
+             */
+            String RESEND_ERROR = "ReSendError";
+
+            /**
              * The Constant SAME_STEPS_ERROR.
              */
             String SAME_STEPS_ERROR = "SameStepsError";
@@ -497,6 +502,11 @@ public interface ControllerConstants {
              * The Constant SEND_SUCCESS.
              */
             String SEND_SUCCESS = "SendSuccess";
+
+            /**
+             * The Constant SEND_SUCCESS.
+             */
+            String RESEND_SUCCESS = "ReSendSuccess";
 
             /**
              * The Constant ROLL_BACK_SUCCESS.
@@ -615,3 +625,4 @@ public interface ControllerConstants {
         }
     }
 }
+
