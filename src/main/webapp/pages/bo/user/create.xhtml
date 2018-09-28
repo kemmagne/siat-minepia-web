@@ -1,187 +1,207 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+	  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
 
-<ui:composition>
+	<ui:composition>
 
-	<h:form id="userCreateForm">
-		<p:panel id="userCreatePanel" rendered="#{not empty userController.selected and empty userController.selected.id}"
-			widgetVar="userCreatePanelWidget" resizable="false" header="#{bundle['CreateUserTitle']}">
+		<h:form id="userCreateForm">
+			<p:panel id="userCreatePanel" rendered="#{not empty userController.selected and empty userController.selected.id}"
+					 widgetVar="userCreatePanelWidget" resizable="false" header="#{bundle['CreateUserTitle']}">
 
-			<h:panelGroup id="display" styleClass="userPage">
-				<p:panelGrid columns="4" id="userCreateGrid">
+				<h:panelGroup id="display" styleClass="userPage">
+					<p:panelGrid columns="4" id="userCreateGrid">
 
 
-					<p:outputLabel value="#{bundle['CreateUserLabel_login']}" for="userLogin" />
+						<p:outputLabel value="#{bundle['CreateUserLabel_login']}" for="userLogin" />
 
-					<h:panelGroup>
-						<p:inputText id="userLogin" value="#{userController.selected.login}" title="#{bundle['CreateUserTitle_login']}" required="true"
-							requiredMessage="#{bundle['CreateUserRequiredMessage_login']}" />
-						<p:message for="userLogin" />
+						<h:panelGroup>
+							<p:inputText id="userLogin" value="#{userController.selected.login}" title="#{bundle['CreateUserTitle_login']}" required="true"
+										 requiredMessage="#{bundle['CreateUserRequiredMessage_login']}" />
+							<p:message for="userLogin" />
+						</h:panelGroup>
+
+						<p:outputLabel value="#{bundle['CreateUserLabel_firstName']}" for="userFirstName" />
+						<h:panelGroup>
+							<p:inputText id="userFirstName" value="#{userController.selected.firstName}" title="#{bundle['CreateUserTitle_firstName']}"
+										 required="true" requiredMessage="#{bundle['CreateUserRequiredMessage_firstName']}" />
+							<p:message for="userFirstName" />
+						</h:panelGroup>
+
+						<p:outputLabel value="#{bundle['CreateUserLabel_lastName']}" for="userLastName" />
+						<h:panelGroup>
+							<p:inputText id="userLastName" value="#{userController.selected.lastName}" title="#{bundle['CreateUserTitle_lastName']}"
+										 required="true" requiredMessage="#{bundle['CreateUserRequiredMessage_lastName']}" />
+							<p:message for="userLastName" />
+						</h:panelGroup>
+
+						<p:outputLabel value="#{bundle['CreateUserLabel_email']}" for="userEmail" />
+						<h:panelGroup>
+							<p:inputText id="userEmail" value="#{userController.selected.email}" title="#{bundle['CreateUserTitle_email']}" required="true"
+										 requiredMessage="#{bundle['CreateUserRequiredMessage_email']}" validatorMessage="#{bundle['MailValidationFail']}">
+								<f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+								<f:ajax execute="mailMsg" event="blur" render="mailMsg" />
+							</p:inputText>
+							<p:message id="mailMsg" for="userEmail" />
+						</h:panelGroup>
+
+						<p:outputLabel value="#{bundle['CreateUserLabel_telephone']}" for="userTelephone" />
+						<h:panelGroup>
+							<p:inputText id="userTelephone" value="#{userController.selected.telephone}" title="#{bundle['CreateUserTitle_telephone']}"
+										 required="true" requiredMessage="#{bundle['CreateUserRequiredMessage_telephone']}"
+										 validatorMessage="#{bundle['PhoneValidationFail']}">
+								<f:validateRegex pattern="(\+){0,1}[0-9]{0,14}" />
+								<f:ajax execute="telMsg" event="blur" render="telMsg" />
+							</p:inputText>
+							<p:message id="telMsg" for="userTelephone" />
+						</h:panelGroup>
+
+						<p:outputLabel value="#{bundle['CreateUserLabel_preferedLanguage']}" for="userPreferedLanguage" />
+						<h:panelGroup>
+							<p:selectOneMenu id="userPreferedLanguage" value="#{userController.selected.preferedLanguage}" required="true"
+											 requiredMessage="#{bundle['CreateUserRequiredMessage_preferedLanguage']}" title="#{bundle['CreateUserTitle_preferedLanguage']}">
+								<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+								<f:selectItems value="#{language.languageOptions}" />
+							</p:selectOneMenu>
+							<p:message for="userPreferedLanguage" />
+						</h:panelGroup>
+
+						<h:panelGroup>
+							<h:outputLabel value="#{bundle['CreateUserLabel_enabled']}" for="userEnabled" />
+							<h:outputText value="*" styleClass="required-star-right" />
+						</h:panelGroup>
+						<h:panelGroup>
+							<p:selectBooleanCheckbox id="userEnabled" value="#{userController.selected.enabled}" title="#{bundle.CreateUserTitle_enabled}" />
+						</h:panelGroup>
+
+						<p:outputLabel value="#{bundle['CreateUserLabel_position']} " for="userPosition" />
+						<h:panelGroup>
+							<p:selectOneMenu id="userPosition" style="width: 133px" value="#{userController.selected.position}" required="true"
+											 requiredMessage="#{bundle['CreateUserRequiredMessage_position']}" title="#{bundle['CreateUserTitle_position']}">
+								<f:selectItems value="#{userController.positionsOptions}" />
+								<p:ajax event="select"
+										update="userSubDepLabel userSubDep userAuthorityFileType userServiceLabel userServiceGrp userEntityLabel userEntityGrp"
+										listener="#{userController.positionChangedHandler}" />
+								<p:ajax event="change"
+										update="userSubDepLabel userSubDep userAuthorityFileType userServiceLabel userServiceGrp userEntityLabel userEntityGrp"
+										listener="#{userController.positionChangedHandler}" />
+							</p:selectOneMenu>
+							<p:message for="userPosition" />
+						</h:panelGroup>
+
+						<h:panelGroup id="userSubDepLabel">
+							<p:outputLabel
+								rendered="#{request.isUserInRole('ADMIN_ORG')  and userController.selected.position ne null and  userController.selected.position ne 'DIRECTEUR' and userController.selected.position ne 'SUPERVISEUR'}"
+								value="#{bundle['User_sub_department']}" for="user_sub_direction" />
+						</h:panelGroup>
+						<h:panelGroup id="userSubDep">
+							<p:selectOneMenu id="user_sub_direction" tyle="width: 133px" requiredMessage="#{bundle['CreateUserRequiredMessage_subDepartment']}"
+											 rendered="#{request.isUserInRole('ADMIN_ORG')  and userController.selected.position ne null and  userController.selected.position ne 'DIRECTEUR' and userController.selected.position ne 'SUPERVISEUR'}"
+											 required="true" value="#{userController.selectedsSubDepartment}" title="#{bundle['CreateUserTitle_position']}">
+								<f:converter binding="#{subDepartmentConverter}" />
+								<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" itemValue="#{null}" />
+								<f:selectItems value="#{userController.subDepartmentsItems}" />
+								<p:ajax event="select" update="userServiceLabel userServiceGrp userEntityLabel userEntityGrp"
+										listener="#{userController.subDepartmentChangedHandler}" />
+								<p:ajax event="change" update="userServiceLabel userServiceGrp userEntityLabel userEntityGrp"
+										listener="#{userController.subDepartmentChangedHandler}" />
+							</p:selectOneMenu>
+							<p:message for="user_sub_direction" />
+						</h:panelGroup>
+
+						<h:panelGroup id="userServiceLabel">
+							<p:outputLabel
+								rendered="#{userController.selectedsSubDepartment ne null and userController.selected.position ne 'DIRECTEUR' and userController.selected.position ne 'SUPERVISEUR' and userController.selected.position ne 'SOUS_DIRECTEUR'}"
+								value="#{bundle['User_service']}" for="userService" />
+						</h:panelGroup>
+						<h:panelGroup id="userServiceGrp">
+							<p:selectOneMenu required="true" id="userService" tyle="width: 133px" requiredMessage="#{bundle['CreateUserRequiredMessage_service']}"
+											 rendered="#{userController.selectedsSubDepartment ne null and userController.selected.position ne 'DIRECTEUR' and userController.selected.position ne 'SUPERVISEUR' and userController.selected.position ne 'SOUS_DIRECTEUR'}"
+											 value="#{userController.selectedService}">
+								<f:converter binding="#{serviceConverter}" />
+								<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" itemValue="#{null}" />
+								<f:selectItems value="#{userController.servicesItems}" />
+								<p:ajax event="select" update="userEntityLabel userEntityGrp" listener="#{userController.serviceChangedHandler}" />
+								<p:ajax event="change" update="userEntityLabel userEntityGrp" listener="#{userController.serviceChangedHandler}" />
+							</p:selectOneMenu>
+							<p:message for="userService" />
+						</h:panelGroup>
+
+						<h:panelGroup id="userEntityLabel">
+							<p:outputLabel
+								rendered="#{userController.selectedService ne null and (userController.selected.position eq 'AGENT' or userController.selected.position eq 'CHEF_BUREAU' or userController.selected.position eq 'OBSERVATEUR')}"
+								value="#{bundle['User_buerau']}" for="userEntity" />
+						</h:panelGroup>
+						<h:panelGroup id="userEntityGrp">
+							<p:selectOneMenu required="true" id="userEntity" tyle="width: 133px" requiredMessage="#{bundle['CreateUserRequiredMessage_bureau']}"
+											 rendered="#{userController.selectedService ne null and (userController.selected.position eq 'AGENT' or userController.selected.position eq 'CHEF_BUREAU' or userController.selected.position eq 'OBSERVATEUR')}"
+											 value="#{userController.selectedEntity}">
+								<f:converter binding="#{entityConverter}" />
+								<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" itemValue="#{null}" />
+								<f:selectItems value="#{userController.entitiesItems}" />
+								<p:ajax event="select" update="userRoleAdministrationExtendLabel userRoleAdministrationExtendGrp" listener="#{userController.bureauChangedHandler}" />
+								<p:ajax event="change" update="userRoleAdministrationExtendLabel userRoleAdministrationExtendGrp" listener="#{userController.bureauChangedHandler}" />
+							</p:selectOneMenu>
+							<p:message for="userEntity" />
+						</h:panelGroup>
+
+						<h:panelGroup id="userRoleAdministrationExtendLabel">
+							<p:outputLabel
+								rendered="#{userController.selectedEntity ne null and (userController.selected.position eq 'AGENT' or userController.selected.position eq 'OBSERVATEUR')}"
+								value="#{bundle['User_etendre_roles_administration']}" for="administrationExtendRoles" />
+						</h:panelGroup>
+						<h:panelGroup id="userRoleAdministrationExtendGrp">
+							<p:selectOneMenu required="false" id="administrationExtendRoles" tyle="width: 133px" 
+											 rendered="#{userController.selectedEntity ne null and (userController.selected.position eq 'AGENT' or userController.selected.position eq 'OBSERVATEUR')}"
+											 value="#{userController.selected.administrationExtendRoles}">
+								<f:converter binding="#{administrationConverter}" />
+								<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" itemValue="#{null}" />
+								<f:selectItems value="#{userController.userAdministrationHierarchy}" var="ad"
+											   itemValue="#{ad}"
+											   itemLabel="#{facesContext.viewRoot.locale eq 'fr' ? ad.labelFr : ad.labelEn}"/>
+							</p:selectOneMenu>
+							<p:message for="administrationExtendRoles" />
+						</h:panelGroup>
+
+					</p:panelGrid>
+
+					<h:panelGroup id="userAuthorityFileType">
+
+						<h:panelGroup id="userAuthFiletype" styleClass="usercreate">
+
+							<p:dataTable id="userAuthorityFiletype" widgetVar="userAuthorityFiletypeWV" rendered="#{not empty userController.selected.position}"
+										 var="item" rowIndexVar="rowIndex" value="#{userController.fileTypeList}" emptyMessage="#{bundle.CreateUserErro_EmptyFileType}">
+								<p:column headerText="#{bundle.UserLabel_file_type_authority}" styleClass="ui-widget-header">
+									<h:outputText value="#{facesContext.viewRoot.locale eq 'fr' ? item.labelFr : item.labelEn}" />
+								</p:column>
+								<p:columns var="column" value="#{userController.authoritiesList}"
+										   headerText="#{facesContext.viewRoot.locale eq 'fr' ? column.labelFr : column.labelEn}" columnIndexVar="colIndex">
+									<p:selectBooleanCheckbox value="#{userController.fileTypeAutorityDatas.get(rowIndex).get(colIndex).checked}" />
+								</p:columns>
+							</p:dataTable>
+
+						</h:panelGroup>
+
 					</h:panelGroup>
 
-					<p:outputLabel value="#{bundle['CreateUserLabel_firstName']}" for="userFirstName" />
-					<h:panelGroup>
-						<p:inputText id="userFirstName" value="#{userController.selected.firstName}" title="#{bundle['CreateUserTitle_firstName']}"
-							required="true" requiredMessage="#{bundle['CreateUserRequiredMessage_firstName']}" />
-						<p:message for="userFirstName" />
-					</h:panelGroup>
+					<br />
 
-					<p:outputLabel value="#{bundle['CreateUserLabel_lastName']}" for="userLastName" />
-					<h:panelGroup>
-						<p:inputText id="userLastName" value="#{userController.selected.lastName}" title="#{bundle['CreateUserTitle_lastName']}"
-							required="true" requiredMessage="#{bundle['CreateUserRequiredMessage_lastName']}" />
-						<p:message for="userLastName" />
-					</h:panelGroup>
+					<div class="btn-bloc">
 
-					<p:outputLabel value="#{bundle['CreateUserLabel_email']}" for="userEmail" />
-					<h:panelGroup>
-						<p:inputText id="userEmail" value="#{userController.selected.email}" title="#{bundle['CreateUserTitle_email']}" required="true"
-							requiredMessage="#{bundle['CreateUserRequiredMessage_email']}" validatorMessage="#{bundle['MailValidationFail']}">
-							<f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
-							<f:ajax execute="mailMsg" event="blur" render="mailMsg" />
-						</p:inputText>
-						<p:message id="mailMsg" for="userEmail" />
-					</h:panelGroup>
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="createBtn"
+										 actionListener="#{userController.create}" process="@form" value="#{bundle['Save']}"
+										 update=":userListForm:datalist :userCreateForm :userEditForm display :growl">
 
-					<p:outputLabel value="#{bundle['CreateUserLabel_telephone']}" for="userTelephone" />
-					<h:panelGroup>
-						<p:inputText id="userTelephone" value="#{userController.selected.telephone}" title="#{bundle['CreateUserTitle_telephone']}"
-							required="true" requiredMessage="#{bundle['CreateUserRequiredMessage_telephone']}"
-							validatorMessage="#{bundle['PhoneValidationFail']}">
-							<f:validateRegex pattern="(\+){0,1}[0-9]{0,14}" />
-							<f:ajax execute="telMsg" event="blur" render="telMsg" />
-						</p:inputText>
-						<p:message id="telMsg" for="userTelephone" />
-					</h:panelGroup>
+						</p:commandButton>
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="cancelBtn"
+										 value="#{bundle['Cancel']}" immediate="true" process="@this" update="@form" actionListener="#{userController.resetForm}">
+							<p:resetInput target="userCreateForm" />
+						</p:commandButton>
 
-					<p:outputLabel value="#{bundle['CreateUserLabel_preferedLanguage']}" for="userPreferedLanguage" />
-					<h:panelGroup>
-						<p:selectOneMenu id="userPreferedLanguage" value="#{userController.selected.preferedLanguage}" required="true"
-							requiredMessage="#{bundle['CreateUserRequiredMessage_preferedLanguage']}" title="#{bundle['CreateUserTitle_preferedLanguage']}">
-							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-							<f:selectItems value="#{language.languageOptions}" />
-						</p:selectOneMenu>
-						<p:message for="userPreferedLanguage" />
-					</h:panelGroup>
-
-					<h:panelGroup>
-						<h:outputLabel value="#{bundle['CreateUserLabel_enabled']}" for="userEnabled" />
-						<h:outputText value="*" styleClass="required-star-right" />
-					</h:panelGroup>
-					<h:panelGroup>
-						<p:selectBooleanCheckbox id="userEnabled" value="#{userController.selected.enabled}" title="#{bundle.CreateUserTitle_enabled}" />
-					</h:panelGroup>
-
-					<p:outputLabel value="#{bundle['CreateUserLabel_position']} " for="userPosition" />
-					<h:panelGroup>
-						<p:selectOneMenu id="userPosition" style="width: 133px" value="#{userController.selected.position}" required="true"
-							requiredMessage="#{bundle['CreateUserRequiredMessage_position']}" title="#{bundle['CreateUserTitle_position']}">
-							<f:selectItems value="#{userController.positionsOptions}" />
-							<p:ajax event="select"
-								update="userSubDepLabel userSubDep userAuthorityFileType userServiceLabel userServiceGrp userEntityLabel userEntityGrp"
-								listener="#{userController.positionChangedHandler}" />
-							<p:ajax event="change"
-								update="userSubDepLabel userSubDep userAuthorityFileType userServiceLabel userServiceGrp userEntityLabel userEntityGrp"
-								listener="#{userController.positionChangedHandler}" />
-						</p:selectOneMenu>
-						<p:message for="userPosition" />
-					</h:panelGroup>
-
-					<h:panelGroup id="userSubDepLabel">
-						<p:outputLabel
-							rendered="#{request.isUserInRole('ADMIN_ORG')  and userController.selected.position ne null and  userController.selected.position ne 'DIRECTEUR' and userController.selected.position ne 'SUPERVISEUR'}"
-							value="#{bundle['User_sub_department']}" for="user_sub_direction" />
-					</h:panelGroup>
-					<h:panelGroup id="userSubDep">
-						<p:selectOneMenu id="user_sub_direction" tyle="width: 133px" requiredMessage="#{bundle['CreateUserRequiredMessage_subDepartment']}"
-							rendered="#{request.isUserInRole('ADMIN_ORG')  and userController.selected.position ne null and  userController.selected.position ne 'DIRECTEUR' and userController.selected.position ne 'SUPERVISEUR'}"
-							required="true" value="#{userController.selectedsSubDepartment}" title="#{bundle['CreateUserTitle_position']}">
-							<f:converter binding="#{subDepartmentConverter}" />
-							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" itemValue="#{null}" />
-							<f:selectItems value="#{userController.subDepartmentsItems}" />
-							<p:ajax event="select" update="userServiceLabel userServiceGrp userEntityLabel userEntityGrp"
-								listener="#{userController.subDepartmentChangedHandler}" />
-							<p:ajax event="change" update="userServiceLabel userServiceGrp userEntityLabel userEntityGrp"
-								listener="#{userController.subDepartmentChangedHandler}" />
-						</p:selectOneMenu>
-						<p:message for="user_sub_direction" />
-					</h:panelGroup>
-
-					<h:panelGroup id="userServiceLabel">
-						<p:outputLabel
-							rendered="#{userController.selectedsSubDepartment ne null and userController.selected.position ne 'DIRECTEUR' and userController.selected.position ne 'SUPERVISEUR' and userController.selected.position ne 'SOUS_DIRECTEUR'}"
-							value="#{bundle['User_service']}" for="userService" />
-					</h:panelGroup>
-					<h:panelGroup id="userServiceGrp">
-						<p:selectOneMenu required="true" id="userService" tyle="width: 133px" requiredMessage="#{bundle['CreateUserRequiredMessage_service']}"
-							rendered="#{userController.selectedsSubDepartment ne null and userController.selected.position ne 'DIRECTEUR' and userController.selected.position ne 'SUPERVISEUR' and userController.selected.position ne 'SOUS_DIRECTEUR'}"
-							value="#{userController.selectedService}">
-							<f:converter binding="#{serviceConverter}" />
-							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" itemValue="#{null}" />
-							<f:selectItems value="#{userController.servicesItems}" />
-							<p:ajax event="select" update="userEntityLabel userEntityGrp" listener="#{userController.serviceChangedHandler}" />
-							<p:ajax event="change" update="userEntityLabel userEntityGrp" listener="#{userController.serviceChangedHandler}" />
-						</p:selectOneMenu>
-						<p:message for="userService" />
-					</h:panelGroup>
-
-					<h:panelGroup id="userEntityLabel">
-						<p:outputLabel
-							rendered="#{userController.selectedService ne null and (userController.selected.position eq 'AGENT' or userController.selected.position eq 'CHEF_BUREAU' or userController.selected.position eq 'OBSERVATEUR')}"
-							value="#{bundle['User_buerau']}" for="userEntity" />
-					</h:panelGroup>
-					<h:panelGroup id="userEntityGrp">
-						<p:selectOneMenu required="true" id="userEntity" tyle="width: 133px" requiredMessage="#{bundle['CreateUserRequiredMessage_bureau']}"
-							rendered="#{userController.selectedService ne null and (userController.selected.position eq 'AGENT' or userController.selected.position eq 'CHEF_BUREAU' or userController.selected.position eq 'OBSERVATEUR')}"
-							value="#{userController.selectedEntity}">
-							<f:converter binding="#{entityConverter}" />
-							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" itemValue="#{null}" />
-							<f:selectItems value="#{userController.entitiesItems}" />
-						</p:selectOneMenu>
-						<p:message for="userEntity" />
-					</h:panelGroup>
-
-				</p:panelGrid>
-
-				<h:panelGroup id="userAuthorityFileType">
-
-					<h:panelGroup id="userAuthFiletype" styleClass="usercreate">
-
-						<p:dataTable id="userAuthorityFiletype" widgetVar="userAuthorityFiletypeWV" rendered="#{not empty userController.selected.position}"
-							var="item" rowIndexVar="rowIndex" value="#{userController.fileTypeList}" emptyMessage="#{bundle.CreateUserErro_EmptyFileType}">
-							<p:column headerText="#{bundle.UserLabel_file_type_authority}" styleClass="ui-widget-header">
-								<h:outputText value="#{facesContext.viewRoot.locale eq 'fr' ? item.labelFr : item.labelEn}" />
-							</p:column>
-							<p:columns var="column" value="#{userController.authoritiesList}"
-								headerText="#{facesContext.viewRoot.locale eq 'fr' ? column.labelFr : column.labelEn}" columnIndexVar="colIndex">
-								<p:selectBooleanCheckbox value="#{userController.fileTypeAutorityDatas.get(rowIndex).get(colIndex).checked}" />
-							</p:columns>
-						</p:dataTable>
-
-					</h:panelGroup>
-
+					</div>
 				</h:panelGroup>
+			</p:panel>
 
-				<br />
+		</h:form>
 
-				<div class="btn-bloc">
-
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="createBtn"
-						actionListener="#{userController.create}" process="@form" value="#{bundle['Save']}"
-						update=":userListForm:datalist :userCreateForm :userEditForm display :growl">
-
-					</p:commandButton>
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="cancelBtn"
-						value="#{bundle['Cancel']}" immediate="true" process="@this" update="@form" actionListener="#{userController.resetForm}">
-						<p:resetInput target="userCreateForm" />
-					</p:commandButton>
-
-				</div>
-			</h:panelGroup>
-		</p:panel>
-
-	</h:form>
-
-</ui:composition>
+	</ui:composition>
 
 </html>

@@ -16,11 +16,6 @@ public class EncodePassword {
 	public static void main(String[] args) {
 		ShaPasswordEncoder encoder = new ShaPasswordEncoder(256);
 		System.out.println("Password : ");
-		System.out.println(encoder.encodePassword("root", "MINEPDED-AG-SRAV-RT"));
-		System.out.println(encoder.encodePassword("root", "MINEPDED-AG-SRAV-CAISSIER"));
-		System.out.println(encoder.encodePassword("root", "MINEPDED-AG-BV-SRAV-RT"));
-		System.out.println(encoder.encodePassword("root", "MINEPDED-AG-BV-SRAV-CAISSIER"));
-		System.out.println(encoder.encodePassword("root", "MINEPDED-AG-BV-SRAV-AR"));
-		System.out.println(encoder.encodePassword("root", "MINEPDED-AG-SRAV-AR"));
+		System.out.println(encoder.encodePassword("root", "MINEPDED-AG-SRAV-CAISSIER-SUP"));
 	}
 }

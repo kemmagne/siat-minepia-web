@@ -1,5 +1,7 @@
 package org.guce.siat.web.ct.controller;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.charset.Charset;
@@ -59,6 +61,8 @@ import org.guce.siat.web.common.AbstractController;
 import org.guce.siat.web.common.ControllerConstants;
 import org.guce.siat.web.ct.controller.util.JsfUtil;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,18 +92,18 @@ public class CostsController extends AbstractController<PaymentData> implements 
 	 * The current file.
 	 */
 	private File currentFile;
-        
-        private boolean vtMinepdedFileType;
-        
-        private java.io.File fileToSave;
-        
-        private String newAttachmentName;
-        
-        private String attachmentType;
-        
-        private Attachment selectedAttachment;
-        
-        private List<Attachment> attachmentList;
+
+	private boolean vtMinepdedFileType;
+
+	private java.io.File fileToSave;
+
+	private String newAttachmentName;
+
+	private String attachmentType;
+
+	private Attachment selectedAttachment;
+
+	private List<Attachment> attachmentList;
 
 	/**
 	 * The current payment data.
@@ -152,11 +156,11 @@ public class CostsController extends AbstractController<PaymentData> implements 
 	 */
 	@ManagedProperty(value = "#{ebxmlPropertiesService}")
 	private EbxmlPropertiesService ebxmlPropertiesService;
-        
-        @ManagedProperty(value = "#{attachmentService}")
+
+	@ManagedProperty(value = "#{attachmentService}")
 	private AttachmentService attachmentService;
-        
-        private static final CharsetEncoder asciiEncoder
+
+	private static final CharsetEncoder asciiEncoder
 			= Charset.forName("US-ASCII").newEncoder(); // or "ISO-8859-1" for ISO Latin 1
 
 	/**
@@ -174,16 +178,16 @@ public class CostsController extends AbstractController<PaymentData> implements 
 		if (LOG.isDebugEnabled()) {
 			LOG.debug(Constants.INIT_LOG_INFO_MESSAGE, CostsController.class.getName());
 		}
-                if (currentFile != null) {
-                    vtMinepdedFileType = FileTypeCode.VT_MINEPDED.equals(currentFile.getFileType().getCode());
-                    attachmentList = getCurrentFile().getAttachmentsList();
-                }
+		if (currentFile != null) {
+			vtMinepdedFileType = FileTypeCode.VT_MINEPDED.equals(currentFile.getFileType().getCode());
+			attachmentList = getCurrentFile().getAttachmentsList();
+		}
 	}
 
 	/**
 	 * Validate payment.
 	 */
-	public void validatePayment() {
+	public void validatePayment() throws IOException {
 
 		// Check if the step of fileItems was changed by another user when the decision popup is open
 		if (fileItemService.verifyStepChangedWhileDecisionInProgress(currentFile.getFileItemsList())) {
@@ -197,6 +201,16 @@ public class CostsController extends AbstractController<PaymentData> implements 
 			// the user must refresh the details page (return to the dashboard then open the file details page) to get the correct decision list in the decision popup
 			JsfUtil.showMessageInDialog(FacesMessage.SEVERITY_ERROR, summary, detail);
 			return;
+		}
+		//save attachments here
+		if (attachmentList != null) {
+			final Session sessionCmisClient = CmisSession.getInstance();
+			for (Attachment at : attachmentList) {
+				if (at.getId() == null) {
+					CmisUtils.sendDocument(Arrays.asList(at.getAttachmentFile()), sessionCmisClient, at.getPath());
+					attachmentService.save(at);
+				}
+			}
 		}
 		sendPayment();
 		returnToPaymentView();
@@ -292,12 +306,12 @@ public class CostsController extends AbstractController<PaymentData> implements 
 			LOG.error(ex.getMessage(), ex);
 		}
 	}
-        
-        private static boolean isPureAscii(String v) {
+
+	private static boolean isPureAscii(String v) {
 		return asciiEncoder.canEncode(v);
 	}
-        
-        public void handleFileUpload(FileUploadEvent event) {
+
+	public void handleFileUpload(FileUploadEvent event) {
 		UploadedFile file = event.getFile();
 		if (file == null || StringUtils.isEmpty(file.getFileName())) {
 			fileToSave = null;
@@ -328,54 +342,55 @@ public class CostsController extends AbstractController<PaymentData> implements 
 			name = "";
 		}
 	}
-        
-        public void saveAttachment() {
-            Folder rootFolder = null;
-            try {
-                    final Session sessionCmisClient = CmisSession.getInstance();
-                    if (fileToSave == null) {
-                            return;
-                    }
-                    final List<java.io.File> attachedFiles = new ArrayList<>();
-                    attachedFiles.add(fileToSave);
 
-                    rootFolder = CmisUtils.getRootFolder(sessionCmisClient, "/siat");
-                    try {
-                        rootFolder = CmisUtils.getRootFolder(sessionCmisClient, "/siat/CT");
-                    } catch (final CmisObjectNotFoundException e) {
-                        rootFolder = CmisUtils.createFolder(rootFolder, "CT");
-                    }
-                    try {
-                        rootFolder = CmisUtils.getRootFolder(sessionCmisClient, "/siat/CT/MINEPDED/");
-                    } catch (final CmisObjectNotFoundException e) {
-                        rootFolder = CmisUtils.createFolder(rootFolder, "MINEPDED");
-                    }
-                    try {
-                        rootFolder = CmisUtils.getRootFolder(sessionCmisClient, "/siat/CT/MINEPDED/" + attachmentType);
-                    } catch (final CmisObjectNotFoundException e) {
-                        rootFolder = CmisUtils.createFolder(rootFolder, attachmentType);
-                    }
-                    try {
-                        rootFolder = CmisUtils.getRootFolder(sessionCmisClient, "/siat/CT/MINEPDED/" + attachmentType + SLASH + currentFile.getNumeroDossier());
-                    } catch (final CmisObjectNotFoundException e) {
-                        rootFolder = CmisUtils.createFolder(rootFolder, currentFile.getNumeroDossier());
-                    }
-                    CmisUtils.sendDocument(attachedFiles, sessionCmisClient, rootFolder.getPath());
-            } catch (IOException ex) {
-                    java.util.logging.Logger.getLogger(FileItemApDetailController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            selectedAttachment = new Attachment();
-            selectedAttachment.setFile(currentFile);
-            selectedAttachment.setAttachmentType(attachmentType);
-            selectedAttachment.setDocumentName(fileToSave.getName());
-            selectedAttachment.setPath(rootFolder != null ? rootFolder.getPath() : "/siat");
-            attachmentService.save(selectedAttachment);
-            if (attachmentList == null) {
-                attachmentList = new java.util.ArrayList<>();
-            }
-            attachmentList.add(selectedAttachment);
-            fileToSave = null;
-            newAttachmentName = "";
+	public void saveAttachment() {
+		Folder rootFolder = null;
+		//try {
+		final Session sessionCmisClient = CmisSession.getInstance();
+		if (fileToSave == null) {
+			return;
+		}
+		final List<java.io.File> attachedFiles = new ArrayList<>();
+		attachedFiles.add(fileToSave);
+
+		rootFolder = CmisUtils.getRootFolder(sessionCmisClient, "/siat");
+		try {
+			rootFolder = CmisUtils.getRootFolder(sessionCmisClient, "/siat/CT");
+		} catch (final CmisObjectNotFoundException e) {
+			rootFolder = CmisUtils.createFolder(rootFolder, "CT");
+		}
+		try {
+			rootFolder = CmisUtils.getRootFolder(sessionCmisClient, "/siat/CT/MINEPDED/");
+		} catch (final CmisObjectNotFoundException e) {
+			rootFolder = CmisUtils.createFolder(rootFolder, "MINEPDED");
+		}
+		try {
+			rootFolder = CmisUtils.getRootFolder(sessionCmisClient, "/siat/CT/MINEPDED/" + attachmentType);
+		} catch (final CmisObjectNotFoundException e) {
+			rootFolder = CmisUtils.createFolder(rootFolder, attachmentType);
+		}
+		try {
+			rootFolder = CmisUtils.getRootFolder(sessionCmisClient, "/siat/CT/MINEPDED/" + attachmentType + SLASH + currentFile.getNumeroDossier());
+		} catch (final CmisObjectNotFoundException e) {
+			rootFolder = CmisUtils.createFolder(rootFolder, currentFile.getNumeroDossier());
+		}
+		/*CmisUtils.sendDocument(attachedFiles, sessionCmisClient, rootFolder.getPath());
+		} catch (IOException ex) {
+			java.util.logging.Logger.getLogger(FileItemApDetailController.class.getName()).log(Level.SEVERE, null, ex);
+		}*/
+		selectedAttachment = new Attachment();
+		selectedAttachment.setFile(currentFile);
+		selectedAttachment.setAttachmentType(attachmentType);
+		selectedAttachment.setDocumentName(fileToSave.getName());
+		selectedAttachment.setPath(rootFolder != null ? rootFolder.getPath() : "/siat");
+		selectedAttachment.setAttachmentFile(fileToSave);
+		//attachmentService.save(selectedAttachment);
+		if (attachmentList == null) {
+			attachmentList = new java.util.ArrayList<>();
+		}
+		attachmentList.add(selectedAttachment);
+		fileToSave = null;
+		newAttachmentName = "";
 	}
 
 	/**
@@ -557,83 +572,106 @@ public class CostsController extends AbstractController<PaymentData> implements 
 	public void setEbxmlPropertiesService(final EbxmlPropertiesService ebxmlPropertiesService) {
 		this.ebxmlPropertiesService = ebxmlPropertiesService;
 	}
-        
-        public boolean isVtMinepdedFileType() {
-            if (currentFile != null) {
-                vtMinepdedFileType = FileTypeCode.VT_MINEPDED.equals(currentFile.getFileType().getCode());
-            }
-            return vtMinepdedFileType;
-        }
 
-    public String getNewAttachmentName() {
-        return newAttachmentName;
-    }
+	public boolean isVtMinepdedFileType() {
+		if (currentFile != null) {
+			vtMinepdedFileType = FileTypeCode.VT_MINEPDED.equals(currentFile.getFileType().getCode());
+		}
+		return vtMinepdedFileType;
+	}
 
-    public void setNewAttachmentName(String newAttachmentName) {
-        this.newAttachmentName = newAttachmentName;
-    }
+	public String getNewAttachmentName() {
+		return newAttachmentName;
+	}
 
-    public java.io.File getFileToSave() {
-        return fileToSave;
-    }
+	public void setNewAttachmentName(String newAttachmentName) {
+		this.newAttachmentName = newAttachmentName;
+	}
 
-    public void setFileToSave(java.io.File fileToSave) {
-        this.fileToSave = fileToSave;
-    }
+	public java.io.File getFileToSave() {
+		return fileToSave;
+	}
 
-    public String getAttachmentType() {
-        return attachmentType;
-    }
+	public void setFileToSave(java.io.File fileToSave) {
+		this.fileToSave = fileToSave;
+	}
 
-    public void setAttachmentType(String attachmentType) {
-        this.attachmentType = attachmentType;
-    }
+	public String getAttachmentType() {
+		return attachmentType;
+	}
 
-    public Attachment getSelectedAttachment() {
-        return selectedAttachment;
-    }
+	public void setAttachmentType(String attachmentType) {
+		this.attachmentType = attachmentType;
+	}
 
-    public void setSelectedAttachment(Attachment selectedAttachment) {
-        this.selectedAttachment = selectedAttachment;
-    }
+	public Attachment getSelectedAttachment() {
+		return selectedAttachment;
+	}
 
-    public AttachmentService getAttachmentService() {
-        return attachmentService;
-    }
+	public void setSelectedAttachment(Attachment selectedAttachment) {
+		this.selectedAttachment = selectedAttachment;
+	}
 
-    public void setAttachmentService(AttachmentService attachmentService) {
-        this.attachmentService = attachmentService;
-    }
-    
-    public List<Attachment> getAttachmentList() {
-            if (attachmentList == null) {
-                    attachmentList = getCurrentFile().getAttachmentsList();
-            }
-            return attachmentList;
-    }
+	public AttachmentService getAttachmentService() {
+		return attachmentService;
+	}
 
-    /**
-     * Sets the attachment list.
-     *
-     * @param attachmentList the new attachment list
-     */
-    public void setAttachmentList(final List<Attachment> attachmentList) {
-        this.attachmentList = attachmentList;
-    }
-    
-    public void showAttachment() {
-            final AttachmentController attachmentController = getInstanceOfPageAttachmentController();
-            attachmentController.setSelectedAttachment(selectedAttachment);
-            attachmentController.init();
-    }
-    
-    public AttachmentController getInstanceOfPageAttachmentController() {
-            final FacesContext fctx = FacesContext.getCurrentInstance();
-            final Application application = fctx.getApplication();
-            final ELContext context = fctx.getELContext();
-            final ExpressionFactory expressionFactory = application.getExpressionFactory();
-            final ValueExpression createValueExpression = expressionFactory.createValueExpression(context, "#{attachmentController}",
-                            AttachmentController.class);
-            return (AttachmentController) createValueExpression.getValue(context);
-    }
+	public void setAttachmentService(AttachmentService attachmentService) {
+		this.attachmentService = attachmentService;
+	}
+
+	public List<Attachment> getAttachmentList() {
+		if (attachmentList == null) {
+			attachmentList = getCurrentFile().getAttachmentsList();
+		}
+		return attachmentList;
+	}
+
+	/**
+	 * Sets the attachment list.
+	 *
+	 * @param attachmentList the new attachment list
+	 */
+	public void setAttachmentList(final List<Attachment> attachmentList) {
+		this.attachmentList = attachmentList;
+	}
+
+	public void showAttachment() {
+		final AttachmentController attachmentController = getInstanceOfPageAttachmentController();
+		if (selectedAttachment.getId() != null) {
+			attachmentController.setSelectedAttachment(selectedAttachment);
+			attachmentController.init();
+		} else {
+			boolean showPaneViewPdf = selectedAttachment.getAttachmentFile().getName().toLowerCase().endsWith(".pdf");
+			attachmentController.setShowPanelViewJpeg(!showPaneViewPdf);
+			attachmentController.setShowPanelViewPdf(showPaneViewPdf);
+			if (showPaneViewPdf) {
+				StreamedContent streamPdf = null;
+				try {
+					streamPdf = new DefaultStreamedContent(new FileInputStream(selectedAttachment.getAttachmentFile()), "application/pdf");
+				} catch (FileNotFoundException ex) {
+					java.util.logging.Logger.getLogger(CostsController.class.getName()).log(Level.SEVERE, null, ex);
+				}
+				attachmentController.setStreamPdf(streamPdf);
+			} else {
+				StreamedContent streamJpeg = null;
+				try {
+					streamJpeg = new DefaultStreamedContent(new FileInputStream(selectedAttachment.getAttachmentFile()), "image/png");
+				} catch (FileNotFoundException ex) {
+					java.util.logging.Logger.getLogger(CostsController.class.getName()).log(Level.SEVERE, null, ex);
+				}
+				attachmentController.setStreamJpeg(streamJpeg);
+			}
+		}
+	}
+
+	public AttachmentController getInstanceOfPageAttachmentController() {
+		final FacesContext fctx = FacesContext.getCurrentInstance();
+		final Application application = fctx.getApplication();
+		final ELContext context = fctx.getELContext();
+		final ExpressionFactory expressionFactory = application.getExpressionFactory();
+		final ValueExpression createValueExpression = expressionFactory.createValueExpression(context, "#{attachmentController}",
+				AttachmentController.class);
+		return (AttachmentController) createValueExpression.getValue(context);
+	}
 }
