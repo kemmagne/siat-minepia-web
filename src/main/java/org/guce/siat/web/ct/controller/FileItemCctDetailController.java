@@ -6609,6 +6609,27 @@ public class FileItemCctDetailController implements Serializable {
         }
     }
 
+    public boolean resendAckAllowed() {
+        boolean ok = selectedItemFlowDto != null
+                && selectedItemFlowDto.getItemFlow() != null
+                && selectedItemFlowDto.getItemFlow().getFlow() != null
+                && selectedItemFlowDto.getItemFlow().getFlow().getOutgoing() != null
+                && selectedItemFlowDto.getItemFlow().getFlow().getOutgoing() == 0;
+        return ok;
+    }
+
+    public void resendAck() {
+        try {
+            fileProducer.resendAcknowledgment(selectedItemFlowDto.getItemFlow());
+
+            JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
+                    getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.RESEND_SUCCESS));
+        } catch (Exception ex) {
+            LOG.error("cannot resend ack", ex);
+            showErrorFacesMessage(ControllerConstants.Bundle.Messages.RESEND_ERROR, null);
+        }
+    }
+
     public boolean isPhytoReadyForSignature(Flow flow) {
         return flow != null && checkMinaderMinistry && FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode()) && FlowCode.FL_CT_07.name().equals(flow.getCode());
     }
