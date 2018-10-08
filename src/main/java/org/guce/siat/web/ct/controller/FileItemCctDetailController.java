@@ -75,6 +75,7 @@ import org.guce.siat.common.model.FileFieldValue;
 import org.guce.siat.common.model.FileItem;
 import org.guce.siat.common.model.FileItemField;
 import org.guce.siat.common.model.FileItemFieldValue;
+import org.guce.siat.common.model.FileType;
 import org.guce.siat.common.model.FileTypeFlow;
 import org.guce.siat.common.model.FileTypeFlowReport;
 import org.guce.siat.common.model.FileTypeStep;
@@ -136,6 +137,7 @@ import org.guce.siat.common.utils.ged.CmisSession;
 import org.guce.siat.core.ct.model.AnalyseOrder;
 import org.guce.siat.core.ct.model.AnalysePart;
 import org.guce.siat.core.ct.model.AnalyseResult;
+import org.guce.siat.core.ct.model.DecisionHistory;
 import org.guce.siat.core.ct.model.Infraction;
 import org.guce.siat.core.ct.model.InspectionController;
 import org.guce.siat.core.ct.model.InspectionReport;
@@ -154,6 +156,7 @@ import org.guce.siat.core.ct.service.AnalyseOrderService;
 import org.guce.siat.core.ct.service.AnalysePartService;
 import org.guce.siat.core.ct.service.AnalyseResultService;
 import org.guce.siat.core.ct.service.CommonService;
+import org.guce.siat.core.ct.service.DecisionHistoryService;
 import org.guce.siat.core.ct.service.InspectionReportService;
 import org.guce.siat.core.ct.service.InterceptionNotificationService;
 import org.guce.siat.core.ct.service.LaboratoryService;
@@ -1032,6 +1035,14 @@ public class FileItemCctDetailController implements Serializable {
     private final String TRANSITE_SUPER_FILE_TYPE_KEY = "TYPE_DOSSIER_EGUCE";
 
     /**
+     * The decision history service.
+     */
+    @ManagedProperty(value = "#{decisionHistoryService}")
+    private DecisionHistoryService decisionHistoryService;
+
+    private List<DecisionHistory> decisionHistories;
+
+    /**
      * Inits the.
      */
     public void init() {
@@ -1766,6 +1777,10 @@ public class FileItemCctDetailController implements Serializable {
         } // Envoie Résultat de Traitement
         else if (isFstpReadyForSignature(selectedFlow) || isAtReadyForSignature(selectedFlow)) {
             treatmentResult = new TreatmentResult();
+            if (isAtReadyForSignature(selectedFlow)) {
+                final List<Long> servicesIds = serviceService.findServicesIdsByAdministration(loggedUser.getAdministration());
+                treatmentCompanys = treatmentCompanyService.findByAdministration(servicesIds);
+            }
         } else if (FlowCode.FL_CT_66.name().equals(selectedFlow.getCode())) {
             if (chckedListSize == Constants.ONE) {
                 specificDecision = CctSpecificDecision.TRR;
@@ -1907,6 +1922,7 @@ public class FileItemCctDetailController implements Serializable {
     private void loadAndGroupFileItemFieldValues() {
         fileItemFieldValues = selectedFileItemCheck.getFileItem().getFileItemFieldValueList();
         groupFileItemFieldValues();
+        decisionHistories = decisionHistoryService.findByFile(currentFile);
     }
 
     /**
@@ -1937,6 +1953,8 @@ public class FileItemCctDetailController implements Serializable {
                     .getFileItem()));
         } else if (isAtReadyForSignature(lastDecisions.getFlow())) {
             specificDecisionsHistory.setLastTreatmentResult(treatmentResultService.findTreatmentResultByItemFlow(lastDecisions));
+            final List<Long> servicesIds = serviceService.findServicesIdsByAdministration(loggedUser.getAdministration());
+            treatmentCompanys = treatmentCompanyService.findByAdministration(servicesIds);
         } else if (isFstpReadyForSignature(lastDecisions.getFlow())) {
             specificDecisionsHistory.setLastTreatmentResult(treatmentResultService.findTreatmentResultByItemFlow(lastDecisions));
         } else if (FlowCode.FL_CT_64.name().equals(lastDecisions.getFlow().getCode())) {
@@ -2353,7 +2371,7 @@ public class FileItemCctDetailController implements Serializable {
                 commonService.takeDecisionAndSaveAnalyzeResult(analyseResult, itemFlowsToAdd);
                 // Attachment --> Alfresco
             } else if (isFstpReadyForSignature(selectedFlow) || isAtReadyForSignature(selectedFlow)) {
-                commonService.takeDecisionAndSaveTreatmentResult(treatmentResult, itemFlowsToAdd);
+                commonService.takeDecisionAndSaveTreatmentResult2(treatmentResult, itemFlowsToAdd);
             } // Envoie Résultat de Traitement
             else if (FlowCode.FL_CT_66.name().equals(selectedFlow.getCode())) {
                 if (treatmentResult.getTreatmentOrder() != null) {
@@ -6657,6 +6675,34 @@ public class FileItemCctDetailController implements Serializable {
         }
         final String superFileType = fileFieldValue.getValue();
         return checkMinaderMinistry && FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode()) && "2".equals(superFileType);
+    }
+
+    public boolean isPrintRelatedDecisions() {
+        return getShowProductDetailsForm() && CollectionUtils.isNotEmpty(decisionHistories);
+    }
+
+    public Map<FileType, List<DecisionHistory>> getRelatedDecisionHistories() {
+
+        final Map<FileType, List<DecisionHistory>> map = new HashMap<>();
+
+        for (final DecisionHistory decisionHistory : decisionHistories) {
+
+            if (map.get(decisionHistory.getFileType()) == null) {
+                map.put(decisionHistory.getFileType(), new ArrayList<DecisionHistory>());
+            }
+
+            map.get(decisionHistory.getFileType()).add(decisionHistory);
+        }
+
+        return map;
+    }
+
+    public DecisionHistoryService getDecisionHistoryService() {
+        return decisionHistoryService;
+    }
+
+    public void setDecisionHistoryService(DecisionHistoryService decisionHistoryService) {
+        this.decisionHistoryService = decisionHistoryService;
     }
 
 }
