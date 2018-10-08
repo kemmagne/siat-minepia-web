@@ -73,10 +73,20 @@
                     <h:outputText value="#{item.file.client.companyName}" />
                 </p:column>
 
-
+                <p:column style="width: 8%;">
+                    <p:commandLink title="#{bundle['Consulter']}" action="#{fileItemCctController.goToDetailPage()}" ajax="true">
+                        <f:setPropertyActionListener target="#{fileItemCctController.selected}" value="#{item}" />
+                        <p:graphicImage value="/images/dashboard/open-document.png" />
+                    </p:commandLink>
+                </p:column>
             </p:dataTable>
 
         </h:form>
     </p:panel>
 
 </ui:composition>
+
+
+
+
+

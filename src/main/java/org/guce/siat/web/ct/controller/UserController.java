@@ -18,9 +18,13 @@ import javax.persistence.PersistenceException;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
+import org.guce.siat.common.model.Administration;
 import org.guce.siat.common.model.Authority;
+import org.guce.siat.common.model.Bureau;
 import org.guce.siat.common.model.Entity;
 import org.guce.siat.common.model.FileType;
+import org.guce.siat.common.model.Ministry;
+import org.guce.siat.common.model.Organism;
 import org.guce.siat.common.model.Service;
 import org.guce.siat.common.model.SubDepartment;
 import org.guce.siat.common.model.User;
@@ -50,128 +54,193 @@ import org.guce.siat.web.ct.data.FileTypeAutorityData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-
 /**
  * The Class UserController.
  */
 @ManagedBean(name = "userController")
 @SessionScoped
-public class UserController extends AbstractController<User>
-{
+public class UserController extends AbstractController<User> {
 
-	/** The Constant serialVersionUID. */
+	/**
+	 * The Constant serialVersionUID.
+	 */
 	private static final long serialVersionUID = -8329077461925308701L;
 
-	/** The Constant LOG. */
+	/**
+	 * The Constant LOG.
+	 */
 	private static final Logger LOG = LoggerFactory.getLogger(User.class);
 
-	/** The Constant USER_EXIST_ERROR_MESSAGE. */
+	/**
+	 * The Constant USER_EXIST_ERROR_MESSAGE.
+	 */
 	private static final String USER_EXIST_ERROR_MESSAGE = "UserAlreadyExists";
 
-	/** The Constant AUTHORITIES_REQUIRED_MESSAGE_CREATE. */
+	/**
+	 * The Constant AUTHORITIES_REQUIRED_MESSAGE_CREATE.
+	 */
 	private static final String AUTHORITIES_REQUIRED_MESSAGE_CREATE = "CreateUserRequiredMessage_role";
 
-	/** The Constant AUTHORITIES_REQUIRED_MESSAGE_EDIT. */
+	/**
+	 * The Constant AUTHORITIES_REQUIRED_MESSAGE_EDIT.
+	 */
 	private static final String AUTHORITIES_REQUIRED_MESSAGE_EDIT = "EditUserRequiredMessage_role";
 
-	/** The Constant CONSTRAINT_VIOLATION_EXCEPTION. */
+	/**
+	 * The Constant CONSTRAINT_VIOLATION_EXCEPTION.
+	 */
 	private static final String CONSTRAINT_VIOLATION_EXCEPTION = "org.hibernate.exception.ConstraintViolationException";
 
-	/** The Constant MINISTRY_ALREADY_AFFECTED_MINESTER. */
+	/**
+	 * The Constant MINISTRY_ALREADY_AFFECTED_MINESTER.
+	 */
 	private static final String MINISTRY_ALREADY_AFFECTED_MINESTER = "CreateUserError_MinestryAffected";
 
-	/** The Constant MINISTRY_ALREADY_AFFECTED_GENERAL_SECRETARY. */
+	/**
+	 * The Constant MINISTRY_ALREADY_AFFECTED_GENERAL_SECRETARY.
+	 */
 	private static final String MINISTRY_ALREADY_AFFECTED_GENERAL_SECRETARY = "CreateUserError_MinestrySGAffected";
 
-	/** The Constant ORGANISM_ALREADY_AFFECTED_DIRECTOR. */
+	/**
+	 * The Constant ORGANISM_ALREADY_AFFECTED_DIRECTOR.
+	 */
 	private static final String ORGANISM_ALREADY_AFFECTED_DIRECTOR = "CreateUserError_MinestryDirAffected";
 
-	/** The Constant ORGANISM_ALREADY_AFFECTED_SUPERVISOR. */
+	/**
+	 * The Constant ORGANISM_ALREADY_AFFECTED_SUPERVISOR.
+	 */
 	private static final String ORGANISM_ALREADY_AFFECTED_SUPERVISOR = "CreateUserError_OrganismSuperAffected";
 
-	/** The all posts affected notification message. */
+	/**
+	 * The all posts affected notification message.
+	 */
 	private static final String ALL_POSTS_AFFECTED_NOTIF_MSG = "CreateUser_NotifPostsAffected";
 
-	/** The user service. */
+	/**
+	 * The user service.
+	 */
 	@ManagedProperty(value = "#{userService}")
 	private UserService userService;
 
-	/** The ministry service. */
+	/**
+	 * The ministry service.
+	 */
 	@ManagedProperty(value = "#{ministryService}")
 	private MinistryService ministryService;
 
-	/** The organism service. */
+	/**
+	 * The organism service.
+	 */
 	@ManagedProperty(value = "#{organismService}")
 	private OrganismService organismService;
 
-	/** The sub department service. */
+	/**
+	 * The sub department service.
+	 */
 	@ManagedProperty(value = "#{subDepartmentService}")
 	private SubDepartmentService subDepartmentService;
 
-	/** The service service. */
+	/**
+	 * The service service.
+	 */
 	@ManagedProperty(value = "#{serviceService}")
 	private ServiceService serviceService;
 
-	/** The entity service. */
+	/**
+	 * The entity service.
+	 */
 	@ManagedProperty(value = "#{entityService}")
 	private EntityService entityService;
 
-	/** The file type service. */
+	/**
+	 * The file type service.
+	 */
 	@ManagedProperty(value = "#{fileTypeService}")
 	private FileTypeService fileTypeService;
 
-	/** The user authority file type service. */
+	/**
+	 * The user authority file type service.
+	 */
 	@ManagedProperty(value = "#{userAuthorityFileTypeService}")
 	private UserAuthorityFileTypeService userAuthorityFileTypeService;
 
-	/** The authority service. */
+	/**
+	 * The authority service.
+	 */
 	@ManagedProperty(value = "#{authorityService}")
 	private AuthorityService authorityService;
 
-	/** The user authority service. */
+	/**
+	 * The user authority service.
+	 */
 	@ManagedProperty(value = "#{userAuthorityService}")
 	private UserAuthorityService userAuthorityService;
 
-	/** The mail service. */
+	/**
+	 * The mail service.
+	 */
 	@ManagedProperty(value = "#{mailService}")
 	private MailService mailService;
 
-	/** The selecteds sub department. */
+	/**
+	 * The selecteds sub department.
+	 */
 	private SubDepartment selectedsSubDepartment;
 
-	/** The selected service. */
+	/**
+	 * The selected service.
+	 */
 	private Service selectedService;
 
-	/** The selected entity. */
+	/**
+	 * The selected entity.
+	 */
 	private Entity selectedEntity;
 
-	/** The file type autority datas. */
+	/**
+	 * The file type autority datas.
+	 */
 	private List<List<FileTypeAutorityData>> fileTypeAutorityDatas;
 
-	/** The authorities list. */
+	/**
+	 * The authorities list.
+	 */
 	private List<Authority> authoritiesList;
 
-	/** The user auth file types. */
+	/**
+	 * The user auth file types.
+	 */
 	private List<UserAuthorityFileType> userAuthFileTypes;
 
-	/** The file type list. */
+	/**
+	 * The file type list.
+	 */
 	private List<FileType> fileTypeList;
 
-	/** The sub departments items. */
+	/**
+	 * The file type list.
+	 */
+	private List<Administration> userAdministrationHierarchy;
+
+	/**
+	 * The sub departments items.
+	 */
 	private List<SelectItem> subDepartmentsItems;
 
-	/** The services items. */
+	/**
+	 * The services items.
+	 */
 	private List<SelectItem> servicesItems;
 
-	/** The entities items. */
+	/**
+	 * The entities items.
+	 */
 	private List<SelectItem> entitiesItems;
 
 	/**
 	 * Instantiates a new user controller.
 	 */
-	public UserController()
-	{
+	public UserController() {
 		super(User.class);
 	}
 
@@ -179,10 +248,8 @@ public class UserController extends AbstractController<User>
 	 * Inits the.
 	 */
 	@PostConstruct
-	public void init()
-	{
-		if (LOG.isDebugEnabled())
-		{
+	public void init() {
+		if (LOG.isDebugEnabled()) {
 			LOG.debug(Constants.INIT_LOG_INFO_MESSAGE, UserController.class.getName());
 		}
 		super.setService(userService);
@@ -193,8 +260,7 @@ public class UserController extends AbstractController<User>
 	 * Go to page.
 	 */
 	@Override
-	public void goToPage()
-	{
+	public void goToPage() {
 		selected = null;
 		super.goToPage();
 	}
@@ -204,58 +270,40 @@ public class UserController extends AbstractController<User>
 	 *
 	 * @return true, if successful
 	 */
-	private boolean hasUserAffected()
-	{
-		if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ADMIN_ORGANISME.getCode()))
-		{
+	private boolean hasUserAffected() {
+		if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ADMIN_ORGANISME.getCode())) {
 			// check if organism is affected to Director
-			if (PositionType.DIRECTEUR.equals(selected.getPosition()))
-			{
-				if (organismService.hasDirectorAffected(getCurrentOrganism()))
-				{
+			if (PositionType.DIRECTEUR.equals(selected.getPosition())) {
+				if (organismService.hasDirectorAffected(getCurrentOrganism())) {
 					JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 							ORGANISM_ALREADY_AFFECTED_DIRECTOR));
 					return true;
 				}
 				selected.setAdministration(getCurrentOrganism());
-			}
-			// check if organism is affected to Supervisor
-			else if (PositionType.SUPERVISEUR.equals(selected.getPosition()))
-			{
-				if (organismService.hasSupervisorAffected(getCurrentOrganism()))
-				{
+			} // check if organism is affected to Supervisor
+			else if (PositionType.SUPERVISEUR.equals(selected.getPosition())) {
+				if (organismService.hasSupervisorAffected(getCurrentOrganism())) {
 					JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 							ORGANISM_ALREADY_AFFECTED_SUPERVISOR));
 					return true;
 				}
 				selected.setAdministration(getCurrentOrganism());
-			}
-			else if (PositionType.SOUS_DIRECTEUR.equals(selected.getPosition()))
-			{
+			} else if (PositionType.SOUS_DIRECTEUR.equals(selected.getPosition())) {
 				selected.setAdministration(selectedsSubDepartment);
-			}
-			else if (PositionType.CHEF_SERVICE.equals(selected.getPosition()))
-			{
+			} else if (PositionType.CHEF_SERVICE.equals(selected.getPosition())) {
 				selected.setAdministration(selectedService);
-			}
-			else if ((PositionType.CHEF_BUREAU.getCode() + "," + PositionType.AGENT.getCode() + "," + PositionType.OBSERVATEUR
-					.getCode()).contains(selected.getPosition().getCode()))
-			{
+			} else if ((PositionType.CHEF_BUREAU.getCode() + "," + PositionType.AGENT.getCode() + "," + PositionType.OBSERVATEUR
+					.getCode()).contains(selected.getPosition().getCode())) {
 				selected.setAdministration(selectedEntity);
 			}
-		}
-		else if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ADMIN_MINISTERE.getCode()))
-		{
-			if (PositionType.MINISTRE.equals(selected.getPosition()) && ministryService.hasMinisterAffected(getCurrentMinistry()))
-			{
+		} else if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ADMIN_MINISTERE.getCode())) {
+			if (PositionType.MINISTRE.equals(selected.getPosition()) && ministryService.hasMinisterAffected(getCurrentMinistry())) {
 				// check if ministry is affected to a minister
 				JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 						MINISTRY_ALREADY_AFFECTED_MINESTER));
 				return true;
-			}
-			else if (PositionType.SECRETAIRE_GENERAL.equals(selected.getPosition())
-					&& ministryService.hasSGAffected(getCurrentMinistry()))
-			{
+			} else if (PositionType.SECRETAIRE_GENERAL.equals(selected.getPosition())
+					&& ministryService.hasSGAffected(getCurrentMinistry())) {
 				// check if ministry is affected to a general secretary
 				JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 						MINISTRY_ALREADY_AFFECTED_GENERAL_SECRETARY));
@@ -276,8 +324,7 @@ public class UserController extends AbstractController<User>
 	 * @see org.guce.siat.web.common.AbstractController#create()
 	 */
 	@Override
-	public void create()
-	{
+	public void create() {
 		selected.setAccountNonExpired(Boolean.TRUE);
 		selected.setDeleted(Boolean.FALSE);
 		selected.setAccountNonLocked(Boolean.TRUE);
@@ -288,12 +335,9 @@ public class UserController extends AbstractController<User>
 		final String radomPassword = RandomStringUtils.randomAlphanumeric(Constants.SIX);
 		selected.setPassword(radomPassword);
 		fillUserAuthorityFileType();
-		try
-		{
-			if (!hasUserAffected())
-			{
-				if (CollectionUtils.isNotEmpty(userAuthFileTypes))
-				{
+		try {
+			if (!hasUserAffected()) {
+				if (CollectionUtils.isNotEmpty(userAuthFileTypes)) {
 					userAuthorityFileTypeService.saveListUserAuthorityFileType(userAuthFileTypes, selected);
 					final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 							User.class.getSimpleName() + PersistenceActions.CREATE.getCode());
@@ -307,30 +351,22 @@ public class UserController extends AbstractController<User>
 					map = prepareMap(subject, mailService.getFromValue(), selected, radomPassword, templateFileName);
 					mailService.sendMail(map);
 					resetAttributes();
-					if (!isValidationFailed())
-					{
+					if (!isValidationFailed()) {
 						refreshItems();
 						selected = null;
 					}
-				}
-				else
-				{
+				} else {
 					JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 							AUTHORITIES_REQUIRED_MESSAGE_CREATE));
 				}
 
 			}
-		}
-		catch (final PersistenceException pe)
-		{
+		} catch (final PersistenceException pe) {
 			LOG.error(null, pe);
-			if (CONSTRAINT_VIOLATION_EXCEPTION.equals(pe.getCause().getClass().getName()))
-			{
+			if (CONSTRAINT_VIOLATION_EXCEPTION.equals(pe.getCause().getClass().getName())) {
 				JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 						USER_EXIST_ERROR_MESSAGE));
-			}
-			else
-			{
+			} else {
 				JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 						PERSISTENCE_ERROR_OCCURED));
 			}
@@ -342,8 +378,7 @@ public class UserController extends AbstractController<User>
 	 *
 	 * @return the file type list
 	 */
-	public List<FileType> getFileTypeList()
-	{
+	public List<FileType> getFileTypeList() {
 		return this.fileTypeList;
 	}
 
@@ -352,61 +387,52 @@ public class UserController extends AbstractController<User>
 	 *
 	 * @return the authorities list
 	 */
-	public List<Authority> getAuthoritiesList()
-	{
+	public List<Authority> getAuthoritiesList() {
 		return this.authoritiesList;
 	}
 
 	/**
 	 * Prepare edit.
 	 */
-	public void prepareEdit()
-	{
-		if (getSelected() != null)
-		{
+	public void prepareEdit() {
+		userAdministrationHierarchy = new ArrayList<>();
+		if (getSelected() != null) {
 			this.setSelected(userService.find(getSelected().getId()));
 		}
-		if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ADMIN_ORGANISME.getCode()))
-		{
-			if (PositionType.SOUS_DIRECTEUR.equals(selected.getPosition()))
-			{
+		if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ADMIN_ORGANISME.getCode())) {
+			if (PositionType.SOUS_DIRECTEUR.equals(selected.getPosition())) {
 				selectedsSubDepartment = (SubDepartment) selected.getAdministration();
-			}
-			else if (PositionType.CHEF_SERVICE.equals(selected.getPosition()))
-			{
+			} else if (PositionType.CHEF_SERVICE.equals(selected.getPosition())) {
 				selectedService = (Service) selected.getAdministration();
 				selectedsSubDepartment = selectedService.getSubDepartment();
-			}
-			else if (PositionType.AGENT.equals(selected.getPosition()) || PositionType.CHEF_BUREAU.equals(selected.getPosition())
-					|| PositionType.OBSERVATEUR.equals(selected.getPosition()))
-			{
+			} else if (PositionType.AGENT.equals(selected.getPosition()) || PositionType.CHEF_BUREAU.equals(selected.getPosition())
+					|| PositionType.OBSERVATEUR.equals(selected.getPosition())) {
 				selectedEntity = (Entity) selected.getAdministration();
 				selectedService = selectedEntity.getService();
 				selectedsSubDepartment = selectedService.getSubDepartment();
+				if (this.selected != null && (PositionType.AGENT.equals(selected.getPosition())
+						|| PositionType.OBSERVATEUR.equals(selected.getPosition()))) {
+					userAdministrationHierarchy = this.getAdministrationHierarchy(selected.getAdministration());
+				}
 			}
 		}
 		fileTypeAutorityDatas = new ArrayList<List<FileTypeAutorityData>>();
 		userAuthFileTypes = userAuthorityFileTypeService.getFileTypeAndAuthorityByUser(selected);
 		fileTypeList = fileTypeService.findFileTypeByMinistry(getCurrentMinistry());
 		authoritiesList = authorityService.findDistinctAutoritiesByPosition(selected.getPosition());
-		for (final FileType fileType : fileTypeList)
-		{
+		for (final FileType fileType : fileTypeList) {
 			final List<FileTypeAutorityData> innerList = new ArrayList<FileTypeAutorityData>();
-			for (final Authority authority : authoritiesList)
-			{
+			for (final Authority authority : authoritiesList) {
 				boolean matched = false;
-				for (final UserAuthorityFileType userAuthorityFileType : userAuthFileTypes)
-				{
+				for (final UserAuthorityFileType userAuthorityFileType : userAuthFileTypes) {
 					if (userAuthorityFileType.getFileType().getId().equals(fileType.getId())
-							&& userAuthorityFileType.getUserAuthority().getAuthorityGranted().getId().equals(authority.getId()))
-					{
+							&& userAuthorityFileType.getUserAuthority().getAuthorityGranted().getId().equals(authority.getId())) {
 						innerList.add(new FileTypeAutorityData(authority, fileType, true));
 						matched = true;
 						break;
 					}
 				}
-				if (!matched)
-				{
+				if (!matched) {
 					innerList.add(new FileTypeAutorityData(authority, fileType, false));
 				}
 			}
@@ -417,16 +443,12 @@ public class UserController extends AbstractController<User>
 	/**
 	 * Fill user authority file type.
 	 */
-	private void fillUserAuthorityFileType()
-	{
+	private void fillUserAuthorityFileType() {
 		userAuthFileTypes = new ArrayList<UserAuthorityFileType>();
 		final Set<UserAuthority> authorities = new HashSet<UserAuthority>();
-		for (final List<FileTypeAutorityData> vos : fileTypeAutorityDatas)
-		{
-			for (final FileTypeAutorityData fileTypeAutorityVo : vos)
-			{
-				if (fileTypeAutorityVo.isChecked())
-				{
+		for (final List<FileTypeAutorityData> vos : fileTypeAutorityDatas) {
+			for (final FileTypeAutorityData fileTypeAutorityVo : vos) {
+				if (fileTypeAutorityVo.isChecked()) {
 					final UserAuthority userAuthority = new UserAuthority();
 					final UserAuthorityFileType uaf = new UserAuthorityFileType();
 					final UserAuthorityFileTypeId uafId = new UserAuthorityFileTypeId();
@@ -454,52 +476,42 @@ public class UserController extends AbstractController<User>
 	 * @see org.guce.siat.web.common.AbstractController#edit()
 	 */
 	@Override
-	public void edit()
-	{
+	public void edit() {
 		selected.setAccountNonExpired(Boolean.TRUE);
 		selected.setDeleted(Boolean.FALSE);
 		selected.setCredentialsNonExpired(Boolean.TRUE);
 		fillUserAuthorityFileType();
-		try
-		{
-			if (CollectionUtils.isNotEmpty(userAuthFileTypes))
-			{
+		try {
+			if (CollectionUtils.isNotEmpty(userAuthFileTypes)) {
+				//avoid password loss
+				String actualPassword = selected.getPassword();
 				userAuthorityFileTypeService.updateListUserAuthorityFileType(selected, userAuthFileTypes);
-				if (selected.getAccountNonLocked())
-				{
+				if (selected.getAccountNonLocked()) {
 					selected.setAttempts(0);
 					selected.setAccountNonLocked(Boolean.TRUE);
 					selected.setLastAttemptsTime(null);
-					userService.update(selected);
 				}
-
+				selected.setPassword(actualPassword);
+				userService.update(selected);
 				final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 						User.class.getSimpleName() + PersistenceActions.UPDATE.getCode());
 
 				JsfUtil.addSuccessMessage(msg);
 				resetAttributes();
-				if (!isValidationFailed())
-				{
+				if (!isValidationFailed()) {
 					refreshItems();
 					selected = null;
 				}
-			}
-			else
-			{
+			} else {
 				JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 						AUTHORITIES_REQUIRED_MESSAGE_EDIT));
 			}
-		}
-		catch (final PersistenceException pe)
-		{
+		} catch (final PersistenceException pe) {
 			LOG.error(null, pe);
-			if (CONSTRAINT_VIOLATION_EXCEPTION.equals(pe.getCause().getClass().getName()))
-			{
+			if (CONSTRAINT_VIOLATION_EXCEPTION.equals(pe.getCause().getClass().getName())) {
 				JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 						USER_EXIST_ERROR_MESSAGE));
-			}
-			else
-			{
+			} else {
 				JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 						PERSISTENCE_ERROR_OCCURED));
 			}
@@ -515,8 +527,7 @@ public class UserController extends AbstractController<User>
 	 * @see org.guce.siat.web.common.AbstractController#delete()
 	 */
 	@Override
-	public void delete()
-	{
+	public void delete() {
 		selected.setDeleted(true);
 		selected.setAdministration(null);
 		userService.update(selected);
@@ -524,8 +535,7 @@ public class UserController extends AbstractController<User>
 				User.class.getSimpleName() + PersistenceActions.DELETE.getCode());
 		JsfUtil.addSuccessMessage(msg);
 		resetAttributes();
-		if (!isValidationFailed())
-		{
+		if (!isValidationFailed()) {
 			refreshItems();
 			selected = null;
 		}
@@ -534,8 +544,7 @@ public class UserController extends AbstractController<User>
 	/**
 	 * Reset attributes.
 	 */
-	public void resetAttributes()
-	{
+	public void resetAttributes() {
 		setSelected(null);
 	}
 
@@ -550,19 +559,14 @@ public class UserController extends AbstractController<User>
 	 * @see org.guce.siat.web.common.AbstractController#getItems()
 	 */
 	@Override
-	public List<User> getItems()
-	{
+	public List<User> getItems() {
 		if (items == null
 				&& ((getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ADMIN_MINISTERE.getCode()) && getCurrentMinistry() != null) || (getLoggedUser()
-						.getAuthoritiesList().contains(AuthorityConstants.ADMIN_ORGANISME.getCode()) && getCurrentOrganism() != null)))
-		{
-			if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ADMIN_MINISTERE.getCode()))
-			{
+				.getAuthoritiesList().contains(AuthorityConstants.ADMIN_ORGANISME.getCode()) && getCurrentOrganism() != null))) {
+			if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ADMIN_MINISTERE.getCode())) {
 				items = userService.findUsersByAdministrationAndPositions(getCurrentMinistry(), PositionType.SECRETAIRE_GENERAL,
 						PositionType.MINISTRE);
-			}
-			else if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ADMIN_ORGANISME.getCode()))
-			{
+			} else if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ADMIN_ORGANISME.getCode())) {
 				items = userService.findUsersByAdministrationAndPositions(getCurrentOrganism(), PositionType.DIRECTEUR,
 						PositionType.SOUS_DIRECTEUR, PositionType.CHEF_SERVICE, PositionType.CHEF_BUREAU, PositionType.AGENT,
 						PositionType.SUPERVISEUR, PositionType.OBSERVATEUR);
@@ -575,17 +579,13 @@ public class UserController extends AbstractController<User>
 	/**
 	 * Gets the list authorities by user.
 	 *
-	 * @param user
-	 *           the user
+	 * @param user the user
 	 * @return the list authorities by user
 	 */
-	public List<Authority> getListAuthoritiesByUser(final User user)
-	{
+	public List<Authority> getListAuthoritiesByUser(final User user) {
 		final List<Authority> listAuthoritiesByUser = new ArrayList<Authority>();
-		for (final User item : getItems())
-		{
-			if (user != null && item.getId().equals(user.getId()))
-			{
+		for (final User item : getItems()) {
+			if (user != null && item.getId().equals(user.getId())) {
 				listAuthoritiesByUser.addAll(item.getAuthorities());
 				break;
 			}
@@ -599,16 +599,14 @@ public class UserController extends AbstractController<User>
 	 *
 	 * @return the positions options
 	 */
-	public SelectItem[] getPositionsOptions()
-	{
+	public SelectItem[] getPositionsOptions() {
 		final SelectItem[] positionsOptions = new SelectItem[getPositionsListForFilter().size() + 1];
 		positionsOptions[0] = new SelectItem(StringUtils.EMPTY, ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale())
 				.getString(SELECT_ONE_MESSAGE));
-		for (int i = 0; i < getPositionsListForFilter().size(); i++)
-		{
+		for (int i = 0; i < getPositionsListForFilter().size(); i++) {
 			positionsOptions[i + 1] = new SelectItem(getPositionsListForFilter().get(i),
 					Constants.LOCALE_ENGLISH.equals(getCurrentLocaleCode()) ? getPositionsListForFilter().get(i).getLabelEn()
-							: getPositionsListForFilter().get(i).getLabelFr());
+					: getPositionsListForFilter().get(i).getLabelFr());
 		}
 
 		return positionsOptions;
@@ -623,23 +621,19 @@ public class UserController extends AbstractController<User>
 	 * @see org.guce.siat.web.common.AbstractController#prepareCreate()
 	 */
 	@Override
-	public void prepareCreate()
-	{
+	public void prepareCreate() {
 		if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ADMIN_MINISTERE.getCode())
-				&& ministryService.hasMinisterAffected(getCurrentMinistry()) && ministryService.hasSGAffected(getCurrentMinistry()))
-		{
+				&& ministryService.hasMinisterAffected(getCurrentMinistry()) && ministryService.hasSGAffected(getCurrentMinistry())) {
 			JsfUtil.addWarningMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
 					ALL_POSTS_AFFECTED_NOTIF_MSG));
-		}
-		else
-		{
+		} else {
 			selectedsSubDepartment = null;
 			selectedService = null;
 			selectedEntity = null;
+			userAdministrationHierarchy = new ArrayList<>();
 			super.prepareCreate();
 			fileTypeList = fileTypeService.findFileTypeByMinistry(getCurrentMinistry());
-			if (selected != null)
-			{
+			if (selected != null) {
 				initFileTypeAuthorityDatas();
 			}
 		}
@@ -649,29 +643,24 @@ public class UserController extends AbstractController<User>
 	/**
 	 * Reset form.
 	 */
-	public void resetForm()
-	{
+	public void resetForm() {
 		initFileTypeAuthorityDatas();
 		this.selected = null;
+		this.userAdministrationHierarchy = new ArrayList<>();
 	}
 
 	/**
 	 * Init the file type authority data.
 	 */
-	private void initFileTypeAuthorityDatas()
-	{
+	private void initFileTypeAuthorityDatas() {
 		fileTypeAutorityDatas = new ArrayList<List<FileTypeAutorityData>>();
-		if (selected.getPosition() != null)
-		{
+		if (selected.getPosition() != null) {
 			authoritiesList = authorityService.findDistinctAutoritiesByPosition(selected.getPosition());
 		}
-		for (final FileType fileType : fileTypeList)
-		{
+		for (final FileType fileType : fileTypeList) {
 			final List<FileTypeAutorityData> innerList = new ArrayList<FileTypeAutorityData>();
-			if (authoritiesList != null)
-			{
-				for (final Authority authority : authoritiesList)
-				{
+			if (authoritiesList != null) {
+				for (final Authority authority : authoritiesList) {
 					innerList.add(new FileTypeAutorityData(authority, fileType, false));
 				}
 			}
@@ -682,23 +671,18 @@ public class UserController extends AbstractController<User>
 	/**
 	 * Handle position changed.
 	 */
-	public void positionChangedHandler()
-	{
+	public void positionChangedHandler() {
 		subDepartmentsItems = new ArrayList<SelectItem>();
+		userAdministrationHierarchy = new ArrayList<>();
 
-		if (this.selected != null && !PositionType.DIRECTEUR.equals(this.selected.getPosition()))
-		{
+		if (this.selected != null && !PositionType.DIRECTEUR.equals(this.selected.getPosition())) {
 			List<SubDepartment> subDepartments = subDepartmentService.findNonAffectedByOrganism(getCurrentOrganism());
-			if (PositionType.SOUS_DIRECTEUR.equals(this.selected.getPosition()))
-			{
+			if (PositionType.SOUS_DIRECTEUR.equals(this.selected.getPosition())) {
 				subDepartments = subDepartmentService.findNonAffectedByOrganism(getCurrentOrganism());
-			}
-			else
-			{
+			} else {
 				subDepartments = subDepartmentService.findSubDepartmentsByOrganism(getCurrentOrganism());
 			}
-			for (final SubDepartment subDepartment : subDepartments)
-			{
+			for (final SubDepartment subDepartment : subDepartments) {
 				subDepartmentsItems.add(new SelectItem(subDepartment, subDepartment.getAbreviation()));
 			}
 		}
@@ -708,24 +692,18 @@ public class UserController extends AbstractController<User>
 	/**
 	 * Sub department changed handler.
 	 */
-	public void subDepartmentChangedHandler()
-	{
+	public void subDepartmentChangedHandler() {
 		servicesItems = new ArrayList<SelectItem>();
 
 		if (this.selectedsSubDepartment != null && !PositionType.DIRECTEUR.equals(this.selected.getPosition())
-				&& !PositionType.SOUS_DIRECTEUR.equals(this.selected.getPosition()))
-		{
+				&& !PositionType.SOUS_DIRECTEUR.equals(this.selected.getPosition())) {
 			List<Service> services = null;
-			if (PositionType.CHEF_SERVICE.equals(this.selected.getPosition()))
-			{
+			if (PositionType.CHEF_SERVICE.equals(this.selected.getPosition())) {
 				services = serviceService.findNonAffectedServicesBySubDepartment(selectedsSubDepartment);
-			}
-			else
-			{
+			} else {
 				services = selectedsSubDepartment.getServicesList();
 			}
-			for (final Service service : services)
-			{
+			for (final Service service : services) {
 				servicesItems.add(new SelectItem(service, service.getAbreviation()));
 			}
 
@@ -735,20 +713,28 @@ public class UserController extends AbstractController<User>
 	/**
 	 * Service changed handler.
 	 */
-	public void serviceChangedHandler()
-	{
+	public void serviceChangedHandler() {
 		entitiesItems = new ArrayList<SelectItem>();
 
 		if (selectedService != null
 				&& (PositionType.CHEF_BUREAU.equals(selected.getPosition()) || PositionType.AGENT.equals(selected.getPosition()) || PositionType.OBSERVATEUR
-						.equals(selected.getPosition())))
-		{
+				.equals(selected.getPosition()))) {
 			final List<Entity> entities = entityService.findNonAffectedEntityByServiceAndPosition(selectedService,
 					selected.getPosition());
-			for (final Entity ent : entities)
-			{
+			for (final Entity ent : entities) {
 				entitiesItems.add(new SelectItem(ent, ent.getCode()));
 			}
+		}
+	}
+
+	/**
+	 * Service changed handler.
+	 */
+	public void bureauChangedHandler() {
+		userAdministrationHierarchy = new ArrayList<>();
+		if (this.selected != null && (PositionType.AGENT.equals(selected.getPosition())
+				|| PositionType.OBSERVATEUR.equals(selected.getPosition()))) {
+			userAdministrationHierarchy = this.getAdministrationHierarchy(selectedEntity);
 		}
 	}
 
@@ -757,17 +743,13 @@ public class UserController extends AbstractController<User>
 	 *
 	 * @return the positions list for filter
 	 */
-	private List<PositionType> getPositionsListForFilter()
-	{
+	private List<PositionType> getPositionsListForFilter() {
 		final List<PositionType> positionsList = new ArrayList<PositionType>();
-		if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ADMIN_ORGANISME.getCode()))
-		{
-			if (!organismService.hasDirectorAffected(getCurrentOrganism()))
-			{
+		if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ADMIN_ORGANISME.getCode())) {
+			if (!organismService.hasDirectorAffected(getCurrentOrganism())) {
 				positionsList.add(PositionType.DIRECTEUR);
 			}
-			if (!organismService.hasSupervisorAffected(getCurrentOrganism()))
-			{
+			if (!organismService.hasSupervisorAffected(getCurrentOrganism())) {
 				positionsList.add(PositionType.SUPERVISEUR);
 			}
 			positionsList.add(PositionType.SOUS_DIRECTEUR);
@@ -776,14 +758,11 @@ public class UserController extends AbstractController<User>
 			positionsList.add(PositionType.AGENT);
 			positionsList.add(PositionType.OBSERVATEUR);
 		}
-		if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ADMIN_MINISTERE.getCode()))
-		{
-			if (!ministryService.hasMinisterAffected(getCurrentMinistry()))
-			{
+		if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ADMIN_MINISTERE.getCode())) {
+			if (!ministryService.hasMinisterAffected(getCurrentMinistry())) {
 				positionsList.add(PositionType.MINISTRE);
 			}
-			if (!ministryService.hasSGAffected(getCurrentMinistry()))
-			{
+			if (!ministryService.hasSGAffected(getCurrentMinistry())) {
 				positionsList.add(PositionType.SECRETAIRE_GENERAL);
 			}
 		}
@@ -795,27 +774,23 @@ public class UserController extends AbstractController<User>
 	 *
 	 * @return the authorities options
 	 */
-	public SelectItem[] getAuthoritiesOptions()
-	{
+	public SelectItem[] getAuthoritiesOptions() {
 		final SelectItem[] grantedAuthoritiesOptions = new SelectItem[getAuthoritiesListForFilter().size() + 1];
 		grantedAuthoritiesOptions[0] = new SelectItem(StringUtils.EMPTY, ResourceBundle.getBundle(LOCAL_BUNDLE_NAME,
 				getCurrentLocale()).getString(SELECT_ONE_MESSAGE));
-		for (int i = 0; i < getAuthoritiesListForFilter().size(); i++)
-		{
+		for (int i = 0; i < getAuthoritiesListForFilter().size(); i++) {
 			grantedAuthoritiesOptions[i + 1] = new SelectItem(getAuthoritiesListForFilter().get(i).getCode(),
 					getAuthoritiesListForFilter().get(i).getLabel());
 		}
 		return grantedAuthoritiesOptions;
 	}
 
-
 	/**
 	 * Gets the authorities list for filter.
 	 *
 	 * @return the authorities list for filter
 	 */
-	private List<AuthorityConstants> getAuthoritiesListForFilter()
-	{
+	private List<AuthorityConstants> getAuthoritiesListForFilter() {
 		final List<AuthorityConstants> authoritiesListForFilter = new ArrayList<AuthorityConstants>();
 		authoritiesListForFilter.add(AuthorityConstants.AGENT_RECEVABILITE);
 		authoritiesListForFilter.add(AuthorityConstants.INSPECTEUR);
@@ -836,24 +811,36 @@ public class UserController extends AbstractController<User>
 		return authoritiesListForFilter;
 	}
 
+	private List<Administration> getAdministrationHierarchy(Administration a) {
+		List<Administration> adms = new ArrayList<Administration>();
+		adms.add(a);
+		if (a instanceof Organism) {
+			adms.addAll(getAdministrationHierarchy(((Organism) a).getMinistry()));
+		} else if (a instanceof SubDepartment) {
+			adms.addAll(getAdministrationHierarchy(((SubDepartment) a).getOrganism()));
+		} else if (a instanceof Service) {
+			adms.addAll(getAdministrationHierarchy(((Service) a).getSubDepartment()));
+		} else if (a instanceof Bureau) {
+			adms.addAll(getAdministrationHierarchy(((Bureau) a).getService()));
+		}
+		return adms;
+	}
+
 	/**
 	 * Gets the user service.
 	 *
 	 * @return the userService
 	 */
-	public UserService getUserService()
-	{
+	public UserService getUserService() {
 		return userService;
 	}
 
 	/**
 	 * Sets the user service.
 	 *
-	 * @param userService
-	 *           the userService to set
+	 * @param userService the userService to set
 	 */
-	public void setUserService(final UserService userService)
-	{
+	public void setUserService(final UserService userService) {
 		this.userService = userService;
 	}
 
@@ -862,19 +849,16 @@ public class UserController extends AbstractController<User>
 	 *
 	 * @return the selecteds sub department
 	 */
-	public SubDepartment getSelectedsSubDepartment()
-	{
+	public SubDepartment getSelectedsSubDepartment() {
 		return selectedsSubDepartment;
 	}
 
 	/**
 	 * Sets the selecteds sub department.
 	 *
-	 * @param selectedsSubDepartment
-	 *           the new selecteds sub department
+	 * @param selectedsSubDepartment the new selecteds sub department
 	 */
-	public void setSelectedsSubDepartment(final SubDepartment selectedsSubDepartment)
-	{
+	public void setSelectedsSubDepartment(final SubDepartment selectedsSubDepartment) {
 		this.selectedsSubDepartment = selectedsSubDepartment;
 	}
 
@@ -883,19 +867,16 @@ public class UserController extends AbstractController<User>
 	 *
 	 * @return the selected service
 	 */
-	public Service getSelectedService()
-	{
+	public Service getSelectedService() {
 		return selectedService;
 	}
 
 	/**
 	 * Sets the selected service.
 	 *
-	 * @param selectedService
-	 *           the new selected service
+	 * @param selectedService the new selected service
 	 */
-	public void setSelectedService(final Service selectedService)
-	{
+	public void setSelectedService(final Service selectedService) {
 		this.selectedService = selectedService;
 	}
 
@@ -904,19 +885,16 @@ public class UserController extends AbstractController<User>
 	 *
 	 * @return the service service
 	 */
-	public ServiceService getServiceService()
-	{
+	public ServiceService getServiceService() {
 		return serviceService;
 	}
 
 	/**
 	 * Sets the service service.
 	 *
-	 * @param serviceService
-	 *           the new service service
+	 * @param serviceService the new service service
 	 */
-	public void setServiceService(final ServiceService serviceService)
-	{
+	public void setServiceService(final ServiceService serviceService) {
 		this.serviceService = serviceService;
 	}
 
@@ -925,30 +903,25 @@ public class UserController extends AbstractController<User>
 	 *
 	 * @return the sub department service
 	 */
-	public SubDepartmentService getSubDepartmentService()
-	{
+	public SubDepartmentService getSubDepartmentService() {
 		return subDepartmentService;
 	}
 
 	/**
 	 * Sets the sub department service.
 	 *
-	 * @param subDepartmentService
-	 *           the new sub department service
+	 * @param subDepartmentService the new sub department service
 	 */
-	public void setSubDepartmentService(final SubDepartmentService subDepartmentService)
-	{
+	public void setSubDepartmentService(final SubDepartmentService subDepartmentService) {
 		this.subDepartmentService = subDepartmentService;
 	}
 
 	/**
 	 * Sets the entity service.
 	 *
-	 * @param entityService
-	 *           the new entity service
+	 * @param entityService the new entity service
 	 */
-	public void setEntityService(final EntityService entityService)
-	{
+	public void setEntityService(final EntityService entityService) {
 		this.entityService = entityService;
 	}
 
@@ -957,8 +930,7 @@ public class UserController extends AbstractController<User>
 	 *
 	 * @return the entity service
 	 */
-	public EntityService getEntityService()
-	{
+	public EntityService getEntityService() {
 		return entityService;
 	}
 
@@ -967,19 +939,16 @@ public class UserController extends AbstractController<User>
 	 *
 	 * @return the ministry service
 	 */
-	public MinistryService getMinistryService()
-	{
+	public MinistryService getMinistryService() {
 		return ministryService;
 	}
 
 	/**
 	 * Sets the ministry service.
 	 *
-	 * @param ministryService
-	 *           the new ministry service
+	 * @param ministryService the new ministry service
 	 */
-	public void setMinistryService(final MinistryService ministryService)
-	{
+	public void setMinistryService(final MinistryService ministryService) {
 		this.ministryService = ministryService;
 	}
 
@@ -988,19 +957,16 @@ public class UserController extends AbstractController<User>
 	 *
 	 * @return the organism service
 	 */
-	public OrganismService getOrganismService()
-	{
+	public OrganismService getOrganismService() {
 		return organismService;
 	}
 
 	/**
 	 * Sets the organism service.
 	 *
-	 * @param organismService
-	 *           the new organism service
+	 * @param organismService the new organism service
 	 */
-	public void setOrganismService(final OrganismService organismService)
-	{
+	public void setOrganismService(final OrganismService organismService) {
 		this.organismService = organismService;
 	}
 
@@ -1009,19 +975,16 @@ public class UserController extends AbstractController<User>
 	 *
 	 * @return the selected entity
 	 */
-	public Entity getSelectedEntity()
-	{
+	public Entity getSelectedEntity() {
 		return selectedEntity;
 	}
 
 	/**
 	 * Sets the selected entity.
 	 *
-	 * @param selectedEntity
-	 *           the new selected entity
+	 * @param selectedEntity the new selected entity
 	 */
-	public void setSelectedEntity(final Entity selectedEntity)
-	{
+	public void setSelectedEntity(final Entity selectedEntity) {
 		this.selectedEntity = selectedEntity;
 	}
 
@@ -1030,19 +993,16 @@ public class UserController extends AbstractController<User>
 	 *
 	 * @return the file type service
 	 */
-	public FileTypeService getFileTypeService()
-	{
+	public FileTypeService getFileTypeService() {
 		return fileTypeService;
 	}
 
 	/**
 	 * Sets the file type service.
 	 *
-	 * @param fileTypeService
-	 *           the new file type service
+	 * @param fileTypeService the new file type service
 	 */
-	public void setFileTypeService(final FileTypeService fileTypeService)
-	{
+	public void setFileTypeService(final FileTypeService fileTypeService) {
 		this.fileTypeService = fileTypeService;
 	}
 
@@ -1051,19 +1011,16 @@ public class UserController extends AbstractController<User>
 	 *
 	 * @return the authority service
 	 */
-	public AuthorityService getAuthorityService()
-	{
+	public AuthorityService getAuthorityService() {
 		return authorityService;
 	}
 
 	/**
 	 * Sets the authority service.
 	 *
-	 * @param authorityService
-	 *           the new authority service
+	 * @param authorityService the new authority service
 	 */
-	public void setAuthorityService(final AuthorityService authorityService)
-	{
+	public void setAuthorityService(final AuthorityService authorityService) {
 		this.authorityService = authorityService;
 	}
 
@@ -1072,19 +1029,17 @@ public class UserController extends AbstractController<User>
 	 *
 	 * @return the user authority file type service
 	 */
-	public UserAuthorityFileTypeService getUserAuthorityFileTypeService()
-	{
+	public UserAuthorityFileTypeService getUserAuthorityFileTypeService() {
 		return userAuthorityFileTypeService;
 	}
 
 	/**
 	 * Sets the user authority file type service.
 	 *
-	 * @param userAuthorityFileTypeService
-	 *           the new user authority file type service
+	 * @param userAuthorityFileTypeService the new user authority file type
+	 * service
 	 */
-	public void setUserAuthorityFileTypeService(final UserAuthorityFileTypeService userAuthorityFileTypeService)
-	{
+	public void setUserAuthorityFileTypeService(final UserAuthorityFileTypeService userAuthorityFileTypeService) {
 		this.userAuthorityFileTypeService = userAuthorityFileTypeService;
 	}
 
@@ -1093,19 +1048,16 @@ public class UserController extends AbstractController<User>
 	 *
 	 * @return the fileTypeAutorityDatas
 	 */
-	public List<List<FileTypeAutorityData>> getFileTypeAutorityDatas()
-	{
+	public List<List<FileTypeAutorityData>> getFileTypeAutorityDatas() {
 		return fileTypeAutorityDatas;
 	}
 
 	/**
 	 * Sets the file type authority data.
 	 *
-	 * @param fileTypeAutorityDatas
-	 *           the fileTypeAutorityDatas to set
+	 * @param fileTypeAutorityDatas the fileTypeAutorityDatas to set
 	 */
-	public void setFileTypeAutorityDatas(final List<List<FileTypeAutorityData>> fileTypeAutorityDatas)
-	{
+	public void setFileTypeAutorityDatas(final List<List<FileTypeAutorityData>> fileTypeAutorityDatas) {
 		this.fileTypeAutorityDatas = fileTypeAutorityDatas;
 	}
 
@@ -1114,10 +1066,8 @@ public class UserController extends AbstractController<User>
 	 *
 	 * @return the subDepartmentsItems
 	 */
-	public List<SelectItem> getSubDepartmentsItems()
-	{
-		if (subDepartmentsItems == null)
-		{
+	public List<SelectItem> getSubDepartmentsItems() {
+		if (subDepartmentsItems == null) {
 			subDepartmentsItems = new ArrayList<SelectItem>();
 		}
 		return subDepartmentsItems;
@@ -1128,10 +1078,8 @@ public class UserController extends AbstractController<User>
 	 *
 	 * @return the servicesItems
 	 */
-	public List<SelectItem> getServicesItems()
-	{
-		if (servicesItems == null)
-		{
+	public List<SelectItem> getServicesItems() {
+		if (servicesItems == null) {
 			servicesItems = new ArrayList<SelectItem>();
 		}
 		return servicesItems;
@@ -1142,10 +1090,8 @@ public class UserController extends AbstractController<User>
 	 *
 	 * @return the entitiesItems
 	 */
-	public List<SelectItem> getEntitiesItems()
-	{
-		if (entitiesItems == null)
-		{
+	public List<SelectItem> getEntitiesItems() {
+		if (entitiesItems == null) {
 			entitiesItems = new ArrayList<SelectItem>();
 		}
 		return entitiesItems;
@@ -1156,19 +1102,16 @@ public class UserController extends AbstractController<User>
 	 *
 	 * @return the userAuthorityService
 	 */
-	public UserAuthorityService getUserAuthorityService()
-	{
+	public UserAuthorityService getUserAuthorityService() {
 		return userAuthorityService;
 	}
 
 	/**
 	 * Sets the user authority service.
 	 *
-	 * @param userAuthorityService
-	 *           the userAuthorityService to set
+	 * @param userAuthorityService the userAuthorityService to set
 	 */
-	public void setUserAuthorityService(final UserAuthorityService userAuthorityService)
-	{
+	public void setUserAuthorityService(final UserAuthorityService userAuthorityService) {
 		this.userAuthorityService = userAuthorityService;
 	}
 
@@ -1177,20 +1120,25 @@ public class UserController extends AbstractController<User>
 	 *
 	 * @return the mail service
 	 */
-	public MailService getMailService()
-	{
+	public MailService getMailService() {
 		return mailService;
 	}
 
 	/**
 	 * Sets the mail service.
 	 *
-	 * @param mailService
-	 *           the new mail service
+	 * @param mailService the new mail service
 	 */
-	public void setMailService(final MailService mailService)
-	{
+	public void setMailService(final MailService mailService) {
 		this.mailService = mailService;
+	}
+
+	public List<Administration> getUserAdministrationHierarchy() {
+		return userAdministrationHierarchy;
+	}
+
+	public void setUserAdministrationHierarchy(List<Administration> userAdministrationHierarchy) {
+		this.userAdministrationHierarchy = userAdministrationHierarchy;
 	}
 
 }
