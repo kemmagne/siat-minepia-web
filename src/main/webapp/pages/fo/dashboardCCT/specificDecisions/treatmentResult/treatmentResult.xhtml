@@ -24,15 +24,6 @@
                 <h:outputLabel value="#{bundle['SuperviseurTraitement']}" for="SuperviseurTraitement" />
                 <p:inputText value="#{fileItemCctDetailController.treatmentResult.supervisor}" id="SuperviseurTraitement" required="true" />
 
-                <h:outputLabel for="TreatmentCompanyAT" value="#{bundle['TreatmentOrder_TreatmentCompanyLabel']}" />
-                <p:selectOneMenu filter="true" id="TreatmentCompanyAT" title="#{bundle['TreatmentOrder_TreatmentCompanyTitle']}" required="true"
-                                 requiredMessage="#{bundle['TreatmentOrder_CompanyRequiredMessage']}" value="#{fileItemCctDetailController.treatmentResult.treatmentCompany}">
-                    <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-                    <f:selectItems value="#{fileItemCctDetailController.treatmentCompanys}" var="lab" itemValue="#{lab}"
-                                   itemLabel="#{facesContext.viewRoot.locale eq 'en' ? lab.labelEn : lab.labelFr}" />
-                    <f:converter binding="#{treatmentCompanyConverter}" />
-                </p:selectOneMenu>
-
             </h:panelGrid>
 
         </p:panel>
@@ -228,3 +219,4 @@
     </p:scrollPanel>
 
 </ui:composition>
+

@@ -89,7 +89,7 @@ public class CtCctCqeExporter extends AbstractReportInvoker {
 
         final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
 
-        String typeProduit = null;
+        String typeProduit;
         String emballage = null;
 
         for (final FileFieldValue fileFieldValue : fileFieldValueList) {
@@ -188,3 +188,4 @@ public class CtCctCqeExporter extends AbstractReportInvoker {
     }
 
 }
+

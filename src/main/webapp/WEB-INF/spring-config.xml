@@ -124,6 +124,9 @@
     <bean id="eGuceDestination" class="org.apache.activemq.command.ActiveMQQueue">
         <constructor-arg value="${uri.out}" />
     </bean>
+    <!--    <bean id="eGuceDestinationDead" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg value="${uri.out}" />
+    </bean>-->
 
 
     <!-- JMS connection factory which connects to the broker using a VM transport. In this way the communication is made at JVM level
@@ -143,13 +146,18 @@
         <property name="defaultDestination" ref="eGuceDestination" />
     </bean>
 
+    <!--    <bean id="jmsTemplateDead" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="cachingConnectionFactory" />
+        <property name="defaultDestination" ref="eGuceDestinationDead" />
+    </bean>-->
+
 
 
     <!-- JMS Consumer Configuration -->
     <bean id="jmsConsumerConnectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory"
-              p:targetConnectionFactory-ref="connectionFactory" />
+          p:targetConnectionFactory-ref="connectionFactory" />
     <jms:listener-container container-type="default" connection-factory="jmsConsumerConnectionFactory"
-                                acknowledge="auto">
+                            acknowledge="auto">
         <jms:listener destination="org.guce.siat.mail" ref="jmsMailMessageListener" />
     </jms:listener-container>
 
@@ -172,4 +180,8 @@
     <!-- MAIL SETTINGS -->
 
 </beans>
+
+
+
+
 

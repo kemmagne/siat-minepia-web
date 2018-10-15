@@ -107,9 +107,6 @@
                                              value="#{bundle['BouttonGenerateReport']}" styleClass="ui-priority-primary" rendered="#{fileItemCctDetailController.generateReportAllowed}">
                                 <p:fileDownload value="#{fileItemCctDetailController.downloadReport()}" />
                             </p:commandButton>
-                            <p:commandButton ajax="false"  id="reporting1" actionListener="#{fileItemCctDetailController.generatePvptReport}"
-                                             value="#{bundle['BouttonGeneratePVPTReport']}" styleClass="ui-priority-primary" rendered="#{false and fileItemCctDetailController.generateReportAllowed and fileItemCctDetailController.checkMinaderMinistry}" />
-
                         </f:facet>
 
                     </p:dataTable>
@@ -139,4 +136,6 @@
     </p:confirmDialog>
 
 </ui:composition>
+
+
 

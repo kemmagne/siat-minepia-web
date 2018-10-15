@@ -254,7 +254,6 @@ public class CtPviExporter extends AbstractReportInvoker {
                 entryInspectionFindingDataVo.setConditionClimatique(inspectionReport.getConditionClimatique());
                 entryInspectionFindingDataVo.setMesureProtection(inspectionReport.getMesureProtection());
                 entryInspectionFindingDataVo.setObservations(inspectionReport.getObservations());
-                entryInspectionFindingDataVo.setNumeroDecisionPVI(null);
                 entryInspectionFindingDataVo.setArticleReglemente(inspectionReport.getArticleReglemente());
                 entryInspectionFindingDataVo.setExporterName(inspectionReport.getItemFlow().getFileItem().getFile().getClient().getCompanyName());
                 entryInspectionFindingDataVo.setPviCouvertDoc(inspectionReport.isPviCouvertDoc());
@@ -288,9 +287,9 @@ public class CtPviExporter extends AbstractReportInvoker {
                     if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("INFORMATIONS_GENERALES_TRANSPORT_NUM_CONNAISSEMENT_LTA")) {
                         entryInspectionFindingDataVo.setBillOfLoading(fileFieldValue.getValue());
                     }
-//					if (StringUtils.isNotEmpty(entryInspectionFindingDataVo.getTransportMeans()) && StringUtils.isNotEmpty(entryInspectionFindingDataVo.getBillOfLoading())){
-//						break;
-//					}
+                    if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("NUMERO_CCT_CT_E_PVI")) {
+                        entryInspectionFindingDataVo.setNumeroDecisionPVI(fileFieldValue.getValue());
+                    }
                 }
             }
         } catch (Exception e) {
@@ -322,3 +321,4 @@ public class CtPviExporter extends AbstractReportInvoker {
     }
 
 }
+

@@ -65,13 +65,6 @@
             <h:outputLabel value="#{bundle['SuperviseurTraitement']}" />
             <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.supervisor}" />
 
-            <h:outputLabel value="#{bundle['TreatmentOrder_TreatmentCompanyLabel']}" />
-            <p:selectOneMenu value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.treatmentCompany}" disabled="true">
-                <f:selectItems value="#{fileItemCctDetailController.treatmentCompanys}" var="lab" itemValue="#{lab}"
-                               itemLabel="#{facesContext.viewRoot.locale eq 'en' ? lab.labelEn : lab.labelFr}" />
-                <f:converter binding="#{treatmentCompanyConverter}" />
-            </p:selectOneMenu>
-
         </h:panelGrid>
 
     </p:panel>
@@ -208,3 +201,4 @@
     </p:outputPanel>
 
 </ui:composition>
+

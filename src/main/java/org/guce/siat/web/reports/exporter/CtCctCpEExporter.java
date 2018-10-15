@@ -242,7 +242,10 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
         }
 
         ctCctCpEFileVo.setFileItemList(fileItemVos);
-        ctCctCpEFileVo.setNames(commoditiesBuilder.substring(0, commoditiesBuilder.lastIndexOf("<br/>")));
+        final String commoditiesStr = commoditiesBuilder.toString();
+        if (commoditiesStr.endsWith("<br/>")) {
+            ctCctCpEFileVo.setNames(commoditiesStr.substring(0, commoditiesStr.lastIndexOf("<br/>")));
+        }
 
         return new JRBeanCollectionDataSource(Collections.singleton(ctCctCpEFileVo));
     }
@@ -264,3 +267,4 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
     }
 
 }
+

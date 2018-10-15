@@ -66,6 +66,36 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
                         treatmentVo.setConsigneeCountry(fileFieldValue.getValue());
                     }
                     break;
+                case "TRAITEMENT_SOCIETE_TRAITEMENT_NOM":
+                    if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
+                        treatmentVo.setTreatmentCompanyName(fileFieldValue.getValue());
+                    }
+                    break;
+                case "TRAITEMENT_SOCIETE_TRAITEMENT_ADRESSE":
+                    if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
+                        treatmentVo.setTreatmentCompanyAddress(fileFieldValue.getValue());
+                    }
+                    break;
+                case "TRAITEMENT_SOCIETE_TRAITEMENT_TELEPHONE":
+                    if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
+                        treatmentVo.setTreatmentCompanyTel(fileFieldValue.getValue());
+                    }
+                    break;
+                case "TRAITEMENT_SOCIETE_TRAITEMENT_FAX":
+                    if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
+                        treatmentVo.setTreatmentCompanyFax(fileFieldValue.getValue());
+                    }
+                    break;
+                case "TRAITEMENT_SOCIETE_TRAITEMENT_EMAIL":
+                    if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
+                        treatmentVo.setTreatmentCompanyEmail(fileFieldValue.getValue());
+                    }
+                    break;
+                case "TRAITEMENT_SOCIETE_TRAITEMENT_BP":
+                    if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
+                        treatmentVo.setTreatmentCompanyBp(fileFieldValue.getValue());
+                    }
+                    break;
             }
         }
         //
@@ -102,12 +132,6 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
         treatmentVo.setWeatherCondition(treatmentResult.getWeatherCondition());
         treatmentVo.setOtherTreatmentMode(treatmentResult.getOtherTreatmentMode());
         treatmentVo.setSupervisor(treatmentResult.getSupervisor());
-        treatmentVo.setTreatmentCompanyAddress(treatmentResult.getTreatmentCompanyAddress());
-        treatmentVo.setTreatmentCompanyName(treatmentResult.getTreatmentCompanyName());
-        treatmentVo.setTreatmentCompanyTel(treatmentResult.getTreatmentCompanyTel());
-        treatmentVo.setTreatmentCompanyFax(treatmentResult.getTreatmentCompanyFax());
-        treatmentVo.setTreatmentCompanyEmail(treatmentResult.getTreatmentCompanyEmail());
-        treatmentVo.setTreatmentCompanyBp(treatmentResult.getTreatmentCompanyBp());
 
         final List<FileItem> fileItemList = file.getFileItemsList();
         List<CtCctTreatmentFileItemVo> fileItemVos = new ArrayList<>(fileItemList.size());
@@ -166,3 +190,4 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
     }
 
 }
+
