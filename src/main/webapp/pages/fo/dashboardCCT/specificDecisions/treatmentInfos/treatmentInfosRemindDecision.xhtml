@@ -1,6 +1,15 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
 
+    <h:panelGrid columns="2" rendered="#{!fileItemCctDetailController.phytoTransitFile}">
+        <p:outputLabel value="#{bundle['delivrableType']}" />
+        <p:selectOneMenu value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfos.delivrableType}"
+                         disabled="true">
+            <f:selectItem itemValue="CCT_CT_E" itemLabel="Certificat Phytosanitaire" />
+            <f:selectItem itemValue="CQ_CT" itemLabel="Certificat de qualité" />
+        </p:selectOneMenu>
+    </h:panelGrid>
+
     <p:panel rendered="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfos.delivrableType eq 'CCT_CT_E' or fileItemCctDetailController.phytoTransitFile}">
         <h:panelGrid columns="2">
             <h:outputLabel value="#{bundle['additionnalDeclaration']}" />
@@ -62,3 +71,5 @@
     </p:panel>
 
 </ui:composition>
+
+
