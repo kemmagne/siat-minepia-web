@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
 
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -2191,10 +2190,9 @@ public class FileItemCctDetailController implements Serializable {
      * @throws ParseException the parse exception
      */
     public void saveDecision() throws ParseException {
-        final DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-        def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-        def.setReadOnly(false);
-        final TransactionStatus status = transactionManager.getTransaction(def);
+        final DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
+        transactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+        final TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
         try {
             if (FlowCode.FL_CT_29.name().equals(selectedFlow.getCode()) && chckedListSize != Constants.ONE) {
                 showErrorFacesMessage(ControllerConstants.Bundle.Messages.CHECK_ANALYSE_DECISION_ERROR,
@@ -2459,12 +2457,22 @@ public class FileItemCctDetailController implements Serializable {
                 decisionDiv.getChildren().clear();
             }
 
-            transactionManager.commit(status);
+            transactionManager.commit(transactionStatus);
+            if (LOG.isDebugEnabled()) {
+                LOG.info("####SAVE DECISION Transaction commited####");
+            }
 
         } catch (final Exception ex) {
             LOG.error(null, ex);
             showErrorFacesMessage(ex.getMessage(), null);
-            transactionManager.rollback(status);
+            try {
+                transactionManager.rollback(transactionStatus);
+            } catch (final Exception ex1) {
+                LOG.error(Objects.toString(ex1), ex1);
+            }
+            if (LOG.isDebugEnabled()) {
+                LOG.info("####SAVE DECISION Transaction rollbacked####");
+            }
         }
 
         resetDataGridInofrmationProducts();
@@ -2475,6 +2483,10 @@ public class FileItemCctDetailController implements Serializable {
      */
     public void annulerDecisions() {
         final List<Long> chckedProductInfoChecksList = getCheckedRollBacksFileItemCheckList();
+        //
+        final DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
+        transactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+        final TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
         try {
             if (cotationAllowed == null) {
                 commonService.rollbackDecision(chckedProductInfoChecksList);
@@ -2502,8 +2514,21 @@ public class FileItemCctDetailController implements Serializable {
                 JsfUtil.addSuccessMessage(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
                         .getString(ControllerConstants.Bundle.Messages.ROLL_BACK_SUCCESS));
             }
-        } catch (final Exception e) {
+            transactionManager.commit(transactionStatus);
+            if (LOG.isDebugEnabled()) {
+                LOG.info("####ROLLBACK DECISION Transaction commited####");
+            }
+        } catch (final Exception ex) {
             showErrorFacesMessage(ControllerConstants.Bundle.Messages.ROLL_BACK_FAIL, null);
+            LOG.error(Objects.toString(ex), ex);
+            try {
+                transactionManager.rollback(transactionStatus);
+            } catch (Exception ex1) {
+                LOG.error(Objects.toString(ex1), ex1);
+            }
+            if (LOG.isDebugEnabled()) {
+                LOG.info("####ROLLBACK DECISION Transaction rollbacked####");
+            }
         }
 
         productInfoItems = disableDraftFromProductInfoItem(productInfoItems);
@@ -2532,50 +2557,70 @@ public class FileItemCctDetailController implements Serializable {
      * Mark file.
      */
     public void dispatchFile() {
-        final List<ItemFlowData> flowDatas = new ArrayList<>();
-        for (final DataType dataType : selectedFlow.getDataTypeList()) {
-            final ItemFlowData itemFlowData = new ItemFlowData();
-            itemFlowData.setDataType(dataType);
+        //
+        final DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
+        transactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+        final TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+        try {
+            final List<ItemFlowData> flowDatas = new ArrayList<>();
+            for (final DataType dataType : selectedFlow.getDataTypeList()) {
+                final ItemFlowData itemFlowData = new ItemFlowData();
+                itemFlowData.setDataType(dataType);
 
-            if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode())) {
-                final HtmlInputText valueDataType = (HtmlInputText) dipatchDiv.findComponent(ID_DISPATCH_LABEL + dataType.getId());
-                itemFlowData.setValue(valueDataType.getValue().toString());
-            } else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode())) {
-                final HtmlSelectBooleanCheckbox valueDataType = (HtmlSelectBooleanCheckbox) dipatchDiv
-                        .findComponent(ID_DISPATCH_LABEL + dataType.getId());
-                itemFlowData.setValue(valueDataType.getValue().toString());
+                if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode())) {
+                    final HtmlInputText valueDataType = (HtmlInputText) dipatchDiv.findComponent(ID_DISPATCH_LABEL + dataType.getId());
+                    itemFlowData.setValue(valueDataType.getValue().toString());
+                } else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode())) {
+                    final HtmlSelectBooleanCheckbox valueDataType = (HtmlSelectBooleanCheckbox) dipatchDiv
+                            .findComponent(ID_DISPATCH_LABEL + dataType.getId());
+                    itemFlowData.setValue(valueDataType.getValue().toString());
 
-            } else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
-                final Calendar valueDataType = (Calendar) dipatchDiv.findComponent(ID_DISPATCH_LABEL + dataType.getId());
-                itemFlowData.setValue(DateUtils.formatSimpleDateFromObject(DateUtils.FRENCH_DATE, valueDataType.getValue()));
+                } else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
+                    final Calendar valueDataType = (Calendar) dipatchDiv.findComponent(ID_DISPATCH_LABEL + dataType.getId());
+                    itemFlowData.setValue(DateUtils.formatSimpleDateFromObject(DateUtils.FRENCH_DATE, valueDataType.getValue()));
 
-            } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode())) {
-                final HtmlInputTextarea valueDataType = (HtmlInputTextarea) dipatchDiv.findComponent(ID_DISPATCH_LABEL
-                        + dataType.getId());
-                itemFlowData.setValue(valueDataType.getValue().toString());
+                } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode())) {
+                    final HtmlInputTextarea valueDataType = (HtmlInputTextarea) dipatchDiv.findComponent(ID_DISPATCH_LABEL
+                            + dataType.getId());
+                    itemFlowData.setValue(valueDataType.getValue().toString());
+                }
+                flowDatas.add(itemFlowData);
             }
-            flowDatas.add(itemFlowData);
-        }
 
-        final List<ItemFlow> itemFlowsToAdd = new ArrayList<>();
-        if (getFileItemCheckListForDecisionByFileAllowed() != null) {
-            for (final FileItemCheck fileItemCheck : getFileItemCheckListForDecisionByFileAllowed()) {
-                final ItemFlow itemFlow = new ItemFlow();
+            final List<ItemFlow> itemFlowsToAdd = new ArrayList<>();
+            if (getFileItemCheckListForDecisionByFileAllowed() != null) {
+                for (final FileItemCheck fileItemCheck : getFileItemCheckListForDecisionByFileAllowed()) {
+                    final ItemFlow itemFlow = new ItemFlow();
 
-                itemFlow.setCreated(null);
-                itemFlow.setFileItem(fileItemCheck.getFileItem());
-                itemFlow.setFlow(selectedFlow);
-                itemFlow.setSender(loggedUser);
-                itemFlow.setSent(Boolean.FALSE);
-                itemFlow.setUnread(Boolean.TRUE);
-                itemFlow.setReceived(AperakType.APERAK_D.getCharCode());
-                itemFlowsToAdd.add(itemFlow);
+                    itemFlow.setCreated(null);
+                    itemFlow.setFileItem(fileItemCheck.getFileItem());
+                    itemFlow.setFlow(selectedFlow);
+                    itemFlow.setSender(loggedUser);
+                    itemFlow.setSent(Boolean.FALSE);
+                    itemFlow.setUnread(Boolean.TRUE);
+                    itemFlow.setReceived(AperakType.APERAK_D.getCharCode());
+                    itemFlowsToAdd.add(itemFlow);
+                }
+                itemFlowService.takeDecision(itemFlowsToAdd, flowDatas);
             }
-            itemFlowService.takeDecision(itemFlowsToAdd, flowDatas);
-        }
-        if (assignedUserForCotation != null) {
-            currentFile.setAssignedUser(assignedUserForCotation);
-            fileService.update(currentFile);
+            if (assignedUserForCotation != null) {
+                currentFile.setAssignedUser(assignedUserForCotation);
+                fileService.update(currentFile);
+            }
+            transactionManager.commit(transactionStatus);
+            if (LOG.isDebugEnabled()) {
+                LOG.info("####DISPATCH DECISION Transaction commited####");
+            }
+        } catch (Exception ex) {
+            LOG.error(Objects.toString(ex), ex);
+            try {
+                transactionManager.rollback(transactionStatus);
+            } catch (final Exception ex1) {
+                LOG.error(Objects.toString(ex1), ex1);
+            }
+            if (LOG.isDebugEnabled()) {
+                LOG.info("####DISPATCH DECISION Transaction rollbacked####");
+            }
         }
         resetDataGridInofrmationProducts();
     }
@@ -2755,10 +2800,9 @@ public class FileItemCctDetailController implements Serializable {
      * Send decisions.
      */
     public void sendDecisions() {
-        final DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-        def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-        def.setReadOnly(false);
-        final TransactionStatus status = transactionManager.getTransaction(def);
+        final DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
+        transactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+        final TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
         try {
             if (currentFile.getFileItemsList() != null && cotationAllowed != null && cotationAllowed) {
                 itemFlowService.sendDecisionsToDispatchCctFile(currentFile, productInfoItemsEnabled);
@@ -2801,7 +2845,7 @@ public class FileItemCctDetailController implements Serializable {
                 }
                 if (!allHasDecision) {
                     showErrorFacesMessage(ControllerConstants.Bundle.Messages.ALL_PRODUCT_MUST_BE_SELECTED, null);
-                    transactionManager.rollback(status);
+                    transactionManager.rollback(transactionStatus);
                     return;
                 }
 
@@ -2958,7 +3002,7 @@ public class FileItemCctDetailController implements Serializable {
             } else {
                 showErrorFacesMessage(ControllerConstants.Bundle.Messages.SEND_ERROR, null);
             }
-            transactionManager.commit(status);
+            transactionManager.commit(transactionStatus);
             if (LOG.isDebugEnabled()) {
                 LOG.info("####SEND DECISION Transaction commited####");
             }
@@ -2968,12 +3012,10 @@ public class FileItemCctDetailController implements Serializable {
             notificationEmail(currentFile, currentStep);
         } catch (final Exception e) {
             LOG.error(Objects.toString(e), e);
-            java.util.logging.Logger.getLogger(FileItemCctDetailController.class.getName()).log(Level.SEVERE, null, e);
             try {
-                transactionManager.rollback(status);
+                transactionManager.rollback(transactionStatus);
             } catch (final Exception ex) {
                 LOG.error(Objects.toString(ex), ex);
-                java.util.logging.Logger.getLogger(FileItemCctDetailController.class.getName()).log(Level.SEVERE, null, ex);
             }
             if (LOG.isDebugEnabled()) {
                 LOG.info("####SEND DECISION Transaction rollbacked####");
