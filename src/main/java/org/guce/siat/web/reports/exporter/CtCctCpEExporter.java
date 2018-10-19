@@ -66,16 +66,12 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
     @Override
     public JRBeanCollectionDataSource getReportDataSource() {
 
-        if (file == null) {
-            return null;
-        }
-
         final CtCctCpEFileVo ctCctCpEFileVo = new CtCctCpEFileVo();
 
         ctCctCpEFileVo.setDecisionPlace(file.getBureau().getLabelFr());
         ctCctCpEFileVo.setDecisionDate(file.getSignatureDate());
-        if (file.getAssignedUser() != null) {
-            ctCctCpEFileVo.setSignatoryName(file.getAssignedUser().getLastName() + " " + file.getAssignedUser().getFirstName());
+        if (file.getSignatory() != null) {
+            ctCctCpEFileVo.setSignatoryName(file.getSignatory().getLastName() + " " + file.getSignatory().getFirstName());
         }
         if (file.getClient() != null) {
             ctCctCpEFileVo.setExporterName(file.getClient().getCompanyName());

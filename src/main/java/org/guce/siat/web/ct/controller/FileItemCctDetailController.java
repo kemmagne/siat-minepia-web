@@ -1575,6 +1575,7 @@ public class FileItemCctDetailController implements Serializable {
             for (final FileItem fileItem : productInfoItems) {
                 if (oneCurrentStep.equals(fileItem.getStep().getId()) && StepCode.ST_CT_02.equals(fileItem.getStep().getStepCode())) {
                     decisionByFile = Boolean.TRUE;
+                    setCotationAllowed(Boolean.FALSE);
                 } else if (oneCurrentStep.equals(fileItem.getStep().getId())
                         && (StepCode.ST_CT_03.equals(fileItem.getStep().getStepCode()) || StepCode.ST_CT_47.equals(fileItem.getStep().getStepCode()))
                         && hasCotationRule(loggedUser)) {
@@ -1583,6 +1584,7 @@ public class FileItemCctDetailController implements Serializable {
                     setDecisionAllowed(Boolean.TRUE);
                 } else {
                     errorDecisionByFile = Boolean.TRUE;
+                    setCotationAllowed(Boolean.FALSE);
                 }
 
             }
@@ -2642,7 +2644,7 @@ public class FileItemCctDetailController implements Serializable {
             flowCode = FlowCode.FL_CT_06;
         }
         selectedFlow = flowService.findFlowByCode(flowCode.name());
-        setInspectorList(userService.findInspectorsByService(getCurrentService()));
+        setInspectorList(userService.findInspectorsByBureau(currentFile.getBureau()));
 
         for (final DataType dataType : selectedFlow.getDataTypeList()) {
 
@@ -2887,11 +2889,17 @@ public class FileItemCctDetailController implements Serializable {
                                 if (FlowCode.FL_CT_89.name().equals(flowToSend.getCode())
                                         || FlowCode.FL_CT_08.name().equals(flowToSend.getCode())) {
 
+                                    // edit signature elements
+                                    Date now = java.util.Calendar.getInstance().getTime();
+                                    currentFile.setSignatureDate(now);
+                                    currentFile.setSignatory(loggedUser);
+                                    fileService.update(currentFile);
+
                                     attachedByteFiles = new HashMap<>();
 
-                                    final List<FileTypeFlowReport> fileTypeFlowReports = fileTypeFlowReportService
+                                    final List<FileTypeFlowReport> fileTypeFlowReportList = fileTypeFlowReportService
                                             .findReportClassNameByFlowAndFileType(flowToSend, currentFile.getFileType());
-                                    for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
+                                    for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportList) {
                                         //Begin Add new field value with report Number
                                         final ReportOrganism reportOrganism = reportOrganismService.findReportByFileTypeFlowReport(fileTypeFlowReport);
                                         final FileField reportField = fileFieldService.findFileFieldByCodeAndFileType(
@@ -2924,16 +2932,6 @@ public class FileItemCctDetailController implements Serializable {
                                         try (FileOutputStream fileOuputStream = new FileOutputStream(targetAttachment)) {
                                             fileOuputStream.write(report);
                                         }
-
-                                        //Update report sequence
-                                        reportOrganism.setSequence(reportOrganism.getSequence() + 1);
-                                        reportOrganismService.update(reportOrganism);
-
-                                        // update signature date
-                                        final Map<String, Date> dateParams = new HashMap<>();
-                                        Date signatureDate = java.util.Calendar.getInstance().getTime();
-                                        dateParams.put("SIGNATURE_DATE", signatureDate);
-                                        fileService.updateSpecificColumn(dateParams, currentFile);
                                     }
                                 }
                             } catch (final Exception e) {
@@ -6663,8 +6661,6 @@ public class FileItemCctDetailController implements Serializable {
         @SuppressWarnings({"rawtypes", "unchecked"})
         Constructor c1;
         byte[] report = null;
-        Date signatureDate = java.util.Calendar.getInstance().getTime();
-        currentFile.setSignatureDate(signatureDate);
         if (checkMinaderMinistry) {
             switch (currentFile.getFileType().getCode()) {
                 case CCT_CT_E: {

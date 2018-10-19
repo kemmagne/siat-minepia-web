@@ -31,8 +31,8 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
 
     @Override
     protected JRBeanCollectionDataSource getReportDataSource() {
-        CtCctTreatmentFileVo treatmentVo = new CtCctTreatmentFileVo();
-        File file = treatmentResult.getItemFlow().getFileItem().getFile();
+        final CtCctTreatmentFileVo treatmentVo = new CtCctTreatmentFileVo();
+        final File file = treatmentResult.getItemFlow().getFileItem().getFile();
         treatmentVo.setFileNumber(file.getNumeroDossier());
         if (null != file.getClient()) {
             treatmentVo.setExporterName(file.getClient().getCompanyName());

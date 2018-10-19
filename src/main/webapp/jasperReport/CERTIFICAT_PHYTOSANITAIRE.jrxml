@@ -2,9 +2,9 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CERTIFICAT_PHYTOSANITAIRE" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6f5c0835-9f5c-4b28-b5db-296746e60a32">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="165"/>
+	<property name="ireport.y" value="539"/>
 	<parameter name="MINADER_LOGO" class="java.lang.String">
-		<defaultValueExpression><![CDATA["C:\\Users\\tadzotsa\\NetBeansProjects\\siat-ct-web\\src\\main\\webapp\\images\\reports\\minader.jpg"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<field name="decisionNumber" class="java.lang.String"/>
 	<field name="decisionPlace" class="java.lang.String"/>
@@ -219,16 +219,16 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS]
 					<textFieldExpression><![CDATA[$F{pointOfEntry}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="5" y="32" width="165" height="20" uuid="ab1b2ed0-8cbb-4018-a0a2-0dd9c2930e18"/>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="5" y="32" width="165" height="20" isPrintWhenDetailOverflows="true" uuid="ab1b2ed0-8cbb-4018-a0a2-0dd9c2930e18"/>
 					<textElement markup="html">
-						<font isBold="true"/>
+						<font size="7" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA["N° <u>" + $F{decisionNumber} + "</u>"]]></textFieldExpression>
 				</textField>
-				<textField isBlankWhenNull="true">
-					<reportElement x="5" y="53" width="165" height="20" uuid="6d206b09-e369-4a57-9f0c-8c9edb67cd25"/>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="5" y="53" width="165" height="20" isPrintWhenDetailOverflows="true" uuid="6d206b09-e369-4a57-9f0c-8c9edb67cd25"/>
 					<textElement markup="html">
-						<font isBold="true"/>
+						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA["A <u>" + $F{decisionPlace} + "</u>"]]></textFieldExpression>
 				</textField>
@@ -431,21 +431,21 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS]
 					<text><![CDATA[Chemical product (Activate matter)]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement x="359" y="258" width="193" height="15" uuid="bcf04da6-4cdb-400e-9faf-f89339189593"/>
+					<reportElement x="359" y="258" width="193" height="15" isPrintWhenDetailOverflows="true" uuid="bcf04da6-4cdb-400e-9faf-f89339189593"/>
 					<textElement>
 						<font isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{deliveryPlace}]]></textFieldExpression>
 				</textField>
 				<textField pattern="EEEEE dd MMMMM yyyy" isBlankWhenNull="true">
-					<reportElement x="360" y="349" width="188" height="15" uuid="f5358dac-70ff-4d2d-b4c8-b04409466297"/>
+					<reportElement x="360" y="349" width="188" height="15" isPrintWhenDetailOverflows="true" uuid="f5358dac-70ff-4d2d-b4c8-b04409466297"/>
 					<textElement verticalAlignment="Middle">
 						<font isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{decisionDate}]]></textFieldExpression>
 				</textField>
-				<textField isBlankWhenNull="true">
-					<reportElement x="359" y="397" width="192" height="15" uuid="abcfac41-b434-4876-b606-aeb1c652e1ce"/>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="359" y="397" width="192" height="15" isPrintWhenDetailOverflows="true" uuid="abcfac41-b434-4876-b606-aeb1c652e1ce"/>
 					<textElement>
 						<font isBold="true"/>
 					</textElement>

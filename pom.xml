@@ -1,20 +1,25 @@
 <?xml version="1.0"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.guce.siat</groupId>
         <artifactId>siat</artifactId>
         <version>1.2.0</version>
     </parent>
+
     <artifactId>siat-ct-web</artifactId>
     <packaging>war</packaging>
     <name>siat-ct-web</name>
-    <version>2.0.2-DEV</version>
+    <version>2.0.3-DEV</version>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <resource.dir>src/main/resources</resource.dir>
     </properties>
+
     <distributionManagement>
         <repository>
             <id>guce-repository</id>
@@ -27,6 +32,7 @@
             <url>https://repo.guce.local/maven/repository/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
+
     <profiles>
         <profile>
             <id>profile-development</id>
@@ -189,6 +195,7 @@
             </activation>
         </profile>
     </profiles>
+
     <dependencies>
         <!-- Servlet -->
         <dependency>
@@ -273,7 +280,7 @@
         <dependency>
             <groupId>org.guce.siat</groupId>
             <artifactId>siat-ct-core</artifactId>
-            <version>2.0.2</version>
+            <version>2.0.3</version>
         </dependency>
 
         <dependency>
