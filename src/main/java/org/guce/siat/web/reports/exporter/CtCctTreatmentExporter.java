@@ -185,7 +185,7 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
     @Override
     protected Map<String, Object> getJRParameters() {
         final Map<String, Object> jRParameters = super.getJRParameters();
-        jRParameters.put("MINADER_LOGO", getRealPath(IMAGES_PATH, "minader", "jpg"));
+        jRParameters.put("MINADER_LOGO", getRealPath(IMAGES_PATH, "phytosanitaire", "jpg"));
         return jRParameters;
     }
 

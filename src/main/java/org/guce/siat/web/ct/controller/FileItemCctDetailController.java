@@ -2320,7 +2320,7 @@ public class FileItemCctDetailController implements Serializable {
                 if (CollectionUtils.isNotEmpty(analysePartsList)) {
                     commonService.takeDecisionAndSaveAnalyseRequest(analysePartsList, analyseOrder, itemFlowsToAdd);
                 }
-            } else if (isPhytoReadyForSignature(selectedFlow) && chckedListSize == Constants.ONE) {
+            } else if (isPhytoReadyForSignature(selectedFlow)) {
                 commonService.takeDecisionAndSaveTreatmentInfos(treatmentInfos, itemFlowsToAdd);
             } // Demande de Traitement
             else if ((FlowCode.FL_CT_64.name().equals(selectedFlow.getCode()) && chckedListSize == Constants.ONE)) {
@@ -2825,8 +2825,8 @@ public class FileItemCctDetailController implements Serializable {
                 if (sameStep) {
                     for (final FileItem selected : currentFile.getFileItemsList()) {
                         if (BooleanUtils.isNotTrue(selected.getDraft())) {
-                            allHasDecision = false;
-                            break;
+//                            allHasDecision = false;
+//                            break;
                         } else {
                             final ItemFlow draftItemFlow = itemFlowService.findDraftByFileItem(selected);
                             if (!draftItemFlow.getSender().getId().equals(getLoggedUser().getId())) {
@@ -3327,7 +3327,7 @@ public class FileItemCctDetailController implements Serializable {
      */
     public List<FileItemCheck> convertFileItemsToFileItemsCheksAndCheckEnabledFileItems(final List<FileItem> fileItems,
             final List<FileItem> enabledFileItems) {
-        final List<FileItemCheck> returnList = new ArrayList<FileItemCheck>();
+        final List<FileItemCheck> returnList = new ArrayList<>();
 
         if (CollectionUtils.isNotEmpty(fileItems)) {
             for (final FileItem fileItem : fileItems) {
