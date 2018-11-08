@@ -2825,8 +2825,8 @@ public class FileItemCctDetailController implements Serializable {
                 if (sameStep) {
                     for (final FileItem selected : currentFile.getFileItemsList()) {
                         if (BooleanUtils.isNotTrue(selected.getDraft())) {
-//                            allHasDecision = false;
-//                            break;
+                            allHasDecision = false;
+                            break;
                         } else {
                             final ItemFlow draftItemFlow = itemFlowService.findDraftByFileItem(selected);
                             if (!draftItemFlow.getSender().getId().equals(getLoggedUser().getId())) {
