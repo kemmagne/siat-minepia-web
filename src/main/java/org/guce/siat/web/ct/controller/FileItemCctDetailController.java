@@ -1148,7 +1148,7 @@ public class FileItemCctDetailController implements Serializable {
     /**
      * Prepare roll back decisions.
      */
-    public void prepareRollBackDecisions() {
+    public synchronized void prepareRollBackDecisions() {
         final List<Long> chckedProductInfoChecksList = getCheckedRollBacksFileItemCheckList();
         if (chckedProductInfoChecksList == null || chckedProductInfoChecksList.isEmpty() && cotationAllowed == null
                 && !decisionByFileAllowed) {
@@ -1182,7 +1182,7 @@ public class FileItemCctDetailController implements Serializable {
     /**
      * Prepare decisions.
      */
-    public void prepareDecisions() {
+    public synchronized void prepareDecisions() {
         specificDecision = null;
         // Prepare analyse order attribute
         selectedLaboratory = null;
@@ -2191,7 +2191,7 @@ public class FileItemCctDetailController implements Serializable {
      *
      * @throws ParseException the parse exception
      */
-    public void saveDecision() throws ParseException {
+    public synchronized void saveDecision() throws ParseException {
         final DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
         transactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
         final TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
@@ -2558,7 +2558,7 @@ public class FileItemCctDetailController implements Serializable {
     /**
      * Mark file.
      */
-    public void dispatchFile() {
+    public synchronized void dispatchFile() {
         //
         final DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
         transactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
@@ -2630,7 +2630,7 @@ public class FileItemCctDetailController implements Serializable {
     /**
      * Prepare dispatch file.
      */
-    public void prepareDispatchFile() {
+    public synchronized void prepareDispatchFile() {
         String stringId = null;
         assignedUserForCotation = null;
         dipatchDiv.getChildren().clear();
@@ -2801,7 +2801,7 @@ public class FileItemCctDetailController implements Serializable {
     /**
      * Send decisions.
      */
-    public void sendDecisions() {
+    public synchronized void sendDecisions() {
         final DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
         transactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
         final TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
