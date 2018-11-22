@@ -149,7 +149,7 @@ public class VtpMinsanteExporter extends AbstractReportInvoker {
 							vtpMinsanteVo.setFobCurrencyValue(fileFieldValue.getValue());
 							break;
 						case "INFORMATIONS_GENERALES_TERMES_MONTANT_TOTAL_FCFA":
-							vtpMinsanteVo.setFobCurrencyValue(fileFieldValue.getValue());
+							vtpMinsanteVo.setFobCfaValue(fileFieldValue.getValue());
 							break;
 						case "PAYS_ORIGINE_LIBELLE":
 							vtpMinsanteVo.setOriginCountry(fileFieldValue.getValue());
@@ -181,13 +181,15 @@ public class VtpMinsanteExporter extends AbstractReportInvoker {
 							: signatoryDate));
 			vtpMinsanteVo.setSupplierPhone(supplierPhoneCode + supplierPhoneNumber + "/" + supplierMobileCode + supplierMobileNumber);
 			vtpMinsanteVo.setSupplierFax(supplierFaxCode + supplierFaxNumber);
+			if (vtpMinsanteVo.getInvoiceAmount() == null){
+				vtpMinsanteVo.setInvoiceAmount(vtpMinsanteVo.getFobCfaValue());
+			}
 			
 			final List<FileItem> fileItemsList = file.getFileItemsList();
 			if (CollectionUtils.isNotEmpty(fileItemsList)){
 				for (FileItem fileItem : fileItemsList){
 					final VtpMinsanteFileItemVo fileItemVo = new VtpMinsanteFileItemVo();
-					if (fileItem.getNsh() != null)
-						fileItemVo.setCode(fileItem.getNsh().getGoodsItemCode());
+					
 					fileItemVo.setQuantity(Double.parseDouble(fileItem.getQuantity()));
 					fileItemVo.setFobValue(fileItem.getFobValue());
 					for (FileItemFieldValue fileItemFieldValue : fileItem.getFileItemFieldValueList()){
@@ -203,6 +205,13 @@ public class VtpMinsanteExporter extends AbstractReportInvoker {
 								break;
 							default:
 								break;
+						}
+					}
+					if (fileItem.getNsh() != null)
+						fileItemVo.setCode(fileItem.getNsh().getGoodsItemCode());
+					if (fileItemVo.getDesignation() == null || StringUtils.isEmpty(fileItemVo.getDesignation())){
+						if (fileItem.getNsh() != null){
+							fileItemVo.setDesignation(fileItem.getNsh().getGoodsItemDesc());
 						}
 					}
 					vtpMinsanteVo.getFileItemList().add(fileItemVo);
