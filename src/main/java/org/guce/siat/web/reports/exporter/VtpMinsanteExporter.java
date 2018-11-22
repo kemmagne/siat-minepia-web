@@ -2,6 +2,7 @@ package org.guce.siat.web.reports.exporter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,9 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.guce.siat.common.model.File;
 import org.guce.siat.common.model.FileFieldValue;
+import org.guce.siat.common.model.FileItem;
+import org.guce.siat.common.model.FileItemFieldValue;
+import org.guce.siat.web.reports.vo.VtpMinsanteFileItemVo;
 import org.guce.siat.web.reports.vo.VtpMinsanteFileVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,32 +57,72 @@ public class VtpMinsanteExporter extends AbstractReportInvoker {
 
 		final VtpMinsanteFileVo vtpMinsanteVo = new VtpMinsanteFileVo();
 		java.util.Date signatoryDate = null;
-
+		String supplierPhoneCode = null;
+		String supplierPhoneNumber = null;
+		String supplierMobileCode = null;
+		String supplierMobileNumber = null;
+		String supplierFaxCode = null;
+		String supplierFaxNumber = null;
 		if ((file != null)) {
 			vtpMinsanteVo.setDecisionDate(file.getSignatureDate());
 			vtpMinsanteVo.setDecisionPlace(file.getBureau().getAddress());
+			vtpMinsanteVo.setFileItemList(new ArrayList<VtpMinsanteFileItemVo>());
+			if (file.getClient() != null){
+				vtpMinsanteVo.setClientAddress(file.getClient().getFirstAddress());
+				vtpMinsanteVo.setClientCity(file.getClient().getCity());
+				if (file.getClient().getCountry() != null)
+					vtpMinsanteVo.setClientCountry(file.getClient().getCountry().getCountryName());
+				vtpMinsanteVo.setClientInscriptionCode(file.getClient().getCommerceApprovalRegistrationNumberFile());
+				vtpMinsanteVo.setClientInscriptionDate(file.getClient().getCommerceApprovalObtainedDate());
+				vtpMinsanteVo.setClientInscriptionIssueDate(file.getClient().getCommerceApprovalValidityDate());
+				vtpMinsanteVo.setClientMail(file.getClient().getEmail());
+				vtpMinsanteVo.setClientName(file.getClient().getCompanyName());
+				vtpMinsanteVo.setClientPhone(file.getClient().getPhone() + "/" + file.getClient().getMobile());
+				vtpMinsanteVo.setClientPobox(file.getClient().getPostalCode());
+				vtpMinsanteVo.setClientTaxpayerNumber(file.getClient().getNumContribuable());
+			}			
 			final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
-
 			if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
 				for (final FileFieldValue fileFieldValue : fileFieldValueList) {
 					switch (fileFieldValue.getFileField().getCode()) {
 						case "NUMERO_VTP_MINSANTE":
 							vtpMinsanteVo.setDecisionNumber(fileFieldValue.getValue());
 							break;
-						case "PHARMACIEN__NOM_STRUCTURE_PHARMACIEN":
-							vtpMinsanteVo.setPharmacy(fileFieldValue.getValue());
+						case "FOURNISSEUR_RAISONSOCIALE":
+							vtpMinsanteVo.setSupplierName(fileFieldValue.getValue());
 							break;
-						case "PHARMACIEN__RAISON_SOCIALE":
-							vtpMinsanteVo.setPharmacistName(fileFieldValue.getValue());
+						case "FOURNISSEUR_ADRESSE_ADRESSE1":
+							vtpMinsanteVo.setSupplierAddress(fileFieldValue.getValue());
 							break;
-						case "PHARMACIEN__ADRESSE__ADRESSE1":
-							vtpMinsanteVo.setPharmacyRoad(fileFieldValue.getValue());
+						case "FOURNISSEUR_ADRESSE_PAYSADDRESS_NOMPAYS":
+							vtpMinsanteVo.setSupplierCountry(fileFieldValue.getValue());
 							break;
-						case "PHARMACIEN__ADRESSE__BP":
-							vtpMinsanteVo.setPharmacyPoBox(fileFieldValue.getValue());
+						case "FOURNISSEUR_ADRESSE_VILLE":
+							vtpMinsanteVo.setSupplierCity(fileFieldValue.getValue());
 							break;
-						case "PHARMACIEN__TELEPHONE_FIXE__NUMERO":
-							vtpMinsanteVo.setPharmacyTel(fileFieldValue.getValue());
+						case "FOURNISSEUR_ADRESSE_BP":
+							vtpMinsanteVo.setSupplierPobox(fileFieldValue.getValue());
+							break;
+						case "FOURNISSEUR_ADRESSE_ADRESSEELECTRONIQUE":
+							vtpMinsanteVo.setSupplierMail(fileFieldValue.getValue());
+							break;
+						case "FOURNISSEUR_TELEPHONE_FIXE_INDICATIFPAYS":
+							supplierPhoneCode = fileFieldValue.getValue();
+							break;
+						case "FOURNISSEUR_TELEPHONE_FIXE_NUMERO":
+							supplierPhoneNumber = fileFieldValue.getValue();
+							break;
+						case "FOURNISSEUR_TELEPHONE_MOBILE_INDICATIFPAYS":
+							supplierMobileCode = fileFieldValue.getValue();
+							break;
+						case "FOURNISSEUR_TELEPHONE_MOBILE_NUMERO":
+							supplierMobileNumber = fileFieldValue.getValue();
+							break;
+						case "FOURNISSEUR_FAX_INDICATIFPAYS":
+							supplierFaxCode = fileFieldValue.getValue();
+							break;
+						case "FOURNISSEUR_FAX_NUMERO":
+							supplierFaxNumber = fileFieldValue.getValue();
 							break;
 						case "FACTURE__NUMERO_FACTURE":
 							vtpMinsanteVo.setInvoiceNumber(fileFieldValue.getValue());
@@ -89,23 +133,29 @@ public class VtpMinsanteExporter extends AbstractReportInvoker {
 						case "FACTURE__MONTANT_TOTAL":
 							vtpMinsanteVo.setInvoiceAmount(fileFieldValue.getValue());
 							break;
-						case "PAYS_ORIGINE_LIBELLE":
-							vtpMinsanteVo.setCountryOfOrigin(fileFieldValue.getValue());
-							break;
-						case "PAYS_PROVENANCE_LIBELLE":
-							vtpMinsanteVo.setCountryOfProvenance(fileFieldValue.getValue());
-							break;
-						case "FOURNISSEUR_RAISONSOCIALE":
-							vtpMinsanteVo.setSupplierName(fileFieldValue.getValue());
-							break;
 						case "INFORMATIONS_GENERALES_TRANSPORT_MODE_TRANSPORT_LIBELLE":
 							vtpMinsanteVo.setTransportWay(fileFieldValue.getValue());
 							break;
-						case "INFORMATIONS_GENERALES_LIEU_CHARGEMENT_LIBELLE":
-							vtpMinsanteVo.setLoadingCustomsOffice(fileFieldValue.getValue());
-							break;
 						case "INFORMATIONS_GENERALES_LIEU_DECHARGEMENT_LIBELLE":
-							vtpMinsanteVo.setEnterringCustomsOffice(fileFieldValue.getValue());
+							vtpMinsanteVo.setCustomPlace(fileFieldValue.getValue());
+							break;
+						case "INFORMATIONS_GENERALES_TERMES_VENTE_CODE_DEVISE":
+							vtpMinsanteVo.setCurrency(fileFieldValue.getValue());
+							break;
+						case "INFORMATIONS_GENERALES_TERMES_VENTE_MONTANT":
+							vtpMinsanteVo.setTotalAmount(fileFieldValue.getValue());
+							break;
+						case "INFORMATIONS_GENERALES_TERMES_VENTE_MONTANT_TOTAL_DEVISE":
+							vtpMinsanteVo.setFobCurrencyValue(fileFieldValue.getValue());
+							break;
+						case "INFORMATIONS_GENERALES_TERMES_MONTANT_TOTAL_FCFA":
+							vtpMinsanteVo.setFobCurrencyValue(fileFieldValue.getValue());
+							break;
+						case "PAYS_ORIGINE_LIBELLE":
+							vtpMinsanteVo.setOriginCountry(fileFieldValue.getValue());
+							break;
+						case "PAYS_PROVENANCE_LIBELLE":
+							vtpMinsanteVo.setDestinationCountry(fileFieldValue.getValue());
 							break;
 						case "SIGNATAIRE_DATE":
 							if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
@@ -120,9 +170,6 @@ public class VtpMinsanteExporter extends AbstractReportInvoker {
 						case "SIGNATAIRE_LIEU":
 							vtpMinsanteVo.setDecisionPlace(fileFieldValue.getValue());
 							break;
-						case "DATE_VALIDITE":
-							vtpMinsanteVo.setExpirationDate(fileFieldValue.getValue());
-							break;
 						default:
 							break;
 					}
@@ -132,6 +179,36 @@ public class VtpMinsanteExporter extends AbstractReportInvoker {
 					+ PREFIX
 					+ new SimpleDateFormat("dd/MM/yyyy").format(signatoryDate == null ? java.util.Calendar.getInstance().getTime()
 							: signatoryDate));
+			vtpMinsanteVo.setSupplierPhone(supplierPhoneCode + supplierPhoneNumber + "/" + supplierMobileCode + supplierMobileNumber);
+			vtpMinsanteVo.setSupplierFax(supplierFaxCode + supplierFaxNumber);
+			
+			final List<FileItem> fileItemsList = file.getFileItemsList();
+			if (CollectionUtils.isNotEmpty(fileItemsList)){
+				for (FileItem fileItem : fileItemsList){
+					final VtpMinsanteFileItemVo fileItemVo = new VtpMinsanteFileItemVo();
+					if (fileItem.getNsh() != null)
+						fileItemVo.setCode(fileItem.getNsh().getGoodsItemCode());
+					fileItemVo.setQuantity(Double.parseDouble(fileItem.getQuantity()));
+					fileItemVo.setFobValue(fileItem.getFobValue());
+					for (FileItemFieldValue fileItemFieldValue : fileItem.getFileItemFieldValueList()){
+						switch (fileItemFieldValue.getFileItemField().getCode()){
+							case "AMM":
+								fileItemVo.setAmm(fileItemFieldValue.getValue());
+								break;
+							case "UNITE":
+								fileItemVo.setUnit(fileItemFieldValue.getValue());
+								break;
+							case "NOM_COMMERCIAL":
+								fileItemVo.setDesignation(fileItemFieldValue.getValue());
+								break;
+							default:
+								break;
+						}
+					}
+					vtpMinsanteVo.getFileItemList().add(fileItemVo);
+				}
+			}
+		
 		}
 
 		return new JRBeanCollectionDataSource(Collections.singleton(vtpMinsanteVo));

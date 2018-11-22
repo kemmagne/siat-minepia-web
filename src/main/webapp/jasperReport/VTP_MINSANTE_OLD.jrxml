@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VTP_MINSANTE" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8edf22e4-85a7-4ff4-97ff-42cd406afed7">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="96"/>
+	<property name="ireport.y" value="360"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -455,7 +455,7 @@ Pro Forma Invoice]]></text>
 Name and adress of the supplier company]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="885af591-1a4f-474d-9e3b-e2bb4de95e63" x="0" y="74" width="201" height="56"/>
+					<reportElement uuid="885af591-1a4f-474d-9e3b-e2bb4de95e63" x="0" y="74" width="201" height="55"/>
 					<box leftPadding="6" rightPadding="6">
 						<pen lineWidth="0.5"/>
 						<topPen lineWidth="0.5"/>
@@ -470,7 +470,7 @@ Name and adress of the supplier company]]></text>
 Number of the TEMPORARY TECHNICAL  VISA]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="84b7a4f7-4d81-4840-9c9e-fd59af8222b9" x="201" y="74" width="166" height="56"/>
+					<reportElement uuid="84b7a4f7-4d81-4840-9c9e-fd59af8222b9" x="201" y="74" width="166" height="55"/>
 					<box leftPadding="6" rightPadding="6">
 						<pen lineWidth="0.5"/>
 						<topPen lineWidth="0.5"/>
@@ -485,7 +485,7 @@ Number of the TEMPORARY TECHNICAL  VISA]]></text>
 Invoice Amount]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="6bb5e56c-a2cb-4115-83a2-901f92bacd20" x="367" y="74" width="188" height="56"/>
+					<reportElement uuid="6bb5e56c-a2cb-4115-83a2-901f92bacd20" x="367" y="74" width="188" height="55"/>
 					<box leftPadding="6" rightPadding="6">
 						<pen lineWidth="0.5"/>
 						<topPen lineWidth="0.5"/>
@@ -528,7 +528,7 @@ Export customs office]]></text>
 					<textFieldExpression><![CDATA[$F{invoiceAmount} != null ? $F{invoiceAmount} : "-"]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement uuid="9b3a5431-05e4-4219-bb68-fa756923b003" x="367" y="130" width="188" height="46"/>
+					<reportElement uuid="9b3a5431-05e4-4219-bb68-fa756923b003" x="367" y="129" width="188" height="46"/>
 					<box leftPadding="6" rightPadding="6">
 						<pen lineWidth="0.5"/>
 						<topPen lineWidth="0.5"/>
@@ -571,7 +571,7 @@ Export customs office]]></text>
 Route (Except by post)]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="2ab946b6-8f96-4606-ae9d-e72a44f2d5e1" x="183" y="205" width="184" height="30"/>
+					<reportElement uuid="2ab946b6-8f96-4606-ae9d-e72a44f2d5e1" x="183" y="204" width="184" height="30"/>
 					<box leftPadding="6" rightPadding="6">
 						<pen lineWidth="0.5"/>
 						<topPen lineWidth="0.5"/>
