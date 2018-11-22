@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="di" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9f130651-a537-47ba-8e02-acbfd4ee569c">
 	<property name="ireport.zoom" value="1.210000000000034"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="528"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -129,7 +129,7 @@
 	<pageHeader>
 		<band height="151" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="87a944ce-fced-47f3-adf5-321529d037ae" x="332" y="1" width="223" height="80"/>
+				<reportElement uuid="87a944ce-fced-47f3-adf5-321529d037ae" x="332" y="-1" width="223" height="80"/>
 				<textElement textAlignment="Center">
 					<font size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
 				</textElement>
@@ -139,7 +139,7 @@ MINISTERE DE LA SANTE
 DIRECTION DE LA PHARMACIE, DU MEDICAMMENT ET DES LABORATOIRES]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="0f89e17b-3be2-4f22-a7ca-529b4688814a" x="0" y="2" width="191" height="79"/>
+				<reportElement uuid="0f89e17b-3be2-4f22-a7ca-529b4688814a" x="0" y="0" width="191" height="79"/>
 				<textElement textAlignment="Center">
 					<font size="9" isBold="true" isItalic="false"/>
 				</textElement>
@@ -179,7 +179,7 @@ DEPARTMENT OF PHARMACY, DRUG AND LABS]]></text>
 			<textField>
 				<reportElement uuid="61d425a9-62e8-4af0-9e0f-0d67f85ecc31" x="23" y="127" width="287" height="20"/>
 				<textElement>
-					<font fontName="SansSerif" size="11" isBold="true"/>
+					<font fontName="Times New Roman" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{attestation} != null ? $F{attestation} : "-"]]></textFieldExpression>
 			</textField>
@@ -205,32 +205,26 @@ DEPARTMENT OF PHARMACY, DRUG AND LABS]]></text>
 						<reportElement uuid="4c6c2654-f17b-48f8-96f8-53a4ab8af6bb" x="0" y="0" width="277" height="20"/>
 						<box leftPadding="1"/>
 						<textElement>
-							<font isBold="false"/>
+							<font isBold="true"/>
 						</textElement>
 						<text><![CDATA[Importateur (nom, adresse) / Importer (name, adress)]]></text>
 					</staticText>
 					<textField isBlankWhenNull="true">
 						<reportElement uuid="2838d7af-7548-4940-8b3c-02294bc3b38c" x="0" y="20" width="277" height="20"/>
 						<box leftPadding="1"/>
-						<textElement>
-							<font fontName="SansSerif" isBold="true"/>
-						</textElement>
+						<textElement/>
 						<textFieldExpression><![CDATA[$F{clientName}]]></textFieldExpression>
 					</textField>
 					<textField isBlankWhenNull="true">
 						<reportElement uuid="72e4ce33-08bb-40c6-af9e-34165d3f1f7f" x="0" y="40" width="277" height="20"/>
 						<box leftPadding="1"/>
-						<textElement>
-							<font fontName="SansSerif" isBold="true"/>
-						</textElement>
+						<textElement/>
 						<textFieldExpression><![CDATA[$F{clientAddress} != null ? $F{clientAddress} : "" + ", " + $F{clientPobox} != null ? $F{clientPobox} : ""]]></textFieldExpression>
 					</textField>
 					<textField isBlankWhenNull="true">
 						<reportElement uuid="4299ddd6-bec5-4433-9e92-97d2f983dd2a" x="0" y="68" width="277" height="20"/>
 						<box leftPadding="1"/>
-						<textElement>
-							<font fontName="SansSerif" isBold="true"/>
-						</textElement>
+						<textElement/>
 						<textFieldExpression><![CDATA[$F{clientCity} != null ? $F{clientCity} : "" +" - " +$F{clientCountry} != null ? $F{clientCountry} : ""]]></textFieldExpression>
 					</textField>
 					<staticText>
@@ -252,55 +246,45 @@ DEPARTMENT OF PHARMACY, DRUG AND LABS]]></text>
 						<text><![CDATA[Péremption]]></text>
 					</staticText>
 					<textField isBlankWhenNull="true">
-						<reportElement uuid="ce5c59fe-f486-4f0c-a785-639c9627c4e3" x="0" y="101" width="82" height="20"/>
+						<reportElement uuid="ce5c59fe-f486-4f0c-a785-639c9627c4e3" x="0" y="108" width="82" height="20"/>
 						<box leftPadding="1"/>
-						<textElement>
-							<font fontName="SansSerif" isBold="true"/>
-						</textElement>
+						<textElement/>
 						<textFieldExpression><![CDATA[$F{clientInscriptionCode}]]></textFieldExpression>
 					</textField>
 					<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-						<reportElement uuid="dcd3f3d9-3ae9-49f9-a27a-269d2aff335b" x="100" y="101" width="77" height="20"/>
+						<reportElement uuid="dcd3f3d9-3ae9-49f9-a27a-269d2aff335b" x="100" y="108" width="77" height="20"/>
 						<box leftPadding="1"/>
-						<textElement>
-							<font fontName="SansSerif" isBold="true"/>
-						</textElement>
+						<textElement/>
 						<textFieldExpression><![CDATA[$F{clientInscriptionDate}]]></textFieldExpression>
 					</textField>
 					<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-						<reportElement uuid="9db39332-c886-4e25-9337-0c95e0f71aa6" x="191" y="101" width="86" height="20"/>
+						<reportElement uuid="9db39332-c886-4e25-9337-0c95e0f71aa6" x="191" y="108" width="86" height="20"/>
 						<box leftPadding="1"/>
-						<textElement>
-							<font fontName="SansSerif" isBold="true"/>
-						</textElement>
+						<textElement/>
 						<textFieldExpression><![CDATA[$F{clientInscriptionIssueDate}]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement uuid="0fc145c5-e229-425f-b2c7-60eba87364a9" x="0" y="122" width="100" height="20"/>
+						<reportElement uuid="0fc145c5-e229-425f-b2c7-60eba87364a9" x="0" y="128" width="118" height="20"/>
 						<box leftPadding="1"/>
 						<textElement/>
 						<text><![CDATA[Code / Statistical number]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="31373229-d7af-4040-8265-b78bd957aa67" x="100" y="122" width="177" height="20"/>
+						<reportElement uuid="31373229-d7af-4040-8265-b78bd957aa67" x="129" y="128" width="148" height="20"/>
 						<box leftPadding="1"/>
 						<textElement/>
 						<text><![CDATA[Téléphone / Phone]]></text>
 					</staticText>
 					<textField isBlankWhenNull="true">
-						<reportElement uuid="8e722933-a0c7-4adb-8cb2-8886a0e87e0e" x="0" y="136" width="100" height="32"/>
+						<reportElement uuid="8e722933-a0c7-4adb-8cb2-8886a0e87e0e" x="0" y="148" width="118" height="20"/>
 						<box leftPadding="1"/>
-						<textElement>
-							<font fontName="SansSerif" isBold="true"/>
-						</textElement>
+						<textElement/>
 						<textFieldExpression><![CDATA[$F{clientTaxpayerNumber}]]></textFieldExpression>
 					</textField>
 					<textField isBlankWhenNull="true">
-						<reportElement uuid="9e988d18-6908-4042-81aa-cf735e6c8c21" x="100" y="136" width="177" height="32"/>
+						<reportElement uuid="9e988d18-6908-4042-81aa-cf735e6c8c21" x="129" y="148" width="148" height="20"/>
 						<box leftPadding="1"/>
-						<textElement>
-							<font fontName="SansSerif" isBold="true"/>
-						</textElement>
+						<textElement/>
 						<textFieldExpression><![CDATA[$F{clientPhone}]]></textFieldExpression>
 					</textField>
 					<staticText>
@@ -312,9 +296,7 @@ DEPARTMENT OF PHARMACY, DRUG AND LABS]]></text>
 					<textField isBlankWhenNull="true">
 						<reportElement uuid="618bece5-6cbe-4e20-80b0-73d0510b0f85" x="47" y="168" width="230" height="20"/>
 						<box leftPadding="1"/>
-						<textElement>
-							<font fontName="SansSerif" isBold="true"/>
-						</textElement>
+						<textElement/>
 						<textFieldExpression><![CDATA[$F{clientMail}]]></textFieldExpression>
 					</textField>
 				</frame>
@@ -327,73 +309,61 @@ DEPARTMENT OF PHARMACY, DRUG AND LABS]]></text>
 						<reportElement uuid="5a29f749-3a2e-4df8-8097-7773fbd816ec" x="0" y="0" width="278" height="20"/>
 						<box leftPadding="1"/>
 						<textElement>
-							<font isBold="false"/>
+							<font isBold="true"/>
 						</textElement>
 						<text><![CDATA[Fournisseur (nom, adresse) / Seller (name, adress)]]></text>
 					</staticText>
 					<textField isBlankWhenNull="true">
 						<reportElement uuid="16583a8c-7f69-4a7a-9942-86521e88ae11" x="0" y="40" width="278" height="20"/>
 						<box leftPadding="1"/>
-						<textElement>
-							<font fontName="SansSerif" isBold="true"/>
-						</textElement>
+						<textElement/>
 						<textFieldExpression><![CDATA[$F{supplierAddress}]]></textFieldExpression>
 					</textField>
 					<textField isBlankWhenNull="true">
 						<reportElement uuid="3d0801ec-ed49-4e5f-a2a8-f657b1ba81fb" x="0" y="68" width="274" height="20"/>
 						<box leftPadding="1"/>
-						<textElement>
-							<font fontName="SansSerif" isBold="true"/>
-						</textElement>
+						<textElement/>
 						<textFieldExpression><![CDATA[$F{supplierCity} != null ? $F{supplierCity} : "" +" - " +$F{supplierCountry} != null ? $F{supplierCountry} : ""]]></textFieldExpression>
 					</textField>
 					<staticText>
-						<reportElement uuid="c97298c4-1d85-40d0-9ce0-081a9ca6f8d6" x="0" y="122" width="160" height="20"/>
+						<reportElement uuid="c97298c4-1d85-40d0-9ce0-081a9ca6f8d6" x="0" y="128" width="160" height="20"/>
 						<box leftPadding="1"/>
 						<textElement/>
 						<text><![CDATA[Téléphone / Phone]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="9d67c5d7-4584-4b11-913d-036cdcca8841" x="160" y="122" width="118" height="20"/>
+						<reportElement uuid="9d67c5d7-4584-4b11-913d-036cdcca8841" x="160" y="128" width="118" height="20"/>
 						<box leftPadding="1"/>
 						<textElement/>
 						<text><![CDATA[Télécopie / Fax]]></text>
 					</staticText>
 					<staticText>
-						<reportElement uuid="db5ed932-54ce-446e-9a18-d6de72211345" x="0" y="170" width="55" height="20"/>
+						<reportElement uuid="db5ed932-54ce-446e-9a18-d6de72211345" x="0" y="170" width="37" height="20"/>
 						<box leftPadding="1"/>
 						<textElement/>
 						<text><![CDATA[E-mail :]]></text>
 					</staticText>
 					<textField isBlankWhenNull="true">
-						<reportElement uuid="abed340d-902e-4878-a81c-d7686d272310" x="0" y="136" width="160" height="34"/>
+						<reportElement uuid="abed340d-902e-4878-a81c-d7686d272310" x="0" y="148" width="160" height="20"/>
 						<box leftPadding="1"/>
-						<textElement>
-							<font fontName="SansSerif" isBold="true"/>
-						</textElement>
+						<textElement/>
 						<textFieldExpression><![CDATA[$F{supplierPhone}]]></textFieldExpression>
 					</textField>
 					<textField isBlankWhenNull="true">
-						<reportElement uuid="d43bba8e-cfb9-460f-9b02-a1fd8a7a8829" x="160" y="136" width="118" height="34"/>
+						<reportElement uuid="d43bba8e-cfb9-460f-9b02-a1fd8a7a8829" x="160" y="148" width="118" height="20"/>
 						<box leftPadding="1"/>
-						<textElement>
-							<font fontName="SansSerif" isBold="true"/>
-						</textElement>
+						<textElement/>
 						<textFieldExpression><![CDATA[$F{supplierFax}]]></textFieldExpression>
 					</textField>
 					<textField isBlankWhenNull="true">
-						<reportElement uuid="0aa67a0f-86fd-4c14-8f88-506fce488375" x="43" y="170" width="235" height="18"/>
+						<reportElement uuid="0aa67a0f-86fd-4c14-8f88-506fce488375" x="37" y="170" width="241" height="18"/>
 						<box leftPadding="1"/>
-						<textElement>
-							<font fontName="SansSerif" isBold="true"/>
-						</textElement>
+						<textElement/>
 						<textFieldExpression><![CDATA[$F{supplierMail}]]></textFieldExpression>
 					</textField>
 					<textField isBlankWhenNull="true">
 						<reportElement uuid="d34a70d9-7bcc-41be-a74b-48c20957d95d" x="2" y="19" width="276" height="20"/>
-						<textElement>
-							<font fontName="SansSerif" isBold="true"/>
-						</textElement>
+						<textElement/>
 						<textFieldExpression><![CDATA[$F{supplierName}]]></textFieldExpression>
 					</textField>
 				</frame>
@@ -412,9 +382,7 @@ DEPARTMENT OF PHARMACY, DRUG AND LABS]]></text>
 					<textField isBlankWhenNull="true">
 						<reportElement uuid="0e65cfe3-c653-4fc1-83a5-0eda91cf7abc" x="0" y="30" width="277" height="20"/>
 						<box leftPadding="1"/>
-						<textElement>
-							<font fontName="SansSerif" isBold="true"/>
-						</textElement>
+						<textElement/>
 						<textFieldExpression><![CDATA[$F{customPlace}]]></textFieldExpression>
 					</textField>
 				</frame>
@@ -434,9 +402,7 @@ Country of Shipment]]></text>
 					<textField isBlankWhenNull="true">
 						<reportElement uuid="93ed75d3-be47-4e97-8ac8-df55d032ab9b" x="0" y="30" width="147" height="20"/>
 						<box leftPadding="1"/>
-						<textElement textAlignment="Center">
-							<font fontName="SansSerif" isBold="true"/>
-						</textElement>
+						<textElement/>
 						<textFieldExpression><![CDATA[$F{originCountry}]]></textFieldExpression>
 					</textField>
 				</frame>
@@ -455,9 +421,7 @@ Origin country]]></text>
 					<textField isBlankWhenNull="true">
 						<reportElement uuid="d7d76938-4782-4781-b8ff-5c77c6914eb0" x="0" y="30" width="131" height="20"/>
 						<box leftPadding="1"/>
-						<textElement textAlignment="Center">
-							<font fontName="SansSerif" isBold="true"/>
-						</textElement>
+						<textElement/>
 						<textFieldExpression><![CDATA[$F{originCountry}]]></textFieldExpression>
 					</textField>
 				</frame>
@@ -476,9 +440,7 @@ Total value in foreign currency]]></text>
 					<textField isBlankWhenNull="true">
 						<reportElement uuid="af31da4e-b2cc-4d36-b889-edc60391b013" x="0" y="27" width="274" height="24"/>
 						<box leftPadding="1"/>
-						<textElement>
-							<font fontName="SansSerif" isBold="true"/>
-						</textElement>
+						<textElement/>
 						<textFieldExpression><![CDATA[$F{invoiceAmount}]]></textFieldExpression>
 					</textField>
 				</frame>
@@ -498,9 +460,7 @@ Transport mode]]></text>
 					<textField isBlankWhenNull="true">
 						<reportElement uuid="d697c274-6008-4faf-a06d-bc02df235d9b" x="0" y="31" width="147" height="20"/>
 						<box leftPadding="1"/>
-						<textElement textAlignment="Center">
-							<font fontName="SansSerif" isBold="true"/>
-						</textElement>
+						<textElement/>
 						<textFieldExpression><![CDATA[$F{transportWay}]]></textFieldExpression>
 					</textField>
 				</frame>
@@ -524,9 +484,7 @@ Transport mode]]></text>
 					<textField isBlankWhenNull="true">
 						<reportElement uuid="f280e2f4-f5d6-48e9-84eb-173bb10f8c80" x="0" y="31" width="130" height="20"/>
 						<box leftPadding="1"/>
-						<textElement textAlignment="Center">
-							<font fontName="SansSerif" isBold="true"/>
-						</textElement>
+						<textElement/>
 						<textFieldExpression><![CDATA[$F{currency}]]></textFieldExpression>
 					</textField>
 				</frame>
@@ -553,17 +511,13 @@ Proforma n° / Date]]></text>
 					<textField isBlankWhenNull="true">
 						<reportElement uuid="3587d0f9-c888-414c-beb1-ad4e04c3db85" x="0" y="27" width="131" height="20"/>
 						<box leftPadding="1"/>
-						<textElement textAlignment="Center">
-							<font fontName="SansSerif" isBold="true"/>
-						</textElement>
+						<textElement/>
 						<textFieldExpression><![CDATA[$F{invoiceNumber}]]></textFieldExpression>
 					</textField>
 					<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 						<reportElement uuid="89fbb177-72c5-4627-8af3-9efb1a7e0e5f" x="131" y="27" width="143" height="20"/>
 						<box rightPadding="1"/>
-						<textElement textAlignment="Center">
-							<font fontName="SansSerif" isBold="true"/>
-						</textElement>
+						<textElement textAlignment="Right"/>
 						<textFieldExpression><![CDATA[$F{invoiceDate}]]></textFieldExpression>
 					</textField>
 				</frame>
@@ -582,9 +536,7 @@ FOB value in foreign currency]]></text>
 					<textField pattern="**#,##0.00" isBlankWhenNull="true">
 						<reportElement uuid="e880e9e6-730d-41c2-bc2c-be4b9554d7da" x="0" y="27" width="147" height="20"/>
 						<box leftPadding="1"/>
-						<textElement textAlignment="Center">
-							<font fontName="SansSerif" isBold="true"/>
-						</textElement>
+						<textElement/>
 						<textFieldExpression><![CDATA[$F{fobCurrencyValue}]]></textFieldExpression>
 					</textField>
 				</frame>
@@ -606,9 +558,7 @@ FOB value in CFA]]></text>
 					<textField pattern="**#,##0.00" isBlankWhenNull="true">
 						<reportElement uuid="9cce88c5-20db-47a4-bf0e-5d352254447d" x="0" y="27" width="130" height="20"/>
 						<box leftPadding="1"/>
-						<textElement textAlignment="Center">
-							<font fontName="SansSerif" isBold="true"/>
-						</textElement>
+						<textElement/>
 						<textFieldExpression><![CDATA[$F{fobCfaValue}]]></textFieldExpression>
 					</textField>
 				</frame>
@@ -625,7 +575,7 @@ FOB value in CFA]]></text>
 				</box>
 				<componentElement>
 					<reportElement uuid="8e2d1f66-5698-403d-9196-2ec8659ff622" key="table 1" x="0" y="0" width="555" height="50"/>
-					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 						<datasetRun subDataset="Table Dataset 1" uuid="9274f022-709d-4dde-95e7-6765b8c393fe">
 							<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{fileItemList})]]></dataSourceExpression>
 						</datasetRun>
@@ -650,10 +600,10 @@ Goods description]]></text>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column uuid="b264f344-53fe-4963-8f80-b594c94ba3de" width="89">
+						<jr:column uuid="b264f344-53fe-4963-8f80-b594c94ba3de" width="108">
 							<jr:columnHeader height="30" rowSpan="1">
 								<staticText>
-									<reportElement uuid="a669832b-79b8-49c9-beae-82b6b155dae1" x="0" y="0" width="89" height="30"/>
+									<reportElement uuid="a669832b-79b8-49c9-beae-82b6b155dae1" x="0" y="0" width="107" height="30"/>
 									<box leftPadding="1">
 										<topPen lineWidth="1.0"/>
 									</box>
@@ -664,17 +614,17 @@ HS code]]></text>
 							</jr:columnHeader>
 							<jr:detailCell height="30" rowSpan="1">
 								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-									<reportElement uuid="2ff86d83-6fe7-4e8a-94c9-3f5b7c8cd266" x="1" y="0" width="88" height="30" isPrintWhenDetailOverflows="true"/>
+									<reportElement uuid="2ff86d83-6fe7-4e8a-94c9-3f5b7c8cd266" x="1" y="0" width="105" height="30" isPrintWhenDetailOverflows="true"/>
 									<box leftPadding="1"/>
 									<textElement verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column uuid="bedfb246-5815-4912-bc54-3867aac15c2e" width="60">
+						<jr:column uuid="bedfb246-5815-4912-bc54-3867aac15c2e" width="81">
 							<jr:columnHeader height="30" rowSpan="1">
 								<staticText>
-									<reportElement uuid="9f421125-43f4-4dc4-a64e-4ac587fff58e" x="0" y="0" width="59" height="30"/>
+									<reportElement uuid="9f421125-43f4-4dc4-a64e-4ac587fff58e" x="0" y="0" width="81" height="30"/>
 									<box leftPadding="1">
 										<topPen lineWidth="1.0"/>
 									</box>
@@ -685,7 +635,7 @@ Quantity]]></text>
 							</jr:columnHeader>
 							<jr:detailCell height="30" rowSpan="1">
 								<textField isStretchWithOverflow="true" pattern="**#,##0.00" isBlankWhenNull="true">
-									<reportElement uuid="3f2985ea-aa13-4908-a0fc-2fde9b0c73c5" x="0" y="0" width="59" height="30" isPrintWhenDetailOverflows="true"/>
+									<reportElement uuid="3f2985ea-aa13-4908-a0fc-2fde9b0c73c5" x="0" y="0" width="81" height="30" isPrintWhenDetailOverflows="true"/>
 									<box leftPadding="1"/>
 									<textElement verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
@@ -713,10 +663,10 @@ Unit]]></text>
 								</textField>
 							</jr:detailCell>
 						</jr:column>
-						<jr:column uuid="28a8fb24-7e96-4609-bb0e-c5a79dd13a06" width="82">
+						<jr:column uuid="28a8fb24-7e96-4609-bb0e-c5a79dd13a06" width="101">
 							<jr:columnHeader height="30" rowSpan="1">
 								<staticText>
-									<reportElement uuid="fcad5906-e9d1-4af1-b5d5-12de8bbb1c75" x="0" y="0" width="81" height="30"/>
+									<reportElement uuid="fcad5906-e9d1-4af1-b5d5-12de8bbb1c75" x="0" y="0" width="101" height="30"/>
 									<box leftPadding="1">
 										<topPen lineWidth="1.0"/>
 									</box>
@@ -727,7 +677,7 @@ FOB in forex]]></text>
 							</jr:columnHeader>
 							<jr:detailCell height="30" rowSpan="1">
 								<textField isStretchWithOverflow="true" pattern="**#,##0.00" isBlankWhenNull="true">
-									<reportElement uuid="080c1bfc-797e-4e6f-9c43-98853cbc2efb" x="0" y="0" width="81" height="30" isPrintWhenDetailOverflows="true"/>
+									<reportElement uuid="080c1bfc-797e-4e6f-9c43-98853cbc2efb" x="0" y="0" width="101" height="30" isPrintWhenDetailOverflows="true"/>
 									<box leftPadding="1"/>
 									<textElement verticalAlignment="Middle"/>
 									<textFieldExpression><![CDATA[$F{fobValue}]]></textFieldExpression>

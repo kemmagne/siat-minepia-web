@@ -1,332 +1,307 @@
 package org.guce.siat.web.reports.vo;
 
+import java.util.List;
+
 /**
  * The Class VtpMinsanteFileVo.
  */
 public class VtpMinsanteFileVo extends AbstractFileVo<VtpMinsanteFileItemVo> {
 
-    /**
-     * The country of origin.
-     */
-    private String countryOfOrigin;
-
-    /**
-     * The country of provenance.
-     */
-    private String countryOfProvenance;
-
-    /**
-     * The provider.
-     */
-    private String provider;
-
-    /**
-     * The invoice.
-     */
-    private String invoice;
-
-    /**
-     * The importer.
-     */
-    private String importer;
-
-    /**
-     * The address.
-     */
-    private String address;
-
-    /**
-     * The profession.
-     */
-    private String profession;
-
-    /**
-     * The code.
-     */
-    private String code;
-
-    private String pharmacistName;
-
-    private String pharmacy;
-
-    private String pharmacyRoad;
-
-    private String pharmacyPoBox;
-
-    private String pharmacyTel;
+    private String supplierName;
+	private String supplierAddress;
+	private String supplierPobox;
+	private String supplierCity;
+	private String supplierCountry;
+	private String supplierMail;
+	private String supplierPhone;
+	private String supplierFax;
+	
+	private String clientName;
+	private String clientAddress;
+	private String clientPobox;
+	private String clientCity;
+	private String clientCountry;
+	private String clientTaxpayerNumber;
+	private String clientMail;
+	private String clientPhone;
+	private String clientInscriptionCode;
+	private String clientInscriptionDate;
+	private String clientInscriptionIssueDate;
 
     private String invoiceNumber;
 
     private String invoiceDate;
 
     private String invoiceAmount;
-
-    private String loadingCustomsOffice;
+	
+	private String customPlace;
 
     private String transportWay;
+	
+	private String currency;
+	
+	private String fobCurrencyValue;
+	
+	private String fobCfaValue;
+	
+	private String totalAmount;
+	
+	private String attestation;
+	
+	private String originCountry;
+	
+	private String destinationCountry;
 
-    private String enterringCustomsOffice;
+	public String getSupplierFax() {
+		return supplierFax;
+	}
 
-    private String expirationDate;
+	public void setSupplierFax(String supplierFax) {
+		this.supplierFax = supplierFax;
+	}
+	
+	public String getSupplierName() {
+		return supplierName;
+	}
 
-    private String supplierName;
+	public void setSupplierName(String supplierName) {
+		this.supplierName = supplierName;
+	}
 
-    private String attestation;
+	public String getSupplierAddress() {
+		return supplierAddress;
+	}
 
-    /**
-     * Gets the country of origin.
-     *
-     * @return the country of origin
-     */
-    public String getCountryOfOrigin() {
-        return countryOfOrigin;
-    }
+	public void setSupplierAddress(String supplierAddress) {
+		this.supplierAddress = supplierAddress;
+	}
 
-    /**
-     * Sets the country of origin.
-     *
-     * @param countryOfOrigin the new country of origin
-     */
-    public void setCountryOfOrigin(final String countryOfOrigin) {
-        this.countryOfOrigin = countryOfOrigin;
-    }
+	public String getSupplierMail() {
+		return supplierMail;
+	}
 
-    /**
-     * Gets the provider.
-     *
-     * @return the provider
-     */
-    public String getProvider() {
-        return provider;
-    }
+	public void setSupplierMail(String supplierMail) {
+		this.supplierMail = supplierMail;
+	}
 
-    /**
-     * Sets the provider.
-     *
-     * @param provider the new provider
-     */
-    public void setProvider(final String provider) {
-        this.provider = provider;
-    }
+	public String getSupplierPhone() {
+		return supplierPhone;
+	}
 
-    /**
-     * Gets the invoice.
-     *
-     * @return the invoice
-     */
-    public String getInvoice() {
-        return invoice;
-    }
+	public void setSupplierPhone(String supplierPhone) {
+		this.supplierPhone = supplierPhone;
+	}
 
-    /**
-     * Sets the invoice.
-     *
-     * @param invoice the new invoice
-     */
-    public void setInvoice(final String invoice) {
-        this.invoice = invoice;
-    }
+	public String getClientName() {
+		return clientName;
+	}
 
-    /**
-     * Gets the country of provenance.
-     *
-     * @return the country of provenance
-     */
-    public String getCountryOfProvenance() {
-        return countryOfProvenance;
-    }
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
+	}
 
-    /**
-     * Sets the country of provenance.
-     *
-     * @param countryOfProvenance the new country of provenance
-     */
-    public void setCountryOfProvenance(final String countryOfProvenance) {
-        this.countryOfProvenance = countryOfProvenance;
-    }
+	public String getClientAddress() {
+		return clientAddress;
+	}
 
-    /**
-     * Gets the importer.
-     *
-     * @return the importer
-     */
-    public String getImporter() {
-        return importer;
-    }
+	public void setClientAddress(String clientAddress) {
+		this.clientAddress = clientAddress;
+	}
 
-    /**
-     * Sets the importer.
-     *
-     * @param importer the new importer
-     */
-    public void setImporter(final String importer) {
-        this.importer = importer;
-    }
+	public String getSupplierPobox() {
+		return supplierPobox;
+	}
 
-    /**
-     * Gets the address.
-     *
-     * @return the address
-     */
-    public String getAddress() {
-        return address;
-    }
+	public void setSupplierPobox(String supplierPobox) {
+		this.supplierPobox = supplierPobox;
+	}
 
-    /**
-     * Sets the address.
-     *
-     * @param address the new address
-     */
-    public void setAddress(final String address) {
-        this.address = address;
-    }
+	public String getSupplierCity() {
+		return supplierCity;
+	}
 
-    /**
-     * Gets the profession.
-     *
-     * @return the profession
-     */
-    public String getProfession() {
-        return profession;
-    }
+	public void setSupplierCity(String supplierCity) {
+		this.supplierCity = supplierCity;
+	}
 
-    /**
-     * Sets the profession.
-     *
-     * @param profession the new profession
-     */
-    public void setProfession(final String profession) {
-        this.profession = profession;
-    }
+	public String getSupplierCountry() {
+		return supplierCountry;
+	}
 
-    /**
-     * Gets the code.
-     *
-     * @return the code
-     */
-    public String getCode() {
-        return code;
-    }
+	public void setSupplierCountry(String supplierCountry) {
+		this.supplierCountry = supplierCountry;
+	}
 
-    /**
-     * Sets the code.
-     *
-     * @param code the new code
-     */
-    public void setCode(final String code) {
-        this.code = code;
-    }
+	public String getClientPobox() {
+		return clientPobox;
+	}
 
-    public String getPharmacistName() {
-        return pharmacistName;
-    }
+	public void setClientPobox(String clientPobox) {
+		this.clientPobox = clientPobox;
+	}
 
-    public void setPharmacistName(String pharmacistName) {
-        this.pharmacistName = pharmacistName;
-    }
+	public String getClientCity() {
+		return clientCity;
+	}
 
-    public String getPharmacy() {
-        return pharmacy;
-    }
+	public void setClientCity(String clientCity) {
+		this.clientCity = clientCity;
+	}
 
-    public void setPharmacy(String pharmacy) {
-        this.pharmacy = pharmacy;
-    }
+	public String getClientCountry() {
+		return clientCountry;
+	}
 
-    public String getPharmacyRoad() {
-        return pharmacyRoad;
-    }
+	public void setClientCountry(String clientCountry) {
+		this.clientCountry = clientCountry;
+	}
 
-    public void setPharmacyRoad(String pharmacyRoad) {
-        this.pharmacyRoad = pharmacyRoad;
-    }
+	public String getClientTaxpayerNumber() {
+		return clientTaxpayerNumber;
+	}
 
-    public String getPharmacyPoBox() {
-        return pharmacyPoBox;
-    }
+	public void setClientTaxpayerNumber(String clientTaxpayerNumber) {
+		this.clientTaxpayerNumber = clientTaxpayerNumber;
+	}
 
-    public void setPharmacyPoBox(String pharmacyPoBox) {
-        this.pharmacyPoBox = pharmacyPoBox;
-    }
+	public String getClientMail() {
+		return clientMail;
+	}
 
-    public String getPharmacyTel() {
-        return pharmacyTel;
-    }
+	public void setClientMail(String clientMail) {
+		this.clientMail = clientMail;
+	}
 
-    public void setPharmacyTel(String pharmacyTel) {
-        this.pharmacyTel = pharmacyTel;
-    }
+	public String getClientPhone() {
+		return clientPhone;
+	}
 
-    public String getInvoiceNumber() {
-        return invoiceNumber;
-    }
+	public void setClientPhone(String clientPhone) {
+		this.clientPhone = clientPhone;
+	}
 
-    public void setInvoiceNumber(String invoiceNumber) {
-        this.invoiceNumber = invoiceNumber;
-    }
+	public String getClientInscriptionCode() {
+		return clientInscriptionCode;
+	}
 
-    public String getInvoiceDate() {
-        return invoiceDate;
-    }
+	public void setClientInscriptionCode(String clientInscriptionCode) {
+		this.clientInscriptionCode = clientInscriptionCode;
+	}
 
-    public void setInvoiceDate(String invoiceDate) {
-        this.invoiceDate = invoiceDate;
-    }
+	public String getClientInscriptionDate() {
+		return clientInscriptionDate;
+	}
 
-    public String getInvoiceAmount() {
-        return invoiceAmount;
-    }
+	public void setClientInscriptionDate(String clientInscriptionDate) {
+		this.clientInscriptionDate = clientInscriptionDate;
+	}
 
-    public void setInvoiceAmount(String invoiceAmount) {
-        this.invoiceAmount = invoiceAmount;
-    }
+	public String getClientInscriptionIssueDate() {
+		return clientInscriptionIssueDate;
+	}
 
-    public String getLoadingCustomsOffice() {
-        return loadingCustomsOffice;
-    }
+	public void setClientInscriptionIssueDate(String clientInscriptionIssueDate) {
+		this.clientInscriptionIssueDate = clientInscriptionIssueDate;
+	}
 
-    public void setLoadingCustomsOffice(String loadingCustomsOffice) {
-        this.loadingCustomsOffice = loadingCustomsOffice;
-    }
+	public String getInvoiceNumber() {
+		return invoiceNumber;
+	}
 
-    public String getTransportWay() {
-        return transportWay;
-    }
+	public void setInvoiceNumber(String invoiceNumber) {
+		this.invoiceNumber = invoiceNumber;
+	}
 
-    public void setTransportWay(String transportWay) {
-        this.transportWay = transportWay;
-    }
+	public String getInvoiceDate() {
+		return invoiceDate;
+	}
 
-    public String getEnterringCustomsOffice() {
-        return enterringCustomsOffice;
-    }
+	public void setInvoiceDate(String invoiceDate) {
+		this.invoiceDate = invoiceDate;
+	}
 
-    public void setEnterringCustomsOffice(String enterringCustomsOffice) {
-        this.enterringCustomsOffice = enterringCustomsOffice;
-    }
+	public String getInvoiceAmount() {
+		return invoiceAmount;
+	}
 
-    public String getExpirationDate() {
-        return expirationDate;
-    }
+	public void setInvoiceAmount(String invoiceAmount) {
+		this.invoiceAmount = invoiceAmount;
+	}
 
-    public void setExpirationDate(String expirationDate) {
-        this.expirationDate = expirationDate;
-    }
+	public String getCustomPlace() {
+		return customPlace;
+	}
 
-    public String getSupplierName() {
-        return supplierName;
-    }
+	public void setCustomPlace(String customPlace) {
+		this.customPlace = customPlace;
+	}
 
-    public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
-    }
+	public String getTransportWay() {
+		return transportWay;
+	}
 
-    public String getAttestation() {
-        return attestation;
-    }
+	public void setTransportWay(String transportWay) {
+		this.transportWay = transportWay;
+	}
 
-    public void setAttestation(String attestation) {
-        this.attestation = attestation;
-    }
+	public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
+
+	public String getFobCurrencyValue() {
+		return fobCurrencyValue;
+	}
+
+	public void setFobCurrencyValue(String fobCurrencyValue) {
+		this.fobCurrencyValue = fobCurrencyValue;
+	}
+
+	public String getFobCfaValue() {
+		return fobCfaValue;
+	}
+
+	public void setFobCfaValue(String fobCfaValue) {
+		this.fobCfaValue = fobCfaValue;
+	}
+
+	public String getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(String totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	public String getAttestation() {
+		return attestation;
+	}
+
+	public void setAttestation(String attestation) {
+		this.attestation = attestation;
+	}
+	
+	public static class VtpMinsanteFileVoRecord{
+		
+	}
+
+	public String getOriginCountry() {
+		return originCountry;
+	}
+
+	public void setOriginCountry(String originCountry) {
+		this.originCountry = originCountry;
+	}
+
+	public String getDestinationCountry() {
+		return destinationCountry;
+	}
+
+	public void setDestinationCountry(String destinationCountry) {
+		this.destinationCountry = destinationCountry;
+	}
 
 }
