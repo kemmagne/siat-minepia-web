@@ -151,10 +151,10 @@ public class VtpMinsanteExporter extends AbstractReportInvoker {
 						case "INFORMATIONS_GENERALES_TERMES_MONTANT_TOTAL_FCFA":
 							vtpMinsanteVo.setFobCfaValue(fileFieldValue.getValue());
 							break;
-						case "PAYS_ORIGINE_LIBELLE":
+						case "INFORMATIONS_GENERALES_PAYS_ORIGINE_NOMPAYS":
 							vtpMinsanteVo.setOriginCountry(fileFieldValue.getValue());
 							break;
-						case "PAYS_PROVENANCE_LIBELLE":
+						case "INFORMATIONS_GENERALES_PAYS_PROVENANCE_NOMPAYS":
 							vtpMinsanteVo.setDestinationCountry(fileFieldValue.getValue());
 							break;
 						case "SIGNATAIRE_DATE":
@@ -175,10 +175,13 @@ public class VtpMinsanteExporter extends AbstractReportInvoker {
 					}
 				}
 			}
-			vtpMinsanteVo.setAttestation(vtpMinsanteVo.getDecisionNumber()
-					+ PREFIX
-					+ new SimpleDateFormat("dd/MM/yyyy").format(signatoryDate == null ? java.util.Calendar.getInstance().getTime()
-							: signatoryDate));
+			vtpMinsanteVo.setAttestation(file.getNumeroDemande());
+//			vtpMinsanteVo.setAttestation(vtpMinsanteVo.getDecisionNumber()
+//					+ PREFIX
+//					+ new SimpleDateFormat("dd/MM/yyyy").format(signatoryDate == null ? java.util.Calendar.getInstance().getTime()
+//							: signatoryDate));
+			
+			
 			vtpMinsanteVo.setSupplierPhone(supplierPhoneCode + supplierPhoneNumber + "/" + supplierMobileCode + supplierMobileNumber);
 			vtpMinsanteVo.setSupplierFax(supplierFaxCode + supplierFaxNumber);
 			if (vtpMinsanteVo.getInvoiceAmount() == null){
