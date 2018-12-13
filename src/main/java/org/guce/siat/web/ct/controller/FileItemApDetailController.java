@@ -114,6 +114,7 @@ import org.guce.siat.common.utils.RepetableUtil;
 import org.guce.siat.common.utils.SiatUtils;
 import org.guce.siat.common.utils.Tab;
 import org.guce.siat.common.utils.ebms.ESBConstants;
+import org.guce.siat.common.utils.ebms.UtilitiesException;
 import org.guce.siat.common.utils.enums.AperakType;
 import org.guce.siat.common.utils.enums.AuthorityConstants;
 import org.guce.siat.common.utils.enums.FileTypeCode;
@@ -155,6 +156,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.xml.sax.SAXException;
 
 /**
  * The Class FileItemApDetailController.
@@ -5296,22 +5298,128 @@ public class FileItemApDetailController implements Serializable {
         return list == null ? java.util.Collections.EMPTY_LIST : list;
     }
 
-    /**
-     * Show error faces message.
-     *
-     * @param bundle the bundle
-     * @param clientId the client id
-     */
-    private static void showErrorFacesMessage(final String bundle, final String clientId) {
-        final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
-                FacesContext.getCurrentInstance().getViewRoot().getLocale()).getString(bundle);
-        if (org.apache.commons.lang3.StringUtils.isEmpty(clientId)) {
-            JsfUtil.addErrorMessage(msg);
-        } else {
-            JsfUtil.addErrorMessage(clientId, msg);
-        }
-        LOG.warn(msg);
-    }
+	/**
+	 * Show error faces message.
+	 *
+	 * @param bundle the bundle
+	 * @param clientId the client id
+	 */
+	private static void showErrorFacesMessage(final String bundle, final String clientId) {
+		final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
+				FacesContext.getCurrentInstance().getViewRoot().getLocale()).getString(bundle);
+		if (org.apache.commons.lang3.StringUtils.isEmpty(clientId)) {
+			JsfUtil.addErrorMessage(msg);
+		} else {
+			JsfUtil.addErrorMessage(clientId, msg);
+		}
+		LOG.warn(msg);
+	}
+	
+	@SuppressWarnings("unused")
+    public void sendMessage() throws JAXBException, IOException, UtilitiesException {
+		try {
+			if (selectedItemFlowDto != null && selectedItemFlowDto.getItemFlow() != null) {
+				Flow currentSelectedFlow = selectedItemFlowDto.getItemFlow().getFlow();
+				final List<FileItem> fileItemList = currentFile.getFileItemsList();
+				final String service = StringUtils.EMPTY;
+				final String documentType = StringUtils.EMPTY;
+				final List<ItemFlow> itemFlowList = itemFlowService.findLastItemFlowsByFileItemList(fileItemList);
+				if (currentSelectedFlow.getOutgoing() != null && currentSelectedFlow.getOutgoing() > 0) {
+					//generate report
+					Map<String, byte[]> attachedByteFiles = null;
+					try {
+						String reportNumber = StringUtils.EMPTY;
+						if (FlowCode.FL_AP_107.name().equals(currentSelectedFlow.getCode()) || FlowCode.FL_AP_169.name().equals(currentSelectedFlow.getCode())) {
+							ItemFlow decisionFlow = null;
+							attachedByteFiles = new HashMap<>();
+
+							final List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<>();
+
+							final List<FileTypeFlowReport> fileTypeFlowReportsList = currentSelectedFlow.getFileTypeFlowReportsList();
+
+							if (fileTypeFlowReportsList != null) {
+
+								for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
+									if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType())) {
+										fileTypeFlowReports.add(fileTypeFlowReport);
+									}
+								}
+							}
+							for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
+								final String nomClasse = fileTypeFlowReport.getReportClassName();
+								@SuppressWarnings("rawtypes")
+								final Class classe = Class.forName(nomClasse);
+								@SuppressWarnings({"rawtypes", "unchecked"})
+
+								final byte[] report = ReportGeneratorUtils.generateReportBytes(fileFieldValueService, classe, currentFile);
+								attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
+
+								final java.io.File targetAttachment = new java.io.File(String.format(
+										applicationPropretiesService.getAttachementFolder() + "%s%s", java.io.File.separator,
+										fileTypeFlowReport.getReportName()));
+
+								final FileOutputStream fileOuputStream = new FileOutputStream(targetAttachment);
+								fileOuputStream.write(report);
+								fileOuputStream.close();
+							}
+						}
+					} catch (final Exception e) {
+						LOG.error("Error occured when loading report: " + e.getMessage(), e);
+						attachedByteFiles = null;
+					}
+
+					// convert file to document
+					final Serializable documentSerializable = xmlConverterService.convertFileToDocument(fileItemList.get(0)
+							.getFile(), currentFile.getFileItemsList(), itemFlowList, currentSelectedFlow);
+
+					// prepare document to send
+					final java.io.File xmlFile = SendDocumentUtils.prepareApDocument(documentSerializable,
+							ebxmlPropertiesService.getEbxmlFolder(), service, documentType);
+					if (CollectionUtils.isNotEmpty(currentSelectedFlow.getCopyRecipientsList())) {
+						final List<CopyRecipient> copyRecipients = currentSelectedFlow.getCopyRecipientsList();
+						for (final CopyRecipient copyRecipient : copyRecipients) {
+							LOG.info("SEND COPY RECIPIENT TO {}", copyRecipient.getToAuthority().getRole());
+							final Map<String, Object> data = new HashMap<String, Object>();
+							final Path path = Paths.get(xmlFile.getAbsolutePath());
+							final byte[] ebxml = Files.readAllBytes(path);
+							data.put(ESBConstants.FLOW, ebxml);
+							data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
+							data.put(ESBConstants.TYPE_DOCUMENT, documentType);
+							data.put(ESBConstants.SERVICE, service);
+							data.put(ESBConstants.MESSAGE, null);
+							data.put(ESBConstants.EBXML_TYPE, "STANDARD");
+							data.put(ESBConstants.TO_PARTY_ID, copyRecipient.getToAuthority().getRole());
+							data.put(ESBConstants.DEAD, "0");
+							fileProducer.sendFile(data);
+							LOG.info("Message sent to OUT queue");
+
+						}
+					} else {
+						final Map<String, Object> data = new HashMap<String, Object>();
+						final Path path = Paths.get(xmlFile.getAbsolutePath());
+						final byte[] ebxml = Files.readAllBytes(path);
+						data.put(ESBConstants.FLOW, ebxml);
+						data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
+						data.put(ESBConstants.TYPE_DOCUMENT, documentType);
+						data.put(ESBConstants.SERVICE, service);
+						data.put(ESBConstants.MESSAGE, null);
+						data.put(ESBConstants.EBXML_TYPE, "STANDARD");
+						data.put(ESBConstants.TO_PARTY_ID, ebxmlPropertiesService.getToPartyId());
+						data.put(ESBConstants.DEAD, "0");
+						fileProducer.sendFile(data);
+						LOG.info("Message sent to OUT queue");
+					}
+
+				}
+				LOG.info("####SEND DECISION Transaction commited####");
+
+			}
+		} catch (SAXException ex) {
+			java.util.logging.Logger.getLogger(FileItemApDetailController.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (ParseException ex) {
+			java.util.logging.Logger.getLogger(FileItemApDetailController.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
 
 }
 
