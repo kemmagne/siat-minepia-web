@@ -116,7 +116,7 @@
                 <p:selectBooleanCheckbox value="#{fileItemCctDetailController.treatmentResult.treatmentPrevention}" id="TreatmentPrevention" />
 
                 <h:outputLabel for="DateHeureDebachage" value="#{bundle['DateHeureDebachage']}" />
-                <p:calendar required="true" navigator="true" value="#{fileItemCctDetailController.treatmentResult.uncoveringDate}" showOn="button"
+                <p:calendar navigator="true" value="#{fileItemCctDetailController.treatmentResult.uncoveringDate}" showOn="button"
                             pattern="dd/MM/yyyy HH:mm" readonlyInput="true" id="DateHeureDebachage" title="#{bundle['TreatmentResultDateTitle']}" />
 
                 <h:outputLabel value="#{bundle['InformationsRiverains']}" for="InformationsRiverains" />
@@ -219,4 +219,5 @@
     </p:scrollPanel>
 
 </ui:composition>
+
 

@@ -8,7 +8,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -260,7 +259,6 @@ public class FileItemCctController extends AbstractController<FileItem> {
                     listUserAuthorityFileTypes = userAuthorityFileTypeService.findUserAuthorityFileTypeByUserList(getLoggedUser()
                             .getMergedDelegatorList());
                 }
-                System.out.println("user authority file types : " + listUserAuthorityFileTypes);
 
                 // Merge the logged user and their delegator users list in the list
                 final Set<Administration> adminList = new HashSet<>();
@@ -273,11 +271,9 @@ public class FileItemCctController extends AbstractController<FileItem> {
                         adminList.add(user.getAdministration());
                     }
                 }
-                System.out.println("admin list : " + adminList);
                 // get the bureaus  for the administration of the logged user and their delegator users
                 final List<Bureau> bureauList = SiatUtils.findCombinedBureausByAdministrationList(new ArrayList<>(
                         adminList));
-                System.out.println("bureau list : " + bureauList);
 
                 items = fileItemService.findFileItemByServiceAndAuthoritiesAndFileType(bureauList, getLoggedUser(),
                         InformationSystemCode.CCT, listUserAuthorityFileTypes);
@@ -289,34 +285,36 @@ public class FileItemCctController extends AbstractController<FileItem> {
                     ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(PERSISTENCE_ERROR_OCCURED));
         }
 
-        if (firstCheck) {
+        if (items != null && firstCheck) {
             Collections.sort(items, new Comparator<FileItem>() {
                 @Override
                 public int compare(final FileItem fi1, final FileItem fi2) {
 
-                    final ItemFlow if1 = itemFlowService.findLastItemFlowByFileItem(fi1);
-                    final ItemFlow if2 = itemFlowService.findLastItemFlowByFileItem(fi2);
-
-                    if (if1.getCreated().getTime() > if2.getCreated().getTime()) {
-                        return 1;
-                    } else if (if1.getCreated().getTime() < if2.getCreated().getTime()) {
-                        return -1;
-                    } else {
-                        return 0;
-                    }
+//                    final ItemFlow if1 = itemFlowService.findLastItemFlowByFileItem(fi1);
+//                    final ItemFlow if2 = itemFlowService.findLastItemFlowByFileItem(fi2);
+//
+                    return fi1.getFile().getLastDecisionDate().compareTo(fi2.getFile().getLastDecisionDate());
+//
+//                    if (if1.getCreated().getTime() > if2.getCreated().getTime()) {
+//                        return 1;
+//                    } else if (if1.getCreated().getTime() < if2.getCreated().getTime()) {
+//                        return -1;
+//                    } else {
+//                        return 0;
+//                    }
                 }
             });
-            final Iterator<FileItem> iter = items.iterator();
-            while (iter.hasNext()) {
-                final FileItem fileItem = iter.next();
-                for (final ItemFlow flow : fileItem.getItemFlowsList()) {
-                    if (fileItem.getStep().equals(flow.getFlow().getToStep())
-                            && !commonService.showEnabledFileItem(fileItem, flow, getLoggedUser())) {
-                        iter.remove();
-                    }
-                }
-            }
-            Collections.reverse(items);
+//            final Iterator<FileItem> iter = items.iterator();
+//            while (iter.hasNext()) {
+//                final FileItem fileItem = iter.next();
+//                for (final ItemFlow flow : fileItem.getItemFlowsList()) {
+//                    if (fileItem.getStep().equals(flow.getFlow().getToStep())
+//                            && !commonService.showEnabledFileItem(fileItem, flow, getLoggedUser())) {
+//                        iter.remove();
+//                    }
+//                }
+//            }
+//            Collections.reverse(items);
             setFirstCheck(false);
         }
         return items;

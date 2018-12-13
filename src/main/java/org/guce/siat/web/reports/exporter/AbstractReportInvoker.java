@@ -15,6 +15,8 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.guce.siat.common.service.FileFieldValueService;
+import org.guce.siat.common.service.FileItemFieldValueService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +40,9 @@ public abstract class AbstractReportInvoker implements ReportCommand {
      * The jasper file name.
      */
     protected String jasperFileName;
+
+    private boolean draft;
+    private FileFieldValueService fileFieldValueService;
 
     /**
      * Instantiates a new jasper report builder.
@@ -65,16 +70,16 @@ public abstract class AbstractReportInvoker implements ReportCommand {
             final HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance()
                     .getExternalContext().getResponse();
 
-            // Provides an output stream for sending binary data
-            final ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream();
-
             //set pdf type
-            httpServletResponse.setContentType("application/pdf");
-            httpServletResponse.setContentLength(bytes.length);
-            httpServletResponse.setHeader("Content-disposition", getPdfFileName());
-            servletOutputStream.write(bytes);
-            servletOutputStream.flush();
-            servletOutputStream.close();
+            try ( // Provides an output stream for sending binary data
+                    ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream()) {
+                //set pdf type
+                httpServletResponse.setContentType("application/pdf");
+                httpServletResponse.setContentLength(bytes.length);
+                httpServletResponse.setHeader("Content-disposition", getPdfFileName());
+                servletOutputStream.write(bytes);
+                servletOutputStream.flush();
+            }
             FacesContext.getCurrentInstance().responseComplete();
         } catch (final JRException | IOException ex) {
             LOG.error(ex.getMessage(), ex);
@@ -90,6 +95,7 @@ public abstract class AbstractReportInvoker implements ReportCommand {
         //Initialize the global parameters we're going to need
         final Map<String, Object> jRParameters = new HashMap<>();
         jRParameters.put("SIAT_LOGO", getRealPath(IMAGES_PATH, SIAT_LOGO, "png"));
+        jRParameters.put("DRAFT", draft);
         return jRParameters;
     }
 
@@ -149,6 +155,22 @@ public abstract class AbstractReportInvoker implements ReportCommand {
      * @return the report data source
      */
     protected abstract JRBeanCollectionDataSource getReportDataSource();
+
+    public boolean isDraft() {
+        return draft;
+    }
+
+    public void setDraft(boolean draft) {
+        this.draft = draft;
+    }
+
+    public FileFieldValueService getFileFieldValueService() {
+        return fileFieldValueService;
+    }
+
+    public void setFileFieldValueService(FileFieldValueService fileFieldValueService) {
+        this.fileFieldValueService = fileFieldValueService;
+    }
 
 }
 

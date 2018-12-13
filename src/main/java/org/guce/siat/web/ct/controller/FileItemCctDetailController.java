@@ -723,7 +723,14 @@ public class FileItemCctDetailController implements Serializable {
     /**
      * The generate report allowed.
      */
+    private boolean generateDraftAllowed;
+
+    /**
+     * The generate report allowed.
+     */
     private Boolean generateReportAllowed;
+
+    private List<FileTypeFlowReport> fileTypeFlowReportsDraft;
 
     private List<FileTypeFlowReport> fileTypeFlowReports;
 
@@ -1109,6 +1116,7 @@ public class FileItemCctDetailController implements Serializable {
         // Initialize and get product recommandations from database
         refreshRecommandationArticleList();
 
+        checkGenerateDraftAllowed();
         checkGenerateReportAllowed();
 
         tabList = new ArrayList<>();
@@ -2459,11 +2467,14 @@ public class FileItemCctDetailController implements Serializable {
                 decisionDiv.getChildren().clear();
             }
 
+            // update the last decision date on file
+            currentFile.setLastDecisionDate(java.util.Calendar.getInstance().getTime());
+            fileService.update(currentFile);
+
             transactionManager.commit(transactionStatus);
             if (LOG.isDebugEnabled()) {
-                LOG.info("####SAVE DECISION Transaction commited####");
+                LOG.debug("####SAVE DECISION Transaction commited####");
             }
-
         } catch (final Exception ex) {
             LOG.error(null, ex);
             showErrorFacesMessage(ex.getMessage(), null);
@@ -2473,23 +2484,25 @@ public class FileItemCctDetailController implements Serializable {
                 LOG.error(Objects.toString(ex1), ex1);
             }
             if (LOG.isDebugEnabled()) {
-                LOG.info("####SAVE DECISION Transaction rollbacked####");
+                LOG.debug("####SAVE DECISION Transaction rollbacked####");
             }
         }
 
         resetDataGridInofrmationProducts();
+        reloadPage();
     }
 
     /**
      * Annuler decisions.
      */
     public void annulerDecisions() {
-        final List<Long> chckedProductInfoChecksList = getCheckedRollBacksFileItemCheckList();
         //
         final DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
         transactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
         final TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
         try {
+            //
+            final List<Long> chckedProductInfoChecksList = getCheckedRollBacksFileItemCheckList();
             if (cotationAllowed == null) {
                 commonService.rollbackDecision(chckedProductInfoChecksList);
 
@@ -2504,10 +2517,8 @@ public class FileItemCctDetailController implements Serializable {
                 // assigned user to the current user
                 if (lastDecisions.getFlow().getIsCota()) {
                     currentFile.setAssignedUser(loggedUser);
-                    fileService.update(currentFile);
                 } else {
                     currentFile.setAssignedUser(null);
-                    fileService.update(currentFile);
                 }
 
                 assignedUserForCotation = null;
@@ -2516,9 +2527,14 @@ public class FileItemCctDetailController implements Serializable {
                 JsfUtil.addSuccessMessage(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
                         .getString(ControllerConstants.Bundle.Messages.ROLL_BACK_SUCCESS));
             }
+
+            // update the last decision date on file
+            currentFile.setLastDecisionDate(currentFileItem.getItemFlowsList().get(0).getCreated());
+            fileService.update(currentFile);
+
             transactionManager.commit(transactionStatus);
             if (LOG.isDebugEnabled()) {
-                LOG.info("####ROLLBACK DECISION Transaction commited####");
+                LOG.debug("####ROLLBACK DECISION Transaction commited####");
             }
         } catch (final Exception ex) {
             showErrorFacesMessage(ControllerConstants.Bundle.Messages.ROLL_BACK_FAIL, null);
@@ -2529,13 +2545,14 @@ public class FileItemCctDetailController implements Serializable {
                 LOG.error(Objects.toString(ex1), ex1);
             }
             if (LOG.isDebugEnabled()) {
-                LOG.info("####ROLLBACK DECISION Transaction rollbacked####");
+                LOG.debug("####ROLLBACK DECISION Transaction rollbacked####");
             }
         }
 
         productInfoItems = disableDraftFromProductInfoItem(productInfoItems);
 
         resetDataGridInofrmationProducts();
+        reloadPage();
 
     }
 
@@ -2916,7 +2933,7 @@ public class FileItemCctDetailController implements Serializable {
                                         fileFieldValueService.save(reportFieldValue);
                                         //End Add new field value with report Number
 
-                                        final byte[] report = getReportBytes(fileTypeFlowReport);
+                                        final byte[] report = getReportBytes(fileTypeFlowReport, false);
 
                                         if (report != null) {
                                             attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
@@ -3889,6 +3906,18 @@ public class FileItemCctDetailController implements Serializable {
     }
 
     /**
+     * Check generate draft allowed.
+     */
+    private void checkGenerateDraftAllowed() {
+        final Flow reportingFlow = flowService.findFlowByCode(FlowCode.FL_CT_08.name());
+        fileTypeFlowReportsDraft = fileTypeFlowReportService
+                .findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getFileType());
+        generateDraftAllowed = sendDecisionAllowed && showDecisionButton
+                && (StepCode.ST_CT_38.equals(currentFileItem.getStep().getStepCode()) || StepCode.ST_CT_31.equals(currentFileItem.getStep().getStepCode()))
+                && CollectionUtils.isNotEmpty(fileTypeFlowReportsDraft);
+    }
+
+    /**
      * Check generate report allowed.
      */
     private void checkGenerateReportAllowed() {
@@ -3902,14 +3931,18 @@ public class FileItemCctDetailController implements Serializable {
     /**
      * Download report.
      *
+     * @param draft
      * @return the streamed content
      */
-    public StreamedContent downloadReport() {
-        if (CollectionUtils.isNotEmpty(fileTypeFlowReports)) {
-            for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
+    public StreamedContent downloadReport(final boolean draft) {
+        final List<FileTypeFlowReport> fileTypeFlowReportsList = draft
+                ? new ArrayList<>(fileTypeFlowReportsDraft)
+                : new ArrayList<>(fileTypeFlowReports);
+        if (CollectionUtils.isNotEmpty(fileTypeFlowReportsList)) {
+            for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
                 //Begin Add new field value with report Number
                 try {
-                    final byte[] report = getReportBytes(fileTypeFlowReport);
+                    final byte[] report = getReportBytes(fileTypeFlowReport, draft);
                     if (report != null) {
                         final InputStream is = new ByteArrayInputStream(report);
                         final StreamedContent fileToDownload = new DefaultStreamedContent(is, "application/pdf",
@@ -6654,13 +6687,14 @@ public class FileItemCctDetailController implements Serializable {
         this.decisionHistoryService = decisionHistoryService;
     }
 
-    private byte[] getReportBytes(FileTypeFlowReport fileTypeFlowReport) throws Exception {
+    private byte[] getReportBytes(final FileTypeFlowReport fileTypeFlowReport, final boolean draft) throws Exception {
         final String nomClasse = fileTypeFlowReport.getReportClassName();
         @SuppressWarnings("rawtypes")
         final Class classe = Class.forName(nomClasse);
         @SuppressWarnings({"rawtypes", "unchecked"})
         Constructor c1;
         byte[] report = null;
+        AbstractReportInvoker reportInvoker = null;
         if (checkMinaderMinistry) {
             switch (currentFile.getFileType().getCode()) {
                 case CCT_CT_E: {
@@ -6668,16 +6702,16 @@ public class FileItemCctDetailController implements Serializable {
                     final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
                     final TreatmentInfos ti = treatmentInfosService.findTreatmentInfosByItemFlow(itemFlow);
                     if (ti.getDelivrableType() == null || "CCT_CT_E".equals(ti.getDelivrableType())) {
-                        report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile, ti, "CERTIFICAT_PHYTOSANITAIRE"));
+                        reportInvoker = (AbstractReportInvoker) c1.newInstance(currentFile, ti, "CERTIFICAT_PHYTOSANITAIRE");
                     } else if ("CQ_CT".equals(ti.getDelivrableType())) {
-                        report = JsfUtil.getReport(new CtCctCqeExporter(currentFile, ti));
+                        reportInvoker = new CtCctCqeExporter(currentFile, ti);
                     }
                     break;
                 }
                 case CCT_CT_E_PVI: {
                     final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
                     final InspectionReport ir = inspectionReportService.findByItemFlow(itemFlow);
-                    report = JsfUtil.getReport(new CtPviExporter(ir));
+                    reportInvoker = new CtPviExporter(ir);
                     break;
                 }
                 case CCT_CT_E_ATP:
@@ -6685,15 +6719,29 @@ public class FileItemCctDetailController implements Serializable {
                     final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
                     final TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
                     if (FileTypeCode.CCT_CT_E_ATP.equals(currentFile.getFileType().getCode())) {
-                        report = JsfUtil.getReport(new CtCctTreatmentExporter("CCT_CT_E_ATP", tr));
+                        reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_ATP", tr);
                     } else {
-                        report = JsfUtil.getReport(new CtCctTreatmentExporter("CCT_CT_E_FSTP", tr));
+                        reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_FSTP", tr);
                     }
                     break;
                 }
             }
+
+            if (reportInvoker != null) {
+                reportInvoker.setDraft(draft);
+                reportInvoker.setFileFieldValueService(fileFieldValueService);
+                report = JsfUtil.getReport(reportInvoker);
+            }
         }
         return report;
+    }
+
+    public boolean isGenerateDraftAllowed() {
+        return generateDraftAllowed;
+    }
+
+    public void setGenerateDraftAllowed(boolean generateDraftAllowed) {
+        this.generateDraftAllowed = generateDraftAllowed;
     }
 
 }

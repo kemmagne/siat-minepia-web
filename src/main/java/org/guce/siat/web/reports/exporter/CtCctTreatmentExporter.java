@@ -1,5 +1,6 @@
 package org.guce.siat.web.reports.exporter;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.guce.siat.common.model.FileFieldValue;
 import org.guce.siat.common.model.FileItem;
 import org.guce.siat.common.model.FileItemFieldValue;
 import org.guce.siat.core.ct.model.TreatmentResult;
+import org.guce.siat.web.ct.controller.util.Utils;
 import static org.guce.siat.web.reports.exporter.ReportCommand.IMAGES_PATH;
 import org.guce.siat.web.reports.vo.CtCctTreatmentFileItemVo;
 import org.guce.siat.web.reports.vo.CtCctTreatmentFileVo;
@@ -133,46 +135,72 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
         treatmentVo.setOtherTreatmentMode(treatmentResult.getOtherTreatmentMode());
         treatmentVo.setSupervisor(treatmentResult.getSupervisor());
 
+        final String productType = getFileFieldValueService()
+                .findValueByFileFieldAndFile("TYPE_PRODUIT_CODE", file).getValue();
+
         final List<FileItem> fileItemList = file.getFileItemsList();
         List<CtCctTreatmentFileItemVo> fileItemVos = new ArrayList<>(fileItemList.size());
         if (CollectionUtils.isNotEmpty(fileItemList)) {
-            CtCctTreatmentFileItemVo fileItemVo;
+
+            BigDecimal itemQuantity = BigDecimal.ZERO;
             for (final FileItem fileItem : fileItemList) {
-                final List<FileItemFieldValue> fileItemFieldValueList = fileItem.getFileItemFieldValueList();
-                fileItemVo = new CtCctTreatmentFileItemVo();
-                if (CollectionUtils.isNotEmpty(fileItemFieldValueList)) {
-                    for (final FileItemFieldValue fileItemFieldValue : fileItemFieldValueList) {
-                        switch (fileItemFieldValue.getFileItemField().getCode()) {
-                            case "QUANTITE_TOTALE":
-                                fileItemVo.setNumber(fileItemFieldValue.getValue());
-                                treatmentVo.setItemQuantity(fileItemFieldValue.getValue());
-                                break;
-                            case "POIDS":
-                                fileItemVo.setWeight(fileItemFieldValue.getValue());
-                                break;
-                            case "VOLUME":
-                                fileItemVo.setVolume(fileItemFieldValue.getValue());
-                                break;
-                            case "NATURE":
-                                fileItemVo.setNature(fileItemFieldValue.getValue());
-                                treatmentVo.setItemNature(fileItemFieldValue.getValue());
-                                break;
-                        }
-                    }
-                }
+
+                final CtCctTreatmentFileItemVo fileItemVo = new CtCctTreatmentFileItemVo();
                 //
                 if (fileItem.getNsh() != null) {
                     fileItemVo.setCode(fileItem.getNsh().getGoodsItemCode());
                 }
-                fileItemVo.setNumber(fileItem.getQuantity());
+
+                final FileItemFieldValue tradeNameFieldValue = getFileFieldValueService()
+                        .findFileItemFieldValueByCodeAndFileItem("NOM_COMMERCIAL", fileItem);
+                if (tradeNameFieldValue != null) {
+                    fileItemVo.setNature(tradeNameFieldValue.getValue());
+                    treatmentVo.setItemNature(tradeNameFieldValue.getValue());
+                }
+
+                final FileItemFieldValue grossWeightFieldValue = getFileFieldValueService()
+                        .findFileItemFieldValueByCodeAndFileItem("POIDS_BRUT", fileItem);
+                if (grossWeightFieldValue != null) {
+                    fileItemVo.setWeight(grossWeightFieldValue.getValue());
+                }
+
+                if (Utils.getCacaProductsTypes().contains(productType)) {
+                    fileItemVo.setWeight(fileItem.getQuantity());
+                    fileItemVo.setNumber(fileItem.getQuantity());
+                } else if (Utils.getWoodProductsTypes().contains(productType)) {
+
+                    final FileItemFieldValue volumeFieldValue = getFileFieldValueService()
+                            .findFileItemFieldValueByCodeAndFileItem("VOLUME", fileItem);
+                    if (volumeFieldValue != null) {
+                        fileItemVo.setVolume(volumeFieldValue.getValue());
+                        fileItemVo.setNumber(volumeFieldValue.getValue());
+                    }
+                } else {
+                    fileItemVo.setNumber(fileItem.getQuantity());
+                }
+
+                itemQuantity = itemQuantity.add(new BigDecimal(fileItemVo.getNumber()));
+
                 fileItemVos.add(fileItemVo);
-                //fileItem.get
+            }
+
+            treatmentVo.setItemQuantity(itemQuantity.toString());
+            if (Utils.getCacaProductsTypes().contains(productType)) {
+                treatmentVo.setItemQuantity(treatmentVo.getItemQuantity().concat(" KG"));
+            } else if (Utils.getCacaProductsTypes().contains(productType)) {
+                treatmentVo.setItemQuantity(treatmentVo.getItemQuantity().concat(" M3"));
+            } else {
+                final FileItemFieldValue unitFieldValue = getFileFieldValueService()
+                        .findFileItemFieldValueByCodeAndFileItem("UNITE", fileItemList.get(0));
+                if (unitFieldValue != null) {
+                    treatmentVo.setItemQuantity(treatmentVo.getItemQuantity().concat(" ")
+                            .concat(unitFieldValue.getValue()));
+                } else {
+                    treatmentVo.setItemQuantity(treatmentVo.getItemQuantity().concat(" KG"));
+                }
             }
         }
         treatmentVo.setFileItemList(fileItemVos);
-        if (treatmentVo.getItemQuantity() == null) {
-            treatmentVo.setItemQuantity(fileItemVos.get(0).getWeight() + " KG");
-        }
 
         return new JRBeanCollectionDataSource(Collections.singleton(treatmentVo));
     }

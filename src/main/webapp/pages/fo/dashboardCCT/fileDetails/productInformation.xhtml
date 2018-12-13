@@ -101,11 +101,17 @@
 
                             <p:commandButton id="sendButton" value="#{bundle['FileItemInformationTitle_send']}" onstart="disableBtn()" styleClass="disBtn"
                                              rendered="#{fileItemCctDetailController.sendDecisionAllowed == 'true' and fileItemCctDetailController.showDecisionButton == 'true'}" onsuccess="enableBtn()"
-                                             actionListener="#{fileItemCctDetailController.sendDecisions}" update=":growl :decisionForm " ajax="false" />
+                                             actionListener="#{fileItemCctDetailController.sendDecisions}" update=":growl :decisionForm" ajax="false" />
+
+                            <p:commandButton ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" id="reportingDraft"
+                                             value="#{bundle['BouttonGenerateDraft']}" styleClass="ui-priority-primary"
+                                             rendered="#{fileItemCctDetailController.generateDraftAllowed}">
+                                <p:fileDownload value="#{fileItemCctDetailController.downloadReport(true)}" />
+                            </p:commandButton>
 
                             <p:commandButton ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" id="reporting"
                                              value="#{bundle['BouttonGenerateReport']}" styleClass="ui-priority-primary" rendered="#{fileItemCctDetailController.generateReportAllowed}">
-                                <p:fileDownload value="#{fileItemCctDetailController.downloadReport()}" />
+                                <p:fileDownload value="#{fileItemCctDetailController.downloadReport(false)}" />
                             </p:commandButton>
                         </f:facet>
 
@@ -136,6 +142,15 @@
     </p:confirmDialog>
 
 </ui:composition>
+
+
+
+
+
+
+
+
+
 
 
 

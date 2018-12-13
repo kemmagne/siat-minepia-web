@@ -208,7 +208,7 @@ public class InspectionReportData implements Serializable {
     /**
      * pulvérisation
      */
-    private String typeTraitement;
+    private ArrayList<String> typeTraitement;
 
     private String etatDateDernierTraitement;
 
@@ -222,7 +222,7 @@ public class InspectionReportData implements Serializable {
      */
     private String dosage;
 
-    private String environnementStockage;
+    private ArrayList<String> environnementStockage;
 
     private String environnementTransport;
 
@@ -943,11 +943,11 @@ public class InspectionReportData implements Serializable {
         this.procedure = procedure;
     }
 
-    public String getTypeTraitement() {
+    public ArrayList<String> getTypeTraitement() {
         return typeTraitement;
     }
 
-    public void setTypeTraitement(String typeTraitement) {
+    public void setTypeTraitement(ArrayList<String> typeTraitement) {
         this.typeTraitement = typeTraitement;
     }
 
@@ -975,11 +975,11 @@ public class InspectionReportData implements Serializable {
         this.dosage = dosage;
     }
 
-    public String getEnvironnementStockage() {
+    public ArrayList<String> getEnvironnementStockage() {
         return environnementStockage;
     }
 
-    public void setEnvironnementStockage(String environnementStockage) {
+    public void setEnvironnementStockage(ArrayList<String> environnementStockage) {
         this.environnementStockage = environnementStockage;
     }
 
@@ -1106,3 +1106,4 @@ public class InspectionReportData implements Serializable {
     }
 
 }
+

@@ -23,9 +23,9 @@
             <p:inputText id="dosage" required="true" value="#{fileItemCctDetailController.inspectionReportData.dosage}" />
 
             <p:outputLabel for="typeTraitement" value="#{bundle['typeTraitement']}" />
-            <p:selectOneMenu id="typeTraitement" required="true" value="#{fileItemCctDetailController.inspectionReportData.typeTraitement}">
+            <p:selectManyMenu id="typeTraitement" required="true" value="#{fileItemCctDetailController.inspectionReportData.typeTraitement}">
                 <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}" var="tt" itemLabel="#{bundle[tt.label]}" itemValue="#{tt.value}" />
-            </p:selectOneMenu>
+            </p:selectManyMenu>
 
             <p:outputLabel for="lastTreatmentDateState" value="#{bundle['lastTreatmentDateState']}" />
             <p:selectOneMenu id="lastTreatmentDateState" required="true" value="#{fileItemCctDetailController.inspectionReportData.etatDateDernierTraitement}">
@@ -33,9 +33,9 @@
             </p:selectOneMenu>
 
             <p:outputLabel for="storageEnv" value="#{bundle['storageEnv']}" />
-            <p:selectOneMenu id="storageEnv" required="true" value="#{fileItemCctDetailController.inspectionReportData.environnementStockage}">
+            <p:selectManyMenu id="storageEnv" required="true" value="#{fileItemCctDetailController.inspectionReportData.environnementStockage}">
                 <f:selectItems value="#{fileItemCctDetailController.pivStorageEnvs}" var="se" itemLabel="#{bundle[se.label]}" itemValue="#{se.value}" />
-            </p:selectOneMenu>
+            </p:selectManyMenu>
 
             <p:outputLabel for="transportEnv" value="#{bundle['transportEnv']}" />
             <p:selectOneMenu id="transportEnv" required="true" value="#{fileItemCctDetailController.inspectionReportData.environnementTransport}">

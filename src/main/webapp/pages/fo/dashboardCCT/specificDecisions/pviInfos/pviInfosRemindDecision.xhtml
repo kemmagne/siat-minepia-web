@@ -18,9 +18,9 @@
         <p:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.dosage}" />
 
         <p:outputLabel value="#{bundle['typeTraitement']}" />
-        <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.typeTraitement}">
+        <p:selectManyMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.typeTraitement}">
             <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}" var="tt" itemLabel="#{bundle[tt.label]}" itemValue="#{tt.value}" />
-        </p:selectOneMenu>
+        </p:selectManyMenu>
 
         <p:outputLabel value="#{bundle['lastTreatmentDateState']}" />
         <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.etatDateDernierTraitement}">
@@ -28,9 +28,9 @@
         </p:selectOneMenu>
 
         <p:outputLabel value="#{bundle['storageEnv']}" />
-        <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.environnementStockage}">
+        <p:selectManyMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.environnementStockage}">
             <f:selectItems value="#{fileItemCctDetailController.pivStorageEnvs}" var="se" itemLabel="#{bundle[se.label]}" itemValue="#{se.value}" />
-        </p:selectOneMenu>
+        </p:selectManyMenu>
 
         <p:outputLabel value="#{bundle['transportEnv']}" />
         <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.environnementTransport}">

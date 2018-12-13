@@ -3,7 +3,6 @@ package org.guce.siat.web.reports.exporter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -96,52 +95,45 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
 
         final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
 
-        String typeProduit = null;
-        String emballage = null;
+        final String productType = getFileFieldValueService()
+                .findValueByFileFieldAndFile("TYPE_PRODUIT_CODE", file).getValue();
+        String emballage = Utils.getProductTypePackaging().get(productType);
 
         if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
             String containersNumbers = null;
-            for (final FileFieldValue fileFieldValue : fileFieldValueList) {
-                switch (fileFieldValue.getFileField().getCode()) {
+            for (final FileFieldValue fileFieldValue1 : fileFieldValueList) {
+                switch (fileFieldValue1.getFileField().getCode()) {
                     case "NUMERO_CT_CCT_CP_E":
-                        ctCctCpEFileVo.setDecisionNumber(fileFieldValue.getValue());
+                        ctCctCpEFileVo.setDecisionNumber(fileFieldValue1.getValue());
                         break;
                     case "INFORMATIONS_GENERALES_LIEU_CHARGEMENT_LIBELLE":
-                        ctCctCpEFileVo.setDeliveryPlace(fileFieldValue.getValue());
+                        ctCctCpEFileVo.setDeliveryPlace(fileFieldValue1.getValue());
                         break;
                     case "INFORMATIONS_GENERALES_TRANSPORT_MODE_TRANSPORT_LIBELLE":
-                        ctCctCpEFileVo.setMeansOfTransport(fileFieldValue.getValue());
+                        ctCctCpEFileVo.setMeansOfTransport(fileFieldValue1.getValue());
                         break;
                     case "INFORMATIONS_GENERALES_LIEU_DECHARGEMENT_LIBELLE":
-                        ctCctCpEFileVo.setPointOfEntry(fileFieldValue.getValue());
+                        ctCctCpEFileVo.setPointOfEntry(fileFieldValue1.getValue());
                         break;
                     case "INFORMATIONS_GENERALES_SIGNATAIRE_NOM":
                         if (ctCctCpEFileVo.getSignatoryName() == null) {
-                            ctCctCpEFileVo.setSignatoryName(fileFieldValue.getValue());
+                            ctCctCpEFileVo.setSignatoryName(fileFieldValue1.getValue());
                         }
                         break;
                     case "DESTINATAIRE_RAISONSOCIALE":
-                        ctCctCpEFileVo.setConsigneeName(fileFieldValue.getValue());
+                        ctCctCpEFileVo.setConsigneeName(fileFieldValue1.getValue());
                         break;
                     case "DESTINATAIRE_ADRESSE_ADRESSE1":
-                        ctCctCpEFileVo.setConsigneeAddress1(fileFieldValue.getValue());
+                        ctCctCpEFileVo.setConsigneeAddress1(fileFieldValue1.getValue());
                         break;
                     case "INSPECTION_CONTENEURS_CONTENEUR":
-                        containersNumbers = fileFieldValue.getValue();
+                        containersNumbers = fileFieldValue1.getValue();
                         break;
                     case "NUMEROS_LOTS":
-                        ctCctCpEFileVo.setLotsNumbers(fileFieldValue.getValue());
+                        ctCctCpEFileVo.setLotsNumbers(fileFieldValue1.getValue());
                         break;
                     case "TYPE_DOSSIER_EGUCE":
-                        ctCctCpEFileVo.setTransit("2".equals(fileFieldValue.getValue()));
-                        break;
-                    case "TYPE_PRODUIT_CODE":
-                        if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
-                            typeProduit = fileFieldValue.getValue();
-                        } else {
-                            typeProduit = "CC";
-                        }
-                        emballage = Utils.getProductTypePackaging().get(typeProduit);
+                        ctCctCpEFileVo.setTransit("2".equals(fileFieldValue1.getValue()));
                         break;
                 }
             }
@@ -166,82 +158,68 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
 
         final List<CtCctCpEFileItemVo> fileItemVos = new ArrayList<>();
 
-        final StringBuilder commoditiesBuilder = new StringBuilder();
         BigDecimal netWeight = BigDecimal.ZERO;
         BigDecimal grossWeight = BigDecimal.ZERO;
-        String mesure = "KG";
 
         if (CollectionUtils.isNotEmpty(fileItemList)) {
+
+            final List<String> commoditiesList = new ArrayList<>();
+
+            String unit = getFileFieldValueService()
+                    .findFileItemFieldValueByCodeAndFileItem("UNITE", fileItemList.get(0)).getValue();
+
+            FileItemFieldValue fileItemFieldValue;
             for (final FileItem fileItem : fileItemList) {
 
-                final String quantity = fileItem.getQuantity();
-                if (StringUtils.isNotBlank(quantity)) {
-                    netWeight = netWeight.add(new BigDecimal(quantity));
+                String comName = "";
+                fileItemFieldValue = getFileFieldValueService()
+                        .findFileItemFieldValueByCodeAndFileItem("NOM_COMMERCIAL", fileItem);
+                if (fileItemFieldValue != null) {
+                    comName = fileItemFieldValue.getValue();
                 }
-
-                final CtCctCpEFileItemVo fileItemVo = new CtCctCpEFileItemVo();
-
-                final List<FileItemFieldValue> fileItemFieldValueList = fileItem.getFileItemFieldValueList();
-
-                if (CollectionUtils.isNotEmpty(fileItemFieldValueList)) {
-                    Collections.sort(fileItemFieldValueList, new Comparator<FileItemFieldValue>() {
-                        @Override
-                        public int compare(FileItemFieldValue o1, FileItemFieldValue o2) {
-                            return ((Long) (o2.getFileItemField().getId() - o1.getFileItemField().getId())).intValue();
-                        }
-                    });
-                    for (final FileItemFieldValue fileItemFieldValue : fileItemFieldValueList) {
-                        switch (fileItemFieldValue.getFileItemField().getCode()) {
-                            case "NOMBRE_SACS":
-                                commoditiesBuilder.append(fileItemFieldValue.getValue()).append(" ").append(emballage).append(" ");
-                                break;
-                            case "NOMBRE_GRUMES":
-                                commoditiesBuilder.append(fileItemFieldValue.getValue()).append(" ").append(emballage).append(" ");
-                                break;
-                            case "NOM_COMMERCIAL":
-                                commoditiesBuilder.append(fileItemFieldValue.getValue()).append("<br/>");
-                                break;
-                            case "UNITE":
-                                mesure = fileItemFieldValue.getValue();
-                                break;
-                            case "VOLUME":
-                                if (StringUtils.isNotBlank(fileItemFieldValue.getValue())) {
-                                    netWeight = netWeight.add(new BigDecimal(fileItemFieldValue.getValue()));
-                                }
-                                break;
-                            case "POIDS_BRUT":
-                                if (StringUtils.isNotBlank(fileItemFieldValue.getValue())) {
-                                    grossWeight = grossWeight.add(new BigDecimal(fileItemFieldValue.getValue()));
-                                }
-                                break;
-                        }
-                    }
+                final String nb;
+                if (Utils.getCacaProductsTypes().contains(productType)) {
+                    nb = getFileFieldValueService()
+                            .findFileItemFieldValueByCodeAndFileItem("NOMBRE_SACS", fileItem).getValue();
+                    netWeight = netWeight.add(new BigDecimal(fileItem.getQuantity()));
+                } else if (Utils.getWoodProductsTypes().contains(productType)) {
+                    nb = getFileFieldValueService()
+                            .findFileItemFieldValueByCodeAndFileItem("NOMBRE_GRUMES", fileItem).getValue();
+                    final String volumeStr = getFileFieldValueService()
+                            .findFileItemFieldValueByCodeAndFileItem("VOLUME", fileItem).getValue();
+                    netWeight = netWeight.add(new BigDecimal(volumeStr));
+                } else {
+                    nb = getFileFieldValueService()
+                            .findFileItemFieldValueByCodeAndFileItem("NOMBRE_SACS", fileItem).getValue();
+                    emballage = unit;
+                    netWeight = netWeight.add(new BigDecimal(fileItem.getQuantity()));
                 }
+                commoditiesList.add(String.format("%s %s %s", nb, emballage, comName));
 
-                fileItemVos.add(fileItemVo);
+                fileItemFieldValue = getFileFieldValueService()
+                        .findFileItemFieldValueByCodeAndFileItem("POIDS_BRUT", fileItem);
+                if (fileItemFieldValue != null) {
+                    grossWeight = grossWeight.add(new BigDecimal(fileItemFieldValue.getValue()));
+                }
             }
 
             final StringBuilder builder = new StringBuilder();
-            if (Utils.getCacaProductsTypes().contains(typeProduit)) {
+            if (Utils.getCacaProductsTypes().contains(productType)) {
                 builder.append("PN : ");
             } else {
                 builder.append("VN : ");
             }
-            builder.append(netWeight);
-            if (Utils.getCacaProductsTypes().contains(typeProduit)) {
-                builder.append(" ").append(mesure);
-            } else {
-                builder.append(" M3");
+            if (Utils.getWoodProductsTypes().contains(productType)) {
+                unit = "M3";
             }
+            builder.append(netWeight).append(" ").append(unit);
             builder.append("<br/>").append("PB : ").append(grossWeight.toString()).append(" KG");
             ctCctCpEFileVo.setQuantities(builder.toString());
+
+            ctCctCpEFileVo.setNames(StringUtils.join(commoditiesList, "<br/>"));
         }
 
         ctCctCpEFileVo.setFileItemList(fileItemVos);
-        final String commoditiesStr = commoditiesBuilder.toString();
-        if (commoditiesStr.endsWith("<br/>")) {
-            ctCctCpEFileVo.setNames(commoditiesStr.substring(0, commoditiesStr.lastIndexOf("<br/>")));
-        }
 
         return new JRBeanCollectionDataSource(Collections.singleton(ctCctCpEFileVo));
     }

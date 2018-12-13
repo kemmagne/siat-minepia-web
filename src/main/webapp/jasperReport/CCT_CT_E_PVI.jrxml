@@ -2,17 +2,18 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PV_INSPECTION_PHYTOSANITAIRE" pageWidth="650" pageHeight="1000" columnWidth="610" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="815c4d67-1776-454d-b1df-c04d5a7d281b">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="460"/>
+	<property name="ireport.y" value="112"/>
 	<parameter name="MINADER_LOGO" class="java.lang.String">
-		<defaultValueExpression><![CDATA["C:\\Users\\tadzotsa\\NetBeansProjects\\siat-ct-web\\src\\main\\webapp\\images\\reports\\minader.jpg"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
+	<parameter name="DRAFT" class="java.lang.Boolean"/>
 	<field name="observations" class="java.lang.String"/>
 	<field name="signatairePVIPhyto" class="java.lang.String"/>
-	<field name="typeTraitement" class="java.lang.String"/>
+	<field name="typeTraitement" class="java.util.List"/>
 	<field name="etatDateDernierTraitement" class="java.lang.String"/>
 	<field name="produitUtilise" class="java.lang.String"/>
 	<field name="dosage" class="java.lang.String"/>
-	<field name="environnementStockage" class="java.lang.String"/>
+	<field name="environnementStockage" class="java.util.List"/>
 	<field name="environnementTransport" class="java.lang.String"/>
 	<field name="conditionClimatique" class="java.lang.String"/>
 	<field name="mesureProtection" class="java.lang.String"/>
@@ -27,7 +28,29 @@
 	<field name="pviQuantite" class="java.lang.String"/>
 	<field name="pviDispositionsPrises" class="java.lang.String"/>
 	<background>
-		<band splitType="Stretch"/>
+		<band height="802" splitType="Stretch">
+			<printWhenExpression><![CDATA[$P{DRAFT}]]></printWhenExpression>
+			<image>
+				<reportElement x="20" y="10" width="130" height="103" uuid="0341a0e0-fde0-4019-8297-da8ef5c36043"/>
+				<imageExpression><![CDATA["../images/reports/draft.jpg"]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame">
+				<reportElement x="30" y="153" width="514" height="521" uuid="47671639-7451-43e9-9ee9-40466f2734e7"/>
+				<imageExpression><![CDATA["../images/reports/draft.jpg"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="445" y="10" width="130" height="103" uuid="0341a0e0-fde0-4019-8297-da8ef5c36043"/>
+				<imageExpression><![CDATA["../images/reports/draft.jpg"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="480" y="699" width="130" height="103" uuid="0341a0e0-fde0-4019-8297-da8ef5c36043"/>
+				<imageExpression><![CDATA["../images/reports/draft.jpg"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="2" y="699" width="130" height="103" uuid="0341a0e0-fde0-4019-8297-da8ef5c36043"/>
+				<imageExpression><![CDATA["../images/reports/draft.jpg"]]></imageExpression>
+			</image>
+		</band>
 	</background>
 	<title>
 		<band height="184" splitType="Stretch">
@@ -109,14 +132,14 @@ DEPARTEMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCT
 				<text><![CDATA[Conformément à <b>l'article 28 de la loi n°2003/003 du 23 Avril 2003</b> portant Protection Phytosanitaire et aux dispositions des <b>articles 6 et 21 du décret n°2005/0771/PM du 06 Avril 2005</b> fixant les modalités d'exécution des opérations de quarantaine végétale.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="280" width="144" height="15" uuid="a8e81e47-b404-4ba6-951e-ecfe4d498a4a"/>
+				<reportElement x="0" y="280" width="157" height="15" uuid="a8e81e47-b404-4ba6-951e-ecfe4d498a4a"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
 				<text><![CDATA[Type de traitement effectué :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="20" y="295" width="70" height="15" uuid="35d6f8ad-6093-4b2a-a9c0-9aad620c6067"/>
+				<reportElement x="20" y="295" width="80" height="15" uuid="35d6f8ad-6093-4b2a-a9c0-9aad620c6067"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
@@ -144,7 +167,7 @@ DEPARTEMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCT
 				<text><![CDATA[chaleur]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="360" y="280" width="146" height="15" uuid="35d6f8ad-6093-4b2a-a9c0-9aad620c6067"/>
+				<reportElement x="360" y="280" width="184" height="15" uuid="35d6f8ad-6093-4b2a-a9c0-9aad620c6067"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
@@ -207,7 +230,7 @@ DEPARTEMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCT
 				<text><![CDATA[Environnement de transport :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="360" width="144" height="15" uuid="a8e81e47-b404-4ba6-951e-ecfe4d498a4a"/>
+				<reportElement x="0" y="360" width="170" height="15" uuid="a8e81e47-b404-4ba6-951e-ecfe4d498a4a"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
@@ -344,7 +367,7 @@ DEPARTEMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCT
 			</textField>
 			<staticText>
 				<reportElement x="0" y="295" width="15" height="15" uuid="a3b01a06-28ea-4109-a860-2cabc7f4ffc5">
-					<printWhenExpression><![CDATA["PULVERISATION".equalsIgnoreCase($F{typeTraitement})]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{typeTraitement} != null && $F{typeTraitement}.contains("PULVERISATION")]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="11"/>
@@ -353,7 +376,7 @@ DEPARTEMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCT
 			</staticText>
 			<staticText>
 				<reportElement x="110" y="295" width="15" height="15" uuid="b1544395-c04b-4a5d-af28-4df68a88c434">
-					<printWhenExpression><![CDATA["TREMPAGE".equalsIgnoreCase($F{typeTraitement})]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{typeTraitement} != null && $F{typeTraitement}.contains("TREMPAGE")]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="11"/>
@@ -362,7 +385,7 @@ DEPARTEMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCT
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="310" width="15" height="15" uuid="8970e7f8-b04c-4348-8e26-1e84b0f628e5">
-					<printWhenExpression><![CDATA["FUMIGRATION".equalsIgnoreCase($F{typeTraitement})]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{typeTraitement} != null && $F{typeTraitement}.contains("FUMIGRATION")]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="11"/>
@@ -371,7 +394,7 @@ DEPARTEMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCT
 			</staticText>
 			<staticText>
 				<reportElement x="110" y="310" width="15" height="15" uuid="bf11125d-51e1-4c99-9284-7e1c5694dad3">
-					<printWhenExpression><![CDATA["CHALEUR".equalsIgnoreCase($F{typeTraitement})]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{typeTraitement} != null && $F{typeTraitement}.contains("CHALEUR")]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="11"/>
@@ -398,7 +421,7 @@ DEPARTEMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCT
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="375" width="15" height="15" uuid="cdb2d598-16ef-4e65-aef4-69187126dc45">
-					<printWhenExpression><![CDATA["AIR_LIBRE".equalsIgnoreCase($F{environnementStockage})]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{environnementStockage} != null && $F{environnementStockage}.contains("AIR_LIBRE")]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="11"/>
@@ -407,7 +430,7 @@ DEPARTEMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCT
 			</staticText>
 			<staticText>
 				<reportElement x="85" y="375" width="15" height="15" uuid="82aa5623-6f2b-4c7e-863c-6888add7f8ef">
-					<printWhenExpression><![CDATA["MAGASIN".equalsIgnoreCase($F{environnementStockage})]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{environnementStockage} != null && $F{environnementStockage}.contains("MAGASIN")]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="11"/>
@@ -416,7 +439,7 @@ DEPARTEMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCT
 			</staticText>
 			<staticText>
 				<reportElement x="180" y="375" width="15" height="15" uuid="eb6021a6-d024-498f-b64b-0af67e2a8d23">
-					<printWhenExpression><![CDATA["CONTENEUR".equalsIgnoreCase($F{environnementStockage})]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{environnementStockage} != null && $F{environnementStockage}.contains("CONTENEUR")]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="11"/>
