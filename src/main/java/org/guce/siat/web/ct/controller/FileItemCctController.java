@@ -293,14 +293,17 @@ public class FileItemCctController extends AbstractController<FileItem> {
                     final File file1 = fileItem1.getFile();
                     final File file2 = fileItem2.getFile();
 
-                    final Date lastDecisionDate1 = file1.getLastDecisionDate();
-                    final Date lastDecisionDate2 = file2.getLastDecisionDate();
-
-                    if (lastDecisionDate1 != null && lastDecisionDate2 != null) {
-                        return lastDecisionDate1.compareTo(lastDecisionDate2);
-                    } else {
-                        return file1.getCreatedDate().compareTo(file2.getCreatedDate());
+                    Date lastDecisionDate1 = file1.getLastDecisionDate();
+                    if (lastDecisionDate1 == null) {
+                        lastDecisionDate1 = file1.getCreatedDate();
                     }
+
+                    Date lastDecisionDate2 = file2.getLastDecisionDate();
+                    if (lastDecisionDate2 == null) {
+                        lastDecisionDate2 = file2.getCreatedDate();
+                    }
+
+                    return lastDecisionDate1.compareTo(lastDecisionDate2);
                 }
             });
             setFirstCheck(false);
