@@ -288,33 +288,21 @@ public class FileItemCctController extends AbstractController<FileItem> {
         if (items != null && firstCheck) {
             Collections.sort(items, new Comparator<FileItem>() {
                 @Override
-                public int compare(final FileItem fi1, final FileItem fi2) {
+                public int compare(final FileItem fileItem1, final FileItem fileItem2) {
 
-//                    final ItemFlow if1 = itemFlowService.findLastItemFlowByFileItem(fi1);
-//                    final ItemFlow if2 = itemFlowService.findLastItemFlowByFileItem(fi2);
-//
-                    return fi1.getFile().getLastDecisionDate().compareTo(fi2.getFile().getLastDecisionDate());
-//
-//                    if (if1.getCreated().getTime() > if2.getCreated().getTime()) {
-//                        return 1;
-//                    } else if (if1.getCreated().getTime() < if2.getCreated().getTime()) {
-//                        return -1;
-//                    } else {
-//                        return 0;
-//                    }
+                    final File file1 = fileItem1.getFile();
+                    final File file2 = fileItem2.getFile();
+
+                    final Date lastDecisionDate1 = file1.getLastDecisionDate();
+                    final Date lastDecisionDate2 = file2.getLastDecisionDate();
+
+                    if (lastDecisionDate1 != null && lastDecisionDate2 != null) {
+                        return lastDecisionDate1.compareTo(lastDecisionDate2);
+                    } else {
+                        return file1.getCreatedDate().compareTo(file2.getCreatedDate());
+                    }
                 }
             });
-//            final Iterator<FileItem> iter = items.iterator();
-//            while (iter.hasNext()) {
-//                final FileItem fileItem = iter.next();
-//                for (final ItemFlow flow : fileItem.getItemFlowsList()) {
-//                    if (fileItem.getStep().equals(flow.getFlow().getToStep())
-//                            && !commonService.showEnabledFileItem(fileItem, flow, getLoggedUser())) {
-//                        iter.remove();
-//                    }
-//                }
-//            }
-//            Collections.reverse(items);
             setFirstCheck(false);
         }
         return items;

@@ -444,7 +444,15 @@ public class FileItemApController extends AbstractController<FileItem> {
             Collections.sort(filesList, new Comparator<File>() {
                 @Override
                 public int compare(File file1, File file2) {
-                    return file1.getLastDecisionDate().compareTo(file2.getLastDecisionDate());
+
+                    final Date lastDecisionDate1 = file1.getLastDecisionDate();
+                    final Date lastDecisionDate2 = file2.getLastDecisionDate();
+
+                    if (lastDecisionDate1 != null && lastDecisionDate2 != null) {
+                        return lastDecisionDate1.compareTo(lastDecisionDate2);
+                    } else {
+                        return file1.getCreatedDate().compareTo(file2.getCreatedDate());
+                    }
                 }
             });
         }
