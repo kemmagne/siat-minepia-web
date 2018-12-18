@@ -1,5 +1,6 @@
 package org.guce.siat.web.reports.exporter;
 
+import java.io.ByteArrayInputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import org.guce.siat.common.model.File;
 import org.guce.siat.common.model.FileFieldValue;
 import org.guce.siat.common.model.FileItem;
 import org.guce.siat.common.model.FileItemFieldValue;
+import org.guce.siat.common.utils.QRCodeUtils;
 import org.guce.siat.web.reports.vo.VtpMinsanteFileItemVo;
 import org.guce.siat.web.reports.vo.VtpMinsanteFileVo;
 import org.slf4j.Logger;
@@ -222,6 +224,13 @@ public class VtpMinsanteExporter extends AbstractReportInvoker {
 			}
 		
 		}
+		
+		String qrContent = "N° Dossier : " + file.getNumeroDemande() +
+				" N° Facture : " + vtpMinsanteVo.getInvoiceNumber() +
+				" Date facture : " + vtpMinsanteVo.getInvoiceDate() + 
+				" Importateur : " + vtpMinsanteVo.getClientName() + 
+				" Fournisseur : " + vtpMinsanteVo.getSupplierName();
+		vtpMinsanteVo.setQrCode(new ByteArrayInputStream(QRCodeUtils.generateQR(qrContent, 512)));
 
 		return new JRBeanCollectionDataSource(Collections.singleton(vtpMinsanteVo));
 	}
@@ -236,6 +245,7 @@ public class VtpMinsanteExporter extends AbstractReportInvoker {
 	protected Map<String, Object> getJRParameters() {
 		final Map<String, Object> jRParameters = super.getJRParameters();
 		jRParameters.put("MINSANTE_LOGO", getRealPath(IMAGES_PATH, "minsante", "jpg"));
+		jRParameters.put("QR_CODE", getRealPath(IMAGES_PATH, "minsante", "jpg"));
 		return jRParameters;
 	}
 
