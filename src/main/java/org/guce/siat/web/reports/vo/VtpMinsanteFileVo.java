@@ -1,6 +1,7 @@
 package org.guce.siat.web.reports.vo;
 
 import java.io.ByteArrayInputStream;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -54,6 +55,8 @@ public class VtpMinsanteFileVo extends AbstractFileVo<VtpMinsanteFileItemVo> {
 	private String destinationCountry;
 	
 	private ByteArrayInputStream qrCode;
+	
+	private String signatoryDate;
 
 	public String getSupplierFax() {
 		return supplierFax;
@@ -313,6 +316,14 @@ public class VtpMinsanteFileVo extends AbstractFileVo<VtpMinsanteFileItemVo> {
 
 	public void setQrCode(ByteArrayInputStream qrCode) {
 		this.qrCode = qrCode;
+	}
+
+	public String getSignatoryDate() {
+		return signatoryDate;
+	}
+
+	public void setSignatoryDate(String signatoryDate) {
+		this.signatoryDate = signatoryDate;
 	}
 
 }

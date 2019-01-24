@@ -160,14 +160,14 @@ public class VtpMinsanteExporter extends AbstractReportInvoker {
 							vtpMinsanteVo.setDestinationCountry(fileFieldValue.getValue());
 							break;
 						case "SIGNATAIRE_DATE":
-							if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
-								try {
-									signatoryDate = new SimpleDateFormat("dd/MM/yyyy").parse(fileFieldValue.getValue());
-								} catch (final ParseException e) {
-									LOG.error(Objects.toString(e), e);
-								}
-							}
-
+							vtpMinsanteVo.setSignatoryDate(fileFieldValue.getValue());
+//							if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
+//								try {
+////									vtpMinsanteVo.setSignatoryDate(new SimpleDateFormat("dd/MM/yyyy").parse(fileFieldValue.getValue()));
+//								} catch (final ParseException e) {
+//									LOG.error(Objects.toString(e), e);
+//								}
+//							}
 							break;
 						case "SIGNATAIRE_LIEU":
 							vtpMinsanteVo.setDecisionPlace(fileFieldValue.getValue());
