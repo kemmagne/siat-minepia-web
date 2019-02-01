@@ -82,8 +82,8 @@
                 <db.password>siat</db.password>
                 <!--<db.url>jdbc:oracle:thin:@siatserverdev:1510:GUCE</db.url>-->
                 <db.url>jdbc:oracle:thin:@yserver:1521:XE</db.url>
-                <ged.url>http://guce.preprod:8080</ged.url>
-                <!--<ged.url>http://gedurl:48080</ged.url>-->
+                <ged.url>http://guce.preprod:17483</ged.url>
+                <!--<ged.url>http://gedurl:8080</ged.url>-->
                 <jms.url>failover:(tcp://brokerurl:61616)</jms.url>
                 <version>${application.version}</version>
                 <ged.username>admin</ged.username>
