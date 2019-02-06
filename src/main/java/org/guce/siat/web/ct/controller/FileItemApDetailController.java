@@ -1101,7 +1101,8 @@ public class FileItemApDetailController implements Serializable {
             JsfUtil.addWarningMessage("Selectionnez la pièce à télécharger");
             return null;
         }
-        final Session sessionCmisClient = CmisSession.getInstance();
+		try {
+			final Session sessionCmisClient = CmisSession.getInstance();
         ContentStream contentStream = CmisClient.getDocumentByPath(sessionCmisClient, getSelectedAttachment().getPath()
                 + AlfrescoDirectoriesInitializer.SLASH + getSelectedAttachment().getDocumentName());
         if (contentStream == null) {
@@ -1126,6 +1127,12 @@ public class FileItemApDetailController implements Serializable {
         final byte[] bytes = out.toByteArray();
 
         return new DefaultStreamedContent(new ByteArrayInputStream(bytes), !StringUtils.isEmpty(contentStream.getMimeType()) ? contentStream.getMimeType() : "application/msword", selectedAttachment.getDocumentName());
+		} catch(Exception e){
+			JsfUtil.addErrorMessage("Impossible de télécharger la pièce jointe");
+			LOG.error(e.getMessage(), e);
+		}
+		
+		return null;
     }
 
     public byte[] getBytesFromAttachment(Attachment att) {
