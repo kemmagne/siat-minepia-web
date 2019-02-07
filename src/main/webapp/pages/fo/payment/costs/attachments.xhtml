@@ -36,13 +36,13 @@
                             </f:facet>
                             <h:outputText value="#{item.attachmentType}" />
                         </p:column>
-                        <ui:remove>
+                        <!--<ui:remove>-->
                             <p:column  style="width:20%" >
                                 <p:commandButton ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" id="testreporting" value="#{bundle['Telecharger']}" icon="ui-icon-arrowthick-1-s">
                                     <p:fileDownload value="#{fileItemApDetailController.downloadAttachment()}" />
                                 </p:commandButton>
                             </p:column>
-                        </ui:remove>
+                        <!--</ui:remove>-->
                     </p:dataTable>
 
                         </p:outputPanel>

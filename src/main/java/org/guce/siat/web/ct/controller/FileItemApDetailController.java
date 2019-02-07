@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -834,6 +835,8 @@ public class FileItemApDetailController implements Serializable {
      * The name of the field vaidity Date
      */
     final static String validityDateFieldName = "DATE_VALIDITE";
+	
+	final static String SIGNATAIRE_DATE_FIELD_NAME = "SIGNATAIRE_DATE";
 
     /**
      * Gets the transaction manager.
@@ -1098,7 +1101,8 @@ public class FileItemApDetailController implements Serializable {
             JsfUtil.addWarningMessage("Selectionnez la pièce à télécharger");
             return null;
         }
-        final Session sessionCmisClient = CmisSession.getInstance();
+		try {
+			final Session sessionCmisClient = CmisSession.getInstance();
         ContentStream contentStream = CmisClient.getDocumentByPath(sessionCmisClient, getSelectedAttachment().getPath()
                 + AlfrescoDirectoriesInitializer.SLASH + getSelectedAttachment().getDocumentName());
         if (contentStream == null) {
@@ -1123,6 +1127,12 @@ public class FileItemApDetailController implements Serializable {
         final byte[] bytes = out.toByteArray();
 
         return new DefaultStreamedContent(new ByteArrayInputStream(bytes), !StringUtils.isEmpty(contentStream.getMimeType()) ? contentStream.getMimeType() : "application/msword", selectedAttachment.getDocumentName());
+		} catch(Exception e){
+			JsfUtil.addErrorMessage("Impossible de télécharger la pièce jointe");
+			LOG.error(e.getMessage(), e);
+		}
+		
+		return null;
     }
 
     public byte[] getBytesFromAttachment(Attachment att) {
@@ -2245,8 +2255,6 @@ public class FileItemApDetailController implements Serializable {
                         String service = StringUtils.EMPTY;
                         String documentType = StringUtils.EMPTY;
                         final Flow flowToSend = map.get(fileItemList.get(0));
-                        System.out.println("executedFlow : " + executedFlow.toString());
-                        System.out.println("flowToSend : " + flowToSend.toString());
                         //generate report
                         Map<String, byte[]> attachedByteFiles = null;
                         try {
@@ -2281,6 +2289,22 @@ public class FileItemApDetailController implements Serializable {
                                     }
                                 }
                                 if (decisionFlow != null) {
+									// Persist SIGNATAIRE_DATE
+									FileField signataireDateFileField = fileFieldService.findFileFieldByCodeAndFileType(SIGNATAIRE_DATE_FIELD_NAME, currentFile.getFileType().getCode());
+									if (signataireDateFileField != null && decisionFlow.getCreated() != null){
+										FileFieldValue signataireDateFieldValue = fileFieldValueService.findValueByFileFieldAndFile(signataireDateFileField.getCode(), currentFile);
+										if (signataireDateFieldValue != null){
+											signataireDateFieldValue.setValue(new SimpleDateFormat("dd/MM/yyyy").format(decisionFlow.getCreated()));
+											fileFieldValueService.update(signataireDateFieldValue);
+										} else {
+											signataireDateFieldValue = new FileFieldValue();
+											signataireDateFieldValue.setFile(currentFile);
+											signataireDateFieldValue.setFileField(signataireDateFileField);
+											signataireDateFieldValue.setValue(new SimpleDateFormat("dd/MM/yyyy").format(decisionFlow.getCreated()));
+											currentFile.getFileFieldValueList().add(signataireDateFieldValue);
+											fileFieldValueService.save(signataireDateFieldValue);
+										}
+									}
                                     final List<ItemFlowData> itemFlowDataList = decisionFlow.getItemFlowsDataList();
                                     for (final ItemFlowData ifd : itemFlowDataList) {
                                         if (ifd.getDataType().getLabel().equalsIgnoreCase("Date validité")) {
