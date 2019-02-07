@@ -208,7 +208,7 @@ public class InspectionReportData implements Serializable {
     /**
      * pulvérisation
      */
-    private ArrayList<String> typeTraitement;
+    private List<String> treatmentTypesList;
 
     private String etatDateDernierTraitement;
 
@@ -222,7 +222,7 @@ public class InspectionReportData implements Serializable {
      */
     private String dosage;
 
-    private ArrayList<String> environnementStockage;
+    private List<String> storageEnvsList;
 
     private String environnementTransport;
 
@@ -286,11 +286,11 @@ public class InspectionReportData implements Serializable {
                 inspectionReport.setProcedure(this.procedure);
                 inspectionReport.setProcessAnalyse(this.processAnalyse);
                 //
-                inspectionReport.setTypeTraitement(typeTraitement);
+                inspectionReport.setTreatmentTypesList(treatmentTypesList);
                 inspectionReport.setEtatDateDernierTraitement(etatDateDernierTraitement);
                 inspectionReport.setProduitUtilise(produitUtilise);
                 inspectionReport.setDosage(dosage);
-                inspectionReport.setEnvironnementStockage(environnementStockage);
+                inspectionReport.setStorageEnvsList(storageEnvsList);
                 inspectionReport.setEnvironnementTransport(environnementTransport);
                 inspectionReport.setConditionClimatique(conditionClimatique);
                 inspectionReport.setMesureProtection(mesureProtection);
@@ -372,11 +372,11 @@ public class InspectionReportData implements Serializable {
             inspectionReport.setProcedure(this.procedure);
             inspectionReport.setProcessAnalyse(this.processAnalyse);
             //
-            inspectionReport.setTypeTraitement(typeTraitement);
+            inspectionReport.setTreatmentTypesList(treatmentTypesList);
             inspectionReport.setEtatDateDernierTraitement(etatDateDernierTraitement);
             inspectionReport.setProduitUtilise(produitUtilise);
             inspectionReport.setDosage(dosage);
-            inspectionReport.setEnvironnementStockage(environnementStockage);
+            inspectionReport.setStorageEnvsList(storageEnvsList);
             inspectionReport.setEnvironnementTransport(environnementTransport);
             inspectionReport.setConditionClimatique(conditionClimatique);
             inspectionReport.setMesureProtection(mesureProtection);
@@ -943,12 +943,12 @@ public class InspectionReportData implements Serializable {
         this.procedure = procedure;
     }
 
-    public ArrayList<String> getTypeTraitement() {
-        return typeTraitement;
+    public List<String> getTreatmentTypesList() {
+        return treatmentTypesList;
     }
 
-    public void setTypeTraitement(ArrayList<String> typeTraitement) {
-        this.typeTraitement = typeTraitement;
+    public void setTreatmentTypesList(List<String> treatmentTypesList) {
+        this.treatmentTypesList = treatmentTypesList;
     }
 
     public String getEtatDateDernierTraitement() {
@@ -975,12 +975,12 @@ public class InspectionReportData implements Serializable {
         this.dosage = dosage;
     }
 
-    public ArrayList<String> getEnvironnementStockage() {
-        return environnementStockage;
+    public List<String> getStorageEnvsList() {
+        return storageEnvsList;
     }
 
-    public void setEnvironnementStockage(ArrayList<String> environnementStockage) {
-        this.environnementStockage = environnementStockage;
+    public void setStorageEnvsList(List<String> storageEnvsList) {
+        this.storageEnvsList = storageEnvsList;
     }
 
     public String getEnvironnementTransport() {

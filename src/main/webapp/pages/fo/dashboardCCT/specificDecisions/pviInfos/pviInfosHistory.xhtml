@@ -18,7 +18,7 @@
         <p:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.dosage}" />
 
         <p:outputLabel value="#{bundle['typeTraitement']}" />
-        <p:selectManyMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.typeTraitement}">
+        <p:selectManyMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.treatmentTypesList}">
             <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}" var="tt" itemLabel="#{bundle[tt.label]}" itemValue="#{tt.value}" />
         </p:selectManyMenu>
 
@@ -28,7 +28,7 @@
         </p:selectOneMenu>
 
         <p:outputLabel value="#{bundle['storageEnv']}" />
-        <p:selectManyMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.environnementStockage}">
+        <p:selectManyMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.storageEnvsList}">
             <f:selectItems value="#{fileItemCctDetailController.pivStorageEnvs}" var="se" itemLabel="#{bundle[se.label]}" itemValue="#{se.value}" />
         </p:selectManyMenu>
 

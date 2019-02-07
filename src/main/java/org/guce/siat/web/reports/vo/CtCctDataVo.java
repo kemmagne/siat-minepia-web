@@ -1,6 +1,5 @@
 package org.guce.siat.web.reports.vo;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -288,7 +287,7 @@ public class CtCctDataVo {
     /**
      * pulvérisation
      */
-    private ArrayList<String> typeTraitement;
+    private List<String> typeTraitement;
 
     private String etatDateDernierTraitement;
 
@@ -302,7 +301,7 @@ public class CtCctDataVo {
      */
     private String dosage;
 
-    private ArrayList<String> environnementStockage;
+    private List<String> environnementStockage;
 
     private String environnementTransport;
 
@@ -1020,11 +1019,11 @@ public class CtCctDataVo {
         this.controller2 = controller2;
     }
 
-    public ArrayList<String> getTypeTraitement() {
+    public List<String> getTypeTraitement() {
         return typeTraitement;
     }
 
-    public void setTypeTraitement(ArrayList<String> typeTraitement) {
+    public void setTypeTraitement(List<String> typeTraitement) {
         this.typeTraitement = typeTraitement;
     }
 
@@ -1052,11 +1051,11 @@ public class CtCctDataVo {
         this.dosage = dosage;
     }
 
-    public ArrayList<String> getEnvironnementStockage() {
+    public List<String> getEnvironnementStockage() {
         return environnementStockage;
     }
 
-    public void setEnvironnementStockage(ArrayList<String> environnementStockage) {
+    public void setEnvironnementStockage(List<String> environnementStockage) {
         this.environnementStockage = environnementStockage;
     }
 

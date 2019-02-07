@@ -2351,7 +2351,7 @@ public class FileItemCctDetailController implements Serializable {
                 }
             } else if (isPviReadyForSignature(selectedFlow)) {
                 final List<InspectionReport> inspectionReports = inspectionReportData.transformToReportList(null);
-                commonService.takeDecisionAndSaveInspectionReports(inspectionReports, itemFlowsToAdd);
+                commonService.takeDecisionAndSaveInspectionReport(inspectionReports.get(0), itemFlowsToAdd);
             } // Saisie Constat
             else if (CONSTAT_FLOW_LIST.contains(selectedFlow.getCode())) {
                 final Appointment appointment = appointmentService.findAppoitmentByFileItemAndController(productInfoItemsEnabled,
@@ -2503,7 +2503,7 @@ public class FileItemCctDetailController implements Serializable {
         try {
             //
             final List<Long> chckedProductInfoChecksList = getCheckedRollBacksFileItemCheckList();
-            if (cotationAllowed == null) {
+            if (!BooleanUtils.toBoolean(cotationAllowed)) {
                 commonService.rollbackDecision(chckedProductInfoChecksList);
 
                 JsfUtil.addSuccessMessage(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
@@ -3153,6 +3153,8 @@ public class FileItemCctDetailController implements Serializable {
         setProductInfoChecksfiltred(null);
         setProductInfoChecks(null);
         setDisionSystemAllowed(false);
+
+        checkGenerateDraftAllowed();
 
     }
 

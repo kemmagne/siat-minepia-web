@@ -23,7 +23,7 @@
             <p:inputText id="dosage" required="true" value="#{fileItemCctDetailController.inspectionReportData.dosage}" />
 
             <p:outputLabel for="typeTraitement" value="#{bundle['typeTraitement']}" />
-            <p:selectManyMenu id="typeTraitement" required="true" value="#{fileItemCctDetailController.inspectionReportData.typeTraitement}">
+            <p:selectManyMenu id="typeTraitement" required="true" value="#{fileItemCctDetailController.inspectionReportData.treatmentTypesList}">
                 <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}" var="tt" itemLabel="#{bundle[tt.label]}" itemValue="#{tt.value}" />
             </p:selectManyMenu>
 
@@ -33,7 +33,7 @@
             </p:selectOneMenu>
 
             <p:outputLabel for="storageEnv" value="#{bundle['storageEnv']}" />
-            <p:selectManyMenu id="storageEnv" required="true" value="#{fileItemCctDetailController.inspectionReportData.environnementStockage}">
+            <p:selectManyMenu id="storageEnv" required="true" value="#{fileItemCctDetailController.inspectionReportData.storageEnvsList}">
                 <f:selectItems value="#{fileItemCctDetailController.pivStorageEnvs}" var="se" itemLabel="#{bundle[se.label]}" itemValue="#{se.value}" />
             </p:selectManyMenu>
 

@@ -1,0 +1,1 @@
+scp -v target/siat-ct-web.war root@agserver:~/ && ssh root@agserver "rm -rfv /opt/tomcat/webapps/siat-ct-web* ; cp -v siat-ct-web.war /opt/tomcat/webapps/ ; cp -v siat-ct-web.war /root/glassfish4/glassfish/domains/domain1/autodeploy/"
