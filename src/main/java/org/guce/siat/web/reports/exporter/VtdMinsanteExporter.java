@@ -3,6 +3,7 @@ package org.guce.siat.web.reports.exporter;
 import java.io.ByteArrayInputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -70,11 +71,12 @@ public class VtdMinsanteExporter extends AbstractReportInvoker {
 			vtdMinsanteVo.setDecisionPlace(file.getBureau().getAddress());
 			vtdMinsanteVo.setDecisionDate(file.getSignatureDate());
 			final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
-			java.util.Date signatoryDate = null;
+//			java.util.Date signatoryDate = null;
 			
 			if (file.getClient() != null){
 				vtdMinsanteVo.setClientAddress(file.getClient().getFirstAddress());
 				vtdMinsanteVo.setClientCity(file.getClient().getCity());
+				vtdMinsanteVo.setFileItemList(new ArrayList<VtdMinsanteFileItemVo>());
 				if (file.getClient().getCountry() != null)
 					vtdMinsanteVo.setClientCountry(file.getClient().getCountry().getCountryName());
 				vtdMinsanteVo.setClientInscriptionCode(file.getClient().getCommerceApprovalRegistrationNumberFile());
@@ -90,6 +92,12 @@ public class VtdMinsanteExporter extends AbstractReportInvoker {
 			if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
 				for (final FileFieldValue fileFieldValue : fileFieldValueList) {
 					switch (fileFieldValue.getFileField().getCode()) {
+						case "NUMERO_DI":		
+							vtdMinsanteVo.setDiNumber(fileFieldValue.getValue());
+							break;
+						case "NUMERO_VTP":
+							vtdMinsanteVo.setVtpNumber(fileFieldValue.getValue());
+							break;
 						case "NUMERO_VTD_MINSANTE":
 							vtdMinsanteVo.setDecisionNumber(fileFieldValue.getValue());
 							break;
