@@ -299,26 +299,26 @@ public class FileItemApController extends AbstractController<FileItem> {
     public void dashboardCalculate() {
         setFirstCheck(true);
         resetDashboardCount();
-        getFilesList();
+        getItems();
         final Date systemDate = Calendar.getInstance().getTime();
-        for (final File file : filesList) {
-            final FileItem fileItem = file.getFileItemsList().get(0);
+        for (final FileItem fileItem : items != null ? items : new ArrayList<FileItem>()) {
             for (final ItemFlow flow : fileItem.getItemFlowsList()) {
-                if (flow.getUnread()) {
-                    getUnreadFilesList().add(fileItem.getFile());
-                    break;
-                } else {
-                    final long diff = systemDate.getTime() - flow.getCreated().getTime();
-                    final long diffDays = diff / (DateUtils.CONST_DURATION_OF_DAY);
-                    if (diffDays <= Constants.ONE) {
-                        getReceivedBeforOneDayFilesList().add(fileItem.getFile());
-                    } else if (diffDays > Constants.THREE) {
-                        getReceivedMoreTwoDaysFilesList().add(fileItem.getFile());
-                    } else if (diffDays > Constants.ONE && diffDays <= Constants.THREE) {
-                        getReceivedBetweenTwoDayFilesList().add(fileItem.getFile());
+                if (fileItem.getStep().equals(flow.getFlow().getToStep())) {
+                    if (flow.getUnread()) {
+                        getUnreadFilesList().add(fileItem.getFile());
+                        break;
+                    } else {
+                        final long diff = systemDate.getTime() - flow.getCreated().getTime();
+                        final long diffDays = diff / (DateUtils.CONST_DURATION_OF_DAY);
+                        if (diffDays <= Constants.ONE) {
+                            getReceivedBeforOneDayFilesList().add(fileItem.getFile());
+                        } else if (diffDays > Constants.THREE) {
+                            getReceivedMoreTwoDaysFilesList().add(fileItem.getFile());
+                        } else if (diffDays > Constants.ONE && diffDays <= Constants.THREE) {
+                            getReceivedBetweenTwoDayFilesList().add(fileItem.getFile());
+                        }
                     }
                 }
-
                 if (!getDraftFilesList().contains(fileItem.getFile())
                         && BooleanUtils.isNotTrue(flow.getSent())
                         && (fileItem.getStep().equals(flow.getFlow().getToStep()) || fileItem.getStep().equals(
@@ -392,7 +392,7 @@ public class FileItemApController extends AbstractController<FileItem> {
      */
     public Set<File> extractFiles() {
         @SuppressWarnings("unchecked")
-        final List<File> files = (List<File>) CollectionUtils.collect(items != null ? items : new HashSet<FileItem>(),
+        final List<File> files = (List<File>) CollectionUtils.collect(items != null ? items : new HashSet<>(),
                 new Transformer() {
             @Override
             public Object transform(final Object input) {
@@ -411,55 +411,33 @@ public class FileItemApController extends AbstractController<FileItem> {
      * @return the filesList
      */
     public List<File> getFilesList() {
-        if (filesList == null) {
-
-            if (listUserAuthorityFileTypes == null) {
-                listUserAuthorityFileTypes = userAuthorityFileTypeService.findUserAuthorityFileTypeByUserList(getLoggedUser()
-                        .getMergedDelegatorList());
-            }
-
-            // Merge the logged user and their delegator users list in the list
-            final List<Administration> adminList = new ArrayList<>();
-
-            if (getLoggedUser().getMergedDelegatorList() != null) {
-                for (final User user : getLoggedUser().getMergedDelegatorList()) {
-                    adminList.add(user.getAdministration());
-                }
-            }
-
-            // get the services id for the administration of the logged user and their delegator users
-            final List<Bureau> bureauList = SiatUtils.findCombinedBureausByAdministrationList(adminList);
-
-            //Ajout dans la liste des bureaux, tous les bureaux de toutes les unités qui appartiennent
-            //à l'administration dont l'utilisateur actuel possède des privilèges globaux
-            User logUser = this.getLoggedUser();
-            if (logUser.getAdministrationExtendRoles() != null) {
-                //l'utilisateur possède des privilèges globaux
-                List<? extends Administration> administrations = Arrays.asList(logUser.getAdministrationExtendRoles());
-                bureauList.addAll(SiatUtils.findCombinedBureausByAdministrationList(administrations));
-            }
-
-            filesList = fileItemService.findFilesByServiceAndAuthoritiesAndFileType(bureauList, getLoggedUser(),
-                    InformationSystemCode.AP, listUserAuthorityFileTypes);
-            Collections.sort(filesList, new Comparator<File>() {
-                @Override
-                public int compare(File file1, File file2) {
-
-                    Date lastDecisionDate1 = file1.getLastDecisionDate();
-                    if (lastDecisionDate1 == null) {
-                        lastDecisionDate1 = file1.getCreatedDate();
-                    }
-
-                    Date lastDecisionDate2 = file2.getLastDecisionDate();
-                    if (lastDecisionDate2 == null) {
-                        lastDecisionDate2 = file2.getCreatedDate();
-                    }
-
-                    return lastDecisionDate1.compareTo(lastDecisionDate2);
-                }
-            });
+        if (Objects.equals(filesList, null)) {
+            filesList = new ArrayList<>(extractFiles());
         }
 
+        if (firstCheck) {
+            Collections.sort(filesList, new Comparator<File>() {
+                @Override
+                public int compare(final File file, final File otherFile) {
+                    final FileItem fi1 = file.getFileItemsList().get(0);
+                    final FileItem fi2 = otherFile.getFileItemsList().get(0);
+
+                    final ItemFlow if1 = itemFlowService.findLastItemFlowByFileItem(fi1);
+                    final ItemFlow if2 = itemFlowService.findLastItemFlowByFileItem(fi2);
+
+                    if (if1.getCreated().getTime() > if2.getCreated().getTime()) {
+                        return 1;
+                    } else if (if1.getCreated().getTime() < if2.getCreated().getTime()) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                }
+            });
+            
+            Collections.reverse(filesList);
+            setFirstCheck(false);
+        }
         return filesList;
     }
 

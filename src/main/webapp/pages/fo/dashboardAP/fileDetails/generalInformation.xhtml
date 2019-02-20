@@ -76,4 +76,74 @@
 			</p:accordionPanel>
 		</h:form>
 	</p:outputPanel>
+    
+        <p:outputPanel>
+                <p:accordionPanel>
+                            <p:tab title="#{bundle['Specifications']}" dynamic="true" cache="true" titleStyleClass="title" rendered="#{fileItemApDetailController.bsbeMinfofFileType}">
+                                    <p:dataTable id="dataListSpec" widgetVar="dataListSpec" value="#{fileItemApDetailController.specsList}"
+                                            var="spec" styleClass="datalist-checkbtn"
+                                            rowKey="#{spec.id}" rows="5" paginator="true" rowsPerPageTemplate="5,10,20"
+                                            emptyMessage="#{bundle['AucuneResultat']}"
+                                            paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                            currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+                                            <p:column width="3%">
+                                                    <f:facet name="header">
+                                                            <h:outputText value="#" title="#" />
+                                                    </f:facet>
+                                                    <h:outputText value="#{spec.lineNumber}" />
+                                            </p:column>
+                                            <p:column>
+                                                    <f:facet name="header">
+                                                            <h:outputText value="#{bundle['Species']}" title="#{bundle['Species']}" />
+                                                    </f:facet>
+                                                <h:outputText value="#{spec.woodSpecies}" />
+                                            </p:column>
+                                            <p:column width="15%">
+                                                    <f:facet name="header">
+                                                            <h:outputText value="#{bundle['numMarqueGrume']}" title="#{bundle['numMarqueGrume']}" />
+                                                    </f:facet>
+                                                <h:outputText value="#{spec.numMarqueGrume}" />
+                                            </p:column>
+                                            <p:column width="8%">
+                                                    <f:facet name="header">
+                                                            <h:outputText value="#{bundle['diamGrosBout']}" title="#{bundle['diamGrosBout']}" />
+                                                    </f:facet>
+                                                <h:outputText value="#{spec.diamGrosBout}" />
+                                            </p:column>
+                                            <p:column width="8%">
+                                                    <f:facet name="header">
+                                                            <h:outputText value="#{bundle['diamPetitBout']}" title="#{bundle['diamPetitBout']}" />
+                                                    </f:facet>
+                                                <h:outputText value="#{spec.diamPetitBout}" />
+                                            </p:column>
+                                            <p:column width="8%">
+                                                    <f:facet name="header">
+                                                            <h:outputText value="#{bundle['diamMoyen']}" title="#{bundle['diamMoyen']}" />
+                                                    </f:facet>
+                                                <h:outputText value="#{spec.diamMoyen}" />
+                                            </p:column>
+                                            <p:column width="7%">
+                                                    <f:facet name="header">
+                                                            <h:outputText value="#{bundle['volume']}" title="#{bundle['volume']}" />
+                                                    </f:facet>
+                                                <h:outputText value="#{spec.volume}" />
+                                            </p:column>
+                                            <p:column>
+                                                    <f:facet name="header">
+                                                            <h:outputText value="#{bundle['fournisseur']}" title="#{bundle['fournisseur']}" />
+                                                    </f:facet>
+                                                <h:outputText value="#{spec.fournisseur}" />
+                                            </p:column>
+                                            <p:column width="20%">
+                                                    <f:facet name="header">
+                                                            <h:outputText value="#{bundle['Observation']}" title="#{bundle['Observation']}" />
+                                                    </f:facet>
+                                                <h:outputText value="#{spec.observations}" />
+                                            </p:column>
+
+                                    </p:dataTable>
+                            </p:tab>
+                    </p:accordionPanel>
+            </p:outputPanel>
 </ui:composition>
