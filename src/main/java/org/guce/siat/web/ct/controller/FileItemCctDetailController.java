@@ -2496,7 +2496,6 @@ public class FileItemCctDetailController implements Serializable {
      * Annuler decisions.
      */
     public void annulerDecisions() {
-        //
         final DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
         transactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
         final TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
@@ -2537,8 +2536,8 @@ public class FileItemCctDetailController implements Serializable {
                 LOG.debug("####ROLLBACK DECISION Transaction commited####");
             }
         } catch (final Exception ex) {
-            showErrorFacesMessage(ControllerConstants.Bundle.Messages.ROLL_BACK_FAIL, null);
             LOG.error(Objects.toString(ex), ex);
+            showErrorFacesMessage(ControllerConstants.Bundle.Messages.ROLL_BACK_FAIL, null);
             try {
                 transactionManager.rollback(transactionStatus);
             } catch (Exception ex1) {
