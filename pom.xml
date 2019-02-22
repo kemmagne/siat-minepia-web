@@ -13,10 +13,7 @@
     <artifactId>siat-ct-web</artifactId>
     <packaging>war</packaging>
     <name>siat-ct-web</name>
-    <!--<version>2.0.15-rc.1</version>-->
-    <!--<version>2.0.15</version>-->
-    <!--<version>2.0.15-TEST</version>-->
-    <version>2.0.14</version>
+    <version>2.1.0</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -83,7 +80,8 @@
                 <!--<db.url>jdbc:oracle:thin:@siatserverdev:1510:GUCE</db.url>-->
                 <db.url>jdbc:oracle:thin:@yserver:1521:XE</db.url>
                 <!--<ged.url>http://guce.preprod:17483</ged.url>-->
-                <ged.url>http://gedurl:17483</ged.url>
+                <!--<ged.url>http://gedurl:17483</ged.url>-->
+                <ged.url>http://gedurl:8080</ged.url>
                 <jms.url>failover:(tcp://brokerurl:61616)</jms.url>
                 <version>${application.version}</version>
                 <ged.username>admin</ged.username>
@@ -319,7 +317,7 @@
         <dependency>
             <groupId>org.guce.siat</groupId>
             <artifactId>siat-ct-core</artifactId>
-            <version>2.0.11</version>
+            <version>2.1.0</version>
         </dependency>
 
         <dependency>
