@@ -198,11 +198,8 @@
                 <environment>test</environment>
                 <db.username>SIAT_CT</db.username>
                 <db.password>siat</db.password>
-                <!-- <db.url>jdbc:oracle:thin:@172.20.3.31:1518:GUCETEST</db.url> -->
                 <db.url>jdbc:oracle:thin:@siat-db:1518:GUCETEST</db.url>
-                <!-- <ged.url>http://localhost:8080</ged.url> -->
                 <ged.url>http://siat-ged:18080</ged.url>
-                <!-- <jms.url>tcp://localhost:61616</jms.url> -->
                 <jms.url>tcp://siat-esb0:61618</jms.url>
                 <version>${application.version}</version>
                 <ged.username>admin</ged.username>
