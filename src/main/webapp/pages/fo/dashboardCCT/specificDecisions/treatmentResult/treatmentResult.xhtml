@@ -32,20 +32,31 @@
 
             <h:panelGrid columns="2">
 
-                <h:outputLabel value="#{bundle['TreatmentMode']}" for="TreatmentMode" />
-                <p:selectOneMenu id="TreatmentMode" value="#{fileItemCctDetailController.treatmentResult.treatmentMode}">
-                    <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-                    <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}" var="tt" itemLabel="#{bundle[tt.label]}" itemValue="#{tt.value}"/>
-                </p:selectOneMenu>
+                <h:outputLabel value="#{bundle['TreatmentMode']} #{bundle['Heat']}" />
+				<p:selectBooleanCheckbox disabled="false" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTR.treatmentModeHeat}" />
+                
+                <h:outputLabel value="#{bundle['TreatmentMode']} #{bundle['Soaking']}" />
+				<p:selectBooleanCheckbox disabled="false" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTR.treatmentModeSoaking}" />
+                
+                <h:outputLabel value="#{bundle['TreatmentMode']} #{bundle['Pulverisation']}" />
+				<p:selectBooleanCheckbox disabled="false" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTR.treatmentModePulverisation}" />
+                
+                <h:outputLabel value="#{bundle['TreatmentMode']} #{bundle['Fumigation']}" />
+				<p:selectBooleanCheckbox disabled="false" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTR.treatmentModeFumigation}" />
+
 
                 <h:outputLabel value="#{bundle['OtherTreatmentMode']}" for="OtherTreatmentMode" />
                 <p:inputText value="#{fileItemCctDetailController.treatmentResult.otherTreatmentMode}" id="OtherTreatmentMode" />
 
-                <h:outputLabel value="#{bundle['ProduitUtilise']}" for="ProduitUtilise" />
-                <p:selectOneMenu id="ProduitUtilise" value="#{fileItemCctDetailController.treatmentResult.productUsed}">
-                    <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-                    <f:selectItems value="#{fileItemCctDetailController.trProductsUsed}" var="pu" itemLabel="#{bundle[pu.label]}" itemValue="#{pu.value}" />
-                </p:selectOneMenu>
+                <h:outputLabel value="#{bundle['ProduitUtilise']} #{bundle['Insecticide']}" />
+				<p:selectBooleanCheckbox disabled="false" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTR.productUsedInsecticide}" />
+                
+                <h:outputLabel value="#{bundle['ProduitUtilise']} #{bundle['Fungicide']}" />
+				<p:selectBooleanCheckbox disabled="false" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTR.productUsedFungicide}" />
+                
+                <h:outputLabel value="#{bundle['ProduitUtilise']} #{bundle['InsecticideFongicide']}" />
+				<p:selectBooleanCheckbox disabled="false" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTR.productUsedInsecticideFungicide}" />
+                
 
                 <h:outputLabel value="#{bundle['Autre']} #{bundle['ProduitUtilise']}" for="AutreProduitUtilise" />
                 <p:inputText value="#{fileItemCctDetailController.treatmentResult.otherProductUsed}" id="AutreProduitUtilise" />

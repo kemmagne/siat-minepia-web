@@ -134,6 +134,14 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
         treatmentVo.setWeatherCondition(treatmentResult.getWeatherCondition());
         treatmentVo.setOtherTreatmentMode(treatmentResult.getOtherTreatmentMode());
         treatmentVo.setSupervisor(treatmentResult.getSupervisor());
+		treatmentVo.setTreatmentModeFumigation(treatmentResult.isTreatmentModeFumigation());
+		treatmentVo.setTreatmentModeHeat(treatmentResult.isTreatmentModeHeat());
+		treatmentVo.setTreatmentModePulverisation(treatmentResult.isTreatmentModePulverisation());
+		treatmentVo.setTreatmentModeSoaking(treatmentResult.isTreatmentModeSoaking());
+		
+		treatmentVo.setProductUsedFungicide(treatmentResult.isProductUsedFungicide());
+		treatmentVo.setProductUsedInsecticide(treatmentResult.isProductUsedInsecticide());
+		treatmentVo.setProductUsedInsecticideFungicide(treatmentResult.isProductUsedInsecticideFungicide());
 
         final String productType = getFileFieldValueService()
                 .findValueByFileFieldAndFile("TYPE_PRODUIT_CODE", file).getValue();
