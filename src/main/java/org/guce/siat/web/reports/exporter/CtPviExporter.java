@@ -240,16 +240,16 @@ public class CtPviExporter extends AbstractReportInvoker {
                 entryInspectionFindingDataVo.setProcedure(inspectionReport.getProcedure());
                 entryInspectionFindingDataVo.setProcessAnalyse(inspectionReport.getProcessAnalyse());
                 //
-                if (controllerDataVoList != null && !controllerDataVoList.isEmpty()) {
+                if (!controllerDataVoList.isEmpty()) {
                     entryInspectionFindingDataVo.setSignatairePVIPhyto(controllerDataVoList.get(0).getName());
                 } else {
                     entryInspectionFindingDataVo.setSignatairePVIPhyto(inspectionReport.getControllerName());
                 }
-                entryInspectionFindingDataVo.setTypeTraitement(inspectionReport.getTypeTraitement());
+                entryInspectionFindingDataVo.setTypeTraitement(inspectionReport.getTreatmentTypesList());
                 entryInspectionFindingDataVo.setEtatDateDernierTraitement(inspectionReport.getEtatDateDernierTraitement());
                 entryInspectionFindingDataVo.setProduitUtilise(inspectionReport.getProduitUtilise());
                 entryInspectionFindingDataVo.setDosage(inspectionReport.getDosage());
-                entryInspectionFindingDataVo.setEnvironnementStockage(inspectionReport.getEnvironnementStockage());
+                entryInspectionFindingDataVo.setEnvironnementStockage(inspectionReport.getStorageEnvsList());
                 entryInspectionFindingDataVo.setEnvironnementTransport(inspectionReport.getEnvironnementTransport());
                 entryInspectionFindingDataVo.setConditionClimatique(inspectionReport.getConditionClimatique());
                 entryInspectionFindingDataVo.setMesureProtection(inspectionReport.getMesureProtection());

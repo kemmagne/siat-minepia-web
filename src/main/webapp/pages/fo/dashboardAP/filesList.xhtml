@@ -20,18 +20,18 @@
                 <p:ajax event="rowDblselect" listener="#{fileItemApController.goToDetailPage}" onstart="PF('statusDialog1').block()"
                         onsuccess="PF('statusDialog1').unblock()" />
 
-                <p:column sortBy="#{file.referenceSiat}" filterBy="#{file.referenceSiat}" filterMatchMode="contains">
-                    <f:facet name="header">
-                        <h:outputText value="#{bundle['FileLabel_num_siat']}" title="#{bundle['FileTitle_num_siat']}" />
-                    </f:facet>
-                    <h:outputText value="#{file.referenceSiat}" />
-                </p:column>
-
                 <p:column sortBy="#{file.numeroDossier}" filterBy="#{file.numeroDossier}" filterMatchMode="contains">
                     <f:facet name="header">
                         <h:outputText value="#{bundle['FileLabel_num_eguce']}" title="#{bundle['FileTitle_num_eguce']}" />
                     </f:facet>
                     <h:outputText value="#{file.numeroDossier}" />
+                </p:column>
+
+                <p:column sortBy="#{file.referenceSiat}" filterBy="#{file.referenceSiat}" filterMatchMode="contains">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['FileLabel_num_siat']}" title="#{bundle['FileTitle_num_siat']}" />
+                    </f:facet>
+                    <h:outputText value="#{file.referenceSiat}" />
                 </p:column>
 
                 <p:column sortBy="#{item.file.createdDate}" filterBy="#{item.file.createdDate}"
@@ -83,5 +83,6 @@
     </p:panel>
 
 </ui:composition>
+
 
 
