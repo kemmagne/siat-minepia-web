@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="FICHE_SUPERVISION_TRAIT_PHYTO" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ef3f7670-4c4d-4516-9c0e-2e9a11db29bd">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="107"/>
+	<property name="ireport.y" value="251"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<parameter name="MINADER_LOGO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -184,7 +184,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 					</staticText>
 					<staticText>
 						<reportElement uuid="3eb16245-21b1-44bd-a8cb-09c246d588af" x="154" y="0" width="15" height="15">
-							<printWhenExpression><![CDATA[$F{treatmentModeHeat} != false]]></printWhenExpression>
+							<printWhenExpression><![CDATA[null != $F{treatmentMode} && $F{treatmentMode}.contains("CHALEUR")]]></printWhenExpression>
 						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle">
 							<font size="10"/>
@@ -203,7 +203,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 					</staticText>
 					<staticText>
 						<reportElement uuid="31bdda1b-a51c-4b0e-a495-b59b11b50302" x="247" y="0" width="15" height="15">
-							<printWhenExpression><![CDATA[$F{treatmentModeSoaking} != false]]></printWhenExpression>
+							<printWhenExpression><![CDATA[null != $F{treatmentMode} && $F{treatmentMode}.contains("TREMPAGE")]]></printWhenExpression>
 						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle">
 							<font size="10"/>
@@ -222,7 +222,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 					</staticText>
 					<staticText>
 						<reportElement uuid="3287aa81-d14a-4bc9-9811-12215ad4e636" x="345" y="0" width="15" height="15">
-							<printWhenExpression><![CDATA[$F{treatmentModePulverisation} != false]]></printWhenExpression>
+							<printWhenExpression><![CDATA[null != $F{treatmentMode} && $F{treatmentMode}.contains("PULVERIDATION")]]></printWhenExpression>
 						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle">
 							<font size="10"/>
@@ -241,7 +241,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 					</staticText>
 					<staticText>
 						<reportElement uuid="47007ffc-9b71-4e28-8e75-97a5ce142520" x="458" y="0" width="15" height="15">
-							<printWhenExpression><![CDATA[$F{treatmentModeFumigation} != false]]></printWhenExpression>
+							<printWhenExpression><![CDATA[null != $F{treatmentMode} && $F{treatmentMode}.contains("FUMIGATION")]]></printWhenExpression>
 						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle">
 							<font size="10"/>
@@ -270,7 +270,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 					</staticText>
 					<staticText>
 						<reportElement uuid="36aada11-ca6b-49c3-974e-d214b6f67878" x="132" y="0" width="15" height="15">
-							<printWhenExpression><![CDATA[$F{productUsedInsecticideFungicide} != false]]></printWhenExpression>
+							<printWhenExpression><![CDATA[null != $F{productUsed} && $F{productUsed}.contains("INSECTICIDE_FONGICIDE")]]></printWhenExpression>
 						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle">
 							<font size="10"/>
@@ -289,7 +289,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 					</staticText>
 					<staticText>
 						<reportElement uuid="cbe6d237-b14c-4c97-93a8-cffb12b8e2d5" x="288" y="0" width="15" height="15">
-							<printWhenExpression><![CDATA[$F{productUsedInsecticide} != false]]></printWhenExpression>
+							<printWhenExpression><![CDATA[null != $F{productUsed} && $F{productUsed}.contains("INSECTICIDE")]]></printWhenExpression>
 						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle">
 							<font size="10"/>
@@ -308,7 +308,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 					</staticText>
 					<staticText>
 						<reportElement uuid="38641984-75db-4bd6-a3f8-2b867c86f220" x="427" y="0" width="15" height="15">
-							<printWhenExpression><![CDATA[$F{productUsedFungicide} != false]]></printWhenExpression>
+							<printWhenExpression><![CDATA[null != $F{productUsed} && $F{productUsed}.contains("FONGICIDE")]]></printWhenExpression>
 						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle">
 							<font size="10"/>
@@ -909,7 +909,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 					</staticText>
 					<staticText>
 						<reportElement uuid="5dcd4f81-a30f-445c-9fa2-c0b8bdb656d1" x="110" y="0" width="15" height="15">
-							<printWhenExpression><![CDATA[null != $F{protectionEquipements} && $F{protectionEquipements}.equalsIgnoreCase("GANG")]]></printWhenExpression>
+							<printWhenExpression><![CDATA[null != $F{protectionEquipements} && $F{protectionEquipements}.contains("GANG")]]></printWhenExpression>
 						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle">
 							<font size="10"/>
@@ -928,7 +928,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 					</staticText>
 					<staticText>
 						<reportElement uuid="4985cc6f-fc66-48f9-8dd2-32838cbcf0e7" x="215" y="0" width="15" height="15">
-							<printWhenExpression><![CDATA[null != $F{protectionEquipements} && $F{protectionEquipements}.equalsIgnoreCase("BOTTES")]]></printWhenExpression>
+							<printWhenExpression><![CDATA[null != $F{protectionEquipements} && $F{protectionEquipements}.contains("BOTTES")]]></printWhenExpression>
 						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle">
 							<font size="10"/>
@@ -947,7 +947,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 					</staticText>
 					<staticText>
 						<reportElement uuid="ad17768b-0248-4fde-bfa4-5df3e96ccee9" x="298" y="0" width="15" height="15">
-							<printWhenExpression><![CDATA[null != $F{protectionEquipements} && $F{protectionEquipements}.equalsIgnoreCase("COMBINAISON")]]></printWhenExpression>
+							<printWhenExpression><![CDATA[null != $F{protectionEquipements} && $F{protectionEquipements}.contains("COMBINAISON")]]></printWhenExpression>
 						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle">
 							<font size="10"/>
@@ -966,7 +966,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 					</staticText>
 					<staticText>
 						<reportElement uuid="70f22aef-9d4f-45ea-9250-deeff0f048cf" x="422" y="0" width="15" height="15">
-							<printWhenExpression><![CDATA[null != $F{protectionEquipements} && $F{protectionEquipements}.equalsIgnoreCase("LUNETTES")]]></printWhenExpression>
+							<printWhenExpression><![CDATA[null != $F{protectionEquipements} && $F{protectionEquipements}.contains("LUNETTES")]]></printWhenExpression>
 						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle">
 							<font size="10"/>
@@ -985,7 +985,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 					</staticText>
 					<staticText>
 						<reportElement uuid="e99568b0-e27c-4193-8547-a95082b09afd" x="10" y="0" width="15" height="15">
-							<printWhenExpression><![CDATA[null != $F{protectionEquipements} && $F{protectionEquipements}.equalsIgnoreCase("MASQUE")]]></printWhenExpression>
+							<printWhenExpression><![CDATA[null != $F{protectionEquipements} && $F{protectionEquipements}.contains("MASQUE")]]></printWhenExpression>
 						</reportElement>
 						<textElement textAlignment="Center" verticalAlignment="Middle">
 							<font size="10"/>

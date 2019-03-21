@@ -75,30 +75,23 @@
 
             <h:panelGrid columns="2">
 
-                <h:outputLabel value="#{bundle['TreatmentMode']} #{bundle['Heat']}" />
-				<p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTR.treatmentModeHeat}" />
-                
-                <h:outputLabel value="#{bundle['TreatmentMode']} #{bundle['Soaking']}" />
-				<p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTR.treatmentModeSoaking}" />
-                
-                <h:outputLabel value="#{bundle['TreatmentMode']} #{bundle['Pulverisation']}" />
-				<p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTR.treatmentModePulverisation}" />
-                
-                <h:outputLabel value="#{bundle['TreatmentMode']} #{bundle['Fumigation']}" />
-				<p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTR.treatmentModeFumigation}" />
+                <h:outputLabel value="#{bundle['TreatmentMode']}" />
+                <h:panelGroup>
+                    <p:selectManyMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.treatmentModesList}">
+						<f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}" var="tt" itemLabel="#{bundle[tt.label]}" itemValue="#{tt.value}"/>
+					</p:selectManyMenu>
+                </h:panelGroup>
 
                 <h:outputLabel value="#{bundle['OtherTreatmentMode']}" />
                 <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTR.otherTreatmentMode}" />
 
-                <h:outputLabel value="#{bundle['ProduitUtilise']} #{bundle['Insecticide']}" />
-				<p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTR.productUsedInsecticide}" />
-                
-                <h:outputLabel value="#{bundle['ProduitUtilise']} #{bundle['Fungicide']}" />
-				<p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTR.productUsedFungicide}" />
-                
-                <h:outputLabel value="#{bundle['ProduitUtilise']} #{bundle['InsecticideFongicide']}" />
-				<p:selectBooleanCheckbox disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTR.productUsedInsecticideFungicide}" />
-                
+                <h:outputLabel value="#{bundle['ProduitUtilise']}" />
+                <h:panelGroup>
+                    <p:selectManyMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTR.productUsedList}">
+                        <f:selectItems value="#{fileItemCctDetailController.trProductsUsed}" var="pu" itemLabel="#{bundle[pu.label]}" itemValue="#{pu.value}" />
+                    </p:selectManyMenu>
+                </h:panelGroup>
+
                 <h:outputLabel value="#{bundle['Autre']} #{bundle['ProduitUtilise']}" />
                 <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTR.otherProductUsed}" />
 
@@ -185,9 +178,9 @@
 
                 <h:outputLabel value="#{bundle['EquipementsProtection']}" />
                 <h:panelGroup>
-                    <p:selectOneMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTR.protectionEquipements}">
+                    <p:selectManyMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTR.protectionEquipementsList}">
                         <f:selectItems value="#{fileItemCctDetailController.trProtectionEquipments}" var="pe" itemLabel="#{bundle[pe.label]}" itemValue="#{pe.value}" />
-                    </p:selectOneMenu>
+                    </p:selectManyMenu>
                 </h:panelGroup>
 
                 <h:outputLabel value="#{bundle['ObservationsGenerales']}" />
