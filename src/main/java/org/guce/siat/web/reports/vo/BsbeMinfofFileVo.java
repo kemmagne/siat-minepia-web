@@ -26,6 +26,8 @@ public class BsbeMinfofFileVo extends AbstractFileVo<VtMinepdedFileItemVo>
 	private String importer;
         
         private java.util.List<WoodSpecificationVo> woodSpecs;
+        
+        private String referenceEforce;
 
 	/**
 	 * Gets the importer.
@@ -47,6 +49,25 @@ public class BsbeMinfofFileVo extends AbstractFileVo<VtMinepdedFileItemVo>
 	{
 		this.importer = importer;
 	}
+
+        /**
+	 * Gets the e-FORCE reference.
+	 *
+	 * @return the e-FORCE reference
+	 */
+        public String getReferenceEforce() {
+                return referenceEforce;
+        }
+
+        /**
+	 * Sets the e-FORCE reference.
+	 *
+	 * @param referenceEforce 
+	 *           the new e-FORCE reference
+	 */
+        public void setReferenceEforce(String referenceEforce) {
+                this.referenceEforce = referenceEforce;
+        }
 
         public String getRegistrationNumber() {
                 return registrationNumber;

@@ -77,11 +77,12 @@ public class BsbeMinfofExporter extends AbstractReportInvoker {
 
         if ((file != null)) {
             bsbeMinfofVo.setDecisionDate(file.getSignatureDate());
+            bsbeMinfofVo.setReferenceEforce(file.getNumeroDemande());
             final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
             if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
                 for (final FileFieldValue fileFieldValue : fileFieldValueList) {
                     switch (fileFieldValue.getFileField().getCode()) {
-                        case "NUMERO_BSBE_MINFOF":
+                        case "BULLETIN_SPECIFICATION_NUMERO_ENREGISTREMENT":
                             bsbeMinfofVo.setDecisionNumber(fileFieldValue.getValue());
                             break;
                         case "INFORMATIONS_GENERALES_BSB_CERTIFICAT_ENREGISTREMENT_NUMERO_ENREGISTREMENT":
