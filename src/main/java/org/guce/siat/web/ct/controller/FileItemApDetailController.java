@@ -119,6 +119,7 @@ import org.guce.siat.common.utils.DateUtils;
 import org.guce.siat.common.utils.RepetableUtil;
 import org.guce.siat.common.utils.SiatUtils;
 import org.guce.siat.common.utils.Tab;
+import org.guce.siat.common.utils.XmlXPathUtils;
 import org.guce.siat.common.utils.ebms.ESBConstants;
 import org.guce.siat.common.utils.ebms.UtilitiesException;
 import org.guce.siat.common.utils.enums.AperakType;
@@ -165,6 +166,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
 /**
@@ -2523,6 +2525,12 @@ public class FileItemApDetailController implements Serializable {
                         // prepare document to send
                         final java.io.File xmlFile = SendDocumentUtils.prepareApDocument(documentSerializable,
                                 ebxmlPropertiesService.getEbxmlFolder(), service, documentType);
+                        
+                        final String xmlContent = FileUtils.readFileToString(xmlFile, "UTF-8");
+                        final Element rootElement = XmlXPathUtils.stringToXMLDOM(xmlContent).getDocumentElement();
+ 
+                        documentType = getDocumentType(rootElement);
+                        service = getService(rootElement);
 
                         if (CollectionUtils.isNotEmpty(flowToSend.getCopyRecipientsList())) {
                             final List<CopyRecipient> copyRecipients = flowToSend.getCopyRecipientsList();
@@ -2555,12 +2563,13 @@ public class FileItemApDetailController implements Serializable {
                             data.put(ESBConstants.SERVICE, service);
                             data.put(ESBConstants.MESSAGE, null);
                             data.put(ESBConstants.EBXML_TYPE, "STANDARD");
-                            data.put(ESBConstants.TO_PARTY_ID, ebxmlPropertiesService.getToPartyId());
+                            data.put(ESBConstants.TO_PARTY_ID, currentFile.getEmetteur());
                             data.put(ESBConstants.DEAD, "0");
-                            //
+                            /*
                             data.put(ESBConstants.FILE, currentFile);
                             data.put(ESBConstants.CURRENT_FLOW, flowToSend.getCode());
                             data.put(ESBConstants.ITEM_FLOW_IDS, SiatUtils.getEntitiesIds(itemFlowList));
+                            */
                             fileProducer.sendFile(data);
                             if (LOG.isDebugEnabled()) {
                                 LOG.debug("Message sent to OUT queue");
@@ -5573,6 +5582,28 @@ public class FileItemApDetailController implements Serializable {
 			java.util.logging.Logger.getLogger(FileItemApDetailController.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
+    
+        /**
+         * Gets the document type.
+         *
+         * @param rootElement the root element
+         * @return the document type
+         */
+        private String getDocumentType(final Element rootElement) {
+                final String flowExpression = "/DOCUMENT/TYPE_DOCUMENT";
+                return XmlXPathUtils.findSingleValue(flowExpression, rootElement);
+        }
+
+        /**
+         * Gets the service.
+         *
+         * @param rootElement the root element
+         * @return the service
+         */
+        private String getService(final Element rootElement) {
+                final String siExpression = "/DOCUMENT/REFERENCE_DOSSIER/SERVICE";
+                return XmlXPathUtils.findSingleValue(siExpression, rootElement);
+        }
 
 }
 
