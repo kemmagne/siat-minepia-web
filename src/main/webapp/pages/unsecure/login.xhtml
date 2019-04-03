@@ -258,7 +258,7 @@ function do_login()
 	</p:layout>
 	<p:graphicImage styleClass="bande-bottom" value="/images/bande.jpg" />
 	<div id="footer">
-		<h:outputText styleClass="footer_left" value="#{bundle['footer_left']}" />
+		<h:outputText styleClass="footer_left" value="#{bundle['footer_left']} #{java.time.Year.now().getValue()}" />
 		<h:outputText styleClass="footer_center" value="#{bundle['footer_copyright']}" />
 		<h:outputText styleClass="footer_right" value="v #{globalBean.appVersion}" />
 	</div>

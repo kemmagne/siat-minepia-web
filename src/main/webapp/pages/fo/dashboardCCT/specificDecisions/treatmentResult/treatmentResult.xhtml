@@ -33,19 +33,17 @@
             <h:panelGrid columns="2">
 
                 <h:outputLabel value="#{bundle['TreatmentMode']}" for="TreatmentMode" />
-                <p:selectOneMenu id="TreatmentMode" value="#{fileItemCctDetailController.treatmentResult.treatmentMode}">
-                    <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+                <p:selectManyMenu id="TreatmentMode" value="#{fileItemCctDetailController.treatmentResult.treatmentModesList}">
                     <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}" var="tt" itemLabel="#{bundle[tt.label]}" itemValue="#{tt.value}"/>
-                </p:selectOneMenu>
+                </p:selectManyMenu>
 
                 <h:outputLabel value="#{bundle['OtherTreatmentMode']}" for="OtherTreatmentMode" />
                 <p:inputText value="#{fileItemCctDetailController.treatmentResult.otherTreatmentMode}" id="OtherTreatmentMode" />
 
                 <h:outputLabel value="#{bundle['ProduitUtilise']}" for="ProduitUtilise" />
-                <p:selectOneMenu id="ProduitUtilise" value="#{fileItemCctDetailController.treatmentResult.productUsed}">
-                    <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+                <p:selectManyMenu id="ProduitUtilise" value="#{fileItemCctDetailController.treatmentResult.productUsedList}">
                     <f:selectItems value="#{fileItemCctDetailController.trProductsUsed}" var="pu" itemLabel="#{bundle[pu.label]}" itemValue="#{pu.value}" />
-                </p:selectOneMenu>
+                </p:selectManyMenu>
 
                 <h:outputLabel value="#{bundle['Autre']} #{bundle['ProduitUtilise']}" for="AutreProduitUtilise" />
                 <p:inputText value="#{fileItemCctDetailController.treatmentResult.otherProductUsed}" id="AutreProduitUtilise" />
@@ -130,10 +128,9 @@
                              id="NatureSecPersonnel" required="true" />
 
                 <h:outputLabel value="#{bundle['EquipementsProtection']}" for="EquipementsProtection" />
-                <p:selectOneMenu required="true" id="EquipementsProtection" value="#{fileItemCctDetailController.treatmentResult.protectionEquipements}">
-                    <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+                <p:selectManyMenu required="true" id="EquipementsProtection" value="#{fileItemCctDetailController.treatmentResult.protectionEquipementsList}">
                     <f:selectItems value="#{fileItemCctDetailController.trProtectionEquipments}" var="pe" itemLabel="#{bundle[pe.label]}" itemValue="#{pe.value}" />
-                </p:selectOneMenu>
+                </p:selectManyMenu>
 
                 <h:outputLabel value="#{bundle['ObservationsGenerales']}" for="ObservationsGenerales" />
                 <p:inputTextarea id="ObservationsGenerales" value="#{fileItemCctDetailController.treatmentResult.generalObservations}"
