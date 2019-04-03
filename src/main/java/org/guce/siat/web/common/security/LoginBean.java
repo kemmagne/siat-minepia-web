@@ -428,7 +428,7 @@ public class LoginBean implements Serializable {
 				FileTypeCode.AT_MINSANTE, FileTypeCode.VTP_MINSANTE, FileTypeCode.VTD_MINSANTE, FileTypeCode.AI_MINSANTE,
 				FileTypeCode.AI_MINMIDT, FileTypeCode.AE_MINMIDT, FileTypeCode.CEA_MINMIDT, FileTypeCode.AT_MINEPIA,
 				FileTypeCode.VT_MINEPIA, FileTypeCode.VT_MINEPDED, FileTypeCode.CP_MINEPDED, FileTypeCode.AS_MINFOF,
-				FileTypeCode.AS_MINCOMMERCE, FileTypeCode.CO_MINFOF_FORET, FileTypeCode.CO_MINFOF_FAUNE, FileTypeCode.FIMEX_WF);
+				FileTypeCode.AS_MINCOMMERCE, FileTypeCode.CO_MINFOF_FORET, FileTypeCode.CO_MINFOF_FAUNE, FileTypeCode.BSBE_MINFOF, FileTypeCode.FIMEX_WF);
 
 		apRendred = Boolean.FALSE;
 

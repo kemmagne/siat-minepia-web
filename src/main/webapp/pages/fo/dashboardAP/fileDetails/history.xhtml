@@ -70,7 +70,7 @@
 
                                     <p:commandLink title="#{bundle['ReSend']}" process="@this"
                                                    rendered="#{(request.isUserInRole('ROOT') or request.isUserInRole('ADMIN_MIN') or request.isUserInRole('ADMIN_ORG') or request.isUserInRole('SUPER')) and fileItemApDetailController.resendMessageAllowed()}"
-                                                   action="#{fileItemApDetailController.sendMessage()}" ajax="false">
+                                                   action="#{fileItemApDetailController.reSendDecision()}" ajax="false">
                                         <p:graphicImage value="/images/send.png" width="20" height="20" />
                                     </p:commandLink>
                                 </h:panelGroup>

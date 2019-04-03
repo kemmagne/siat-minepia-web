@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="bsbe-minfof" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2f6e4db4-9f8f-4ffe-9759-6e1fd142f492">
+	<property name="template.type" value="columnar"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#000000" fontName="Century Gothic" fontSize="50" isBold="false"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Century Gothic" fontSize="18" isBold="false"/>
+	<style name="Column header" forecolor="#666666" fontName="Century Gothic" fontSize="14" isBold="true"/>
+	<style name="Detail" mode="Transparent" fontName="Century Gothic"/>
+	<style name="Row" mode="Transparent" fontName="Century Gothic" pdfFontName="Century Gothic">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="specsDataSet" whenResourceMissingType="Empty" uuid="477c5951-0abf-48d7-81cb-28a05dc49643">
+		<field name="woodSpecies" class="java.lang.String"/>
+		<field name="numMarqueGrume" class="java.lang.String"/>
+		<field name="longueurGrume" class="java.math.BigDecimal"/>
+		<field name="diamGrosBout" class="java.lang.Integer"/>
+		<field name="diamPetitBout" class="java.lang.Integer"/>
+		<field name="diamMoyen" class="java.lang.Integer"/>
+		<field name="volume" class="java.math.BigDecimal"/>
+		<field name="fournisseur" class="java.lang.String"/>
+		<field name="observations" class="java.lang.String"/>
+		<variable name="TOTAL_VOLUME" class="java.math.BigDecimal"/>
+	</subDataset>
+	<field name="importer" class="java.lang.String"/>
+	<field name="woodSpecs" class="java.util.List"/>
+	<field name="decisionNumber" class="java.lang.String"/>
+	<field name="referenceEforce" class="java.lang.String"/>
+	<field name="decisionDate" class="java.util.Date"/>
+	<field name="decisionPlace" class="java.lang.String"/>
+	<field name="registrationNumber" class="java.lang.String"/>
+	<field name="loadingPlace" class="java.lang.String"/>
+	<field name="dischargePlace" class="java.lang.String"/>
+	<field name="signatory" class="java.lang.String"/>
+	<field name="destinationCountry" class="java.lang.String"/>
+	<title>
+		<band height="239" splitType="Stretch">
+			<staticText>
+				<reportElement x="78" y="101" width="390" height="20" uuid="73f56145-a1f4-4c8c-b15a-d90f2da04519"/>
+				<textElement textAlignment="Center">
+					<font fontName="Century Gothic" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BULLETIN DE SPECIFICATION DES BOIS A L'EXPORTATION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="47" y="129" width="199" height="18" uuid="82a8f537-24ff-4366-b0e4-5b2509293845"/>
+				<textElement>
+					<font fontName="Century Gothic"/>
+				</textElement>
+				<text><![CDATA[- Nom ou raison sociale de l'Exportateur : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="47" y="151" width="320" height="18" uuid="12d75d02-ce2a-446f-aa2f-481f62facf03"/>
+				<textElement>
+					<font fontName="Century Gothic"/>
+				</textElement>
+				<text><![CDATA[- N° d'enregistrement à la Direction des Eaux et Forets et Chasses : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="47" y="173" width="112" height="18" uuid="c2b8072d-449d-4e3b-a1a1-d4a3284abeae"/>
+				<textElement>
+					<font fontName="Century Gothic"/>
+				</textElement>
+				<text><![CDATA[- Lieu de l'Exportation :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="47" y="196" width="68" height="18" uuid="a0e77dd5-ceb4-44d5-b095-18c1f86963bd"/>
+				<textElement>
+					<font fontName="Century Gothic"/>
+				</textElement>
+				<text><![CDATA[- Destination : ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="115" y="196" width="414" height="18" uuid="390545b4-c93c-427b-9a29-5b972fd45f17"/>
+				<textElement>
+					<font fontName="Century Gothic" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{destinationCountry} == null ? "" : $F{destinationCountry} + " - " + $F{dischargePlace} == null ? "" : $F{dischargePlace}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="159" y="173" width="370" height="18" uuid="126bf0ee-4f8a-425f-8042-55f1d8a378f4"/>
+				<textElement>
+					<font fontName="Century Gothic" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{loadingPlace} == null ? " - " : $F{loadingPlace}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="367" y="151" width="162" height="18" uuid="08b25827-e05a-4d8e-84bf-12885cd5d946"/>
+				<textElement>
+					<font fontName="Century Gothic" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{registrationNumber} == null ? " - " : $F{registrationNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="246" y="129" width="283" height="19" uuid="71557aa8-1b52-4cac-ad59-ca6e62a46361"/>
+				<textElement>
+					<font fontName="Century Gothic" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{importer} == null ? " - " : $F{importer}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="47" y="218" width="78" height="18" uuid="20625c2a-3e06-42a1-b9cf-6f734bdeac65"/>
+				<textElement>
+					<font fontName="Century Gothic"/>
+				</textElement>
+				<text><![CDATA[- Numero BSB : ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="126" y="218" width="159" height="18" uuid="dbaf29f6-1d0e-463b-b40a-6ee4c9725b04"/>
+				<textElement>
+					<font fontName="Century Gothic" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{decisionNumber} == null ? " - " : $F{decisionNumber}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="345" y="18" width="200" height="40" uuid="ffd069a8-5864-4363-8918-fcbb4c253c49"/>
+				<textElement textAlignment="Center">
+					<font fontName="Century Gothic" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPUBLIQUE DU CAMEROUN
+Paix - Travail - Patrie
+------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="18" width="102" height="25" uuid="c8d86262-9ed4-4fda-b95f-73bb2a01c7da"/>
+				<textElement textAlignment="Center">
+					<font fontName="Century Gothic" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MINISTERES DES FORETS ET DE LA FAUNE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="41" width="130" height="34" uuid="b068d4a1-4422-4205-b866-8ba26c0578a3"/>
+				<textElement textAlignment="Center">
+					<font fontName="Century Gothic" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------
+DIRECTION DES FORETS
+-----]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="410" y="218" width="119" height="18" uuid="c6a8beb1-b986-4ff0-a124-df59c785fe99"/>
+				<textElement>
+					<font fontName="Century Gothic" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{referenceEforce} == null ? " - " : $F{referenceEforce}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="297" y="218" width="113" height="18" uuid="34e069a3-ab31-446d-be1c-a02a13867919"/>
+				<textElement>
+					<font fontName="Century Gothic"/>
+				</textElement>
+				<text><![CDATA[- Référence e-FORCE : ]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<detail>
+		<band height="109" splitType="Stretch">
+			<componentElement>
+				<reportElement key="table" style="table" mode="Opaque" x="0" y="13" width="555" height="80" uuid="38184627-8a63-4978-a34d-08ea75e57b3c"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
+					<datasetRun subDataset="specsDataSet" uuid="5860654a-df3e-4cad-83dd-d4ce8c23f1f7">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{woodSpecs})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="64" uuid="c13cbdcd-b475-4c29-bcca-6a589d7ae288">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="64" height="30" uuid="a9d06770-c3c5-4182-beca-c9d1e4494be7"/>
+								<box>
+									<topPen lineWidth="1.0"/>
+									<leftPen lineWidth="1.0"/>
+									<bottomPen lineWidth="1.0"/>
+									<rightPen lineWidth="1.0"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Century Gothic" size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Essence]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField isStretchWithOverflow="true">
+								<reportElement x="0" y="0" width="64" height="20" uuid="ffff1f15-57a9-400d-8cef-a78ed9d8e64c"/>
+								<textElement textAlignment="Center">
+									<font fontName="Century Gothic"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{woodSpecies} == null ? "-" : $F{woodSpecies}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="86" uuid="4818841b-8d67-4f4c-a824-cf7fec36176b">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="86" height="30" uuid="9256c483-aa52-40fe-840a-b03b7a33b17b"/>
+								<box>
+									<topPen lineWidth="1.0"/>
+									<bottomPen lineWidth="1.0"/>
+									<rightPen lineWidth="1.0"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Century Gothic" size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[N° et Marque de la Grume]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField isStretchWithOverflow="true">
+								<reportElement x="0" y="0" width="86" height="20" uuid="60f4dd06-ce36-4b51-898c-9af131aae5dd"/>
+								<textElement textAlignment="Center">
+									<font fontName="Century Gothic"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{numMarqueGrume} == null ? "-" : $F{numMarqueGrume}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="55" uuid="f787061b-76bf-4f2f-a16b-bfe5662e6d5e">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="55" height="30" uuid="8d340769-e0a0-48f0-9ccc-47f65b312ab8"/>
+								<box>
+									<topPen lineWidth="1.0"/>
+									<bottomPen lineWidth="1.0"/>
+									<rightPen lineWidth="1.0"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Century Gothic" size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Longueur de la Grume]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField isStretchWithOverflow="true">
+								<reportElement x="0" y="0" width="55" height="20" uuid="51002c3e-33ac-45b7-bbdd-827775b18b8e"/>
+								<textElement textAlignment="Center">
+									<font fontName="Century Gothic"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{longueurGrume} == null ? "-" : $F{longueurGrume}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="55" uuid="796a6e1d-af7e-412a-a545-697f3f5510d2">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="55" height="30" uuid="bf4a6a24-a20f-4fb2-af8c-6cbf55711c27"/>
+								<box>
+									<topPen lineWidth="1.0"/>
+									<bottomPen lineWidth="1.0"/>
+									<rightPen lineWidth="1.0"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Century Gothic" size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Ø Moyen Gros Bout]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField isStretchWithOverflow="true">
+								<reportElement x="0" y="0" width="55" height="20" uuid="ad6ddb71-70f2-48b4-983b-871db71c094e"/>
+								<textElement textAlignment="Center">
+									<font fontName="Century Gothic"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{diamGrosBout} == null ? "-" : $F{diamGrosBout}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="58" uuid="28c4805e-f8d9-4d8a-b1c6-30cd05197db1">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="58" height="30" uuid="affd6464-4d0e-4145-ab18-828e507932d0"/>
+								<box>
+									<topPen lineWidth="1.0"/>
+									<bottomPen lineWidth="1.0"/>
+									<rightPen lineWidth="1.0"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Century Gothic" size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Ø Moyen Petit Bout]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField isStretchWithOverflow="true">
+								<reportElement x="0" y="0" width="58" height="20" uuid="01d07ab5-9d97-4106-8065-ea4682bde522"/>
+								<textElement textAlignment="Center">
+									<font fontName="Century Gothic"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{diamPetitBout} == null ? "-" : $F{diamPetitBout}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="49" uuid="d8a3f6b6-ba56-4299-b9b7-159432f33ee2">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="3" y="0" width="46" height="30" uuid="3224a95f-b33d-404e-b6e3-f2859579e256"/>
+								<box>
+									<topPen lineWidth="1.0"/>
+									<bottomPen lineWidth="1.0"/>
+									<rightPen lineWidth="1.0"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Century Gothic" size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Ø Moyenne Generale]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField isStretchWithOverflow="true">
+								<reportElement x="0" y="0" width="49" height="20" uuid="245a1964-433b-4493-b7cb-df299ea1a370"/>
+								<textElement textAlignment="Center">
+									<font fontName="Century Gothic"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{diamMoyen} == null ? "-" : $F{diamMoyen}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="55" uuid="a3403cf3-8458-4256-8f84-18726c5ef789">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="55" height="30" uuid="5763b175-1eab-4844-bd42-9f013b33d26d"/>
+								<box>
+									<topPen lineWidth="1.0"/>
+									<bottomPen lineWidth="1.0"/>
+									<rightPen lineWidth="1.0"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Century Gothic" size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Volume]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField isStretchWithOverflow="true">
+								<reportElement x="0" y="0" width="55" height="20" uuid="bbfc1080-6703-416c-bf34-3894570816a9"/>
+								<textElement textAlignment="Center">
+									<font fontName="Century Gothic"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{volume} == null ? "-" : $F{volume}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="52" uuid="6273d436-62e9-4735-8c9d-d3a0fa2c6b8a">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="52" height="30" uuid="5763b175-1eab-4844-bd42-9f013b33d26d"/>
+								<box>
+									<topPen lineWidth="1.0"/>
+									<bottomPen lineWidth="1.0"/>
+									<rightPen lineWidth="1.0"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Century Gothic" size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Fournisseur]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField isStretchWithOverflow="true">
+								<reportElement x="0" y="0" width="52" height="20" uuid="46c7a0ef-0e47-4959-a5a4-9fd656ceea06"/>
+								<textElement textAlignment="Center">
+									<font fontName="Century Gothic"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{fournisseur} == null ? "-" : $F{fournisseur}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="80" uuid="b4061b4d-9068-43e7-b113-498e67a7399a">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="80" height="30" uuid="4db4378f-9285-448a-b160-fd4d048d5162"/>
+								<box>
+									<topPen lineWidth="1.0"/>
+									<bottomPen lineWidth="1.0"/>
+									<rightPen lineWidth="1.0"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Century Gothic" size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Observations]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="20" rowSpan="1">
+							<textField isStretchWithOverflow="true">
+								<reportElement x="0" y="0" width="80" height="20" uuid="242bd6ea-3e81-42f3-ab3c-1f4cf246dd30"/>
+								<textElement textAlignment="Center">
+									<font fontName="Century Gothic"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{observations} == null ? "-" : $F{observations}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="6" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="fab082df-3ca0-43ac-900e-4da3f8b5a45d"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="75" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="62" width="555" height="13" forecolor="#D0B48E" backcolor="#FFFFFF" uuid="bfdca178-800d-445c-9a31-bb616a00e8ce"/>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="515" y="0" width="40" height="13" forecolor="#000000" uuid="2fba0f87-635e-476d-858f-d102b26146fe"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Column header" mode="Transparent" x="435" y="0" width="80" height="13" forecolor="#000000" uuid="e454d23d-bcfc-4c79-a399-0ef520a3150a"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{PAGE_NUMBER}+" /"]]></textFieldExpression>
+				</textField>
+				<textField pattern="d/M/yyyy">
+					<reportElement style="Column header" x="2" y="0" width="197" height="13" forecolor="#000000" uuid="14d8de1e-8695-4078-a67f-0e69172574d5"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{decisionDate} == null ? new java.util.Date() : $F{decisionDate}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<staticText>
+				<reportElement x="2" y="7" width="145" height="13" uuid="2d89c11d-793f-476d-bba9-2c297407c036"/>
+				<textElement textAlignment="Center">
+					<font fontName="Century Gothic" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VISA DE L'EXPORTATEUR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="285" y="6" width="263" height="14" uuid="a18629cd-5c36-4b90-a7ea-dc2467b376f3"/>
+				<textElement textAlignment="Center">
+					<font fontName="Century Gothic" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SIGNATURE DE L'AGENT DES EAUX ET FORETSET DES CHASSES]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="327" y="39" width="188" height="19" uuid="c53254fd-b9e1-483a-b1f5-6e63a5292f04"/>
+				<textElement textAlignment="Center">
+					<font fontName="Century Gothic" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{signatory} == null ? " - " : $F{signatory}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
