@@ -69,6 +69,13 @@ public class CtCctTreatmentFileVo {
     private String protectionEquipements;
     private boolean preventionPlaquePresent;
     private String generalObservations;
+	private boolean productUsedFungicide;
+	private boolean productUsedInsecticide;
+	private boolean productUsedInsecticideFungicide;
+	private boolean treatmentModeFumigation;
+	private boolean treatmentModePulverisation;
+	private boolean treatmentModeSoaking;
+	private boolean treatmentModeHeat;
 
     public String getDecisionNumber() {
         return decisionNumber;
@@ -493,6 +500,62 @@ public class CtCctTreatmentFileVo {
     public void setTreatmentCompanyBp(String treatmentCompanyBp) {
         this.treatmentCompanyBp = treatmentCompanyBp;
     }
+
+	public boolean isProductUsedFungicide() {
+		return productUsedFungicide;
+	}
+
+	public void setProductUsedFungicide(boolean productUsedFungicide) {
+		this.productUsedFungicide = productUsedFungicide;
+	}
+
+	public boolean isProductUsedInsecticide() {
+		return productUsedInsecticide;
+	}
+
+	public void setProductUsedInsecticide(boolean productUsedInsecticide) {
+		this.productUsedInsecticide = productUsedInsecticide;
+	}
+
+	public boolean isProductUsedInsecticideFungicide() {
+		return productUsedInsecticideFungicide;
+	}
+
+	public void setProductUsedInsecticideFungicide(boolean productUsedInsecticideFungicide) {
+		this.productUsedInsecticideFungicide = productUsedInsecticideFungicide;
+	}
+
+	public boolean isTreatmentModeFumigation() {
+		return treatmentModeFumigation;
+	}
+
+	public void setTreatmentModeFumigation(boolean treatmentModeFumigation) {
+		this.treatmentModeFumigation = treatmentModeFumigation;
+	}
+
+	public boolean isTreatmentModePulverisation() {
+		return treatmentModePulverisation;
+	}
+
+	public void setTreatmentModePulverisation(boolean treatmentModePulverisation) {
+		this.treatmentModePulverisation = treatmentModePulverisation;
+	}
+
+	public boolean isTreatmentModeSoaking() {
+		return treatmentModeSoaking;
+	}
+
+	public void setTreatmentModeSoaking(boolean treatmentModeSoaking) {
+		this.treatmentModeSoaking = treatmentModeSoaking;
+	}
+
+	public boolean isTreatmentModeHeat() {
+		return treatmentModeHeat;
+	}
+
+	public void setTreatmentModeHeat(boolean treatmentModeHeat) {
+		this.treatmentModeHeat = treatmentModeHeat;
+	}
 
     /**
      *
