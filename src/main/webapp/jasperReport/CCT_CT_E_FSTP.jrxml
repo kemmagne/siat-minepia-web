@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="FICHE_SUPERVISION_TRAIT_PHYTO" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ef3f7670-4c4d-4516-9c0e-2e9a11db29bd">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="251"/>
+	<property name="ireport.y" value="591"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<parameter name="MINADER_LOGO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -1005,7 +1005,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 					<textElement textAlignment="Right" markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["A <u>" + ($F{decisionPlace} != null ? $F{decisionPlace} : "-") + "</u> le <u>" + ($F{decisionDate} != null ? new java.text.SimpleDateFormat("EEEEE dd MMMMM yyyy").format($F{decisionDate}) : "-") + "</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["A <u>" + ($F{decisionPlace} != null ? $F{decisionPlace} : "-") + "</u> le <u>" + ($F{decisionDate} != null ? new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{decisionDate}) : "-") + "</u>"]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement uuid="c912c15e-dfef-40d0-8848-6180bee498d3" x="0" y="530" width="194" height="30"/>
