@@ -2907,7 +2907,6 @@ public class FileItemCctDetailController implements Serializable {
                                     Date now = java.util.Calendar.getInstance().getTime();
                                     currentFile.setSignatureDate(now);
                                     currentFile.setSignatory(loggedUser);
-                                    
 
                                     attachedByteFiles = new HashMap<>();
 
@@ -2928,7 +2927,7 @@ public class FileItemCctDetailController implements Serializable {
                                         reportFieldValue.setValue(reportNumber);
                                         currentFile.getFileFieldValueList().add(reportFieldValue);
                                         fileFieldValueService.save(reportFieldValue);
-										fileService.update(currentFile);
+                                        fileService.update(currentFile);
                                         //End Add new field value with report Number
 
                                         final byte[] report = getReportBytes(fileTypeFlowReport, false);
