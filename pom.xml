@@ -81,8 +81,11 @@
                 <environment>dev</environment>
                 <db.username>siat_ct</db.username>
                 <db.password>siat</db.password>
-                <db.url>jdbc:oracle:thin:@test:1518:GUCETEST</db.url>
-                <ged.url>http://gedurl:17483</ged.url>
+                <!--<db.url>jdbc:oracle:thin:@siatserverdev:1510:GUCE</db.url>-->
+                <db.url>jdbc:oracle:thin:@yserver:1521:XE</db.url>
+                <!--<ged.url>http://guce.preprod:17483</ged.url>-->
+                <!--<ged.url>http://gedurl:17483</ged.url>-->
+                <ged.url>http://gedurl:8080</ged.url>
                 <jms.url>failover:(tcp://brokerurl:61616)</jms.url>
                 <version>${application.version}</version>
                 <ged.username>admin</ged.username>
@@ -91,12 +94,12 @@
                 <uri.out>SIAT</uri.out>
                 <uri.dead.in>direct:dead</uri.dead.in>
                 <uri.dead.out>amq:deadQueue</uri.dead.out>
-                <ebxml.folder>D:/lerichjam/siat/ebxml</ebxml.folder>
-                <!--<ebxml.folder>/home/yenke/eGuce/ebxml</ebxml.folder>-->
-                <xml.folder>D:/lerichjam/siat/xml</xml.folder>
-                <!--<xml.folder>/home/yenke/eGuce/xml</xml.folder>-->
-                <attachement.folder>D:/lerichjam/siat/attachement</attachement.folder>
-                <!--<attachement.folder>/home/yenke/eGuce/attachement</attachement.folder>-->
+                <!--<ebxml.folder>C:/Users/leric/siat/ebxml</ebxml.folder>-->
+                <ebxml.folder>/home/yenke/eGuce/ebxml</ebxml.folder>
+                <!--<xml.folder>C:/Users/leric/siat/xml</xml.folder>-->
+                <xml.folder>/home/yenke/eGuce/xml</xml.folder>
+                <!--<attachement.folder>C:/Users/leric/siat/attachement</attachement.folder>-->
+                <attachement.folder>/home/yenke/eGuce/attachement</attachement.folder>
                 <hibernate.default_schema>SIAT_CT</hibernate.default_schema>
                 <jms.username>admin</jms.username>
                 <jms.password>admin</jms.password>
