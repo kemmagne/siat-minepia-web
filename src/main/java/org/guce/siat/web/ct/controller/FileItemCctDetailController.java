@@ -1,5 +1,6 @@
 package org.guce.siat.web.ct.controller;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,9 +8,6 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.lang.reflect.Constructor;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -2909,7 +2907,6 @@ public class FileItemCctDetailController implements Serializable {
                                     Date now = java.util.Calendar.getInstance().getTime();
                                     currentFile.setSignatureDate(now);
                                     currentFile.setSignatory(loggedUser);
-                                    fileService.update(currentFile);
 
                                     attachedByteFiles = new HashMap<>();
 
@@ -2930,6 +2927,7 @@ public class FileItemCctDetailController implements Serializable {
                                         reportFieldValue.setValue(reportNumber);
                                         currentFile.getFileFieldValueList().add(reportFieldValue);
                                         fileFieldValueService.save(reportFieldValue);
+                                        fileService.update(currentFile);
                                         //End Add new field value with report Number
 
                                         final byte[] report = getReportBytes(fileTypeFlowReport, false);
@@ -2959,18 +2957,17 @@ public class FileItemCctDetailController implements Serializable {
                                     .get(0).getFile(), fileItemList, itemFlowList, flowToSend);
 
                             // prepare document to send
-                            final java.io.File xmlFile = SendDocumentUtils
-                                    .prepareCctDocument(documentSerializable,
-                                            ebxmlPropertiesService.getEbxmlFolder(), service, documentType);
+                            byte[] xmlBytes;
+                            try (final ByteArrayOutputStream output = SendDocumentUtils.prepareCctDocument(documentSerializable, service, documentType)) {
+                                xmlBytes = output.toByteArray();
+                            }
 
                             if (CollectionUtils.isNotEmpty(flowToSend.getCopyRecipientsList())) {
                                 final List<CopyRecipient> copyRecipients = flowToSend.getCopyRecipientsList();
                                 for (final CopyRecipient copyRecipient : copyRecipients) {
                                     LOG.info("SEND COPY RECIPIENT TO {}", copyRecipient.getToAuthority().getRole());
                                     final Map<String, Object> data = new HashMap<>();
-                                    final Path path = Paths.get(xmlFile.getAbsolutePath());
-                                    final byte[] ebxml = Files.readAllBytes(path);
-                                    data.put(ESBConstants.FLOW, ebxml);
+                                    data.put(ESBConstants.FLOW, xmlBytes);
                                     data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
                                     data.put(ESBConstants.TYPE_DOCUMENT, documentType);
                                     data.put(ESBConstants.SERVICE, service);
@@ -2985,9 +2982,7 @@ public class FileItemCctDetailController implements Serializable {
                                 }
                             } else {
                                 final Map<String, Object> data = new HashMap<>();
-                                final Path path = Paths.get(xmlFile.getAbsolutePath());
-                                final byte[] ebxml = Files.readAllBytes(path);
-                                data.put(ESBConstants.FLOW, ebxml);
+                                data.put(ESBConstants.FLOW, xmlBytes);
                                 data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
                                 data.put(ESBConstants.SERVICE, service);
                                 data.put(ESBConstants.TYPE_DOCUMENT, documentType);
@@ -6600,33 +6595,12 @@ public class FileItemCctDetailController implements Serializable {
 
     public void reSendDecision() {
         try {
-            fileProducer.resendFile(selectedItemFlowDto.getItemFlow());
+            fileProducer.resendDecision(selectedItemFlowDto.getItemFlow());
 
             JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
                     getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.RESEND_SUCCESS));
         } catch (Exception ex) {
             LOG.error("cannot resend the decision", ex);
-            showErrorFacesMessage(ControllerConstants.Bundle.Messages.RESEND_ERROR, null);
-        }
-    }
-
-    public boolean resendAckAllowed() {
-        boolean ok = selectedItemFlowDto != null
-                && selectedItemFlowDto.getItemFlow() != null
-                && selectedItemFlowDto.getItemFlow().getFlow() != null
-                && selectedItemFlowDto.getItemFlow().getFlow().getOutgoing() != null
-                && selectedItemFlowDto.getItemFlow().getFlow().getOutgoing() == 0;
-        return ok;
-    }
-
-    public void resendAck() {
-        try {
-            fileProducer.resendAcknowledgment(selectedItemFlowDto.getItemFlow());
-
-            JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
-                    getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.RESEND_SUCCESS));
-        } catch (Exception ex) {
-            LOG.error("cannot resend ack", ex);
             showErrorFacesMessage(ControllerConstants.Bundle.Messages.RESEND_ERROR, null);
         }
     }

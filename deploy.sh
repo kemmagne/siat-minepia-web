@@ -1,1 +1,2 @@
-scp -v target/siat-ct-web.war root@agserver:~/ && ssh root@agserver "rm -rfv /opt/tomcat/webapps/siat-ct-web* ; cp -v siat-ct-web.war /opt/tomcat/webapps/ ; cp -v siat-ct-web.war /root/glassfish4/glassfish/domains/domain1/autodeploy/"
+scp -i /home/tadzotsa/.ssh/glassfish_htserver_id_rsa target/siat-ct-web.war glassfish@agserver:~/ \
+&& ssh -i /home/tadzotsa/.ssh/glassfish_htserver_id_rsa glassfish@agserver "cp -v siat-ct-web.war /opt/tomcat/webapps/ ; cp -v siat-ct-web.war /data/glassfish/4/domains/siat/autodeploy/ ; rm -vf siat-ct-web.war"

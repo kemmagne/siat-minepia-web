@@ -62,9 +62,13 @@
                 <mailSender.password>P@ssword2015</mailSender.password>
                 <mailSender.from>guce.technical.notifier@gmail.com</mailSender.from>
                 <mailSender.replyTo>hycient.forum@gmail.com</mailSender.replyTo>
+                <!--new-->
+                <webservice.url>http://thehost:9759/orchestra/privacy/siat/messageService/ebxml</webservice.url>
+                <messages.folder>/data/glassfish/siat/eguce/messages/ct</messages.folder>
+                <mails.folder>/data/glassfish/siat/eguce/mails/ct</mails.folder>
             </properties>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <activeByDefault>false</activeByDefault>
                 <property>
                     <name>environment</name>
                     <value>ht</value>
@@ -106,8 +110,13 @@
                 <mailSender.password>P@ssword2015</mailSender.password>
                 <mailSender.from>guce.technical.notifier@gmail.com</mailSender.from>
                 <mailSender.replyTo>lerichgames@gmail.com</mailSender.replyTo>
+                <!--new-->
+                <webservice.url>http://localhost:9759/orchestra/privacy/siat/messageService/ebxml</webservice.url>
+                <messages.folder>/data/glassfish/siat/eguce/messages/ct</messages.folder>
+                <mails.folder>/data/glassfish/siat/eguce/mails/ct</mails.folder>
             </properties>
             <activation>
+                <activeByDefault>true</activeByDefault>
                 <property>
                     <name>environment</name>
                     <value>dev</value>
@@ -145,6 +154,10 @@
                 <mailSender.password>P@ssword2015</mailSender.password>
                 <mailSender.from>guce.technical.notifier@gmail.com</mailSender.from>
                 <mailSender.replyTo>amine.ayed@businessdecision.com;farouk.bensaria@businessdecision.com;</mailSender.replyTo>
+                <!--new-->
+                <webservice.url>http://thehost:9759/orchestra/privacy/siat/messageService/ebxml</webservice.url>
+                <messages.folder>/data/glassfish/siat/eguce/messages/ct</messages.folder>
+                <mails.folder>/data/glassfish/siat/eguce/mails/ct</mails.folder>
             </properties>
             <activation>
                 <property>
@@ -181,6 +194,10 @@
                 <mailSender.password>siat1234</mailSender.password>
                 <mailSender.from>siat@singlewindow.cm</mailSender.from>
                 <mailSender.replyTo>siat@singlewindow.cm</mailSender.replyTo>
+                <!--new-->
+                <webservice.url>http://sw0:9759/orchestra/privacy/siat/messageService/ebxml</webservice.url>
+                <messages.folder>/siat/eGuce/messages/ct</messages.folder>
+                <mails.folder>/siat/eGuce/mails/ct</mails.folder>
             </properties>
             <activation>
                 <property>
@@ -218,6 +235,10 @@
                 <mailSender.password>siat1234</mailSender.password>
                 <mailSender.from>testsiat@singlewindow.cm</mailSender.from>
                 <mailSender.replyTo>testsiat@singlewindow.cm</mailSender.replyTo>
+                <!--new-->
+                <webservice.url>http://sw0:9759/orchestra/privacy/siat/messageService/ebxml</webservice.url>
+                <messages.folder>/siat/eGuce/messages/ct</messages.folder>
+                <mails.folder>/siat/eGuce/mails/ct</mails.folder>
             </properties>
             <activation>
                 <property>
