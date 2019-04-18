@@ -77,7 +77,8 @@
                 <environment>dev</environment>
                 <db.username>siat_ct</db.username>
                 <db.password>siat</db.password>
-                <db.url>jdbc:oracle:thin:@test:1518:GUCETEST</db.url>
+                <!--<db.url>jdbc:oracle:thin:@test:1518:GUCETEST</db.url>-->
+                <db.url>jdbc:oracle:thin:@vm:1521:GUCE</db.url>
                 <ged.url>http://gedurl:17483</ged.url>
                 <jms.url>failover:(tcp://brokerurl:61616)</jms.url>
                 <version>${application.version}</version>
@@ -87,12 +88,15 @@
                 <uri.out>SIAT</uri.out>
                 <uri.dead.in>direct:dead</uri.dead.in>
                 <uri.dead.out>amq:deadQueue</uri.dead.out>
-                <ebxml.folder>D:/lerichjam/siat/ebxml</ebxml.folder>
+                <!--<ebxml.folder>D:/lerichjam/siat/ebxml</ebxml.folder>-->
                 <!--<ebxml.folder>/home/yenke/eGuce/ebxml</ebxml.folder>-->
-                <xml.folder>D:/lerichjam/siat/xml</xml.folder>
+                <!--<xml.folder>D:/lerichjam/siat/xml</xml.folder>-->
                 <!--<xml.folder>/home/yenke/eGuce/xml</xml.folder>-->
-                <attachement.folder>D:/lerichjam/siat/attachement</attachement.folder>
+                <!--<attachement.folder>D:/lerichjam/siat/attachement</attachement.folder>-->
                 <!--<attachement.folder>/home/yenke/eGuce/attachement</attachement.folder>-->
+                <ebxml.folder>d:/Developement/GUCE/eGuce/ebxml</ebxml.folder>
+                <xml.folder>d:/Developement/GUCE/eGuce/xml</xml.folder>
+                <attachement.folder>d:/Developement/GUCE/eGuce/attachement</attachement.folder>
                 <hibernate.default_schema>SIAT_CT</hibernate.default_schema>
                 <jms.username>admin</jms.username>
                 <jms.password>admin</jms.password>
@@ -308,7 +312,7 @@
         <dependency>
             <groupId>org.guce.siat</groupId>
             <artifactId>siat-ct-core</artifactId>
-            <version>2.1.0</version>
+            <version>2.1.1</version>
         </dependency>
 
         <dependency>
