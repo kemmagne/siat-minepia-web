@@ -45,6 +45,10 @@
 		<field name="volume" class="java.math.BigDecimal"/>
 		<field name="fournisseur" class="java.lang.String"/>
 		<field name="observations" class="java.lang.String"/>
+		<field name="numColis" class="java.lang.String"/>
+		<field name="nbrePieces" class="java.lang.Integer"/>
+		<field name="largeur" class="java.math.BigDecimal"/>
+		<field name="epaisseur" class="java.lang.Integer"/>
 		<variable name="TOTAL_VOLUME" class="java.math.BigDecimal"/>
 	</subDataset>
 	<field name="importer" class="java.lang.String"/>
@@ -138,29 +142,13 @@
 				<textFieldExpression><![CDATA[$F{decisionNumber} == null ? " - " : $F{decisionNumber}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="345" y="18" width="200" height="40" uuid="ffd069a8-5864-4363-8918-fcbb4c253c49"/>
+				<reportElement x="345" y="5" width="200" height="40" uuid="ffd069a8-5864-4363-8918-fcbb4c253c49"/>
 				<textElement textAlignment="Center">
 					<font fontName="Century Gothic" size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[REPUBLIQUE DU CAMEROUN
-Paix - Travail - Patrie
+				<text><![CDATA[REPUBLIC OF CAMEROON
+Peace - Workk - Fatherland
 ------]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="13" y="18" width="102" height="25" uuid="c8d86262-9ed4-4fda-b95f-73bb2a01c7da"/>
-				<textElement textAlignment="Center">
-					<font fontName="Century Gothic" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[MINISTERES DES FORETS ET DE LA FAUNE]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="2" y="41" width="130" height="34" uuid="b068d4a1-4422-4205-b866-8ba26c0578a3"/>
-				<textElement textAlignment="Center">
-					<font fontName="Century Gothic" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[--------
-DIRECTION DES FORETS
------]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="410" y="218" width="119" height="18" uuid="c6a8beb1-b986-4ff0-a124-df59c785fe99"/>
@@ -176,13 +164,54 @@ DIRECTION DES FORETS
 				</textElement>
 				<text><![CDATA[- Référence e-FORCE : ]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="345" y="45" width="200" height="15" uuid="6a93c6a4-6283-400b-8cf6-f66d65f0cb42"/>
+				<textElement textAlignment="Center">
+					<font fontName="Century Gothic" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MINISTRY OF FORESTRY AND WILDLIFE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="345" y="60" width="200" height="34" uuid="2f15f796-0f8a-4806-be8c-69af8a9cebd0"/>
+				<textElement textAlignment="Center">
+					<font fontName="Century Gothic" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------
+FORESTS DIRECTORATE
+-----]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="14" y="60" width="200" height="34" uuid="4d522c17-221d-4d06-8514-135a25612557"/>
+				<textElement textAlignment="Center">
+					<font fontName="Century Gothic" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[--------
+DIRECTION DES FORETS
+-----]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="14" y="5" width="200" height="40" uuid="56a7873b-4199-4c3a-a98f-a1485ca08fc8"/>
+				<textElement textAlignment="Center">
+					<font fontName="Century Gothic" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPUBLIQUE DU CAMEROUN
+Paix - Travail - Patrie
+------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="14" y="45" width="200" height="15" uuid="e2cc2860-2716-42e2-9da1-7edbd22abc13"/>
+				<textElement textAlignment="Center">
+					<font fontName="Century Gothic" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MINISTERE DES FORETS ET DE LA FAUNE]]></text>
+			</staticText>
 		</band>
 	</title>
 	<pageHeader>
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<detail>
-		<band height="109" splitType="Stretch">
+		<band height="112" splitType="Stretch">
 			<componentElement>
 				<reportElement key="table" style="table" mode="Opaque" x="0" y="13" width="555" height="80" uuid="38184627-8a63-4978-a34d-08ea75e57b3c"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
@@ -227,7 +256,7 @@ DIRECTION DES FORETS
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Century Gothic" size="8" isBold="true"/>
 								</textElement>
-								<text><![CDATA[N° et Marque de la Grume]]></text>
+								<text><![CDATA[N° Colis]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20" rowSpan="1">
@@ -236,7 +265,7 @@ DIRECTION DES FORETS
 								<textElement textAlignment="Center">
 									<font fontName="Century Gothic"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{numMarqueGrume} == null ? "-" : $F{numMarqueGrume}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{numColis} == null ? "-" : $F{numColis}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -252,7 +281,7 @@ DIRECTION DES FORETS
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Century Gothic" size="8" isBold="true"/>
 								</textElement>
-								<text><![CDATA[Longueur de la Grume]]></text>
+								<text><![CDATA[Nbre de pièces]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20" rowSpan="1">
@@ -261,7 +290,7 @@ DIRECTION DES FORETS
 								<textElement textAlignment="Center">
 									<font fontName="Century Gothic"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{longueurGrume} == null ? "-" : $F{longueurGrume}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{nbrePieces} == null ? "-" : $F{nbrePieces}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -277,7 +306,7 @@ DIRECTION DES FORETS
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Century Gothic" size="8" isBold="true"/>
 								</textElement>
-								<text><![CDATA[Ø Moyen Gros Bout]]></text>
+								<text><![CDATA[Epaisseur]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20" rowSpan="1">
@@ -286,7 +315,7 @@ DIRECTION DES FORETS
 								<textElement textAlignment="Center">
 									<font fontName="Century Gothic"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{diamGrosBout} == null ? "-" : $F{diamGrosBout}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{epaisseur} == null ? "-" : $F{epaisseur}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -302,7 +331,7 @@ DIRECTION DES FORETS
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Century Gothic" size="8" isBold="true"/>
 								</textElement>
-								<text><![CDATA[Ø Moyen Petit Bout]]></text>
+								<text><![CDATA[Largeur]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20" rowSpan="1">
@@ -311,14 +340,14 @@ DIRECTION DES FORETS
 								<textElement textAlignment="Center">
 									<font fontName="Century Gothic"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{diamPetitBout} == null ? "-" : $F{diamPetitBout}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{largeur} == null ? "-" : $F{largeur}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="49" uuid="d8a3f6b6-ba56-4299-b9b7-159432f33ee2">
 						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="3" y="0" width="46" height="30" uuid="3224a95f-b33d-404e-b6e3-f2859579e256"/>
+								<reportElement x="0" y="0" width="49" height="30" uuid="3224a95f-b33d-404e-b6e3-f2859579e256"/>
 								<box>
 									<topPen lineWidth="1.0"/>
 									<bottomPen lineWidth="1.0"/>
@@ -327,7 +356,7 @@ DIRECTION DES FORETS
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Century Gothic" size="8" isBold="true"/>
 								</textElement>
-								<text><![CDATA[Ø Moyenne Generale]]></text>
+								<text><![CDATA[Longueur]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20" rowSpan="1">
@@ -420,7 +449,7 @@ DIRECTION DES FORETS
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="6" splitType="Stretch">
+		<band height="4" splitType="Stretch">
 			<line>
 				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="fab082df-3ca0-43ac-900e-4da3f8b5a45d"/>
 				<graphicElement>
@@ -430,52 +459,68 @@ DIRECTION DES FORETS
 		</band>
 	</columnFooter>
 	<pageFooter>
-		<band height="75" splitType="Stretch">
-			<frame>
-				<reportElement mode="Opaque" x="0" y="62" width="555" height="13" forecolor="#D0B48E" backcolor="#FFFFFF" uuid="bfdca178-800d-445c-9a31-bb616a00e8ce"/>
-				<textField evaluationTime="Report">
-					<reportElement style="Column header" x="515" y="0" width="40" height="13" forecolor="#000000" uuid="2fba0f87-635e-476d-858f-d102b26146fe"/>
-					<textElement verticalAlignment="Middle">
-						<font size="10" isBold="false"/>
-					</textElement>
-					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
-				</textField>
-				<textField>
-					<reportElement style="Column header" mode="Transparent" x="435" y="0" width="80" height="13" forecolor="#000000" uuid="e454d23d-bcfc-4c79-a399-0ef520a3150a"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font size="10" isBold="false"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{PAGE_NUMBER}+" /"]]></textFieldExpression>
-				</textField>
-				<textField pattern="d/M/yyyy">
-					<reportElement style="Column header" x="2" y="0" width="197" height="13" forecolor="#000000" uuid="14d8de1e-8695-4078-a67f-0e69172574d5"/>
-					<textElement verticalAlignment="Middle">
-						<font size="10" isBold="false"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{decisionDate} == null ? new java.util.Date() : $F{decisionDate}]]></textFieldExpression>
-				</textField>
-			</frame>
+		<band height="101" splitType="Stretch">
 			<staticText>
-				<reportElement x="2" y="7" width="145" height="13" uuid="2d89c11d-793f-476d-bba9-2c297407c036"/>
+				<reportElement x="10" y="22" width="150" height="60" uuid="2d89c11d-793f-476d-bba9-2c297407c036"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
 				<textElement textAlignment="Center">
 					<font fontName="Century Gothic" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[VISA DE L'EXPORTATEUR]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="285" y="6" width="263" height="14" uuid="a18629cd-5c36-4b90-a7ea-dc2467b376f3"/>
+				<reportElement x="364" y="22" width="181" height="60" uuid="a18629cd-5c36-4b90-a7ea-dc2467b376f3"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
 				<textElement textAlignment="Center">
 					<font fontName="Century Gothic" size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[SIGNATURE DE L'AGENT DES EAUX ET FORETSET DES CHASSES]]></text>
+				<text><![CDATA[SIGNATURE DE L'AGENT DES EAUX ET FORETS ET DES CHASSES]]></text>
 			</staticText>
+			<textField pattern="d/M/yyyy">
+				<reportElement style="Column header" x="396" y="2" width="72" height="13" forecolor="#000000" uuid="14d8de1e-8695-4078-a67f-0e69172574d5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{decisionDate} == null ? new java.util.Date() : $F{decisionDate}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="515" y="88" width="40" height="13" forecolor="#000000" uuid="2fba0f87-635e-476d-858f-d102b26146fe"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
 			<textField>
-				<reportElement x="327" y="39" width="188" height="19" uuid="c53254fd-b9e1-483a-b1f5-6e63a5292f04"/>
+				<reportElement style="Column header" mode="Transparent" x="435" y="88" width="80" height="13" forecolor="#000000" uuid="e454d23d-bcfc-4c79-a399-0ef520a3150a"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}+" /"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="364" y="63" width="181" height="19" uuid="c53254fd-b9e1-483a-b1f5-6e63a5292f04"/>
 				<textElement textAlignment="Center">
 					<font fontName="Century Gothic" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{signatory} == null ? " - " : $F{signatory}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="364" y="2" width="32" height="13" uuid="65c460f9-6daa-45ef-89e1-85ec80b8a999"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Century Gothic"/>
+				</textElement>
+				<text><![CDATA[Fait le ]]></text>
+			</staticText>
 		</band>
 	</pageFooter>
 	<summary>

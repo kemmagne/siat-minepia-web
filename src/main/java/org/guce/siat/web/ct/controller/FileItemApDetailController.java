@@ -811,7 +811,8 @@ public class FileItemApDetailController implements Serializable {
 
     boolean update = true;
 
-        private List<WoodSpecification> specsList;
+    private List<WoodSpecification> specsList;
+    private FileFieldValue woodsType;
 
     /**
      * The Constant ACCEPTATION_FLOWS.
@@ -985,6 +986,7 @@ public class FileItemApDetailController implements Serializable {
                     case BSBE_MINFOF :
                         bsbeMinfofFileType = true;
                         specsList = woodSpecificationServce.findByFile(currentFile);
+                        woodsType = fileFieldValueService.findValueByFileFieldAndFile("INFORMATIONS_GENERALES_BSB_CERTIFICAT_ENREGISTREMENT_TYPE_PRODUIT", currentFile);
                         break;
                     default:
                         break;
@@ -5428,13 +5430,21 @@ public class FileItemApDetailController implements Serializable {
         this.minepdedVtType = minepdedVtType;
     }
 
-        public List<WoodSpecification> getSpecsList() {
-                return specsList;
-        }
+    public List<WoodSpecification> getSpecsList() {
+            return specsList;
+    }
 
-        public void setSpecsList(List<WoodSpecification> specsList) {
-                this.specsList = specsList;
-        }
+    public void setSpecsList(List<WoodSpecification> specsList) {
+            this.specsList = specsList;
+    }
+
+    public FileFieldValue getWoodsType() {
+        return woodsType;
+    }
+
+    public void setWoodsType(FileFieldValue woodsType) {
+        this.woodsType = woodsType;
+    }
 
     public boolean resendMessageAllowed() {
         return selectedItemFlowDto != null
