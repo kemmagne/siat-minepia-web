@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
-
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
@@ -48,7 +47,6 @@ import javax.servlet.http.HttpSession;
 import javax.xml.bind.JAXBException;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.SerializationUtils;
@@ -967,23 +965,22 @@ public class FileItemApDetailController implements Serializable {
         bsbeMinfofFileType = FileTypeCode.BSBE_MINFOF.equals(currentFile.getFileType().getCode());
     }
 
-        private void processSpecificAddons() {
-            if (currentFile != null && currentFile.getFileType() != null) {
-                switch(currentFile.getFileType().getCode()) {
-                    case AI_MINMIDT : 
-                        aiMinmidtFileType = true;
-                        break;
-                    case VT_MINEPDED :
-                        vtMinepdedFileType = true;
-                        break;
-                    case BSBE_MINFOF :
-                        bsbeMinfofFileType = true;
-                        specsList = woodSpecificationServce.findByFile(currentFile);
-                        woodsType = fileFieldValueService.findValueByFileFieldAndFile("INFORMATIONS_GENERALES_BSB_CERTIFICAT_ENREGISTREMENT_TYPE_PRODUIT", currentFile);
-                        break;
-                    default:
-                        break;
-                }
+    private void processSpecificAddons() {
+        if (currentFile != null && currentFile.getFileType() != null) {
+            switch (currentFile.getFileType().getCode()) {
+                case AI_MINMIDT:
+                    aiMinmidtFileType = true;
+                    break;
+                case VT_MINEPDED:
+                    vtMinepdedFileType = true;
+                    break;
+                case BSBE_MINFOF:
+                    bsbeMinfofFileType = true;
+                    specsList = woodSpecificationServce.findByFile(currentFile);
+                    woodsType = fileFieldValueService.findValueByFileFieldAndFile("INFORMATIONS_GENERALES_BSB_CERTIFICAT_ENREGISTREMENT_TYPE_PRODUIT", currentFile);
+                    break;
+                default:
+                    break;
             }
         }
     }
@@ -5417,11 +5414,11 @@ public class FileItemApDetailController implements Serializable {
     }
 
     public List<WoodSpecification> getSpecsList() {
-            return specsList;
+        return specsList;
     }
 
     public void setSpecsList(List<WoodSpecification> specsList) {
-            this.specsList = specsList;
+        this.specsList = specsList;
     }
 
     public FileFieldValue getWoodsType() {
