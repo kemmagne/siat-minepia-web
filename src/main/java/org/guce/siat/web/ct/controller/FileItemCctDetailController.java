@@ -3950,7 +3950,7 @@ public class FileItemCctDetailController implements Serializable {
                     final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
                             .getString(ControllerConstants.Bundle.Messages.GENERATE_REPORT_FAILED);
                     JsfUtil.addErrorMessage(msg);
-
+                    LOG.error(e.getMessage(), e);
                 }
 
             }
