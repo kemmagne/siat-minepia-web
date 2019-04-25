@@ -805,6 +805,7 @@ public class FileItemApDetailController implements Serializable {
     boolean update = true;
 
     private List<WoodSpecification> specsList;
+    private FileFieldValue woodsType;
 
     /**
      * The Constant ACCEPTATION_FLOWS.
@@ -966,21 +967,23 @@ public class FileItemApDetailController implements Serializable {
         bsbeMinfofFileType = FileTypeCode.BSBE_MINFOF.equals(currentFile.getFileType().getCode());
     }
 
-    private void processSpecificAddons() {
-        if (currentFile != null && currentFile.getFileType() != null) {
-            switch (currentFile.getFileType().getCode()) {
-                case AI_MINMIDT:
-                    aiMinmidtFileType = true;
-                    break;
-                case VT_MINEPDED:
-                    vtMinepdedFileType = true;
-                    break;
-                case BSBE_MINFOF:
-                    bsbeMinfofFileType = true;
-                    specsList = woodSpecificationServce.findByFile(currentFile);
-                    break;
-                default:
-                    break;
+        private void processSpecificAddons() {
+            if (currentFile != null && currentFile.getFileType() != null) {
+                switch(currentFile.getFileType().getCode()) {
+                    case AI_MINMIDT : 
+                        aiMinmidtFileType = true;
+                        break;
+                    case VT_MINEPDED :
+                        vtMinepdedFileType = true;
+                        break;
+                    case BSBE_MINFOF :
+                        bsbeMinfofFileType = true;
+                        specsList = woodSpecificationServce.findByFile(currentFile);
+                        woodsType = fileFieldValueService.findValueByFileFieldAndFile("INFORMATIONS_GENERALES_BSB_CERTIFICAT_ENREGISTREMENT_TYPE_PRODUIT", currentFile);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
@@ -5414,11 +5417,19 @@ public class FileItemApDetailController implements Serializable {
     }
 
     public List<WoodSpecification> getSpecsList() {
-        return specsList;
+            return specsList;
     }
 
     public void setSpecsList(List<WoodSpecification> specsList) {
-        this.specsList = specsList;
+            this.specsList = specsList;
+    }
+
+    public FileFieldValue getWoodsType() {
+        return woodsType;
+    }
+
+    public void setWoodsType(FileFieldValue woodsType) {
+        this.woodsType = woodsType;
     }
 
     public boolean resendMessageAllowed() {

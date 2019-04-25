@@ -99,29 +99,59 @@
                                                     </f:facet>
                                                 <h:outputText value="#{spec.woodSpecies}" />
                                             </p:column>
-                                            <p:column width="15%">
+                                            <p:column width="15%" rendered="#{fileItemApDetailController.woodsType.value eq 'GRUMES'}">
                                                     <f:facet name="header">
                                                             <h:outputText value="#{bundle['numMarqueGrume']}" title="#{bundle['numMarqueGrume']}" />
                                                     </f:facet>
                                                 <h:outputText value="#{spec.numMarqueGrume}" />
                                             </p:column>
+                                            <p:column width="15%" rendered="#{fileItemApDetailController.woodsType.value eq 'DEBITES'}">
+                                                    <f:facet name="header">
+                                                            <h:outputText value="#{bundle['numColis']}" title="#{bundle['numColis']}" />
+                                                    </f:facet>
+                                                <h:outputText value="#{spec.numColis}" />
+                                            </p:column>
+                                            <p:column width="15%" rendered="#{fileItemApDetailController.woodsType.value eq 'DEBITES'}">
+                                                    <f:facet name="header">
+                                                            <h:outputText value="#{bundle['nbrePieces']}" title="#{bundle['nbrePieces']}" />
+                                                    </f:facet>
+                                                <h:outputText value="#{spec.nbrePieces}" />
+                                            </p:column>
                                             <p:column width="8%">
+                                                    <f:facet name="header">
+                                                            <h:outputText value="#{bundle['longueurGrume']}" title="#{bundle['longueurGrume']}" />
+                                                    </f:facet>
+                                                <h:outputText value="#{spec.longueurGrume}" />
+                                            </p:column>
+                                            <p:column width="8%" rendered="#{fileItemApDetailController.woodsType.value eq 'DEBITES'}">
+                                                    <f:facet name="header">
+                                                            <h:outputText value="#{bundle['largeur']}" title="#{bundle['largeur']}" />
+                                                    </f:facet>
+                                                <h:outputText value="#{spec.largeur}" />
+                                            </p:column>
+                                            <p:column width="8%" rendered="#{fileItemApDetailController.woodsType.value eq 'GRUMES'}">
                                                     <f:facet name="header">
                                                             <h:outputText value="#{bundle['diamGrosBout']}" title="#{bundle['diamGrosBout']}" />
                                                     </f:facet>
                                                 <h:outputText value="#{spec.diamGrosBout}" />
                                             </p:column>
-                                            <p:column width="8%">
+                                            <p:column width="8%" rendered="#{fileItemApDetailController.woodsType.value eq 'GRUMES'}">
                                                     <f:facet name="header">
                                                             <h:outputText value="#{bundle['diamPetitBout']}" title="#{bundle['diamPetitBout']}" />
                                                     </f:facet>
                                                 <h:outputText value="#{spec.diamPetitBout}" />
                                             </p:column>
-                                            <p:column width="8%">
+                                            <p:column width="8%" rendered="#{fileItemApDetailController.woodsType.value eq 'GRUMES'}">
                                                     <f:facet name="header">
                                                             <h:outputText value="#{bundle['diamMoyen']}" title="#{bundle['diamMoyen']}" />
                                                     </f:facet>
                                                 <h:outputText value="#{spec.diamMoyen}" />
+                                            </p:column>
+                                            <p:column width="8%" rendered="#{fileItemApDetailController.woodsType.value eq 'DEBITES'}">
+                                                    <f:facet name="header">
+                                                            <h:outputText value="#{bundle['epaisseur']}" title="#{bundle['epaisseur']}" />
+                                                    </f:facet>
+                                                <h:outputText value="#{spec.epaisseur}" />
                                             </p:column>
                                             <p:column width="7%">
                                                     <f:facet name="header">
