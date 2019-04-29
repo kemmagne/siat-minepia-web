@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Transactional
 @RequestMapping("ws")
 @RestController
-public class MessageRestController {
+public class MessageCtRestController {
 
     @Autowired
     private CtDocumentReciever documentReciever;
