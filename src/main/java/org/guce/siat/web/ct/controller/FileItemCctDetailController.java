@@ -203,6 +203,7 @@ import org.guce.siat.web.gr.util.GrUtilsWeb;
 import org.guce.siat.web.gr.util.ScenarioType;
 import org.guce.siat.web.reports.exporter.AbstractReportInvoker;
 import org.guce.siat.web.reports.exporter.CtCctCqeExporter;
+import org.guce.siat.web.reports.exporter.CtCctCsvExporter;
 import org.guce.siat.web.reports.exporter.CtCctTreatmentExporter;
 import org.guce.siat.web.reports.exporter.CtPviExporter;
 import org.primefaces.component.calendar.Calendar;
@@ -1014,6 +1015,10 @@ public class FileItemCctDetailController implements Serializable {
      * this is minader ministry
      */
     private boolean checkMinaderMinistry;
+    /**
+     * this is minepia ministry
+     */
+    private boolean checkMinepiaMinistry;
 
     /**
      * The is payment.
@@ -1043,6 +1048,7 @@ public class FileItemCctDetailController implements Serializable {
     private InterceptionNotification interceptionNotification;
 
     private final String MINADER_MINISTRY = "MINADER";
+    private final String MINEPIA_MINISTRY = "MINEPIA";
 
     private final String TRANSITE_SUPER_FILE_TYPE = "2";
     private final String TRANSITE_SUPER_FILE_TYPE_KEY = "TYPE_DOSSIER_EGUCE";
@@ -1061,6 +1067,7 @@ public class FileItemCctDetailController implements Serializable {
     public void init() {
         currentFile = currentFileItem.getFile();
         checkMinaderMinistry = currentFile.getDestinataire().equalsIgnoreCase(MINADER_MINISTRY);
+        checkMinepiaMinistry = currentFile.getDestinataire().equalsIgnoreCase(MINEPIA_MINISTRY);
         loggedUser = getLoggedUser();
         allowedRecommandation = checkIsAllowadRecommandation();
         listUserAuthorityFileTypes = userAuthorityFileTypeService.findUserAuthorityFileTypeByFileTypeAndUserList(
@@ -1239,6 +1246,20 @@ public class FileItemCctDetailController implements Serializable {
                         } else {
                             flows = flowService.findFlowsByFromStepAndFileType(referenceFileItemCheck.getStep(), referenceFileItemCheck
                                     .getFile().getFileType());
+                        }
+
+                        if (currentFile.getDestinataire().equalsIgnoreCase(MINEPIA_MINISTRY)
+                                && referenceFileItemCheck.getStep().getStepCode().name().equals("ST_CT_04")) {
+                            String MINEPIA_FLOW_CODE_LIST = "FL_CT_CVS_05";
+                            List<String> flowsToRemove = new ArrayList<>();
+                            for (Flow f : flows) {
+                                if (!MINEPIA_FLOW_CODE_LIST.contains(f.getCode())) {
+                                    flowsToRemove.add(f.getCode());
+                                }
+                            }
+
+                            flows = deleteFlowFromFlowList(flows, flowsToRemove.toArray(new String[0]));
+
                         }
 
                         productsHaveSameRDDStatus = productsHaveSameRDDStatus(chckedProductInfoChecksList);
@@ -2658,7 +2679,14 @@ public class FileItemCctDetailController implements Serializable {
             flowCode = FlowCode.FL_CT_06;
         }
         selectedFlow = flowService.findFlowByCode(flowCode.name());
-        setInspectorList(userService.findInspectorsByBureau(currentFile.getBureau()));
+        List<User> cotationActors;
+        if (currentFile.getDestinataire().equals("MINEPIA")) {
+            cotationActors = userService.findCotationsAgentByBureauAndRole(currentFile.getBureau(),
+                    AuthorityConstants.SOCIETE_TRAITEMENT.getCode());
+        } else {
+            cotationActors = userService.findInspectorsByBureau(currentFile.getBureau());
+        }
+        setInspectorList(cotationActors);
 
         for (final DataType dataType : selectedFlow.getDataTypeList()) {
 
@@ -6349,6 +6377,19 @@ public class FileItemCctDetailController implements Serializable {
     }
 
     /**
+     * Sets the check minepia ministry.
+     *
+     * @param checkMinepiaMinistry the new check minepia ministry
+     */
+    public void setCheckMinepiaMinistry(final boolean checkMinepiaMinistry) {
+        this.checkMinepiaMinistry = checkMinepiaMinistry;
+    }
+
+    public boolean isCheckMinepiaMinistry() {
+        return checkMinepiaMinistry;
+    }
+
+    /**
      * Gets the checks if is payment.
      *
      * @return the checks if is payment
@@ -6702,11 +6743,18 @@ public class FileItemCctDetailController implements Serializable {
                 }
             }
 
-            if (reportInvoker != null) {
-                reportInvoker.setDraft(draft);
-                reportInvoker.setFileFieldValueService(fileFieldValueService);
-                report = JsfUtil.getReport(reportInvoker);
+        } else if (currentFile.getDestinataire().equalsIgnoreCase(MINEPIA_MINISTRY)) {
+            switch (currentFile.getFileType().getCode()) {
+                case CCT_CT: {
+                    reportInvoker = new CtCctCsvExporter(currentFile);
+                    break;
+                }
             }
+        }
+        if (reportInvoker != null) {
+            reportInvoker.setDraft(draft);
+            reportInvoker.setFileFieldValueService(fileFieldValueService);
+            report = JsfUtil.getReport(reportInvoker);
         }
         return report;
     }
