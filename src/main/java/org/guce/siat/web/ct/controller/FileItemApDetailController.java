@@ -5439,10 +5439,95 @@ public class FileItemApDetailController implements Serializable {
 
     public void reSendDecision() {
         try {
-            fileProducer.resendDecision(selectedItemFlowDto.getItemFlow());
+            if (fileProducer.resendDecision(selectedItemFlowDto.getItemFlow())) {
+                JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
+                        getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.RESEND_SUCCESS));
+            } else {
+                Flow currentSelectedFlow = selectedItemFlowDto.getItemFlow().getFlow();
+                final List<FileItem> fileItemList = currentFile.getFileItemsList();
+                final String service = StringUtils.EMPTY;
+                final String documentType = StringUtils.EMPTY;
+                final List<ItemFlow> itemFlowList = itemFlowService.findLastItemFlowsByFileItemList(fileItemList);
+                if (currentSelectedFlow.getOutgoing() != null && currentSelectedFlow.getOutgoing() > 0) {
+                    //generate report
+                    Map<String, byte[]> attachedByteFiles = null;
+                    try {
+                        if (FlowCode.FL_AP_107.name().equals(currentSelectedFlow.getCode()) || FlowCode.FL_AP_169.name().equals(currentSelectedFlow.getCode())) {
+                            attachedByteFiles = new HashMap<>();
 
-            JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
-                    getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.RESEND_SUCCESS));
+                            final List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<>();
+
+                            final List<FileTypeFlowReport> fileTypeFlowReportsList = currentSelectedFlow.getFileTypeFlowReportsList();
+
+                            if (fileTypeFlowReportsList != null) {
+
+                                for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
+                                    if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType())) {
+                                        fileTypeFlowReports.add(fileTypeFlowReport);
+                                    }
+                                }
+                            }
+                            for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
+                                final String nomClasse = fileTypeFlowReport.getReportClassName();
+                                @SuppressWarnings("rawtypes")
+                                final Class classe = Class.forName(nomClasse);
+                                @SuppressWarnings({"rawtypes", "unchecked"})
+
+                                final byte[] report = ReportGeneratorUtils.generateReportBytes(fileFieldValueService, classe, currentFile);
+                                attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
+                            }
+                        }
+                    } catch (final Exception e) {
+                        LOG.error("Error occured when loading report: " + e.getMessage(), e);
+                        attachedByteFiles = null;
+                    }
+
+                    // convert file to document
+                    final Serializable documentSerializable = xmlConverterService.convertFileToDocument(fileItemList.get(0)
+                            .getFile(), currentFile.getFileItemsList(), itemFlowList, currentSelectedFlow);
+
+                    // prepare document to send
+                    byte[] xmlBytes;
+                    try (final ByteArrayOutputStream output = SendDocumentUtils.prepareApDocument(documentSerializable, service, documentType)) {
+                        xmlBytes = output.toByteArray();
+                    }
+                    if (CollectionUtils.isNotEmpty(currentSelectedFlow.getCopyRecipientsList())) {
+                        final List<CopyRecipient> copyRecipients = currentSelectedFlow.getCopyRecipientsList();
+                        for (final CopyRecipient copyRecipient : copyRecipients) {
+                            LOG.info("SEND COPY RECIPIENT TO {}", copyRecipient.getToAuthority().getRole());
+                            final Map<String, Object> data = new HashMap<>();
+                            data.put(ESBConstants.FLOW, xmlBytes);
+                            data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
+                            data.put(ESBConstants.TYPE_DOCUMENT, documentType);
+                            data.put(ESBConstants.SERVICE, service);
+                            data.put(ESBConstants.MESSAGE, null);
+                            data.put(ESBConstants.EBXML_TYPE, "STANDARD");
+                            data.put(ESBConstants.TO_PARTY_ID, copyRecipient.getToAuthority().getRole());
+                            data.put(ESBConstants.DEAD, "0");
+                            fileProducer.sendFile(data);
+                            LOG.info("Message sent to OUT queue");
+
+                        }
+                    } else {
+                        final Map<String, Object> data = new HashMap<>();
+                        data.put(ESBConstants.FLOW, xmlBytes);
+                        data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
+                        data.put(ESBConstants.TYPE_DOCUMENT, documentType);
+                        data.put(ESBConstants.SERVICE, service);
+                        data.put(ESBConstants.MESSAGE, null);
+                        data.put(ESBConstants.EBXML_TYPE, "STANDARD");
+                        data.put(ESBConstants.TO_PARTY_ID, ebxmlPropertiesService.getToPartyId());
+                        data.put(ESBConstants.DEAD, "0");
+                        fileProducer.sendFile(data);
+                        LOG.info("Message sent to OUT queue");
+                    }
+
+                }
+                LOG.info("####SEND DECISION Transaction commited####");
+
+                JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
+                        getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.RESEND_SUCCESS));
+            }
         } catch (Exception ex) {
             LOG.error("cannot resend the decision", ex);
             showErrorFacesMessage(ControllerConstants.Bundle.Messages.RESEND_ERROR, null);
