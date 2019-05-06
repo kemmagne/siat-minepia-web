@@ -2534,6 +2534,8 @@ public class FileItemApDetailController implements Serializable {
                                 data.put(ESBConstants.EBXML_TYPE, "STANDARD");
                                 data.put(ESBConstants.TO_PARTY_ID, copyRecipient.getToAuthority().getRole());
                                 data.put(ESBConstants.DEAD, "0");
+                                //
+                                data.put(ESBConstants.ITEM_FLOWS, itemFlowList);
                                 fileProducer.sendFile(data);
                                 if (LOG.isDebugEnabled()) {
                                     LOG.debug("Message sent to OUT queue");
@@ -2550,11 +2552,8 @@ public class FileItemApDetailController implements Serializable {
                             data.put(ESBConstants.EBXML_TYPE, "STANDARD");
                             data.put(ESBConstants.TO_PARTY_ID, currentFile.getEmetteur());
                             data.put(ESBConstants.DEAD, "0");
-                            /*
-                            data.put(ESBConstants.FILE, currentFile);
-                            data.put(ESBConstants.CURRENT_FLOW, flowToSend.getCode());
-                            data.put(ESBConstants.ITEM_FLOW_IDS, SiatUtils.getEntitiesIds(itemFlowList));
-                             */
+                            //
+                            data.put(ESBConstants.ITEM_FLOWS, itemFlowList);
                             fileProducer.sendFile(data);
                             if (LOG.isDebugEnabled()) {
                                 LOG.debug("Message sent to OUT queue");
@@ -5504,6 +5503,8 @@ public class FileItemApDetailController implements Serializable {
                             data.put(ESBConstants.EBXML_TYPE, "STANDARD");
                             data.put(ESBConstants.TO_PARTY_ID, copyRecipient.getToAuthority().getRole());
                             data.put(ESBConstants.DEAD, "0");
+                            //
+                            data.put(ESBConstants.ITEM_FLOWS, itemFlowList);
                             fileProducer.sendFile(data);
                             LOG.info("Message sent to OUT queue");
 
@@ -5518,6 +5519,8 @@ public class FileItemApDetailController implements Serializable {
                         data.put(ESBConstants.EBXML_TYPE, "STANDARD");
                         data.put(ESBConstants.TO_PARTY_ID, ebxmlPropertiesService.getToPartyId());
                         data.put(ESBConstants.DEAD, "0");
+                        //
+                        data.put(ESBConstants.ITEM_FLOWS, itemFlowList);
                         fileProducer.sendFile(data);
                         LOG.info("Message sent to OUT queue");
                     }

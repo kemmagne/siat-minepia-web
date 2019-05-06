@@ -11,7 +11,7 @@
                 <p:scrollPanel mode="native">
 
                     <p:dataTable id="historyDataTable" widgetVar="historyDataTable" value="#{fileItemCctDetailController.itemFlowHistoryDtoList}"
-                                 filteredValue="" var="item" selectionMode="single" rowKey="#{item.itemFlow.id}" rows="20" paginator="true"
+                                 filteredValue="#{fileItemCctDetailController.itemFlowHistoryDtoListFiltred}" var="item" selectionMode="single" rowKey="#{item.itemFlow.id}" rows="20" paginator="true"
                                  rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}" styleClass="newui-datatable fixeColumnWidth"
                                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                                  currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})"
