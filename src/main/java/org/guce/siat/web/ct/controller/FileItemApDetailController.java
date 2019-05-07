@@ -11,9 +11,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,7 +25,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
-
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
@@ -51,7 +47,6 @@ import javax.servlet.http.HttpSession;
 import javax.xml.bind.JAXBException;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.SerializationUtils;
@@ -119,9 +114,7 @@ import org.guce.siat.common.utils.DateUtils;
 import org.guce.siat.common.utils.RepetableUtil;
 import org.guce.siat.common.utils.SiatUtils;
 import org.guce.siat.common.utils.Tab;
-import org.guce.siat.common.utils.XmlXPathUtils;
 import org.guce.siat.common.utils.ebms.ESBConstants;
-import org.guce.siat.common.utils.ebms.UtilitiesException;
 import org.guce.siat.common.utils.enums.AperakType;
 import org.guce.siat.common.utils.enums.AuthorityConstants;
 import org.guce.siat.common.utils.enums.FileTypeCode;
@@ -166,8 +159,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
-import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
 
 /**
  * The Class FileItemApDetailController.
@@ -226,7 +217,7 @@ public class FileItemApDetailController implements Serializable {
      */
     private static final String EMAIL_BODY_NOTIFICATION_EN = "emailBodyNotification_en.vm";
 
-        private static final DateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
+    private static final DateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
 
     /**
      * The administration service.
@@ -672,11 +663,11 @@ public class FileItemApDetailController implements Serializable {
     @ManagedProperty(value = "#{paymentDataService}")
     private PaymentDataService paymentDataService;
 
-        @ManagedProperty(value = "#{woodSpecificationService}")
-        private WoodSpecificationService woodSpecificationServce;
-        
-        @ManagedProperty(value = "#{fileMarshallService}")
-        private FileMarshallService fileMarshallServce;
+    @ManagedProperty(value = "#{woodSpecificationService}")
+    private WoodSpecificationService woodSpecificationServce;
+
+    @ManagedProperty(value = "#{fileMarshallService}")
+    private FileMarshallService fileMarshallServce;
 
     /**
      * The come from retrieve ap.
@@ -798,7 +789,7 @@ public class FileItemApDetailController implements Serializable {
     private boolean vtTypeSelectionViewable;
     private boolean aiMinmidtFileType;
     private boolean vtMinepdedFileType;
-        private boolean bsbeMinfofFileType;
+    private boolean bsbeMinfofFileType;
     /**
      *
      */
@@ -811,7 +802,8 @@ public class FileItemApDetailController implements Serializable {
 
     boolean update = true;
 
-        private List<WoodSpecification> specsList;
+    private List<WoodSpecification> specsList;
+    private FileFieldValue woodsType;
 
     /**
      * The Constant ACCEPTATION_FLOWS.
@@ -856,8 +848,8 @@ public class FileItemApDetailController implements Serializable {
      * The name of the field vaidity Date
      */
     final static String validityDateFieldName = "DATE_VALIDITE";
-	
-	final static String SIGNATAIRE_DATE_FIELD_NAME = "SIGNATAIRE_DATE";
+
+    final static String SIGNATAIRE_DATE_FIELD_NAME = "SIGNATAIRE_DATE";
 
     /**
      * Gets the transaction manager.
@@ -967,30 +959,31 @@ public class FileItemApDetailController implements Serializable {
         rejctDispatchAllowed = (cotationAllowed && !apDecisionStep.equals(currentFile.getFileItemsList().get(0).getStep()) && !StepCode.ST_AP_47
                 .equals(currentFile.getFileItemsList().get(0).getStep().getStepCode()));
 
-                processSpecificAddons();
+        processSpecificAddons();
         aiMinmidtFileType = FileTypeCode.AI_MINMIDT.equals(currentFile.getFileType().getCode());
         vtMinepdedFileType = FileTypeCode.VT_MINEPDED.equals(currentFile.getFileType().getCode());
-                bsbeMinfofFileType = FileTypeCode.BSBE_MINFOF.equals(currentFile.getFileType().getCode());
+        bsbeMinfofFileType = FileTypeCode.BSBE_MINFOF.equals(currentFile.getFileType().getCode());
     }
 
-        private void processSpecificAddons() {
-            if (currentFile != null && currentFile.getFileType() != null) {
-                switch(currentFile.getFileType().getCode()) {
-                    case AI_MINMIDT : 
-                        aiMinmidtFileType = true;
-                        break;
-                    case VT_MINEPDED :
-                        vtMinepdedFileType = true;
-                        break;
-                    case BSBE_MINFOF :
-                        bsbeMinfofFileType = true;
-                        specsList = woodSpecificationServce.findByFile(currentFile);
-                        break;
-                    default:
-                        break;
-                }
+    private void processSpecificAddons() {
+        if (currentFile != null && currentFile.getFileType() != null) {
+            switch (currentFile.getFileType().getCode()) {
+                case AI_MINMIDT:
+                    aiMinmidtFileType = true;
+                    break;
+                case VT_MINEPDED:
+                    vtMinepdedFileType = true;
+                    break;
+                case BSBE_MINFOF:
+                    bsbeMinfofFileType = true;
+                    specsList = woodSpecificationServce.findByFile(currentFile);
+                    woodsType = fileFieldValueService.findValueByFileFieldAndFile("INFORMATIONS_GENERALES_BSB_CERTIFICAT_ENREGISTREMENT_TYPE_PRODUIT", currentFile);
+                    break;
+                default:
+                    break;
             }
         }
+    }
 
     /**
      * Prepare decisions. On select button "Decider" we should initialize the
@@ -1143,38 +1136,38 @@ public class FileItemApDetailController implements Serializable {
             JsfUtil.addWarningMessage("Selectionnez la pièce à télécharger");
             return null;
         }
-		try {
-			final Session sessionCmisClient = CmisSession.getInstance();
-        ContentStream contentStream = CmisClient.getDocumentByPath(sessionCmisClient, getSelectedAttachment().getPath()
-                + AlfrescoDirectoriesInitializer.SLASH + getSelectedAttachment().getDocumentName());
-        if (contentStream == null) {
-            contentStream = CmisClient.getDocumentByPath(sessionCmisClient, getSelectedAttachment().getPath());
-        }
-        if (contentStream == null) {
-            JsfUtil.addErrorMessage("Impossible de trouver la pièce jointe");
-            return null;
-        }
-        final BufferedInputStream in = new BufferedInputStream(contentStream.getStream());
-        final ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-        int val = -1;
         try {
-            while ((val = in.read()) != -1) {
-                out.write(val);
+            final Session sessionCmisClient = CmisSession.getInstance();
+            ContentStream contentStream = CmisClient.getDocumentByPath(sessionCmisClient, getSelectedAttachment().getPath()
+                    + AlfrescoDirectoriesInitializer.SLASH + getSelectedAttachment().getDocumentName());
+            if (contentStream == null) {
+                contentStream = CmisClient.getDocumentByPath(sessionCmisClient, getSelectedAttachment().getPath());
             }
-        } catch (final IOException e) {
+            if (contentStream == null) {
+                JsfUtil.addErrorMessage("Impossible de trouver la pièce jointe");
+                return null;
+            }
+            final BufferedInputStream in = new BufferedInputStream(contentStream.getStream());
+            final ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+            int val = -1;
+            try {
+                while ((val = in.read()) != -1) {
+                    out.write(val);
+                }
+            } catch (final IOException e) {
+                LOG.error(e.getMessage(), e);
+            }
+
+            final byte[] bytes = out.toByteArray();
+
+            return new DefaultStreamedContent(new ByteArrayInputStream(bytes), !StringUtils.isEmpty(contentStream.getMimeType()) ? contentStream.getMimeType() : "application/msword", selectedAttachment.getDocumentName());
+        } catch (Exception e) {
+            JsfUtil.addErrorMessage("Impossible de télécharger la pièce jointe");
             LOG.error(e.getMessage(), e);
         }
 
-        final byte[] bytes = out.toByteArray();
-
-        return new DefaultStreamedContent(new ByteArrayInputStream(bytes), !StringUtils.isEmpty(contentStream.getMimeType()) ? contentStream.getMimeType() : "application/msword", selectedAttachment.getDocumentName());
-		} catch(Exception e){
-			JsfUtil.addErrorMessage("Impossible de télécharger la pièce jointe");
-			LOG.error(e.getMessage(), e);
-		}
-		
-		return null;
+        return null;
     }
 
     public byte[] getBytesFromAttachment(Attachment att) {
@@ -1438,9 +1431,9 @@ public class FileItemApDetailController implements Serializable {
                                         FlowCode.FL_AP_158.name(), FlowCode.FL_AP_159.name()).contains(flow.getCode())) {
 //							destinationFlowsFromCurrentStep = Collections.singletonList(flow);
                             destinationFlowsFromCurrentStep = new ArrayList<Flow>();
-                                                        if (fileTypeFlow != null || !bsbeMinfofFileType) {
-                            destinationFlowsFromCurrentStep.add(flow);
-                                                        }
+                            if (fileTypeFlow != null || !bsbeMinfofFileType) {
+                                destinationFlowsFromCurrentStep.add(flow);
+                            }
                             cotationAllowed = true;
                             decisionAllowed = false;
                             returnAllowed = true;
@@ -1450,9 +1443,9 @@ public class FileItemApDetailController implements Serializable {
                                 && flow.getToStep().getId().equals(apDecisionStep.getId())
                                 && !DECISION_FLOWS_AT_COTATION_STEP.contains(flow.getCode())) {
 
-                                                        if (fileTypeFlow != null || !bsbeMinfofFileType) {
-                            destinationFlowsFromCurrentStep.add(flow);
-                                                        }
+                            if (fileTypeFlow != null || !bsbeMinfofFileType) {
+                                destinationFlowsFromCurrentStep.add(flow);
+                            }
                         } else if ((flow.getToStep() != null && !apDecisionStepCode.contains(flow.getToStep().getStepCode())) && !returnAllowed
                                 && !DECISION_FLOWS_AT_COTATION_STEP.contains(flow.getCode()) || flow.getToStep() == null) {
                             destinationFlowsFromCurrentStep.add(flow);
@@ -2338,9 +2331,9 @@ public class FileItemApDetailController implements Serializable {
                                 if (decisionFlow != null) {
                                     // Persist SIGNATAIRE_DATE
                                     FileField signataireDateFileField = fileFieldService.findFileFieldByCodeAndFileType(SIGNATAIRE_DATE_FIELD_NAME, currentFile.getFileType().getCode());
-                                    if (signataireDateFileField != null && decisionFlow.getCreated() != null){
+                                    if (signataireDateFileField != null && decisionFlow.getCreated() != null) {
                                         FileFieldValue signataireDateFieldValue = fileFieldValueService.findValueByFileFieldAndFile(signataireDateFileField.getCode(), currentFile);
-                                        if (signataireDateFieldValue != null){
+                                        if (signataireDateFieldValue != null) {
                                             signataireDateFieldValue.setValue(new SimpleDateFormat("dd/MM/yyyy").format(decisionFlow.getCreated()));
                                             fileFieldValueService.update(signataireDateFieldValue);
                                         } else {
@@ -2445,7 +2438,7 @@ public class FileItemApDetailController implements Serializable {
                                         }
                                     }
                                     //End Add new field value with report Number
-                                    byte[] report = null;
+                                    byte[] report;
 
                                     if (aiMinmidtFileType) {
                                         Attachment finalAttachment = findAuthorizationAttachment();
@@ -2485,9 +2478,9 @@ public class FileItemApDetailController implements Serializable {
                                     }
                                     final java.io.File targetAttachment = new java.io.File(folder, targetAttachmentName);
 
-                                    final FileOutputStream fileOuputStream = new FileOutputStream(targetAttachment);
-                                    fileOuputStream.write(report);
-                                    fileOuputStream.close();
+                                    try (FileOutputStream fileOuputStream = new FileOutputStream(targetAttachment)) {
+                                        fileOuputStream.write(report);
+                                    }
 
                                     //Update report sequence
                                     reportOrganism.setSequence(reportOrganism.getSequence() + 1);
@@ -2523,23 +2516,17 @@ public class FileItemApDetailController implements Serializable {
                                 .getFile(), fileItemList, itemFlowList, executedFlow);
 
                         // prepare document to send
-                        final java.io.File xmlFile = SendDocumentUtils.prepareApDocument(documentSerializable,
-                                ebxmlPropertiesService.getEbxmlFolder(), service, documentType);
-                        
-                        final String xmlContent = FileUtils.readFileToString(xmlFile, "UTF-8");
-                        final Element rootElement = XmlXPathUtils.stringToXMLDOM(xmlContent).getDocumentElement();
- 
-                        documentType = getDocumentType(rootElement);
-                        service = getService(rootElement);
+                        byte[] xmlBytes;
+                        try (final ByteArrayOutputStream output = SendDocumentUtils.prepareApDocument(documentSerializable, service, documentType)) {
+                            xmlBytes = output.toByteArray();
+                        }
 
                         if (CollectionUtils.isNotEmpty(flowToSend.getCopyRecipientsList())) {
                             final List<CopyRecipient> copyRecipients = flowToSend.getCopyRecipientsList();
                             for (final CopyRecipient copyRecipient : copyRecipients) {
                                 LOG.info("SEND COPY RECIPIENT TO {}", copyRecipient.getToAuthority().getRole());
                                 final Map<String, Object> data = new HashMap<>();
-                                final Path path = Paths.get(xmlFile.getAbsolutePath());
-                                final byte[] ebxml = Files.readAllBytes(path);
-                                data.put(ESBConstants.FLOW, ebxml);
+                                data.put(ESBConstants.FLOW, xmlBytes);
                                 data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
                                 data.put(ESBConstants.TYPE_DOCUMENT, documentType);
                                 data.put(ESBConstants.SERVICE, service);
@@ -2547,6 +2534,8 @@ public class FileItemApDetailController implements Serializable {
                                 data.put(ESBConstants.EBXML_TYPE, "STANDARD");
                                 data.put(ESBConstants.TO_PARTY_ID, copyRecipient.getToAuthority().getRole());
                                 data.put(ESBConstants.DEAD, "0");
+                                //
+                                data.put(ESBConstants.ITEM_FLOWS, itemFlowList);
                                 fileProducer.sendFile(data);
                                 if (LOG.isDebugEnabled()) {
                                     LOG.debug("Message sent to OUT queue");
@@ -2555,9 +2544,7 @@ public class FileItemApDetailController implements Serializable {
                             }
                         } else {
                             final Map<String, Object> data = new HashMap<>();
-                            final Path path = Paths.get(xmlFile.getAbsolutePath());
-                            final byte[] ebxml = Files.readAllBytes(path);
-                            data.put(ESBConstants.FLOW, ebxml);
+                            data.put(ESBConstants.FLOW, xmlBytes);
                             data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
                             data.put(ESBConstants.TYPE_DOCUMENT, documentType);
                             data.put(ESBConstants.SERVICE, service);
@@ -2565,11 +2552,8 @@ public class FileItemApDetailController implements Serializable {
                             data.put(ESBConstants.EBXML_TYPE, "STANDARD");
                             data.put(ESBConstants.TO_PARTY_ID, currentFile.getEmetteur());
                             data.put(ESBConstants.DEAD, "0");
-                            /*
-                            data.put(ESBConstants.FILE, currentFile);
-                            data.put(ESBConstants.CURRENT_FLOW, flowToSend.getCode());
-                            data.put(ESBConstants.ITEM_FLOW_IDS, SiatUtils.getEntitiesIds(itemFlowList));
-                            */
+                            //
+                            data.put(ESBConstants.ITEM_FLOWS, itemFlowList);
                             fileProducer.sendFile(data);
                             if (LOG.isDebugEnabled()) {
                                 LOG.debug("Message sent to OUT queue");
@@ -3367,13 +3351,13 @@ public class FileItemApDetailController implements Serializable {
                 @SuppressWarnings("rawtypes")
                 Class classe = Class.forName(nomClasse);
                 @SuppressWarnings({"rawtypes", "unchecked"})
-				byte[] report;
-                                if (bsbeMinfofFileType) {
-                                    Constructor c1 = classe.getConstructor(File.class, List.class);
-                                    report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile, specsList));
-                                } else {
-                                    report = ReportGeneratorUtils.generateReportBytes(fileFieldValueService, classe, currentFile);
-                                }
+                byte[] report;
+                if (bsbeMinfofFileType) {
+                    Constructor c1 = classe.getConstructor(File.class, List.class);
+                    report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile, specsList));
+                } else {
+                    report = ReportGeneratorUtils.generateReportBytes(fileFieldValueService, classe, currentFile);
+                }
                 final InputStream is = new ByteArrayInputStream(report);
                 final StreamedContent fileToDownload = new DefaultStreamedContent(is, "application/pdf",
                         currentFile.getReferenceSiat() + '_' + fileTypeFlowReport.getReportName());
@@ -5276,21 +5260,21 @@ public class FileItemApDetailController implements Serializable {
         this.fileTypeFlowService = fileTypeFlowService;
     }
 
-        public WoodSpecificationService getWoodSpecificationServce() {
-                return woodSpecificationServce;
-        }
+    public WoodSpecificationService getWoodSpecificationServce() {
+        return woodSpecificationServce;
+    }
 
-        public void setWoodSpecificationServce(WoodSpecificationService woodSpecificationServce) {
-                this.woodSpecificationServce = woodSpecificationServce;
-        }
+    public void setWoodSpecificationServce(WoodSpecificationService woodSpecificationServce) {
+        this.woodSpecificationServce = woodSpecificationServce;
+    }
 
-        public FileMarshallService getFileMarshallServce() {
-                return fileMarshallServce;
-        }
+    public FileMarshallService getFileMarshallServce() {
+        return fileMarshallServce;
+    }
 
-        public void setFileMarshallServce(FileMarshallService fileMarshallServce) {
-                this.fileMarshallServce = fileMarshallServce;
-        }
+    public void setFileMarshallServce(FileMarshallService fileMarshallServce) {
+        this.fileMarshallServce = fileMarshallServce;
+    }
 
     /**
      * Gets the generate report allowed.
@@ -5412,10 +5396,10 @@ public class FileItemApDetailController implements Serializable {
         return vtMinepdedFileType;
     }
 
-        public boolean isBsbeMinfofFileType() {
-               return bsbeMinfofFileType;
-        }
-    
+    public boolean isBsbeMinfofFileType() {
+        return bsbeMinfofFileType;
+    }
+
     public FileField getVtTypeFileField() {
         return vtTypeFileField;
     }
@@ -5428,13 +5412,21 @@ public class FileItemApDetailController implements Serializable {
         this.minepdedVtType = minepdedVtType;
     }
 
-        public List<WoodSpecification> getSpecsList() {
-                return specsList;
-        }
+    public List<WoodSpecification> getSpecsList() {
+        return specsList;
+    }
 
-        public void setSpecsList(List<WoodSpecification> specsList) {
-                this.specsList = specsList;
-        }
+    public void setSpecsList(List<WoodSpecification> specsList) {
+        this.specsList = specsList;
+    }
+
+    public FileFieldValue getWoodsType() {
+        return woodsType;
+    }
+
+    public void setWoodsType(FileFieldValue woodsType) {
+        this.woodsType = woodsType;
+    }
 
     public boolean resendMessageAllowed() {
         return selectedItemFlowDto != null
@@ -5446,10 +5438,99 @@ public class FileItemApDetailController implements Serializable {
 
     public void reSendDecision() {
         try {
-            fileProducer.resendFile(selectedItemFlowDto.getItemFlow());
+            if (fileProducer.resendDecision(selectedItemFlowDto.getItemFlow())) {
+                JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
+                        getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.RESEND_SUCCESS));
+            } else {
+                Flow currentSelectedFlow = selectedItemFlowDto.getItemFlow().getFlow();
+                final List<FileItem> fileItemList = currentFile.getFileItemsList();
+                final String service = StringUtils.EMPTY;
+                final String documentType = StringUtils.EMPTY;
+                final List<ItemFlow> itemFlowList = itemFlowService.findLastItemFlowsByFileItemList(fileItemList);
+                if (currentSelectedFlow.getOutgoing() != null && currentSelectedFlow.getOutgoing() > 0) {
+                    //generate report
+                    Map<String, byte[]> attachedByteFiles = null;
+                    try {
+                        if (FlowCode.FL_AP_107.name().equals(currentSelectedFlow.getCode()) || FlowCode.FL_AP_169.name().equals(currentSelectedFlow.getCode())) {
+                            attachedByteFiles = new HashMap<>();
 
-            JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
-                    getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.RESEND_SUCCESS));
+                            final List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<>();
+
+                            final List<FileTypeFlowReport> fileTypeFlowReportsList = currentSelectedFlow.getFileTypeFlowReportsList();
+
+                            if (fileTypeFlowReportsList != null) {
+
+                                for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
+                                    if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType())) {
+                                        fileTypeFlowReports.add(fileTypeFlowReport);
+                                    }
+                                }
+                            }
+                            for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
+                                final String nomClasse = fileTypeFlowReport.getReportClassName();
+                                @SuppressWarnings("rawtypes")
+                                final Class classe = Class.forName(nomClasse);
+                                @SuppressWarnings({"rawtypes", "unchecked"})
+
+                                final byte[] report = ReportGeneratorUtils.generateReportBytes(fileFieldValueService, classe, currentFile);
+                                attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
+                            }
+                        }
+                    } catch (final Exception e) {
+                        LOG.error("Error occured when loading report: " + e.getMessage(), e);
+                        attachedByteFiles = null;
+                    }
+
+                    // convert file to document
+                    final Serializable documentSerializable = xmlConverterService.convertFileToDocument(fileItemList.get(0)
+                            .getFile(), currentFile.getFileItemsList(), itemFlowList, currentSelectedFlow);
+
+                    // prepare document to send
+                    byte[] xmlBytes;
+                    try (final ByteArrayOutputStream output = SendDocumentUtils.prepareApDocument(documentSerializable, service, documentType)) {
+                        xmlBytes = output.toByteArray();
+                    }
+                    if (CollectionUtils.isNotEmpty(currentSelectedFlow.getCopyRecipientsList())) {
+                        final List<CopyRecipient> copyRecipients = currentSelectedFlow.getCopyRecipientsList();
+                        for (final CopyRecipient copyRecipient : copyRecipients) {
+                            LOG.info("SEND COPY RECIPIENT TO {}", copyRecipient.getToAuthority().getRole());
+                            final Map<String, Object> data = new HashMap<>();
+                            data.put(ESBConstants.FLOW, xmlBytes);
+                            data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
+                            data.put(ESBConstants.TYPE_DOCUMENT, documentType);
+                            data.put(ESBConstants.SERVICE, service);
+                            data.put(ESBConstants.MESSAGE, null);
+                            data.put(ESBConstants.EBXML_TYPE, "STANDARD");
+                            data.put(ESBConstants.TO_PARTY_ID, copyRecipient.getToAuthority().getRole());
+                            data.put(ESBConstants.DEAD, "0");
+                            //
+                            data.put(ESBConstants.ITEM_FLOWS, itemFlowList);
+                            fileProducer.sendFile(data);
+                            LOG.info("Message sent to OUT queue");
+
+                        }
+                    } else {
+                        final Map<String, Object> data = new HashMap<>();
+                        data.put(ESBConstants.FLOW, xmlBytes);
+                        data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
+                        data.put(ESBConstants.TYPE_DOCUMENT, documentType);
+                        data.put(ESBConstants.SERVICE, service);
+                        data.put(ESBConstants.MESSAGE, null);
+                        data.put(ESBConstants.EBXML_TYPE, "STANDARD");
+                        data.put(ESBConstants.TO_PARTY_ID, ebxmlPropertiesService.getToPartyId());
+                        data.put(ESBConstants.DEAD, "0");
+                        //
+                        data.put(ESBConstants.ITEM_FLOWS, itemFlowList);
+                        fileProducer.sendFile(data);
+                        LOG.info("Message sent to OUT queue");
+                    }
+
+                }
+                LOG.info("####SEND DECISION Transaction commited####");
+
+                JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
+                        getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.RESEND_SUCCESS));
+            }
         } catch (Exception ex) {
             LOG.error("cannot resend the decision", ex);
             showErrorFacesMessage(ControllerConstants.Bundle.Messages.RESEND_ERROR, null);
@@ -5460,150 +5541,22 @@ public class FileItemApDetailController implements Serializable {
         return list == null ? java.util.Collections.EMPTY_LIST : list;
     }
 
-	/**
-	 * Show error faces message.
-	 *
-	 * @param bundle the bundle
-	 * @param clientId the client id
-	 */
-	private static void showErrorFacesMessage(final String bundle, final String clientId) {
-		final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
-				FacesContext.getCurrentInstance().getViewRoot().getLocale()).getString(bundle);
-		if (org.apache.commons.lang3.StringUtils.isEmpty(clientId)) {
-			JsfUtil.addErrorMessage(msg);
-		} else {
-			JsfUtil.addErrorMessage(clientId, msg);
-		}
-		LOG.warn(msg);
-	}
-	
-	@SuppressWarnings("unused")
-    public void sendMessage() throws JAXBException, IOException, UtilitiesException {
-		try {
-			if (selectedItemFlowDto != null && selectedItemFlowDto.getItemFlow() != null) {
-				Flow currentSelectedFlow = selectedItemFlowDto.getItemFlow().getFlow();
-				final List<FileItem> fileItemList = currentFile.getFileItemsList();
-				final String service = StringUtils.EMPTY;
-				final String documentType = StringUtils.EMPTY;
-				final List<ItemFlow> itemFlowList = itemFlowService.findLastItemFlowsByFileItemList(fileItemList);
-				if (currentSelectedFlow.getOutgoing() != null && currentSelectedFlow.getOutgoing() > 0) {
-					//generate report
-					Map<String, byte[]> attachedByteFiles = null;
-					try {
-						String reportNumber = StringUtils.EMPTY;
-						if (FlowCode.FL_AP_107.name().equals(currentSelectedFlow.getCode()) || FlowCode.FL_AP_169.name().equals(currentSelectedFlow.getCode())) {
-							ItemFlow decisionFlow = null;
-							attachedByteFiles = new HashMap<>();
-
-							final List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<>();
-
-							final List<FileTypeFlowReport> fileTypeFlowReportsList = currentSelectedFlow.getFileTypeFlowReportsList();
-
-							if (fileTypeFlowReportsList != null) {
-
-								for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
-									if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType())) {
-										fileTypeFlowReports.add(fileTypeFlowReport);
-									}
-								}
-							}
-							for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
-								final String nomClasse = fileTypeFlowReport.getReportClassName();
-								@SuppressWarnings("rawtypes")
-								final Class classe = Class.forName(nomClasse);
-								@SuppressWarnings({"rawtypes", "unchecked"})
-
-								final byte[] report = ReportGeneratorUtils.generateReportBytes(fileFieldValueService, classe, currentFile);
-								attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
-
-								final java.io.File targetAttachment = new java.io.File(String.format(
-										applicationPropretiesService.getAttachementFolder() + "%s%s", java.io.File.separator,
-										fileTypeFlowReport.getReportName()));
-
-								final FileOutputStream fileOuputStream = new FileOutputStream(targetAttachment);
-								fileOuputStream.write(report);
-								fileOuputStream.close();
-							}
-						}
-					} catch (final Exception e) {
-						LOG.error("Error occured when loading report: " + e.getMessage(), e);
-						attachedByteFiles = null;
-					}
-
-					// convert file to document
-					final Serializable documentSerializable = xmlConverterService.convertFileToDocument(fileItemList.get(0)
-							.getFile(), currentFile.getFileItemsList(), itemFlowList, currentSelectedFlow);
-
-					// prepare document to send
-					final java.io.File xmlFile = SendDocumentUtils.prepareApDocument(documentSerializable,
-							ebxmlPropertiesService.getEbxmlFolder(), service, documentType);
-					if (CollectionUtils.isNotEmpty(currentSelectedFlow.getCopyRecipientsList())) {
-						final List<CopyRecipient> copyRecipients = currentSelectedFlow.getCopyRecipientsList();
-						for (final CopyRecipient copyRecipient : copyRecipients) {
-							LOG.info("SEND COPY RECIPIENT TO {}", copyRecipient.getToAuthority().getRole());
-							final Map<String, Object> data = new HashMap<String, Object>();
-							final Path path = Paths.get(xmlFile.getAbsolutePath());
-							final byte[] ebxml = Files.readAllBytes(path);
-							data.put(ESBConstants.FLOW, ebxml);
-							data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
-							data.put(ESBConstants.TYPE_DOCUMENT, documentType);
-							data.put(ESBConstants.SERVICE, service);
-							data.put(ESBConstants.MESSAGE, null);
-							data.put(ESBConstants.EBXML_TYPE, "STANDARD");
-							data.put(ESBConstants.TO_PARTY_ID, copyRecipient.getToAuthority().getRole());
-							data.put(ESBConstants.DEAD, "0");
-							fileProducer.sendFile(data);
-							LOG.info("Message sent to OUT queue");
-
-						}
-					} else {
-						final Map<String, Object> data = new HashMap<String, Object>();
-						final Path path = Paths.get(xmlFile.getAbsolutePath());
-						final byte[] ebxml = Files.readAllBytes(path);
-						data.put(ESBConstants.FLOW, ebxml);
-						data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
-						data.put(ESBConstants.TYPE_DOCUMENT, documentType);
-						data.put(ESBConstants.SERVICE, service);
-						data.put(ESBConstants.MESSAGE, null);
-						data.put(ESBConstants.EBXML_TYPE, "STANDARD");
-						data.put(ESBConstants.TO_PARTY_ID, ebxmlPropertiesService.getToPartyId());
-						data.put(ESBConstants.DEAD, "0");
-						fileProducer.sendFile(data);
-						LOG.info("Message sent to OUT queue");
-					}
-
-				}
-				LOG.info("####SEND DECISION Transaction commited####");
-
-			}
-		} catch (SAXException ex) {
-			java.util.logging.Logger.getLogger(FileItemApDetailController.class.getName()).log(Level.SEVERE, null, ex);
-		} catch (ParseException ex) {
-			java.util.logging.Logger.getLogger(FileItemApDetailController.class.getName()).log(Level.SEVERE, null, ex);
-		}
-	}
-    
-        /**
-         * Gets the document type.
-         *
-         * @param rootElement the root element
-         * @return the document type
-         */
-        private String getDocumentType(final Element rootElement) {
-                final String flowExpression = "/DOCUMENT/TYPE_DOCUMENT";
-                return XmlXPathUtils.findSingleValue(flowExpression, rootElement);
+    /**
+     * Show error faces message.
+     *
+     * @param bundle the bundle
+     * @param clientId the client id
+     */
+    private static void showErrorFacesMessage(final String bundle, final String clientId) {
+        final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
+                FacesContext.getCurrentInstance().getViewRoot().getLocale()).getString(bundle);
+        if (org.apache.commons.lang3.StringUtils.isEmpty(clientId)) {
+            JsfUtil.addErrorMessage(msg);
+        } else {
+            JsfUtil.addErrorMessage(clientId, msg);
         }
-
-        /**
-         * Gets the service.
-         *
-         * @param rootElement the root element
-         * @return the service
-         */
-        private String getService(final Element rootElement) {
-                final String siExpression = "/DOCUMENT/REFERENCE_DOSSIER/SERVICE";
-                return XmlXPathUtils.findSingleValue(siExpression, rootElement);
-        }
+        LOG.warn(msg);
+    }
 
 }
 

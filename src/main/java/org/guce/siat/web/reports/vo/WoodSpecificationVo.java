@@ -17,13 +17,21 @@ public class WoodSpecificationVo {
     
     private String numMarqueGrume;
     
+    private String numColis;
+    
+    private Integer nbrePieces;
+    
     private BigDecimal longueurGrume;
+    
+    private BigDecimal largeur;
     
     private Integer diamGrosBout;
     
     private Integer diamPetitBout;
     
     private Integer diamMoyen;
+    
+    private Integer epaisseur;
     
     private BigDecimal volume;
     
@@ -47,12 +55,36 @@ public class WoodSpecificationVo {
         this.numMarqueGrume = numMarqueGrume;
     }
 
+    public String getNumColis() {
+        return numColis;
+    }
+
+    public void setNumColis(String numColis) {
+        this.numColis = numColis;
+    }
+
+    public Integer getNbrePieces() {
+        return nbrePieces;
+    }
+
+    public void setNbrePieces(Integer nbrePieces) {
+        this.nbrePieces = nbrePieces;
+    }
+
     public BigDecimal getLongueurGrume() {
         return longueurGrume;
     }
 
     public void setLongueurGrume(BigDecimal longueurGrume) {
         this.longueurGrume = longueurGrume;
+    }
+
+    public BigDecimal getLargeur() {
+        return largeur;
+    }
+
+    public void setLargeur(BigDecimal largeur) {
+        this.largeur = largeur;
     }
 
     public Integer getDiamGrosBout() {
@@ -77,6 +109,14 @@ public class WoodSpecificationVo {
 
     public void setDiamMoyen(Integer diamMoyen) {
         this.diamMoyen = diamMoyen;
+    }
+
+    public Integer getEpaisseur() {
+        return epaisseur;
+    }
+
+    public void setEpaisseur(Integer epaisseur) {
+        this.epaisseur = epaisseur;
     }
 
     public BigDecimal getVolume() {

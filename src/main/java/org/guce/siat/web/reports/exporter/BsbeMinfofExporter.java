@@ -42,10 +42,11 @@ public class BsbeMinfofExporter extends AbstractReportInvoker {
      * Instantiates a new bsbe MINFOF exporter.
      *
      * @param file the file
-     * @param specsList
+     * @param specsList the specifications list
+     * @param woodsType the woods type : GRUMES or DEBITES
      */
-    public BsbeMinfofExporter(final File file, final List<WoodSpecification> specsList) {
-        super("BSBE_MINFOF", "BSBE_MINFOF");
+    public BsbeMinfofExporter(final File file, final List<WoodSpecification> specsList, final String woodsType) {
+        super("BSBE_MINFOF_" + woodsType, "BSBE_MINFOF");
         this.file = file;
         this.specsList = specsList;
     }
@@ -134,9 +135,13 @@ public class BsbeMinfofExporter extends AbstractReportInvoker {
                     woodSpecVo.setDiamGrosBout(woodSpec.getDiamGrosBout());
                     woodSpecVo.setDiamMoyen(woodSpec.getDiamMoyen());
                     woodSpecVo.setDiamPetitBout(woodSpec.getDiamPetitBout());
+                    woodSpecVo.setEpaisseur(woodSpec.getEpaisseur());
                     woodSpecVo.setFournisseur(woodSpec.getFournisseur());
                     woodSpecVo.setLongueurGrume(woodSpec.getLongueurGrume());
+                    woodSpecVo.setLargeur(woodSpec.getLargeur());
                     woodSpecVo.setNumMarqueGrume(woodSpec.getNumMarqueGrume());
+                    woodSpecVo.setNumColis(woodSpec.getNumColis());
+                    woodSpecVo.setNbrePieces(woodSpec.getNbrePieces());
                     woodSpecVo.setObservations(woodSpec.getObservations());
                     woodSpecVo.setVolume(woodSpec.getVolume());
                     woodSpecVo.setWoodSpecies(woodSpec.getWoodSpecies());
