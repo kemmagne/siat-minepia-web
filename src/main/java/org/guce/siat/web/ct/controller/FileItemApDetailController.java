@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
-
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
@@ -48,7 +47,6 @@ import javax.servlet.http.HttpSession;
 import javax.xml.bind.JAXBException;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.SerializationUtils;
@@ -805,6 +803,7 @@ public class FileItemApDetailController implements Serializable {
     boolean update = true;
 
     private List<WoodSpecification> specsList;
+    private FileFieldValue woodsType;
 
     /**
      * The Constant ACCEPTATION_FLOWS.
@@ -978,6 +977,7 @@ public class FileItemApDetailController implements Serializable {
                 case BSBE_MINFOF:
                     bsbeMinfofFileType = true;
                     specsList = woodSpecificationServce.findByFile(currentFile);
+                    woodsType = fileFieldValueService.findValueByFileFieldAndFile("INFORMATIONS_GENERALES_BSB_CERTIFICAT_ENREGISTREMENT_TYPE_PRODUIT", currentFile);
                     break;
                 default:
                     break;
@@ -2534,6 +2534,8 @@ public class FileItemApDetailController implements Serializable {
                                 data.put(ESBConstants.EBXML_TYPE, "STANDARD");
                                 data.put(ESBConstants.TO_PARTY_ID, copyRecipient.getToAuthority().getRole());
                                 data.put(ESBConstants.DEAD, "0");
+                                //
+                                data.put(ESBConstants.ITEM_FLOWS, itemFlowList);
                                 fileProducer.sendFile(data);
                                 if (LOG.isDebugEnabled()) {
                                     LOG.debug("Message sent to OUT queue");
@@ -2550,11 +2552,8 @@ public class FileItemApDetailController implements Serializable {
                             data.put(ESBConstants.EBXML_TYPE, "STANDARD");
                             data.put(ESBConstants.TO_PARTY_ID, currentFile.getEmetteur());
                             data.put(ESBConstants.DEAD, "0");
-                            /*
-                            data.put(ESBConstants.FILE, currentFile);
-                            data.put(ESBConstants.CURRENT_FLOW, flowToSend.getCode());
-                            data.put(ESBConstants.ITEM_FLOW_IDS, SiatUtils.getEntitiesIds(itemFlowList));
-                             */
+                            //
+                            data.put(ESBConstants.ITEM_FLOWS, itemFlowList);
                             fileProducer.sendFile(data);
                             if (LOG.isDebugEnabled()) {
                                 LOG.debug("Message sent to OUT queue");
@@ -2583,7 +2582,6 @@ public class FileItemApDetailController implements Serializable {
             final Step currentStep = file.getFileItemsList().get(0).getStep();
             notificationEmail(currentFile, currentStep);
         } catch (final Exception e) {
-            e.printStackTrace();
             transactionManager.rollback(status);
 
             LOG.error("####SEND DECISION Transaction rollbacked#### " + e.getMessage(), e);
@@ -5421,6 +5419,14 @@ public class FileItemApDetailController implements Serializable {
         this.specsList = specsList;
     }
 
+    public FileFieldValue getWoodsType() {
+        return woodsType;
+    }
+
+    public void setWoodsType(FileFieldValue woodsType) {
+        this.woodsType = woodsType;
+    }
+
     public boolean resendMessageAllowed() {
         return selectedItemFlowDto != null
                 && selectedItemFlowDto.getItemFlow() != null
@@ -5431,10 +5437,105 @@ public class FileItemApDetailController implements Serializable {
 
     public void reSendDecision() {
         try {
-            fileProducer.resendDecision(selectedItemFlowDto.getItemFlow());
+            if (fileProducer.resendDecision(selectedItemFlowDto.getItemFlow())) {
+                JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
+                        getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.RESEND_SUCCESS));
+            } else {
+                final DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
+                transactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+                final TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+                try {
+                    Flow currentSelectedFlow = selectedItemFlowDto.getItemFlow().getFlow();
+                    final List<FileItem> fileItemList = currentFile.getFileItemsList();
+                    final String service = StringUtils.EMPTY;
+                    final String documentType = StringUtils.EMPTY;
+                    final List<ItemFlow> itemFlowList = selectedItemFlowDto.getItemFlow().getFlow().getItemsFlowsList();
+                    //generate report
+                    Map<String, byte[]> attachedByteFiles = null;
+                    if (FlowCode.FL_AP_107.name().equals(currentSelectedFlow.getCode()) || FlowCode.FL_AP_169.name().equals(currentSelectedFlow.getCode())) {
+                        attachedByteFiles = new HashMap<>();
 
-            JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
-                    getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.RESEND_SUCCESS));
+                        final List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<>();
+
+                        final List<FileTypeFlowReport> fileTypeFlowReportsList = currentSelectedFlow.getFileTypeFlowReportsList();
+
+                        if (fileTypeFlowReportsList != null) {
+
+                            for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
+                                if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType())) {
+                                    fileTypeFlowReports.add(fileTypeFlowReport);
+                                }
+                            }
+                        }
+                        for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
+                            final String nomClasse = fileTypeFlowReport.getReportClassName();
+                            @SuppressWarnings("rawtypes")
+                            final Class classe = Class.forName(nomClasse);
+                            @SuppressWarnings({"rawtypes", "unchecked"})
+
+                            final byte[] report = ReportGeneratorUtils.generateReportBytes(fileFieldValueService, classe, currentFile);
+                            attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
+                        }
+                    }
+
+                    // convert file to document
+                    final Serializable documentSerializable = xmlConverterService.convertFileToDocument(fileItemList.get(0)
+                            .getFile(), currentFile.getFileItemsList(), itemFlowList, currentSelectedFlow);
+
+                    // prepare document to send
+                    byte[] xmlBytes;
+                    try (final ByteArrayOutputStream output = SendDocumentUtils.prepareApDocument(documentSerializable, service, documentType)) {
+                        xmlBytes = output.toByteArray();
+                    }
+                    if (CollectionUtils.isNotEmpty(currentSelectedFlow.getCopyRecipientsList())) {
+                        final List<CopyRecipient> copyRecipients = currentSelectedFlow.getCopyRecipientsList();
+                        for (final CopyRecipient copyRecipient : copyRecipients) {
+                            LOG.info("SEND COPY RECIPIENT TO {}", copyRecipient.getToAuthority().getRole());
+                            final Map<String, Object> data = new HashMap<>();
+                            data.put(ESBConstants.FLOW, xmlBytes);
+                            data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
+                            data.put(ESBConstants.TYPE_DOCUMENT, documentType);
+                            data.put(ESBConstants.SERVICE, service);
+                            data.put(ESBConstants.MESSAGE, null);
+                            data.put(ESBConstants.EBXML_TYPE, "STANDARD");
+                            data.put(ESBConstants.TO_PARTY_ID, copyRecipient.getToAuthority().getRole());
+                            data.put(ESBConstants.DEAD, "0");
+                            //
+                            data.put(ESBConstants.ITEM_FLOWS, itemFlowList);
+                            fileProducer.sendFile(data);
+                            LOG.info("Message sent to OUT queue");
+
+                        }
+                    } else {
+                        final Map<String, Object> data = new HashMap<>();
+                        data.put(ESBConstants.FLOW, xmlBytes);
+                        data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
+                        data.put(ESBConstants.TYPE_DOCUMENT, documentType);
+                        data.put(ESBConstants.SERVICE, service);
+                        data.put(ESBConstants.MESSAGE, null);
+                        data.put(ESBConstants.EBXML_TYPE, "STANDARD");
+                        data.put(ESBConstants.TO_PARTY_ID, ebxmlPropertiesService.getToPartyId());
+                        data.put(ESBConstants.DEAD, "0");
+                        //
+                        data.put(ESBConstants.ITEM_FLOWS, itemFlowList);
+                        fileProducer.sendFile(data);
+                        LOG.info("Message sent to OUT queue");
+                    }
+
+                    transactionManager.commit(transactionStatus);
+                    if (LOG.isDebugEnabled()) {
+                        LOG.info("####RESEND DECISION Transaction commited####");
+                    }
+
+                    LOG.info("####RESEND DECISION Transaction commited####");
+
+                    JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
+                            getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.RESEND_SUCCESS));
+                } catch (final Exception e) {
+                    transactionManager.rollback(transactionStatus);
+                    throw e;
+                }
+            }
         } catch (Exception ex) {
             LOG.error("cannot resend the decision", ex);
             showErrorFacesMessage(ControllerConstants.Bundle.Messages.RESEND_ERROR, null);
