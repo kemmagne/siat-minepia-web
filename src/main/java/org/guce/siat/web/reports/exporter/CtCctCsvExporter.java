@@ -7,15 +7,21 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import javax.faces.bean.ManagedProperty;
 
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.guce.siat.common.dao.ItemFlowDao;
 import org.guce.siat.common.model.File;
 import org.guce.siat.common.model.FileFieldValue;
 import org.guce.siat.common.model.FileItem;
 import org.guce.siat.common.model.FileItemFieldValue;
+import org.guce.siat.common.model.ItemFlow;
+import org.guce.siat.common.model.ItemFlowData;
+import org.guce.siat.common.model.User;
+import org.guce.siat.web.ct.controller.FileItemCctDetailController;
 import org.guce.siat.web.reports.vo.CtCctCsvFileItemVo;
 import org.guce.siat.web.reports.vo.CtCctCsvFileVo;
 import org.slf4j.Logger;
@@ -36,14 +42,17 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
      */
     private final File file;
 
+    private final User user;
+
     /**
      * Instantiates a new ct cct csv exporter.
      *
      * @param file the file
      */
-    public CtCctCsvExporter(final File file) {
+    public CtCctCsvExporter(final File file, User connected) {
         super("CT_CCT_CSV", "CT_CCT_CSV");
         this.file = file;
+        this.user = connected;
     }
 
 
@@ -61,14 +70,18 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
             final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
             ctCctCsvFileVo.setDecisionPlace(file.getBureau().getLabelFr());
             ctCctCsvFileVo.setDecisionDate(Calendar.getInstance().getTime());
-            if (file.getAssignedUser() != null) {
-                ctCctCsvFileVo.setSignatoryName(file.getAssignedUser().getFirstName());
-                ctCctCsvFileVo.setSignatoryPosition(file.getAssignedUser().getPosition().getLabelFr());
+            if (user != null) {
+                ctCctCsvFileVo.setSignatoryName(user.getFirstName());
+                ctCctCsvFileVo.setSignatoryPosition(user.getPosition().getLabelFr());
+                ctCctCsvFileVo.setVeterinaryAuthority(user.getAdministration().getLabelFr());
+            } 
+            if (ctCctCsvFileVo.getVeterinaryAuthority() == null) {
+                ctCctCsvFileVo.setVeterinaryAuthority(file.getBureau().getLabelFr());
             }
             if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
                 for (final FileFieldValue fileFieldValue : fileFieldValueList) {
                     switch (fileFieldValue.getFileField().getCode()) {
-                        case "NUMERO_DEMANDE":
+                        case "CERTIFICATE_NUMBER":
                             if (ctCctCsvFileVo.getCertificateReferenceNumber() == null) {
                                 ctCctCsvFileVo.setCertificateReferenceNumber(fileFieldValue.getValue());
                             }
@@ -77,6 +90,18 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
                             if (ctCctCsvFileVo.getCertificateReferenceNumber() == null) {
                                 ctCctCsvFileVo.setCertificateReferenceNumber(fileFieldValue.getValue());
                             }
+                            break;
+                        case "CODE_BUREAU":
+//                            ctCctCsvFileVo.setVeterinaryAuthority(fileFieldValue.getValue());
+                            break;
+                        case "PAYS_ORIGINE":
+                            ctCctCsvFileVo.setCountryOfOrigin(fileFieldValue.getValue());
+                            break;
+                        case "PAYS_DESTINATION":
+                            ctCctCsvFileVo.setCountryOfDestination(fileFieldValue.getValue());
+                            break;
+                        case "LIEU_CHARGEMENT":
+                            ctCctCsvFileVo.setPlaceOfLoading(fileFieldValue.getValue());
                             break;
                         case "TRANSITAIRE_RAISONSOCIALE":
                             ctCctCsvFileVo.setConsigneeName(fileFieldValue.getValue());
@@ -224,10 +249,41 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
                             ctCctCsvFileVo.setConsignorTelephone(fileFieldValue.getValue());
                             break;
                         }
+                        case "CCT_CONTENEURS_CONTENEUR": {
+                            String value = fileFieldValue.getValue();
+                            ctCctCsvFileVo.setCvsIdContainersSeals(value);
+                            break;
+                        }
                         default:
                             break;
                     }
                 }
+            }
+
+            if (CollectionUtils.isNotEmpty(file.getFileItemsList())) {
+                List<ItemFlow> ifs = file.getFileItemsList().get(0).getItemFlowsList();
+                if (CollectionUtils.isNotEmpty(ifs)) {
+                    List<String> cctCsvAcceptFlowList = new ArrayList<>();
+                    cctCsvAcceptFlowList.add("FL_CT_CVS_03");
+                    cctCsvAcceptFlowList.add("FL_CT_CVS_07");
+                    for (ItemFlow ifl : ifs) {
+                        if (cctCsvAcceptFlowList.contains(ifl.getFlow().getCode())) {
+                            List<ItemFlowData> itemFlowDataList = ifl.getItemFlowsDataList();
+
+                            for (final ItemFlowData itemFlowData : itemFlowDataList) {
+                                switch (itemFlowData.getDataType().getLabel()) {
+                                    case "Titre et Qualité":
+                                        ctCctCsvFileVo.setSignatoryPosition(itemFlowData.getValue());
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+
+                        }
+                    }
+                }
+
             }
 
             ctCctCsvFileVo.setDecisionNumber("/MINEP/SG/BNO");

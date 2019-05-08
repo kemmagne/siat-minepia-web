@@ -6746,7 +6746,7 @@ public class FileItemCctDetailController implements Serializable {
         } else if (currentFile.getDestinataire().equalsIgnoreCase(MINEPIA_MINISTRY)) {
             switch (currentFile.getFileType().getCode()) {
                 case CCT_CT: {
-                    reportInvoker = new CtCctCsvExporter(currentFile);
+                    reportInvoker = new CtCctCsvExporter(currentFile, loggedUser);
                     break;
                 }
             }

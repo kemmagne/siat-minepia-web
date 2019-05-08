@@ -136,6 +136,10 @@ public class CtCctCsvFileVo extends AbstractFileVo<CtCctCsvFileItemVo> {
      * The place of shipment.
      */
     private String placeOfShipment;
+    /**
+     * The place of shipment.
+     */
+    private String placeOfLoading;
 
     /**
      * The expedition date.
@@ -679,6 +683,16 @@ public class CtCctCsvFileVo extends AbstractFileVo<CtCctCsvFileItemVo> {
     public void setPlaceOfOriginAddress(final String placeOfOriginAddress) {
         this.placeOfOriginAddress = placeOfOriginAddress;
     }
+
+    public String getPlaceOfLoading() {
+        return placeOfLoading;
+    }
+
+    public void setPlaceOfLoading(String placeOfLoading) {
+        this.placeOfLoading = placeOfLoading;
+    }
+    
+    
 
     /**
      * Gets the place of shipment.
