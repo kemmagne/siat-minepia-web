@@ -2582,7 +2582,6 @@ public class FileItemApDetailController implements Serializable {
             final Step currentStep = file.getFileItemsList().get(0).getStep();
             notificationEmail(currentFile, currentStep);
         } catch (final Exception e) {
-            e.printStackTrace();
             transactionManager.rollback(status);
 
             LOG.error("####SEND DECISION Transaction rollbacked#### " + e.getMessage(), e);
@@ -5442,43 +5441,41 @@ public class FileItemApDetailController implements Serializable {
                 JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
                         getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.RESEND_SUCCESS));
             } else {
-                Flow currentSelectedFlow = selectedItemFlowDto.getItemFlow().getFlow();
-                final List<FileItem> fileItemList = currentFile.getFileItemsList();
-                final String service = StringUtils.EMPTY;
-                final String documentType = StringUtils.EMPTY;
-                final List<ItemFlow> itemFlowList = itemFlowService.findLastItemFlowsByFileItemList(fileItemList);
-                if (currentSelectedFlow.getOutgoing() != null && currentSelectedFlow.getOutgoing() > 0) {
+                final DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
+                transactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+                final TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+                try {
+                    Flow currentSelectedFlow = selectedItemFlowDto.getItemFlow().getFlow();
+                    final List<FileItem> fileItemList = currentFile.getFileItemsList();
+                    final String service = StringUtils.EMPTY;
+                    final String documentType = StringUtils.EMPTY;
+                    final List<ItemFlow> itemFlowList = selectedItemFlowDto.getItemFlow().getFlow().getItemsFlowsList();
                     //generate report
                     Map<String, byte[]> attachedByteFiles = null;
-                    try {
-                        if (FlowCode.FL_AP_107.name().equals(currentSelectedFlow.getCode()) || FlowCode.FL_AP_169.name().equals(currentSelectedFlow.getCode())) {
-                            attachedByteFiles = new HashMap<>();
+                    if (FlowCode.FL_AP_107.name().equals(currentSelectedFlow.getCode()) || FlowCode.FL_AP_169.name().equals(currentSelectedFlow.getCode())) {
+                        attachedByteFiles = new HashMap<>();
 
-                            final List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<>();
+                        final List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<>();
 
-                            final List<FileTypeFlowReport> fileTypeFlowReportsList = currentSelectedFlow.getFileTypeFlowReportsList();
+                        final List<FileTypeFlowReport> fileTypeFlowReportsList = currentSelectedFlow.getFileTypeFlowReportsList();
 
-                            if (fileTypeFlowReportsList != null) {
+                        if (fileTypeFlowReportsList != null) {
 
-                                for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
-                                    if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType())) {
-                                        fileTypeFlowReports.add(fileTypeFlowReport);
-                                    }
+                            for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
+                                if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType())) {
+                                    fileTypeFlowReports.add(fileTypeFlowReport);
                                 }
                             }
-                            for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
-                                final String nomClasse = fileTypeFlowReport.getReportClassName();
-                                @SuppressWarnings("rawtypes")
-                                final Class classe = Class.forName(nomClasse);
-                                @SuppressWarnings({"rawtypes", "unchecked"})
-
-                                final byte[] report = ReportGeneratorUtils.generateReportBytes(fileFieldValueService, classe, currentFile);
-                                attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
-                            }
                         }
-                    } catch (final Exception e) {
-                        LOG.error("Error occured when loading report: " + e.getMessage(), e);
-                        attachedByteFiles = null;
+                        for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
+                            final String nomClasse = fileTypeFlowReport.getReportClassName();
+                            @SuppressWarnings("rawtypes")
+                            final Class classe = Class.forName(nomClasse);
+                            @SuppressWarnings({"rawtypes", "unchecked"})
+
+                            final byte[] report = ReportGeneratorUtils.generateReportBytes(fileFieldValueService, classe, currentFile);
+                            attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
+                        }
                     }
 
                     // convert file to document
@@ -5525,11 +5522,19 @@ public class FileItemApDetailController implements Serializable {
                         LOG.info("Message sent to OUT queue");
                     }
 
-                }
-                LOG.info("####SEND DECISION Transaction commited####");
+                    transactionManager.commit(transactionStatus);
+                    if (LOG.isDebugEnabled()) {
+                        LOG.info("####RESEND DECISION Transaction commited####");
+                    }
 
-                JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
-                        getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.RESEND_SUCCESS));
+                    LOG.info("####RESEND DECISION Transaction commited####");
+
+                    JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
+                            getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.RESEND_SUCCESS));
+                } catch (final Exception e) {
+                    transactionManager.rollback(transactionStatus);
+                    throw e;
+                }
             }
         } catch (Exception ex) {
             LOG.error("cannot resend the decision", ex);
