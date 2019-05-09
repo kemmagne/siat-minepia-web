@@ -11,6 +11,10 @@ public class CtCctTreatmentFileItemVo {
     private String nature;
     private String volume;
     private String weight;
+	
+	private String productLabel;
+	private String quantityLabel;
+	private String volumeWeightLabel;
 
     public String getCode() {
         return code;
@@ -51,5 +55,29 @@ public class CtCctTreatmentFileItemVo {
     public void setWeight(String weight) {
         this.weight = weight;
     }
+	
+	public String getProductLabel() {
+		return productLabel;
+	}
+
+	public void setProductLabel(String productLabel) {
+		this.productLabel = productLabel;
+	}
+
+	public String getQuantityLabel() {
+		return quantityLabel;
+	}
+
+	public void setQuantityLabel(String quantityLabel) {
+		this.quantityLabel = quantityLabel;
+	}
+
+	public String getVolumeWeightLabel() {
+		return volumeWeightLabel;
+	}
+
+	public void setVolumeWeightLabel(String volumeWeightLabel) {
+		this.volumeWeightLabel = volumeWeightLabel;
+	}
 
 }
