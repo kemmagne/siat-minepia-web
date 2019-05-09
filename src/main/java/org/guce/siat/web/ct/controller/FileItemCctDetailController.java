@@ -1246,7 +1246,7 @@ public class FileItemCctDetailController implements Serializable {
                                     .getFile().getFileType());
                         }
 
-                        if (currentFile.getDestinataire().equalsIgnoreCase(MINEPIA_MINISTRY)
+                        if (checkMinepiaMinistry
                                 && referenceFileItemCheck.getStep().getStepCode().name().equals("ST_CT_04")) {
                             String MINEPIA_FLOW_CODE_LIST = "FL_CT_CVS_05";
                             List<String> flowsToRemove = new ArrayList<>();
@@ -2678,7 +2678,7 @@ public class FileItemCctDetailController implements Serializable {
         }
         selectedFlow = flowService.findFlowByCode(flowCode.name());
         List<User> cotationActors;
-        if (currentFile.getDestinataire().equals("MINEPIA")) {
+        if (checkMinepiaMinistry) {
             cotationActors = userService.findCotationsAgentByBureauAndRole(currentFile.getBureau(),
                     AuthorityConstants.SOCIETE_TRAITEMENT.getCode());
         } else {
@@ -2927,7 +2927,9 @@ public class FileItemCctDetailController implements Serializable {
                             try {
                                 String reportNumber;
                                 if (FlowCode.FL_CT_89.name().equals(flowToSend.getCode())
-                                        || FlowCode.FL_CT_08.name().equals(flowToSend.getCode())) {
+                                        || FlowCode.FL_CT_08.name().equals(flowToSend.getCode())
+                                        || FlowCode.FL_CT_CVS_03.name().equals(flowToSend.getCode())
+                                        || FlowCode.FL_CT_CVS_07.name().equals(flowToSend.getCode())) {
 
                                     // edit signature elements
                                     Date now = java.util.Calendar.getInstance().getTime();
@@ -6834,7 +6836,7 @@ public class FileItemCctDetailController implements Serializable {
                 }
             }
 
-        } else if (currentFile.getDestinataire().equalsIgnoreCase(MINEPIA_MINISTRY)) {
+        } else if (checkMinepiaMinistry) {
             switch (currentFile.getFileType().getCode()) {
                 case CCT_CT: {
                     reportInvoker = new CtCctCsvExporter(currentFile, loggedUser);

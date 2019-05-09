@@ -1,5 +1,6 @@
 package org.guce.siat.web.reports.vo;
 
+import java.io.ByteArrayInputStream;
 import java.util.Date;
 
 /**
@@ -233,6 +234,8 @@ public class CtCctCsvFileVo extends AbstractFileVo<CtCctCsvFileItemVo> {
      * The permit CITES Number.
      */
     private String cvsPermitCITES;
+
+    private ByteArrayInputStream qrCode;
 
     /**
      * Gets the consignor name.
@@ -691,8 +694,6 @@ public class CtCctCsvFileVo extends AbstractFileVo<CtCctCsvFileItemVo> {
     public void setPlaceOfLoading(String placeOfLoading) {
         this.placeOfLoading = placeOfLoading;
     }
-    
-    
 
     /**
      * Gets the place of shipment.
@@ -755,6 +756,14 @@ public class CtCctCsvFileVo extends AbstractFileVo<CtCctCsvFileItemVo> {
      */
     public String getModeOfTransport() {
         return modeOfTransport;
+    }
+
+    public ByteArrayInputStream getQrCode() {
+        return qrCode;
+    }
+
+    public void setQrCode(ByteArrayInputStream qrCode) {
+        this.qrCode = qrCode;
     }
 
     /**
@@ -913,7 +922,5 @@ public class CtCctCsvFileVo extends AbstractFileVo<CtCctCsvFileItemVo> {
     public void setCvsPermitCITES(String cvsPermitCITES) {
         this.cvsPermitCITES = cvsPermitCITES;
     }
-    
-    
 
 }

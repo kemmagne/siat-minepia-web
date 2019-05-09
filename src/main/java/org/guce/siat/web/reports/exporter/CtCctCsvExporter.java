@@ -1,5 +1,6 @@
 package org.guce.siat.web.reports.exporter;
 
+import java.io.ByteArrayInputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import org.guce.siat.common.model.FileItemFieldValue;
 import org.guce.siat.common.model.ItemFlow;
 import org.guce.siat.common.model.ItemFlowData;
 import org.guce.siat.common.model.User;
+import org.guce.siat.common.utils.QRCodeUtils;
 import org.guce.siat.web.ct.controller.FileItemCctDetailController;
 import org.guce.siat.web.reports.vo.CtCctCsvFileItemVo;
 import org.guce.siat.web.reports.vo.CtCctCsvFileVo;
@@ -74,7 +76,7 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
                 ctCctCsvFileVo.setSignatoryName(user.getFirstName());
                 ctCctCsvFileVo.setSignatoryPosition(user.getPosition().getLabelFr());
                 ctCctCsvFileVo.setVeterinaryAuthority(user.getAdministration().getLabelFr());
-            } 
+            }
             if (ctCctCsvFileVo.getVeterinaryAuthority() == null) {
                 ctCctCsvFileVo.setVeterinaryAuthority(file.getBureau().getLabelFr());
             }
@@ -260,6 +262,20 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
                 }
             }
 
+            if (StringUtils.isNotBlank(ctCctCsvFileVo.getCvsIdContainersSeals())) {
+                final String[] tab1 = ctCctCsvFileVo.getCvsIdContainersSeals().split(";");
+                final int size = tab1.length;
+                final StringBuilder builder = new StringBuilder();
+                for (int i = 1; i < size; i++) {
+                    if (StringUtils.isBlank(tab1[i])) {
+                        continue;
+                    }
+                    final String[] tab2 = tab1[i].split(",");
+                    builder.append(tab2[0]).append("/").append(tab2[3]).append("; ");
+                }
+                ctCctCsvFileVo.setCvsIdContainersSeals(builder.substring(0, builder.lastIndexOf(" ")));
+            }
+
             if (CollectionUtils.isNotEmpty(file.getFileItemsList())) {
                 List<ItemFlow> ifs = file.getFileItemsList().get(0).getItemFlowsList();
                 if (CollectionUtils.isNotEmpty(ifs)) {
@@ -296,7 +312,7 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
                 for (final FileItem fileItem : fileItemList) {
                     final CtCctCsvFileItemVo fileItemVo = new CtCctCsvFileItemVo();
 
-                    fileItemVo.setDesc(fileItem.getNsh() != null ? fileItem.getNsh().getGoodsItemDesc() : null);
+                    fileItemVo.setNumberOfPackages(fileItem.getQuantity());
                     fileItemVo.setCode(fileItem.getNsh() != null ? fileItem.getNsh().getGoodsItemCode() : null);
 
                     final List<FileItemFieldValue> fileItemFieldValueList = fileItem.getFileItemFieldValueList();
@@ -307,12 +323,18 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
                                 case "NUMERO_CONTENEUR":
                                     fileItemVo.setContainerNumber(fileItemFieldValue.getValue());
                                     break;
+                                case "SPECIFICATION_TECHNIQUE":
+                                    fileItemVo.setDesc(fileItemFieldValue.getValue());
+                                    break;
+//                                case "QUANTITE":
+//                                    fileItemVo.setNumberOfPackages(fileItemFieldValue.getValue());
+//                                    break;
                                 case "QUANTITE_TOTALE":
                                     fileItemVo.setTotalQuantity(fileItemFieldValue.getValue());
                                     break;
-                                case "NBR_LOTS_COLIS":
-                                    fileItemVo.setNumberOfPackages(fileItemFieldValue.getValue());
-                                    break;
+//                                case "NBR_LOTS_COLIS":
+//                                    fileItemVo.setNumberOfPackages(fileItemFieldValue.getValue());
+//                                    break;
                                 case "POIDS_NET":
                                     fileItemVo.setNetWeight(fileItemFieldValue.getValue());
                                 case "TEMPERATURE":
@@ -346,6 +368,13 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
                 }
             }
             //	ctCctCsvFileVo.setSignatoryName();
+
+            String qrContent = "Nom Importateur : " + ctCctCsvFileVo.getConsigneeName()
+                    + " Nom Fournisseur : " + ctCctCsvFileVo.getConsignorName()
+                    + " Referencence Dedouanement : " + ctCctCsvFileVo.getCertificateReferenceNumber()
+                    + " Numero BL ou LTA : " + ctCctCsvFileVo.getLadingNumberLTA();
+            ctCctCsvFileVo.setQrCode(new ByteArrayInputStream(QRCodeUtils.generateQR(qrContent, 512)));
+            
             ctCctCsvFileVo.setFileItemList(fileItemVos);
         }
 

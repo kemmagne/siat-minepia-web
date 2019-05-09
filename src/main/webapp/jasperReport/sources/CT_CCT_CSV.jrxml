@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="file" language="groovy" pageWidth="595" pageHeight="842" columnWidth="585" leftMargin="5" rightMargin="5" topMargin="5" bottomMargin="5" uuid="28078ea8-15af-47d5-9f91-aa95db5f187e">
-	<property name="ireport.zoom" value="3.0"/>
-	<property name="ireport.x" value="825"/>
-	<property name="ireport.y" value="1735"/>
+	<property name="ireport.zoom" value="2.0490403660952135"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="2101"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<style name="table">
 		<box>
@@ -79,6 +79,7 @@
 	<field name="cvsGoodPackageNumber" class="java.lang.String"/>
 	<field name="cvsGoodPackageApproved" class="java.lang.String"/>
 	<field name="cvsGoodPackageNetWeight" class="java.lang.String"/>
+	<field name="qrCode" class="java.io.InputStream"/>
 	<title>
 		<band height="188" splitType="Stretch">
 			<staticText>
@@ -364,7 +365,7 @@
 				</staticText>
 				<textField>
 					<reportElement mode="Transparent" x="141" y="1" width="128" height="24" uuid="d4049d84-d4d5-479f-92cf-d2fb1563b0e3"/>
-					<textElement verticalAlignment="Middle" markup="none">
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[($F{certificateReferenceNumber}!= null && $F{certificateReferenceNumber}.trim().length()>0 ? $F{certificateReferenceNumber} : "-")]]></textFieldExpression>
@@ -387,7 +388,7 @@
 				</staticText>
 				<textField>
 					<reportElement mode="Transparent" x="8" y="46" width="258" height="12" uuid="85815181-bfe1-4544-ba6c-b06160463120"/>
-					<textElement verticalAlignment="Middle" markup="none">
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[($F{veterinaryAuthority}!= null && $F{veterinaryAuthority}.trim().length()>0 ? $F{veterinaryAuthority} : "-")]]></textFieldExpression>
@@ -450,7 +451,7 @@
 				</staticText>
 				<textField>
 					<reportElement mode="Transparent" x="8" y="25" width="258" height="12" uuid="c3ebfb31-856c-4e92-baea-0538027b384b"/>
-					<textElement verticalAlignment="Middle" markup="none">
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[($F{ladingNumberLTA}!= null && $F{ladingNumberLTA}.trim().length()>0 ? $F{ladingNumberLTA} : "-")]]></textFieldExpression>
@@ -480,7 +481,7 @@
 				</staticText>
 				<textField>
 					<reportElement mode="Transparent" x="3" y="14" width="268" height="12" uuid="4a5cea00-f6cc-4b82-85ce-cee45f21bfab"/>
-					<textElement verticalAlignment="Middle" markup="none">
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[($F{countryOfOrigin}!= null && $F{countryOfOrigin}.trim().length()>0 ? $F{countryOfOrigin} : "-")]]></textFieldExpression>
@@ -510,7 +511,7 @@
 				</staticText>
 				<textField>
 					<reportElement mode="Transparent" x="3" y="44" width="268" height="12" uuid="e32c6717-bf70-4768-ac4d-22e7dbe8d677"/>
-					<textElement verticalAlignment="Middle" markup="none">
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[($F{countryOfDestination}!= null && $F{countryOfDestination}.trim().length()>0 ? $F{countryOfDestination} : "-")]]></textFieldExpression>
@@ -651,7 +652,7 @@
 				</staticText>
 				<textField>
 					<reportElement x="278" y="34" width="261" height="12" uuid="e6a4016c-e1da-42dc-ac40-1c0bb5fbf4fc"/>
-					<textElement verticalAlignment="Middle" markup="none">
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[($F{cvsPermitCITES}!= null && $F{cvsPermitCITES}.trim().length()>0 ? $F{cvsPermitCITES} : "-")]]></textFieldExpression>
@@ -671,14 +672,7 @@
 					<text><![CDATA[1.14 HS code (Code SH) - Description (Description) - Quantity (Quantité) - Unit(Unité) - Total Quantity (Quantité totale)]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="358" y="12" width="152" height="12" uuid="1b3aa722-2de0-4019-b590-c30fa4cebf49"/>
-					<textElement verticalAlignment="Middle" markup="none">
-						<font size="8" isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[($F{fileItemList}!= null && $F{fileItemList}.size()>0 && $F{fileItemList}.get(0).getTotalQuantity() != null  && $F{fileItemList}.get(0).getTotalQuantity().trim().length()>0 ? $F{fileItemList}.get(0).getTotalQuantity() : "-")]]></textFieldExpression>
-				</textField>
-				<textField>
-					<reportElement x="112" y="12" width="111" height="12" uuid="0bba085f-4465-49ba-a8e1-f9c7dfca82a1"/>
+					<reportElement x="101" y="12" width="111" height="12" uuid="0bba085f-4465-49ba-a8e1-f9c7dfca82a1"/>
 					<textElement verticalAlignment="Middle" markup="none">
 						<font size="8" isBold="true"/>
 					</textElement>
@@ -692,7 +686,7 @@
 					<textFieldExpression><![CDATA[($F{fileItemList}!= null && $F{fileItemList}.size()>0 && $F{fileItemList}.get(0).getCode() != null  && $F{fileItemList}.get(0).getCode().trim().length()>0 ? $F{fileItemList}.get(0).getCode() : "-")]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="225" y="12" width="111" height="12" uuid="1775d265-dfb9-42b1-86f1-01fbec01c3cb"/>
+					<reportElement x="213" y="12" width="111" height="12" uuid="1775d265-dfb9-42b1-86f1-01fbec01c3cb"/>
 					<textElement verticalAlignment="Middle" markup="none">
 						<font size="8" isBold="true"/>
 					</textElement>
@@ -724,8 +718,8 @@
 					<text><![CDATA[1.16 Total number of packages(Nombre d'unités emballées)]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="344" y="14" width="197" height="12" uuid="357ab7e6-a17d-4574-8618-64c47ef8464e"/>
-					<textElement verticalAlignment="Middle" markup="none">
+					<reportElement x="344" y="14" width="197" height="18" uuid="357ab7e6-a17d-4574-8618-64c47ef8464e"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[($F{cvsNbPackagedUnit}!= null && $F{cvsNbPackagedUnit}.trim().length()>0  ? $F{cvsNbPackagedUnit}: "-")]]></textFieldExpression>
@@ -822,8 +816,8 @@
 					<text><![CDATA[1.18 Type of packaging(Nature du l'emballage)]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="336" y="30" width="204" height="12" uuid="9b52882c-f98a-440c-81e2-2bf37fdc7eab"/>
-					<textElement verticalAlignment="Middle" markup="none">
+					<reportElement x="336" y="22" width="204" height="19" uuid="9b52882c-f98a-440c-81e2-2bf37fdc7eab"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[($F{cvsPackageNature}!= null && $F{cvsPackageNature}.trim().length()>0  ? $F{cvsPackageNature}: "-")]]></textFieldExpression>
@@ -1033,42 +1027,42 @@ Espèces (Nom scientifique)]]></text>
 (Poids Net)]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="106" y="11" width="91" height="30" uuid="015bbd1b-a35d-43ef-8bc3-eb2d1e3ebe67"/>
+					<reportElement x="103" y="13" width="91" height="30" uuid="015bbd1b-a35d-43ef-8bc3-eb2d1e3ebe67"/>
 					<textElement>
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[($F{cvsGoodSpecies}!= null && $F{cvsGoodSpecies}.trim().length()>0? $F{cvsGoodSpecies} : "-")]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="98" y="45" width="91" height="30" uuid="b22be651-faae-4eea-80d6-6627ec5adb70"/>
+					<reportElement x="85" y="45" width="105" height="30" uuid="b22be651-faae-4eea-80d6-6627ec5adb70"/>
 					<textElement>
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[($F{cvsGoodPackageNumber} != null && $F{cvsGoodPackageNumber}.trim().length()>0 ? $F{cvsGoodPackageNumber} : "-")]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="298" y="12" width="86" height="30" uuid="28ce851f-de42-4e6b-aed4-27a2493a99ed"/>
+					<reportElement x="293" y="12" width="91" height="30" uuid="28ce851f-de42-4e6b-aed4-27a2493a99ed"/>
 					<textElement>
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[($F{cvsGoodNature} != null && $F{cvsGoodNature}.trim().length()>0 ? $F{cvsGoodNature} : "-")]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="465" y="12" width="78" height="30" uuid="e9daff2c-cdef-453f-bbf8-83cffb045331"/>
+					<reportElement x="457" y="12" width="86" height="30" uuid="e9daff2c-cdef-453f-bbf8-83cffb045331"/>
 					<textElement>
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[($F{cvsGoodTreatment} != null && $F{cvsGoodTreatment}.trim().length()>0 ? $F{cvsGoodTreatment} : "-")]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="446" y="45" width="78" height="30" uuid="cc342e30-43a4-4b32-87bc-f04d7c0a66f3"/>
+					<reportElement x="430" y="45" width="110" height="30" uuid="cc342e30-43a4-4b32-87bc-f04d7c0a66f3"/>
 					<textElement>
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[($F{cvsGoodPackageNetWeight} != null && $F{cvsGoodPackageNetWeight}.trim().length()>0 ? $F{cvsGoodPackageNetWeight} : "-")]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="293" y="45" width="78" height="30" uuid="0765a1d7-f8e6-4c6a-90d1-c0d945951e19"/>
+					<reportElement x="272" y="45" width="111" height="30" uuid="0765a1d7-f8e6-4c6a-90d1-c0d945951e19"/>
 					<textElement>
 						<font size="8" isBold="true"/>
 					</textElement>
@@ -1148,45 +1142,36 @@ Titre et Qualité]]></text>
 				</staticText>
 				<textField>
 					<reportElement x="380" y="85" width="165" height="45" uuid="930ec06e-4f08-4617-a083-4be04cb0ef63"/>
-					<textElement verticalAlignment="Middle" markup="none">
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[($F{signatoryPosition}!= null && $F{signatoryPosition}.trim().length()>0 ? $F{signatoryPosition} : "-")]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="208" y="87" width="166" height="40" uuid="2023edc0-8b35-4b37-a577-7ee43b63ac2b"/>
-					<textElement verticalAlignment="Middle" markup="none">
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[($F{signatoryName}!= null && $F{signatoryName}.trim().length()>0 ? $F{signatoryName} : "-")+","+($F{signatoryAddress}!= null && $F{signatoryAddress}.trim().length()>0 ? $F{signatoryAddress} : "-")]]></textFieldExpression>
 				</textField>
-				<staticText>
-					<reportElement x="70" y="127" width="60" height="13" uuid="aa4e2e74-9843-4646-b2a6-2a118aa6408c"/>
-					<textElement textAlignment="Center"/>
-					<text><![CDATA[QR CODE]]></text>
-				</staticText>
-				<rectangle>
-					<reportElement x="26" y="145" width="151" height="61" uuid="e2377a71-b892-494a-ba9e-a691a0e43b76"/>
-				</rectangle>
-				<staticText>
-					<reportElement x="26" y="146" width="151" height="58" uuid="43ac6ecb-5410-48de-8340-96587e8aac73"/>
-					<textElement textAlignment="Center"/>
-					<text><![CDATA[Nom importateur, Nom fournisseur, référence dédouanement, Numero BL ou LTA)]]></text>
-				</staticText>
 				<textField>
-					<reportElement mode="Transparent" x="33" y="207" width="137" height="24" uuid="646bca33-3213-44d1-bf9d-c0c0bc1594ed"/>
-					<textElement verticalAlignment="Middle" markup="none">
+					<reportElement mode="Transparent" x="33" y="215" width="137" height="24" uuid="646bca33-3213-44d1-bf9d-c0c0bc1594ed"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[($F{certificateReferenceNumber}!= null && $F{certificateReferenceNumber}.trim().length()>0 ? $F{certificateReferenceNumber} : "-")]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="24" y="234" width="156" height="11" uuid="8acf7b94-7724-4f3b-9689-b0789e767b25"/>
+					<reportElement x="22" y="234" width="156" height="11" uuid="8acf7b94-7724-4f3b-9689-b0789e767b25"/>
 					<textElement textAlignment="Center">
 						<font size="8"/>
 					</textElement>
 					<text><![CDATA[(Référence Dédouanement)]]></text>
 				</staticText>
+				<image hAlign="Center" vAlign="Middle">
+					<reportElement x="30" y="40" width="138" height="138" uuid="08e4ecc5-d4bd-4ce3-9ed1-c6d271102c54"/>
+					<imageExpression><![CDATA[$F{qrCode}]]></imageExpression>
+				</image>
 			</frame>
 			<textField>
 				<reportElement x="535" y="501" width="22" height="14" uuid="50d9e4a8-689e-4984-9c2a-9eb0b94aa6e3"/>
