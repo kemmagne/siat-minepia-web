@@ -2948,7 +2948,7 @@ public class FileItemCctDetailController implements Serializable {
                                         final String eforceRef = currentFile.getNumeroDemande();
                                         reportNumber = eforceRef
                                                 + "/" + java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)
-                                                + (reportOrganism.getValue() != null ? reportOrganism.getValue() : StringUtils.EMPTY);
+                                                + ((reportOrganism != null && reportOrganism.getValue() != null) ? reportOrganism.getValue() : StringUtils.EMPTY);
                                         final FileFieldValue reportFieldValue = new FileFieldValue();
                                         reportFieldValue.setFile(currentFile);
                                         reportFieldValue.setFileField(reportField);
@@ -6844,11 +6844,11 @@ public class FileItemCctDetailController implements Serializable {
                 }
             }
         }
-            if (reportInvoker != null) {
-                reportInvoker.setDraft(draft);
-                reportInvoker.setFileFieldValueService(fileFieldValueService);
-                report = JsfUtil.getReport(reportInvoker);
-            }
+        if (reportInvoker != null) {
+            reportInvoker.setDraft(draft);
+            reportInvoker.setFileFieldValueService(fileFieldValueService);
+            report = JsfUtil.getReport(reportInvoker);
+        }
         return report;
     }
 
