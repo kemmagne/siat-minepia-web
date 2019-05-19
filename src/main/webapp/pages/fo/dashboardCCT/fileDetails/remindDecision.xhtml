@@ -61,6 +61,10 @@
                     <ui:include src="../specificDecisions/paymentValidation/paymentValidationRemindDecision.xhtml" />
                 </h:panelGroup>
 
+                <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.approvedDecision}">
+                    <ui:include src="../specificDecisions/dcc/dccRemindDecision.xhtml" />
+                </h:panelGroup>
+
             </p:tab>
 
         </p:accordionPanel>

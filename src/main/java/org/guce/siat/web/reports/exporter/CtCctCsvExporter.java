@@ -8,13 +8,11 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import javax.faces.bean.ManagedProperty;
 
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.guce.siat.common.dao.ItemFlowDao;
 import org.guce.siat.common.model.File;
 import org.guce.siat.common.model.FileFieldValue;
 import org.guce.siat.common.model.FileItem;
@@ -23,7 +21,7 @@ import org.guce.siat.common.model.ItemFlow;
 import org.guce.siat.common.model.ItemFlowData;
 import org.guce.siat.common.model.User;
 import org.guce.siat.common.utils.QRCodeUtils;
-import org.guce.siat.web.ct.controller.FileItemCctDetailController;
+import org.guce.siat.core.ct.model.ApprovedDecision;
 import org.guce.siat.web.reports.vo.CtCctCsvFileItemVo;
 import org.guce.siat.web.reports.vo.CtCctCsvFileVo;
 import org.slf4j.Logger;
@@ -46,15 +44,20 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
 
     private final User user;
 
+    private final ApprovedDecision decision;
+
     /**
      * Instantiates a new ct cct csv exporter.
      *
      * @param file the file
+     * @param connected the user connected
+     * @param decision the decision updated by operator
      */
-    public CtCctCsvExporter(final File file, User connected) {
+    public CtCctCsvExporter(final File file, User connected, ApprovedDecision decision) {
         super("CT_CCT_CSV", "CT_CCT_CSV");
         this.file = file;
         this.user = connected;
+        this.decision = decision;
     }
 
 
@@ -276,6 +279,45 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
                 ctCctCsvFileVo.setCvsIdContainersSeals(builder.substring(0, builder.lastIndexOf(" ")));
             }
 
+            if (decision != null) {
+                if (decision.getDepartureDate() != null) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                    ctCctCsvFileVo.setCvsDepartureDate(sdf.format(decision.getDepartureDate()));
+                }
+                if (decision.getProductTemperature() != null) {
+                    ctCctCsvFileVo.setCvsProductTemperature(decision.getProductTemperature());
+                }
+                if (decision.getContainerSeals() != null) {
+                    ctCctCsvFileVo.setCvsIdContainersSeals(decision.getContainerSeals());
+                }
+                if (decision.getNumberOfUnitPackaged() != null) {
+                    ctCctCsvFileVo.setCvsNbPackagedUnit(decision.getNumberOfUnitPackaged());
+                }
+                if (decision.getTypeOfPagkaging() != null) {
+                    ctCctCsvFileVo.setCvsPackageNature(decision.getTypeOfPagkaging());
+                }
+                if (decision.getGoodsCertifiedFor() != null) {
+                    ctCctCsvFileVo.setCvsGoodFor(decision.getGoodsCertifiedFor());
+                }
+                if (decision.getGoodsSpecies() != null) {
+                    ctCctCsvFileVo.setCvsGoodSpecies(decision.getGoodsSpecies());
+                }
+                if (decision.getGoodsNature() != null) {
+                    ctCctCsvFileVo.setCvsGoodNature(decision.getGoodsNature());
+                }
+                if (decision.getGoodsTreatment() != null) {
+                    ctCctCsvFileVo.setCvsGoodTreatment(decision.getGoodsTreatment());
+                }
+                if (decision.getGoodsPackageNumber() != null) {
+                    ctCctCsvFileVo.setCvsGoodPackageNumber(decision.getGoodsPackageNumber());
+                }
+                if (decision.getGoodsAgreementReference() != null) {
+                    ctCctCsvFileVo.setCvsGoodPackageNetWeight(decision.getGoodsAgreementReference());
+                }
+                if (decision.getGoodsNetWeight() != null) {
+                    ctCctCsvFileVo.setCvsGoodPackageNetWeight(decision.getGoodsNetWeight());
+                }
+            }
             if (CollectionUtils.isNotEmpty(file.getFileItemsList())) {
                 List<ItemFlow> ifs = file.getFileItemsList().get(0).getItemFlowsList();
                 if (CollectionUtils.isNotEmpty(ifs)) {
@@ -374,7 +416,7 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
                     + " Referencence Dedouanement : " + ctCctCsvFileVo.getCertificateReferenceNumber()
                     + " Numero BL ou LTA : " + ctCctCsvFileVo.getLadingNumberLTA();
             ctCctCsvFileVo.setQrCode(new ByteArrayInputStream(QRCodeUtils.generateQR(qrContent, 512)));
-            
+
             ctCctCsvFileVo.setFileItemList(fileItemVos);
         }
 

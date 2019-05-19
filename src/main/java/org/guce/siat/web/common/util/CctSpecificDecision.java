@@ -25,7 +25,10 @@ public enum CctSpecificDecision
 	ANR("Analyse result"),
 
 	/** The Treatment result. */
-	TRR("Treatment result");
+	TRR("Treatment result"),
+	
+        /** The documentary control certificate. */
+	DCC("Documentary control certificate");
 
 	/** The label. */
 	private String label;

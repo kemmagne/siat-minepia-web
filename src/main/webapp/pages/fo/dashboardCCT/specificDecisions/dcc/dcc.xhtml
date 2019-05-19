@@ -1,66 +1,85 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
 
-	<h:panelGroup styleClass="grise"
-		rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'AN'}">
+    <h:panelGroup styleClass="grise"
+                  rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'DCC'}">
 
-		<h:panelGrid columns="2">
+        <h:panelGrid columns="2">
 
-			<h:outputLabel value="#{bundle['AnalyseOrder_SampleLabel']} : " />
-			<h:outputText
-				value="#{facesContext.viewRoot.locale eq 'fr' ? fileItemCctDetailController.analyseOrder.sample.fileItem.nsh.goodsItemDesc : fileItemCctDetailController.analyseOrder.sample.fileItem.nsh.goodsItemDescEn}" />
-
-			<h:outputLabel value="#{bundle['AnalyseOrder_QuantityTakenLabel']} : " />
-			<h:outputText  value="#{fileItemCctDetailController.analyseOrder.sample.takenQuantity}" />
-
-			<h:outputLabel value="#{bundle['AnalyseOrder_AnalysedQuantityLabel']} : " />
-			<h:panelGroup>
-				<p:inputText id="analyseQuantity" required="true" requiredMessage="#{bundle['AnalyseOrder_AnalysedQuantityRequiredMessage']}"
-					value="#{fileItemCctDetailController.analyseOrder.quantity}" title="#{bundle['AnalyseOrder_AnalysedQuantityTitle']}" />
-				<p:message for="analyseQuantity" />
-			</h:panelGroup>
-
-			<h:outputLabel value="#{bundle['AnalyseOrder_ObservationLabel']} : " />
-			<p:inputTextarea id="analyseObservation" title="#{bundle['AnalyseOrder_ObservationTitle']}"
-				value="#{fileItemCctDetailController.analyseOrder.observation}" />
+            <h:outputLabel value="#{bundle['Dcc_DepartureDate']} : " />
+            <h:panelGroup>
+                <p:calendar  navigator="true" id="departureDate" value="#{fileItemCctDetailController.approvedDecision.departureDate}" title="#{bundle['Dcc_DepartureDate']}"
+                             showOn="button" pattern="dd/MM/yyyy">
+                    <p:ajax event="dateSelect" update="departureDate" />
+                </p:calendar>
+                <p:message for="departureDate" />
+            </h:panelGroup>
 
 
-			<h:outputLabel value="#{bundle['AnalyseOrder_LaboratoryLabel']} : " />
-			<h:panelGroup>
+            <h:outputLabel value="#{bundle['Dcc_ProductTemperature']} : " />
+            <h:panelGroup>
+                <p:selectOneMenu id="productTemperature"
+                                 value="#{fileItemCctDetailController.approvedDecision.productTemperature}" >
+                    <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" itemValue="" />
+                    <f:selectItem itemLabel="#{bundle['Dcc_temperatureAmbient']}" itemValue="#{bundle['Dcc_temperatureAmbient']}" />
+                    <f:selectItem itemLabel="#{bundle['Dcc_temperatureChilled']}" itemValue="#{bundle['Dcc_temperatureChilled']}" />
+                    <f:selectItem itemLabel="#{bundle['Dcc_temperatureFrozen']}" itemValue="#{bundle['Dcc_temperatureFrozen']}" />
+                </p:selectOneMenu>
+                <p:message for="productTemperature" />
+            </h:panelGroup>
 
-				<p:selectOneMenu filter="true" id="laboratory" title="#{bundle['AnalyseOrder_LaboratoryTitle']}" required="true"
-					requiredMessage="#{bundle['AnalyseOrder_LaboratoryRequiredMessage']}" value="#{fileItemCctDetailController.selectedLaboratory}">
-					<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-					<f:selectItems id="analyseLaboratory" value="#{fileItemCctDetailController.analyseLaboratories}" var="lab" itemValue="#{lab}"
-						itemLabel="#{facesContext.viewRoot.locale eq 'en' ? lab.labelEn : lab.labelFr}" />
-					<f:converter binding="#{laboratoryConverter}" />
-					<p:ajax event="change" listener="#{fileItemCctDetailController.changeLaboratoryHandler}" update="analyseTypeDT" />
-				</p:selectOneMenu>
-				<p:message for="analyseLaboratory" />
-			</h:panelGroup>
+            <h:outputLabel value="#{bundle['Dcc_NumberOfUnitPackaged']} : " />
+            <p:inputText id="numberOfUnitPackaged" title="#{bundle['Dcc_NumberOfUnitPackaged']}"
+                         value="#{fileItemCctDetailController.approvedDecision.numberOfUnitPackaged}" />
 
-			<h:outputLabel value="#{bundle['AnalyseOrder_TypeLabel']} : " />
+            <h:outputLabel value="#{bundle['Dcc_TypeOfPagkaging']} : " />
+            <p:inputText id="typeOfPagkaging" title="#{bundle['Dcc_TypeOfPagkaging']}"
+                         value="#{fileItemCctDetailController.approvedDecision.typeOfPagkaging}" />
 
-			<p:dataTable id="analyseTypeDT" var="item" value="#{fileItemCctDetailController.analyseTypeDtosList}"
-				emptyMessage="#{bundle['AucuneResultat']}">
+            <h:outputLabel value="#{bundle['Dcc_ContainerSeals']} : " />
+            <p:inputTextarea id="containerSeals" title="#{bundle['Dcc_ContainerSeals']}"
+                             value="#{fileItemCctDetailController.approvedDecision.containerSeals}" />
 
-				<p:column headerText="#{bundle['AnalyseOrder_ChekedLabel']}">
-					<p:selectBooleanCheckbox value="#{item.checked}" required="true" requiredMessage="#{bundle['AnalyseTypeRequiredMessage']}" />
-				</p:column>
 
-				<p:column headerText="#{bundle['AnalyseOrder_AnalyseNameLabel']}">
-					<h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? item.analyseType.labelEn : item.analyseType.labelFr}" />
-				</p:column>
+            <h:outputLabel value="#{bundle['Dcc_GoodsCertifiedFor']} : " />
+            <h:panelGroup>
+                <p:selectOneMenu id="goodsCertifiedFor"
+                                 value="#{fileItemCctDetailController.approvedDecision.goodsCertifiedFor}" >
+                    <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" itemValue="" />
+                    <f:selectItem itemLabel="#{bundle['Dcc_commodityHuman']}" itemValue="#{bundle['Dcc_commodityHuman']}" />
+                    <f:selectItem itemLabel="#{bundle['Dcc_commodityAnimal']}" itemValue="#{bundle['Dcc_commodityAnimal']}" />
+                    <f:selectItem itemLabel="#{bundle['Dcc_commodityFurther']}" itemValue="#{bundle['Dcc_commodityFurther']}" />
+                    <f:selectItem itemLabel="#{bundle['Dcc_commodityTechnical']}" itemValue="#{bundle['Dcc_commodityTechnical']}" />
+                    <f:selectItem itemLabel="#{bundle['Dcc_commodityOther']}" itemValue="#{bundle['Dcc_commodityOther']}" />
+                </p:selectOneMenu>
+                <p:message for="goodsCertifiedFor" />
+            </h:panelGroup>
 
-				<p:column headerText="#{bundle['AnalyseOrder_DurationLabel']}">
-					<h:outputText value="#{item.analyseType.duration}" />
-				</p:column>
+            <h:outputLabel value="#{bundle['Dcc_GoodsSpecies']} : " />
+            <p:inputText id="goodsSpecies" title="#{bundle['Dcc_GoodsSpecies']}"
+                         value="#{fileItemCctDetailController.approvedDecision.goodsSpecies}" />
 
-			</p:dataTable>
-		</h:panelGrid>
-	</h:panelGroup>
+            <h:outputLabel value="#{bundle['Dcc_GoodsNature']} : " />
+            <p:inputText id="goodsNature" title="#{bundle['Dcc_GoodsNature']}"
+                         value="#{fileItemCctDetailController.approvedDecision.goodsNature}" />
 
-	<p:messages id="checkAnalyseType" redisplay="false" for="checkAnalyseType" globalOnly="true" showDetail="false" autoUpdate="false" />
+            <h:outputLabel value="#{bundle['Dcc_GoodsTreatment']} : " />
+            <p:inputText id="goodsTreatment" title="#{bundle['Dcc_GoodsTreatment']}"
+                         value="#{fileItemCctDetailController.approvedDecision.goodsTreatment}" />
 
+            <h:outputLabel value="#{bundle['Dcc_GoodsPackageNumber']} : " />
+            <p:inputText id="goodsPackageNumber" title="#{bundle['Dcc_GoodsPackageNumber']}"
+                         value="#{fileItemCctDetailController.approvedDecision.goodsPackageNumber}" />
+
+            <h:outputLabel value="#{bundle['Dcc_GoodsAgreementReference']} : " />
+            <p:inputText id="goodsAgreementReference" title="#{bundle['Dcc_GoodsAgreementReference']}"
+                         value="#{fileItemCctDetailController.approvedDecision.goodsAgreementReference}" />
+
+            <h:outputLabel value="#{bundle['Dcc_GoodsNetWeight']} : " />
+            <p:inputText id="goodsNetWeight" title="#{bundle['Dcc_GoodsNetWeight']}"
+                         value="#{fileItemCctDetailController.approvedDecision.goodsNetWeight}" />
+
+        </h:panelGrid>
+    </h:panelGroup>
 
 </ui:composition>

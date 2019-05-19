@@ -1,44 +1,48 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
 
-	<h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAO}">
+    <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.approvedDecision}">
 
-		<p:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight">
+        <p:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight">
 
-			<h:outputLabel value="#{bundle['AnalyseOrder_DateLabel']} : " />
-			<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAO.date}" />
+            <h:outputLabel value="#{bundle['Dcc_DepartureDate']} : " />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.approvedDecision.departureDate}" />
+            
+            <h:outputLabel value="#{bundle['Dcc_ProductTemperature']} : " />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.approvedDecision.productTemperature}" />
+            
+            <h:outputLabel value="#{bundle['Dcc_NumberOfUnitPackaged']} : " />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.approvedDecision.numberOfUnitPackaged}" />
+            
+            <h:outputLabel value="#{bundle['Dcc_ContainerSeals']} : " />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.approvedDecision.containerSeals}" />
+            
+            <h:outputLabel value="#{bundle['Dcc_TypeOfPagkaging']} : " />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.approvedDecision.typeOfPagkaging}" />
+            
+            <h:outputLabel value="#{bundle['Dcc_GoodsCertifiedFor']} : " />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.approvedDecision.goodsCertifiedFor}" />
+            
+            <h:outputLabel value="#{bundle['Dcc_GoodsSpecies']} : " />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.approvedDecision.goodsSpecies}" />
+            
+            <h:outputLabel value="#{bundle['Dcc_GoodsNature']} : " />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.approvedDecision.goodsNature}" />
+            
+            <h:outputLabel value="#{bundle['Dcc_GoodsTreatment']} : " />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.approvedDecision.goodsTreatment}" />
+            
+            <h:outputLabel value="#{bundle['Dcc_GoodsPackageNumber']} : " />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.approvedDecision.goodsPackageNumber}" />
+            
+            <h:outputLabel value="#{bundle['Dcc_GoodsAgreementReference']} : " />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.approvedDecision.goodsAgreementReference}" />
+            
+            <h:outputLabel value="#{bundle['Dcc_GoodsNetWeight']} : " />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.approvedDecision.goodsNetWeight}" />
+            
+        </p:panelGrid>
 
-			<h:outputLabel value="#{bundle['AnalyseOrder_QuantityTakenLabel']} : " />
-			<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAO.sample.takenQuantity}" />
-
-			<h:outputLabel value="#{bundle['AnalyseOrder_AnalysedQuantityLabel']} : " />
-			<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAO.quantity}" />
-
-			<h:outputLabel value="#{bundle['AnalyseOrder_ObservationLabel']} : " />
-			<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAO.observation}" />
-
-			<h:outputLabel value="#{bundle['AnalyseOrder_LaboratoryLabel']} : " />
-			<h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAO.laboratory.code}" />
-
-		</p:panelGrid>
-
-		<br />
-
-		<p:dataTable var="item" value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAO.analysePartsList}">
-
-			<f:facet name="header">
-				<h:outputLabel value="#{bundle['AnalyseOrder_TypeLabel']}" />
-			</f:facet>
-
-			<p:column headerText="#{bundle['AnalyseOrder_AnalyseNameLabel']}">
-				<h:outputLabel value="#{facesContext.viewRoot.locale eq 'en' ? item.analyseType.labelEn : item.analyseType.labelFr}" />
-			</p:column>
-
-			<p:column headerText="#{bundle['AnalyseOrder_DurationLabel']}">
-				<h:outputLabel value="#{item.analyseType.duration}" />
-			</p:column>
-
-		</p:dataTable>
-	</h:panelGroup>
+    </h:panelGroup>
 
 </ui:composition>
