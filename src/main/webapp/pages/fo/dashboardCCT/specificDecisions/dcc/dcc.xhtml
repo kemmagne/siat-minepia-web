@@ -6,9 +6,11 @@
 
         <h:panelGrid columns="2">
 
-            <h:outputLabel value="#{bundle['Dcc_DepartureDate']} : " />
+            <h:outputLabel value="#{bundle['Dcc_DepartureDate']}* : " />
             <h:panelGroup>
-                <p:calendar  navigator="true" id="departureDate" value="#{fileItemCctDetailController.approvedDecision.departureDate}" title="#{bundle['Dcc_DepartureDate']}"
+                <p:calendar  navigator="true" id="departureDate" value="#{fileItemCctDetailController.approvedDecision.departureDate}" title="#{bundle['Dcc_DepartureDate']}" 
+                             required="true"
+                             requiredMessage="#{bundle['Dcc_DepartureDateRequired']}"
                              showOn="button" pattern="dd/MM/yyyy">
                     <p:ajax event="dateSelect" update="departureDate" />
                 </p:calendar>
@@ -16,9 +18,10 @@
             </h:panelGroup>
 
 
-            <h:outputLabel value="#{bundle['Dcc_ProductTemperature']} : " />
+            <h:outputLabel value="#{bundle['Dcc_ProductTemperature']}* : " />
             <h:panelGroup>
-                <p:selectOneMenu id="productTemperature"
+                <p:selectOneMenu id="productTemperature" required="true"
+                                 requiredMessage="#{bundle['Dcc_ProductTemperatureRequired']}"
                                  value="#{fileItemCctDetailController.approvedDecision.productTemperature}" >
                     <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" itemValue="" />
                     <f:selectItem itemLabel="#{bundle['Dcc_temperatureAmbient']}" itemValue="#{bundle['Dcc_temperatureAmbient']}" />
@@ -28,22 +31,26 @@
                 <p:message for="productTemperature" />
             </h:panelGroup>
 
-            <h:outputLabel value="#{bundle['Dcc_NumberOfUnitPackaged']} : " />
-            <p:inputText id="numberOfUnitPackaged" title="#{bundle['Dcc_NumberOfUnitPackaged']}"
+            <h:outputLabel value="#{bundle['Dcc_NumberOfUnitPackaged']}* : " />
+            <p:inputText id="numberOfUnitPackaged" title="#{bundle['Dcc_NumberOfUnitPackaged']}" required="true"
+                         requiredMessage="#{bundle['Dcc_NumberOfUnitPackagedRequired']}"
                          value="#{fileItemCctDetailController.approvedDecision.numberOfUnitPackaged}" />
 
-            <h:outputLabel value="#{bundle['Dcc_TypeOfPagkaging']} : " />
-            <p:inputText id="typeOfPagkaging" title="#{bundle['Dcc_TypeOfPagkaging']}"
+            <h:outputLabel value="#{bundle['Dcc_TypeOfPagkaging']}* : " />
+            <p:inputText id="typeOfPagkaging" title="#{bundle['Dcc_TypeOfPagkaging']}" required="true"
+                         requiredMessage="#{bundle['Dcc_TypeOfPagkagingRequired']}"
                          value="#{fileItemCctDetailController.approvedDecision.typeOfPagkaging}" />
 
-            <h:outputLabel value="#{bundle['Dcc_ContainerSeals']} : " />
-            <p:inputTextarea id="containerSeals" title="#{bundle['Dcc_ContainerSeals']}"
+            <h:outputLabel value="#{bundle['Dcc_ContainerSeals']}* : " />
+            <p:inputTextarea id="containerSeals" title="#{bundle['Dcc_ContainerSeals']}" required="true"
+                             requiredMessage="#{bundle['Dcc_ContainerSealsRequired']}"
                              value="#{fileItemCctDetailController.approvedDecision.containerSeals}" />
 
 
-            <h:outputLabel value="#{bundle['Dcc_GoodsCertifiedFor']} : " />
+            <h:outputLabel value="#{bundle['Dcc_GoodsCertifiedFor']}* : " />
             <h:panelGroup>
-                <p:selectOneMenu id="goodsCertifiedFor"
+                <p:selectOneMenu id="goodsCertifiedFor" required="true"
+                                 requiredMessage="#{bundle['Dcc_GoodsCertifiedForRequired']}"
                                  value="#{fileItemCctDetailController.approvedDecision.goodsCertifiedFor}" >
                     <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" itemValue="" />
                     <f:selectItem itemLabel="#{bundle['Dcc_commodityHuman']}" itemValue="#{bundle['Dcc_commodityHuman']}" />
@@ -55,29 +62,41 @@
                 <p:message for="goodsCertifiedFor" />
             </h:panelGroup>
 
-            <h:outputLabel value="#{bundle['Dcc_GoodsSpecies']} : " />
-            <p:inputText id="goodsSpecies" title="#{bundle['Dcc_GoodsSpecies']}"
+            <h:outputLabel value="#{bundle['Dcc_GoodsSpecies']}* : " />
+            <p:inputText id="goodsSpecies" title="#{bundle['Dcc_GoodsSpecies']}" required="true"
+                         requiredMessage="#{bundle['Dcc_GoodsSpeciesRequired']}"
                          value="#{fileItemCctDetailController.approvedDecision.goodsSpecies}" />
 
-            <h:outputLabel value="#{bundle['Dcc_GoodsNature']} : " />
-            <p:inputText id="goodsNature" title="#{bundle['Dcc_GoodsNature']}"
+            <h:outputLabel value="#{bundle['Dcc_GoodsNature']}* : " />
+            <p:inputText id="goodsNature" title="#{bundle['Dcc_GoodsNature']}" required="true"
+                         requiredMessage="#{bundle['Dcc_GoodsNatureRequired']}"
                          value="#{fileItemCctDetailController.approvedDecision.goodsNature}" />
 
-            <h:outputLabel value="#{bundle['Dcc_GoodsTreatment']} : " />
-            <p:inputText id="goodsTreatment" title="#{bundle['Dcc_GoodsTreatment']}"
+            <h:outputLabel value="#{bundle['Dcc_GoodsTreatment']}* : " />
+            <p:inputText id="goodsTreatment" title="#{bundle['Dcc_GoodsTreatment']}" required="true"
+                         requiredMessage="#{bundle['Dcc_GoodsTreatmentRequired']}" 
                          value="#{fileItemCctDetailController.approvedDecision.goodsTreatment}" />
 
-            <h:outputLabel value="#{bundle['Dcc_GoodsPackageNumber']} : " />
-            <p:inputText id="goodsPackageNumber" title="#{bundle['Dcc_GoodsPackageNumber']}"
+            <h:outputLabel value="#{bundle['Dcc_GoodsPackageNumber']}* : " />
+            <p:inputText id="goodsPackageNumber" title="#{bundle['Dcc_GoodsPackageNumber']}" required="true"
+                         requiredMessage="#{bundle['Dcc_GoodsPackageNumberRequired']}"
                          value="#{fileItemCctDetailController.approvedDecision.goodsPackageNumber}" />
 
-            <h:outputLabel value="#{bundle['Dcc_GoodsAgreementReference']} : " />
-            <p:inputText id="goodsAgreementReference" title="#{bundle['Dcc_GoodsAgreementReference']}"
+            <h:outputLabel value="#{bundle['Dcc_GoodsAgreementReference']}* : " />
+            <p:inputText id="goodsAgreementReference" title="#{bundle['Dcc_GoodsAgreementReference']}" required="true"
+                         requiredMessage="#{bundle['Dcc_GoodsAgreementReferenceRequired']}"
                          value="#{fileItemCctDetailController.approvedDecision.goodsAgreementReference}" />
 
-            <h:outputLabel value="#{bundle['Dcc_GoodsNetWeight']} : " />
-            <p:inputText id="goodsNetWeight" title="#{bundle['Dcc_GoodsNetWeight']}"
+            <h:outputLabel value="#{bundle['Dcc_GoodsNetWeight']}* : " />
+            <p:inputText id="goodsNetWeight" title="#{bundle['Dcc_GoodsNetWeight']}" required="true"
+                         requiredMessage="#{bundle['Dcc_GoodsNetWeightRequired']}"
                          value="#{fileItemCctDetailController.approvedDecision.goodsNetWeight}" />
+
+            <h:outputLabel value="#{bundle['Dcc_OfficialPosition']}* : " rendered="#{!fileItemCctDetailController.isMaskOfficialPosition()}"/>
+            <p:inputText id="officialPosition" title="#{bundle['Dcc_OfficialPosition']}" required="true"
+                         rendered="#{!fileItemCctDetailController.isMaskOfficialPosition()}"
+                         requiredMessage="#{bundle['Dcc_OfficialPositionRequired']}"
+                         value="#{fileItemCctDetailController.approvedDecision.officialPosition}" />
 
         </h:panelGrid>
     </h:panelGroup>

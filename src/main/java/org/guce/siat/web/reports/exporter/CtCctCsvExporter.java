@@ -317,6 +317,9 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
                 if (decision.getGoodsNetWeight() != null) {
                     ctCctCsvFileVo.setCvsGoodPackageNetWeight(decision.getGoodsNetWeight());
                 }
+                if (decision.getOfficialPosition() != null) {
+                    ctCctCsvFileVo.setSignatoryPosition(decision.getOfficialPosition());
+                }
             }
             if (CollectionUtils.isNotEmpty(file.getFileItemsList())) {
                 List<ItemFlow> ifs = file.getFileItemsList().get(0).getItemFlowsList();
@@ -348,7 +351,7 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
 
             final List<FileItem> fileItemList = file.getFileItemsList();
 
-            final List<CtCctCsvFileItemVo> fileItemVos = new ArrayList<CtCctCsvFileItemVo>();
+            final List<CtCctCsvFileItemVo> fileItemVos = new ArrayList<>();
 
             if (CollectionUtils.isNotEmpty(fileItemList)) {
                 for (final FileItem fileItem : fileItemList) {

@@ -310,7 +310,7 @@ public class FileItemCctDetailController implements Serializable {
     /**
      * The Constant DCC_FLOW_CODES.
      */
-    private static final List<String> DCC_FLOW_CODES = Arrays.asList(FlowCode.FL_CT_CVS_03.name(), FlowCode.FL_CT_CVS_07.name());
+    private static final List<String> DCC_FLOW_CODES = Arrays.asList(FlowCode.FL_CT_CVS_03.name(), FlowCode.FL_CT_CVS_07.name(), FlowCode.FL_CT_CVS_05.name());
 
     /**
      * The Constant EMAIL_BODY_NOTIFICATION_FR.
@@ -1075,6 +1075,7 @@ public class FileItemCctDetailController implements Serializable {
     private DecisionHistoryService decisionHistoryService;
 
     private List<DecisionHistory> decisionHistories;
+    private boolean maskOfficialPosition;
 
     /**
      * Inits the.
@@ -1738,87 +1739,23 @@ public class FileItemCctDetailController implements Serializable {
             inspectionReportData = new InspectionReportData();
         } // Signature de DCC (Certificat de Contrôle Documentaire)
         else if (DCC_FLOW_CODES.contains(selectedFlow.getCode())) {
-            approvedDecision = new ApprovedDecision();
+            lastDecisions = itemFlowService.findLastSentItemFlowByFileItem(selectedFileItemCheck.getFileItem());
 
-            if (CollectionUtils.isNotEmpty(currentFile.getFileFieldValueList())) {
-                for (final FileFieldValue fileFieldValue : currentFile.getFileFieldValueList()) {
-                    switch (fileFieldValue.getFileField().getCode()) {
-                        case "DATE_DEPART": {
-                            try {
-                                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                                approvedDecision.setDepartureDate(sdf.parse(fileFieldValue.getValue()));
-                            } catch (ParseException e) {
-                                java.util.logging.Logger.getLogger(FileItemCctDetailController.class.getName()).log(Level.SEVERE, null, e);
+            approvedDecision = approvedDecisionService.findApprovedDecisionByItemFlow(lastDecisions);
 
-                            }
-                            break;
-                        }
-                        case "TEMPERATURE_PRODUIT": {
-                            approvedDecision.setProductTemperature(fileFieldValue.getValue());
-                            break;
-                        }
-                        case "NOMBRE_UNITES_EMBALLES": {
-                            approvedDecision.setNumberOfUnitPackaged(fileFieldValue.getValue());
-                            break;
-                        }
-                        case "NATURE_EMBALLAGE": {
-                            approvedDecision.setTypeOfPagkaging(fileFieldValue.getValue());
-                            break;
-                        }
-                        case "MARCHANDISE_POUR": {
-                            approvedDecision.setGoodsCertifiedFor(fileFieldValue.getValue());
-                            break;
-                        }
-                        case "MARCHANDISE_ESPECE": {
-                            approvedDecision.setGoodsSpecies(fileFieldValue.getValue());
-                            break;
-                        }
-                        case "MARCHANDISE_NATURE": {
-                            approvedDecision.setGoodsNature(fileFieldValue.getValue());
-                            break;
-                        }
-                        case "MARCHANDISE_TRAITEMENT": {
-                            approvedDecision.setGoodsTreatment(fileFieldValue.getValue());
-                            break;
-                        }
-                        case "MARCHANDISE_NB_COLIS": {
-                            approvedDecision.setGoodsPackageNumber(fileFieldValue.getValue());
-                            break;
-                        }
-                        case "MARCHANDISE_NB_APPROUVES": {
-                            approvedDecision.setGoodsAgreementReference(fileFieldValue.getValue());
-                            break;
-                        }
-                        case "MARCHANDISE_POIDS_NET": {
-                            approvedDecision.setGoodsNetWeight(fileFieldValue.getValue());
-                            break;
-                        }
-                        case "ID_CONTENEURS_SCELLES": {
-                            approvedDecision.setContainerSeals(fileFieldValue.getValue());
-                            break;
-                        }
-                        case "CCT_CONTENEURS_CONTENEUR": {
-                            String containers = fileFieldValue.getValue();
-                            if (StringUtils.isNotBlank(containers)) {
-                                final String[] tab1 = containers.split(";");
-                                final int size = tab1.length;
-                                final StringBuilder builder = new StringBuilder();
-                                for (int i = 1; i < size; i++) {
-                                    if (StringUtils.isBlank(tab1[i])) {
-                                        continue;
-                                    }
-                                    final String[] tab2 = tab1[i].split(",");
-                                    builder.append(tab2[0]).append("/").append(tab2[3]).append("; ");
-                                }
-                                approvedDecision.setContainerSeals(builder.substring(0, builder.lastIndexOf(" ")));
-                            }
-                            break;
-                        }
-
-                    }
-                }
-
+            if (selectedFlow.getCode().equals(FlowCode.FL_CT_CVS_05)) {
+                maskOfficialPosition = true;
+            } else {
+                maskOfficialPosition = false;
             }
+
+            if (approvedDecision == null) {
+                approvedDecision = new ApprovedDecision();
+                fillApprovedDecision(approvedDecision);
+            } else {
+                approvedDecision.setOfficialPosition("Chef du Poste d'inspection Sanitaire Vétérinaire");
+            }
+
             specificDecision = CctSpecificDecision.DCC;
         } // Saisie Constat
         else if (CONSTAT_FLOW_LIST.contains(selectedFlow.getCode())) {
@@ -6956,6 +6893,11 @@ public class FileItemCctDetailController implements Serializable {
         } else if (checkMinepiaMinistry) {
             switch (currentFile.getFileType().getCode()) {
                 case CCT_CT: {
+                    if (approvedDecision == null) {
+                        lastDecisions = itemFlowService.findLastSentItemFlowByFileItem(selectedFileItemCheck.getFileItem());
+
+                        approvedDecision = approvedDecisionService.findApprovedDecisionByItemFlow(lastDecisions);
+                    }
                     reportInvoker = new CtCctCsvExporter(currentFile, loggedUser, approvedDecision);
                     break;
                 }
@@ -6984,4 +6926,95 @@ public class FileItemCctDetailController implements Serializable {
     public void setApprovedDecision(ApprovedDecision approvedDecision) {
         this.approvedDecision = approvedDecision;
     }
+
+    private void fillApprovedDecision(ApprovedDecision approvedDecision) {
+        if (CollectionUtils.isNotEmpty(currentFile.getFileFieldValueList())) {
+            for (final FileFieldValue fileFieldValue : currentFile.getFileFieldValueList()) {
+                switch (fileFieldValue.getFileField().getCode()) {
+                    case "DATE_DEPART": {
+                        try {
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                            approvedDecision.setDepartureDate(sdf.parse(fileFieldValue.getValue()));
+                        } catch (ParseException e) {
+                            java.util.logging.Logger.getLogger(FileItemCctDetailController.class.getName()).log(Level.SEVERE, null, e);
+
+                        }
+                        break;
+                    }
+                    case "TEMPERATURE_PRODUIT": {
+                        approvedDecision.setProductTemperature(fileFieldValue.getValue());
+                        break;
+                    }
+                    case "NOMBRE_UNITES_EMBALLES": {
+                        approvedDecision.setNumberOfUnitPackaged(fileFieldValue.getValue());
+                        break;
+                    }
+                    case "NATURE_EMBALLAGE": {
+                        approvedDecision.setTypeOfPagkaging(fileFieldValue.getValue());
+                        break;
+                    }
+                    case "MARCHANDISE_POUR": {
+                        approvedDecision.setGoodsCertifiedFor(fileFieldValue.getValue());
+                        break;
+                    }
+                    case "MARCHANDISE_ESPECE": {
+                        approvedDecision.setGoodsSpecies(fileFieldValue.getValue());
+                        break;
+                    }
+                    case "MARCHANDISE_NATURE": {
+                        approvedDecision.setGoodsNature(fileFieldValue.getValue());
+                        break;
+                    }
+                    case "MARCHANDISE_TRAITEMENT": {
+                        approvedDecision.setGoodsTreatment(fileFieldValue.getValue());
+                        break;
+                    }
+                    case "MARCHANDISE_NB_COLIS": {
+                        approvedDecision.setGoodsPackageNumber(fileFieldValue.getValue());
+                        break;
+                    }
+                    case "MARCHANDISE_NB_APPROUVES": {
+                        approvedDecision.setGoodsAgreementReference(fileFieldValue.getValue());
+                        break;
+                    }
+                    case "MARCHANDISE_POIDS_NET": {
+                        approvedDecision.setGoodsNetWeight(fileFieldValue.getValue());
+                        break;
+                    }
+                    case "ID_CONTENEURS_SCELLES": {
+                        approvedDecision.setContainerSeals(fileFieldValue.getValue());
+                        break;
+                    }
+                    case "CCT_CONTENEURS_CONTENEUR": {
+                        String containers = fileFieldValue.getValue();
+                        if (StringUtils.isNotBlank(containers)) {
+                            final String[] tab1 = containers.split(";");
+                            final int size = tab1.length;
+                            final StringBuilder builder = new StringBuilder();
+                            for (int i = 1; i < size; i++) {
+                                if (StringUtils.isBlank(tab1[i])) {
+                                    continue;
+                                }
+                                final String[] tab2 = tab1[i].split(",");
+                                builder.append(tab2[0]).append("/").append(tab2[3]).append("; ");
+                            }
+                            approvedDecision.setContainerSeals(builder.substring(0, builder.lastIndexOf(" ")));
+                        }
+                        break;
+                    }
+
+                }
+            }
+
+        }
+    }
+
+    public boolean isMaskOfficialPosition() {
+        return maskOfficialPosition;
+    }
+
+    public void setMaskOfficialPosition(boolean maskOfficialPosition) {
+        this.maskOfficialPosition = maskOfficialPosition;
+    }
+
 }
