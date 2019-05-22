@@ -178,11 +178,18 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
                 if (grossWeightFieldValue != null) {
                     fileItemVo.setVolume(grossWeightFieldValue.getValue());
                 }
-				
+				if (fileItemVo.getVolume() == null || fileItemVo.getVolume().isEmpty()){
+					final FileItemFieldValue weightFieldValue = getFileFieldValueService()
+                        .findFileItemFieldValueByCodeAndFileItem("POIDS", fileItem);
+					if (weightFieldValue != null) {
+						fileItemVo.setVolume(weightFieldValue.getValue());
+					}
+				}
                 if (Utils.getCacaProductsTypes().contains(productType)) {
 					fileItemVo.setVolumeWeightLabel("POIDS");
 					fileItemVo.setQuantityLabel("NUMERO DES LOTS");
 //                    fileItemVo.setWeight(fileItem.getQuantity());
+					fileItemVo.setVolume(fileItem.getQuantity());
                     fileItemVo.setNumber(lotNumber);
                 } else if (Utils.getWoodProductsTypes().contains(productType)) {
 					if (productType.equalsIgnoreCase("GR")){
