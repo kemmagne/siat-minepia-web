@@ -15,7 +15,7 @@
 			<pen lineWidth="0.5" lineColor="#FFFFFF"/>
 		</box>
 	</style>
-	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+	<style name="table_CH" mode="Opaque" backcolor="#FFFFFF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#FFFFFF"/>
 		</box>
@@ -29,7 +29,7 @@
 			<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
 		</box>
 	</style>
-	<style name="Table_CH" mode="Opaque" backcolor="#BFE1FF">
+	<style name="Table_CH" mode="Opaque" backcolor="#FFFFFF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#FFFFFF"/>
 			<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
@@ -692,15 +692,15 @@
 					<reportElement x="0" y="0" width="546" height="101" uuid="6aeb04a1-e39e-4ca8-b42b-3279ab4882cc"/>
 				</rectangle>
 				<staticText>
-					<reportElement mode="Transparent" x="2" y="0" width="540" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="aa464cb9-c47a-47ef-a765-997d2180cf56"/>
+					<reportElement mode="Transparent" x="2" y="0" width="24" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="aa464cb9-c47a-47ef-a765-997d2180cf56"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<text><![CDATA[1.14 HS code (Code SH) - Description (Description) - Quantity (Quantité) - Unit(Unité) - Total Quantity (Quantité totale)]]></text>
+					<text><![CDATA[1.14 ]]></text>
 				</staticText>
 				<componentElement>
-					<reportElement x="2" y="12" width="541" height="89" uuid="ecba57cc-1319-41af-96a4-8bb89f1307e4">
+					<reportElement x="19" y="1" width="525" height="99" uuid="ecba57cc-1319-41af-96a4-8bb89f1307e4">
 						<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 						<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
 						<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
@@ -712,6 +712,21 @@
 						</datasetRun>
 						<jr:column width="70" uuid="0cae5093-6b72-4123-adec-328cfb68167f">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne1"/>
+							<jr:columnHeader style="Table_CH" height="16" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="70" height="16" uuid="6143ae0c-2e6a-4f16-96a1-205ef4af1b0c"/>
+									<box>
+										<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+										<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+										<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+										<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Top">
+										<font size="7"/>
+									</textElement>
+									<text><![CDATA[HS code (Code SH)]]></text>
+								</staticText>
+							</jr:columnHeader>
 							<jr:detailCell style="Table_TD" height="16">
 								<textField>
 									<reportElement x="0" y="0" width="70" height="16" uuid="97633e3c-62ab-4ab3-b0a0-b85b936b13b8"/>
@@ -731,6 +746,21 @@
 						</jr:column>
 						<jr:column width="180" uuid="b4eace78-217e-4155-9a33-60b3b0f7d19c">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne2"/>
+							<jr:columnHeader style="Table_CH" height="16" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="180" height="16" uuid="253d8974-bf9f-446c-9a12-4f998d812c54"/>
+									<box>
+										<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+										<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+										<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+										<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Top">
+										<font size="7"/>
+									</textElement>
+									<text><![CDATA[Description (Description)]]></text>
+								</staticText>
+							</jr:columnHeader>
 							<jr:detailCell style="Table_TD" height="16">
 								<textField>
 									<reportElement x="0" y="0" width="180" height="16" uuid="357c217e-7357-466a-8e28-dcd9ad51c0b9"/>
@@ -750,6 +780,21 @@
 						</jr:column>
 						<jr:column width="80" uuid="d65a580e-22d5-461b-9406-712d25a33356">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne3"/>
+							<jr:columnHeader style="Table_CH" height="16" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="80" height="16" uuid="c2fd555a-8491-486c-a260-ff67cb1857d1"/>
+									<box>
+										<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+										<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+										<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+										<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Top">
+										<font size="7"/>
+									</textElement>
+									<text><![CDATA[Quantity (Quantité) ]]></text>
+								</staticText>
+							</jr:columnHeader>
 							<jr:detailCell style="Table_TD" height="16">
 								<textField>
 									<reportElement x="0" y="0" width="80" height="16" uuid="2b8bacb6-61c7-4ff1-91ec-33de911a66bd"/>
@@ -769,6 +814,21 @@
 						</jr:column>
 						<jr:column width="70" uuid="ef6bc10d-4414-4fd4-a494-964a32840a21">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne4"/>
+							<jr:columnHeader style="Table_CH" height="16" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="70" height="16" uuid="0a634a20-8d32-409f-afe0-04baab596c59"/>
+									<box>
+										<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+										<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+										<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+										<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Top">
+										<font size="7"/>
+									</textElement>
+									<text><![CDATA[Unit(Unité) ]]></text>
+								</staticText>
+							</jr:columnHeader>
 							<jr:detailCell style="Table_TD" height="16">
 								<box>
 									<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
@@ -787,6 +847,21 @@
 						</jr:column>
 						<jr:column width="126" uuid="f498daaa-3670-480c-b114-e306f101c685">
 							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne5"/>
+							<jr:columnHeader style="Table_CH" height="16" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="126" height="16" uuid="36688620-174a-4741-9181-297264d0cac6"/>
+									<box>
+										<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+										<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+										<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+										<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Top">
+										<font size="7"/>
+									</textElement>
+									<text><![CDATA[Total Quantity (Quantité totale)]]></text>
+								</staticText>
+							</jr:columnHeader>
 							<jr:detailCell style="Table_TD" height="16">
 								<textField>
 									<reportElement x="0" y="0" width="126" height="16" uuid="2f55339d-32d7-4fb6-9161-02b3954bb218"/>
