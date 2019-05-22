@@ -153,6 +153,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                 ctCctCpEFileVo.setContainersNumbers(builder.substring(0, builder.lastIndexOf(" ")));
             }
         }
+		ctCctCpEFileVo.setDecisionNumber(file.getNumeroDossier());
 
         final List<FileItem> fileItemList = file.getFileItemsList();
 
@@ -177,20 +178,37 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                 if (fileItemFieldValue != null) {
                     comName = fileItemFieldValue.getValue();
                 }
-                final String nb;
+				FileItemFieldValue botanicFileItemFieldValue = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("NOM_BOTANIQUE", fileItem);
+				if (botanicFileItemFieldValue != null){
+					comName += " (" + botanicFileItemFieldValue.getValue() + ")";
+				}
+                String nb = "";
                 if (Utils.getCacaProductsTypes().contains(productType)) {
-                    nb = getFileFieldValueService()
-                            .findFileItemFieldValueByCodeAndFileItem("NOMBRE_SACS", fileItem).getValue();
+					FileItemFieldValue nsf = getFileFieldValueService()
+							.findFileItemFieldValueByCodeAndFileItem("NOMBRE_SACS", fileItem);
+					if (nsf != null){
+						nb = nsf.getValue();
+					}
+                    
                     netWeight = netWeight.add(new BigDecimal(fileItem.getQuantity()));
                 } else if (Utils.getWoodProductsTypes().contains(productType)) {
-                    nb = getFileFieldValueService()
-                            .findFileItemFieldValueByCodeAndFileItem("NOMBRE_GRUMES", fileItem).getValue();
+					FileItemFieldValue ngf = getFileFieldValueService()
+							.findFileItemFieldValueByCodeAndFileItem("NOMBRE_GRUMES", fileItem);
+					if (ngf != null){
+						nb = ngf.getValue();
+					} else {
+						nb = fileItem.getQuantity();
+					}
+                    
                     final String volumeStr = getFileFieldValueService()
                             .findFileItemFieldValueByCodeAndFileItem("VOLUME", fileItem).getValue();
                     netWeight = netWeight.add(new BigDecimal(volumeStr));
                 } else {
-                    nb = getFileFieldValueService()
-                            .findFileItemFieldValueByCodeAndFileItem("NOMBRE_SACS", fileItem).getValue();
+					FileItemFieldValue nsf = getFileFieldValueService()
+							.findFileItemFieldValueByCodeAndFileItem("NOMBRE_SACS", fileItem);
+					if (nsf != null){
+						nb = nsf.getValue();
+					}
                     emballage = unit;
                     netWeight = netWeight.add(new BigDecimal(fileItem.getQuantity()));
                 }

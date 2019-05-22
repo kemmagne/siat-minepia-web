@@ -555,7 +555,7 @@ public class CtCctTreatmentFileVo {
 
 	public void setTreatmentModeHeat(boolean treatmentModeHeat) {
 		this.treatmentModeHeat = treatmentModeHeat;
-	}
+	}	
 
     /**
      *

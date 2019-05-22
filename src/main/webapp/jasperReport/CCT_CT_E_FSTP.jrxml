@@ -1005,7 +1005,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 					<textElement textAlignment="Right" markup="html">
 						<font size="11"/>
 					</textElement>
-					<textFieldExpression><![CDATA["A <u>" + ($F{decisionPlace} != null ? $F{decisionPlace} : "-") + "</u> le <u>" + ($F{decisionDate} != null ? new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{decisionDate}) : "-") + "</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["A Douala le " + ($F{decisionDate} != null ? new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{decisionDate}) : "-") + "</u>"]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement uuid="c912c15e-dfef-40d0-8848-6180bee498d3" x="0" y="530" width="194" height="30"/>

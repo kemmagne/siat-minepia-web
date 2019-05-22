@@ -256,7 +256,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS]
 					<textElement markup="html">
 						<font size="7" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA["N° <u>" + $F{decisionNumber} + "</u>"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["N° " + $F{decisionNumber}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement uuid="6d206b09-e369-4a57-9f0c-8c9edb67cd25" positionType="Float" stretchType="RelativeToTallestObject" x="5" y="53" width="165" height="20" isPrintWhenDetailOverflows="true"/>
@@ -531,10 +531,10 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS]
 					</textElement>
 					<text><![CDATA[X]]></text>
 				</staticText>
-				<textField isBlankWhenNull="true">
-					<reportElement uuid="59782573-e27c-4681-845e-99ab3c5b3465" x="190" y="335" width="165" height="35"/>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="59782573-e27c-4681-845e-99ab3c5b3465" x="190" y="335" width="165" height="42"/>
 					<textElement>
-						<font isBold="true"/>
+						<font size="9" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{chemicalProduct}]]></textFieldExpression>
 				</textField>
