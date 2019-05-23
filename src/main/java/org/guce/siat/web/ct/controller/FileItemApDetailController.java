@@ -2458,8 +2458,8 @@ public class FileItemApDetailController implements Serializable {
                                         @SuppressWarnings("rawtypes")
                                         final Class classe = Class.forName(nomClasse);
                                         if (bsbeMinfofFileType) {
-                                            Constructor c1 = classe.getConstructor(File.class, List.class);
-                                            report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile, specsList));
+                                            Constructor c1 = classe.getConstructor(File.class, List.class, String.class);
+                                            report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile, specsList, woodsType == null ? "GRUMES" : woodsType.getValue()));
                                         } else {
                                             report = ReportGeneratorUtils.generateReportBytes(fileFieldValueService, classe, currentFile);
                                         }
@@ -3352,8 +3352,8 @@ public class FileItemApDetailController implements Serializable {
                 @SuppressWarnings({"rawtypes", "unchecked"})
                 byte[] report;
                 if (bsbeMinfofFileType) {
-                    Constructor c1 = classe.getConstructor(File.class, List.class);
-                    report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile, specsList));
+                    Constructor c1 = classe.getConstructor(File.class, List.class, String.class);
+                    report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile, specsList, woodsType == null ? "GRUMES" : woodsType.getValue()));
                 } else {
                     report = ReportGeneratorUtils.generateReportBytes(fileFieldValueService, classe, currentFile);
                 }
@@ -3365,7 +3365,7 @@ public class FileItemApDetailController implements Serializable {
                 final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
                         .getString(ControllerConstants.Bundle.Messages.GENERATE_REPORT_FAILED);
                 JsfUtil.addErrorMessage(msg);
-
+                LOG.error(e.getMessage());
             }
         }
         return null;
