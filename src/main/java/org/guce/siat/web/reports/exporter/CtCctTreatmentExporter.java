@@ -172,6 +172,14 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
                     fileItemVo.setNature(tradeNameFieldValue.getValue());
                     treatmentVo.setItemNature(tradeNameFieldValue.getValue());
                 }
+				
+				FileItemFieldValue nb = getFileFieldValueService()
+                        .findFileItemFieldValueByCodeAndFileItem("NOM_BOTANIQUE", fileItem);
+						if (nb != null) {
+							fileItemVo.setNature(fileItemVo.getNature() + " (" + nb.getValue() + ")");
+							treatmentVo.setItemNature(tradeNameFieldValue.getValue());
+						}
+				String unit = Utils.getProductTypePackaging().get(productType);
 
                 final FileItemFieldValue grossWeightFieldValue = getFileFieldValueService()
                         .findFileItemFieldValueByCodeAndFileItem("POIDS_BRUT", fileItem);
@@ -191,6 +199,13 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
 //                    fileItemVo.setWeight(fileItem.getQuantity());
 					fileItemVo.setVolume(fileItem.getQuantity());
                     fileItemVo.setNumber(lotNumber);
+					String nsfv ="";
+					FileItemFieldValue nsf = getFileFieldValueService()
+							.findFileItemFieldValueByCodeAndFileItem("NOMBRE_SACS", fileItem);
+					if (nsf != null){
+						nsfv = nsf.getValue();
+					}
+					fileItemVo.setNature(String.format("%s %s %s", nsfv, unit, fileItemVo.getNature()));
                 } else if (Utils.getWoodProductsTypes().contains(productType)) {
 					if (productType.equalsIgnoreCase("GR")){
 						fileItemVo.setQuantityLabel("NOMBRE DE GRUMES");
@@ -201,12 +216,6 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
 							fileItemVo.setNumber(ng.getValue());
 						}
 					}
-					FileItemFieldValue nb = getFileFieldValueService()
-                        .findFileItemFieldValueByCodeAndFileItem("NOM_BOTANIQUE", fileItem);
-						if (nb != null) {
-							fileItemVo.setNature(fileItemVo.getNature() + " (" + nb.getValue() + ")");
-							treatmentVo.setItemNature(tradeNameFieldValue.getValue());
-						}
 
                     final FileItemFieldValue volumeFieldValue = getFileFieldValueService()
                             .findFileItemFieldValueByCodeAndFileItem("VOLUME", fileItem);
