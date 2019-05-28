@@ -172,7 +172,9 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
                     fileItemVo.setNature(tradeNameFieldValue.getValue());
                     treatmentVo.setItemNature(tradeNameFieldValue.getValue());
                 }
-				
+				else {
+					fileItemVo.setNature("");
+				}
 				FileItemFieldValue nb = getFileFieldValueService()
                         .findFileItemFieldValueByCodeAndFileItem("NOM_BOTANIQUE", fileItem);
 						if (nb != null) {
