@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ATTESTATION_TRAITEMENT_PHYTO" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3f27f79b-e6ae-419b-aa77-db95164ce974">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="464"/>
+	<property name="ireport.y" value="336"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<style name="table">
 		<box>
@@ -30,6 +30,9 @@
 		<field name="nature" class="java.lang.String"/>
 		<field name="volume" class="java.lang.String"/>
 		<field name="weight" class="java.lang.String"/>
+		<field name="productLabel" class="java.lang.String"/>
+		<field name="quantityLabel" class="java.lang.String"/>
+		<field name="volumeWeightLabel" class="java.lang.String"/>
 	</subDataset>
 	<parameter name="MINADER_LOGO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -57,6 +60,7 @@
 	<field name="treatmentCompanyFax" class="java.lang.String"/>
 	<field name="treatmentCompanyEmail" class="java.lang.String"/>
 	<field name="consigneeCountry" class="java.lang.String"/>
+	<field name="treatmentTime" class="java.util.Date"/>
 	<background>
 		<band height="802">
 			<printWhenExpression><![CDATA[$P{DRAFT}]]></printWhenExpression>
@@ -134,9 +138,9 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 		</band>
 	</title>
 	<detail>
-		<band height="263" splitType="Stretch">
+		<band height="280" splitType="Stretch">
 			<componentElement>
-				<reportElement uuid="37ccefb1-3f65-4140-853c-6ad85aa933ab" key="table" style="table" x="0" y="200" width="555" height="60"/>
+				<reportElement uuid="37ccefb1-3f65-4140-853c-6ad85aa933ab" key="table" style="table" x="0" y="215" width="555" height="65"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="fileItemListDataset" uuid="20021209-5e05-41dd-b1c2-02ce904770c3">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{fileItemList})]]></dataSourceExpression>
@@ -148,12 +152,12 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="11" isBold="true"/>
 								</textElement>
-								<text><![CDATA[N° contrat(1) N° code, lot]]></text>
+								<text><![CDATA[CODE NSH]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="table_TD" height="29" rowSpan="1">
+						<jr:detailCell style="table_TD" height="50" rowSpan="1">
 							<textField isBlankWhenNull="true">
-								<reportElement uuid="f2b0cf1b-6a05-4833-ab90-b0fec4c275ac" x="0" y="0" width="120" height="29"/>
+								<reportElement uuid="f2b0cf1b-6a05-4833-ab90-b0fec4c275ac" x="0" y="0" width="120" height="50"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="11"/>
 								</textElement>
@@ -161,19 +165,19 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column uuid="e0bc4aa1-ea59-4991-86be-45542909234a" width="250">
+					<jr:column uuid="e0bc4aa1-ea59-4991-86be-45542909234a" width="175">
 						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement uuid="d30937cd-d3ef-4a3e-a0a4-667d1f2ba7f9" x="0" y="0" width="250" height="30"/>
+							<textField>
+								<reportElement uuid="ba25433d-1e15-4439-aa58-9e109d0ba90f" x="0" y="0" width="175" height="30"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="11" isBold="true"/>
 								</textElement>
-								<text><![CDATA[Nombre et nature du produit]]></text>
-							</staticText>
+								<textFieldExpression><![CDATA[$F{productLabel}]]></textFieldExpression>
+							</textField>
 						</jr:columnHeader>
-						<jr:detailCell style="table_TD" height="29" rowSpan="1">
+						<jr:detailCell style="table_TD" height="50" rowSpan="1">
 							<textField isBlankWhenNull="true">
-								<reportElement uuid="9eab722e-125d-4cd5-851c-949550d3b36a" x="0" y="0" width="250" height="29"/>
+								<reportElement uuid="9eab722e-125d-4cd5-851c-949550d3b36a" x="0" y="0" width="174" height="50"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="11"/>
 								</textElement>
@@ -181,19 +185,39 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column uuid="adf79721-4e9d-435e-9091-875ac83879f3" width="90">
+					<jr:column uuid="adf79721-4e9d-435e-9091-875ac83879f3" width="171">
 						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement uuid="a99eca7d-c106-457c-bcbc-73594a9c56f0" x="0" y="0" width="90" height="30"/>
+							<textField>
+								<reportElement uuid="ce71630a-614c-436d-8000-cac50fcf61b1" x="0" y="0" width="171" height="30"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="11" isBold="true"/>
 								</textElement>
-								<text><![CDATA[Volume]]></text>
-							</staticText>
+								<textFieldExpression><![CDATA[$F{quantityLabel}]]></textFieldExpression>
+							</textField>
 						</jr:columnHeader>
-						<jr:detailCell style="table_TD" height="29" rowSpan="1">
+						<jr:detailCell style="table_TD" height="50" rowSpan="1">
 							<textField isBlankWhenNull="true">
-								<reportElement uuid="2f7f1a21-d0d7-4177-b6eb-65977a5049cd" x="0" y="0" width="90" height="29"/>
+								<reportElement uuid="2f7f1a21-d0d7-4177-b6eb-65977a5049cd" x="0" y="0" width="171" height="50"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="11"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{number}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column uuid="a17cda20-8482-469e-b85d-c7b0cd95069c" width="88">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
+							<textField>
+								<reportElement uuid="085c4170-9d95-4323-9a3e-620c037ed92c" x="0" y="0" width="87" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="11" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{volumeWeightLabel}]]></textFieldExpression>
+							</textField>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="50" rowSpan="1">
+							<textField isBlankWhenNull="true">
+								<reportElement uuid="bad84b26-6fd1-44df-b2b9-7f8724f6e3cd" x="0" y="0" width="87" height="50"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="11"/>
 								</textElement>
@@ -201,42 +225,22 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column uuid="a17cda20-8482-469e-b85d-c7b0cd95069c" width="90">
-						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement uuid="39432599-6a9b-4843-9ef8-e7a87e1d5681" x="0" y="0" width="90" height="30"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font size="11" isBold="true"/>
-								</textElement>
-								<text><![CDATA[Poids]]></text>
-							</staticText>
-						</jr:columnHeader>
-						<jr:detailCell style="table_TD" height="29" rowSpan="1">
-							<textField isBlankWhenNull="true">
-								<reportElement uuid="bad84b26-6fd1-44df-b2b9-7f8724f6e3cd" x="0" y="0" width="90" height="29"/>
-								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font size="11"/>
-								</textElement>
-								<textFieldExpression><![CDATA[$F{weight}]]></textFieldExpression>
-							</textField>
-						</jr:detailCell>
-					</jr:column>
 				</jr:table>
 			</componentElement>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="2afecf9e-eb6a-42e6-a67e-e5b560ed2491" x="0" y="0" width="555" height="170"/>
+				<reportElement uuid="2afecf9e-eb6a-42e6-a67e-e5b560ed2491" x="0" y="0" width="555" height="195"/>
 				<textElement markup="html"/>
-				<textFieldExpression><![CDATA["Le chef de Poste de Police Phytosanitaire atteste que la Société <b><u>" + ($F{treatmentCompanyName} != null ? $F{treatmentCompanyName} : "-") + "</u></b> BP : <b><u>" + ($F{treatmentCompanyBp} != null ? $F{treatmentCompanyBp} : "-") + "</u></b> Tel : <b><u>" + ($F{treatmentCompanyTel} != null ? $F{treatmentCompanyTel} : "-") + "</u></b> Fax : <b><u>" + ($F{treatmentCompanyFax} != null ? $F{treatmentCompanyFax} : "-") + "</u></b> Email : <b><u>" + ($F{treatmentCompanyEmail} != null ? $F{treatmentCompanyEmail} : "-") + "</u></b>, a procédé sous la supervision de <b><u>" + ($F{supervisor} != null ? $F{supervisor} : "-") + "</u></b> dans ses services, au traitement phytosanitaire par <b><u>" + ($F{treatmentType} != null ? $F{treatmentType} : "-") + "</u></b><br/><br/>A la spécificité commerciale (N° d lot(s) / N° homologation) <b><u>" + ($F{homologationNumber} != null ? $F{homologationNumber} : "-") + "</u></b><br/><br/>Concentration des matières actives <b><u>" + ($F{concentration} != null ? $F{concentration} : "-") + "</u></b><br/><br/>A raison de (doses de traitement) <b><u>" + ($F{treatmentDose} != null ? $F{treatmentDose} : "-") + "</u></b><br/><br/>D'un lot de marchandises à destination de <b><u>" + ($F{consigneeCountry} != null ? $F{consigneeCountry} : "-") + "</u></b><br/><br/>Suivant le dossier <b><u>" + ($F{fileNumber} != null ? $F{fileNumber} : "-") + "</u></b>"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Le chef de Poste de Police Phytosanitaire atteste que la Société <b><u>" + ($F{treatmentCompanyName} != null ? $F{treatmentCompanyName} : "-") + "</u></b> BP : <b><u>" + ($F{treatmentCompanyBp} != null ? $F{treatmentCompanyBp} : "-") + "</u></b> Tel : <b><u>" + ($F{treatmentCompanyTel} != null ? $F{treatmentCompanyTel} : "-") + "</u></b> Fax : <b><u>" + ($F{treatmentCompanyFax} != null ? $F{treatmentCompanyFax} : "-") + "</u></b> Email : <b><u>" + ($F{treatmentCompanyEmail} != null ? $F{treatmentCompanyEmail} : "-") + "</u></b>, a procédé sous la supervision de <b><u>" + ($F{supervisor} != null ? $F{supervisor} : "-") + "</u></b> dans ses services, au traitement phytosanitaire par <b><u>" + ($F{treatmentType} != null ? $F{treatmentType} : "-") + "</u></b><br/><br/>A la spécificité commerciale (N° d lot(s) / N° homologation) <b><u>" + ($F{homologationNumber} != null ? $F{homologationNumber} : "-") + "</u></b><br/><br/>Concentration des matières actives <b><u>" + ($F{concentration} != null ? $F{concentration} : "-") + "</u></b><br/><br/>A raison de (doses de traitement) <b><u>" + ($F{treatmentDose} != null ? $F{treatmentDose} : "-") + "</u></b><br/><br/>D'un lot de marchandises à destination de <b><u>" + ($F{consigneeCountry} != null ? $F{consigneeCountry} : "-") + "</u></b><br/><br/>Suivant le dossier <b><u>" + ($F{fileNumber} != null ? $F{fileNumber} : "-")  + ($F{exporterName} != null ? ("; " + $F{exporterName}) : "") + " " + ($F{treatmentTime} != null ? new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{treatmentTime}) : "") + "</u></b><br/><br/>En foi de quoi la présente attestation est délivrée pour servir et valoir ce que de droit"]]></textFieldExpression>
 			</textField>
 			<rectangle>
-				<reportElement uuid="7a479826-8061-4010-a552-afce08a9331c" mode="Transparent" x="0" y="180" width="555" height="20"/>
+				<reportElement uuid="7a479826-8061-4010-a552-afce08a9331c" mode="Transparent" x="0" y="195" width="555" height="20"/>
 			</rectangle>
 			<staticText>
-				<reportElement uuid="ae1e303e-4fff-480e-818e-9fcc1dc149b8" x="5" y="180" width="100" height="20"/>
+				<reportElement uuid="ae1e303e-4fff-480e-818e-9fcc1dc149b8" x="5" y="195" width="100" height="20"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="11" isBold="true"/>
 				</textElement>
-				<text><![CDATA[DETAIL DU LOT]]></text>
+				<text><![CDATA[DETAIL]]></text>
 			</staticText>
 		</band>
 		<band height="118">
@@ -252,10 +256,10 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 				<textElement textAlignment="Right" markup="html">
 					<font size="11"/>
 				</textElement>
-				<textFieldExpression><![CDATA["A <u>" + ($F{decisionPlace} != null ? $F{decisionPlace} : "-") + "</u> le <u>" + ($F{decisionDate} != null ? new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{decisionDate}) : "-") + "</u>"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["A Douala le "  + ($F{decisionDate} != null ? new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{decisionDate}) : "-") + "</u>"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="7e645ebe-93d3-47e2-925d-2f91a962dad1" x="0" y="0" width="555" height="55"/>
+				<reportElement uuid="7e645ebe-93d3-47e2-925d-2f91a962dad1" x="0" y="3" width="555" height="55"/>
 				<textElement markup="html"/>
 				<text><![CDATA[Ces opérations supervisées par nos soins ont été jugées conformes <b>aux articles 19 et 20 de la loi N° 2003/003 du 21 avril 2003</b> portant Protection Phytosanitaire, à <b>l'article 13 du décret N° 2005/0771/PM du 06 avril 2005</b> fixant les modalités d'exécution des opérations de quarantaines végétales et à la Convention Internationale pour la Protection des Végétaux.
 <br/><br/>

@@ -1,5 +1,6 @@
 package org.guce.siat.web.ct.controller;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -127,6 +128,7 @@ import org.guce.siat.common.utils.enums.FileTypeCode;
 import org.guce.siat.common.utils.enums.FlowCode;
 import org.guce.siat.common.utils.enums.ParamsCategory;
 import org.guce.siat.common.utils.enums.StepCode;
+import org.guce.siat.common.utils.ged.AlfrescoDirectoriesInitializer;
 import org.guce.siat.common.utils.ged.CmisClient;
 import org.guce.siat.common.utils.ged.CmisSession;
 import org.guce.siat.core.ct.model.AnalyseOrder;
@@ -6808,6 +6810,45 @@ public class FileItemCctDetailController implements Serializable {
 
     public void setGenerateDraftAllowed(boolean generateDraftAllowed) {
         this.generateDraftAllowed = generateDraftAllowed;
+    }
+	
+	public StreamedContent downloadAttachment() {
+        if (selectedAttachment == null) {
+            JsfUtil.addWarningMessage("Selectionnez la pièce à télécharger");
+            return null;
+        }
+        try {
+            final Session sessionCmisClient = CmisSession.getInstance();
+            ContentStream contentStream = CmisClient.getDocumentByPath(sessionCmisClient, getSelectedAttachment().getPath()
+                    + AlfrescoDirectoriesInitializer.SLASH + getSelectedAttachment().getDocumentName());
+            if (contentStream == null) {
+                contentStream = CmisClient.getDocumentByPath(sessionCmisClient, getSelectedAttachment().getPath());
+            }
+            if (contentStream == null) {
+                JsfUtil.addErrorMessage("Impossible de trouver la pièce jointe");
+                return null;
+            }
+            final BufferedInputStream in = new BufferedInputStream(contentStream.getStream());
+            final ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+            int val = -1;
+            try {
+                while ((val = in.read()) != -1) {
+                    out.write(val);
+                }
+            } catch (final IOException e) {
+                LOG.error(e.getMessage(), e);
+            }
+
+            final byte[] bytes = out.toByteArray();
+
+            return new DefaultStreamedContent(new java.io.ByteArrayInputStream(bytes), !org.apache.commons.lang.StringUtils.isEmpty(contentStream.getMimeType()) ? contentStream.getMimeType() : "application/msword", selectedAttachment.getDocumentName());
+        } catch (Exception e) {
+            JsfUtil.addErrorMessage("Impossible de télécharger la pièce jointe");
+            LOG.error(e.getMessage(), e);
+        }
+
+        return null;
     }
 
 }

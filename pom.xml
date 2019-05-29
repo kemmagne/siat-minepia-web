@@ -13,7 +13,7 @@
     <artifactId>siat-ct-web</artifactId>
     <packaging>war</packaging>
     <name>siat-ct-web</name>
-    <version>2.2.2</version>
+    <version>2.2.8</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -76,9 +76,9 @@
             </activation>
         </profile>
         <profile>
-            <id>profile-development</id>
+            <id>profile-ue</id>
             <properties>
-                <environment>dev</environment>
+                <environment>ue</environment>
                 <db.username>siat_ct</db.username>
                 <db.password>siat</db.password>
                 <db.url>jdbc:oracle:thin:@test:1518:GUCETEST</db.url>
@@ -92,11 +92,51 @@
                 <uri.dead.in>direct:dead</uri.dead.in>
                 <uri.dead.out>amq:deadQueue</uri.dead.out>
                 <ebxml.folder>D:/lerichjam/siat/ebxml</ebxml.folder>
-                <!--<ebxml.folder>/home/yenke/eGuce/ebxml</ebxml.folder>-->
                 <xml.folder>D:/lerichjam/siat/xml</xml.folder>
-                <!--<xml.folder>/home/yenke/eGuce/xml</xml.folder>-->
                 <attachement.folder>D:/lerichjam/siat/attachement</attachement.folder>
-                <!--<attachement.folder>/home/yenke/eGuce/attachement</attachement.folder>-->
+                <hibernate.default_schema>SIAT_CT</hibernate.default_schema>
+                <jms.username>admin</jms.username>
+                <jms.password>admin</jms.password>
+                <mailSender.host>smtp.gmail.com</mailSender.host>
+                <mailSender.port>587</mailSender.port>
+                <mailSender.username>guce.technical.notifier</mailSender.username>
+                <mailSender.password>P@ssword2015</mailSender.password>
+                <mailSender.from>guce.technical.notifier@gmail.com</mailSender.from>
+                <mailSender.replyTo>lerichgames@gmail.com</mailSender.replyTo>
+                <webservice.url>http://sw0:9759/orchestra/privacy/siat/messageService/ebxml</webservice.url>
+                <messages.folder>D:/lerichjam/siat/eguce/messages/ct</messages.folder>
+                <mails.folder>D:/lerichjam/siat/eguce/mails/ct</mails.folder>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>environment</name>
+                    <value>ue</value>
+                </property>
+            </activation>
+        </profile>
+        <profile>
+            <id>profile-development</id>
+            <properties>
+                <environment>dev</environment>
+                <db.username>siat_ct</db.username>
+                <db.password>siat</db.password>
+                <db.url>jdbc:oracle:thin:@localhost:1521:XE</db.url>
+                <ged.url>http://gedurl:17483</ged.url>
+                <jms.url>failover:(tcp://brokerurl:61616)</jms.url>
+                <version>${application.version}</version>
+                <ged.username>admin</ged.username>
+                <ged.password>admin</ged.password>
+                <uri.in>amq:CT</uri.in>
+                <uri.out>SIAT</uri.out>
+                <uri.dead.in>direct:dead</uri.dead.in>
+                <uri.dead.out>amq:deadQueue</uri.dead.out>
+                <!--<ebxml.folder>D:/lerichjam/siat/ebxml</ebxml.folder>-->
+                <ebxml.folder>/home/yenke/eGuce/ebxml</ebxml.folder>
+                <!--<xml.folder>D:/lerichjam/siat/xml</xml.folder>-->
+                <xml.folder>/home/yenke/eGuce/xml</xml.folder>
+                <!--<attachement.folder>D:/lerichjam/siat/attachement</attachement.folder>-->
+                <attachement.folder>/home/yenke/eGuce/attachement</attachement.folder>
                 <hibernate.default_schema>SIAT_CT</hibernate.default_schema>
                 <jms.username>admin</jms.username>
                 <jms.password>admin</jms.password>

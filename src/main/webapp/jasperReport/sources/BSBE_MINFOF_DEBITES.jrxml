@@ -4,7 +4,7 @@
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="5"/>
 	<style name="Title" forecolor="#000000" fontName="Century Gothic" fontSize="50" isBold="false"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Century Gothic" fontSize="18" isBold="false"/>
 	<style name="Column header" forecolor="#666666" fontName="Century Gothic" fontSize="14" isBold="true"/>
@@ -63,79 +63,79 @@
 	<field name="signatory" class="java.lang.String"/>
 	<field name="destinationCountry" class="java.lang.String"/>
 	<title>
-		<band height="239" splitType="Stretch">
+		<band height="247" splitType="Stretch">
 			<staticText>
-				<reportElement x="78" y="101" width="390" height="20" uuid="73f56145-a1f4-4c8c-b15a-d90f2da04519"/>
+				<reportElement x="78" y="108" width="390" height="20" uuid="73f56145-a1f4-4c8c-b15a-d90f2da04519"/>
 				<textElement textAlignment="Center">
 					<font fontName="Century Gothic" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[BULLETIN DE SPECIFICATION DES BOIS A L'EXPORTATION]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="47" y="129" width="199" height="18" uuid="82a8f537-24ff-4366-b0e4-5b2509293845"/>
+				<reportElement x="47" y="136" width="199" height="18" uuid="82a8f537-24ff-4366-b0e4-5b2509293845"/>
 				<textElement>
 					<font fontName="Century Gothic"/>
 				</textElement>
 				<text><![CDATA[- Nom ou raison sociale de l'Exportateur : ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="47" y="151" width="320" height="18" uuid="12d75d02-ce2a-446f-aa2f-481f62facf03"/>
+				<reportElement x="47" y="158" width="320" height="18" uuid="12d75d02-ce2a-446f-aa2f-481f62facf03"/>
 				<textElement>
 					<font fontName="Century Gothic"/>
 				</textElement>
 				<text><![CDATA[- N° d'enregistrement à la Direction des Eaux et Forets et Chasses : ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="47" y="173" width="112" height="18" uuid="c2b8072d-449d-4e3b-a1a1-d4a3284abeae"/>
+				<reportElement x="47" y="180" width="112" height="18" uuid="c2b8072d-449d-4e3b-a1a1-d4a3284abeae"/>
 				<textElement>
 					<font fontName="Century Gothic"/>
 				</textElement>
 				<text><![CDATA[- Lieu de l'Exportation :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="47" y="196" width="68" height="18" uuid="a0e77dd5-ceb4-44d5-b095-18c1f86963bd"/>
+				<reportElement x="47" y="203" width="68" height="18" uuid="a0e77dd5-ceb4-44d5-b095-18c1f86963bd"/>
 				<textElement>
 					<font fontName="Century Gothic"/>
 				</textElement>
 				<text><![CDATA[- Destination : ]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="115" y="196" width="414" height="18" uuid="390545b4-c93c-427b-9a29-5b972fd45f17"/>
+				<reportElement x="115" y="203" width="414" height="18" uuid="390545b4-c93c-427b-9a29-5b972fd45f17"/>
 				<textElement>
 					<font fontName="Century Gothic" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{destinationCountry} == null ? "" : $F{destinationCountry} + " - " + $F{dischargePlace} == null ? "" : $F{dischargePlace}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="159" y="173" width="370" height="18" uuid="126bf0ee-4f8a-425f-8042-55f1d8a378f4"/>
+				<reportElement x="159" y="180" width="370" height="18" uuid="126bf0ee-4f8a-425f-8042-55f1d8a378f4"/>
 				<textElement>
 					<font fontName="Century Gothic" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{loadingPlace} == null ? " - " : $F{loadingPlace}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="367" y="151" width="162" height="18" uuid="08b25827-e05a-4d8e-84bf-12885cd5d946"/>
+				<reportElement x="367" y="158" width="162" height="18" uuid="08b25827-e05a-4d8e-84bf-12885cd5d946"/>
 				<textElement>
 					<font fontName="Century Gothic" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{registrationNumber} == null ? " - " : $F{registrationNumber}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="246" y="129" width="283" height="19" uuid="71557aa8-1b52-4cac-ad59-ca6e62a46361"/>
+				<reportElement x="246" y="136" width="283" height="19" uuid="71557aa8-1b52-4cac-ad59-ca6e62a46361"/>
 				<textElement>
 					<font fontName="Century Gothic" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{importer} == null ? " - " : $F{importer}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="47" y="218" width="78" height="18" uuid="20625c2a-3e06-42a1-b9cf-6f734bdeac65"/>
+				<reportElement x="47" y="225" width="78" height="18" uuid="20625c2a-3e06-42a1-b9cf-6f734bdeac65"/>
 				<textElement>
 					<font fontName="Century Gothic"/>
 				</textElement>
 				<text><![CDATA[- Numero BSB : ]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="126" y="218" width="159" height="18" uuid="dbaf29f6-1d0e-463b-b40a-6ee4c9725b04"/>
+				<reportElement x="126" y="225" width="159" height="18" uuid="dbaf29f6-1d0e-463b-b40a-6ee4c9725b04"/>
 				<textElement>
 					<font fontName="Century Gothic" isBold="true"/>
 				</textElement>
@@ -147,18 +147,18 @@
 					<font fontName="Century Gothic" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[REPUBLIC OF CAMEROON
-Peace - Workk - Fatherland
+Peace - Work - Fatherland
 ------]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="410" y="218" width="119" height="18" uuid="c6a8beb1-b986-4ff0-a124-df59c785fe99"/>
+				<reportElement x="410" y="225" width="119" height="18" uuid="c6a8beb1-b986-4ff0-a124-df59c785fe99"/>
 				<textElement>
 					<font fontName="Century Gothic" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{referenceEforce} == null ? " - " : $F{referenceEforce}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="297" y="218" width="113" height="18" uuid="34e069a3-ab31-446d-be1c-a02a13867919"/>
+				<reportElement x="297" y="225" width="113" height="18" uuid="34e069a3-ab31-446d-be1c-a02a13867919"/>
 				<textElement>
 					<font fontName="Century Gothic"/>
 				</textElement>
@@ -205,6 +205,10 @@ Paix - Travail - Patrie
 				</textElement>
 				<text><![CDATA[MINISTERE DES FORETS ET DE LA FAUNE]]></text>
 			</staticText>
+			<image>
+				<reportElement x="219" y="0" width="119" height="101" uuid="2f5e81f2-a700-4190-a096-ec9abd5f59cf"/>
+				<imageExpression><![CDATA["minfof_logo.png"]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>
