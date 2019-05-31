@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import net.sf.jasperreports.engine.JRParameter;
 
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
@@ -85,27 +86,8 @@ public class VtMinepdedExporter extends AbstractReportInvoker {
                         case "FACTURE_NUMERO_FACTURE":
                             vtMinepdedVo.setInvoice(fileFieldValue.getValue());
                             break;
-//                        case "PAYS_ORIGINE_LIBELLE":
-//                            vtMinepdedVo.setCountryOfOrigin(fileFieldValue.getValue());
-//                            break;
-//                        case "PAYS_PROVENANCE_LIBELLE":
-//                            vtMinepdedVo.setCountryOfProvenance(fileFieldValue.getValue());
-//                            break;
                         case "FOURNISSEUR_RAISONSOCIALE":
                             vtMinepdedVo.setProvider(fileFieldValue.getValue());
-                            break;
-                        case "SIGNATAIRE_DATE":
-                            if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
-                                try {
-                                    if (fileFieldValue.getValue() != null) {
-                                        vtMinepdedVo.setDecisionDate(new SimpleDateFormat("dd/MM/yyyy").parse(fileFieldValue.getValue()));
-                                    } else {
-                                        vtMinepdedVo.setDecisionDate(java.util.Calendar.getInstance().getTime());
-                                    }
-                                } catch (final ParseException e) {
-                                    LOG.error(Objects.toString(e), e);
-                                }
-                            }
                             break;
                         case "SIGNATAIRE_LIEU":
                             vtMinepdedVo.setDecisionPlace(fileFieldValue.getValue());
@@ -154,6 +136,7 @@ public class VtMinepdedExporter extends AbstractReportInvoker {
 
         final Map<String, Object> jRParameters = super.getJRParameters();
         jRParameters.put("MINEPDED_LOGO", getRealPath(IMAGES_PATH, "minepded", "jpg"));
+        jRParameters.put(JRParameter.REPORT_LOCALE, new java.util.Locale("FR"));
         return jRParameters;
     }
 
