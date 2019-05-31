@@ -1745,7 +1745,7 @@ public class FileItemCctDetailController implements Serializable {
 
             approvedDecision = approvedDecisionService.findApprovedDecisionByItemFlow(lastDecisions);
 
-            if (selectedFlow.getCode().equals(FlowCode.FL_CT_CVS_05)) {
+            if (selectedFlow.getCode().equals(FlowCode.FL_CT_CVS_05.name())) {
                 maskOfficialPosition = true;
             } else {
                 maskOfficialPosition = false;
@@ -1754,6 +1754,9 @@ public class FileItemCctDetailController implements Serializable {
             if (approvedDecision == null) {
                 approvedDecision = new ApprovedDecision();
                 fillApprovedDecision(approvedDecision);
+                if (selectedFlow.getCode().equals(FlowCode.FL_CT_CVS_03.name())) {
+                    approvedDecision.setOfficialPosition("Chef du Poste d'inspection Sanitaire Vétérinaire");
+                }
             } else {
                 approvedDecision.setOfficialPosition("Chef du Poste d'inspection Sanitaire Vétérinaire");
             }
@@ -6905,11 +6908,11 @@ public class FileItemCctDetailController implements Serializable {
                 }
             }
         }
-            if (reportInvoker != null) {
-                reportInvoker.setDraft(draft);
-                reportInvoker.setFileFieldValueService(fileFieldValueService);
-                report = JsfUtil.getReport(reportInvoker);
-            }
+        if (reportInvoker != null) {
+            reportInvoker.setDraft(draft);
+            reportInvoker.setFileFieldValueService(fileFieldValueService);
+            report = JsfUtil.getReport(reportInvoker);
+        }
         return report;
     }
 
@@ -6920,8 +6923,8 @@ public class FileItemCctDetailController implements Serializable {
     public void setGenerateDraftAllowed(boolean generateDraftAllowed) {
         this.generateDraftAllowed = generateDraftAllowed;
     }
-	
-	public StreamedContent downloadAttachment() {
+
+    public StreamedContent downloadAttachment() {
         if (selectedAttachment == null) {
             JsfUtil.addWarningMessage("Selectionnez la pièce à télécharger");
             return null;
@@ -6959,8 +6962,8 @@ public class FileItemCctDetailController implements Serializable {
 
         return null;
     }
-        
-        public ApprovedDecision getApprovedDecision() {
+
+    public ApprovedDecision getApprovedDecision() {
         return approvedDecision;
     }
 
@@ -7040,6 +7043,8 @@ public class FileItemCctDetailController implements Serializable {
                                 builder.append(tab2[0]).append("/").append(tab2[3]).append("; ");
                             }
                             approvedDecision.setContainerSeals(builder.substring(0, builder.lastIndexOf(" ")));
+                        } else {
+                            approvedDecision.setContainerSeals("-");
                         }
                         break;
                     }
