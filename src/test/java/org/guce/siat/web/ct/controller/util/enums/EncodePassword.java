@@ -19,7 +19,7 @@ public class EncodePassword {
 
     private static void test01() {
 
-        final List<String> logins = Arrays.asList("MINSANTE-D-DPM", "MINSANTE-SD-SDM", "MINSANTE-AG-BH-RT");
+        final List<String> logins = Arrays.asList("MINSANTE-D-DPM", "MINSANTE-SD-SDM", "MINSANTE-AG-BH-RT", "TSIMIETOGA");
         final List<String> logins1 = Arrays.asList("CCIMA", "EKATA", "MOMONOUNI", "GOUROUMAHA", "AYABI", "NGANOGO",
                 "PERABI", "NZOKOA", "SENABIONO", "EMPOAGHAM", "KENFACKJP", "NIMAYA", "KAMDEM", "ZEBAZE",
                 "AKONO", "TONYE", "JAMMULUMI", "KONGUEP", "FOKOUEN", "IJANGFONGOH", "TOUANDOP", "TAZOJACOB", "MEBIAME");
