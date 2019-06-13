@@ -7,7 +7,7 @@ package org.guce.siat.web.ct.controller.util.enums;
 public enum TRProtectionEquipement {
 
     MASQUE("Masque"),
-    GANG("Gang"),
+    GANG("Gant"),
     BOTTES("Bottes"),
     COMBINAISON("Combinaison"),
     LUNETTES("Lunettes");
