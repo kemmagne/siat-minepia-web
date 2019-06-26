@@ -98,6 +98,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
         final String productType = getFileFieldValueService()
                 .findValueByFileFieldAndFile("TYPE_PRODUIT_CODE", file).getValue();
         String emballage = Utils.getProductTypePackaging().get(productType);
+		ctCctCpEFileVo.setPackaging(productType);
 
         if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
             String containersNumbers = null;

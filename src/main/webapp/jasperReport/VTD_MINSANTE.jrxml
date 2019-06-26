@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="di" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9f130651-a537-47ba-8e02-acbfd4ee569c">
 	<property name="ireport.zoom" value="1.210000000000034"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="10"/>
+	<property name="ireport.y" value="346"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -124,6 +124,7 @@
 	<field name="qrCode" class="java.io.InputStream"/>
 	<field name="signatoryDate" class="java.lang.String"/>
 	<field name="vtpNumber" class="java.lang.String"/>
+	<field name="loadingCustomsOffice" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -137,7 +138,7 @@
 				<text><![CDATA[REPUBLIQUE DU CAMEROUN
 Paix-Travail-Patrie
 MINISTERE DE LA SANTE
-DIRECTION DE LA PHARMACIE, DU MEDICAMMENT ET DES LABORATOIRES]]></text>
+DIRECTION DE LA PHARMACIE, DU MEDICAMENT ET DES LABORATOIRES]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="0f89e17b-3be2-4f22-a7ca-529b4688814a" x="0" y="2" width="191" height="79"/>
@@ -154,7 +155,7 @@ DEPARTMENT OF PHARMACY, DRUG AND LABS]]></text>
 				<textElement textAlignment="Center">
 					<font size="14" isBold="true" isItalic="false"/>
 				</textElement>
-				<text><![CDATA[VISAS TECHNIQUE DEFINITIF]]></text>
+				<text><![CDATA[VISA TECHNIQUE DEFINITIF]]></text>
 			</staticText>
 			<textField>
 				<reportElement uuid="bd035d41-5d8a-497a-b53e-c67af00267f7" x="433" y="131" width="80" height="20"/>
@@ -415,15 +416,22 @@ DEPARTMENT OF PHARMACY, DRUG AND LABS]]></text>
 						<reportElement uuid="8191a6bf-6188-4881-85a4-fc919fe3684f" x="0" y="0" width="277" height="30"/>
 						<box leftPadding="1"/>
 						<textElement/>
-						<text><![CDATA[Lieu de dédouanement / Custom clearing office]]></text>
+						<text><![CDATA[Lieu de chargement et de dédouanement / Custom clearing office]]></text>
 					</staticText>
 					<textField isBlankWhenNull="true">
-						<reportElement uuid="0e65cfe3-c653-4fc1-83a5-0eda91cf7abc" x="0" y="30" width="277" height="20"/>
+						<reportElement uuid="0e65cfe3-c653-4fc1-83a5-0eda91cf7abc" x="77" y="30" width="200" height="20"/>
 						<box leftPadding="1"/>
-						<textElement>
+						<textElement textAlignment="Center">
 							<font fontName="SansSerif" isBold="true"/>
 						</textElement>
 						<textFieldExpression><![CDATA[$F{enterringCustomsOffice}]]></textFieldExpression>
+					</textField>
+					<textField isBlankWhenNull="true">
+						<reportElement uuid="cb6c815a-9bba-4cb0-ad0c-8366a27a6f54" x="77" y="10" width="200" height="20"/>
+						<textElement textAlignment="Center">
+							<font isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{loadingCustomsOffice}]]></textFieldExpression>
 					</textField>
 				</frame>
 				<frame>
@@ -479,7 +487,7 @@ VTP number]]></text>
 						<text><![CDATA[Valeur Totale(devises) /
 Total value in foreign currency]]></text>
 					</staticText>
-					<textField isBlankWhenNull="true">
+					<textField pattern="#,##0.00" isBlankWhenNull="true">
 						<reportElement uuid="af31da4e-b2cc-4d36-b889-edc60391b013" x="0" y="27" width="274" height="24"/>
 						<box leftPadding="1"/>
 						<textElement>
