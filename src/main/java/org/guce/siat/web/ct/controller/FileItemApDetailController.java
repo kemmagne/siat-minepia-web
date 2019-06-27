@@ -891,7 +891,7 @@ public class FileItemApDetailController implements Serializable {
                 currentFile.getFileType(), getLoggedUser().getMergedDelegatorList());
         loadProductHistoryList();
         //Reloader la liste des fileItem dans la vue productionInfos avec les buttons
-        productInfoItems = initFileItemApDetails();
+//        productInfoItems = initFileItemApDetails();
 
         // SET ATTCHMENT TO NULL AND DISABLED VIEW PANEL OF PDF VIEWER
         initAttachmentView();
@@ -1375,6 +1375,9 @@ public class FileItemApDetailController implements Serializable {
         boolean acceptationFlowFound;
         Flow decisionAtCotationFlow = null;
         List<Flow> acceptedFlow = currentFile.getFileType().getFlowList();
+//        if (currentFile.getFileItemsList() == null) {
+//            currentFile.setFileItemsList(fileItemService.findFileItemsByFile(currentFile));
+//        }
         if (currentFile.getFileItemsList() == null) {
             currentFile.setFileItemsList(fileItemService.findFileItemsByFile(currentFile));
 
@@ -2113,7 +2116,7 @@ public class FileItemApDetailController implements Serializable {
             flowDatas.add(itemFlowData);
         }
 
-        final List<ItemFlow> itemFlowsToAdd = new ArrayList<ItemFlow>();
+        final List<ItemFlow> itemFlowsToAdd = new ArrayList<>();
         for (final FileItem fileItem : currentFile.getFileItemsList()) {
             final ItemFlow itemFlow = new ItemFlow();
 
@@ -5564,4 +5567,3 @@ public class FileItemApDetailController implements Serializable {
     }
 
 }
-
