@@ -234,8 +234,14 @@ public class CtCctCsvFileVo extends AbstractFileVo<CtCctCsvFileItemVo> {
      * The permit CITES Number.
      */
     private String cvsPermitCITES;
-
+/**
+     * The qr Code image.
+     */
     private ByteArrayInputStream qrCode;
+    /**
+     * The signature date.
+     */
+    private String date;
 
     /**
      * Gets the consignor name.
@@ -923,4 +929,13 @@ public class CtCctCsvFileVo extends AbstractFileVo<CtCctCsvFileItemVo> {
         this.cvsPermitCITES = cvsPermitCITES;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    
 }

@@ -74,6 +74,12 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
         if ((file != null)) {
             final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
             ctCctCsvFileVo.setDecisionPlace(file.getBureau().getLabelFr());
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            if (file.getSignatureDate() != null) {
+                ctCctCsvFileVo.setDate(sdf.format(file.getSignatureDate()));
+            } else {
+                ctCctCsvFileVo.setDate(sdf.format(Calendar.getInstance().getTime()));
+            }
             ctCctCsvFileVo.setDecisionDate(Calendar.getInstance().getTime());
             if (user != null) {
                 ctCctCsvFileVo.setSignatoryName(user.getFirstName());
@@ -281,7 +287,6 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
 
             if (decision != null) {
                 if (decision.getDepartureDate() != null) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                     ctCctCsvFileVo.setCvsDepartureDate(sdf.format(decision.getDepartureDate()));
                 }
                 if (decision.getProductTemperature() != null) {
