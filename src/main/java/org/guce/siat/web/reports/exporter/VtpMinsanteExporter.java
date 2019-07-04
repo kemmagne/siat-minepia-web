@@ -177,7 +177,7 @@ public class VtpMinsanteExporter extends AbstractReportInvoker {
 					}
 				}
 			}
-			vtpMinsanteVo.setAttestation(file.getNumeroDemande());
+			vtpMinsanteVo.setAttestation(file.getNumeroDemande() + " / " + file.getNumeroDossier());
 //			vtpMinsanteVo.setAttestation(vtpMinsanteVo.getDecisionNumber()
 //					+ PREFIX
 //					+ new SimpleDateFormat("dd/MM/yyyy").format(signatoryDate == null ? java.util.Calendar.getInstance().getTime()
