@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="di" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9f130651-a537-47ba-8e02-acbfd4ee569c">
 	<property name="ireport.zoom" value="1.210000000000034"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="600"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -179,14 +179,14 @@ DEPARTMENT OF PHARMACY, DRUG AND LABS]]></text>
 				<text><![CDATA[N° ___]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="61d425a9-62e8-4af0-9e0f-0d67f85ecc31" x="23" y="127" width="183" height="20"/>
+				<reportElement uuid="61d425a9-62e8-4af0-9e0f-0d67f85ecc31" x="23" y="127" width="208" height="20"/>
 				<textElement>
 					<font fontName="SansSerif" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{attestation} != null ? $F{attestation} : "-"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="61d425a9-62e8-4af0-9e0f-0d67f85ecc31" x="207" y="127" width="183" height="20"/>
+				<reportElement uuid="61d425a9-62e8-4af0-9e0f-0d67f85ecc31" x="231" y="127" width="183" height="20"/>
 				<textElement>
 					<font fontName="SansSerif" size="11" isBold="true"/>
 				</textElement>
