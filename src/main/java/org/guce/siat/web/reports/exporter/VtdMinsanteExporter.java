@@ -233,7 +233,7 @@ public class VtdMinsanteExporter extends AbstractReportInvoker {
 				}
 			}
 			}
-			vtdMinsanteVo.setAttestation(file.getNumeroDemande());
+			vtdMinsanteVo.setAttestation(file.getNumeroDemande() + " / " + file.getNumeroDossier());
 			vtdMinsanteVo.setSupplierPhone(supplierPhoneCode + supplierPhoneNumber + "/" + supplierMobileCode + supplierMobileNumber);
 			vtdMinsanteVo.setSupplierFax(supplierFaxCode + supplierFaxNumber);
 			vtdMinsanteVo.setBillOfLanding(lta == null ? bl : (lta + (bl == null ? "" : " / " + bl)));
