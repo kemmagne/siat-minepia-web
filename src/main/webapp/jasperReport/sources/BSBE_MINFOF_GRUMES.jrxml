@@ -65,7 +65,7 @@
 				<textElement textAlignment="Center">
 					<font fontName="Century Gothic" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[BULLETIN DE SPECIFICATION DES BOIS A L'EXPORTATION]]></text>
+				<text><![CDATA[DECLARATION DES SPECIFICATIONS DES BOIS A L'EXPORTATION]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="47" y="134" width="199" height="18" uuid="82a8f537-24ff-4366-b0e4-5b2509293845"/>
