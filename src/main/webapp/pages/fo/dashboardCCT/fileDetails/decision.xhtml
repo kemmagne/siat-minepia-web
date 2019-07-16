@@ -42,6 +42,10 @@
                     <p:panel rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'APP'}">
                         <ui:include src="../specificDecisions/appointment/calendar.xhtml" />
                     </p:panel>
+                    
+                    <p:panel rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'DCC'}">
+                        <ui:include src="../specificDecisions/dcc/dcc.xhtml" />
+                    </p:panel>
 
                     <p:panel rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'IR'}">
                         <ui:include src="../specificDecisions/inspectionReport/inspectionReport.xhtml" />
