@@ -91,6 +91,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
             ctCctCpEFileVo.setConcentration(treatmentInfos.getConcentration());
             ctCctCpEFileVo.setTreatmentsCarriedOut(treatmentInfos.getTreatmentsCarriedOut());
             ctCctCpEFileVo.setAdditionalDeclaration(treatmentInfos.getAdditionnalDeclaration());
+            ctCctCpEFileVo.setTreatmentDate(treatmentInfos.getTreatmentDate());
         }
 
         final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();

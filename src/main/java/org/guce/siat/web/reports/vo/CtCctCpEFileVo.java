@@ -174,6 +174,8 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
     private String netWeight;
     private String grossWeight;
     private String lotsNumbers;
+    
+    private Date treatmentDate;
 
     /**
      * Gets the consignor name.
@@ -864,4 +866,11 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
         this.quantities = quantities;
     }
 
+    public Date getTreatmentDate() {
+        return treatmentDate;
+    }
+
+    public void setTreatmentDate(Date treatmentDate) {
+        this.treatmentDate = treatmentDate;
+    }
 }
