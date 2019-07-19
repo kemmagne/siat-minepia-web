@@ -212,12 +212,11 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
 					if (productType.equalsIgnoreCase("GR")){
 						fileItemVo.setQuantityLabel("NOMBRE DE GRUMES");
 						fileItemVo.setProductLabel("ESSENCE");
-						FileItemFieldValue ng = getFileFieldValueService()
-								.findFileItemFieldValueByCodeAndFileItem("NOMBRE_GRUMES", fileItem);
-						if (ng != null){
-							fileItemVo.setNumber(ng.getValue());
-						}
 					}
+                       FileItemFieldValue ng = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("NOMBRE_GRUMES", fileItem);
+                    if (ng != null){
+                            fileItemVo.setNumber(ng.getValue());
+                    }
 
                     final FileItemFieldValue volumeFieldValue = getFileFieldValueService()
                             .findFileItemFieldValueByCodeAndFileItem("VOLUME", fileItem);
