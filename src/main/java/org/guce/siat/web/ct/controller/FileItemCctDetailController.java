@@ -2685,6 +2685,9 @@ public class FileItemCctDetailController implements Serializable {
                     itemFlow.setSent(Boolean.FALSE);
                     itemFlow.setUnread(Boolean.TRUE);
                     itemFlow.setReceived(AperakType.APERAK_D.getCharCode());
+                    if(assignedUserForCotation != null){
+                        itemFlow.setAssignedUser(assignedUserForCotation);
+                    }
                     itemFlowsToAdd.add(itemFlow);
                 }
                 itemFlowService.takeDecision(itemFlowsToAdd, flowDatas);
@@ -6864,6 +6867,14 @@ public class FileItemCctDetailController implements Serializable {
         byte[] report = null;
         AbstractReportInvoker reportInvoker = null;
         if (checkMinaderMinistry) {
+            String reportNumber = null;
+            if (draft){
+                final ReportOrganism reportOrganism = reportOrganismService.findReportByFileTypeFlowReport(fileTypeFlowReport);
+                reportNumber = currentFile.getNumeroDemande()
+                    + "/" + java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)
+                    + ((reportOrganism != null && reportOrganism.getValue() != null) ? reportOrganism.getValue() : StringUtils.EMPTY);             
+
+            }
             switch (currentFile.getFileType().getCode()) {
                 case CCT_CT_E: {
                     c1 = classe.getConstructor(File.class, TreatmentInfos.class, String.class);
@@ -6879,7 +6890,11 @@ public class FileItemCctDetailController implements Serializable {
                 case CCT_CT_E_PVI: {
                     final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
                     final InspectionReport ir = inspectionReportService.findByItemFlow(itemFlow);
-                    reportInvoker = new CtPviExporter(ir);
+                    if (draft){
+                        reportInvoker = new CtPviExporter(ir, reportNumber);
+                    } else {
+                        reportInvoker = new CtPviExporter(ir);
+                    }                    
                     break;
                 }
                 case CCT_CT_E_ATP:
@@ -6887,9 +6902,17 @@ public class FileItemCctDetailController implements Serializable {
                     final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
                     final TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
                     if (FileTypeCode.CCT_CT_E_ATP.equals(currentFile.getFileType().getCode())) {
-                        reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_ATP", tr);
+                        if (draft){
+                            reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_ATP", tr, reportNumber);
+                        } else {
+                            reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_ATP", tr);
+                        }                        
                     } else {
-                        reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_FSTP", tr);
+                        if (draft){
+                            reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_FSTP", tr, reportNumber);
+                        } else {
+                            reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_FSTP", tr);
+                        }                    
                     }
                     break;
                 }

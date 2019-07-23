@@ -25,10 +25,18 @@ import org.guce.siat.web.reports.vo.CtCctTreatmentFileVo;
 public class CtCctTreatmentExporter extends AbstractReportInvoker {
 
     private final TreatmentResult treatmentResult;
+    private final String referenceNumber;
 
     public CtCctTreatmentExporter(String jasperFileName, TreatmentResult treatmentResult) {
         super(jasperFileName, jasperFileName);
         this.treatmentResult = treatmentResult;
+        this.referenceNumber = null;
+    }
+    
+    public CtCctTreatmentExporter(String jasperFileName, TreatmentResult treatmentResult, String referenceNumber){
+        super(jasperFileName, jasperFileName);
+        this.treatmentResult = treatmentResult;
+        this.referenceNumber = referenceNumber;
     }
 
     @Override
@@ -111,6 +119,9 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
         treatmentVo.setConditioning(treatmentResult.getConditioning());
         treatmentVo.setDecisionDate(file.getSignatureDate());
         treatmentVo.setDecisionPlace(file.getBureau().getLabelFr());
+        if (referenceNumber != null && treatmentVo.getDecisionNumber() == null){
+            treatmentVo.setDecisionNumber(referenceNumber);
+        }
         treatmentVo.setGeneralObservations(treatmentResult.getGeneralObservations());
         treatmentVo.setHomologationNumber(treatmentResult.getHomologationNumber());
         treatmentVo.setOptimalTemperature(treatmentResult.getOptimalTemperature());
