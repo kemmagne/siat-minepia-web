@@ -299,7 +299,7 @@ public class CtPviExporter extends AbstractReportInvoker {
                         entryInspectionFindingDataVo.setNumeroDecisionPVI(fileFieldValue.getValue());
                     }
                 }
-                if (this.referenceNumber != null && entryInspectionFindingDataVo.getNumeroDecisionPVI() != null){
+                if (this.referenceNumber != null){
                     entryInspectionFindingDataVo.setNumeroDecisionPVI(referenceNumber);
                 }
             }
