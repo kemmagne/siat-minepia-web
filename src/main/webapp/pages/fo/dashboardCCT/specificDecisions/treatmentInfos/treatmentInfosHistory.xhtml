@@ -41,6 +41,11 @@
     <!-- TreatmentInfos -->
     <p:panel header="#{bundle['TreatmentInfos']}" rendered="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTI.delivrableType eq 'CCT_CT_E' or fileItemCctDetailController.phytoTransitFile}">
         <h:panelGrid columns="2">
+            <h:outputLabel value="#{bundle['TreatmentDate']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTI.treatmentDate}">
+                <f:convertDateTime pattern="dd/MM/yyyy" />
+            </h:outputLabel>
+            
             <h:outputLabel value="#{bundle['TypeOfTreatment']}" />
             <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTI.typeOfTreatment}" />
 
