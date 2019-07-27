@@ -271,7 +271,6 @@ public class CostsController extends AbstractController<PaymentData> implements 
                     data.put(ESBConstants.EBXML_TYPE, "STANDARD");
                     data.put(ESBConstants.TO_PARTY_ID, copyRecipient.getToAuthority().getRole());
                     data.put(ESBConstants.DEAD, "0");
-                    data.put(ESBConstants.ITEM_FLOWS, currentPaymentData.getPaymentItemFlowList().get(0).getItemFlow().getFlow().getItemsFlowsList());
                     fileProducer.sendFile(data);
                     if (LOG.isDebugEnabled()) {
                         LOG.debug("Message sent to OUT queue");
