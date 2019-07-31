@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.annotation.PostConstruct;
@@ -15,6 +16,11 @@ import javax.faces.application.Application;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.html.HtmlInputText;
+import javax.faces.component.html.HtmlInputTextarea;
+import javax.faces.component.html.HtmlOutputText;
+import javax.faces.component.html.HtmlPanelGroup;
+import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
@@ -24,6 +30,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.guce.siat.common.model.AnalyseType;
 import org.guce.siat.common.model.Company;
 import org.guce.siat.common.model.Country;
+import org.guce.siat.common.model.DataType;
 import org.guce.siat.common.model.File;
 import org.guce.siat.common.model.FileItem;
 import org.guce.siat.common.model.FileType;
@@ -31,6 +38,7 @@ import org.guce.siat.common.model.FileTypeStep;
 import org.guce.siat.common.model.Port;
 import org.guce.siat.common.model.ServicesItem;
 import org.guce.siat.common.model.Step;
+import org.guce.siat.common.model.Transfer;
 import org.guce.siat.common.model.TransportType;
 import org.guce.siat.common.model.User;
 import org.guce.siat.common.service.AnalyseTypeService;
@@ -46,19 +54,26 @@ import org.guce.siat.common.service.StepService;
 import org.guce.siat.common.service.TransportTypeService;
 import org.guce.siat.common.service.UserAuthorityFileTypeService;
 import org.guce.siat.common.service.UserService;
+import org.guce.siat.common.service.TransferService;
 import org.guce.siat.common.utils.Constants;
 import org.guce.siat.common.utils.enums.AuthorityConstants;
 import org.guce.siat.common.utils.enums.FileTypeCode;
+import org.guce.siat.common.utils.enums.FlowCode;
+import org.guce.siat.core.ct.filter.AssignedFileItemFilter;
 import org.guce.siat.core.ct.filter.FileItemFilter;
 import org.guce.siat.core.ct.model.Laboratory;
 import org.guce.siat.core.ct.service.CommonService;
 import org.guce.siat.core.ct.service.LaboratoryService;
 import org.guce.siat.web.common.AbstractController;
 import org.guce.siat.web.common.ControllerConstants;
+import static org.guce.siat.web.ct.controller.FileItemCctDetailController.STYLE_CLASS;
 import org.guce.siat.web.ct.controller.util.JsfUtil;
+import org.guce.siat.web.ct.controller.util.enums.DataTypeEnnumeration;
 import org.guce.siat.web.ct.controller.util.enums.SearchCriteria;
 import org.guce.siat.web.ct.controller.util.enums.ServiceItemType;
 import org.guce.siat.web.ct.data.StepDto;
+import org.primefaces.component.calendar.Calendar;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,6 +108,8 @@ public class SearchController extends AbstractController<FileItem> {
      * The Constant QUICK_SEARCH_VALIDATION_ERROR_MESSAGE.
      */
     private static final String QUICK_SEARCH_VALIDATION_ERROR_MESSAGE = "QuickSearchValidationError";
+    
+    private static final String TRANSFER_DONE = "TransferDone";
 
     /**
      * The Constant INVALID_DOC_NUMBER_ERROR_MESSAGE.
@@ -169,6 +186,10 @@ public class SearchController extends AbstractController<FileItem> {
      */
     @ManagedProperty(value = "#{userService}")
     private UserService userService;
+    
+    
+    @ManagedProperty(value = "#{transferService}")
+    private TransferService transferService;
 
     /**
      * The analyse type service.
@@ -192,6 +213,14 @@ public class SearchController extends AbstractController<FileItem> {
      * The filter.
      */
     private FileItemFilter filter;
+    
+    /**
+     * AssignedFileItemFilter
+     */
+    private AssignedFileItemFilter assignedFilter;
+    
+    
+    private List<User> inspectorList;
 
     /**
      * The detail page url.
@@ -328,6 +357,10 @@ public class SearchController extends AbstractController<FileItem> {
      * The selected step filter.
      */
     private StepDto selectedStepFilter;
+    
+    private Transfer transfer;
+    
+    private User assignedUser;
 
     /**
      * Instantiates a new search controller.
@@ -366,6 +399,23 @@ public class SearchController extends AbstractController<FileItem> {
         }
 
     }
+    
+    public void initAssignedFileSearch(){
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(Constants.INIT_LOG_INFO_MESSAGE, SearchController.class.getName());
+        }
+        documentNumberFilter = null;
+        selectedStepFilter = null;
+        assignedFilter = new AssignedFileItemFilter();
+        simpleSearchItemList = new ArrayList<FileItem>();
+        fileTypeItems = new ArrayList<SelectItem>();
+        final List<FileType> fileTypes = fileTypeService.findDistinctFileTypesByUser(getLoggedUser());
+
+        for (final FileType fileType : fileTypes) {
+            fileTypeItems.add(new SelectItem(fileType, "fr".equals(getCurrentLocaleCode()) ? fileType.getLabelFr() : fileType
+                    .getLabelEn()));
+        }
+    }
 
     /**
      * Inits the advanced search.
@@ -393,6 +443,19 @@ public class SearchController extends AbstractController<FileItem> {
                 : getCurrentAdministration());
     }
 
+    public void goToAssignedFileSearch(){
+        try{
+            initAssignedFileSearch();
+            final FacesContext context = FacesContext.getCurrentInstance();
+            final ExternalContext extContext = context.getExternalContext();
+            final String url = extContext.encodeActionURL(context.getApplication().getViewHandler()
+                    .getActionURL(context, ControllerConstants.Pages.FO.ASSIGNED_FILE_ITEM_PAGE));
+            extContext.redirect(url);
+        } catch (Exception e){
+            
+        }
+    }
+    
     /**
      * Go to simple search page.
      */
@@ -524,6 +587,28 @@ public class SearchController extends AbstractController<FileItem> {
             filter.setStep(selectedStepFilter.getStep());
         }
         setSimpleSearchItemList(commonService.findByFilter(filter, getLoggedUser(), getCurrentAdministration()));
+
+        if (CollectionUtils.isNotEmpty(simpleSearchItemList)) {
+            for (final FileItem fileItem : simpleSearchItemList) {
+
+                final FileTypeStep fileTypeStep = fileTypeStepService.findFileTypeStepByFileTypeAndStep(fileItem.getFile()
+                        .getFileType(), fileItem.getStep());
+                if (fileTypeStep != null && fileTypeStep.getLabelFr() != null) {
+                    fileItem.setRedefinedLabelEn((fileTypeStep.getLabelEn()));
+                    fileItem.setRedefinedLabelFr((fileTypeStep.getLabelFr()));
+                }
+            }
+        }
+    }
+    
+    public void doAssignedSearch(){
+        if (assignedFilter.getFromDate() != null && assignedFilter.getToDate() != null && assignedFilter.getFromDate().after(assignedFilter.getToDate())) {
+            JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
+                    DATE_VALIDATION_ERROR_MESSAGE));
+        } else if (selectedStepFilter != null) {
+            assignedFilter.setStep(selectedStepFilter.getStep());
+        }
+        setSimpleSearchItemList(commonService.findByFilter(assignedFilter, getLoggedUser(), getCurrentAdministration()));
 
         if (CollectionUtils.isNotEmpty(simpleSearchItemList)) {
             for (final FileItem fileItem : simpleSearchItemList) {
@@ -849,6 +934,15 @@ public class SearchController extends AbstractController<FileItem> {
     public void setFilter(final FileItemFilter filter) {
         this.filter = filter;
     }
+
+    public AssignedFileItemFilter getAssignedFilter() {
+        return assignedFilter;
+    }
+
+    public void setAssignedFilter(AssignedFileItemFilter assignedFilter) {
+        this.assignedFilter = assignedFilter;
+    }
+    
 
     /**
      * Gets the simple search item list.
@@ -1438,6 +1532,58 @@ public class SearchController extends AbstractController<FileItem> {
         this.userService = userService;
     }
 
+    public TransferService getTransferService() {
+        return transferService;
+    }
+
+    public void setTransferService(TransferService transferService) {
+        this.transferService = transferService;
+    }
+
+    public Transfer getTransfer() {
+        return transfer;
+    }
+
+    public void setTransfer(Transfer transfer) {
+        this.transfer = transfer;
+    }
+
+    public User getAssignedUser() {
+        return assignedUser;
+    }
+
+    public void setAssignedUser(User assignedUser) {
+        this.assignedUser = assignedUser;
+    }
+    
+    
+    public void createTransfer(){
+        transfer = new Transfer();
+        if (selected != null){
+            transfer.setFile(selected.getFile());
+            transfer.setCreatedDate(java.util.Calendar.getInstance().getTime());
+            transfer.setUser(loggedUser);
+        }
+    }
+    
+    public void saveTransfer(){
+        try {
+            RequestContext context = RequestContext.getCurrentInstance();
+            createTransfer();
+            transfer.setAssignedUser(assignedUser);
+            selected.getFile().setAssignedUser(assignedUser);
+            transferService.save(transfer);
+            fileService.update(selected.getFile());
+            JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
+                            TRANSFER_DONE));
+            context.execute("PF('DialogCotation').hide();");
+        } catch (Exception e){
+            LOG.error(e.getMessage(), e);
+        }
+        
+    }
+
+
     /**
      * Gets the analyse type service.
      *
@@ -1580,6 +1726,36 @@ public class SearchController extends AbstractController<FileItem> {
      */
     public void setSelectedStepFilter(final StepDto selectedStepFilter) {
         this.selectedStepFilter = selectedStepFilter;
+    }
+
+    public List<User> getInspectorList() {
+        return inspectorList;
+    }
+
+    public void setInspectorList(List<User> inspectorList) {
+        this.inspectorList = inspectorList;
+    }
+    
+    
+    public synchronized void prepareDispatchFile() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        if (selected != null){
+            setAssignedUser(null);
+            File currentFile = selected.getFile();
+            List<User> cotationActors;
+            boolean checkMinepiaMinistry = currentFile.getDestinataire().equalsIgnoreCase("MINEPIA");
+            if (checkMinepiaMinistry) {
+                cotationActors = userService.findCotationsAgentByBureauAndRole(currentFile.getBureau(),
+                        AuthorityConstants.SOCIETE_TRAITEMENT.getCode());
+            } else {
+                cotationActors = userService.findInspectorsByBureau(currentFile.getBureau());
+            }
+            setInspectorList(cotationActors);
+            
+        }
+        context.execute("PF('DialogCotation').show();");
+        context.update(":filtredFileItemListForm:transferForm");
+        
     }
 
 }
