@@ -91,9 +91,9 @@
                 <uri.out>SIAT</uri.out>
                 <uri.dead.in>direct:dead</uri.dead.in>
                 <uri.dead.out>amq:deadQueue</uri.dead.out>
-                <ebxml.folder>D:/lerichjam/siat/ebxml</ebxml.folder>
-                <xml.folder>D:/lerichjam/siat/xml</xml.folder>
-                <attachement.folder>D:/lerichjam/siat/attachement</attachement.folder>
+                <ebxml.folder>C:/data/lerichjam/siat/ebxml</ebxml.folder>
+                <xml.folder>C:/data/lerichjam/siat/xml</xml.folder>
+                <attachement.folder>C:/data/lerichjam/siat/attachement</attachement.folder>
                 <hibernate.default_schema>SIAT_CT</hibernate.default_schema>
                 <jms.username>admin</jms.username>
                 <jms.password>admin</jms.password>
@@ -104,8 +104,8 @@
                 <mailSender.from>guce.technical.notifier@gmail.com</mailSender.from>
                 <mailSender.replyTo>lerichgames@gmail.com</mailSender.replyTo>
                 <webservice.url>http://sw0:9759/orchestra/privacy/siat/messageService/ebxml</webservice.url>
-                <messages.folder>D:/lerichjam/siat/eguce/messages/ct</messages.folder>
-                <mails.folder>D:/lerichjam/siat/eguce/mails/ct</mails.folder>
+                <messages.folder>C:/data/lerichjam/siat/eguce/messages/ct</messages.folder>
+                <mails.folder>C:/data/lerichjam/siat/eguce/mails/ct</mails.folder>
             </properties>
             <activation>
                 <activeByDefault>false</activeByDefault>
