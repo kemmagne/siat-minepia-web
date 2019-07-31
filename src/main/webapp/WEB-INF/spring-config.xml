@@ -36,13 +36,13 @@
 
     <import resource="classpath:resend-mails-config.xml" />
     <!-- DataSource -->
-    <bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource">
+    <bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
         <property name="driverClass" value="oracle.jdbc.OracleDriver" />
         <property name="jdbcUrl" value="${database.url}" />
         <property name="user" value="${database.username}" />
         <property name="password" value="${database.password}" />
-        <property name="idleConnectionTestPeriodInMinutes" value="${database.idleConnectionTestPeriodInMinutes}" />
-        <property name="idleMaxAgeInMinutes" value="${database.idleMaxAgeInMinutes}" />
+        <property name="idleConnectionTestPeriod" value="${database.idleConnectionTestPeriod}" />
+        <property name="idleMaxAge" value="${database.idleMaxAge}" />
         <property name="maxConnectionsPerPartition" value="${database.maxConnectionsPerPartition}" />
         <property name="minConnectionsPerPartition" value="${database.minConnectionsPerPartition}" />
         <property name="poolAvailabilityThreshold" value="${database.poolAvailabilityThreshold}" />
@@ -52,6 +52,7 @@
         <property name="connectionTestStatement" value="${database.connectionTestStatement}" />
         <property name="lazyInit" value="${database.lazyInit}" />
         <property name="logStatementsEnabled" value="${database.logStatementsEnabled}" />
+        <property name="releaseHelperThreads" value="${database.releaseHelperThreads}" />
     </bean>
 
     <bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
