@@ -1025,7 +1025,21 @@ public class FileItemApDetailController implements Serializable {
 
                 if (equalsSteps) {
                     //Pour la Retreive Seulement une seule decision
-                    flows = destinationFlowsFromCurrentStep;
+                    if (FileTypeCode.BSBE_MINFOF.equals(currentFile.getFileType().getCode())) {
+                        flows = flowService.findFlowsByFromStepAndFileType2(referenceFileItem.getStep(), referenceFileItem
+                                    .getFile().getFileType());
+                        if (!CollectionUtils.isEmpty(flows)) {
+                            for (Flow elt : flows) {
+                                final FileTypeFlow fileTypeFlow = fileTypeFlowService.findByFlowAndFileType(currentFile.getFileType(), elt);
+                                if (fileTypeFlow != null) {
+                                    elt.setRedefinedLabelEn(fileTypeFlow.getLabelEn());
+                                    elt.setRedefinedLabelFr(fileTypeFlow.getLabelFr());
+                                }
+                            }
+                        }
+                    } else {
+                        flows = destinationFlowsFromCurrentStep;
+                    }
                     if (comeFromRetrieveAp != null && comeFromRetrieveAp) {
                         selectedFlow = flowService.findFlowByCurrentStep(apDecisionStep);
                     } //Pour la decision et la cotation
@@ -1373,11 +1387,6 @@ public class FileItemApDetailController implements Serializable {
         decisionAllowedAtCotationLevel = false;
         boolean returnAllowed;
         boolean acceptationFlowFound;
-        Flow decisionAtCotationFlow = null;
-        List<Flow> acceptedFlow = currentFile.getFileType().getFlowList();
-//        if (currentFile.getFileItemsList() == null) {
-//            currentFile.setFileItemsList(fileItemService.findFileItemsByFile(currentFile));
-//        }
         if (currentFile.getFileItemsList() == null) {
             currentFile.setFileItemsList(fileItemService.findFileItemsByFile(currentFile));
 
@@ -1463,10 +1472,8 @@ public class FileItemApDetailController implements Serializable {
                         acceptationFlowFound = true;
                     }
                     if (!acceptationFlowFound && PROCESS_ALLOWING_DECISION_AT_COTATION_STEP.contains(currentFile.getFileType().getCode()) && !flow.getIsCota() && DECISION_FLOWS_AT_COTATION_STEP.contains(flow.getCode()) && stepListByFileType.contains(flow.getToStep())) {
-//                        if (!destinationFlowsFromCurrentCotationStep.contains(flow) && acceptedFlow.contains(flow)) {
                         if (!destinationFlowsFromCurrentCotationStep.contains(flow)) {
                             destinationFlowsFromCurrentCotationStep.add(flow);
-                            decisionAtCotationFlow = flow;
                         }
                         decisionAllowedAtCotationLevel = Boolean.TRUE;
                     }
