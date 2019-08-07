@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.io.StringReader;
 import java.lang.reflect.Constructor;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,6 +24,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
@@ -134,6 +136,7 @@ import org.guce.siat.common.utils.ged.CmisSession;
 import org.guce.siat.core.ct.model.AnalyseOrder;
 import org.guce.siat.core.ct.model.AnalysePart;
 import org.guce.siat.core.ct.model.AnalyseResult;
+import org.guce.siat.core.ct.model.ApprovedDecision;
 import org.guce.siat.core.ct.model.DecisionHistory;
 import org.guce.siat.core.ct.model.Infraction;
 import org.guce.siat.core.ct.model.InspectionController;
@@ -152,6 +155,7 @@ import org.guce.siat.core.ct.model.TreatmentType;
 import org.guce.siat.core.ct.service.AnalyseOrderService;
 import org.guce.siat.core.ct.service.AnalysePartService;
 import org.guce.siat.core.ct.service.AnalyseResultService;
+import org.guce.siat.core.ct.service.ApprovedDecisionService;
 import org.guce.siat.core.ct.service.CommonService;
 import org.guce.siat.core.ct.service.DecisionHistoryService;
 import org.guce.siat.core.ct.service.InspectionReportService;
@@ -203,6 +207,7 @@ import org.guce.siat.web.gr.util.GrUtilsWeb;
 import org.guce.siat.web.gr.util.ScenarioType;
 import org.guce.siat.web.reports.exporter.AbstractReportInvoker;
 import org.guce.siat.web.reports.exporter.CtCctCqeExporter;
+import org.guce.siat.web.reports.exporter.CtCctCsvExporter;
 import org.guce.siat.web.reports.exporter.CtCctTreatmentExporter;
 import org.guce.siat.web.reports.exporter.CtPviExporter;
 import org.primefaces.component.calendar.Calendar;
@@ -305,6 +310,11 @@ public class FileItemCctDetailController implements Serializable {
             FlowCode.FL_CT_73.name(), FlowCode.FL_CT_74.name());
 
     /**
+     * The Constant DCC_FLOW_CODES.
+     */
+    private static final List<String> DCC_FLOW_CODES = Arrays.asList(FlowCode.FL_CT_CVS_03.name(), FlowCode.FL_CT_CVS_07.name(), FlowCode.FL_CT_CVS_05.name());
+
+    /**
      * The Constant EMAIL_BODY_NOTIFICATION_FR.
      */
     private static final String EMAIL_BODY_NOTIFICATION_FR = "emailBodyNotification_fr.vm";
@@ -373,6 +383,12 @@ public class FileItemCctDetailController implements Serializable {
      */
     @ManagedProperty(value = "#{appointmentService}")
     private AppointmentService appointmentService;
+
+    /**
+     * The approved decision service.
+     */
+    @ManagedProperty(value = "#{approvedDecisionService}")
+    private ApprovedDecisionService approvedDecisionService;
 
     /**
      * The field group service.
@@ -919,6 +935,8 @@ public class FileItemCctDetailController implements Serializable {
 
     private TreatmentInfos treatmentInfos;
 
+    private ApprovedDecision approvedDecision;
+
     /**
      * The treatment companys.
      */
@@ -1014,6 +1032,10 @@ public class FileItemCctDetailController implements Serializable {
      * this is minader ministry
      */
     private boolean checkMinaderMinistry;
+    /**
+     * this is minepia ministry
+     */
+    private boolean checkMinepiaMinistry;
 
     /**
      * The is payment.
@@ -1043,6 +1065,7 @@ public class FileItemCctDetailController implements Serializable {
     private InterceptionNotification interceptionNotification;
 
     private final String MINADER_MINISTRY = "MINADER";
+    private final String MINEPIA_MINISTRY = "MINEPIA";
 
     private final String TRANSITE_SUPER_FILE_TYPE = "2";
     private final String TRANSITE_SUPER_FILE_TYPE_KEY = "TYPE_DOSSIER_EGUCE";
@@ -1054,6 +1077,7 @@ public class FileItemCctDetailController implements Serializable {
     private DecisionHistoryService decisionHistoryService;
 
     private List<DecisionHistory> decisionHistories;
+    private boolean maskOfficialPosition;
 
     /**
      * Inits the.
@@ -1061,6 +1085,7 @@ public class FileItemCctDetailController implements Serializable {
     public void init() {
         currentFile = currentFileItem.getFile();
         checkMinaderMinistry = currentFile.getDestinataire().equalsIgnoreCase(MINADER_MINISTRY);
+        checkMinepiaMinistry = currentFile.getDestinataire().equalsIgnoreCase(MINEPIA_MINISTRY);
         loggedUser = getLoggedUser();
         allowedRecommandation = checkIsAllowadRecommandation();
         listUserAuthorityFileTypes = userAuthorityFileTypeService.findUserAuthorityFileTypeByFileTypeAndUserList(
@@ -1239,6 +1264,20 @@ public class FileItemCctDetailController implements Serializable {
                         } else {
                             flows = flowService.findFlowsByFromStepAndFileType(referenceFileItemCheck.getStep(), referenceFileItemCheck
                                     .getFile().getFileType());
+                        }
+
+                        if (checkMinepiaMinistry
+                                && referenceFileItemCheck.getStep().getStepCode().name().equals("ST_CT_04")) {
+                            String MINEPIA_FLOW_CODE_LIST = "FL_CT_CVS_05";
+                            List<String> flowsToRemove = new ArrayList<>();
+                            for (Flow f : flows) {
+                                if (!MINEPIA_FLOW_CODE_LIST.contains(f.getCode())) {
+                                    flowsToRemove.add(f.getCode());
+                                }
+                            }
+
+                            flows = deleteFlowFromFlowList(flows, flowsToRemove.toArray(new String[0]));
+
                         }
 
                         productsHaveSameRDDStatus = productsHaveSameRDDStatus(chckedProductInfoChecksList);
@@ -1700,6 +1739,29 @@ public class FileItemCctDetailController implements Serializable {
             }
         } else if (isPviReadyForSignature(selectedFlow)) {
             inspectionReportData = new InspectionReportData();
+        } // Signature de DCC (Certificat de Contrôle Documentaire)
+        else if (DCC_FLOW_CODES.contains(selectedFlow.getCode())) {
+            lastDecisions = itemFlowService.findLastSentItemFlowByFileItem(selectedFileItemCheck.getFileItem());
+
+            approvedDecision = approvedDecisionService.findApprovedDecisionByItemFlow(lastDecisions);
+
+            if (selectedFlow.getCode().equals(FlowCode.FL_CT_CVS_05.name())) {
+                maskOfficialPosition = true;
+            } else {
+                maskOfficialPosition = false;
+            }
+
+            if (approvedDecision == null) {
+                approvedDecision = new ApprovedDecision();
+                fillApprovedDecision(approvedDecision);
+                if (selectedFlow.getCode().equals(FlowCode.FL_CT_CVS_03.name())) {
+                    approvedDecision.setOfficialPosition("Chef du Poste d'inspection Sanitaire Vétérinaire");
+                }
+            } else {
+                approvedDecision.setOfficialPosition("Chef du Poste d'inspection Sanitaire Vétérinaire");
+            }
+
+            specificDecision = CctSpecificDecision.DCC;
         } // Saisie Constat
         else if (CONSTAT_FLOW_LIST.contains(selectedFlow.getCode())) {
             checkMinepdedMinistry = false;
@@ -1960,6 +2022,8 @@ public class FileItemCctDetailController implements Serializable {
                     .getFileItem()));
         } else if (APPOINTMENT_DECISIONS_LIST.contains(lastDecisions.getFlow().getCode())) {
             specificDecisionsHistory.setLastDecisionApp(appointmentService.findAppointmentsByItemFlow(lastDecisions));
+        } else if (DCC_FLOW_CODES.contains(lastDecisions.getFlow().getCode())) {
+            specificDecisionsHistory.setApprovedDecision(approvedDecisionService.findApprovedDecisionByItemFlow(lastDecisions));
         } else if (FlowCode.FL_CT_29.name().equals(lastDecisions.getFlow().getCode())) {
             specificDecisionsHistory.setLastAnalyseOrder(analyseOrderService.findByItemFlow(lastDecisions));
         } else if (isPhytoReadyForSignature(lastDecisions.getFlow())) {
@@ -2005,6 +2069,9 @@ public class FileItemCctDetailController implements Serializable {
             final List<ItemFlow> listItemFlow = new ArrayList<>();
             listItemFlow.add(selectedItemFlowDto.getItemFlow());
             specificDecisionsHistory.setDecisionDetailsApp(appointmentService.findAppointmentsByItemFlow(selectedItemFlowDto
+                    .getItemFlow()));
+        } else if (DCC_FLOW_CODES.contains(selectedItemFlowDto.getItemFlow().getFlow().getCode())) {
+            specificDecisionsHistory.setApprovedDecision(approvedDecisionService.findApprovedDecisionByItemFlow(selectedItemFlowDto
                     .getItemFlow()));
         } else if (FlowCode.FL_CT_29.name().equals(selectedItemFlowDto.getItemFlow().getFlow().getCode())) {
             specificDecisionsHistory.setDecisionDetailsAO(analyseOrderService.findByItemFlow(selectedItemFlowDto.getItemFlow()));
@@ -2414,6 +2481,9 @@ public class FileItemCctDetailController implements Serializable {
                 }
                 commonService.takeDecisionAndSaveTreatmentResult(treatmentResult, itemFlowsToAdd);
                 // Attachment --> Alfresco
+            } // DCC (Signature Certificat Controle Documentaire)
+            else if (DCC_FLOW_CODES.contains(selectedFlow.getCode())) {
+                commonService.takeDecisionAndSaveApprovedDecision(approvedDecision, itemFlowsToAdd);
             } // Geniric (affichage des itemFlowData)
             else {
                 // Recuperate the values of DataType (Observation text area ...)
@@ -2658,7 +2728,14 @@ public class FileItemCctDetailController implements Serializable {
             flowCode = FlowCode.FL_CT_06;
         }
         selectedFlow = flowService.findFlowByCode(flowCode.name());
-        setInspectorList(userService.findInspectorsByBureau(currentFile.getBureau()));
+        List<User> cotationActors;
+        if (checkMinepiaMinistry) {
+            cotationActors = userService.findCotationsAgentByBureauAndRole(currentFile.getBureau(),
+                    AuthorityConstants.SOCIETE_TRAITEMENT.getCode());
+        } else {
+            cotationActors = userService.findInspectorsByBureau(currentFile.getBureau());
+        }
+        setInspectorList(cotationActors);
 
         for (final DataType dataType : selectedFlow.getDataTypeList()) {
 
@@ -2901,7 +2978,9 @@ public class FileItemCctDetailController implements Serializable {
                             try {
                                 String reportNumber;
                                 if (FlowCode.FL_CT_89.name().equals(flowToSend.getCode())
-                                        || FlowCode.FL_CT_08.name().equals(flowToSend.getCode())) {
+                                        || FlowCode.FL_CT_08.name().equals(flowToSend.getCode())
+                                        || FlowCode.FL_CT_CVS_03.name().equals(flowToSend.getCode())
+                                        || FlowCode.FL_CT_CVS_07.name().equals(flowToSend.getCode())) {
 
                                     // edit signature elements
                                     Date now = java.util.Calendar.getInstance().getTime();
@@ -2920,7 +2999,7 @@ public class FileItemCctDetailController implements Serializable {
                                         final String eforceRef = currentFile.getNumeroDemande();
                                         reportNumber = eforceRef
                                                 + "/" + java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)
-                                                + (reportOrganism.getValue() != null ? reportOrganism.getValue() : StringUtils.EMPTY);
+                                                + ((reportOrganism != null && reportOrganism.getValue() != null) ? reportOrganism.getValue() : StringUtils.EMPTY);
                                         final FileFieldValue reportFieldValue = new FileFieldValue();
                                         reportFieldValue.setFile(currentFile);
                                         reportFieldValue.setFileField(reportField);
@@ -5554,6 +5633,14 @@ public class FileItemCctDetailController implements Serializable {
         this.treatmentInfosService = treatmentInfosService;
     }
 
+    public ApprovedDecisionService getApprovedDecisionService() {
+        return approvedDecisionService;
+    }
+
+    public void setApprovedDecisionService(ApprovedDecisionService approvedDecisionService) {
+        this.approvedDecisionService = approvedDecisionService;
+    }
+
     /**
      * Gets the analyses file managers.
      *
@@ -6349,6 +6436,19 @@ public class FileItemCctDetailController implements Serializable {
     }
 
     /**
+     * Sets the check minepia ministry.
+     *
+     * @param checkMinepiaMinistry the new check minepia ministry
+     */
+    public void setCheckMinepiaMinistry(final boolean checkMinepiaMinistry) {
+        this.checkMinepiaMinistry = checkMinepiaMinistry;
+    }
+
+    public boolean isCheckMinepiaMinistry() {
+        return checkMinepiaMinistry;
+    }
+
+    /**
      * Gets the checks if is payment.
      *
      * @return the checks if is payment
@@ -6795,11 +6895,23 @@ public class FileItemCctDetailController implements Serializable {
                 }
             }
 
-            if (reportInvoker != null) {
-                reportInvoker.setDraft(draft);
-                reportInvoker.setFileFieldValueService(fileFieldValueService);
-                report = JsfUtil.getReport(reportInvoker);
+        } else if (checkMinepiaMinistry) {
+            switch (currentFile.getFileType().getCode()) {
+                case CCT_CT: {
+                    if (approvedDecision == null) {
+                        lastDecisions = itemFlowService.findLastSentItemFlowByFileItem(selectedFileItemCheck.getFileItem());
+
+                        approvedDecision = approvedDecisionService.findApprovedDecisionByItemFlow(lastDecisions);
+                    }
+                    reportInvoker = new CtCctCsvExporter(currentFile, loggedUser, approvedDecision);
+                    break;
+                }
             }
+        }
+        if (reportInvoker != null) {
+            reportInvoker.setDraft(draft);
+            reportInvoker.setFileFieldValueService(fileFieldValueService);
+            report = JsfUtil.getReport(reportInvoker);
         }
         return report;
     }
@@ -6811,8 +6923,8 @@ public class FileItemCctDetailController implements Serializable {
     public void setGenerateDraftAllowed(boolean generateDraftAllowed) {
         this.generateDraftAllowed = generateDraftAllowed;
     }
-	
-	public StreamedContent downloadAttachment() {
+
+    public StreamedContent downloadAttachment() {
         if (selectedAttachment == null) {
             JsfUtil.addWarningMessage("Selectionnez la pièce à télécharger");
             return null;
@@ -6849,6 +6961,106 @@ public class FileItemCctDetailController implements Serializable {
         }
 
         return null;
+    }
+
+    public ApprovedDecision getApprovedDecision() {
+        return approvedDecision;
+    }
+
+    public void setApprovedDecision(ApprovedDecision approvedDecision) {
+        this.approvedDecision = approvedDecision;
+    }
+
+    private void fillApprovedDecision(ApprovedDecision approvedDecision) {
+        if (CollectionUtils.isNotEmpty(currentFile.getFileFieldValueList())) {
+            for (final FileFieldValue fileFieldValue : currentFile.getFileFieldValueList()) {
+                switch (fileFieldValue.getFileField().getCode()) {
+                    case "DATE_DEPART": {
+                        try {
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                            approvedDecision.setDepartureDate(sdf.parse(fileFieldValue.getValue()));
+                        } catch (ParseException e) {
+                            java.util.logging.Logger.getLogger(FileItemCctDetailController.class.getName()).log(Level.SEVERE, null, e);
+
+                        }
+                        break;
+                    }
+                    case "TEMPERATURE_PRODUIT": {
+                        approvedDecision.setProductTemperature(fileFieldValue.getValue());
+                        break;
+                    }
+                    case "NOMBRE_UNITES_EMBALLES": {
+                        approvedDecision.setNumberOfUnitPackaged(fileFieldValue.getValue());
+                        break;
+                    }
+                    case "NATURE_EMBALLAGE": {
+                        approvedDecision.setTypeOfPagkaging(fileFieldValue.getValue());
+                        break;
+                    }
+                    case "MARCHANDISE_POUR": {
+                        approvedDecision.setGoodsCertifiedFor(fileFieldValue.getValue());
+                        break;
+                    }
+                    case "MARCHANDISE_ESPECE": {
+                        approvedDecision.setGoodsSpecies(fileFieldValue.getValue());
+                        break;
+                    }
+                    case "MARCHANDISE_NATURE": {
+                        approvedDecision.setGoodsNature(fileFieldValue.getValue());
+                        break;
+                    }
+                    case "MARCHANDISE_TRAITEMENT": {
+                        approvedDecision.setGoodsTreatment(fileFieldValue.getValue());
+                        break;
+                    }
+                    case "MARCHANDISE_NB_COLIS": {
+                        approvedDecision.setGoodsPackageNumber(fileFieldValue.getValue());
+                        break;
+                    }
+                    case "MARCHANDISE_NB_APPROUVES": {
+                        approvedDecision.setGoodsAgreementReference(fileFieldValue.getValue());
+                        break;
+                    }
+                    case "MARCHANDISE_POIDS_NET": {
+                        approvedDecision.setGoodsNetWeight(fileFieldValue.getValue());
+                        break;
+                    }
+                    case "ID_CONTENEURS_SCELLES": {
+                        approvedDecision.setContainerSeals(fileFieldValue.getValue());
+                        break;
+                    }
+                    case "CCT_CONTENEURS_CONTENEUR": {
+                        String containers = fileFieldValue.getValue();
+                        if (StringUtils.isNotBlank(containers)) {
+                            final String[] tab1 = containers.split(";");
+                            final int size = tab1.length;
+                            final StringBuilder builder = new StringBuilder();
+                            for (int i = 1; i < size; i++) {
+                                if (StringUtils.isBlank(tab1[i])) {
+                                    continue;
+                                }
+                                final String[] tab2 = tab1[i].split(",");
+                                builder.append(tab2[0]).append("/").append(tab2[3]).append("; ");
+                            }
+                            approvedDecision.setContainerSeals(builder.substring(0, builder.lastIndexOf(" ")));
+                        } else {
+                            approvedDecision.setContainerSeals("-");
+                        }
+                        break;
+                    }
+
+                }
+            }
+
+        }
+    }
+
+    public boolean isMaskOfficialPosition() {
+        return maskOfficialPosition;
+    }
+
+    public void setMaskOfficialPosition(boolean maskOfficialPosition) {
+        this.maskOfficialPosition = maskOfficialPosition;
     }
 
 }

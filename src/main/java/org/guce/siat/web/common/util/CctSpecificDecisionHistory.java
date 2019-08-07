@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.guce.siat.common.model.Appointment;
 import org.guce.siat.core.ct.model.AnalyseOrder;
 import org.guce.siat.core.ct.model.AnalyseResult;
+import org.guce.siat.core.ct.model.ApprovedDecision;
 import org.guce.siat.core.ct.model.InspectionReport;
 import org.guce.siat.core.ct.model.InterceptionNotification;
 import org.guce.siat.core.ct.model.PaymentData;
@@ -100,6 +101,8 @@ public class CctSpecificDecisionHistory implements Serializable {
     private TreatmentInfos lastTreatmentInfos;
 
     private TreatmentInfos decisionDetailsTI;
+
+    private ApprovedDecision approvedDecision;
 
     /**
      * Gets the last decision ir.
@@ -383,6 +386,14 @@ public class CctSpecificDecisionHistory implements Serializable {
 
     public void setDecisionDetailsTI(final TreatmentInfos decisionDetailsTI) {
         this.decisionDetailsTI = decisionDetailsTI;
+    }
+
+    public ApprovedDecision getApprovedDecision() {
+        return approvedDecision;
+    }
+
+    public void setApprovedDecision(ApprovedDecision approvedDecision) {
+        this.approvedDecision = approvedDecision;
     }
 
 }

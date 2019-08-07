@@ -1,0 +1,53 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+
+
+    <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastAnalyseOrder}">
+
+        <p:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight">
+
+            <h:outputLabel value="#{bundle['Dcc_DepartureDate']} : " />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.approvedDecision.departureDate}" />
+
+            <h:outputLabel value="#{bundle['Dcc_ProductTemperature']} : " />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.approvedDecision.productTemperature}" />
+
+            <h:outputLabel value="#{bundle['Dcc_NumberOfUnitPackaged']} : " />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.approvedDecision.numberOfUnitPackaged}" />
+
+            <h:outputLabel value="#{bundle['Dcc_ContainerSeals']} : " />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.approvedDecision.containerSeals}" />
+
+            <h:outputLabel value="#{bundle['Dcc_TypeOfPagkaging']} : " />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.approvedDecision.typeOfPagkaging}" />
+
+            <h:outputLabel value="#{bundle['Dcc_GoodsCertifiedFor']} : " />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.approvedDecision.goodsCertifiedFor}" />
+
+            <h:outputLabel value="#{bundle['Dcc_GoodsSpecies']} : " />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.approvedDecision.goodsSpecies}" />
+
+            <h:outputLabel value="#{bundle['Dcc_GoodsNature']} : " />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.approvedDecision.goodsNature}" />
+
+            <h:outputLabel value="#{bundle['Dcc_GoodsTreatment']} : " />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.approvedDecision.goodsTreatment}" />
+
+            <h:outputLabel value="#{bundle['Dcc_GoodsPackageNumber']} : " />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.approvedDecision.goodsPackageNumber}" />
+
+            <h:outputLabel value="#{bundle['Dcc_GoodsAgreementReference']} : " />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.approvedDecision.goodsAgreementReference}" />
+
+            <h:outputLabel value="#{bundle['Dcc_GoodsNetWeight']} : " />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.approvedDecision.goodsNetWeight}" />
+            
+            <h:outputLabel value="#{bundle['Dcc_OfficialPosition']} : " />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.approvedDecision.officialPosition}" />
+        </p:panelGrid>
+
+    </h:panelGroup>
+
+
+</ui:composition>
