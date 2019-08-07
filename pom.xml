@@ -41,6 +41,11 @@
                 <db.username>siat_ct</db.username>
                 <db.password>siat</db.password>
                 <db.url>jdbc:oracle:thin:@agserver:1521:GUCE</db.url>
+                <!--d-->
+                <database.maxConnectionsPerPartition>10</database.maxConnectionsPerPartition>
+                <database.minConnectionsPerPartition>2</database.minConnectionsPerPartition>
+                <database.partitionCount>2</database.partitionCount>
+                <!--d-->
                 <ged.url>http://gedurl:8080</ged.url>
                 <jms.url>failover:(tcp://brokerurl:61616)</jms.url>
                 <version>${application.version}</version>
@@ -82,6 +87,11 @@
                 <db.username>siat_ct</db.username>
                 <db.password>siat</db.password>
                 <db.url>jdbc:oracle:thin:@test:1518:GUCETEST</db.url>
+                <!--d-->
+                <database.maxConnectionsPerPartition>10</database.maxConnectionsPerPartition>
+                <database.minConnectionsPerPartition>2</database.minConnectionsPerPartition>
+                <database.partitionCount>2</database.partitionCount>
+                <!--d-->
                 <ged.url>http://gedurl:17483</ged.url>
                 <jms.url>failover:(tcp://brokerurl:61616)</jms.url>
                 <version>${application.version}</version>
@@ -122,6 +132,11 @@
                 <db.username>siat_ct</db.username>
                 <db.password>siat</db.password>
                 <db.url>jdbc:oracle:thin:@yserver:1521:XE</db.url>
+                <!--d-->
+                <database.maxConnectionsPerPartition>10</database.maxConnectionsPerPartition>
+                <database.minConnectionsPerPartition>2</database.minConnectionsPerPartition>
+                <database.partitionCount>2</database.partitionCount>
+                <!--d-->
                 <ged.url>http://yserver:8080</ged.url>
                 <jms.url>failover:(tcp://brokerurl:61616)</jms.url>
                 <version>${application.version}</version>
@@ -166,6 +181,11 @@
                 <db.password>siat</db.password>
                 <!-- <db.url>jdbc:oracle:thin:@172.24.3.23:1528:SIAT</db.url> -->
                 <db.url>jdbc:oracle:thin:@siat-db:1528:SIAT</db.url>
+                <!--d-->
+                <database.maxConnectionsPerPartition>10</database.maxConnectionsPerPartition>
+                <database.minConnectionsPerPartition>2</database.minConnectionsPerPartition>
+                <database.partitionCount>2</database.partitionCount>
+                <!--d-->
                 <!-- <ged.url>http://172.24.2.134:8080</ged.url> -->
                 <ged.url>http://siat-ged:8080</ged.url>
                 <!-- <jms.url>failover:(tcp://172.24.2.120:61618,tcp://172.24.2.121:61618)</jms.url> -->
@@ -208,6 +228,11 @@
                 <db.username>siat_ct</db.username>
                 <db.password>siat</db.password>
                 <db.url>jdbc:oracle:thin:@siat-db:1528:SIAT</db.url>
+                <!--d-->
+                <database.maxConnectionsPerPartition>50</database.maxConnectionsPerPartition>
+                <database.minConnectionsPerPartition>20</database.minConnectionsPerPartition>
+                <database.partitionCount>4</database.partitionCount>
+                <!--d-->
                 <ged.url>http://siat-ged:8080</ged.url>
                 <jms.url>failover:(tcp://siat-esb0:61618,tcp://siat-esb1:61618)</jms.url>
                 <version>${application.version}</version>
@@ -249,6 +274,11 @@
                 <db.username>SIAT_CT</db.username>
                 <db.password>siat</db.password>
                 <db.url>jdbc:oracle:thin:@siat-db:1518:GUCETEST</db.url>
+                <!--d-->
+                <database.maxConnectionsPerPartition>10</database.maxConnectionsPerPartition>
+                <database.minConnectionsPerPartition>2</database.minConnectionsPerPartition>
+                <database.partitionCount>2</database.partitionCount>
+                <!--d-->
                 <ged.url>http://siat-ged:18080</ged.url>
                 <jms.url>failover:(tcp://siat-esb0:61618)</jms.url>
                 <version>${application.version}</version>
