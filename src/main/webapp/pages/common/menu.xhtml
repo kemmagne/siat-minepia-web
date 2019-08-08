@@ -175,6 +175,10 @@
                                 value="#{bundle['appmenu_search_simple']}" actionListener="#{searchController.goToSimpleSearchPage}" />
                     <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="advancedMenuItem"
                                 value="#{bundle['appmenu_search_advanced']}" actionListener="#{searchController.goToAdvancedSearchPage}" />
+                    
+                    <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="assigned_search_file"
+                                rendered="#{request.isUserInRole('AC1')}"
+                                value="#{bundle['assigned_search_file']}" actionListener="#{searchController.goToAssignedFileSearch()}" />
 
                 </p:submenu>
 

@@ -141,6 +141,10 @@
 						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editBtn"
 										 actionListener="#{userController.edit}" value="#{bundle['Save']}"
 										 update=":userListForm:datalist :userCreateForm :userEditForm display :growl" />
+                                                
+                                                <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="initPswdBtn"
+                                                                 actionListener="#{userController.resetPassword()}" value="#{bundle['InitPassword']}"
+										 update=":userListForm:datalist :userCreateForm :userEditForm display :growl" />
 						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="cancelBtn"
 										 value="#{bundle['Cancel']}" immediate="true" process="@this" update="@form :userListForm:datalist"
 										 actionListener="#{userController.resetForm}">
