@@ -282,6 +282,8 @@ public interface ControllerConstants {
              * The simple search index page.
              */
             String SIMPLE_SEARCH_INDEX_PAGE = "/pages/fo/search/simple/index.xhtml";
+            
+            String ASSIGNED_FILE_ITEM_PAGE = "/pages/fo/search/assigned/index.xhtml";
 
             /**
              * The advanced search index page.

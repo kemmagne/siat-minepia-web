@@ -114,6 +114,8 @@ public class UserController extends AbstractController<User> {
      * The all posts affected notification message.
      */
     private static final String ALL_POSTS_AFFECTED_NOTIF_MSG = "CreateUser_NotifPostsAffected";
+    
+    private static final String DEFAULT_STRING_PASSWORD = "12345678";
 
     /**
      * The user service.
@@ -465,6 +467,21 @@ public class UserController extends AbstractController<User> {
         userAuthorities.addAll(authorities);
         selected.setUserAuthorityList(userAuthorities);
     }
+    
+    public void resetPassword(){
+        if (selected != null){
+            try {
+                selected.setPassword(DEFAULT_STRING_PASSWORD);
+                userService.updateUser(selected);
+                userService.update(selected);
+            } catch (Exception e){
+                LOG.error(null, e);
+                JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
+                        "ResetPasswordError"));
+            } 
+        }
+    }
+    
 
     /**
      * Edits the.

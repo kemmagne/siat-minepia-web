@@ -62,14 +62,14 @@ public class MessageCtRestController {
 
         final byte[] ebxml = ex.getEbxml();
 
-        try {
-            final Map<String, Object> messageMap = EbxmlUtils.ebxmlToMap(ebxml);
-            final Map<String, Object> exceptionResult = documentReciever.generateAperakCFile(messageMap, ex.getMessage());
-            final OrchestraEbxmlMessage exResponse = EbxmlUtils.mapToEbxml(exceptionResult);
-            return ResponseEntity.ok(new String(exResponse.getData()));
-        } catch (Exception ex1) {
-            LOG.error(ex1.getMessage(), ex1);
-        }
+            try {
+                final Map<String, Object> messageMap = EbxmlUtils.ebxmlToMap(ebxml);
+                final Map<String, Object> exceptionResult = documentReciever.generateAperakCFile(messageMap, ex.getMessage());
+                final OrchestraEbxmlMessage exResponse = EbxmlUtils.mapToEbxml(exceptionResult);
+                return ResponseEntity.ok(new String(exResponse.getData()));
+            } catch (Exception ex1) {
+                LOG.error(ex1.getMessage(), ex1);
+            }
 
         return ResponseEntity.ok(StringUtils.EMPTY);
     }

@@ -36,10 +36,18 @@ public class CtPviExporter extends AbstractReportInvoker {
     protected static final String LOCAL_BUNDLE_NAME = "org.guce.siat.messages.locale";
     private static final String CONSTAT_BUNDLE_TRUE = "constatBundleTrue";
     private static final String CONSTAT_BUNDLE_FALSE = "constatBundleFalse";
+    private final String referenceNumber;
 
     public CtPviExporter(final InspectionReport inspectionReport) {
         super("CCT_CT_E_PVI", "CCT_CT_E_PVI");
         this.inspectionReport = inspectionReport;
+        this.referenceNumber = null;
+    }
+    
+    public CtPviExporter(final InspectionReport inspectionReport, final String referenceNumber){
+        super("CCT_CT_E_PVI", "CCT_CT_E_PVI");
+        this.inspectionReport = inspectionReport;
+        this.referenceNumber = referenceNumber;
     }
 
     @Override
@@ -290,6 +298,9 @@ public class CtPviExporter extends AbstractReportInvoker {
                     if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("NUMERO_CCT_CT_E_PVI")) {
                         entryInspectionFindingDataVo.setNumeroDecisionPVI(fileFieldValue.getValue());
                     }
+                }
+                if (this.referenceNumber != null){
+                    entryInspectionFindingDataVo.setNumeroDecisionPVI(referenceNumber);
                 }
             }
         } catch (Exception e) {

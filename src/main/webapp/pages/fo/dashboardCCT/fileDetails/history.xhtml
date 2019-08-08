@@ -80,7 +80,13 @@
                                 </h:panelGrid>
                             </h:panelGroup>
                             <br />
-
+                            <h:panelGroup rendered="#{fileItemCctDetailController.selectedItemFlowDto.itemFlow.assignedUser != null}">
+                                <h:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight" cellspacing="4">
+                                        <h:outputLabel value="#{bundle['assignedUser']} :" title="#{bundle['assignedUser']}" />
+                                        <h:outputLabel
+                                            value="#{fileItemCctDetailController.selectedItemFlowDto.itemFlow.assignedUser.firstName} #{fileItemCctDetailController.selectedItemFlowDto.itemFlow.assignedUser.lastName}" />
+                                    </h:panelGrid>
+                            </h:panelGroup>
                             <h:panelGroup
                                 rendered="#{empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsApp and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAO and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTO and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAR and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTR}">
                                 <ui:repeat value="#{fileItemCctDetailController.selectedItemFlowDto.itemFlow.itemFlowsDataList}" var="itemFlowData"
