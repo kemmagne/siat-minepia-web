@@ -3001,60 +3001,56 @@ public class FileItemCctDetailController implements Serializable {
 
                             //generate report
                             Map<String, byte[]> attachedByteFiles = null;
-                            try {
-                                String reportNumber;
-                                if (FlowCode.FL_CT_89.name().equals(flowToSend.getCode())
-                                        || FlowCode.FL_CT_08.name().equals(flowToSend.getCode())
-                                        || FlowCode.FL_CT_CVS_03.name().equals(flowToSend.getCode())
-                                        || FlowCode.FL_CT_CVS_07.name().equals(flowToSend.getCode())) {
+                            String reportNumber;
+                            if (FlowCode.FL_CT_89.name().equals(flowToSend.getCode())
+                                    || FlowCode.FL_CT_08.name().equals(flowToSend.getCode())
+                                    || FlowCode.FL_CT_CVS_03.name().equals(flowToSend.getCode())
+                                    || FlowCode.FL_CT_CVS_07.name().equals(flowToSend.getCode())) {
 
-                                    // edit signature elements
-                                    Date now = java.util.Calendar.getInstance().getTime();
-                                    currentFile.setSignatureDate(now);
-                                    currentFile.setSignatory(loggedUser);
+                                // edit signature elements
+                                Date now = java.util.Calendar.getInstance().getTime();
+                                currentFile.setSignatureDate(now);
+                                currentFile.setSignatory(loggedUser);
 
-                                    attachedByteFiles = new HashMap<>();
+                                attachedByteFiles = new HashMap<>();
 
-                                    final List<FileTypeFlowReport> fileTypeFlowReportList = fileTypeFlowReportService
-                                            .findReportClassNameByFlowAndFileType(flowToSend, currentFile.getFileType());
-                                    for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportList) {
-                                        //Begin Add new field value with report Number
-                                        final ReportOrganism reportOrganism = reportOrganismService.findReportByFileTypeFlowReport(fileTypeFlowReport);
-                                        final FileField reportField = fileFieldService.findFileFieldByCodeAndFileType(
-                                                fileTypeFlowReport.getFileFieldName(), fileTypeFlowReport.getFileType().getCode());
-                                        final String eforceRef = currentFile.getNumeroDemande();
-                                        reportNumber = eforceRef
-                                                + "/" + java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)
-                                                + ((reportOrganism != null && reportOrganism.getValue() != null) ? reportOrganism.getValue() : StringUtils.EMPTY);
-                                        final FileFieldValue reportFieldValue = new FileFieldValue();
-                                        reportFieldValue.setFile(currentFile);
-                                        reportFieldValue.setFileField(reportField);
-                                        reportFieldValue.setValue(reportNumber);
-                                        currentFile.getFileFieldValueList().add(reportFieldValue);
-                                        fileFieldValueService.save(reportFieldValue);
-                                        fileService.update(currentFile);
-                                        //End Add new field value with report Number
+                                final List<FileTypeFlowReport> fileTypeFlowReportList = fileTypeFlowReportService
+                                        .findReportClassNameByFlowAndFileType(flowToSend, currentFile.getFileType());
+                                for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportList) {
+                                    //Begin Add new field value with report Number
+                                    final ReportOrganism reportOrganism = reportOrganismService.findReportByFileTypeFlowReport(fileTypeFlowReport);
+                                    final FileField reportField = fileFieldService.findFileFieldByCodeAndFileType(
+                                            fileTypeFlowReport.getFileFieldName(), fileTypeFlowReport.getFileType().getCode());
+                                    final String eforceRef = currentFile.getNumeroDemande();
+                                    reportNumber = eforceRef
+                                            + "/" + java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)
+                                            + ((reportOrganism != null && reportOrganism.getValue() != null) ? reportOrganism.getValue() : StringUtils.EMPTY);
+                                    final FileFieldValue reportFieldValue = new FileFieldValue();
+                                    reportFieldValue.setFile(currentFile);
+                                    reportFieldValue.setFileField(reportField);
+                                    reportFieldValue.setValue(reportNumber);
+                                    currentFile.getFileFieldValueList().add(reportFieldValue);
+                                    fileFieldValueService.save(reportFieldValue);
+                                    fileService.update(currentFile);
+                                    //End Add new field value with report Number
 
-                                        final byte[] report = getReportBytes(fileTypeFlowReport, false);
+                                    final byte[] report = getReportBytes(fileTypeFlowReport, false);
 
-                                        if (report != null) {
-                                            attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
-                                        }
+                                    if (report != null) {
+                                        attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
+                                    }
 
-                                        /**
-                                         * *
-                                         */
-                                        final java.io.File targetAttachment = new java.io.File(String.format(
-                                                applicationPropretiesService.getAttachementFolder() + "%s%s", java.io.File.separator,
-                                                fileTypeFlowReport.getReportName()));
+                                    /**
+                                     * *
+                                     */
+                                    final java.io.File targetAttachment = new java.io.File(String.format(
+                                            applicationPropretiesService.getAttachementFolder() + "%s%s", java.io.File.separator,
+                                            fileTypeFlowReport.getReportName()));
 
-                                        try (FileOutputStream fileOuputStream = new FileOutputStream(targetAttachment)) {
-                                            fileOuputStream.write(report);
-                                        }
+                                    try (FileOutputStream fileOuputStream = new FileOutputStream(targetAttachment)) {
+                                        fileOuputStream.write(report);
                                     }
                                 }
-                            } catch (final Exception e) {
-                                LOG.error("Error occured when loading report: " + e.getMessage(), e);
                             }
 
                             // convert file to document
