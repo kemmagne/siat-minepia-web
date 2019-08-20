@@ -10,6 +10,8 @@ import java.util.Map;
  * @author tadzotsa
  */
 public class Utils {
+    
+    public final static String COTONPRODUCTTYPE = "COTON";
 
     private Utils() {
     }
@@ -24,6 +26,7 @@ public class Utils {
         map.put("BT", "COLIS");
         map.put("OA", "PIECES");
         map.put("PS", "COLIS");
+        map.put("COTON", "BALLES");
 
         return map;
     }

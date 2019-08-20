@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="FICHE_SUPERVISION_TRAIT_PHYTO" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ef3f7670-4c4d-4516-9c0e-2e9a11db29bd">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="586"/>
+	<property name="ireport.y" value="144"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<parameter name="MINADER_LOGO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -993,10 +993,10 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 						<text><![CDATA[X]]></text>
 					</staticText>
 				</frame>
-				<textField>
-					<reportElement uuid="efb069e9-4ec0-4985-a6b4-bc212dfac348" x="0" y="470" width="555" height="40"/>
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="efb069e9-4ec0-4985-a6b4-bc212dfac348" x="0" y="458" width="555" height="52"/>
 					<textElement markup="html">
-						<font size="11"/>
+						<font size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA["Observations générales : " + ($F{generalObservations} != null ? $F{generalObservations} : "-")]]></textFieldExpression>
 				</textField>
