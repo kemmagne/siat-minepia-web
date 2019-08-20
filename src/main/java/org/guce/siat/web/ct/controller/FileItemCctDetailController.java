@@ -2556,7 +2556,7 @@ public class FileItemCctDetailController implements Serializable {
             }
         } catch (final Exception ex) {
             LOG.error(null, ex);
-            showErrorFacesMessage(ex.getMessage(), null);
+            showErrorFacesMessage(ControllerConstants.Bundle.Messages.SAVE_DECISION_FAILED, null);
             if (LOG.isDebugEnabled()) {
                 LOG.debug("####SAVE DECISION Transaction rollbacked####");
             }

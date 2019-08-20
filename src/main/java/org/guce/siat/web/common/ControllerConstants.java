@@ -282,7 +282,7 @@ public interface ControllerConstants {
              * The simple search index page.
              */
             String SIMPLE_SEARCH_INDEX_PAGE = "/pages/fo/search/simple/index.xhtml";
-            
+
             String ASSIGNED_FILE_ITEM_PAGE = "/pages/fo/search/assigned/index.xhtml";
 
             /**
@@ -486,6 +486,11 @@ public interface ControllerConstants {
             String CREATION_FAILED = "DecisionFailed";
 
             /**
+             * The Constant SAVE_DECISION_FAILED : SaveDecisionFailed
+             */
+            String SAVE_DECISION_FAILED = "SaveDecisionFailed";
+
+            /**
              * The Constant PERSISTENCE_ERROR_OCCURED.
              */
             String PERSISTENCE_ERROR_OCCURED = "PersistenceErrorOccured";
@@ -627,4 +632,3 @@ public interface ControllerConstants {
         }
     }
 }
-
