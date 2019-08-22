@@ -205,7 +205,21 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                     final String volumeStr = getFileFieldValueService()
                             .findFileItemFieldValueByCodeAndFileItem("VOLUME", fileItem).getValue();
                     netWeight = netWeight.add(new BigDecimal(volumeStr));
-                } else {
+                } else if (Utils.COTONPRODUCTTYPE.equalsIgnoreCase(productType)) {
+                    FileItemFieldValue ngf = getFileFieldValueService()
+							.findFileItemFieldValueByCodeAndFileItem("NOMBRE_GRUMES", fileItem);
+					if (ngf != null){
+						nb = ngf.getValue();
+					} else {
+						nb = fileItem.getQuantity();
+					}
+                                        FileItemFieldValue pnf = getFileFieldValueService()
+							.findFileItemFieldValueByCodeAndFileItem("POIDS", fileItem);
+					if (pnf != null){
+						netWeight = netWeight.add(new BigDecimal(pnf.getValue()));
+					} 
+                                        unit = Utils.getProductTypePackaging().get(productType);
+                }else {
 					FileItemFieldValue nsf = getFileFieldValueService()
 							.findFileItemFieldValueByCodeAndFileItem("NOMBRE_SACS", fileItem);
 					if (nsf != null){
@@ -226,7 +240,9 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
             final StringBuilder builder = new StringBuilder();
             if (Utils.getCacaProductsTypes().contains(productType)) {
                 builder.append("PN : ");
-            } else {
+            } else if (Utils.COTONPRODUCTTYPE.equalsIgnoreCase(productType)) {
+                builder.append("PN : ");
+            }else {
                 builder.append("VN : ");
             }
             if (Utils.getWoodProductsTypes().contains(productType)) {
