@@ -1014,6 +1014,11 @@ public class FileItemCctDetailController implements Serializable {
     private PlatformTransactionManager transactionManager;
 
     /**
+     * the transaction helper
+     */
+//    @ManagedProperty(value = "#{transactionHelper}")
+//    private TransactionHelper transactionHelper;
+    /**
      * The infraction type list.
      */
     private List<Infraction> infractionList;
@@ -1078,6 +1083,8 @@ public class FileItemCctDetailController implements Serializable {
 
     private List<DecisionHistory> decisionHistories;
     private boolean maskOfficialPosition;
+
+    private static final int GLOBAL_PROPAGATION_TRANSACTION_BEHAVIOUR = TransactionDefinition.PROPAGATION_REQUIRES_NEW;
 
     /**
      * Inits the.
@@ -2266,9 +2273,10 @@ public class FileItemCctDetailController implements Serializable {
      * @throws ParseException the parse exception
      */
     public synchronized void saveDecision() throws ParseException {
-        final DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
-        transactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-        final TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+        DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
+        transactionDefinition.setPropagationBehavior(GLOBAL_PROPAGATION_TRANSACTION_BEHAVIOUR);
+        TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+//        MutableObject<TransactionStatus> vStatus = transactionHelper.beginTransaction();
         try {
             if (FlowCode.FL_CT_29.name().equals(selectedFlow.getCode()) && chckedListSize != Constants.ONE) {
                 showErrorFacesMessage(ControllerConstants.Bundle.Messages.CHECK_ANALYSE_DECISION_ERROR,
@@ -2540,21 +2548,24 @@ public class FileItemCctDetailController implements Serializable {
             currentFile.setLastDecisionDate(java.util.Calendar.getInstance().getTime());
             fileService.update(currentFile);
 
-            transactionManager.commit(transactionStatus);
+            TransactionStatus tsCommit = transactionStatus;
+            transactionStatus = null;
+            transactionManager.commit(tsCommit);
+//            transactionHelper.commit(vStatus);
             if (LOG.isDebugEnabled()) {
                 LOG.debug("####SAVE DECISION Transaction commited####");
             }
         } catch (final Exception ex) {
             LOG.error(null, ex);
-            showErrorFacesMessage(ex.getMessage(), null);
-            try {
-                transactionManager.rollback(transactionStatus);
-            } catch (final Exception ex1) {
-                LOG.error(Objects.toString(ex1), ex1);
-            }
+            showErrorFacesMessage(ControllerConstants.Bundle.Messages.SAVE_DECISION_FAILED, null);
             if (LOG.isDebugEnabled()) {
                 LOG.debug("####SAVE DECISION Transaction rollbacked####");
             }
+        } finally {
+            if (transactionStatus != null) {
+                transactionManager.rollback(transactionStatus);
+            }
+//            transactionHelper.rollback(vStatus);
         }
 
         resetDataGridInofrmationProducts();
@@ -2565,9 +2576,10 @@ public class FileItemCctDetailController implements Serializable {
      * Annuler decisions.
      */
     public void annulerDecisions() {
-        final DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
-        transactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-        final TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+        DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
+        transactionDefinition.setPropagationBehavior(GLOBAL_PROPAGATION_TRANSACTION_BEHAVIOUR);
+        TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+//        MutableObject<TransactionStatus> vStatus = transactionHelper.beginTransaction();
         try {
             //
             final List<Long> chckedProductInfoChecksList = getCheckedRollBacksFileItemCheckList();
@@ -2600,21 +2612,24 @@ public class FileItemCctDetailController implements Serializable {
             currentFile.setLastDecisionDate(currentFileItem.getItemFlowsList().get(0).getCreated());
             fileService.update(currentFile);
 
-            transactionManager.commit(transactionStatus);
+            TransactionStatus tsCommit = transactionStatus;
+            transactionStatus = null;
+            transactionManager.commit(tsCommit);
+//            transactionHelper.commit(vStatus);
             if (LOG.isDebugEnabled()) {
                 LOG.debug("####ROLLBACK DECISION Transaction commited####");
             }
         } catch (final Exception ex) {
             LOG.error(Objects.toString(ex), ex);
             showErrorFacesMessage(ControllerConstants.Bundle.Messages.ROLL_BACK_FAIL, null);
-            try {
-                transactionManager.rollback(transactionStatus);
-            } catch (Exception ex1) {
-                LOG.error(Objects.toString(ex1), ex1);
-            }
             if (LOG.isDebugEnabled()) {
                 LOG.debug("####ROLLBACK DECISION Transaction rollbacked####");
             }
+        } finally {
+            if (transactionStatus != null) {
+                transactionManager.rollback(transactionStatus);
+            }
+//            transactionHelper.rollback(vStatus);
         }
 
         productInfoItems = disableDraftFromProductInfoItem(productInfoItems);
@@ -2644,10 +2659,10 @@ public class FileItemCctDetailController implements Serializable {
      * Mark file.
      */
     public synchronized void dispatchFile() {
-        //
-        final DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
-        transactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-        final TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+        DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
+        transactionDefinition.setPropagationBehavior(GLOBAL_PROPAGATION_TRANSACTION_BEHAVIOUR);
+        TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+//        MutableObject<TransactionStatus> vStatus = transactionHelper.beginTransaction();
         try {
             final List<ItemFlowData> flowDatas = new ArrayList<>();
             for (final DataType dataType : selectedFlow.getDataTypeList()) {
@@ -2686,7 +2701,7 @@ public class FileItemCctDetailController implements Serializable {
                     itemFlow.setSent(Boolean.FALSE);
                     itemFlow.setUnread(Boolean.TRUE);
                     itemFlow.setReceived(AperakType.APERAK_D.getCharCode());
-                    if(assignedUserForCotation != null){
+                    if (assignedUserForCotation != null) {
                         itemFlow.setAssignedUser(assignedUserForCotation);
                     }
                     itemFlowsToAdd.add(itemFlow);
@@ -2697,20 +2712,24 @@ public class FileItemCctDetailController implements Serializable {
                 currentFile.setAssignedUser(assignedUserForCotation);
                 fileService.update(currentFile);
             }
-            transactionManager.commit(transactionStatus);
+
+            TransactionStatus tsCommit = transactionStatus;
+            transactionStatus = null;
+            transactionManager.commit(tsCommit);
+//            transactionHelper.commit(vStatus);
             if (LOG.isDebugEnabled()) {
                 LOG.info("####DISPATCH DECISION Transaction commited####");
             }
         } catch (Exception ex) {
             LOG.error(Objects.toString(ex), ex);
-            try {
-                transactionManager.rollback(transactionStatus);
-            } catch (final Exception ex1) {
-                LOG.error(Objects.toString(ex1), ex1);
-            }
             if (LOG.isDebugEnabled()) {
                 LOG.info("####DISPATCH DECISION Transaction rollbacked####");
             }
+        } finally {
+            if (transactionStatus != null) {
+                transactionManager.rollback(transactionStatus);
+            }
+//            transactionHelper.rollback(vStatus);
         }
         resetDataGridInofrmationProducts();
     }
@@ -2897,9 +2916,10 @@ public class FileItemCctDetailController implements Serializable {
      * Send decisions.
      */
     public synchronized void sendDecisions() {
-        final DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
-        transactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-        final TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+        DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
+        transactionDefinition.setPropagationBehavior(GLOBAL_PROPAGATION_TRANSACTION_BEHAVIOUR);
+        TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+//        MutableObject<TransactionStatus> vStatus = transactionHelper.beginTransaction();
         try {
             if (currentFile.getFileItemsList() != null && cotationAllowed != null && cotationAllowed) {
                 itemFlowService.sendDecisionsToDispatchCctFile(currentFile, productInfoItemsEnabled);
@@ -2920,12 +2940,12 @@ public class FileItemCctDetailController implements Serializable {
                 if (sameStep) {
                     for (final FileItem selected : currentFile.getFileItemsList()) {
                         if (BooleanUtils.isNotTrue(selected.getDraft())) {
-                            allHasDecision = false;
+//                            allHasDecision = false;
                             break;
                         } else {
                             final ItemFlow draftItemFlow = itemFlowService.findDraftByFileItem(selected);
                             if (!draftItemFlow.getSender().getId().equals(getLoggedUser().getId())) {
-                                allHasDecision = false;
+//                                allHasDecision = false;
                                 break;
                             }
                         }
@@ -2942,7 +2962,10 @@ public class FileItemCctDetailController implements Serializable {
                 }
                 if (!allHasDecision) {
                     showErrorFacesMessage(ControllerConstants.Bundle.Messages.ALL_PRODUCT_MUST_BE_SELECTED, null);
-                    transactionManager.rollback(transactionStatus);
+                    if (transactionStatus != null) {
+                        transactionManager.rollback(transactionStatus);
+                    }
+//                    transactionHelper.rollback(vStatus);
                     return;
                 }
 
@@ -2979,60 +3002,56 @@ public class FileItemCctDetailController implements Serializable {
 
                             //generate report
                             Map<String, byte[]> attachedByteFiles = null;
-                            try {
-                                String reportNumber;
-                                if (FlowCode.FL_CT_89.name().equals(flowToSend.getCode())
-                                        || FlowCode.FL_CT_08.name().equals(flowToSend.getCode())
-                                        || FlowCode.FL_CT_CVS_03.name().equals(flowToSend.getCode())
-                                        || FlowCode.FL_CT_CVS_07.name().equals(flowToSend.getCode())) {
+                            String reportNumber;
+                            if (FlowCode.FL_CT_89.name().equals(flowToSend.getCode())
+                                    || FlowCode.FL_CT_08.name().equals(flowToSend.getCode())
+                                    || FlowCode.FL_CT_CVS_03.name().equals(flowToSend.getCode())
+                                    || FlowCode.FL_CT_CVS_07.name().equals(flowToSend.getCode())) {
 
-                                    // edit signature elements
-                                    Date now = java.util.Calendar.getInstance().getTime();
-                                    currentFile.setSignatureDate(now);
-                                    currentFile.setSignatory(loggedUser);
+                                // edit signature elements
+                                Date now = java.util.Calendar.getInstance().getTime();
+                                currentFile.setSignatureDate(now);
+                                currentFile.setSignatory(loggedUser);
 
-                                    attachedByteFiles = new HashMap<>();
+                                attachedByteFiles = new HashMap<>();
 
-                                    final List<FileTypeFlowReport> fileTypeFlowReportList = fileTypeFlowReportService
-                                            .findReportClassNameByFlowAndFileType(flowToSend, currentFile.getFileType());
-                                    for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportList) {
-                                        //Begin Add new field value with report Number
-                                        final ReportOrganism reportOrganism = reportOrganismService.findReportByFileTypeFlowReport(fileTypeFlowReport);
-                                        final FileField reportField = fileFieldService.findFileFieldByCodeAndFileType(
-                                                fileTypeFlowReport.getFileFieldName(), fileTypeFlowReport.getFileType().getCode());
-                                        final String eforceRef = currentFile.getNumeroDemande();
-                                        reportNumber = eforceRef
-                                                + "/" + java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)
-                                                + ((reportOrganism != null && reportOrganism.getValue() != null) ? reportOrganism.getValue() : StringUtils.EMPTY);
-                                        final FileFieldValue reportFieldValue = new FileFieldValue();
-                                        reportFieldValue.setFile(currentFile);
-                                        reportFieldValue.setFileField(reportField);
-                                        reportFieldValue.setValue(reportNumber);
-                                        currentFile.getFileFieldValueList().add(reportFieldValue);
-                                        fileFieldValueService.save(reportFieldValue);
-                                        fileService.update(currentFile);
-                                        //End Add new field value with report Number
+                                final List<FileTypeFlowReport> fileTypeFlowReportList = fileTypeFlowReportService
+                                        .findReportClassNameByFlowAndFileType(flowToSend, currentFile.getFileType());
+                                for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportList) {
+                                    //Begin Add new field value with report Number
+                                    final ReportOrganism reportOrganism = reportOrganismService.findReportByFileTypeFlowReport(fileTypeFlowReport);
+                                    final FileField reportField = fileFieldService.findFileFieldByCodeAndFileType(
+                                            fileTypeFlowReport.getFileFieldName(), fileTypeFlowReport.getFileType().getCode());
+                                    final String eforceRef = currentFile.getNumeroDemande();
+                                    reportNumber = eforceRef
+                                            + "/" + java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)
+                                            + ((reportOrganism != null && reportOrganism.getValue() != null) ? reportOrganism.getValue() : StringUtils.EMPTY);
+                                    final FileFieldValue reportFieldValue = new FileFieldValue();
+                                    reportFieldValue.setFile(currentFile);
+                                    reportFieldValue.setFileField(reportField);
+                                    reportFieldValue.setValue(reportNumber);
+                                    currentFile.getFileFieldValueList().add(reportFieldValue);
+                                    fileFieldValueService.save(reportFieldValue);
+                                    fileService.update(currentFile);
+                                    //End Add new field value with report Number
 
-                                        final byte[] report = getReportBytes(fileTypeFlowReport, false);
+                                    final byte[] report = getReportBytes(fileTypeFlowReport, false);
 
-                                        if (report != null) {
-                                            attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
-                                        }
+                                    if (report != null) {
+                                        attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
+                                    }
 
-                                        /**
-                                         * *
-                                         */
-                                        final java.io.File targetAttachment = new java.io.File(String.format(
-                                                applicationPropretiesService.getAttachementFolder() + "%s%s", java.io.File.separator,
-                                                fileTypeFlowReport.getReportName()));
+                                    /**
+                                     * *
+                                     */
+                                    final java.io.File targetAttachment = new java.io.File(String.format(
+                                            applicationPropretiesService.getAttachementFolder() + "%s%s", java.io.File.separator,
+                                            fileTypeFlowReport.getReportName()));
 
-                                        try (FileOutputStream fileOuputStream = new FileOutputStream(targetAttachment)) {
-                                            fileOuputStream.write(report);
-                                        }
+                                    try (FileOutputStream fileOuputStream = new FileOutputStream(targetAttachment)) {
+                                        fileOuputStream.write(report);
                                     }
                                 }
-                            } catch (final Exception e) {
-                                LOG.error("Error occured when loading report: " + e.getMessage(), e);
                             }
 
                             // convert file to document
@@ -3094,7 +3113,11 @@ public class FileItemCctDetailController implements Serializable {
             } else {
                 showErrorFacesMessage(ControllerConstants.Bundle.Messages.SEND_ERROR, null);
             }
-            transactionManager.commit(transactionStatus);
+
+            TransactionStatus tsCommit = transactionStatus;
+            transactionStatus = null;
+            transactionManager.commit(tsCommit);
+//            transactionHelper.commit(vStatus);
             if (LOG.isDebugEnabled()) {
                 LOG.info("####SEND DECISION Transaction commited####");
             }
@@ -3104,14 +3127,14 @@ public class FileItemCctDetailController implements Serializable {
             notificationEmail(currentFile, currentStep);
         } catch (final Exception e) {
             LOG.error(Objects.toString(e), e);
-            try {
-                transactionManager.rollback(transactionStatus);
-            } catch (final Exception ex) {
-                LOG.error(Objects.toString(ex), ex);
-            }
             if (LOG.isDebugEnabled()) {
                 LOG.info("####SEND DECISION Transaction rollbacked####");
             }
+        } finally {
+            if (transactionStatus != null) {
+                transactionManager.rollback(transactionStatus);
+            }
+//            transactionHelper.rollback(vStatus);
         }
 
     }
@@ -6062,6 +6085,22 @@ public class FileItemCctDetailController implements Serializable {
     }
 
     /**
+     * Gets the transaction helper
+     *
+     * @return the transaction helper
+     */
+//    public TransactionHelper getTransactionHelper() {
+//        return transactionHelper;
+//    }
+    /**
+     * Sets the transaction helper
+     *
+     * @param transactionHelper the new transaction helper
+     */
+//    public void setTransactionHelper(final TransactionHelper transactionHelper) {
+//        this.transactionHelper = transactionHelper;
+//    }
+    /**
      * Gets the detail.
      *
      * @return the detail
@@ -6703,9 +6742,10 @@ public class FileItemCctDetailController implements Serializable {
                 JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
                         getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.RESEND_SUCCESS));
             } else {
-                final DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
-                transactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-                final TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+                DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
+                transactionDefinition.setPropagationBehavior(GLOBAL_PROPAGATION_TRANSACTION_BEHAVIOUR);
+                TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+//                MutableObject<TransactionStatus> vStatus = transactionHelper.beginTransaction();
                 try {
                     final Flow flowToSend = selectedItemFlowDto.getItemFlow().getFlow();
                     final File selectedFile = selectedItemFlowDto.getItemFlow().getFileItem().getFile();
@@ -6784,7 +6824,10 @@ public class FileItemCctDetailController implements Serializable {
                         }
                     }
 
-                    transactionManager.commit(transactionStatus);
+                    TransactionStatus tsCommit = transactionStatus;
+                    transactionStatus = null;
+                    transactionManager.commit(tsCommit);
+//                    transactionHelper.commit(vStatus);
                     if (LOG.isDebugEnabled()) {
                         LOG.info("####RESEND DECISION Transaction commited####");
                     }
@@ -6792,8 +6835,12 @@ public class FileItemCctDetailController implements Serializable {
                     JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
                             getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.RESEND_SUCCESS));
                 } catch (Exception ex) {
-                    transactionManager.rollback(transactionStatus);
                     throw ex;
+                } finally {
+                    if (transactionStatus != null) {
+                        transactionManager.rollback(transactionStatus);
+                    }
+//                    transactionHelper.rollback(vStatus);
                 }
             }
         } catch (Exception ex) {
@@ -6869,11 +6916,11 @@ public class FileItemCctDetailController implements Serializable {
         AbstractReportInvoker reportInvoker = null;
         if (checkMinaderMinistry) {
             String reportNumber = null;
-            if (draft){
+            if (draft) {
                 final ReportOrganism reportOrganism = reportOrganismService.findReportByFileTypeFlowReport(fileTypeFlowReport);
                 reportNumber = currentFile.getNumeroDemande()
-                    + "/" + java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)
-                    + ((reportOrganism != null && reportOrganism.getValue() != null) ? reportOrganism.getValue() : StringUtils.EMPTY);             
+                        + "/" + java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)
+                        + ((reportOrganism != null && reportOrganism.getValue() != null) ? reportOrganism.getValue() : StringUtils.EMPTY);
 
             }
             switch (currentFile.getFileType().getCode()) {
@@ -6891,11 +6938,11 @@ public class FileItemCctDetailController implements Serializable {
                 case CCT_CT_E_PVI: {
                     final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
                     final InspectionReport ir = inspectionReportService.findByItemFlow(itemFlow);
-                    if (draft){
+                    if (draft) {
                         reportInvoker = new CtPviExporter(ir, reportNumber);
                     } else {
                         reportInvoker = new CtPviExporter(ir);
-                    }                    
+                    }
                     break;
                 }
                 case CCT_CT_E_ATP:
@@ -6903,17 +6950,17 @@ public class FileItemCctDetailController implements Serializable {
                     final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
                     final TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
                     if (FileTypeCode.CCT_CT_E_ATP.equals(currentFile.getFileType().getCode())) {
-                        if (draft){
+                        if (draft) {
                             reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_ATP", tr, reportNumber);
                         } else {
                             reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_ATP", tr);
-                        }                        
+                        }
                     } else {
-                        if (draft){
+                        if (draft) {
                             reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_FSTP", tr, reportNumber);
                         } else {
                             reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_FSTP", tr);
-                        }                    
+                        }
                     }
                     break;
                 }
