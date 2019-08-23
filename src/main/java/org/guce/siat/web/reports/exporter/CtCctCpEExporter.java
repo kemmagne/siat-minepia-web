@@ -242,6 +242,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                 builder.append("PN : ");
             } else if (Utils.COTONPRODUCTTYPE.equalsIgnoreCase(productType)) {
                 builder.append("PN : ");
+                unit = "KG";
             }else {
                 builder.append("VN : ");
             }
