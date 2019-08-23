@@ -113,10 +113,17 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
             }
         }
         //
+        if(file.getSignatory() != null){
+            treatmentVo.setSignatory(file.getSignatory().getFirstName() + " " + file.getSignatory().getLastName());
+        }
+        if (file.getAssignedUser() != null){
+            treatmentVo.setInspector(file.getAssignedUser().getFirstName() + " " + file.getAssignedUser().getLastName());
+        }
         treatmentVo.setActiveIngredient(treatmentResult.getActiveIngredient());
         treatmentVo.setApplicationDose(treatmentResult.getTreatmentDose());
         treatmentVo.setConcentration(treatmentResult.getAtConcentration());
         treatmentVo.setConditioning(treatmentResult.getConditioning());
+        treatmentVo.setTreatmentDate(treatmentResult.getTreatmentDate());
         treatmentVo.setDecisionDate(file.getSignatureDate());
         treatmentVo.setDecisionPlace(file.getBureau().getLabelFr());
         if (referenceNumber != null && treatmentVo.getDecisionNumber() == null) {
@@ -192,19 +199,13 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
                     treatmentVo.setItemNature(tradeNameFieldValue.getValue());
                 }
                 String unit = Utils.getProductTypePackaging().get(productType);
-
-                final FileItemFieldValue grossWeightFieldValue = getFileFieldValueService()
-                        .findFileItemFieldValueByCodeAndFileItem("POIDS_BRUT", fileItem);
-                if (grossWeightFieldValue != null) {
-                    fileItemVo.setVolume(grossWeightFieldValue.getValue());
-                }
-                if (fileItemVo.getVolume() == null || fileItemVo.getVolume().isEmpty()) {
-                    final FileItemFieldValue weightFieldValue = getFileFieldValueService()
-                            .findFileItemFieldValueByCodeAndFileItem("POIDS", fileItem);
-                    if (weightFieldValue != null) {
-                        fileItemVo.setVolume(weightFieldValue.getValue());
+                
+                final FileItemFieldValue volumeFieldValue = getFileFieldValueService()
+                            .findFileItemFieldValueByCodeAndFileItem("VOLUME", fileItem);
+                    if (volumeFieldValue != null) {
+                        fileItemVo.setVolume(volumeFieldValue.getValue());
                     }
-                }
+
                 if (Utils.getCacaProductsTypes().contains(productType)) {
                     fileItemVo.setVolumeWeightLabel("POIDS");
                     fileItemVo.setQuantityLabel("NUMERO DES LOTS");
@@ -228,12 +229,6 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
                         fileItemVo.setNumber(ng.getValue());
                     }
 
-                    final FileItemFieldValue volumeFieldValue = getFileFieldValueService()
-                            .findFileItemFieldValueByCodeAndFileItem("VOLUME", fileItem);
-                    if (volumeFieldValue != null) {
-                        fileItemVo.setVolume(volumeFieldValue.getValue());
-//                        fileItemVo.setNumber(volumeFieldValue.getValue());
-                    }
                     if (fileItemVo.getNumber() == null) {
                         fileItemVo.setNumber(fileItem.getQuantity());
                     }
@@ -243,6 +238,18 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
                     FileItemFieldValue ng = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("NOMBRE_GRUMES", fileItem);
                     if (ng != null) {
                         fileItemVo.setNumber(ng.getValue());
+                    }
+                    final FileItemFieldValue grossWeightFieldValue = getFileFieldValueService()
+                        .findFileItemFieldValueByCodeAndFileItem("POIDS_BRUT", fileItem);
+                    if (grossWeightFieldValue != null) {
+                        fileItemVo.setVolume(grossWeightFieldValue.getValue());
+                    }
+                    if (grossWeightFieldValue == null) {
+                        final FileItemFieldValue weightFieldValue = getFileFieldValueService()
+                                .findFileItemFieldValueByCodeAndFileItem("POIDS", fileItem);
+                        if (weightFieldValue != null) {
+                            fileItemVo.setVolume(weightFieldValue.getValue());
+                        }
                     }
                 } else {
                     fileItemVo.setNumber(fileItem.getQuantity());

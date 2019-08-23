@@ -283,6 +283,11 @@ public class CtCctDataVo {
     private String pviNatureArticleInspecte;
     private String pviQuantite;
     private String pviDispositionsPrises;
+    
+    private Date inspectionStartDate;
+    private Date inspectionEndDate;
+    private Date signatureDate;
+    private String inspector, signatory, signaturePlace;
 
     /**
      * pulvérisation
@@ -1179,5 +1184,54 @@ public class CtCctDataVo {
         this.pviDispositionsPrises = pviDispositionsPrises;
     }
 
+    public Date getInspectionStartDate() {
+        return inspectionStartDate;
+    }
+
+    public void setInspectionStartDate(Date inspectionStartDate) {
+        this.inspectionStartDate = inspectionStartDate;
+    }
+
+    public Date getInspectionEndDate() {
+        return inspectionEndDate;
+    }
+
+    public void setInspectionEndDate(Date inspectionEndDate) {
+        this.inspectionEndDate = inspectionEndDate;
+    }
+
+    public String getInspector() {
+        return inspector;
+    }
+
+    public void setInspector(String inspector) {
+        this.inspector = inspector;
+    }
+
+    public String getSignatory() {
+        return signatory;
+    }
+
+    public void setSignatory(String signatory) {
+        this.signatory = signatory;
+    }
+
+    public Date getSignatureDate() {
+        return signatureDate;
+    }
+
+    public void setSignatureDate(Date signatureDate) {
+        this.signatureDate = signatureDate;
+    }
+
+    public String getSignaturePlace() {
+        return signaturePlace;
+    }
+
+    public void setSignaturePlace(String signaturePlace) {
+        this.signaturePlace = signaturePlace;
+    }
+    
+   
 }
 
