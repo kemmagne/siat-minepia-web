@@ -139,8 +139,9 @@ public abstract class AbstractReportInvoker implements ReportCommand {
     public byte[] getPdfFile() {
         byte[] pdfReport = null;
         try {
+            JRBeanCollectionDataSource reportDataSource = getReportDataSource();
             final JasperPrint jasperPrint = JasperFillManager.fillReport(getRealPath(REPORTS_PATH, jasperFileName, "jasper"),
-                    getJRParameters(), getReportDataSource());
+                    getJRParameters(), reportDataSource);
             pdfReport = JasperExportManager.exportReportToPdf(jasperPrint);
 
         } catch (final JRException e) {

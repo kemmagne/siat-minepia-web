@@ -38,6 +38,8 @@ public class InspectionReportData implements Serializable {
      * The inspection time.
      */
     private Date inspectionTime;
+    
+    private Date inspectionStartDate, inspectionEndDate;
 
     /**
      * The origin certificate.
@@ -256,6 +258,8 @@ public class InspectionReportData implements Serializable {
                 final InspectionReport inspectionReport = new InspectionReport();
                 inspectionReport.setPlace(this.inspectionPlace);
                 inspectionReport.setReportDate(this.inspectionDate);
+                inspectionReport.setInspectionStartDate(this.inspectionStartDate);
+                inspectionReport.setInspectionEndDate(this.inspectionEndDate);
                 inspectionReport.setReportTime(this.inspectionTime);
                 inspectionReport.setControllerDecision(this.controllerDecision);
                 inspectionReport.setQuarantinedCulturePlace(this.quarantinedCulturePlace);
@@ -342,6 +346,8 @@ public class InspectionReportData implements Serializable {
             final InspectionReport inspectionReport = new InspectionReport();
             inspectionReport.setPlace(this.inspectionPlace);
             inspectionReport.setReportDate(this.inspectionDate);
+            inspectionReport.setInspectionStartDate(this.inspectionStartDate);
+            inspectionReport.setInspectionEndDate(this.inspectionEndDate);
             inspectionReport.setReportTime(this.inspectionTime);
             inspectionReport.setControllerDecision(this.controllerDecision);
             inspectionReport.setQuarantinedCulturePlace(this.quarantinedCulturePlace);
@@ -431,6 +437,23 @@ public class InspectionReportData implements Serializable {
     public void setInspectionDate(final Date inspectionDate) {
         this.inspectionDate = inspectionDate;
     }
+
+    public Date getInspectionStartDate() {
+        return inspectionStartDate;
+    }
+
+    public void setInspectionStartDate(Date inspectionStartDate) {
+        this.inspectionStartDate = inspectionStartDate;
+    }
+
+    public Date getInspectionEndDate() {
+        return inspectionEndDate;
+    }
+
+    public void setInspectionEndDate(Date inspectionEndDate) {
+        this.inspectionEndDate = inspectionEndDate;
+    }
+    
 
     /**
      * Gets the inspection time.

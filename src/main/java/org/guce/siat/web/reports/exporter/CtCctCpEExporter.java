@@ -23,7 +23,9 @@ import org.guce.siat.web.reports.vo.CtCctCpEFileVo;
  * The Class CtCctCpEExporter.
  */
 public class CtCctCpEExporter extends AbstractReportInvoker {
-
+    
+    public static final String CP_COTCOCAF = "CERTIFICAT_PHYTOSANITAIRE_CACAO_CAFE_COTON";
+    public static final String CP_BOIS_CONV = "CERTIFICAT_PHYTOSANITAIRE_BOIS_CONVENTIONNEL";
     /**
      * The file.
      */
@@ -100,9 +102,9 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                 .findValueByFileFieldAndFile("TYPE_PRODUIT_CODE", file).getValue();
         String emballage = Utils.getProductTypePackaging().get(productType);
 		ctCctCpEFileVo.setPackaging(productType);
-
+        String containersNumbers = null;
         if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
-            String containersNumbers = null;
+            
             for (final FileFieldValue fileFieldValue1 : fileFieldValueList) {
                 switch (fileFieldValue1.getFileField().getCode()) {
                     case "NUMERO_CT_CCT_CP_E":
@@ -257,6 +259,13 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
         }
 
         ctCctCpEFileVo.setFileItemList(fileItemVos);
+        if (productType != null){
+            if (Utils.getCacaProductsTypes().contains(productType) || Utils.COTONPRODUCTTYPE.equalsIgnoreCase(productType)){
+                this.jasperFileName = CP_COTCOCAF;
+            } else if (Utils.getWoodProductsTypes().contains(productType) && containersNumbers == null){
+                this.jasperFileName = CP_BOIS_CONV;
+            }
+        }
 
         return new JRBeanCollectionDataSource(Collections.singleton(ctCctCpEFileVo));
     }

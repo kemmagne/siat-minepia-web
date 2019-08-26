@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CERTIFICAT_PHYTOSANITAIRE" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6f5c0835-9f5c-4b28-b5db-296746e60a32">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="768"/>
+	<property name="ireport.y" value="720"/>
 	<parameter name="MINADER_LOGO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -232,14 +232,14 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					<text><![CDATA[Origin]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="031ac96f-ec74-4c38-9abd-7a55f1fc3761" x="2" y="98" width="183" height="31"/>
+					<reportElement uuid="031ac96f-ec74-4c38-9abd-7a55f1fc3761" x="2" y="99" width="183" height="31"/>
 					<textElement textAlignment="Center">
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{exporterName} + ", " + $F{exporterAddress}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="2e3feed9-6f97-4541-9742-8aa7de3939e2" stretchType="RelativeToBandHeight" x="4" y="151" width="240" height="42"/>
+					<reportElement uuid="2e3feed9-6f97-4541-9742-8aa7de3939e2" stretchType="RelativeToBandHeight" x="4" y="153" width="240" height="42"/>
 					<textElement>
 						<font size="8" isBold="true"/>
 					</textElement>
@@ -280,8 +280,8 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					</textElement>
 					<textFieldExpression><![CDATA["A <u>" + $F{decisionPlace} + "</u>"]]></textFieldExpression>
 				</textField>
-				<image hAlign="Center">
-					<reportElement uuid="985b5a8f-b2c3-441a-ae72-7a3922dc99e8" x="185" y="57" width="58" height="45"/>
+				<image hAlign="Center" vAlign="Middle">
+					<reportElement uuid="985b5a8f-b2c3-441a-ae72-7a3922dc99e8" x="185" y="52" width="58" height="45"/>
 					<imageExpression><![CDATA[new java.io.File($P{MINADER_LOGO})]]></imageExpression>
 				</image>
 				<textField isBlankWhenNull="true">
@@ -296,7 +296,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					<textElement textAlignment="Center">
 						<font size="8" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA["CERTIFICAT PHYTOSANITAIRE" + (!$F{transit} ? "" : " DE REEXPORTATION")]]></textFieldExpression>
+					<textFieldExpression><![CDATA["CERTIFICAT PHYTOSANITAIRE " + (!$F{transit} ? "" : " DE REEXPORTATION")]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>
@@ -604,14 +604,14 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					<textFieldExpression><![CDATA[$F{quantities}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="250714b0-f608-4b46-88f0-7575ef9ab224" x="1" y="119" width="473" height="48"/>
+					<reportElement uuid="250714b0-f608-4b46-88f0-7575ef9ab224" x="1" y="106" width="473" height="61"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{containersNumbers}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="f9d4ac49-0104-4bde-ac21-834103fce845" x="5" y="98" width="469" height="20"/>
+					<reportElement uuid="f9d4ac49-0104-4bde-ac21-834103fce845" x="2" y="54" width="472" height="51"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8" isBold="true"/>
 					</textElement>
@@ -653,17 +653,17 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					<textFieldExpression><![CDATA[$F{treatmentsCarriedOut}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="703a3b6f-fcc0-456e-929f-963839d7506e" x="1" y="24" width="473" height="74"/>
+					<reportElement uuid="703a3b6f-fcc0-456e-929f-963839d7506e" x="1" y="24" width="473" height="27"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{names}]]></textFieldExpression>
 				</textField>
 				<line>
-					<reportElement uuid="20ab5909-0384-4488-8671-46f204accad7" x="0" y="98" width="474" height="1"/>
+					<reportElement uuid="20ab5909-0384-4488-8671-46f204accad7" x="0" y="52" width="474" height="1"/>
 				</line>
 				<line>
-					<reportElement uuid="795ce32b-1750-459c-98ff-0a0e397eee5c" x="0" y="118" width="474" height="1"/>
+					<reportElement uuid="795ce32b-1750-459c-98ff-0a0e397eee5c" x="0" y="105" width="474" height="1"/>
 				</line>
 				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 					<reportElement uuid="81486c17-ec8d-47a3-8a39-a9101a344285" x="270" y="406" width="81" height="21"/>

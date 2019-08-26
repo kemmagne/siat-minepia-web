@@ -253,6 +253,10 @@ public class CtPviExporter extends AbstractReportInvoker {
                 } else {
                     entryInspectionFindingDataVo.setSignatairePVIPhyto(inspectionReport.getControllerName());
                 }
+                entryInspectionFindingDataVo.setSignatureDate(inspectionReport.getFileItem().getFile().getSignatureDate());
+                if (inspectionReport.getFileItem().getFile().getSignatory() != null)
+                    entryInspectionFindingDataVo.setSignatory(inspectionReport.getFileItem().getFile().getSignatory().getFirstName() + " " + inspectionReport.getFileItem().getFile().getSignatory().getLastName());
+                entryInspectionFindingDataVo.setSignaturePlace(inspectionReport.getFileItem().getFile().getBureau().getLabelFr());
                 entryInspectionFindingDataVo.setTypeTraitement(inspectionReport.getTreatmentTypesList());
                 entryInspectionFindingDataVo.setEtatDateDernierTraitement(inspectionReport.getEtatDateDernierTraitement());
                 entryInspectionFindingDataVo.setProduitUtilise(inspectionReport.getProduitUtilise());
@@ -271,6 +275,10 @@ public class CtPviExporter extends AbstractReportInvoker {
                 entryInspectionFindingDataVo.setPviQuantite(inspectionReport.getPviQuantite());
                 entryInspectionFindingDataVo.setPviReference(inspectionReport.getItemFlow().getFileItem().getFile().getNumeroDossier());
                 entryInspectionFindingDataVo.setPviSituationArticle(inspectionReport.getPviSituationArticle());
+                entryInspectionFindingDataVo.setInspectionStartDate(inspectionReport.getInspectionStartDate());
+                entryInspectionFindingDataVo.setInspectionEndDate(inspectionReport.getInspectionEndDate());
+                if (inspectionReport.getFileItem().getFile().getAssignedUser() != null)
+                    entryInspectionFindingDataVo.setInspector(inspectionReport.getFileItem().getFile().getAssignedUser().getFirstName() + " " + inspectionReport.getFileItem().getFile().getAssignedUser().getLastName());
                 for (FileFieldValue fileFieldValue : inspectionReport.getItemFlow().getFileItem().getFile().getFileFieldValueList()) {
                     if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("DESTINATAIRE_RAISONSOCIALE")) {
                         entryInspectionFindingDataVo.setRecipient(fileFieldValue.getValue());
@@ -298,7 +306,7 @@ public class CtPviExporter extends AbstractReportInvoker {
                     if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("NUMERO_CCT_CT_E_PVI")) {
                         entryInspectionFindingDataVo.setNumeroDecisionPVI(fileFieldValue.getValue());
                     }
-                }
+                    }
                 if (this.referenceNumber != null){
                     entryInspectionFindingDataVo.setNumeroDecisionPVI(referenceNumber);
                 }

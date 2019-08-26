@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ATTESTATION_TRAITEMENT_PHYTO" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3f27f79b-e6ae-419b-aa77-db95164ce974">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="336"/>
+	<property name="ireport.y" value="144"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<style name="table">
 		<box>
@@ -60,7 +60,8 @@
 	<field name="treatmentCompanyFax" class="java.lang.String"/>
 	<field name="treatmentCompanyEmail" class="java.lang.String"/>
 	<field name="consigneeCountry" class="java.lang.String"/>
-	<field name="treatmentTime" class="java.util.Date"/>
+	<field name="treatmentDate" class="java.util.Date"/>
+	<field name="signatory" class="java.lang.String"/>
 	<background>
 		<band height="802">
 			<printWhenExpression><![CDATA[$P{DRAFT}]]></printWhenExpression>
@@ -230,7 +231,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="2afecf9e-eb6a-42e6-a67e-e5b560ed2491" x="0" y="0" width="555" height="195"/>
 				<textElement markup="html"/>
-				<textFieldExpression><![CDATA["Le chef de Poste de Police Phytosanitaire atteste que la Société <b><u>" + ($F{treatmentCompanyName} != null ? $F{treatmentCompanyName} : "-") + "</u></b> BP : <b><u>" + ($F{treatmentCompanyBp} != null ? $F{treatmentCompanyBp} : "-") + "</u></b> Tel : <b><u>" + ($F{treatmentCompanyTel} != null ? $F{treatmentCompanyTel} : "-") + "</u></b> Fax : <b><u>" + ($F{treatmentCompanyFax} != null ? $F{treatmentCompanyFax} : "-") + "</u></b> Email : <b><u>" + ($F{treatmentCompanyEmail} != null ? $F{treatmentCompanyEmail} : "-") + "</u></b>, a procédé sous la supervision de <b><u>" + ($F{supervisor} != null ? $F{supervisor} : "-") + "</u></b> dans ses services, au traitement phytosanitaire par <b><u>" + ($F{treatmentType} != null ? $F{treatmentType} : "-") + "</u></b><br/><br/>A la spécificité commerciale (N° d lot(s) / N° homologation) <b><u>" + ($F{homologationNumber} != null ? $F{homologationNumber} : "-") + "</u></b><br/><br/>Concentration des matières actives <b><u>" + ($F{concentration} != null ? $F{concentration} : "-") + "</u></b><br/><br/>A raison de (doses de traitement) <b><u>" + ($F{treatmentDose} != null ? $F{treatmentDose} : "-") + "</u></b><br/><br/>D'un lot de marchandises à destination de <b><u>" + ($F{consigneeCountry} != null ? $F{consigneeCountry} : "-") + "</u></b><br/><br/>Suivant le dossier <b><u>" + ($F{fileNumber} != null ? $F{fileNumber} : "-")  + ($F{exporterName} != null ? ("; " + $F{exporterName}) : "") + " " + ($F{treatmentTime} != null ? new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{treatmentTime}) : "") + "</u></b><br/><br/>En foi de quoi la présente attestation est délivrée pour servir et valoir ce que de droit"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Le chef de Poste de Police Phytosanitaire atteste que la Société <b><u>" + ($F{treatmentCompanyName} != null ? $F{treatmentCompanyName} : "-") + "</u></b> BP : <b><u>" + ($F{treatmentCompanyBp} != null ? $F{treatmentCompanyBp} : "-") + "</u></b> Tel : <b><u>" + ($F{treatmentCompanyTel} != null ? $F{treatmentCompanyTel} : "-") + "</u></b> Fax : <b><u>" + ($F{treatmentCompanyFax} != null ? $F{treatmentCompanyFax} : "-") + "</u></b> Email : <b><u>" + ($F{treatmentCompanyEmail} != null ? $F{treatmentCompanyEmail} : "-") + "</u></b>, a procédé sous la supervision de <b><u>" + ($F{supervisor} != null ? $F{supervisor} : "-") + "</u></b> dans ses services, au traitement phytosanitaire par <b><u>" + ($F{treatmentType} != null ? $F{treatmentType} : "-") + "</u></b><br/><br/>A la spécificité commerciale (N° d lot(s) / N° homologation) <b><u>" + ($F{homologationNumber} != null ? $F{homologationNumber} : "-") + "</u></b><br/><br/>Concentration des matières actives <b><u>" + ($F{concentration} != null ? $F{concentration} : "-") + "</u></b><br/><br/>A raison de (doses de traitement) <b><u>" + ($F{treatmentDose} != null ? $F{treatmentDose} : "-") + "</u></b><br/><br/>D'un lot de marchandises à destination de <b><u>" + ($F{consigneeCountry} != null ? $F{consigneeCountry} : "-") + "</u></b><br/><br/>Suivant le dossier <b><u>" + ($F{fileNumber} != null ? $F{fileNumber} : "-")  + ($F{exporterName} != null ? ("; " + $F{exporterName}) : "") + "</u></b>" + ($F{treatmentDate} != null ? ("<br/><br/>Date de traitement <u><b>" + new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{treatmentDate}) + "</b></u>") : "") + "<br/><br/>En foi de quoi la présente attestation est délivrée pour servir et valoir ce que de droit"]]></textFieldExpression>
 			</textField>
 			<rectangle>
 				<reportElement uuid="7a479826-8061-4010-a552-afce08a9331c" mode="Transparent" x="0" y="195" width="555" height="20"/>
@@ -245,7 +246,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 		</band>
 		<band height="118">
 			<staticText>
-				<reportElement uuid="d68c1cef-3bc9-4f9d-a91c-61afd42b1f28" x="10" y="80" width="165" height="20"/>
+				<reportElement uuid="d68c1cef-3bc9-4f9d-a91c-61afd42b1f28" x="10" y="80" width="237" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="11" isBold="true"/>
 				</textElement>
@@ -256,7 +257,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 				<textElement textAlignment="Right" markup="html">
 					<font size="11"/>
 				</textElement>
-				<textFieldExpression><![CDATA["A Douala le "  + ($F{decisionDate} != null ? new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{decisionDate}) : "-") + "</u>"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["A " + ($F{decisionPlace} != null ? $F{decisionPlace} : "-") + " le "  + ($F{decisionDate} != null ? new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{decisionDate}) : "-") + "</u>"]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="7e645ebe-93d3-47e2-925d-2f91a962dad1" x="0" y="3" width="555" height="55"/>
@@ -265,6 +266,11 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS ET AGRICULTURAL PRODUCTS
 <br/><br/>
 En foi de quoi la présente attestation est délivrée pour servir et valoir ce que de droit.]]></text>
 			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="656d7500-a875-4955-82c3-d490c18aa909" x="10" y="98" width="545" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{signatory}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

@@ -7,6 +7,20 @@
         <p:messages autoUpdate="true" />
 
         <h:panelGrid columns="2" styleClass="table-decision">
+            <h:outputLabel value="#{bundle['InspectionStartDate']}" for="InspectionStartDate" />
+            <h:panelGroup>
+                <p:calendar navigator="true" readonlyInput="true" showOn="button"
+                            value="#{fileItemCctDetailController.inspectionReportData.inspectionStartDate}"  pattern="dd/MM/yyyy HH:mm" id="InspectionStartDate"
+                            required="true" requiredMessage="#{bundle['InspectionStartDateRequired']}" widgetVar="InspectionStartDate" />
+                <p:message for="InspectionStartDate" />
+            </h:panelGroup>
+            <h:outputLabel value="#{bundle['InspectionEndDate']}" for="InspectionEndDate" />
+            <h:panelGroup>
+                <p:calendar navigator="true" readonlyInput="true" showOn="button"
+                            value="#{fileItemCctDetailController.inspectionReportData.inspectionEndDate}"  pattern="dd/MM/yyyy HH:mm" id="InspectionEndDate"
+                            required="true" requiredMessage="#{bundle['InspectionEndDateRequired']}" widgetVar="InspectionEndDate" />
+                <p:message for="InspectionEndDate" />
+            </h:panelGroup>
             <p:outputLabel for="NomControleur" value="#{bundle['NomControleur']}" />
             <p:inputText id="NomControleur" required="true" value="#{fileItemCctDetailController.inspectionReportData.controllerName}" />
 
@@ -23,12 +37,13 @@
             <p:inputText id="dosage" required="true" value="#{fileItemCctDetailController.inspectionReportData.dosage}" />
 
             <p:outputLabel for="typeTraitement" value="#{bundle['typeTraitement']}" />
-            <p:selectManyMenu id="typeTraitement" required="true" value="#{fileItemCctDetailController.inspectionReportData.treatmentTypesList}">
+            <p:selectManyMenu id="typeTraitement" required="false" value="#{fileItemCctDetailController.inspectionReportData.treatmentTypesList}">
                 <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}" var="tt" itemLabel="#{bundle[tt.label]}" itemValue="#{tt.value}" />
             </p:selectManyMenu>
 
             <p:outputLabel for="lastTreatmentDateState" value="#{bundle['lastTreatmentDateState']}" />
-            <p:selectOneMenu id="lastTreatmentDateState" required="true" value="#{fileItemCctDetailController.inspectionReportData.etatDateDernierTraitement}">
+            <p:selectOneMenu id="lastTreatmentDateState" required="false" value="#{fileItemCctDetailController.inspectionReportData.etatDateDernierTraitement}">
+                <f:selectItem value="#{null}" />
                 <f:selectItems value="#{fileItemCctDetailController.pivLastTreatmentDateStates}" var="ltds" itemLabel="#{bundle[ltds.label]}" itemValue="#{ltds.value}" />
             </p:selectOneMenu>
 
@@ -59,7 +74,7 @@
             <p:inputTextarea id="observations" value="#{fileItemCctDetailController.inspectionReportData.observations}" autoResize="true" rows="5"/>
 
             <p:outputLabel for="couvertDoc" value="#{bundle['couvertDoc']}" />
-            <p:selectBooleanCheckbox required="true" id="couvertDoc" value="#{fileItemCctDetailController.inspectionReportData.pviCouvertDoc}" />
+            <p:selectBooleanCheckbox required="false" id="couvertDoc" value="#{fileItemCctDetailController.inspectionReportData.pviCouvertDoc}" />
         </h:panelGrid>
     </p:scrollPanel>
 
