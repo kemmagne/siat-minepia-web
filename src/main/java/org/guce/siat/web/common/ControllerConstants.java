@@ -373,6 +373,12 @@ public interface ControllerConstants {
              * The statistic pinding files.
              */
             String STATISTIC_PINDING_FILES = "/pages/fo/statistic/pendingFiles/index.xhtml";
+            
+            String STATISTIC_ACTIVITY_REPORT = "/pages/fo/statistic/activityReport/index.xhtml";
+            String STATISTIC_GLOBAL_DELAY_LISTING = "/pages/fo/statistic/globalDelayListing/index.xhtml";
+            String STATISTIC_DELAY_LISTING_STAKEHOLDER = "/pages/fo/statistic/delayListingStakeholder/index.xhtml";
+            String STATISTIC_EXPORT_NSH_DESTINIATION = "/pages/fo/statistic/exportNshDestination/index.xhtml";
+            String STATISTIC_EXPORT_NSH_DESTINIATION_SENDER = "/pages/fo/statistic/exportNshDestinationSender/index.xhtml";
 
             /**
              * The Interface GR.

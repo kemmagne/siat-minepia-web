@@ -194,7 +194,7 @@
 					<p:submenu id="staticMenuItem" label="#{bundle['appmenu_statistic']}" styleClass="staticMenuItem"
 							   rendered="#{request.isUserInRole('SUPER') or request.isUserInRole('ADMIN_MIN')}">
 
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="pindingFilesMenuItem"
+                                                <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="pindingFilesMenuItem"
 									styleClass="pendingFiles" value="#{bundle['appmenu_statistic_pindingFiles']}"
 									actionListener="#{statisticController.goToPindingSearchPage}" rendered="#{request.isUserInRole('SUPER')}" />
 

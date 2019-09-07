@@ -56,6 +56,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.logging.Level;
+import org.guce.siat.common.model.Bureau;
+import org.guce.siat.common.model.FileType;
+import org.guce.siat.common.model.Organism;
+import org.guce.siat.common.service.BureauService;
+import org.guce.siat.common.service.FileTypeService;
+import org.guce.siat.common.utils.enums.BureauType;
+import org.guce.siat.core.ct.filter.CteFilter;
+import org.guce.siat.web.ct.data.ActivityReportData;
+import org.guce.siat.web.ct.data.DelayListingStakeholderData;
+import org.guce.siat.web.ct.data.ExportNshDestinationData;
+import org.guce.siat.web.ct.data.GlobalDelayListingData;
 
 
 /**
@@ -89,6 +105,12 @@ public class StatisticController extends AbstractController<FileItem>
 	/** The company service. */
 	@ManagedProperty(value = "#{companyService}")
 	private CompanyService companyService;
+        
+        @ManagedProperty(value = "#{bureauService}")
+        private BureauService bureauService;
+        
+        @ManagedProperty(value = "#{fileTypeService}")
+        private FileTypeService fileTypeService;
 
 	/** The item service. */
 	@ManagedProperty(value = "#{itemService}")
@@ -114,6 +136,8 @@ public class StatisticController extends AbstractController<FileItem>
 
 	/** The filter. */
 	private Filter filter;
+        
+        private CteFilter cteFilter;
 
 	/** The filter decision delivree. */
 	private Filter filterDecisionDelivree;
@@ -141,6 +165,10 @@ public class StatisticController extends AbstractController<FileItem>
 
 	/** The client list. */
 	private List<Company> clientList;
+        
+        private List<Bureau> bureauList;
+        
+        private List<FileType> fileTypeList;
 
 	/** The nsh list. */
 	private List<Item> nshList;
@@ -197,6 +225,14 @@ public class StatisticController extends AbstractController<FileItem>
 
 	/** The file items sauv. */
 	private List<FileItem> fileItemsSauv = new ArrayList<FileItem>();
+        
+        private List<ActivityReportData> activityReportDataList;
+        
+        private List<GlobalDelayListingData> globalDelayListingDataList;
+        
+        private List<DelayListingStakeholderData> delayListingStakeholderDataList;
+        
+        private List<ExportNshDestinationData> exportNshDestinationDataList;
 
 	/**
 	 * Instantiates a new statistic controller.
@@ -329,6 +365,51 @@ public class StatisticController extends AbstractController<FileItem>
 		nshList = itemService.findAll();
 		doServiceItemByStatisticsBusinessFilter();
 	}
+        
+        public void initActivityReportDataSearch(){
+            cteFilter = new CteFilter();
+            cteFilter.setOperationType(new String[]{"0", "2"});
+            activityReportDataList = new ArrayList<ActivityReportData>();
+            Calendar c = Calendar.getInstance(); 
+            c.set(Calendar.DAY_OF_MONTH, 1);
+            cteFilter.setCreationFromDate(c.getTime());
+            cteFilter.setCreationToDate(new Date());
+//            doActivityReportFilter();
+        }
+        
+        public void initGlobalDelayListingSearch(){
+            cteFilter = new CteFilter();
+            cteFilter.setOperationType(new String[]{"0", "2"});
+            Calendar c = Calendar.getInstance();
+            c.set(Calendar.DAY_OF_MONTH, 1);
+            cteFilter.setCreationFromDate(c.getTime());
+            cteFilter.setCreationToDate(new Date());
+            globalDelayListingDataList = new ArrayList<GlobalDelayListingData>();
+        }
+        
+        public void initDelayListingStakeholderSearch(){
+            cteFilter = new CteFilter();
+            cteFilter.setOperationType(new String[]{"0", "2"});
+            Calendar c = Calendar.getInstance();
+            c.set(Calendar.DAY_OF_MONTH, 1);
+            cteFilter.setCreationFromDate(c.getTime());
+            cteFilter.setCreationToDate(new Date());
+            delayListingStakeholderDataList = new ArrayList<DelayListingStakeholderData>();
+        }
+        
+        public void initExportNshDestinationSearch(){
+            cteFilter = new CteFilter();
+            cteFilter.setOperationType(new String[]{"0", "2"});
+            Calendar c = Calendar.getInstance();
+            c.set(Calendar.DAY_OF_MONTH, 1);
+            cteFilter.setValidationFromDate(c.getTime());
+            cteFilter.setValidationToDate(new Date());
+            exportNshDestinationDataList = new ArrayList<ExportNshDestinationData>();
+        }
+        
+        public void initExportNshDestinationSenderSearch(){
+            initExportNshDestinationSearch();
+        }
 
 	/**
 	 * Inits the pinding files search.
@@ -506,6 +587,90 @@ public class StatisticController extends AbstractController<FileItem>
 		{
 			LOG.error(ioe.getMessage(), ioe);
 		}
+	}
+        
+        
+        public void goToExportNshDestinationSearchPage(){
+            try
+		{
+			initExportNshDestinationSearch();
+			final FacesContext context = FacesContext.getCurrentInstance();
+			final ExternalContext extContext = context.getExternalContext();
+			final String url = extContext.encodeActionURL(context.getApplication().getViewHandler()
+					.getActionURL(context, ControllerConstants.Pages.FO.STATISTIC_EXPORT_NSH_DESTINIATION));
+			extContext.redirect(url);
+		}
+		catch (final IOException ioe)
+		{
+			LOG.error(ioe.getMessage(), ioe);
+		}
+        }
+        public void goToExportNshDestinationSenderSearchPage(){
+            try
+		{
+			initExportNshDestinationSenderSearch();
+			final FacesContext context = FacesContext.getCurrentInstance();
+			final ExternalContext extContext = context.getExternalContext();
+			final String url = extContext.encodeActionURL(context.getApplication().getViewHandler()
+					.getActionURL(context, ControllerConstants.Pages.FO.STATISTIC_EXPORT_NSH_DESTINIATION_SENDER));
+			extContext.redirect(url);
+		}
+		catch (final IOException ioe)
+		{
+			LOG.error(ioe.getMessage(), ioe);
+		}
+        }
+        
+        
+        
+        public void goToDelayListingStakeholderSearchPage(){
+            try
+		{
+			initGlobalDelayListingSearch();
+			final FacesContext context = FacesContext.getCurrentInstance();
+			final ExternalContext extContext = context.getExternalContext();
+			final String url = extContext.encodeActionURL(context.getApplication().getViewHandler()
+					.getActionURL(context, ControllerConstants.Pages.FO.STATISTIC_DELAY_LISTING_STAKEHOLDER));
+			extContext.redirect(url);
+		}
+		catch (final IOException ioe)
+		{
+			LOG.error(ioe.getMessage(), ioe);
+		}
+        }
+        public void goToGlobalDelayListingSearchPage(){
+            try
+		{
+			initGlobalDelayListingSearch();
+			final FacesContext context = FacesContext.getCurrentInstance();
+			final ExternalContext extContext = context.getExternalContext();
+			final String url = extContext.encodeActionURL(context.getApplication().getViewHandler()
+					.getActionURL(context, ControllerConstants.Pages.FO.STATISTIC_GLOBAL_DELAY_LISTING));
+			extContext.redirect(url);
+		}
+		catch (final IOException ioe)
+		{
+			LOG.error(ioe.getMessage(), ioe);
+		}
+        }
+        
+        public void goToActivityReportSearchPage()
+	{
+
+		try
+		{
+			initActivityReportDataSearch();
+			final FacesContext context = FacesContext.getCurrentInstance();
+			final ExternalContext extContext = context.getExternalContext();
+			final String url = extContext.encodeActionURL(context.getApplication().getViewHandler()
+					.getActionURL(context, ControllerConstants.Pages.FO.STATISTIC_ACTIVITY_REPORT));
+			extContext.redirect(url);
+		}
+		catch (final IOException ioe)
+		{
+			LOG.error(ioe.getMessage(), ioe);
+		}
+
 	}
 
 	/**
@@ -810,6 +975,312 @@ public class StatisticController extends AbstractController<FileItem>
 					getLoggedUser(), getCurrentAdministration());
 		}
 	}
+        
+        public void doExportNshDestinationSenderFilter(){
+            if (cteFilter.getValidationFromDate() != null && cteFilter.getValidationToDate()!= null && cteFilter.getValidationFromDate().after(cteFilter.getValidationToDate()))
+		{
+			JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
+					DATE_VALIDATION_ERROR_MESSAGE));
+			return;
+		}
+            else {
+                final List<Object[]> objectList =  commonService.getExportNshDestinationSender(cteFilter, loggedUser);
+                exportNshDestinationDataList = new ArrayList<ExportNshDestinationData>();
+                for (Object[] object : objectList){
+                    ExportNshDestinationData exportNshDestinationData = new ExportNshDestinationData();
+                    if (object[0] != null)
+                        exportNshDestinationData.setNsh(object[0].toString());
+                    if (object[1] != null)
+                        exportNshDestinationData.setDestinationCountryCode(object[1].toString());
+                    if (object[2] != null)
+                        exportNshDestinationData.setProductType(object[2].toString());
+                    if (object[3] != null)
+                        exportNshDestinationData.setNshDescription(object[3].toString());
+                    if (object[4] != null)
+                        exportNshDestinationData.setWoodColisCount(object[4].toString());
+                    if (object[5] != null)
+                        exportNshDestinationData.setBagCount(object[5].toString());
+                    if (object[6] != null)
+                        exportNshDestinationData.setVolume(object[6].toString());
+                    if (object[7] != null)
+                        exportNshDestinationData.setWeightBrut(object[7].toString());
+                    if (object[8] != null)
+                        exportNshDestinationData.setWeight(object[8].toString());
+                    if (object[9] != null)
+                        exportNshDestinationData.setDestinationCountryLabel(object[9].toString());
+                    if (object[10] != null)
+                        exportNshDestinationData.setOriginCountryCode(object[10].toString());
+                    if (object[11] != null)
+                        exportNshDestinationData.setOriginCountryLabel(object[11].toString());
+                    if (object[12] != null)
+                        exportNshDestinationData.setOfficeCode(object[12].toString());
+                    if (object[13] != null)
+                        exportNshDestinationData.setOfficeLabel(object[13].toString());
+                    if (object[14] != null)
+                        exportNshDestinationData.setExporterNiu(object[14].toString());
+                    if (object[15] != null)
+                        exportNshDestinationData.setExporterName(object[15].toString());
+                    exportNshDestinationDataList.add(exportNshDestinationData);
+                }
+            }
+        }
+        
+        public void doExportNshDestinationFilter(){
+            if (cteFilter.getValidationFromDate() != null && cteFilter.getValidationToDate()!= null && cteFilter.getValidationFromDate().after(cteFilter.getValidationToDate()))
+		{
+			JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
+					DATE_VALIDATION_ERROR_MESSAGE));
+			return;
+		}
+            else {
+                final List<Object[]> objectList =  commonService.getExportNshDestination(cteFilter, loggedUser);
+                exportNshDestinationDataList = new ArrayList<ExportNshDestinationData>();
+                for (Object[] object : objectList){
+                    ExportNshDestinationData exportNshDestinationData = new ExportNshDestinationData();
+                    if (object[0] != null)
+                        exportNshDestinationData.setNsh(object[0].toString());
+                    if (object[1] != null)
+                        exportNshDestinationData.setDestinationCountryCode(object[1].toString());
+                    if (object[2] != null)
+                        exportNshDestinationData.setProductType(object[2].toString());
+                    if (object[3] != null)
+                        exportNshDestinationData.setNshDescription(object[3].toString());
+                    if (object[4] != null)
+                        exportNshDestinationData.setWoodColisCount(object[4].toString());
+                    if (object[5] != null)
+                        exportNshDestinationData.setBagCount(object[5].toString());
+                    if (object[6] != null)
+                        exportNshDestinationData.setVolume(object[6].toString());
+                    if (object[7] != null)
+                        exportNshDestinationData.setWeightBrut(object[7].toString());
+                    if (object[8] != null)
+                        exportNshDestinationData.setWeight(object[8].toString());
+                    if (object[9] != null)
+                        exportNshDestinationData.setDestinationCountryLabel(object[9].toString());
+                    if (object[10] != null)
+                        exportNshDestinationData.setOriginCountryCode(object[10].toString());
+                    if (object[11] != null)
+                        exportNshDestinationData.setOriginCountryLabel(object[11].toString());
+                    if (object[12] != null)
+                        exportNshDestinationData.setOfficeCode(object[12].toString());
+                    if (object[13] != null)
+                        exportNshDestinationData.setOfficeLabel(object[13].toString());
+                    exportNshDestinationDataList.add(exportNshDestinationData);
+                }
+            }
+        }
+        
+        public void doDelayListingStakeholderFilter(){
+            if (cteFilter.getCreationFromDate() != null && cteFilter.getCreationToDate()!= null && cteFilter.getCreationFromDate().after(cteFilter.getCreationToDate()))
+		{
+			JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
+					DATE_VALIDATION_ERROR_MESSAGE));
+			return;
+		}
+            
+            else if ((cteFilter.getValidationFromDate() == null && cteFilter.getValidationToDate() != null) || (cteFilter.getValidationFromDate() != null && cteFilter.getValidationToDate() == null)){
+                JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
+					"DateValidationErrorMessage"));
+                return;
+            }
+             else {
+                final List<Object[]> objectList =  commonService.getDelayListingStakeholder(cteFilter, loggedUser);
+                delayListingStakeholderDataList = new ArrayList<DelayListingStakeholderData>();
+                for (Object[] object : objectList){
+                    DelayListingStakeholderData delayListingData = new DelayListingStakeholderData();
+                    if (object[0] != null){
+                        delayListingData.setSubfileNumber(object[0].toString());
+                    }
+                    if (object[1] != null){
+                        delayListingData.setExpecNumber(object[1].toString());
+                    }
+                    if (object[2] != null){
+                        delayListingData.setProcessName(object[2].toString());
+                    }
+                    if (object[3] != null){
+                        delayListingData.setOfficeCode(object[3].toString());
+                    }
+                    if (object[4] != null){
+                        delayListingData.setOfficeLabel(object[4].toString());
+                    }
+                    if (object[5] != null){
+                        delayListingData.setExporterNiu(object[5].toString());
+                    }
+                    if (object[6] != null){
+                        delayListingData.setExporterName(object[6].toString());
+                    }
+                    if (object[7] != null){
+                        delayListingData.setProductType(object[7].toString());
+                    }
+                    if (object[8] != null){
+                        delayListingData.setDestinationCountry(object[8].toString());
+                    }
+                    if (object[9] != null){
+                        delayListingData.setAdmisibilityAgent(object[9].toString());
+                    }
+                    if (object[10] != null){delayListingData.setAdmisibilityDelay(formatDelaySecond(object[10].toString()));
+                    }
+                    if (object[11] != null){
+                        delayListingData.setCotationAgent(object[11].toString());
+                    }
+                    if (object[12] != null){delayListingData.setCotationDelay(formatDelaySecond(object[12].toString()));
+                    }
+                    if (object[13] != null){
+                        delayListingData.setTreatmentAgent(object[13].toString());
+                    }
+                    if (object[14] != null){
+                        delayListingData.setConfirmationAppointmentDelay(formatDelaySecond(object[14].toString()));
+                    }
+                    if (object[15] != null){
+                        delayListingData.setTreatmentDelay(formatDelaySecond(object[15].toString()));
+                    }
+                    if (object[16] != null){
+                        delayListingData.setSignatoryAgent(object[16].toString());
+                    }
+                    if (object[17] != null){ 
+                        delayListingData.setSignatoryDelay(formatDelaySecond(object[17].toString()));
+                    }
+                    if (object[18] != null){
+                        delayListingData.setCiResnponseDelay(object[18].toString());
+                    }
+                    if (object[19] != null){
+                        delayListingData.setCiCount(object[19].toString());
+                    }
+                    
+                    delayListingStakeholderDataList.add(delayListingData);
+                }
+            }
+        }
+        
+        
+        public void doGlobalDelayListingFilter(){
+            if (cteFilter.getCreationFromDate() != null && cteFilter.getCreationToDate()!= null && cteFilter.getCreationFromDate().after(cteFilter.getCreationToDate()))
+		{
+			JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
+					DATE_VALIDATION_ERROR_MESSAGE));
+			return;
+		}
+            
+            else if ((cteFilter.getValidationFromDate() == null && cteFilter.getValidationToDate() != null) || (cteFilter.getValidationFromDate() != null && cteFilter.getValidationToDate() == null)){
+                JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
+					"DateValidationErrorMessage"));
+                return;
+            }
+            else {
+                final List<Object[]> objectList =  commonService.getGlobalDelayListing(cteFilter, loggedUser);
+                globalDelayListingDataList = new ArrayList<GlobalDelayListingData>();
+                for (Object[] object : objectList){
+                    try {
+                        GlobalDelayListingData globalDelay = new GlobalDelayListingData();
+                        if (object[1] != null)
+                            globalDelay.setProcessName(object[1].toString());
+                        if (object[2] != null)
+                            globalDelay.setExpecNumber(object[2].toString());
+                        if (object[0] != null)
+                            globalDelay.setSubfileNumber(object[0].toString());
+                        if (object[3] != null)
+                            globalDelay.setExporterNiu(object[3].toString());
+                        if (object[4] != null)
+                            globalDelay.setExporterName(object[4].toString());
+                        if (object[5] != null)
+                            globalDelay.setProductType(object[5].toString());
+                        if (object[6] != null)
+                            globalDelay.setDestinationCountry(object[6].toString());
+                        if (object[9] != null)
+                            globalDelay.setStep(object[9].toString());
+                        if (object[7] != null)
+                            globalDelay.setEntryDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").parse(object[7].toString()));
+                        if (object[8] != null){
+                            globalDelay.setReleaseDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").parse(object[8].toString()));
+                        }
+                        globalDelay.setGlobalDelay(diffDate(globalDelay.getEntryDate(), globalDelay.getReleaseDate()));
+                        if (object[10] != null)
+                            globalDelay.setOfficeCode(object[10].toString());
+                        if (object[11] != null)
+                            globalDelay.setOfficeLabel(object[11].toString());
+                        globalDelayListingDataList.add(globalDelay);
+                    } catch (ParseException ex) {
+                        java.util.logging.Logger.getLogger(StatisticController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
+        
+        public static void main(String[] args){
+            Date dateFrom;
+            try {
+//                dateFrom = new SimpleDateFormat("dd/MM/yy HH:mm:ss.S").parse("05/07/18 15:12:34.276000000");
+//                System.out.println(diffDate(dateFrom, null));
+//                String diff = "14201,700844";
+                String diff2 = "14201.700844";
+//                System.out.println(formatDelaySecond(diff));
+                System.out.println(formatDelaySecond(diff2));
+            } catch (Exception ex) {
+                java.util.logging.Logger.getLogger(StatisticController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        
+        public static String formatDelaySecond(String second){
+            Double diff = Double.valueOf(second);
+            int diffDays = (int) (diff / (24 * 60 * 60));
+            int diffhours = (int) ((diff / (60 * 60)) % 24);
+            int diffmin = (int) ((diff / 60) % 60);
+            int diffsec = (int) (diff % 60);
+            StringBuilder res = new StringBuilder();
+            res.append(diffDays).append(" j ").append(diffhours).append(" h ").append(diffmin).append(" m ").append(diffsec).append(" s");
+            return res.toString();
+        }
+        
+        public static String displayDateDifference(long diff){
+                int diffDays = (int) (diff / (24 * 60 * 60 * 1000));
+                int diffhours = (int) ((diff / (60 * 60 * 1000)) % 24);
+                int diffmin = (int) ((diff / (60 * 1000)) % 60);
+                int diffsec = (int) ((diff / 1000) % 60);
+                StringBuilder res = new StringBuilder();
+                res.append(diffDays).append(" j ").append(diffhours).append(" h ").append(diffmin).append(" m ").append(diffsec).append(" s");
+                return res.toString();
+        }
+        
+        public static String diffDate(Date dateFrom, Date dateTo){
+            try{
+                if (dateTo == null){
+                    dateTo = new Date();
+                }
+                long diff = dateTo.getTime() - dateFrom.getTime();
+                return displayDateDifference(diff);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            return null;
+        }
+        
+        public void doActivityReportFilter(){
+            if (cteFilter.getCreationFromDate() != null && cteFilter.getCreationToDate()!= null && cteFilter.getCreationFromDate().after(cteFilter.getCreationToDate()))
+		{
+			JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
+					DATE_VALIDATION_ERROR_MESSAGE));
+			return;
+		}
+            else {
+                final List<Object[]> objectList =  commonService.getActivitiesReport(cteFilter, getLoggedUser());
+                activityReportDataList = new ArrayList<ActivityReportData>();
+                for (Object[] object : objectList){
+                    ActivityReportData data = new ActivityReportData();
+                    data.setProcessName(object[1].toString());
+                    data.setOfficeCode(object[2].toString());
+                    data.setOfficeLabel(object[3].toString());
+                    data.setFileReceivedCount(object[4].toString());
+                    data.setFileSignedCount(object[5].toString());
+                    data.setFileReceivedSignedCount(object[6].toString());
+                    data.setFileRejectedCount(object[7].toString());
+                    data.setFileReceivedRejectedCount(object[8].toString());
+                    data.setFilePendingCount(object[9].toString());
+                    
+                    activityReportDataList.add(data);
+                }
+            }
+        }
 
 
 	/**
@@ -1014,6 +1485,64 @@ public class StatisticController extends AbstractController<FileItem>
 		this.laboratoryService = laboratoryService;
 	}
 
+    public List<ExportNshDestinationData> getExportNshDestinationDataList() {
+        return exportNshDestinationDataList;
+    }
+
+    public void setExportNshDestinationDataList(List<ExportNshDestinationData> exportNshDestinationDataList) {
+        this.exportNshDestinationDataList = exportNshDestinationDataList;
+    }
+
+        
+        
+    public FileTypeService getFileTypeService() {
+        return fileTypeService;
+    }
+
+    public void setFileTypeService(FileTypeService fileTypeService) {
+        this.fileTypeService = fileTypeService;
+    }
+
+    public List<DelayListingStakeholderData> getDelayListingStakeholderDataList() {
+        return delayListingStakeholderDataList;
+    }
+
+    public void setDelayListingStakeholderDataList(List<DelayListingStakeholderData> delayListingStakeholderDataList) {
+        this.delayListingStakeholderDataList = delayListingStakeholderDataList;
+    }
+    
+
+    public List<GlobalDelayListingData> getGlobalDelayListingDataList() {
+        return globalDelayListingDataList;
+    }
+
+    public void setGlobalDelayListingDataList(List<GlobalDelayListingData> globalDelayListingDataList) {
+        this.globalDelayListingDataList = globalDelayListingDataList;
+    }
+
+        
+
+    public List<ActivityReportData> getActivityReportDataList() {
+        return activityReportDataList;
+    }
+
+    public void setActivityReportDataList(List<ActivityReportData> activityReportDataList) {
+        this.activityReportDataList = activityReportDataList;
+    }
+
+    public List<FileType> getFileTypeList() {
+        if (fileTypeList == null){
+            fileTypeList = fileTypeService.findDistinctFileTypesByUser(getLoggedUser());
+        }
+        return fileTypeList;
+    }
+
+    public void setFileTypeList(List<FileType> fileTypeList) {
+        this.fileTypeList = fileTypeList;
+    }
+    
+    
+        
 
 	/**
 	 * Gets the sample filter.
@@ -1127,6 +1656,41 @@ public class StatisticController extends AbstractController<FileItem>
 	{
 		this.filter = filter;
 	}
+
+    public CteFilter getCteFilter() {
+        return cteFilter;
+    }
+
+    public void setCteFilter(CteFilter cteFilter) {
+        this.cteFilter = cteFilter;
+    }
+
+    public BureauService getBureauService() {
+        return bureauService;
+    }
+
+    public void setBureauService(BureauService bureauService) {
+        this.bureauService = bureauService;
+    }
+
+    public List<Bureau> getBureauList() {
+        if (bureauList == null){
+            if (getLoggedUser() != null){
+                Organism organism = getCurrentOrganism();
+                if (organism != null){
+                    bureauList = bureauService.findBureauByTypeAndOrganism(BureauType.BUREAU_CENTRAL, organism);
+                }
+                
+            }
+        }
+        return bureauList;
+    }
+
+    public void setBureauList(List<Bureau> bureauList) {
+        this.bureauList = bureauList;
+    }
+        
+    
 
 
 	/**

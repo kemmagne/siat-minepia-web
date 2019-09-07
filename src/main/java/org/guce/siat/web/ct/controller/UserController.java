@@ -823,6 +823,7 @@ public class UserController extends AbstractController<User> {
         authoritiesListForFilter.add(AuthorityConstants.AGENT_COTATION_6);
         authoritiesListForFilter.add(AuthorityConstants.SUPERVISEUR);
         authoritiesListForFilter.add(AuthorityConstants.CONSULTER);
+        authoritiesListForFilter.add(AuthorityConstants.STATISTIQUE);
 
         return authoritiesListForFilter;
     }
