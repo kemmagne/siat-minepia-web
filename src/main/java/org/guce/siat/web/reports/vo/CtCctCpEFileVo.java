@@ -176,6 +176,10 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
     private String lotsNumbers;
     
     private Date treatmentDate;
+    
+    private String namesAnnex;
+    private String lotsNumbersAnnex;
+    private String containersNumbersAnnex;
 
     /**
      * Gets the consignor name.
@@ -873,4 +877,30 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
     public void setTreatmentDate(Date treatmentDate) {
         this.treatmentDate = treatmentDate;
     }
+
+    public String getNamesAnnex() {
+        return namesAnnex;
+    }
+
+    public void setNamesAnnex(String namesAnnex) {
+        this.namesAnnex = namesAnnex;
+    }
+
+    public String getLotsNumbersAnnex() {
+        return lotsNumbersAnnex;
+    }
+
+    public void setLotsNumbersAnnex(String lotsNumbersAnnex) {
+        this.lotsNumbersAnnex = lotsNumbersAnnex;
+    }
+
+    public String getContainersNumbersAnnex() {
+        return containersNumbersAnnex;
+    }
+
+    public void setContainersNumbersAnnex(String containersNumbersAnnex) {
+        this.containersNumbersAnnex = containersNumbersAnnex;
+    }
+    
+    
 }

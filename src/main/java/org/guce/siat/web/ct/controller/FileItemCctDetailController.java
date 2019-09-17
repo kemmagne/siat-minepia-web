@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.lang.reflect.Constructor;
+import java.nio.ByteBuffer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.activemq.util.ByteArrayInputStream;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
@@ -137,12 +139,14 @@ import org.guce.siat.core.ct.model.AnalyseOrder;
 import org.guce.siat.core.ct.model.AnalysePart;
 import org.guce.siat.core.ct.model.AnalyseResult;
 import org.guce.siat.core.ct.model.ApprovedDecision;
+import org.guce.siat.core.ct.model.CCTCPParamValue;
 import org.guce.siat.core.ct.model.DecisionHistory;
 import org.guce.siat.core.ct.model.Infraction;
 import org.guce.siat.core.ct.model.InspectionController;
 import org.guce.siat.core.ct.model.InspectionReport;
 import org.guce.siat.core.ct.model.InterceptionNotification;
 import org.guce.siat.core.ct.model.Laboratory;
+import org.guce.siat.core.ct.model.ParamCCTCP;
 import org.guce.siat.core.ct.model.PaymentData;
 import org.guce.siat.core.ct.model.PaymentItemFlow;
 import org.guce.siat.core.ct.model.Sample;
@@ -156,11 +160,13 @@ import org.guce.siat.core.ct.service.AnalyseOrderService;
 import org.guce.siat.core.ct.service.AnalysePartService;
 import org.guce.siat.core.ct.service.AnalyseResultService;
 import org.guce.siat.core.ct.service.ApprovedDecisionService;
+import org.guce.siat.core.ct.service.CCTCPParamValueService;
 import org.guce.siat.core.ct.service.CommonService;
 import org.guce.siat.core.ct.service.DecisionHistoryService;
 import org.guce.siat.core.ct.service.InspectionReportService;
 import org.guce.siat.core.ct.service.InterceptionNotificationService;
 import org.guce.siat.core.ct.service.LaboratoryService;
+import org.guce.siat.core.ct.service.ParamCCTCPService;
 import org.guce.siat.core.ct.service.PaymentDataService;
 import org.guce.siat.core.ct.service.TreatmentCompanyService;
 import org.guce.siat.core.ct.service.TreatmentInfosService;
@@ -206,6 +212,7 @@ import org.guce.siat.web.gr.controller.RiskController;
 import org.guce.siat.web.gr.util.GrUtilsWeb;
 import org.guce.siat.web.gr.util.ScenarioType;
 import org.guce.siat.web.reports.exporter.AbstractReportInvoker;
+import org.guce.siat.web.reports.exporter.CtCctCpEExporter;
 import org.guce.siat.web.reports.exporter.CtCctCqeExporter;
 import org.guce.siat.web.reports.exporter.CtCctCsvExporter;
 import org.guce.siat.web.reports.exporter.CtCctTreatmentExporter;
@@ -389,6 +396,18 @@ public class FileItemCctDetailController implements Serializable {
      */
     @ManagedProperty(value = "#{approvedDecisionService}")
     private ApprovedDecisionService approvedDecisionService;
+
+    /**
+     * The CCT CP param value service.
+     */
+    @ManagedProperty(value = "#{cCTCPParamValueService}")
+    private CCTCPParamValueService cCTCPParamValueService;
+
+    /**
+     * The CCT CP param value service.
+     */
+    @ManagedProperty(value = "#{paramCCTCPService}")
+    private ParamCCTCPService paramCCTCPService;
 
     /**
      * The field group service.
@@ -937,6 +956,8 @@ public class FileItemCctDetailController implements Serializable {
 
     private ApprovedDecision approvedDecision;
 
+    private CCTCPParamValue cCTCPParamValue;
+
     /**
      * The treatment companys.
      */
@@ -1041,6 +1062,10 @@ public class FileItemCctDetailController implements Serializable {
      * this is minepia ministry
      */
     private boolean checkMinepiaMinistry;
+    /**
+     * Determine if it is last decision step for phyto
+     */
+    private boolean phytoEnd;
 
     /**
      * The is payment.
@@ -1826,7 +1851,17 @@ public class FileItemCctDetailController implements Serializable {
         } // fourniture des informations relatives au traitement
         else if (isPhytoReadyForSignature(selectedFlow)) {
             treatmentInfos = new TreatmentInfos();
-        } // Demande de Traitement
+        } // Signature effective du certificat phytosanitaire
+        else if (isPhytoReadyForSignatureEnd(selectedFlow)) {
+            cCTCPParamValue = cCTCPParamValueService.findCCTCPParamValueByItemFlow(lastDecisions);
+
+            if (cCTCPParamValue == null) {
+                cCTCPParamValue = new CCTCPParamValue();
+                fillCCTCPParamValue(cCTCPParamValue);
+            }
+
+            specificDecision = CctSpecificDecision.CCT_CP;
+        }// Demande de Traitement
         else if (FlowCode.FL_CT_64.name().equals(selectedFlow.getCode())) {
             treatmentOrder = new TreatmentOrder();
             treatmentOrder.setDate(java.util.Calendar.getInstance().getTime());
@@ -2031,6 +2066,8 @@ public class FileItemCctDetailController implements Serializable {
             specificDecisionsHistory.setLastDecisionApp(appointmentService.findAppointmentsByItemFlow(lastDecisions));
         } else if (DCC_FLOW_CODES.contains(lastDecisions.getFlow().getCode())) {
             specificDecisionsHistory.setApprovedDecision(approvedDecisionService.findApprovedDecisionByItemFlow(lastDecisions));
+        } else if (isPhytoReadyForSignatureEnd(lastDecisions.getFlow())) {
+            specificDecisionsHistory.setcCTCPParamValue(cCTCPParamValueService.findCCTCPParamValueByItemFlow(lastDecisions));
         } else if (FlowCode.FL_CT_29.name().equals(lastDecisions.getFlow().getCode())) {
             specificDecisionsHistory.setLastAnalyseOrder(analyseOrderService.findByItemFlow(lastDecisions));
         } else if (isPhytoReadyForSignature(lastDecisions.getFlow())) {
@@ -2080,6 +2117,9 @@ public class FileItemCctDetailController implements Serializable {
                     .getItemFlow()));
         } else if (DCC_FLOW_CODES.contains(selectedItemFlowDto.getItemFlow().getFlow().getCode())) {
             specificDecisionsHistory.setApprovedDecision(approvedDecisionService.findApprovedDecisionByItemFlow(selectedItemFlowDto
+                    .getItemFlow()));
+        } else if (isPhytoReadyForSignatureEnd(selectedItemFlowDto.getItemFlow().getFlow())) {
+            specificDecisionsHistory.setcCTCPParamValue(cCTCPParamValueService.findCCTCPParamValueByItemFlow(selectedItemFlowDto
                     .getItemFlow()));
         } else if (FlowCode.FL_CT_29.name().equals(selectedItemFlowDto.getItemFlow().getFlow().getCode())) {
             specificDecisionsHistory.setDecisionDetailsAO(analyseOrderService.findByItemFlow(selectedItemFlowDto.getItemFlow()));
@@ -2404,6 +2444,7 @@ public class FileItemCctDetailController implements Serializable {
                 }
             } else if (isPhytoReadyForSignature(selectedFlow)) {
                 commonService.takeDecisionAndSaveTreatmentInfos(treatmentInfos, itemFlowsToAdd);
+//                commonService.takeDecisionAndSaveCCTCPParamValue(cCTCPParamValue, itemFlowsToAdd);
             } // Demande de Traitement
             else if ((FlowCode.FL_CT_64.name().equals(selectedFlow.getCode()) && chckedListSize == Constants.ONE)) {
                 if (CollectionUtils.isNotEmpty(treatmentPartsList)) {
@@ -2493,6 +2534,9 @@ public class FileItemCctDetailController implements Serializable {
             } // DCC (Signature Certificat Controle Documentaire)
             else if (DCC_FLOW_CODES.contains(selectedFlow.getCode())) {
                 commonService.takeDecisionAndSaveApprovedDecision(approvedDecision, itemFlowsToAdd);
+            } // CCT_CP (Signature du phytosanitaire)
+            else if (isPhytoReadyForSignature(selectedFlow)) {
+                commonService.takeDecisionAndSaveCCTCPParamValue(cCTCPParamValue, itemFlowsToAdd);
             } // Geniric (affichage des itemFlowData)
             else {
                 // Recuperate the values of DataType (Observation text area ...)
@@ -4047,8 +4091,12 @@ public class FileItemCctDetailController implements Serializable {
                     final byte[] report = getReportBytes(fileTypeFlowReport, draft);
                     if (report != null) {
                         final InputStream is = new ByteArrayInputStream(report);
+                        String name = currentFile.getReferenceSiat() + '_' + fileTypeFlowReport.getReportName();
+                        if (isPhytoEnd() && draft) {
+                            name = "PREVIEW_" + name;
+                        }
                         final StreamedContent fileToDownload = new DefaultStreamedContent(is, "application/pdf",
-                                currentFile.getReferenceSiat() + '_' + fileTypeFlowReport.getReportName());
+                                name);
 
                         return fileToDownload;
                     }
@@ -6208,6 +6256,30 @@ public class FileItemCctDetailController implements Serializable {
         return reportOrganismService;
     }
 
+    public CCTCPParamValueService getcCTCPParamValueService() {
+        return cCTCPParamValueService;
+    }
+
+    public void setcCTCPParamValueService(CCTCPParamValueService cCTCPParamValueService) {
+        this.cCTCPParamValueService = cCTCPParamValueService;
+    }
+
+    public ParamCCTCPService getParamCCTCPService() {
+        return paramCCTCPService;
+    }
+
+    public void setParamCCTCPService(ParamCCTCPService paramCCTCPService) {
+        this.paramCCTCPService = paramCCTCPService;
+    }
+
+    public boolean isPhytoEnd() {
+        return phytoEnd;
+    }
+
+    public void setPhytoEnd(boolean phytoEnd) {
+        this.phytoEnd = phytoEnd;
+    }
+
     /**
      * Sets the report organism service.
      *
@@ -6851,6 +6923,13 @@ public class FileItemCctDetailController implements Serializable {
 
     public boolean isPhytoReadyForSignature(Flow flow) {
         return flow != null && checkMinaderMinistry && FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode()) && FlowCode.FL_CT_07.name().equals(flow.getCode());
+//        phytoEnd = flow != null && checkMinaderMinistry && FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode()) && FlowCode.FL_CT_07.name().equals(flow.getCode());
+//        return phytoEnd;
+    }
+
+    public boolean isPhytoReadyForSignatureEnd(Flow flow) {
+        phytoEnd = flow != null && checkMinaderMinistry && FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode()) && FlowCode.FL_CT_08.name().equals(flow.getCode());
+        return phytoEnd;
     }
 
     public boolean isFstpReadyForSignature(Flow flow) {
@@ -6911,8 +6990,9 @@ public class FileItemCctDetailController implements Serializable {
         @SuppressWarnings("rawtypes")
         final Class classe = Class.forName(nomClasse);
         @SuppressWarnings({"rawtypes", "unchecked"})
-        Constructor c1;
+//        Constructor c1;
         byte[] report = null;
+        Map<String, Object> forAnnexes = null;
         AbstractReportInvoker reportInvoker = null;
         if (checkMinaderMinistry) {
             String reportNumber = null;
@@ -6925,11 +7005,29 @@ public class FileItemCctDetailController implements Serializable {
             }
             switch (currentFile.getFileType().getCode()) {
                 case CCT_CT_E: {
-                    c1 = classe.getConstructor(File.class, TreatmentInfos.class, String.class);
+//                    c1 = classe.getConstructor(File.class, TreatmentInfos.class, CCTCPParamValue.class, String.class);
                     final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
                     final TreatmentInfos ti = treatmentInfosService.findTreatmentInfosByItemFlow(itemFlow);
+                    CCTCPParamValue paramValue = cCTCPParamValueService.findCCTCPParamValueByItemFlow(itemFlow);
+                    if (phytoEnd && paramValue == null) {
+                        paramValue = cCTCPParamValue;
+                    }
                     if (ti.getDelivrableType() == null || "CCT_CT_E".equals(ti.getDelivrableType())) {
-                        reportInvoker = (AbstractReportInvoker) c1.newInstance(currentFile, ti, "CERTIFICAT_PHYTOSANITAIRE");
+                        if (paramValue.getFileGoodsCountValue() > paramValue.getMaxGoodsLineNumber()
+                                || paramValue.getFileContainerCountValue() > paramValue.getMaxContainerNumber()
+                                || paramValue.getFilePackageCountValue() > paramValue.getMaxPackageNumber()) {
+//                            String[] annexes = {"CERTIFICAT_PHYTOSANITAIRE_ANNEXE"};
+                            forAnnexes = new HashMap();
+                            forAnnexes.put("ti", ti);
+                            forAnnexes.put("paramValue", paramValue);
+                            forAnnexes.put("fileNameAnnex", "CERTIFICAT_PHYTOSANITAIRE_ANNEXE");
+//                            reportInvoker = (AbstractReportInvoker) c1.newInstance(currentFile, ti, paramValue, "CERTIFICAT_PHYTOSANITAIRE", annexes);
+                        }
+//                        else {
+//                        reportInvoker = (AbstractReportInvoker) c1.newInstance(currentFile, ti, paramValue, "CERTIFICAT_PHYTOSANITAIRE");
+                        reportInvoker = new CtCctCpEExporter(currentFile, ti, paramValue, "CERTIFICAT_PHYTOSANITAIRE");
+//                        }
+
                     } else if ("CQ_CT".equals(ti.getDelivrableType())) {
                         reportInvoker = new CtCctCqeExporter(currentFile, ti);
                     }
@@ -6983,6 +7081,22 @@ public class FileItemCctDetailController implements Serializable {
             reportInvoker.setDraft(draft);
             reportInvoker.setFileFieldValueService(fileFieldValueService);
             report = JsfUtil.getReport(reportInvoker);
+            if (forAnnexes != null) {
+                JasperPrint page1 = JsfUtil.getReportJP(reportInvoker);
+                TreatmentInfos ti = (TreatmentInfos) forAnnexes.get("ti");
+                CCTCPParamValue paramValue = (CCTCPParamValue) forAnnexes.get("paramValue");
+                String fileAnnexName = (String) forAnnexes.get("fileNameAnnex");
+                CtCctCpEExporter exporter = new CtCctCpEExporter(currentFile, ti, paramValue, fileAnnexName);
+                exporter.setDraft(draft);
+                exporter.setFileFieldValueService(fileFieldValueService);
+                JasperPrint report2 = JsfUtil.getReportJP(exporter);
+
+                List<JasperPrint> inputStreams = new ArrayList<>();
+                inputStreams.add(page1);
+                inputStreams.add(report2);
+
+                report = JsfUtil.mergePdf(inputStreams);
+            }
         }
         return report;
     }
@@ -7040,6 +7154,14 @@ public class FileItemCctDetailController implements Serializable {
 
     public void setApprovedDecision(ApprovedDecision approvedDecision) {
         this.approvedDecision = approvedDecision;
+    }
+
+    public CCTCPParamValue getcCTCPParamValue() {
+        return cCTCPParamValue;
+    }
+
+    public void setcCTCPParamValue(CCTCPParamValue cCTCPParamValue) {
+        this.cCTCPParamValue = cCTCPParamValue;
     }
 
     private void fillApprovedDecision(ApprovedDecision approvedDecision) {
@@ -7124,6 +7246,70 @@ public class FileItemCctDetailController implements Serializable {
             }
 
         }
+    }
+
+    private void fillCCTCPParamValue(CCTCPParamValue cCTCPParamValue) {
+        ParamCCTCP params = paramCCTCPService.findParamCCTCPByAdministration(getLoggedUser().getAdministration());
+        if (params != null) {
+            cCTCPParamValue.setMaxContainerNumber(params.getMaxContainerNumber());
+            cCTCPParamValue.setMaxGoodsLineNumber(params.getMaxGoodsLineNumber());
+            cCTCPParamValue.setMaxPackageNumber(params.getMaxPackageNumber());
+            cCTCPParamValue.setLabelMore(params.getLabelAttachment());
+        } else {
+            params = paramCCTCPService.findParamCCTCPDefault();
+            if (params != null) {
+                cCTCPParamValue.setMaxContainerNumber(params.getMaxContainerNumber());
+                cCTCPParamValue.setMaxGoodsLineNumber(params.getMaxGoodsLineNumber());
+                cCTCPParamValue.setMaxPackageNumber(params.getMaxPackageNumber());
+                cCTCPParamValue.setLabelMore(params.getLabelAttachment());
+            } else {
+                //LOAD DEFAULT NOT REGISTERED VALUE HERE
+                cCTCPParamValue.setMaxContainerNumber(18);
+                cCTCPParamValue.setMaxGoodsLineNumber(6);
+                cCTCPParamValue.setMaxPackageNumber(6);
+                cCTCPParamValue.setLabelMore("Voir pièce jointe");
+            }
+        }
+
+        final List<FileItem> fileItemList = currentFile.getFileItemsList();
+        cCTCPParamValue.setFileGoodsCountValue(fileItemList.size());
+
+        final List<FileFieldValue> fileFieldValueList = currentFile.getFileFieldValueList();
+        if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
+            String containersNumbers = null;
+            String packageNumber = null;
+            for (final FileFieldValue fileFieldValue1 : fileFieldValueList) {
+                switch (fileFieldValue1.getFileField().getCode()) {
+                    case "INSPECTION_CONTENEURS_CONTENEUR":
+                        containersNumbers = fileFieldValue1.getValue();
+                        break;
+                    case "NUMEROS_LOTS":
+                        packageNumber = fileFieldValue1.getValue();
+                        break;
+                }
+            }
+            if (org.apache.commons.lang.StringUtils.isNotBlank(containersNumbers)) {
+                final String[] tab1 = containersNumbers.split(";");
+                final int size = tab1.length;
+                final int positionScelles = "Type".equalsIgnoreCase(tab1[0].split(",")[1]) ? 2 : 1;
+                final StringBuilder builder = new StringBuilder();
+                for (int i = 1; i < size; i++) {
+                    if (org.apache.commons.lang.StringUtils.isBlank(tab1[i])) {
+                        continue;
+                    }
+                    final String[] tab2 = tab1[i].split(",");
+                    builder.append(tab2[0]).append("/").append(tab2[positionScelles]).append(" ");
+                }
+                String containerNumbers[] = builder.substring(0, builder.lastIndexOf(" ")).split(" ");
+                cCTCPParamValue.setFileContainerCountValue(containerNumbers.length);
+            }
+            if (org.apache.commons.lang.StringUtils.isNotBlank(packageNumber)) {
+                String packagesNumbers[] = packageNumber.split(" ");
+                cCTCPParamValue.setFilePackageCountValue(packagesNumbers.length);
+            }
+
+        }
+
     }
 
     public boolean isMaskOfficialPosition() {

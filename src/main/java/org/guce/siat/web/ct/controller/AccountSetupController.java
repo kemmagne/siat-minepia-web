@@ -21,6 +21,8 @@ import org.guce.siat.common.model.User;
 import org.guce.siat.common.service.UserService;
 import org.guce.siat.common.utils.Constants;
 import org.guce.siat.common.utils.enums.Theme;
+import org.guce.siat.core.ct.model.ParamCCTCP;
+import org.guce.siat.core.ct.service.ParamCCTCPService;
 import org.guce.siat.web.common.ControllerConstants;
 import org.guce.siat.web.common.util.ServletUtils;
 import org.guce.siat.web.ct.controller.util.JsfUtil;
@@ -28,263 +30,322 @@ import org.guce.siat.web.ct.controller.util.enums.PersistenceActions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * The Class AccountSetupController.
  */
 @SessionScoped
 @ManagedBean(name = "accountSetupController")
-public class AccountSetupController implements Serializable
-{
+public class AccountSetupController implements Serializable {
 
-	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = -3827154485703748011L;
+    /**
+     * The Constant serialVersionUID.
+     */
+    private static final long serialVersionUID = -3827154485703748011L;
 
-	/** The Constant LOG. */
-	private static final Logger LOG = LoggerFactory.getLogger(AccountSetupController.class);
+    /**
+     * The Constant LOG.
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(AccountSetupController.class);
 
-	/** The Constant SELECT_ONE_MESSAGE. */
-	private static final String SELECT_ONE_MESSAGE = "SelectOneMessage";
+    /**
+     * The Constant SELECT_ONE_MESSAGE.
+     */
+    private static final String SELECT_ONE_MESSAGE = "SelectOneMessage";
 
-	/** The Constant LOCAL_BUNDLE_NAME. */
-	private static final String LOCAL_BUNDLE_NAME = "org.guce.siat.messages.locale";
+    /**
+     * The Constant LOCAL_BUNDLE_NAME.
+     */
+    private static final String LOCAL_BUNDLE_NAME = "org.guce.siat.messages.locale";
 
-	/** The theme page url. */
-	private String themePageUrl;
-	/** The logged user. */
-	private User loggedUser;
+    /**
+     * The theme page url.
+     */
+    private String themePageUrl;
 
-	/** The selected theme. */
-	private Theme selectedTheme;
+    /**
+     * The theme page url.
+     */
+    private String cctCpConfigPageUrl;
+    /**
+     * The logged user.
+     */
+    private User loggedUser;
 
-	/** The cookie theme. */
-	private String cookieTheme;
+    /**
+     * The selected theme.
+     */
+    private Theme selectedTheme;
 
-	/** The user service. */
-	@ManagedProperty(value = "#{userService}")
-	private UserService userService;
+    /**
+     * The cookie theme.
+     */
+    private String cookieTheme;
 
+    /**
+     * The user service.
+     */
+    @ManagedProperty(value = "#{userService}")
+    private UserService userService;
 
-	/**
-	 * Inits the.
-	 */
-	@PostConstruct
-	public void init()
-	{
-		if (LOG.isDebugEnabled())
-		{
-			LOG.debug(Constants.INIT_LOG_INFO_MESSAGE, AccountSetupController.class.getName());
-		}
-		setThemePageUrl(ControllerConstants.Pages.AccountSetup.THEME_CONFIG_PAGE);
-		if (getLoggedUser() != null)
-		{
-			selectedTheme = getLoggedUser().getTheme();
-		}
+//    /**
+//     * The CCT CP param value service.
+//     */
+//    @ManagedProperty(value = "#{paramCCTCPService}")
+//    private ParamCCTCPService paramCCTCPService;
+//
+//    private ParamCCTCP paramCCTCP;
+    /**
+     * Inits the.
+     */
+    @PostConstruct
+    public void init() {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(Constants.INIT_LOG_INFO_MESSAGE, AccountSetupController.class.getName());
+        }
+        setThemePageUrl(ControllerConstants.Pages.AccountSetup.THEME_CONFIG_PAGE);
+        setCctCpConfigPageUrl(ControllerConstants.Pages.AccountSetup.PARAM_CCT_CP_CONFIG_PAGE);
 
-		cookieTheme = ServletUtils.getCookieValue("theme");
-	}
+        if (getLoggedUser() != null) {
+            selectedTheme = getLoggedUser().getTheme();
+        }
 
-	/**
-	 * Go to theme page.
-	 */
-	public void goToThemePage()
-	{
-		try
-		{
-			final FacesContext context = FacesContext.getCurrentInstance();
-			final ExternalContext extContext = context.getExternalContext();
-			final String url = extContext.encodeActionURL(context.getApplication().getViewHandler()
-					.getActionURL(context, themePageUrl));
-			extContext.redirect(url);
-		}
-		catch (final IOException ioe)
-		{
-			LOG.error(ioe.getMessage(), ioe);
-		}
-	}
+        cookieTheme = ServletUtils.getCookieValue("theme");
+//        if (paramCCTCP == null) {
+//
+//            paramCCTCP = paramCCTCPService.findParamCCTCPByAdministration(getLoggedUser().getAdministration());
+//
+//            if (paramCCTCP == null) {
+//                paramCCTCP = paramCCTCPService.findParamCCTCPDefault();
+//            }
+//
+//        }
+    }
 
+    /**
+     * Go to theme page.
+     */
+    public void goToThemePage() {
+        try {
+            final FacesContext context = FacesContext.getCurrentInstance();
+            final ExternalContext extContext = context.getExternalContext();
+            final String url = extContext.encodeActionURL(context.getApplication().getViewHandler()
+                    .getActionURL(context, themePageUrl));
+            extContext.redirect(url);
+        } catch (final IOException ioe) {
+            LOG.error(ioe.getMessage(), ioe);
+        }
+    }
 
-	/**
-	 * Go to my account page.
-	 */
-	public void goToMyAccountPage()
-	{
-		try
-		{
-			final FacesContext context = FacesContext.getCurrentInstance();
-			final ExternalContext extContext = context.getExternalContext();
-			final String url = extContext.encodeActionURL(context.getApplication().getViewHandler()
-					.getActionURL(context, "/pages/fo/accountSetup/edit.xhtml"));
-			extContext.redirect(url);
-		}
-		catch (final IOException ioe)
-		{
-			LOG.error(ioe.getMessage(), ioe);
-		}
-	}
-	/**
-	 * Change theme.
-	 */
-	public void changeTheme()
-	{
-		loggedUser.setTheme(selectedTheme);
-		userService.update(loggedUser);
+    /**
+     * Go to Phytosanitary report config page.
+     */
+    public void goToCctCpCongigPage() {
+        try {
+            final FacesContext context = FacesContext.getCurrentInstance();
+            final ExternalContext extContext = context.getExternalContext();
+            final String url = extContext.encodeActionURL(context.getApplication().getViewHandler()
+                    .getActionURL(context, cctCpConfigPageUrl));
+            extContext.redirect(url);
+        } catch (final IOException ioe) {
+            LOG.error(ioe.getMessage(), ioe);
+        }
+    }
 
-		ServletUtils.setCookies("theme", selectedTheme.getCode());
+    /**
+     * Go to my account page.
+     */
+    public void goToMyAccountPage() {
+        try {
+            final FacesContext context = FacesContext.getCurrentInstance();
+            final ExternalContext extContext = context.getExternalContext();
+            final String url = extContext.encodeActionURL(context.getApplication().getViewHandler()
+                    .getActionURL(context, "/pages/fo/accountSetup/edit.xhtml"));
+            extContext.redirect(url);
+        } catch (final IOException ioe) {
+            LOG.error(ioe.getMessage(), ioe);
+        }
+    }
 
-		final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-				Theme.class.getSimpleName() + PersistenceActions.UPDATE.getCode());
-		JsfUtil.addSuccessMessage(msg);
-	}
+    /**
+     * Change theme.
+     */
+    public void changeTheme() {
+        loggedUser.setTheme(selectedTheme);
+        userService.update(loggedUser);
 
+        ServletUtils.setCookies("theme", selectedTheme.getCode());
 
-	/**
-	 * Gets the theme options.
-	 *
-	 * @return the theme options
-	 */
-	public SelectItem[] getThemeOptions()
-	{
-		final SelectItem[] themeOptions = new SelectItem[getThemeList().size() + 1];
-		themeOptions[0] = new SelectItem(StringUtils.EMPTY, ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale())
-				.getString(SELECT_ONE_MESSAGE));
-		for (int i = 0; i < getThemeList().size(); i++)
-		{
-			themeOptions[i + 1] = new SelectItem(getThemeList().get(i), getThemeList().get(i).getLabel());
-		}
-		return themeOptions;
-	}
+        final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
+                Theme.class.getSimpleName() + PersistenceActions.UPDATE.getCode());
+        JsfUtil.addSuccessMessage(msg);
+    }
 
-	/**
-	 * Gets the theme list.
-	 *
-	 * @return the theme list
-	 */
-	private List<Theme> getThemeList()
-	{
-		final List<Theme> themesList = new ArrayList<Theme>();
-		themesList.add(Theme.BLUE);
-		themesList.add(Theme.BLUE_SKY);
-		themesList.add(Theme.BROWN);
-		themesList.add(Theme.GREEN);
-		themesList.add(Theme.PURPLE);
-		themesList.add(Theme.YELLOW);
+    public void updateParam() {
+//        if (paramCCTCP != null) {
+//            if (paramCCTCP.getId() != 0) {
+//                paramCCTCP.setAdministration(getLoggedUser().getAdministration());
+//                paramCCTCPService.save(paramCCTCP);
+//            } else {
+//                paramCCTCPService.update(paramCCTCP);
+//            }
+//
+//            final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
+//                    Theme.class.getSimpleName() + PersistenceActions.UPDATE.getCode());
+//            JsfUtil.addSuccessMessage(msg);
+//        }
 
-		return themesList;
-	}
+    }
 
-	/**
-	 * Gets the logged user.
-	 *
-	 * @return the logged user
-	 */
-	public User getLoggedUser()
-	{
-		if (loggedUser == null)
-		{
-			final FacesContext context = FacesContext.getCurrentInstance();
-			if (context != null)
-			{
-				final HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-				loggedUser = (User) session.getAttribute("loggedUser");
-			}
-		}
-		return loggedUser;
-	}
+    /**
+     * Gets the theme options.
+     *
+     * @return the theme options
+     */
+    public SelectItem[] getThemeOptions() {
+        final SelectItem[] themeOptions = new SelectItem[getThemeList().size() + 1];
+        themeOptions[0] = new SelectItem(StringUtils.EMPTY, ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale())
+                .getString(SELECT_ONE_MESSAGE));
+        for (int i = 0; i < getThemeList().size(); i++) {
+            themeOptions[i + 1] = new SelectItem(getThemeList().get(i), getThemeList().get(i).getLabel());
+        }
+        return themeOptions;
+    }
 
-	/**
-	 * Gets the current locale.
-	 *
-	 * @return the current locale
-	 */
-	public Locale getCurrentLocale()
-	{
-		return FacesContext.getCurrentInstance().getViewRoot().getLocale();
-	}
+    /**
+     * Gets the theme list.
+     *
+     * @return the theme list
+     */
+    private List<Theme> getThemeList() {
+        final List<Theme> themesList = new ArrayList<Theme>();
+        themesList.add(Theme.BLUE);
+        themesList.add(Theme.BLUE_SKY);
+        themesList.add(Theme.BROWN);
+        themesList.add(Theme.GREEN);
+        themesList.add(Theme.PURPLE);
+        themesList.add(Theme.YELLOW);
 
-	/**
-	 * Gets the theme page url.
-	 *
-	 * @return the themePageUrl
-	 */
-	public String getThemePageUrl()
-	{
-		return themePageUrl;
-	}
+        return themesList;
+    }
 
-	/**
-	 * Sets the theme page url.
-	 *
-	 * @param themePageUrl
-	 *           the themePageUrl to set
-	 */
-	public void setThemePageUrl(final String themePageUrl)
-	{
-		this.themePageUrl = themePageUrl;
-	}
+    /**
+     * Gets the logged user.
+     *
+     * @return the logged user
+     */
+    public User getLoggedUser() {
+        if (loggedUser == null) {
+            final FacesContext context = FacesContext.getCurrentInstance();
+            if (context != null) {
+                final HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
+                loggedUser = (User) session.getAttribute("loggedUser");
+            }
+        }
+        return loggedUser;
+    }
 
-	/**
-	 * Gets the user service.
-	 *
-	 * @return the userService
-	 */
-	public UserService getUserService()
-	{
-		return userService;
-	}
+    /**
+     * Gets the current locale.
+     *
+     * @return the current locale
+     */
+    public Locale getCurrentLocale() {
+        return FacesContext.getCurrentInstance().getViewRoot().getLocale();
+    }
 
-	/**
-	 * Sets the user service.
-	 *
-	 * @param userService
-	 *           the userService to set
-	 */
-	public void setUserService(final UserService userService)
-	{
-		this.userService = userService;
-	}
+    /**
+     * Gets the theme page url.
+     *
+     * @return the themePageUrl
+     */
+    public String getThemePageUrl() {
+        return themePageUrl;
+    }
 
-	/**
-	 * Gets the selected theme.
-	 *
-	 * @return the selectedTheme
-	 */
-	public Theme getSelectedTheme()
-	{
-		return selectedTheme;
-	}
+    /**
+     * Sets the theme page url.
+     *
+     * @param themePageUrl the themePageUrl to set
+     */
+    public void setThemePageUrl(final String themePageUrl) {
+        this.themePageUrl = themePageUrl;
+    }
 
-	/**
-	 * Sets the selected theme.
-	 *
-	 * @param selectedTheme
-	 *           the selectedTheme to set
-	 */
-	public void setSelectedTheme(final Theme selectedTheme)
-	{
-		this.selectedTheme = selectedTheme;
-	}
+    /**
+     * Gets the user service.
+     *
+     * @return the userService
+     */
+    public UserService getUserService() {
+        return userService;
+    }
 
-	/**
-	 * Gets the cookie theme.
-	 *
-	 * @return the cookieTheme
-	 */
-	public String getCookieTheme()
-	{
-		return cookieTheme;
-	}
+    /**
+     * Sets the user service.
+     *
+     * @param userService the userService to set
+     */
+    public void setUserService(final UserService userService) {
+        this.userService = userService;
+    }
 
-	/**
-	 * Sets the cookie theme.
-	 *
-	 * @param cookieTheme
-	 *           the cookieTheme to set
-	 */
-	public void setCookieTheme(final String cookieTheme)
-	{
-		this.cookieTheme = cookieTheme;
-	}
+    /**
+     * Gets the selected theme.
+     *
+     * @return the selectedTheme
+     */
+    public Theme getSelectedTheme() {
+        return selectedTheme;
+    }
 
+    /**
+     * Sets the selected theme.
+     *
+     * @param selectedTheme the selectedTheme to set
+     */
+    public void setSelectedTheme(final Theme selectedTheme) {
+        this.selectedTheme = selectedTheme;
+    }
 
+    /**
+     * Gets the cookie theme.
+     *
+     * @return the cookieTheme
+     */
+    public String getCookieTheme() {
+        return cookieTheme;
+    }
+
+    /**
+     * Sets the cookie theme.
+     *
+     * @param cookieTheme the cookieTheme to set
+     */
+    public void setCookieTheme(final String cookieTheme) {
+        this.cookieTheme = cookieTheme;
+    }
+
+    public String getCctCpConfigPageUrl() {
+        return cctCpConfigPageUrl;
+    }
+
+    public void setCctCpConfigPageUrl(String cctCpConfigPageUrl) {
+        this.cctCpConfigPageUrl = cctCpConfigPageUrl;
+    }
+
+//    public ParamCCTCPService getParamCCTCPService() {
+//        return paramCCTCPService;
+//    }
+//
+//    public void setParamCCTCPService(ParamCCTCPService paramCCTCPService) {
+//        this.paramCCTCPService = paramCCTCPService;
+//    }
+//
+//    public ParamCCTCP getParamCCTCP() {
+//        return paramCCTCP;
+//    }
+//
+//    public void setParamCCTCP(ParamCCTCP paramCCTCP) {
+//        this.paramCCTCP = paramCCTCP;
+//    }
 }

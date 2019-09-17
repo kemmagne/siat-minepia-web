@@ -413,6 +413,10 @@ public interface ControllerConstants {
              * The theme config page.
              */
             String THEME_CONFIG_PAGE = "/pages/fo/accountSetup/theme.xhtml";
+            /**
+             * The phytosanitary report config.
+             */
+            String PARAM_CCT_CP_CONFIG_PAGE = "/pages/fo/accountSetup/paramCctCp.xhtml";
         }
     }
 

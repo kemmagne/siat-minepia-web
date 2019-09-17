@@ -1,0 +1,45 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+    <h:panelGroup styleClass="grise"
+                  rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'CCT_CP'}">
+
+        <h:panelGrid columns="2" >
+
+            <h:outputLabel value="#{bundle['CctCp_Observations']} : " />
+            <p:inputTextarea id="cctCpObservations" title="#{bundle['CctCp_Observations']}" required="false"
+                             value="#{fileItemCctDetailController.cCTCPParamValue.observations}" />
+        </h:panelGrid>
+
+        <h:panelGrid columns="3" rendered="#{fileItemCctDetailController.cCTCPParamValue.fileContainerCountValue ne 0}">
+
+            <h:outputLabel value="#{bundle['CctCp_NumberOfContainer']}* : " />
+            <p:inputText id="numberOfContainer" title="#{bundle['CctCp_NumberOfContainer']}" required="true"
+                         requiredMessage="#{bundle['CctCp_NumberOfContainerRequired']}"
+                         value="#{fileItemCctDetailController.cCTCPParamValue.maxContainerNumber}" />
+            <p:inputText id="fileContainerCountValue" title="#{bundle['CctCp_NumberOfContainerFile']}" disabled="true"
+                         value="#{fileItemCctDetailController.cCTCPParamValue.fileContainerCountValue}" />
+        </h:panelGrid>
+
+        <h:panelGrid columns="3" rendered="#{fileItemCctDetailController.cCTCPParamValue.fileGoodsCountValue ne 0}">
+            <h:outputLabel value="#{bundle['CctCp_NumberOfMerchendise']}* : " />
+            <p:inputText id="numberOfMerchendise" title="#{bundle['CctCp_NumberOfMerchendise']}" required="true"
+                         requiredMessage="#{bundle['CctCp_NumberOfMerchendiseRequired']}"
+                         value="#{fileItemCctDetailController.cCTCPParamValue.maxGoodsLineNumber}" />
+            <p:inputText id="fileGoodsCountValue" title="#{bundle['CctCp_NumberOfMerchendiseFile']}" disabled="true"
+                         value="#{fileItemCctDetailController.cCTCPParamValue.fileGoodsCountValue}" />
+        </h:panelGrid>
+
+        <h:panelGrid columns="3" rendered="#{fileItemCctDetailController.cCTCPParamValue.filePackageCountValue ne 0}">
+            <h:outputLabel value="#{bundle['CctCp_NumberOfPackage']}* : " />
+            <p:inputText id="numberOfPackage" title="#{bundle['CctCp_NumberOfPackage']}" required="true"
+                         requiredMessage="#{bundle['CctCp_NumberOfPackageRequired']}"
+                         value="#{fileItemCctDetailController.cCTCPParamValue.maxPackageNumber}" />
+            <p:inputText id="filePackageCountValue" title="#{bundle['CctCp_NumberOfPackageFile']}" disabled="true"
+                         value="#{fileItemCctDetailController.cCTCPParamValue.filePackageCountValue}" />
+        </h:panelGrid>
+
+
+    </h:panelGroup>
+
+</ui:composition>

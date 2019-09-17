@@ -184,11 +184,17 @@
         <profile>
             <id>profile-lyd</id>
             <properties>
-                <environment>dev</environment>
+                <environment>lyd</environment>
                 <db.username>siat_ct</db.username>
                 <db.password>siat</db.password>
+                <!--d-->
+                <database.maxConnectionsPerPartition>10</database.maxConnectionsPerPartition>
+                <database.minConnectionsPerPartition>2</database.minConnectionsPerPartition>
+                <database.partitionCount>2</database.partitionCount>
+                <database.acquireIncrement>3</database.acquireIncrement>
+                <!--d-->
                 <!--<db.url>jdbc:oracle:thin:@test:1518:GUCETEST</db.url>-->
-                <db.url>jdbc:oracle:thin:@vm:1521:GUCE</db.url>
+                <db.url>jdbc:oracle:thin:@vm:1521:xe</db.url>
                 <ged.url>http://gedurl:17483</ged.url>
                 <jms.url>failover:(tcp://brokerurl:61616)</jms.url>
                 <version>${application.version}</version>
@@ -216,6 +222,7 @@
                 <mails.folder>/data/glassfish/siat/eguce/mails/ct</mails.folder>
             </properties>
             <activation>
+                <activeByDefault>true</activeByDefault>
                 <property>
                     <name>environment</name>
                     <value>lyd</value>
@@ -434,7 +441,7 @@
         <dependency>
             <groupId>com.lowagie</groupId>
             <artifactId>itext</artifactId>
-            <version>2.1.0</version>
+            <version>2.1.7.js2</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -484,7 +491,7 @@
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
-            <version>5.6.0</version>
+            <version>6.1.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>commons-collections</groupId>
@@ -501,6 +508,17 @@
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
             <version>2.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.6</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+            <version>1.52</version>
         </dependency>
     </dependencies>
 
