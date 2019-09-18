@@ -87,13 +87,14 @@ public class AccountSetupController implements Serializable {
     @ManagedProperty(value = "#{userService}")
     private UserService userService;
 
-//    /**
-//     * The CCT CP param value service.
-//     */
-//    @ManagedProperty(value = "#{paramCCTCPService}")
-//    private ParamCCTCPService paramCCTCPService;
-//
-//    private ParamCCTCP paramCCTCP;
+    /**
+     * The CCT CP param value service.
+     */
+    @ManagedProperty(value = "#{paramCCTCPService}")
+    private ParamCCTCPService paramCCTCPService;
+
+    private ParamCCTCP paramCCTCP;
+
     /**
      * Inits the.
      */
@@ -110,15 +111,15 @@ public class AccountSetupController implements Serializable {
         }
 
         cookieTheme = ServletUtils.getCookieValue("theme");
-//        if (paramCCTCP == null) {
-//
-//            paramCCTCP = paramCCTCPService.findParamCCTCPByAdministration(getLoggedUser().getAdministration());
-//
-//            if (paramCCTCP == null) {
-//                paramCCTCP = paramCCTCPService.findParamCCTCPDefault();
-//            }
-//
-//        }
+        if (getLoggedUser() != null && paramCCTCP == null) {
+
+            paramCCTCP = paramCCTCPService.findParamCCTCPByAdministration(getLoggedUser().getAdministration());
+
+            if (paramCCTCP == null) {
+                paramCCTCP = new ParamCCTCP();
+            }
+
+        }
     }
 
     /**
@@ -181,19 +182,18 @@ public class AccountSetupController implements Serializable {
     }
 
     public void updateParam() {
-//        if (paramCCTCP != null) {
-//            if (paramCCTCP.getId() != 0) {
-//                paramCCTCP.setAdministration(getLoggedUser().getAdministration());
-//                paramCCTCPService.save(paramCCTCP);
-//            } else {
-//                paramCCTCPService.update(paramCCTCP);
-//            }
-//
-//            final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-//                    Theme.class.getSimpleName() + PersistenceActions.UPDATE.getCode());
-//            JsfUtil.addSuccessMessage(msg);
-//        }
+        if (paramCCTCP != null) {
+            if (paramCCTCP.getId() == null) {
+                paramCCTCP.setAdministration(getLoggedUser().getAdministration());
+                paramCCTCPService.save(paramCCTCP);
+            } else {
+                paramCCTCPService.update(paramCCTCP);
+            }
 
+            final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
+                    "ParamCctCpUpdated");
+            JsfUtil.addSuccessMessage(msg);
+        }
     }
 
     /**
@@ -217,7 +217,7 @@ public class AccountSetupController implements Serializable {
      * @return the theme list
      */
     private List<Theme> getThemeList() {
-        final List<Theme> themesList = new ArrayList<Theme>();
+        final List<Theme> themesList = new ArrayList<>();
         themesList.add(Theme.BLUE);
         themesList.add(Theme.BLUE_SKY);
         themesList.add(Theme.BROWN);
@@ -333,19 +333,19 @@ public class AccountSetupController implements Serializable {
         this.cctCpConfigPageUrl = cctCpConfigPageUrl;
     }
 
-//    public ParamCCTCPService getParamCCTCPService() {
-//        return paramCCTCPService;
-//    }
-//
-//    public void setParamCCTCPService(ParamCCTCPService paramCCTCPService) {
-//        this.paramCCTCPService = paramCCTCPService;
-//    }
-//
-//    public ParamCCTCP getParamCCTCP() {
-//        return paramCCTCP;
-//    }
-//
-//    public void setParamCCTCP(ParamCCTCP paramCCTCP) {
-//        this.paramCCTCP = paramCCTCP;
-//    }
+    public ParamCCTCPService getParamCCTCPService() {
+        return paramCCTCPService;
+    }
+
+    public void setParamCCTCPService(ParamCCTCPService paramCCTCPService) {
+        this.paramCCTCPService = paramCCTCPService;
+    }
+
+    public ParamCCTCP getParamCCTCP() {
+        return paramCCTCP;
+    }
+
+    public void setParamCCTCP(ParamCCTCP paramCCTCP) {
+        this.paramCCTCP = paramCCTCP;
+    }
 }

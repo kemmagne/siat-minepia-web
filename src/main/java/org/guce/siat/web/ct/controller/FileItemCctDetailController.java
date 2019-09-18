@@ -1099,6 +1099,9 @@ public class FileItemCctDetailController implements Serializable {
 
     private final String TRANSITE_SUPER_FILE_TYPE = "2";
     private final String TRANSITE_SUPER_FILE_TYPE_KEY = "TYPE_DOSSIER_EGUCE";
+    private final String COUNT_GOODS = "goods";
+    private final String COUNT_CONTAINERS = "containers";
+    private final String COUNT_PACKAGES = "packages";
 
     /**
      * The decision history service.
@@ -1740,7 +1743,6 @@ public class FileItemCctDetailController implements Serializable {
     public void changeDecisionHandler() {
         specificDecision = null;
         decisionDiv.getChildren().clear();
-        String stringId = null;
         final List<FileItemCheck> checksProduct = selectCheckedFileItemCheck();
         isPayment = Boolean.FALSE;
         //paiement;FlowCode.FL_CO_155.name().equals(selectedFlow.getCode())
@@ -1853,6 +1855,7 @@ public class FileItemCctDetailController implements Serializable {
             treatmentInfos = new TreatmentInfos();
         } // Signature effective du certificat phytosanitaire
         else if (isPhytoReadyForSignatureEnd(selectedFlow)) {
+            buildGenericFormFromDataType(selectedFlow.getDataTypeList());
             cCTCPParamValue = cCTCPParamValueService.findCCTCPParamValueByItemFlow(lastDecisions);
 
             if (cCTCPParamValue == null) {
@@ -1922,98 +1925,104 @@ public class FileItemCctDetailController implements Serializable {
             }
         } // Generic : construction du formulaire à partir des DataType
         else {
-            for (final DataType dataType : selectedFlow.getDataTypeList()) {
-                final FacesContext context = FacesContext.getCurrentInstance();
+            buildGenericFormFromDataType(selectedFlow.getDataTypeList());
+        }
+    }
 
-                if (dataType.getId() != null) {
-                    stringId = String.valueOf(dataType.getId());
-                }
-                // Label for the component
-                final HtmlOutputLabel htmlOutputLabel = (HtmlOutputLabel) context.getApplication().createComponent(
-                        HtmlOutputLabel.COMPONENT_TYPE);
-                htmlOutputLabel.setFor(ID_DECISION_LABEL + stringId);
-                if (FacesContext.getCurrentInstance().getViewRoot().getLocale().equals(Locale.FRENCH)) {
-                    htmlOutputLabel.setValue(dataType.getLabel());
-                } else {
-                    htmlOutputLabel.setValue(dataType.getLabelEn());
-                }
-                decisionDiv.getChildren().add(htmlOutputLabel);
+    private void buildGenericFormFromDataType(List<DataType> dataTypes) {
+        String stringId = null;
 
-                final HtmlPanelGroup htmlPanelGroup = (HtmlPanelGroup) context.getApplication().createComponent(
-                        HtmlPanelGroup.COMPONENT_TYPE);
+        for (final DataType dataType : dataTypes) {
+            final FacesContext context = FacesContext.getCurrentInstance();
 
-                if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode())) {
-                    final HtmlInputText inputText = (HtmlInputText) context.getApplication().createComponent(
-                            HtmlInputText.COMPONENT_TYPE);
-                    if (dataType.getRequired()) {
-                        inputText.setRequired(true);
-                        inputText.setRequiredMessage(dataType.getLabel()
-                                + Constants.SPACE
-                                + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                                        "RequiredMessage_standard"));
-                    }
-                    inputText.setId(ID_DECISION_LABEL + stringId);
-                    htmlPanelGroup.getChildren().add(inputText);
-                } else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode())) {
-                    final HtmlSelectBooleanCheckbox booleanCheckbox = (HtmlSelectBooleanCheckbox) context.getApplication()
-                            .createComponent(HtmlSelectBooleanCheckbox.COMPONENT_TYPE);
-                    if (dataType.getRequired()) {
-                        booleanCheckbox.setRequired(true);
-                        booleanCheckbox.setRequiredMessage(dataType.getLabel()
-                                + Constants.SPACE
-                                + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                                        "RequiredMessage_standard"));
-                    }
-                    booleanCheckbox.setId(ID_DECISION_LABEL + stringId);
-                    htmlPanelGroup.getChildren().add(booleanCheckbox);
-                } else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
-                    final Calendar calendar = (Calendar) context.getApplication().createComponent(Calendar.COMPONENT_TYPE);
-                    calendar.setShowOn("button");
-                    if (dataType.getRequired()) {
-                        calendar.setRequired(true);
-                        calendar.setRequiredMessage(dataType.getLabel()
-                                + Constants.SPACE
-                                + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                                        "RequiredMessage_standard"));
-                    }
-                    calendar.setId(ID_DECISION_LABEL + stringId);
-                    final String dataTypeProps = dataType.getProps();
-                    String pattern = DateUtils.FRENCH_DATE;
-                    if (dataTypeProps != null) {
-                        Properties properties = new Properties();
-                        try {
-                            properties.load(new StringReader(dataTypeProps));
-                            pattern = properties.getProperty(DataTypePropEnnum.PATTERN.getCode(), pattern);
-                        } catch (IOException ex) {
-                            LOG.debug("Problem occured when trying to load properties of data type : " + dataType, ex);
-                        }
-                    }
-                    calendar.setPattern(pattern);
-                    calendar.setLocale(Locale.FRANCE);
-                    calendar.setNavigator(true);
-                    htmlPanelGroup.getChildren().add(calendar);
-
-                } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode())) {
-                    final HtmlInputTextarea inputTextarea = (HtmlInputTextarea) context.getApplication().createComponent(
-                            HtmlInputTextarea.COMPONENT_TYPE);
-                    if (dataType.getRequired()) {
-                        inputTextarea.setRequired(true);
-                        inputTextarea.setRequiredMessage(dataType.getLabel()
-                                + Constants.SPACE
-                                + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                                        "RequiredMessage_standard"));
-                    }
-                    inputTextarea.setRows(10);
-                    inputTextarea.setId(ID_DECISION_LABEL + stringId);
-                    htmlPanelGroup.getChildren().add(inputTextarea);
-                }
-
-                final Message message = (Message) context.getApplication().createComponent(Message.COMPONENT_TYPE);
-                message.setFor(ID_DECISION_LABEL + stringId);
-                htmlPanelGroup.getChildren().add(message);
-
-                decisionDiv.getChildren().add(htmlPanelGroup);
+            if (dataType.getId() != null) {
+                stringId = String.valueOf(dataType.getId());
             }
+            // Label for the component
+            final HtmlOutputLabel htmlOutputLabel = (HtmlOutputLabel) context.getApplication().createComponent(
+                    HtmlOutputLabel.COMPONENT_TYPE);
+            htmlOutputLabel.setFor(ID_DECISION_LABEL + stringId);
+            if (FacesContext.getCurrentInstance().getViewRoot().getLocale().equals(Locale.FRENCH)) {
+                htmlOutputLabel.setValue(dataType.getLabel());
+            } else {
+                htmlOutputLabel.setValue(dataType.getLabelEn());
+            }
+            decisionDiv.getChildren().add(htmlOutputLabel);
+
+            final HtmlPanelGroup htmlPanelGroup = (HtmlPanelGroup) context.getApplication().createComponent(
+                    HtmlPanelGroup.COMPONENT_TYPE);
+
+            if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode())) {
+                final HtmlInputText inputText = (HtmlInputText) context.getApplication().createComponent(
+                        HtmlInputText.COMPONENT_TYPE);
+                if (dataType.getRequired()) {
+                    inputText.setRequired(true);
+                    inputText.setRequiredMessage(dataType.getLabel()
+                            + Constants.SPACE
+                            + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
+                                    "RequiredMessage_standard"));
+                }
+                inputText.setId(ID_DECISION_LABEL + stringId);
+                htmlPanelGroup.getChildren().add(inputText);
+            } else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode())) {
+                final HtmlSelectBooleanCheckbox booleanCheckbox = (HtmlSelectBooleanCheckbox) context.getApplication()
+                        .createComponent(HtmlSelectBooleanCheckbox.COMPONENT_TYPE);
+                if (dataType.getRequired()) {
+                    booleanCheckbox.setRequired(true);
+                    booleanCheckbox.setRequiredMessage(dataType.getLabel()
+                            + Constants.SPACE
+                            + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
+                                    "RequiredMessage_standard"));
+                }
+                booleanCheckbox.setId(ID_DECISION_LABEL + stringId);
+                htmlPanelGroup.getChildren().add(booleanCheckbox);
+            } else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
+                final Calendar calendar = (Calendar) context.getApplication().createComponent(Calendar.COMPONENT_TYPE);
+                calendar.setShowOn("button");
+                if (dataType.getRequired()) {
+                    calendar.setRequired(true);
+                    calendar.setRequiredMessage(dataType.getLabel()
+                            + Constants.SPACE
+                            + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
+                                    "RequiredMessage_standard"));
+                }
+                calendar.setId(ID_DECISION_LABEL + stringId);
+                final String dataTypeProps = dataType.getProps();
+                String pattern = DateUtils.FRENCH_DATE;
+                if (dataTypeProps != null) {
+                    Properties properties = new Properties();
+                    try {
+                        properties.load(new StringReader(dataTypeProps));
+                        pattern = properties.getProperty(DataTypePropEnnum.PATTERN.getCode(), pattern);
+                    } catch (IOException ex) {
+                        LOG.debug("Problem occured when trying to load properties of data type : " + dataType, ex);
+                    }
+                }
+                calendar.setPattern(pattern);
+                calendar.setLocale(Locale.FRANCE);
+                calendar.setNavigator(true);
+                htmlPanelGroup.getChildren().add(calendar);
+
+            } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode())) {
+                final HtmlInputTextarea inputTextarea = (HtmlInputTextarea) context.getApplication().createComponent(
+                        HtmlInputTextarea.COMPONENT_TYPE);
+                if (dataType.getRequired()) {
+                    inputTextarea.setRequired(true);
+                    inputTextarea.setRequiredMessage(dataType.getLabel()
+                            + Constants.SPACE
+                            + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
+                                    "RequiredMessage_standard"));
+                }
+                inputTextarea.setRows(10);
+                inputTextarea.setId(ID_DECISION_LABEL + stringId);
+                htmlPanelGroup.getChildren().add(inputTextarea);
+            }
+
+            final Message message = (Message) context.getApplication().createComponent(Message.COMPONENT_TYPE);
+            message.setFor(ID_DECISION_LABEL + stringId);
+            htmlPanelGroup.getChildren().add(message);
+
+            decisionDiv.getChildren().add(htmlPanelGroup);
         }
     }
 
@@ -2535,51 +2544,17 @@ public class FileItemCctDetailController implements Serializable {
             else if (DCC_FLOW_CODES.contains(selectedFlow.getCode())) {
                 commonService.takeDecisionAndSaveApprovedDecision(approvedDecision, itemFlowsToAdd);
             } // CCT_CP (Signature du phytosanitaire)
-            else if (isPhytoReadyForSignature(selectedFlow)) {
-                commonService.takeDecisionAndSaveCCTCPParamValue(cCTCPParamValue, itemFlowsToAdd);
+            else if (isPhytoReadyForSignatureEnd(selectedFlow)) {
+
+                List<ItemFlowData> flowDatas = getValuesOfDataTypeForDecision(itemFlowsToAdd, selectedFlow.getDataTypeList());
+
+                commonService.takeDecisionAndSaveCCTCPParamValueAndDataType(cCTCPParamValue, flowDatas, itemFlowsToAdd);
+
             } // Geniric (affichage des itemFlowData)
             else {
                 // Recuperate the values of DataType (Observation text area ...)
-                List<ItemFlowData> flowDatas;
+                List<ItemFlowData> flowDatas = getValuesOfDataTypeForDecision(itemFlowsToAdd, selectedFlow.getDataTypeList());
 
-                flowDatas = new ArrayList<>();
-                for (final DataType dataType : selectedFlow.getDataTypeList()) {
-                    final ItemFlowData itemFlowData = new ItemFlowData();
-                    itemFlowData.setDataType(dataType);
-
-                    if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode())) {
-                        final HtmlInputText valueDataType = (HtmlInputText) decisionDiv.findComponent(ID_DECISION_LABEL
-                                + dataType.getId());
-                        itemFlowData.setValue(valueDataType.getValue().toString());
-                    } else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode())) {
-                        final HtmlSelectBooleanCheckbox valueDataType = (HtmlSelectBooleanCheckbox) decisionDiv
-                                .findComponent(ID_DECISION_LABEL + dataType.getId());
-                        itemFlowData.setValue(valueDataType.getValue().toString());
-
-                    } else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
-                        final Calendar valueDataType = (Calendar) decisionDiv.findComponent(ID_DECISION_LABEL + dataType.getId());
-                        final String dataTypeProps = dataType.getProps();
-                        String pattern = DateUtils.FRENCH_DATE;
-                        if (StringUtils.isNotBlank(dataTypeProps)) {
-                            final Properties properties = new Properties();
-                            try {
-                                properties.load(new StringReader(dataTypeProps));
-                                pattern = properties.getProperty(DataTypePropEnnum.PATTERN.getCode(), pattern);
-                            } catch (IOException ex) {
-                                LOG.debug("Problem occured when trying to load properties of data type : " + dataType, ex);
-                            }
-                        }
-                        final String itemFlowDataTypeValue = DateUtils.formatSimpleDateFromObject(pattern, valueDataType.getValue());
-                        itemFlowData.setValue(itemFlowDataTypeValue);
-
-                    } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode())) {
-                        final HtmlInputTextarea valueDataType = (HtmlInputTextarea) decisionDiv.findComponent(ID_DECISION_LABEL
-                                + dataType.getId());
-                        itemFlowData.setValue(valueDataType.getValue().toString());
-                    }
-
-                    flowDatas.add(itemFlowData);
-                }
                 if (FlowCode.FL_CT_92.name().equals(selectedFlow.getCode())) {
                     commonService.takeDacisionAndSavePayment(itemFlowsToAdd, paymentData);
                 } else {
@@ -2614,6 +2589,50 @@ public class FileItemCctDetailController implements Serializable {
 
         resetDataGridInofrmationProducts();
         reloadPage();
+    }
+
+    private List<ItemFlowData> getValuesOfDataTypeForDecision(List<ItemFlow> itemsFlows, List<DataType> dataTypes) {
+        List<ItemFlowData> flowDatas = new ArrayList<>();
+        for (final DataType dataType : dataTypes) {
+            final ItemFlowData itemFlowData = new ItemFlowData();
+            itemFlowData.setDataType(dataType);
+
+            if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode())) {
+                final HtmlInputText valueDataType = (HtmlInputText) decisionDiv.findComponent(ID_DECISION_LABEL
+                        + dataType.getId());
+                itemFlowData.setValue(valueDataType.getValue().toString());
+            } else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode())) {
+                final HtmlSelectBooleanCheckbox valueDataType = (HtmlSelectBooleanCheckbox) decisionDiv
+                        .findComponent(ID_DECISION_LABEL + dataType.getId());
+                itemFlowData.setValue(valueDataType.getValue().toString());
+
+            } else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
+                final Calendar valueDataType = (Calendar) decisionDiv.findComponent(ID_DECISION_LABEL + dataType.getId());
+                final String dataTypeProps = dataType.getProps();
+                String pattern = DateUtils.FRENCH_DATE;
+                if (StringUtils.isNotBlank(dataTypeProps)) {
+                    final Properties properties = new Properties();
+                    try {
+                        properties.load(new StringReader(dataTypeProps));
+                        pattern = properties.getProperty(DataTypePropEnnum.PATTERN.getCode(), pattern);
+                    } catch (IOException ex) {
+                        LOG.debug("Problem occured when trying to load properties of data type : " + dataType, ex);
+                    }
+                }
+                final String itemFlowDataTypeValue = DateUtils.formatSimpleDateFromObject(pattern, valueDataType.getValue());
+                itemFlowData.setValue(itemFlowDataTypeValue);
+
+            } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode())) {
+                final HtmlInputTextarea valueDataType = (HtmlInputTextarea) decisionDiv.findComponent(ID_DECISION_LABEL
+                        + dataType.getId());
+                itemFlowData.setValue(valueDataType.getValue().toString());
+            }
+
+            flowDatas.add(itemFlowData);
+        }
+
+        return flowDatas;
+
     }
 
     /**
@@ -7008,14 +7027,17 @@ public class FileItemCctDetailController implements Serializable {
 //                    c1 = classe.getConstructor(File.class, TreatmentInfos.class, CCTCPParamValue.class, String.class);
                     final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
                     final TreatmentInfos ti = treatmentInfosService.findTreatmentInfosByItemFlow(itemFlow);
-                    CCTCPParamValue paramValue = cCTCPParamValueService.findCCTCPParamValueByItemFlow(itemFlow);
+                    final ItemFlow itemFlow2 = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_08);
+
+                    CCTCPParamValue paramValue = cCTCPParamValueService.findCCTCPParamValueByItemFlow(itemFlow2);
                     if (phytoEnd && paramValue == null) {
                         paramValue = cCTCPParamValue;
                     }
                     if (ti.getDelivrableType() == null || "CCT_CT_E".equals(ti.getDelivrableType())) {
-                        if (paramValue.getFileGoodsCountValue() > paramValue.getMaxGoodsLineNumber()
-                                || paramValue.getFileContainerCountValue() > paramValue.getMaxContainerNumber()
-                                || paramValue.getFilePackageCountValue() > paramValue.getMaxPackageNumber()) {
+                        Map<String, Integer> count = countFileContainerAndPackage(currentFile);
+                        if (count.get(COUNT_GOODS) > paramValue.getMaxGoodsLineNumber()
+                                || count.get(COUNT_CONTAINERS) > paramValue.getMaxContainerNumber()
+                                || count.get(COUNT_PACKAGES) > paramValue.getMaxPackageNumber()) {
 //                            String[] annexes = {"CERTIFICAT_PHYTOSANITAIRE_ANNEXE"};
                             forAnnexes = new HashMap();
                             forAnnexes.put("ti", ti);
@@ -7271,10 +7293,31 @@ public class FileItemCctDetailController implements Serializable {
             }
         }
 
-        final List<FileItem> fileItemList = currentFile.getFileItemsList();
-        cCTCPParamValue.setFileGoodsCountValue(fileItemList.size());
+        Map<String, Integer> count = countFileContainerAndPackage(currentFile);
+        cCTCPParamValue.setFileGoodsCountValue(count.get(COUNT_GOODS));
+        cCTCPParamValue.setFileContainerCountValue(count.get(COUNT_CONTAINERS));
+        cCTCPParamValue.setFilePackageCountValue(count.get(COUNT_PACKAGES));
 
-        final List<FileFieldValue> fileFieldValueList = currentFile.getFileFieldValueList();
+    }
+
+    public boolean isMaskOfficialPosition() {
+        return maskOfficialPosition;
+    }
+
+    public void setMaskOfficialPosition(boolean maskOfficialPosition) {
+        this.maskOfficialPosition = maskOfficialPosition;
+    }
+
+    private Map<String, Integer> countFileContainerAndPackage(File file) {
+        Map<String, Integer> count = new HashMap<>();
+
+        count.put(COUNT_GOODS, 0);
+        count.put(COUNT_CONTAINERS, 0);
+        count.put(COUNT_PACKAGES, 0);
+
+        final List<FileItem> fileItemList = file.getFileItemsList();
+        count.put(COUNT_GOODS, fileItemList.size());
+        final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
         if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
             String containersNumbers = null;
             String packageNumber = null;
@@ -7301,23 +7344,15 @@ public class FileItemCctDetailController implements Serializable {
                     builder.append(tab2[0]).append("/").append(tab2[positionScelles]).append(" ");
                 }
                 String containerNumbers[] = builder.substring(0, builder.lastIndexOf(" ")).split(" ");
-                cCTCPParamValue.setFileContainerCountValue(containerNumbers.length);
+                count.put(COUNT_CONTAINERS, containerNumbers.length);
             }
             if (org.apache.commons.lang.StringUtils.isNotBlank(packageNumber)) {
                 String packagesNumbers[] = packageNumber.split(" ");
-                cCTCPParamValue.setFilePackageCountValue(packagesNumbers.length);
+                count.put(COUNT_PACKAGES, packagesNumbers.length);
+
             }
 
         }
-
+        return count;
     }
-
-    public boolean isMaskOfficialPosition() {
-        return maskOfficialPosition;
-    }
-
-    public void setMaskOfficialPosition(boolean maskOfficialPosition) {
-        this.maskOfficialPosition = maskOfficialPosition;
-    }
-
 }

@@ -4,12 +4,12 @@
     <h:panelGroup styleClass="grise"
                   rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'CCT_CP'}">
 
-        <h:panelGrid columns="2" >
+<!--        <h:panelGrid columns="2" >
 
             <h:outputLabel value="#{bundle['CctCp_Observations']} : " />
             <p:inputTextarea id="cctCpObservations" title="#{bundle['CctCp_Observations']}" required="false"
                              value="#{fileItemCctDetailController.cCTCPParamValue.observations}" />
-        </h:panelGrid>
+        </h:panelGrid>-->
 
         <h:panelGrid columns="3" rendered="#{fileItemCctDetailController.cCTCPParamValue.fileContainerCountValue ne 0}">
 
