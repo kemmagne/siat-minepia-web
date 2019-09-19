@@ -93,6 +93,11 @@
                                              rendered="#{fileItemCctDetailController.decisionButtonAllowed == 'true' and fileItemCctDetailController.showDecisionButton == 'true'}" onstart="PF('statusDialog1').block(); disableBtn()"
                                              onsuccess="PF('statusDialog1').unblock(); enableBtn()" actionListener="#{fileItemCctDetailController.prepareDecisions}"
                                              update=":growl :decisionForm :systemDecisionForm" resetValues="true"  styleClass="disBtn"/>
+                            
+                            <p:commandButton id="decideCotationButton" value="#{bundle['FileItemInformationTitle_decider']}"
+                                             rendered="#{fileItemCctDetailController.decisionButtonAllowedAtCotationLevel == 'true' and fileItemCctDetailController.showDecisionButton == 'true'}" onstart="PF('statusDialog1').block(); disableBtn()"
+                                             onsuccess="PF('statusDialog1').unblock(); enableBtn()" actionListener="#{fileItemCctDetailController.prepareDecisions}"
+                                             update=":growl :decisionForm :systemDecisionForm" resetValues="true"  styleClass="disBtn"/>
 
                             <p:commandButton id="markButton" value="#{bundle['FileItemInformationTitle_dispatch']}"
                                              rendered="#{fileItemCctDetailController.cotationButtonAllowed == 'true' and fileItemCctDetailController.showDecisionButton == 'true'}" onstart="PF('statusDialog1').block()"
