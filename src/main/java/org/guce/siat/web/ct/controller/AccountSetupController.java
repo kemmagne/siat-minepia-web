@@ -17,9 +17,14 @@ import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.guce.siat.common.model.Administration;
+import org.guce.siat.common.model.FileType;
 import org.guce.siat.common.model.User;
+import org.guce.siat.common.service.FileTypeService;
+import org.guce.siat.common.service.ServiceService;
 import org.guce.siat.common.service.UserService;
 import org.guce.siat.common.utils.Constants;
+import org.guce.siat.common.utils.enums.FileTypeCode;
 import org.guce.siat.common.utils.enums.Theme;
 import org.guce.siat.core.ct.model.ParamCCTCP;
 import org.guce.siat.core.ct.service.ParamCCTCPService;
@@ -82,6 +87,16 @@ public class AccountSetupController implements Serializable {
     private String cookieTheme;
 
     /**
+     * The office selected.
+     */
+    private Administration selectedOffice;
+
+    /**
+     * The office selected.
+     */
+    private List<Administration> bureaux = new ArrayList<>();
+
+    /**
      * The user service.
      */
     @ManagedProperty(value = "#{userService}")
@@ -92,6 +107,12 @@ public class AccountSetupController implements Serializable {
      */
     @ManagedProperty(value = "#{paramCCTCPService}")
     private ParamCCTCPService paramCCTCPService;
+
+    @ManagedProperty(value = "#{fileTypeService}")
+    private FileTypeService fileTypeService;
+
+    @ManagedProperty(value = "#{serviceService}")
+    private ServiceService serviceService;
 
     private ParamCCTCP paramCCTCP;
 
@@ -108,17 +129,26 @@ public class AccountSetupController implements Serializable {
 
         if (getLoggedUser() != null) {
             selectedTheme = getLoggedUser().getTheme();
+
+            List<FileType> filetypes = fileTypeService.findFileTypesByCodes(FileTypeCode.CCT_CT_E);
+            if (filetypes != null) {
+                if (filetypes.size() == 1) {
+                    bureaux.addAll(serviceService.findServicesByAdministration(filetypes.get(0)));
+                } else {
+                    for (FileType ft : filetypes) {
+                        if (ft.getCode().equals(FileTypeCode.CCT_CT_E)) {
+                            bureaux.addAll(serviceService.findServicesByAdministration(ft));
+                        }
+                    }
+                }
+            }
         }
 
         cookieTheme = ServletUtils.getCookieValue("theme");
         if (getLoggedUser() != null && paramCCTCP == null) {
-
-            paramCCTCP = paramCCTCPService.findParamCCTCPByAdministration(getLoggedUser().getAdministration());
-
             if (paramCCTCP == null) {
                 paramCCTCP = new ParamCCTCP();
             }
-
         }
     }
 
@@ -182,17 +212,30 @@ public class AccountSetupController implements Serializable {
     }
 
     public void updateParam() {
-        if (paramCCTCP != null) {
-            if (paramCCTCP.getId() == null) {
-                paramCCTCP.setAdministration(getLoggedUser().getAdministration());
-                paramCCTCPService.save(paramCCTCP);
-            } else {
-                paramCCTCPService.update(paramCCTCP);
-            }
+        if (selectedOffice != null) {
+            if (paramCCTCP != null) {
+                if (paramCCTCP.getId() == null) {
+                    paramCCTCP.setAdministration(selectedOffice);
+                    paramCCTCPService.save(paramCCTCP);
+                } else {
+                    paramCCTCPService.update(paramCCTCP);
+                }
 
-            final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                    "ParamCctCpUpdated");
-            JsfUtil.addSuccessMessage(msg);
+                final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
+                        "ParamCctCpUpdated");
+                JsfUtil.addSuccessMessage(msg);
+            }
+        }
+    }
+
+    public void changeOffice() {
+        if (selectedOffice != null) {
+            paramCCTCP = paramCCTCPService.findParamCCTCPByAdministration(selectedOffice);
+            if (paramCCTCP == null) {
+                paramCCTCP = new ParamCCTCP();
+            }
+        } else {
+            paramCCTCP = null;
         }
     }
 
@@ -325,6 +368,14 @@ public class AccountSetupController implements Serializable {
         this.cookieTheme = cookieTheme;
     }
 
+    public Administration getSelectedOffice() {
+        return selectedOffice;
+    }
+
+    public void setSelectedOffice(Administration selectedOffice) {
+        this.selectedOffice = selectedOffice;
+    }
+
     public String getCctCpConfigPageUrl() {
         return cctCpConfigPageUrl;
     }
@@ -341,6 +392,30 @@ public class AccountSetupController implements Serializable {
         this.paramCCTCPService = paramCCTCPService;
     }
 
+    public FileTypeService getFileTypeService() {
+        return fileTypeService;
+    }
+
+    public void setFileTypeService(FileTypeService fileTypeService) {
+        this.fileTypeService = fileTypeService;
+    }
+
+    public ServiceService getServiceService() {
+        return serviceService;
+    }
+
+    public void setServiceService(ServiceService serviceService) {
+        this.serviceService = serviceService;
+    }
+
+    public List<Administration> getBureaux() {
+        return bureaux;
+    }
+
+    public void setBureaux(List<Administration> bureaux) {
+        this.bureaux = bureaux;
+    }
+
     public ParamCCTCP getParamCCTCP() {
         return paramCCTCP;
     }
@@ -348,4 +423,6 @@ public class AccountSetupController implements Serializable {
     public void setParamCCTCP(ParamCCTCP paramCCTCP) {
         this.paramCCTCP = paramCCTCP;
     }
+
+    
 }

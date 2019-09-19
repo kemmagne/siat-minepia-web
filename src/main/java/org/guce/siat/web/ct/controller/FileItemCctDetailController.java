@@ -7271,7 +7271,8 @@ public class FileItemCctDetailController implements Serializable {
     }
 
     private void fillCCTCPParamValue(CCTCPParamValue cCTCPParamValue) {
-        ParamCCTCP params = paramCCTCPService.findParamCCTCPByAdministration(getLoggedUser().getAdministration());
+        Service uService = serviceService.findServiceByUser(getLoggedUser());
+        ParamCCTCP params = paramCCTCPService.findParamCCTCPByAdministration(uService);
         if (params != null) {
             cCTCPParamValue.setMaxContainerNumber(params.getMaxContainerNumber());
             cCTCPParamValue.setMaxGoodsLineNumber(params.getMaxGoodsLineNumber());
