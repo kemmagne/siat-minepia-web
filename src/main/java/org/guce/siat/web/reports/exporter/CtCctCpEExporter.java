@@ -130,6 +130,9 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                     case "DESTINATAIRE_ADRESSE_ADRESSE1":
                         ctCctCpEFileVo.setConsigneeAddress1(fileFieldValue1.getValue());
                         break;
+                    case "DESTINATAIRE_AUTRE_CONTACT":
+                        ctCctCpEFileVo.setConsignee(fileFieldValue1.getValue());
+                        break;
                     case "INSPECTION_CONTENEURS_CONTENEUR":
                         containersNumbers = fileFieldValue1.getValue();
                         break;

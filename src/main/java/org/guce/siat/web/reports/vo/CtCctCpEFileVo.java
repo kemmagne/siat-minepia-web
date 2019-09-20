@@ -31,6 +31,8 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
      */
     private String consignorCountry;
 
+    private String consignee;
+    
     /**
      * The consignee name.
      */
@@ -873,4 +875,14 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
     public void setTreatmentDate(Date treatmentDate) {
         this.treatmentDate = treatmentDate;
     }
+
+    public String getConsignee() {
+        return consignee;
+    }
+
+    public void setConsignee(String consignee) {
+        this.consignee = consignee;
+    }
+    
+    
 }
