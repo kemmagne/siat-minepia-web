@@ -10,6 +10,8 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
     private String exporterName;
 
     private String exporterAddress;
+    
+    private String exporter;
 
     /**
      * The consignor name.
@@ -882,6 +884,14 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
 
     public void setConsignee(String consignee) {
         this.consignee = consignee;
+    }
+
+    public String getExporter() {
+        return exporter;
+    }
+
+    public void setExporter(String exporter) {
+        this.exporter = exporter;
     }
     
     

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CERTIFICAT_PHYTOSANITAIRE" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6f5c0835-9f5c-4b28-b5db-296746e60a32">
 	<property name="ireport.zoom" value="1.2100000000000002"/>
-	<property name="ireport.x" value="11"/>
-	<property name="ireport.y" value="220"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="MINADER_LOGO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -50,6 +50,8 @@
 	<field name="transit" class="java.lang.Boolean"/>
 	<field name="quantities" class="java.lang.String"/>
 	<field name="treatmentDate" class="java.util.Date"/>
+	<field name="consignee" class="java.lang.String"/>
+	<field name="exporter" class="java.lang.String"/>
 	<background>
 		<band height="802">
 			<printWhenExpression><![CDATA[$P{DRAFT}]]></printWhenExpression>
@@ -236,14 +238,14 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					<textElement textAlignment="Center">
 						<font size="8" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{exporterName} + ", " + $F{exporterAddress}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{exporter} != null ? $F{exporter}.replace('\n', ',' ) : ($F{exporterName} + ", " + $F{exporterAddress})]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
 					<reportElement uuid="2e3feed9-6f97-4541-9742-8aa7de3939e2" stretchType="RelativeToBandHeight" x="4" y="153" width="240" height="42"/>
 					<textElement>
 						<font size="8" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{consigneeName} + ", " + $F{consigneeAddress1}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{consignee} != null ? $F{consignee}.replace('\n', ',' ) : ($F{consigneeName} + ", " + $F{consigneeAddress1})]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
 					<reportElement uuid="bedfdf25-bb44-4c25-a5e4-b9347ee85d96" x="354" y="201" width="198" height="27"/>
