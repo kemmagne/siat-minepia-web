@@ -904,6 +904,8 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
 
     public void setContainersNumbersAnnex(String containersNumbersAnnex) {
         this.containersNumbersAnnex = containersNumbersAnnex;
+    }
+    
     public String getConsignee() {
         return consignee;
     }
