@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CERTIFICAT_PHYTOSANITAIRE" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6f5c0835-9f5c-4b28-b5db-296746e60a32">
 	<property name="ireport.zoom" value="1.2100000000000002"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="240"/>
 	<parameter name="MINADER_LOGO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -306,7 +306,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 	<detail>
 		<band height="530">
 			<frame>
-				<reportElement uuid="f4fb2e2b-5496-45ae-9db7-9a6e6de4e89f" x="0" y="0" width="555" height="530"/>
+				<reportElement uuid="f4fb2e2b-5496-45ae-9db7-9a6e6de4e89f" isPrintRepeatedValues="false" x="0" y="0" width="555" height="530"/>
 				<rectangle>
 					<reportElement uuid="7b6abe5f-6b42-47e9-a87b-983d15fb41a8" mode="Transparent" x="0" y="0" width="474" height="168"/>
 				</rectangle>

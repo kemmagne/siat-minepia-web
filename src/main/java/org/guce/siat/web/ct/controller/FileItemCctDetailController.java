@@ -4122,6 +4122,7 @@ public class FileItemCctDetailController implements Serializable {
         generateDraftAllowed = sendDecisionAllowed && showDecisionButton
                 && (StepCode.ST_CT_38.equals(currentFileItem.getStep().getStepCode())
                 || StepCode.ST_CT_31.equals(currentFileItem.getStep().getStepCode())
+                || StepCode.ST_CT_53.equals(currentFileItem.getStep().getStepCode())
                 || StepCode.ST_CT_55.equals(currentFileItem.getStep().getStepCode())
                 || StepCode.ST_CT_56.equals(currentFileItem.getStep().getStepCode()))
                 && CollectionUtils.isNotEmpty(fileTypeFlowReportsDraft);
@@ -7129,6 +7130,10 @@ public class FileItemCctDetailController implements Serializable {
                     if (phytoEnd && paramValue == null) {
                         paramValue = cCTCPParamValue;
                     }
+                    if (paramValue == null){
+                        paramValue = new CCTCPParamValue();
+                        fillCCTCPParamValue(paramValue);
+                    }
                     if (ti.getDelivrableType() == null || "CCT_CT_E".equals(ti.getDelivrableType())) {
                         Map<String, Integer> count = countFileContainerAndPackage(currentFile);
                         if (count.get(COUNT_GOODS) > paramValue.getMaxGoodsLineNumber()
@@ -7193,7 +7198,6 @@ public class FileItemCctDetailController implements Serializable {
         if (reportInvoker != null) {
             reportInvoker.setDraft(draft);
             reportInvoker.setFileFieldValueService(fileFieldValueService);
-            report = JsfUtil.getReport(reportInvoker);
             if (forAnnexes != null) {
                 JasperPrint page1 = JsfUtil.getReportJP(reportInvoker);
                 TreatmentInfos ti = (TreatmentInfos) forAnnexes.get("ti");
@@ -7209,6 +7213,8 @@ public class FileItemCctDetailController implements Serializable {
                 inputStreams.add(report2);
 
                 report = JsfUtil.mergePdf(inputStreams);
+            } else {
+                report = JsfUtil.getReport(reportInvoker);
             }
         }
         return report;
@@ -7220,6 +7226,7 @@ public class FileItemCctDetailController implements Serializable {
         final Class classe = Class.forName(nomClasse);
         @SuppressWarnings({"rawtypes", "unchecked"})
         Constructor c1;
+        Map<String, Object> forAnnexes = null;
         byte[] report = null;
         AbstractReportInvoker reportInvoker = null;
         FileItem ffi = file.getFileItemsList().get(0);
@@ -7249,8 +7256,27 @@ public class FileItemCctDetailController implements Serializable {
                         JsfUtil.addErrorMessage(msg);
                         return null;
                     }
+                    ItemFlow itemFlow2 = itemFlowService.findItemFlowByFileItemAndFlow(file.getFileItemsList().get(0), FlowCode.FL_CT_08);
+                    if (itemFlow2 == null){
+                        itemFlow2 = itemFlowService.findItemFlowByFileItemAndFlow(file.getFileItemsList().get(0), FlowCode.FL_CT_114);
+                    }
+                    CCTCPParamValue paramValue = cCTCPParamValueService.findCCTCPParamValueByItemFlow(itemFlow2);
+                    if (paramValue == null) {
+                        fillCCTCPParamValue(paramValue);
+                    }
+                 
                     if (ti.getDelivrableType() == null || "CCT_CT_E".equals(ti.getDelivrableType())) {
-                        reportInvoker = (AbstractReportInvoker) c1.newInstance(file, ti, "CERTIFICAT_PHYTOSANITAIRE");
+                        Map<String, Integer> count = countFileContainerAndPackage(file);
+                        if (count.get(COUNT_GOODS) > paramValue.getMaxGoodsLineNumber()
+                                || count.get(COUNT_CONTAINERS) > paramValue.getMaxContainerNumber()
+                                || count.get(COUNT_PACKAGES) > paramValue.getMaxPackageNumber()) {
+                            forAnnexes = new HashMap();
+                            forAnnexes.put("ti", ti);
+                            forAnnexes.put("paramValue", paramValue);
+                            forAnnexes.put("fileNameAnnex", "CERTIFICAT_PHYTOSANITAIRE_ANNEXE");
+                        }
+                        reportInvoker = new CtCctCpEExporter(file, ti, paramValue, "CERTIFICAT_PHYTOSANITAIRE");
+
                     } else if ("CQ_CT".equals(ti.getDelivrableType())) {
                         reportInvoker = new CtCctCqeExporter(file, ti);
                     }
@@ -7303,7 +7329,24 @@ public class FileItemCctDetailController implements Serializable {
         if (reportInvoker != null) {
             reportInvoker.setDraft(draft);
             reportInvoker.setFileFieldValueService(fileFieldValueService);
-            report = JsfUtil.getReport(reportInvoker);
+            if (forAnnexes != null) {
+                JasperPrint page1 = JsfUtil.getReportJP(reportInvoker);
+                TreatmentInfos ti = (TreatmentInfos) forAnnexes.get("ti");
+                CCTCPParamValue paramValue = (CCTCPParamValue) forAnnexes.get("paramValue");
+                String fileAnnexName = (String) forAnnexes.get("fileNameAnnex");
+                CtCctCpEExporter exporter = new CtCctCpEExporter(currentFile, ti, paramValue, fileAnnexName);
+                exporter.setDraft(draft);
+                exporter.setFileFieldValueService(fileFieldValueService);
+                JasperPrint report2 = JsfUtil.getReportJP(exporter);
+
+                List<JasperPrint> inputStreams = new ArrayList<>();
+                inputStreams.add(page1);
+                inputStreams.add(report2);
+
+                report = JsfUtil.mergePdf(inputStreams);
+            } else {
+                report = JsfUtil.getReport(reportInvoker);
+            }
         }
         return report;
     }
