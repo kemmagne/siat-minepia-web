@@ -3148,6 +3148,8 @@ public class FileItemCctDetailController implements Serializable {
                                         attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
                                     }
                                 }
+
+                                fileService.update(currentFile);
                             }
 
                             // convert file to document
