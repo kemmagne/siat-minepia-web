@@ -269,14 +269,15 @@
 
                     <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="menuItemTheme" styleClass="theme"
                                 value="#{bundle['appmenu_theme']} " actionListener="#{accountSetupController.goToThemePage}" />
+                    <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="menuItemTheme2" 
+                                value="#{bundle['appmenu_cctCpConfig']} " actionListener="#{accountSetupController.goToCctCpCongigPage}"
+                                rendered="#{request.isUserInRole('ADMIN_ORG') or request.isUserInRole('ROOT')}" />
                     <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="paramsMenuItem2"
                                 value="#{bundle['appmenu_gestion_params_organism_gen']}"
                                 rendered="#{request.isUserInRole('ADMIN_ORG') or request.isUserInRole('ROOT')}" actionListener="#{settingsController.goToPage}" />
                     <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="reportParams"
                                 value="#{bundle['appmenu_gestion_params_organism_report']}" rendered="#{request.isUserInRole('ADMIN_ORG')}"
                                 actionListener="#{reportSettingsController.goToPage}" />
-
-
                 </p:submenu>
 
             </p:panelMenu>

@@ -6,6 +6,7 @@ import org.guce.siat.common.model.Appointment;
 import org.guce.siat.core.ct.model.AnalyseOrder;
 import org.guce.siat.core.ct.model.AnalyseResult;
 import org.guce.siat.core.ct.model.ApprovedDecision;
+import org.guce.siat.core.ct.model.CCTCPParamValue;
 import org.guce.siat.core.ct.model.InspectionReport;
 import org.guce.siat.core.ct.model.InterceptionNotification;
 import org.guce.siat.core.ct.model.PaymentData;
@@ -103,6 +104,8 @@ public class CctSpecificDecisionHistory implements Serializable {
     private TreatmentInfos decisionDetailsTI;
 
     private ApprovedDecision approvedDecision;
+    
+    private CCTCPParamValue cCTCPParamValue;
 
     /**
      * Gets the last decision ir.
@@ -394,6 +397,14 @@ public class CctSpecificDecisionHistory implements Serializable {
 
     public void setApprovedDecision(ApprovedDecision approvedDecision) {
         this.approvedDecision = approvedDecision;
+    }
+
+    public CCTCPParamValue getcCTCPParamValue() {
+        return cCTCPParamValue;
+    }
+
+    public void setcCTCPParamValue(CCTCPParamValue cCTCPParamValue) {
+        this.cCTCPParamValue = cCTCPParamValue;
     }
 
 }

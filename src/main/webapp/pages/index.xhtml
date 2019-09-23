@@ -1,271 +1,274 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
-	  xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+      xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
 
-	<ui:composition template="/templates/template.xhtml">
+    <ui:composition template="/templates/template.xhtml">
 
-		<ui:define name="title">
-			<h:outputText value="#{bundle['home_title']}"></h:outputText>
-		</ui:define>
+        <ui:define name="title">
+            <h:outputText value="#{bundle['home_title']}"></h:outputText>
+        </ui:define>
 
-		<ui:define name="body">
+        <ui:define name="body">
 
-			<h:form styleClass="nav nav-content">
+            <h:form styleClass="nav nav-content">
 
-				<h:panelGroup styleClass="menuSearch">
+                <h:panelGroup styleClass="menuSearch">
 
-					<p:inputText id="quickSearchInput" placeholder="#{bundle['QuickSearch_label']}" title="#{bundle['QuickSearch_label']}"
-								 value="#{searchController.documentNumberFilter}"
-								 rendered="#{!request.isUserInRole('ROOT') and !request.isUserInRole('ADMIN_MIN') and !request.isUserInRole('ADMIN_ORG')}" />
-					<p:commandButton id="quickSearchButton" icon="ui-icon-search" title="#{bundle['ButtonSearch']}" onstart="PF('statusDialog1').block()"
-									 onsuccess="PF('statusDialog1').unblock()" action="#{searchController.doQuickSearch}" update="growl quickSearchInput"
-									 rendered="#{!request.isUserInRole('ROOT') and !request.isUserInRole('ADMIN_MIN') and !request.isUserInRole('ADMIN_ORG')}" />
-				</h:panelGroup>
+                    <p:inputText id="quickSearchInput" placeholder="#{bundle['QuickSearch_label']}" title="#{bundle['QuickSearch_label']}"
+                                 value="#{searchController.documentNumberFilter}"
+                                 rendered="#{!request.isUserInRole('ROOT') and !request.isUserInRole('ADMIN_MIN') and !request.isUserInRole('ADMIN_ORG')}" />
+                    <p:commandButton id="quickSearchButton" icon="ui-icon-search" title="#{bundle['ButtonSearch']}" onstart="PF('statusDialog1').block()"
+                                     onsuccess="PF('statusDialog1').unblock()" action="#{searchController.doQuickSearch}" update="growl quickSearchInput"
+                                     rendered="#{!request.isUserInRole('ROOT') and !request.isUserInRole('ADMIN_MIN') and !request.isUserInRole('ADMIN_ORG')}" />
+                </h:panelGroup>
 
-				<p:panelMenu>
+                <p:panelMenu>
 
-					<p:submenu id="globalMenuItem" label="#{bundle['appmenu_dashboard']}" styleClass="home"
-							   rendered="#{!request.isUserInRole('ROOT') and !request.isUserInRole('ADMIN_MIN') and !request.isUserInRole('ADMIN_ORG') and !request.isUserInRole('SUPER') and (sessionScope.apRendred or sessionScope.cctRendred)}">
+                    <p:submenu id="globalMenuItem" label="#{bundle['appmenu_dashboard']}" styleClass="home"
+                               rendered="#{!request.isUserInRole('ROOT') and !request.isUserInRole('ADMIN_MIN') and !request.isUserInRole('ADMIN_ORG') and !request.isUserInRole('SUPER') and (sessionScope.apRendred or sessionScope.cctRendred)}">
 
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="menuItemAVIS"
-									value="#{bundle['appmenu_home_ap']}" actionListener="#{fileItemApController.goToPage}" styleClass="dashboardAP"
-									rendered="#{!request.isUserInRole('CA') and sessionScope.apRendred}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="menuItemAVIS"
+                                    value="#{bundle['appmenu_home_ap']}" actionListener="#{fileItemApController.goToPage}" styleClass="dashboardAP"
+                                    rendered="#{!request.isUserInRole('CA') and sessionScope.apRendred}" />
 
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock();" id="menuItemCCT"
-									value="#{bundle['appmenu_home_cct']}" actionListener="#{fileItemCctController.goToPage}" styleClass="dashboardCCT"
-									rendered="#{!request.isUserInRole('CA') and sessionScope.cctRendred}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock();" id="menuItemCCT"
+                                    value="#{bundle['appmenu_home_cct']}" actionListener="#{fileItemCctController.goToPage}" styleClass="dashboardCCT"
+                                    rendered="#{!request.isUserInRole('CA') and sessionScope.cctRendred}" />
 
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="menuItemRetrieveAP"
-									value="#{bundle['appmenu_home_retrieve_ap']}" actionListener="#{retrieveApController.goToPage}" styleClass="retrieveAP"
-									rendered="#{!request.isUserInRole('CA') and sessionScope.apRendred}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="menuItemRetrieveAP"
+                                    value="#{bundle['appmenu_home_retrieve_ap']}" actionListener="#{retrieveApController.goToPage}" styleClass="retrieveAP"
+                                    rendered="#{!request.isUserInRole('CA') and sessionScope.apRendred}" />
 
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="menuPayment"
-									value="#{bundle['appmenu_home_payment']}" actionListener="#{paymentController.goToPage}" styleClass="payment"
-									rendered="#{request.isUserInRole('CA') and sessionScope.apRendred}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="menuPayment"
+                                    value="#{bundle['appmenu_home_payment']}" actionListener="#{paymentController.goToPage}" styleClass="payment"
+                                    rendered="#{request.isUserInRole('CA') and sessionScope.apRendred}" />
 
-					</p:submenu>
+                    </p:submenu>
 
-					<p:submenu id="AppointmentsMenuItem" label="#{bundle['appmenu_appointment']}" styleClass="appointments"
-							   rendered="#{request.isUserInRole('CONT')}">
+                    <p:submenu id="AppointmentsMenuItem" label="#{bundle['appmenu_appointment']}" styleClass="appointments"
+                               rendered="#{request.isUserInRole('CONT')}">
 
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="menuItemMyAppointments"
-									value="#{bundle['appmenu_myAppointments']}" actionListener="#{inspectionAppointmentController.goToPage}"
-									styleClass="controllerAppointment" rendered="#{request.isUserInRole('CONT')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="menuItemMyAppointments"
+                                    value="#{bundle['appmenu_myAppointments']}" actionListener="#{inspectionAppointmentController.goToPage}"
+                                    styleClass="controllerAppointment" rendered="#{request.isUserInRole('CONT')}" />
 
-					</p:submenu>
+                    </p:submenu>
 
-					<p:submenu id="administrationSubMenu" label="#{bundle['appmenu_administration']}" icon="ui-icon-contact" styleClass="administration"
-							   rendered="#{request.isUserInRole('ADMIN_ORG') or request.isUserInRole('ADMIN_MIN') or request.isUserInRole('ROOT')}">
+                    <p:submenu id="administrationSubMenu" label="#{bundle['appmenu_administration']}" icon="ui-icon-contact" styleClass="administration"
+                               rendered="#{request.isUserInRole('ADMIN_ORG') or request.isUserInRole('ADMIN_MIN') or request.isUserInRole('ROOT')}">
 
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="adminMenuItem"
-									value="#{bundle['appmenu_gestion_admin']}" actionListener="#{adminController.goToPage}"
-									rendered="#{request.isUserInRole('ROOT') or request.isUserInRole('ADMIN_MIN')}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="userMenuItem"
-									value="#{bundle['appmenu_gestion_utilisateurs']}" actionListener="#{userController.goToPage}"
-									rendered="#{request.isUserInRole('ADMIN_MIN') or request.isUserInRole('ADMIN_ORG')}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="controllerHolidayMenuItem"
-									value="#{bundle['appmenu_gestion_controllerHoliday']}" actionListener="#{controllerHolidayController.goToPage}"
-									rendered="#{request.isUserInRole('ADMIN_ORG')}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="delegationMenuItem"
-									value="#{bundle['appmenu_gestion_delegations']}" actionListener="#{delegationController.goToPage}"
-									rendered="#{request.isUserInRole('ADMIN_ORG')}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="ministryMenuItem"
-									value="#{bundle['appmenu_gestion_ministeres']}" actionListener="#{ministryController.goToPage}"
-									rendered="#{request.isUserInRole('ROOT')}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="bureauGuceSiatMenuItem"
-									value="#{bundle['appmenu_gestion_bureau_guce_siat']}" actionListener="#{guceSiatBureauController.goToPage}"
-									rendered="#{request.isUserInRole('ROOT')}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="organismMenuItem"
-									value="#{bundle['appmenu_gestion_organism']}" actionListener="#{organismController.goToPage}"
-									rendered="#{request.isUserInRole('ADMIN_MIN')}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="subDepartmentMenuItem"
-									value="#{bundle['appmenu_configure_subdepartment']}" actionListener="#{subDepartmentController.goToPage}"
-									rendered="#{request.isUserInRole('ADMIN_ORG')}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="serviceMenuItem"
-									value="#{bundle['appmenu_gestion_services']}" actionListener="#{serviceController.goToPage}"
-									rendered="#{request.isUserInRole('ADMIN_ORG')}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="bureauRegionalMenuItem"
-									value="#{bundle['appmenu_gestion_bureauRegional']}" actionListener="#{bureauRegionalController.goToPage}"
-									rendered="#{request.isUserInRole('ADMIN_ORG')}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="carMenuItem"
-									value="#{bundle['appmenu_gestion_parc_automobile']}" actionListener="#{carController.goToPage}"
-									rendered="#{request.isUserInRole('ADMIN_ORG')}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="auditEntityMenuItem"
-									value="#{bundle['appmenu_gestion_auditEntity']}" actionListener="#{auditEntityController.goToPage}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="adminMenuItem"
+                                    value="#{bundle['appmenu_gestion_admin']}" actionListener="#{adminController.goToPage}"
+                                    rendered="#{request.isUserInRole('ROOT') or request.isUserInRole('ADMIN_MIN')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="userMenuItem"
+                                    value="#{bundle['appmenu_gestion_utilisateurs']}" actionListener="#{userController.goToPage}"
+                                    rendered="#{request.isUserInRole('ADMIN_MIN') or request.isUserInRole('ADMIN_ORG')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="controllerHolidayMenuItem"
+                                    value="#{bundle['appmenu_gestion_controllerHoliday']}" actionListener="#{controllerHolidayController.goToPage}"
+                                    rendered="#{request.isUserInRole('ADMIN_ORG')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="delegationMenuItem"
+                                    value="#{bundle['appmenu_gestion_delegations']}" actionListener="#{delegationController.goToPage}"
+                                    rendered="#{request.isUserInRole('ADMIN_ORG')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="ministryMenuItem"
+                                    value="#{bundle['appmenu_gestion_ministeres']}" actionListener="#{ministryController.goToPage}"
+                                    rendered="#{request.isUserInRole('ROOT')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="bureauGuceSiatMenuItem"
+                                    value="#{bundle['appmenu_gestion_bureau_guce_siat']}" actionListener="#{guceSiatBureauController.goToPage}"
+                                    rendered="#{request.isUserInRole('ROOT')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="organismMenuItem"
+                                    value="#{bundle['appmenu_gestion_organism']}" actionListener="#{organismController.goToPage}"
+                                    rendered="#{request.isUserInRole('ADMIN_MIN')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="subDepartmentMenuItem"
+                                    value="#{bundle['appmenu_configure_subdepartment']}" actionListener="#{subDepartmentController.goToPage}"
+                                    rendered="#{request.isUserInRole('ADMIN_ORG')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="serviceMenuItem"
+                                    value="#{bundle['appmenu_gestion_services']}" actionListener="#{serviceController.goToPage}"
+                                    rendered="#{request.isUserInRole('ADMIN_ORG')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="bureauRegionalMenuItem"
+                                    value="#{bundle['appmenu_gestion_bureauRegional']}" actionListener="#{bureauRegionalController.goToPage}"
+                                    rendered="#{request.isUserInRole('ADMIN_ORG')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="carMenuItem"
+                                    value="#{bundle['appmenu_gestion_parc_automobile']}" actionListener="#{carController.goToPage}"
+                                    rendered="#{request.isUserInRole('ADMIN_ORG')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="auditEntityMenuItem"
+                                    value="#{bundle['appmenu_gestion_auditEntity']}" actionListener="#{auditEntityController.goToPage}" />
 
-					</p:submenu>
+                    </p:submenu>
 
-					<p:submenu id="hourlySubMenu" label="#{bundle['appmenu_hourly']}" icon="ui-icon-contact" styleClass="hourly"
-							   rendered="#{request.isUserInRole('ROOT') or request.isUserInRole('ADMIN_ORG')}">
+                    <p:submenu id="hourlySubMenu" label="#{bundle['appmenu_hourly']}" icon="ui-icon-contact" styleClass="hourly"
+                               rendered="#{request.isUserInRole('ROOT') or request.isUserInRole('ADMIN_ORG')}">
 
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="hourlyTypeMenuItem"
-									value="#{bundle['appmenu_gestion_types_horaires']}" actionListener="#{hourlyTypeController.goToPage}"
-									rendered="#{request.isUserInRole('ROOT')}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="holidayMenuItem"
-									value="#{bundle['appmenu_gestion_jours_feriers']}" actionListener="#{holidayController.goToPage}"
-									rendered="#{request.isUserInRole('ROOT')}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="workYearConfigMenuItem"
-									value="#{bundle['appmenu_gestion_des_horaires_annuels']}" actionListener="#{workYearConfigController.goToPage}"
-									rendered="#{request.isUserInRole('ROOT')}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="inspWorkWeekConfigMenuItem"
-									value="#{bundle['appmenu_gestion_inspWorkWeekConfig']}" actionListener="#{inspectionWorkWeekConfigController.goToPage}"
-									rendered="#{request.isUserInRole('ADMIN_ORG')}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="inspectionWorkDayConfigMenuItem"
-									value="#{bundle['appmenu_gestion_horaire_inspection_par_jour']}" actionListener="#{inspectionWorkDayConfigController.goToPage}"
-									rendered="#{request.isUserInRole('ADMIN_ORG')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="hourlyTypeMenuItem"
+                                    value="#{bundle['appmenu_gestion_types_horaires']}" actionListener="#{hourlyTypeController.goToPage}"
+                                    rendered="#{request.isUserInRole('ROOT')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="holidayMenuItem"
+                                    value="#{bundle['appmenu_gestion_jours_feriers']}" actionListener="#{holidayController.goToPage}"
+                                    rendered="#{request.isUserInRole('ROOT')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="workYearConfigMenuItem"
+                                    value="#{bundle['appmenu_gestion_des_horaires_annuels']}" actionListener="#{workYearConfigController.goToPage}"
+                                    rendered="#{request.isUserInRole('ROOT')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="inspWorkWeekConfigMenuItem"
+                                    value="#{bundle['appmenu_gestion_inspWorkWeekConfig']}" actionListener="#{inspectionWorkWeekConfigController.goToPage}"
+                                    rendered="#{request.isUserInRole('ADMIN_ORG')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="inspectionWorkDayConfigMenuItem"
+                                    value="#{bundle['appmenu_gestion_horaire_inspection_par_jour']}" actionListener="#{inspectionWorkDayConfigController.goToPage}"
+                                    rendered="#{request.isUserInRole('ADMIN_ORG')}" />
 
-					</p:submenu>
+                    </p:submenu>
 
-					<p:submenu id="productsSubMenu" label="#{bundle['appmenu_productManagement']}" icon="ui-icon-contact" styleClass="products"
-							   rendered="#{request.isUserInRole('ADMIN_ORG')}">
+                    <p:submenu id="productsSubMenu" label="#{bundle['appmenu_productManagement']}" icon="ui-icon-contact" styleClass="products"
+                               rendered="#{request.isUserInRole('ADMIN_ORG')}">
 
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="itemMenuItem"
-									value="#{bundle['appmenu_gestion_NSH']}" actionListener="#{itemController.goToPage}" rendered="#{request.isUserInRole('ADMIN_ORG')}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="servicesItemMenuItem"
-									value="#{bundle['appmenu_gestion_subfamily']}" actionListener="#{servicesItemController.goToPage}"
-									rendered="#{request.isUserInRole('ADMIN_ORG')}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="analyseTypeMenuItem"
-									value="#{bundle['appmenu_gestion_analyse_type']}" actionListener="#{analyseTypeController.goToPage}"
-									rendered="#{request.isUserInRole('ADMIN_ORG')}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="laboratoryMenuItem"
-									value="#{bundle['appmenu_gestion_laboratory']}" actionListener="#{laboratoryController.goToPage}"
-									rendered="#{request.isUserInRole('ADMIN_ORG')}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="treatmentTypeMenuItem"
-									value="#{bundle['appmenu_gestion_traitement_type']}" actionListener="#{treatmentTypeController.goToPage}"
-									rendered="#{request.isUserInRole('ADMIN_ORG')}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="treatmentCompanyMenuItem"
-									value="#{bundle['appmenu_gestion_societe_traitement']}" actionListener="#{treatmentCompanyController.goToPage}"
-									rendered="#{request.isUserInRole('ADMIN_ORG')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="itemMenuItem"
+                                    value="#{bundle['appmenu_gestion_NSH']}" actionListener="#{itemController.goToPage}" rendered="#{request.isUserInRole('ADMIN_ORG')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="servicesItemMenuItem"
+                                    value="#{bundle['appmenu_gestion_subfamily']}" actionListener="#{servicesItemController.goToPage}"
+                                    rendered="#{request.isUserInRole('ADMIN_ORG')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="analyseTypeMenuItem"
+                                    value="#{bundle['appmenu_gestion_analyse_type']}" actionListener="#{analyseTypeController.goToPage}"
+                                    rendered="#{request.isUserInRole('ADMIN_ORG')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="laboratoryMenuItem"
+                                    value="#{bundle['appmenu_gestion_laboratory']}" actionListener="#{laboratoryController.goToPage}"
+                                    rendered="#{request.isUserInRole('ADMIN_ORG')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="treatmentTypeMenuItem"
+                                    value="#{bundle['appmenu_gestion_traitement_type']}" actionListener="#{treatmentTypeController.goToPage}"
+                                    rendered="#{request.isUserInRole('ADMIN_ORG')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="treatmentCompanyMenuItem"
+                                    value="#{bundle['appmenu_gestion_societe_traitement']}" actionListener="#{treatmentCompanyController.goToPage}"
+                                    rendered="#{request.isUserInRole('ADMIN_ORG')}" />
 
-					</p:submenu>
+                    </p:submenu>
 
-					<p:submenu id="gestionRisquesSubMenu" label="#{bundle['appmenu_gestion_risques']}" icon="ui-icon-alert" styleClass="risk"
-							   rendered="#{request.isUserInRole('ADMIN_ORG') or request.isUserInRole('INS')}">
+                    <p:submenu id="gestionRisquesSubMenu" label="#{bundle['appmenu_gestion_risques']}" icon="ui-icon-alert" styleClass="risk"
+                               rendered="#{request.isUserInRole('ADMIN_ORG') or request.isUserInRole('INS')}">
 
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="alertMenuItem"
-									value="#{bundle['appmenu_gestion_alertes']}" rendered="#{request.isUserInRole('ADMIN_ORG')}"
-									actionListener="#{alertController.goToPage}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="historyAlertMenuItem"
-									value="#{bundle['appmenu_history_alert']}" rendered="#{request.isUserInRole('ADMIN_ORG')}"
-									actionListener="#{historyAlertController.goToPage}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="ciblageMenuItem"
-									value="#{bundle['appmenu_gestion_ciblage']}" rendered="#{request.isUserInRole('ADMIN_ORG')}"
-									actionListener="#{ciblageController.goToPage}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="historyCiblageMenuItem"
-									value="#{bundle['appmenu_history_ciblage']}" rendered="#{request.isUserInRole('ADMIN_ORG')}"
-									actionListener="#{historyCiblageController.goToPage}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="paramsMenuItem"
-									value="#{bundle['appmenu_gestion_params_organism']}" rendered="#{request.isUserInRole('ADMIN_ORG')}"
-									actionListener="#{paramsOrganismController.goToPage}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="tendancePerformanceMenuItem"
-									value="#{bundle['appmenu_gestion_tendance_performance']}" rendered="#{request.isUserInRole('INS')}" styleClass="trendPerformance"
-									actionListener="#{trendPerformanceController.goToPage}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="alertMenuItem"
+                                    value="#{bundle['appmenu_gestion_alertes']}" rendered="#{request.isUserInRole('ADMIN_ORG')}"
+                                    actionListener="#{alertController.goToPage}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="historyAlertMenuItem"
+                                    value="#{bundle['appmenu_history_alert']}" rendered="#{request.isUserInRole('ADMIN_ORG')}"
+                                    actionListener="#{historyAlertController.goToPage}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="ciblageMenuItem"
+                                    value="#{bundle['appmenu_gestion_ciblage']}" rendered="#{request.isUserInRole('ADMIN_ORG')}"
+                                    actionListener="#{ciblageController.goToPage}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="historyCiblageMenuItem"
+                                    value="#{bundle['appmenu_history_ciblage']}" rendered="#{request.isUserInRole('ADMIN_ORG')}"
+                                    actionListener="#{historyCiblageController.goToPage}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="paramsMenuItem"
+                                    value="#{bundle['appmenu_gestion_params_organism']}" rendered="#{request.isUserInRole('ADMIN_ORG')}"
+                                    actionListener="#{paramsOrganismController.goToPage}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="tendancePerformanceMenuItem"
+                                    value="#{bundle['appmenu_gestion_tendance_performance']}" rendered="#{request.isUserInRole('INS')}" styleClass="trendPerformance"
+                                    actionListener="#{trendPerformanceController.goToPage}" />
 
-					</p:submenu>
+                    </p:submenu>
 
-					<p:submenu id="wfStepsFlowsSubMenu" label="#{bundle['appmenu_wfStepsFlows']}" icon="ui-icon-contact" styleClass="workflow"
-							   rendered="#{request.isUserInRole('ROOT')}">
+                    <p:submenu id="wfStepsFlowsSubMenu" label="#{bundle['appmenu_wfStepsFlows']}" icon="ui-icon-contact" styleClass="workflow"
+                               rendered="#{request.isUserInRole('ROOT')}">
 
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="fileTypeMenuItem"
-									value="#{bundle['appmenu_configure_fileType']}" actionListener="#{fileTypeController.goToPage}"
-									rendered="#{request.isUserInRole('ROOT')}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="positionAuthorityMenuItem"
-									value="#{bundle['appmenu_configure_AuthoritiesPerPosition']}" actionListener="#{positionAuthorityController.goToPage}"
-									rendered="#{false and request.isUserInRole('ROOT')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="fileTypeMenuItem"
+                                    value="#{bundle['appmenu_configure_fileType']}" actionListener="#{fileTypeController.goToPage}"
+                                    rendered="#{request.isUserInRole('ROOT')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="positionAuthorityMenuItem"
+                                    value="#{bundle['appmenu_configure_AuthoritiesPerPosition']}" actionListener="#{positionAuthorityController.goToPage}"
+                                    rendered="#{false and request.isUserInRole('ROOT')}" />
 
-					</p:submenu>
+                    </p:submenu>
 
-					<p:submenu id="searchSubMenu" label="#{bundle['appmenu_search']}" styleClass="searchSubMenu"
-							   rendered="#{!request.isUserInRole('ROOT') and !request.isUserInRole('ADMIN_MIN') and !request.isUserInRole('ADMIN_ORG')}">
+                    <p:submenu id="searchSubMenu" label="#{bundle['appmenu_search']}" styleClass="searchSubMenu"
+                               rendered="#{!request.isUserInRole('ROOT') and !request.isUserInRole('ADMIN_MIN') and !request.isUserInRole('ADMIN_ORG')}">
 
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="simpleMenuItem"
-									value="#{bundle['appmenu_search_simple']}" actionListener="#{searchController.goToSimpleSearchPage}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="advancedMenuItem"
-									value="#{bundle['appmenu_search_advanced']}" actionListener="#{searchController.goToAdvancedSearchPage}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="simpleMenuItem"
+                                    value="#{bundle['appmenu_search_simple']}" actionListener="#{searchController.goToSimpleSearchPage}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="advancedMenuItem"
+                                    value="#{bundle['appmenu_search_advanced']}" actionListener="#{searchController.goToAdvancedSearchPage}" />
 
-					</p:submenu>
+                    </p:submenu>
 
-					<p:submenu id="QuotaSubMenu" label="#{bundle['appmenu_Quota']}" styleClass="QuotaSubMenu"
-							   rendered="#{request.isUserInRole('SUPER') and globalBean.currentMinistry.id eq 221}">
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="QuotaSubMenuItem" styleClass="quota"
-									value="#{bundle['appmenu_QuotaItem']}" actionListener="#{quotaController.goToPage}" />
-					</p:submenu>
+                    <p:submenu id="QuotaSubMenu" label="#{bundle['appmenu_Quota']}" styleClass="QuotaSubMenu"
+                               rendered="#{request.isUserInRole('SUPER') and globalBean.currentMinistry.id eq 221}">
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="QuotaSubMenuItem" styleClass="quota"
+                                    value="#{bundle['appmenu_QuotaItem']}" actionListener="#{quotaController.goToPage}" />
+                    </p:submenu>
 
-					<p:submenu id="staticMenuItem" label="#{bundle['appmenu_statistic']}" styleClass="staticMenuItem"
-							   rendered="#{request.isUserInRole('SUPER') or request.isUserInRole('ADMIN_MIN')}">
+                    <p:submenu id="staticMenuItem" label="#{bundle['appmenu_statistic']}" styleClass="staticMenuItem"
+                               rendered="#{request.isUserInRole('SUPER') or request.isUserInRole('ADMIN_MIN')}">
 
-                                                <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="pindingFilesMenuItem"
-									styleClass="pendingFiles" value="#{bundle['appmenu_statistic_pindingFiles']}"
-									actionListener="#{statisticController.goToPindingSearchPage}" rendered="#{request.isUserInRole('SUPER')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="pindingFilesMenuItem"
+                                    styleClass="pendingFiles" value="#{bundle['appmenu_statistic_pindingFiles']}"
+                                    actionListener="#{statisticController.goToPindingSearchPage}" rendered="#{request.isUserInRole('SUPER')}" />
 
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="sampleLabMenuItem"
-									styleClass="sampleByLab" value="#{bundle['appmenu_search_sampleByLab']}"
-									actionListener="#{statisticController.goToSampleByLabStatisticPage}"
-									rendered="#{request.isUserInRole('SUPER') and sessionScope.cctRendred}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="analyseLabMenuItem"
-									styleClass="analyseByLab" value="#{bundle['appmenu_search_analyseByLab']}"
-									actionListener="#{statisticController.goToAnalyseByLabStatisticPage}"
-									rendered="#{request.isUserInRole('SUPER') and sessionScope.cctRendred}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="decisionRefoulDestrMenuItem"
-									styleClass="fileItemByDesicion" value="#{bundle['appmenu_search_decisionRefoulDestr']}"
-									actionListener="#{statisticController.goToDecisionRefoulementDestructionPage}"
-									rendered="#{request.isUserInRole('SUPER') and sessionScope.cctRendred}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="sampleLabMenuItem"
+                                    styleClass="sampleByLab" value="#{bundle['appmenu_search_sampleByLab']}"
+                                    actionListener="#{statisticController.goToSampleByLabStatisticPage}"
+                                    rendered="#{request.isUserInRole('SUPER') and sessionScope.cctRendred}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="analyseLabMenuItem"
+                                    styleClass="analyseByLab" value="#{bundle['appmenu_search_analyseByLab']}"
+                                    actionListener="#{statisticController.goToAnalyseByLabStatisticPage}"
+                                    rendered="#{request.isUserInRole('SUPER') and sessionScope.cctRendred}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="decisionRefoulDestrMenuItem"
+                                    styleClass="fileItemByDesicion" value="#{bundle['appmenu_search_decisionRefoulDestr']}"
+                                    actionListener="#{statisticController.goToDecisionRefoulementDestructionPage}"
+                                    rendered="#{request.isUserInRole('SUPER') and sessionScope.cctRendred}" />
 
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="inspectionDestributionItem"
-									styleClass="inspectionDestribution" value="#{bundle['appmenu_statistic_inspectionDestribution']}"
-									actionListener="#{statisticController.goToInspectionDestributionPage}"
-									rendered="#{request.isUserInRole('SUPER') and sessionScope.cctRendred}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="inspectionDestributionItem"
+                                    styleClass="inspectionDestribution" value="#{bundle['appmenu_statistic_inspectionDestribution']}"
+                                    actionListener="#{statisticController.goToInspectionDestributionPage}"
+                                    rendered="#{request.isUserInRole('SUPER') and sessionScope.cctRendred}" />
 
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="historicClientByDecisionMenuItem"
-									styleClass="historicClientByDecision" value="#{bundle['appmenu_search_historicClientByDecision']}"
-									actionListener="#{statisticController.goToHistoricClientDecisionPage}" rendered="#{request.isUserInRole('SUPER')}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="historicClientByProductMenuItem"
-									styleClass="historicClientByProduct" value="#{bundle['appmenu_search_historicClientByProduct']}"
-									actionListener="#{statisticController.goToHistoricClientProductPage}" rendered="#{request.isUserInRole('SUPER')}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="productsQuantitiesMenuItem"
-									styleClass="productsQuantity" value="#{bundle['appmenu_search_productsQuantity']}"
-									actionListener="#{statisticController.goToProductsQuantitiesPage}" rendered="#{request.isUserInRole('SUPER')}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="productsQuantitiesByDrdMenuItem"
-									styleClass="productsQuantityByDrd" value="#{bundle['appmenu_search_productsQuantityByDrd']}"
-									actionListener="#{statisticController.goToProductsQuantitiesByDrdPage}"
-									rendered="#{request.isUserInRole('SUPER') and sessionScope.cctRendred}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="repartitionDecisionDelivree"
-									value="#{bundle['appmenu_search_repartitionDecisionDelivree']}" styleClass="repartitionDecisionDelevree"
-									actionListener="#{statisticController.goToRepartitionDecisionDelivree}" rendered="#{request.isUserInRole('SUPER')}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="balance" styleClass="tradeBalance"
-									value="#{bundle['trade_balance']}" actionListener="#{tradeBalanceController.goToPage}" rendered="#{request.isUserInRole('SUPER')}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="balanceConfig"
-									styleClass="tradeBalanceConfig" value="#{bundle['appmenu_statistic_tradeConfig']}"
-									actionListener="#{tradeBalanceConfigController.goToPage}" rendered="#{request.isUserInRole('ADMIN_MIN')}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="statisticsOnBusinessMenuItem"
-									value="#{bundle['appmenu_search_statisticsOnBusiness']}" actionListener="#{statisticController.goToStatisticsBusinessPage}"
-									rendered="#{request.isUserInRole('SUPER')}" />
-					</p:submenu>
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="historicClientByDecisionMenuItem"
+                                    styleClass="historicClientByDecision" value="#{bundle['appmenu_search_historicClientByDecision']}"
+                                    actionListener="#{statisticController.goToHistoricClientDecisionPage}" rendered="#{request.isUserInRole('SUPER')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="historicClientByProductMenuItem"
+                                    styleClass="historicClientByProduct" value="#{bundle['appmenu_search_historicClientByProduct']}"
+                                    actionListener="#{statisticController.goToHistoricClientProductPage}" rendered="#{request.isUserInRole('SUPER')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="productsQuantitiesMenuItem"
+                                    styleClass="productsQuantity" value="#{bundle['appmenu_search_productsQuantity']}"
+                                    actionListener="#{statisticController.goToProductsQuantitiesPage}" rendered="#{request.isUserInRole('SUPER')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="productsQuantitiesByDrdMenuItem"
+                                    styleClass="productsQuantityByDrd" value="#{bundle['appmenu_search_productsQuantityByDrd']}"
+                                    actionListener="#{statisticController.goToProductsQuantitiesByDrdPage}"
+                                    rendered="#{request.isUserInRole('SUPER') and sessionScope.cctRendred}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="repartitionDecisionDelivree"
+                                    value="#{bundle['appmenu_search_repartitionDecisionDelivree']}" styleClass="repartitionDecisionDelevree"
+                                    actionListener="#{statisticController.goToRepartitionDecisionDelivree}" rendered="#{request.isUserInRole('SUPER')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="balance" styleClass="tradeBalance"
+                                    value="#{bundle['trade_balance']}" actionListener="#{tradeBalanceController.goToPage}" rendered="#{request.isUserInRole('SUPER')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="balanceConfig"
+                                    styleClass="tradeBalanceConfig" value="#{bundle['appmenu_statistic_tradeConfig']}"
+                                    actionListener="#{tradeBalanceConfigController.goToPage}" rendered="#{request.isUserInRole('ADMIN_MIN')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="statisticsOnBusinessMenuItem"
+                                    value="#{bundle['appmenu_search_statisticsOnBusiness']}" actionListener="#{statisticController.goToStatisticsBusinessPage}"
+                                    rendered="#{request.isUserInRole('SUPER')}" />
+                    </p:submenu>
 
-					<p:submenu rendered="#{globalBean.currentMinistry.id eq 221 and !request.isUserInRole('ADMIN_MIN')}" id="foreignTradeMonitoringMenuItem"
-							   label="#{bundle['app_menu_monitoring']}" styleClass="foreign">
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="foreignTradeMonitoringItem"
-									value="#{bundle['app_menu_fimex']} " actionListener="#{fimexController.goToPage}" />
-					</p:submenu>
+                    <p:submenu rendered="#{globalBean.currentMinistry.id eq 221 and !request.isUserInRole('ADMIN_MIN')}" id="foreignTradeMonitoringMenuItem"
+                               label="#{bundle['app_menu_monitoring']}" styleClass="foreign">
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="foreignTradeMonitoringItem"
+                                    value="#{bundle['app_menu_fimex']} " actionListener="#{fimexController.goToPage}" />
+                    </p:submenu>
 
-					<p:submenu id="accountSetupMenuItem" label="#{bundle['appmenu_Settings']}" styleClass="settings">
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="menuItemTheme" styleClass="theme"
-									value="#{bundle['appmenu_theme']} " actionListener="#{accountSetupController.goToThemePage}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="paramsMenuItem2"
-									value="#{bundle['appmenu_gestion_params_organism_gen']}"
-									rendered="#{request.isUserInRole('ADMIN_ORG') or request.isUserInRole('ROOT')}" actionListener="#{settingsController.goToPage}" />
-						<p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="reportParams"
-									value="#{bundle['appmenu_gestion_params_organism_report']}" rendered="#{request.isUserInRole('ADMIN_ORG')}"
-									actionListener="#{reportSettingsController.goToPage}" />
+                    <p:submenu id="accountSetupMenuItem" label="#{bundle['appmenu_Settings']}" styleClass="settings">
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="menuItemTheme" styleClass="theme"
+                                    value="#{bundle['appmenu_theme']} " actionListener="#{accountSetupController.goToThemePage}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="menuItemTheme2" styleClass="theme"
+                                    value="#{bundle['appmenu_cctCpConfig']} " actionListener="#{accountSetupController.goToCctCpCongigPage}"
+                                    rendered="#{request.isUserInRole('ADMIN_ORG') or request.isUserInRole('ROOT')}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="paramsMenuItem2"
+                                    value="#{bundle['appmenu_gestion_params_organism_gen']}"
+                                    rendered="#{request.isUserInRole('ADMIN_ORG') or request.isUserInRole('ROOT')}" actionListener="#{settingsController.goToPage}" />
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="reportParams"
+                                    value="#{bundle['appmenu_gestion_params_organism_report']}" rendered="#{request.isUserInRole('ADMIN_ORG')}"
+                                    actionListener="#{reportSettingsController.goToPage}" />
 
-					</p:submenu>
+                    </p:submenu>
 
-				</p:panelMenu>
+                </p:panelMenu>
 
-			</h:form>
+            </h:form>
 
 
 
-		</ui:define>
-	</ui:composition>
+        </ui:define>
+    </ui:composition>
 </html>
