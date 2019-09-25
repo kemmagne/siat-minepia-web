@@ -7553,6 +7553,51 @@ public class FileItemCctDetailController implements Serializable {
             if (tmp != null) {
                 treatInfo = (TreatmentInfos) BeanUtils.cloneBean(tmp);
             }
+            if (tmp == null){
+                // Load TreatmentInfos from FileField
+                final List<FileFieldValue> fileFieldValueList = tmpFile.getFileFieldValueList();
+                if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
+                    for (final FileFieldValue fileFieldValue1 : fileFieldValueList) {
+                        switch (fileFieldValue1.getFileField().getCode()) {
+                            case "AUTRE_INFORMATION_DECLARATION_ADDITIONNELLE":
+                                treatInfo.setAdditionnalDeclaration(fileFieldValue1.getValue());
+                                break;
+                            case "AUTRE_INFORMATION_DATE_TRAITEMENT":
+                                treatInfo.setTreatmentDate(new SimpleDateFormat("dd/MM/yyyy").parse(fileFieldValue1.getValue()));
+                                break;
+                            case "AUTRE_INFORMATION_TYPE_TRAITEMENT":
+                                treatInfo.setTypeOfTreatment(fileFieldValue1.getValue());
+                                break;
+                            case "AUTRE_INFORMATION_DUREE_TRAITEMENT":
+                                treatInfo.setDuration(fileFieldValue1.getValue());
+                                break;
+                            case "AUTRE_INFORMATION_TEMPERATURE":
+                                treatInfo.setTemperature(fileFieldValue1.getValue());
+                                break;
+                            case "AUTRE_INFORMATION_TRAITEMENT_EFFECTUE":
+                                treatInfo.setTreatmentsCarriedOut(fileFieldValue1.getValue());
+                                break;
+                            case "AUTRE_INFORMATION_PRODUIT_CHIMIQUE":
+                                treatInfo.setChemicalProduct(fileFieldValue1.getValue());
+                                break;
+                            case "AUTRE_INFORMATION_CONCENTRATION":
+                                treatInfo.setConcentration(fileFieldValue1.getValue());
+                                break;
+                            case "AUTRE_INFORMATION_RENSEIGNEMENT_COMPLEMENTAIRE":
+                                treatInfo.setAdditionalInfos(fileFieldValue1.getValue());
+                                break;
+                            case "AUTRE_INFORMATION_FUMIGATION":
+                                treatInfo.setFumigation(Boolean.parseBoolean(fileFieldValue1.getValue()));
+                                break;
+                            case "AUTRE_INFORMATION_DESINFECTION":
+                                treatInfo.setDisinfection(Boolean.parseBoolean(fileFieldValue1.getValue()));
+                                break;
+                            default:
+                                 break;
+                        }
+                    }
+                }
+            }
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
         } finally {
@@ -7623,4 +7668,6 @@ public class FileItemCctDetailController implements Serializable {
         }
         return count;
     }
+    
+    
 }

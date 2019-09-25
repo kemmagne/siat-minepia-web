@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CERTIFICAT_PHYTOSANITAIRE" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6f5c0835-9f5c-4b28-b5db-296746e60a32">
 	<property name="ireport.zoom" value="1.0000000000000004"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="96"/>
+	<property name="ireport.y" value="240"/>
 	<parameter name="MINADER_LOGO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -174,8 +174,10 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 				<reportElement uuid="fd57a025-404c-493f-93dc-c3f783d517b8" stretchType="RelativeToBandHeight" mode="Transparent" x="0" y="-3" width="555" height="32"/>
 			</rectangle>
 		</band>
-		<band height="34" splitType="Prevent">
-			<printWhenExpression><![CDATA[$F{containersNumbersAnnex} != null]]></printWhenExpression>
+		<band height="229" splitType="Prevent">
+			<rectangle>
+				<reportElement uuid="d3ac723e-303d-4528-a079-e519dc5f8852" positionType="Float" x="0" y="29" width="555" height="195"/>
+			</rectangle>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="08102bf1-4b4c-490b-9a1d-df74a94550fd" positionType="Float" stretchType="RelativeToTallestObject" x="1" y="1" width="553" height="31"/>
 				<textElement textAlignment="Center" markup="html"/>
@@ -184,79 +186,72 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 			<rectangle>
 				<reportElement uuid="fe5d09f8-b697-42f8-bf49-546f00ce518f" stretchType="RelativeToBandHeight" mode="Transparent" x="0" y="-4" width="555" height="33"/>
 			</rectangle>
-		</band>
-	</detail>
-	<pageFooter>
-		<band height="195">
 			<staticText>
-				<reportElement uuid="638001a1-d42b-4f74-b796-9e72730749e0" x="270" y="2" width="193" height="13"/>
+				<reportElement uuid="638001a1-d42b-4f74-b796-9e72730749e0" positionType="Float" x="275" y="41" width="193" height="13"/>
 				<textElement markup="html">
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[Lieu de délivrance / <i>Place of issue</i>]]></text>
 			</staticText>
-			<rectangle>
-				<reportElement uuid="d3ac723e-303d-4528-a079-e519dc5f8852" x="0" y="-5" width="555" height="195"/>
-			</rectangle>
 			<staticText>
-				<reportElement uuid="9ec2a24e-d838-4a70-bd5d-671c0ed70b7c" x="270" y="52" width="280" height="13"/>
+				<reportElement uuid="9ec2a24e-d838-4a70-bd5d-671c0ed70b7c" positionType="Float" x="270" y="91" width="280" height="13"/>
 				<textElement markup="html">
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[Cachet / <i>Stamp</i>]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="8c821d2c-721a-4872-9d47-d901e1e0fc41" x="270" y="90" width="280" height="13"/>
+				<reportElement uuid="8c821d2c-721a-4872-9d47-d901e1e0fc41" positionType="Float" x="270" y="129" width="280" height="13"/>
 				<textElement markup="html">
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[Date / <i>Date</i>]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="d4faab34-b5bf-466e-9367-598340f2ac94" x="269" y="126" width="145" height="13"/>
+				<reportElement uuid="d4faab34-b5bf-466e-9367-598340f2ac94" positionType="Float" x="272" y="165" width="145" height="13"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[Nom du fonctionnaire autorisé]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="654454f8-a21b-4482-8ec6-e29327df57af" x="269" y="136" width="145" height="13"/>
+				<reportElement uuid="654454f8-a21b-4482-8ec6-e29327df57af" positionType="Float" x="272" y="175" width="145" height="13"/>
 				<textElement>
 					<font size="8" isItalic="true"/>
 				</textElement>
 				<text><![CDATA[Name of authorized officer]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="3e989661-82a7-49d2-a326-df82bf86c9b2" x="269" y="166" width="189" height="13"/>
+				<reportElement uuid="3e989661-82a7-49d2-a326-df82bf86c9b2" positionType="Float" x="274" y="205" width="189" height="13"/>
 				<textElement markup="html">
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[Signature / <i>Signature</i>]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="15e3ffe4-8b08-4a82-b028-4177102789ac" x="270" y="15" width="282" height="20"/>
+				<reportElement uuid="15e3ffe4-8b08-4a82-b028-4177102789ac" positionType="Float" x="273" y="54" width="282" height="20"/>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{deliveryPlace}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement uuid="664a06b8-10b3-4765-af63-46e1a694fe71" x="269" y="-5" width="1" height="195"/>
+				<reportElement uuid="664a06b8-10b3-4765-af63-46e1a694fe71" positionType="Float" x="269" y="30" width="1" height="195"/>
 			</line>
 			<textField>
-				<reportElement uuid="dc58c79d-7525-48e3-96db-dcb65f08d1dc" x="3" y="149" width="267" height="20"/>
+				<reportElement uuid="dc58c79d-7525-48e3-96db-dcb65f08d1dc" positionType="Float" x="3" y="188" width="267" height="20"/>
 				<textElement>
 					<font size="7" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{decisionDate} != null ? ("Date de validation en ligne : " + new java.text.SimpleDateFormat("dd/MM/YYYY").format($F{decisionDate})) : ""]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="dc58c79d-7525-48e3-96db-dcb65f08d1dc" x="2" y="94" width="267" height="33"/>
+				<reportElement uuid="dc58c79d-7525-48e3-96db-dcb65f08d1dc" positionType="Float" x="2" y="133" width="267" height="33"/>
 				<textElement>
 					<font size="7" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{signatoryName} !=  null ? "Validé en ligne par : " + $F{signatoryName} : ""]]></textFieldExpression>
 			</textField>
 		</band>
-	</pageFooter>
+	</detail>
 </jasperReport>
