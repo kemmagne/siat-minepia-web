@@ -1,7 +1,6 @@
 package org.guce.siat.web.ct.rest;
 
 import java.util.Map;
-import org.apache.commons.lang.StringUtils;
 import org.guce.orchestra.core.OrchestraEbxmlMessage;
 import org.guce.siat.common.service.ProcessMessageService;
 import org.guce.siat.common.utils.EbxmlUtils;
@@ -12,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -41,34 +39,25 @@ public class MessageCtRestController {
     @RequestMapping(value = "ebxml", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_OCTET_STREAM_VALUE,
             produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> processMessage(@RequestBody byte[] ebxml) {
+    public ResponseEntity<String> processMessage(@RequestBody byte[] ebxml) throws Exception {
         try {
             final byte[] response = processMessageService.process(ebxml, documentReciever);
             final String responseStr = new String(response);
             return ResponseEntity.ok(responseStr);
         } catch (Exception ex) {
-            LOG.error(ex.getMessage(), ex);
-            throw new MessageProcessingException(ebxml, ex.getMessage(), ex);
+            return exceptionHandler(new MessageProcessingException(ebxml, ex.getMessage(), ex));
         }
     }
 
-    @ExceptionHandler(MessageProcessingException.class)
-    public ResponseEntity<String> exceptionHandler(MessageProcessingException ex) {
-
-        LOG.info("org.guce.siat.web.ct.rest.MessageCtRestController.exceptionHandler()");
+//    @ExceptionHandler(MessageProcessingException.class)
+    public ResponseEntity<String> exceptionHandler(MessageProcessingException ex) throws Exception {
 
         final byte[] ebxml = ex.getEbxml();
+        final Map<String, Object> messageMap = EbxmlUtils.ebxmlToMap(ebxml);
+        final Map<String, Object> exceptionResult = documentReciever.generateAperakCFile(messageMap, ex.getMessage());
+        final OrchestraEbxmlMessage exResponse = EbxmlUtils.mapToEbxml(exceptionResult);
 
-        try {
-            final Map<String, Object> messageMap = EbxmlUtils.ebxmlToMap(ebxml);
-            final Map<String, Object> exceptionResult = documentReciever.generateAperakCFile(messageMap, ex.getMessage());
-            final OrchestraEbxmlMessage exResponse = EbxmlUtils.mapToEbxml(exceptionResult);
-            return ResponseEntity.ok(new String(exResponse.getData()));
-        } catch (Exception ex1) {
-            LOG.error(ex1.getMessage(), ex1);
-        }
-
-        return ResponseEntity.ok(StringUtils.EMPTY);
+        return ResponseEntity.ok(new String(exResponse.getData()));
     }
 
 }
