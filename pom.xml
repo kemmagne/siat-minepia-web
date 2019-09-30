@@ -139,6 +139,7 @@
                 <db.username>siat_ct</db.username>
                 <db.password>siat</db.password>
                 <db.url>jdbc:oracle:thin:@yserver:1521:XE</db.url>
+                <!--<db.url>jdbc:oracle:thin:@guce.test:1518:GUCETEST</db.url>-->
                 <!--d-->
                 <database.maxConnectionsPerPartition>10</database.maxConnectionsPerPartition>
                 <database.minConnectionsPerPartition>2</database.minConnectionsPerPartition>
