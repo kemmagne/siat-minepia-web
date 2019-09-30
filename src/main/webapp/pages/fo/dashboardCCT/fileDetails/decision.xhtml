@@ -42,13 +42,17 @@
                     <p:panel rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'APP'}">
                         <ui:include src="../specificDecisions/appointment/calendar.xhtml" />
                     </p:panel>
-                    
+
                     <p:panel rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'DCC'}">
                         <ui:include src="../specificDecisions/dcc/dcc.xhtml" />
                     </p:panel>
 
                     <p:panel rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'IR'}">
                         <ui:include src="../specificDecisions/inspectionReport/inspectionReport.xhtml" />
+                    </p:panel>
+
+                    <p:panel rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'CCT_CP'}">
+                        <ui:include src="../specificDecisions/cctCp/cctCp.xhtml" />
                     </p:panel>
 
                     <p:panel rendered="#{fileItemCctDetailController.isPviReadyForSignature(fileItemCctDetailController.selectedFlow)}">
@@ -83,6 +87,11 @@
                                      oncomplete="handleSubmit(xhr,status,args,decisionDlg,'datalistTable');" />
                     <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" value="#{bundle['Cancel']}"
                                      styleClass="ui-priority-primary" onclick="PF('decisionDialog').hide();" immediate="true" />
+
+                    <p:commandButton ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" id="reporting" 
+                                     value="#{bundle['PreviewFile']}" styleClass="ui-priority-primary" rendered="#{fileItemCctDetailController.phytoEnd}">
+                        <p:fileDownload value="#{fileItemCctDetailController.downloadReport(true)}" />
+                    </p:commandButton>
                 </div>
 
             </h:panelGroup>

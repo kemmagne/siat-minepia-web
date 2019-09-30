@@ -16,7 +16,6 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.guce.siat.common.service.FileFieldValueService;
-import org.guce.siat.common.service.FileItemFieldValueService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -139,14 +138,33 @@ public abstract class AbstractReportInvoker implements ReportCommand {
     public byte[] getPdfFile() {
         byte[] pdfReport = null;
         try {
+            JRBeanCollectionDataSource reportDataSource = getReportDataSource();
             final JasperPrint jasperPrint = JasperFillManager.fillReport(getRealPath(REPORTS_PATH, jasperFileName, "jasper"),
-                    getJRParameters(), getReportDataSource());
+                    getJRParameters(), reportDataSource);
             pdfReport = JasperExportManager.exportReportToPdf(jasperPrint);
 
         } catch (final JRException e) {
             LOG.error(Objects.toString(e), e);
         }
         return pdfReport;
+    }
+
+    /**
+     * Gets the pdf file.
+     *
+     * @return the JasperPrint file
+     */
+    public JasperPrint getJasperReport() {
+        JasperPrint jasperPrint = null;
+        try {
+            JRBeanCollectionDataSource reportDataSource = getReportDataSource();
+            jasperPrint = JasperFillManager.fillReport(getRealPath(REPORTS_PATH, jasperFileName, "jasper"),
+                    getJRParameters(), reportDataSource);
+
+        } catch (final JRException e) {
+            LOG.error(Objects.toString(e), e);
+        }
+        return jasperPrint;
     }
 
     /**
@@ -173,4 +191,3 @@ public abstract class AbstractReportInvoker implements ReportCommand {
     }
 
 }
-

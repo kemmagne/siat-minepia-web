@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
@@ -12,6 +14,10 @@ import javax.faces.component.UISelectItem;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
 import javax.faces.model.SelectItem;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRPrintPage;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -380,6 +386,16 @@ public final class JsfUtil {
     }
 
     /**
+     * Gets the report.
+     *
+     * @param abstractReportInvoker the abstract report invoker
+     * @return the report
+     */
+    public static JasperPrint getReportJP(final AbstractReportInvoker abstractReportInvoker) {
+        return abstractReportInvoker.getJasperReport();
+    }
+
+    /**
      * Generate table content.
      *
      * @param arrayValues the array values
@@ -412,5 +428,30 @@ public final class JsfUtil {
 
         return list;
     }
-}
 
+    public static byte[] mergePdf(List<JasperPrint> list) {
+        try {
+            JasperPrint globalJP = new JasperPrint();
+
+            if (list != null && list.size() > 1) {
+                JasperPrint jasperPrint = list.get(0);
+                globalJP.setOrientation(jasperPrint.getOrientationValue());
+                globalJP.setLocaleCode(jasperPrint.getLocaleCode());
+                globalJP.setPageHeight(jasperPrint.getPageHeight());
+                globalJP.setPageWidth(jasperPrint.getPageWidth());
+                globalJP.setTimeZoneId(jasperPrint.getTimeZoneId());
+                globalJP.setName(jasperPrint.getName());
+                //Merging into one report
+                for (JasperPrint jpPrint : list) {
+                    for (JRPrintPage page : jpPrint.getPages()) {
+                        globalJP.addPage(page);
+                    }
+                }
+            }
+            return JasperExportManager.exportReportToPdf(globalJP);
+        } catch (JRException ex) {
+            Logger.getLogger(JsfUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+}

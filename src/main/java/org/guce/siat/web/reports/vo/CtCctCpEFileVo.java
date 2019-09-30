@@ -10,6 +10,8 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
     private String exporterName;
 
     private String exporterAddress;
+    
+    private String exporter;
 
     /**
      * The consignor name.
@@ -31,6 +33,8 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
      */
     private String consignorCountry;
 
+    private String consignee;
+    
     /**
      * The consignee name.
      */
@@ -174,6 +178,12 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
     private String netWeight;
     private String grossWeight;
     private String lotsNumbers;
+    
+    private Date treatmentDate;
+    
+    private String namesAnnex;
+    private String lotsNumbersAnnex;
+    private String containersNumbersAnnex;
 
     /**
      * Gets the consignor name.
@@ -864,4 +874,53 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
         this.quantities = quantities;
     }
 
+    public Date getTreatmentDate() {
+        return treatmentDate;
+    }
+
+    public void setTreatmentDate(Date treatmentDate) {
+        this.treatmentDate = treatmentDate;
+    }
+
+    public String getNamesAnnex() {
+        return namesAnnex;
+    }
+
+    public void setNamesAnnex(String namesAnnex) {
+        this.namesAnnex = namesAnnex;
+    }
+
+    public String getLotsNumbersAnnex() {
+        return lotsNumbersAnnex;
+    }
+
+    public void setLotsNumbersAnnex(String lotsNumbersAnnex) {
+        this.lotsNumbersAnnex = lotsNumbersAnnex;
+    }
+
+    public String getContainersNumbersAnnex() {
+        return containersNumbersAnnex;
+    }
+
+    public void setContainersNumbersAnnex(String containersNumbersAnnex) {
+        this.containersNumbersAnnex = containersNumbersAnnex;
+    }
+    
+    public String getConsignee() {
+        return consignee;
+    }
+
+    public void setConsignee(String consignee) {
+        this.consignee = consignee;
+    }
+
+    public String getExporter() {
+        return exporter;
+    }
+
+    public void setExporter(String exporter) {
+        this.exporter = exporter;
+    }
+    
+    
 }

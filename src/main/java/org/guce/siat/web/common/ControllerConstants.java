@@ -283,6 +283,8 @@ public interface ControllerConstants {
              */
             String SIMPLE_SEARCH_INDEX_PAGE = "/pages/fo/search/simple/index.xhtml";
 
+            String ASSIGNED_FILE_ITEM_PAGE = "/pages/fo/search/assigned/index.xhtml";
+
             /**
              * The advanced search index page.
              */
@@ -371,6 +373,12 @@ public interface ControllerConstants {
              * The statistic pinding files.
              */
             String STATISTIC_PINDING_FILES = "/pages/fo/statistic/pendingFiles/index.xhtml";
+            
+            String STATISTIC_ACTIVITY_REPORT = "/pages/fo/statistic/activityReport/index.xhtml";
+            String STATISTIC_GLOBAL_DELAY_LISTING = "/pages/fo/statistic/globalDelayListing/index.xhtml";
+            String STATISTIC_DELAY_LISTING_STAKEHOLDER = "/pages/fo/statistic/delayListingStakeholder/index.xhtml";
+            String STATISTIC_EXPORT_NSH_DESTINIATION = "/pages/fo/statistic/exportNshDestination/index.xhtml";
+            String STATISTIC_EXPORT_NSH_DESTINIATION_SENDER = "/pages/fo/statistic/exportNshDestinationSender/index.xhtml";
 
             /**
              * The Interface GR.
@@ -405,6 +413,10 @@ public interface ControllerConstants {
              * The theme config page.
              */
             String THEME_CONFIG_PAGE = "/pages/fo/accountSetup/theme.xhtml";
+            /**
+             * The phytosanitary report config.
+             */
+            String PARAM_CCT_CP_CONFIG_PAGE = "/pages/fo/accountSetup/paramCctCp.xhtml";
         }
     }
 
@@ -482,6 +494,11 @@ public interface ControllerConstants {
              * The Constant CREATION_FAILED.
              */
             String CREATION_FAILED = "DecisionFailed";
+
+            /**
+             * The Constant SAVE_DECISION_FAILED : SaveDecisionFailed
+             */
+            String SAVE_DECISION_FAILED = "SaveDecisionFailed";
 
             /**
              * The Constant PERSISTENCE_ERROR_OCCURED.
@@ -625,4 +642,3 @@ public interface ControllerConstants {
         }
     }
 }
-

@@ -1,268 +1,264 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+      xmlns:pe="http://primefaces.org/ui/extensions" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
-<h:head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta http-equiv="refresh" content="58" />
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="refresh" content="58" />
 
-	<title>#{bundle['AppName']} - #{bundle['login_authentication']} v#{globalBean.appVersion}</title>
+        <title>#{bundle['AppName']} - #{bundle['login_authentication']} v#{globalBean.appVersion}</title>
 
-	<link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.request.contextPath}/css/style.css" />
-	<link rel="stylesheet" type="text/css"
-		href="#{facesContext.externalContext.request.contextPath}/css/#{not empty accountSetupController.loggedUser ? accountSetupController.loggedUser.theme.code : (not empty accountSetupController.cookieTheme ? accountSetupController.cookieTheme :'color-blue' )}.css" />
+        <link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.request.contextPath}/css/style.css" />
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.request.contextPath}/css/#{not empty accountSetupController.loggedUser ? accountSetupController.loggedUser.theme.code : (not empty accountSetupController.cookieTheme ? accountSetupController.cookieTheme :'color-blue' )}.css" />
 
-	<link rel="shortcut icon" href="#{facesContext.externalContext.request.contextPath}/images/icons/cameroon_flag.ico" type="image/x-icon" />
-	<script>
-		var toolkitPath = "#{facesContext.externalContext.request.contextPath}/js/toolkit";
-	</script>
-	<c:if test="#{globalBean.certificatAuthentifaction}">
-		<script src="#{facesContext.externalContext.request.contextPath}/js/toolkit/client/applet/script/sgj_scripts.js" type="text/javascript"></script>
-	</c:if>
-</h:head>
+        <link rel="shortcut icon" href="#{facesContext.externalContext.request.contextPath}/images/icons/cameroon_flag.ico" type="image/x-icon" />
+        <!--	<script>
+                        var toolkitPath = "{facesContext.externalContext.request.contextPath}/js/toolkit";
+                </script>-->
+        <!--	<c:if test="{globalBean.certificatAuthentifaction}">
+                        <script src="{facesContext.externalContext.request.contextPath}/js/toolkit/client/applet/script/sgj_scripts.js" type="text/javascript"></script>
+                </c:if>-->
+    </h:head>
 
-<script type="text/javascript">
+    <!--    <script type="text/javascript">
 
-function do_login()
-{
-	var domainName = "guichetunique.org";	
-	var id  = document.getElementById('loginForm:j_username').value + domainName;	// Unigue value to distinguish subscriber session
-	var svrCert = SGJ_getSeverKmCert(); // ServerKmCert is in the sgj_scripts.js
-	
-	//alert(id);
-	// C-2. Configure certificate policy OIDs and Names at certificate selection window 
-	var policyDesc = "2.16.120.200001.4.1.1.1.1=CIVIL SERVANT|2.16.120.200001.4.1.1.1.2=ORGANIZATION|2.16.120.200001.4.1.1.2.1=INDIVIDUAL|2.16.120.200001.4.1.1.2.2=CORPORATE";		
-	SGJ_setPolicyDesc(policyDesc);
-	
-	// C-3. Remove existing session and display certificate selection window
-	SGJ_removeAllSession();	
-	
-	var nReturn = SGJ_selectCertificate(id);
-	if(!nReturn)
-	{
-		alert("Select a certificate has been canceled.");
-		return;
-	}
-	
-	// C-4. Get subscriber's signing certificate (PEM Type)		
-	var strSignCert = SGJ_getCert(id, "SIGN");
-	if(strSignCert == null || strSignCert == "")
-	{
-		alert('ee');
-		alert(SGJ_getErrorMsg());
-		return;
-	}
+            function do_login()
+            {
+            var domainName = "guichetunique.org";
+            var id = document.getElementById('loginForm:j_username').value + domainName; // Unigue value to distinguish subscriber session
+            var svrCert = SGJ_getSeverKmCert(); // ServerKmCert is in the sgj_scripts.js
 
-//3. generate 32byte nonce value to prevent REPLAY ATTACK
-	
-	var nonce  = "";
-         
-	for(var i=0; i &lt; 32 ; i++)
-	{
-		var rndVal =(Math.random() * 62);
-		if(rndVal &lt; 10)
-		{
-			nonce += rndVal;			
-		}else if(rndVal &gt; 35)
-		{
-			nonce += (rndVal + 61);
-		}else
-		{
-			nonce += (rndVal + 55);
-		}
-	}
-	
-	// C-5. Generate digital signature for (Nonce Value + Login ID + Password)
-	// (nonce Value is added to protect replay-attack 
-	var strOriginalMessage =  nonce+ "$" + document.loginForm.j_username.value  + "$" + document.loginForm.j_password.value ;
-	var strSignedData = SG.SGJ_getSignature(id, strOriginalMessage);
-	if(strSignedData == null || strSignedData == "")
-	{
-		alert(SG.SGJ_getErrorMsg());
-		return;
-	}
+            //alert(id);
+            // C-2. Configure certificate policy OIDs and Names at certificate selection window
+            var policyDesc = "2.16.120.200001.4.1.1.1.1=CIVIL SERVANT|2.16.120.200001.4.1.1.1.2=ORGANIZATION|2.16.120.200001.4.1.1.2.1=INDIVIDUAL|2.16.120.200001.4.1.1.2.2=CORPORATE";
+            SGJ_setPolicyDesc(policyDesc);
+            // C-3. Remove existing session and display certificate selection window
+            SGJ_removeAllSession();
+            var nReturn = SGJ_selectCertificate(id);
+            if (!nReturn)
+            {
+            alert("Select a certificate has been canceled.");
+            return;
+            }
 
-	// C-6. Encrypt (Login ID and Password) with Session Key
-	var encLoginID = SG.SGJ_encryptData(id, document.getElementById('loginForm:j_username').value);
-	var encPassword = SG.SGJ_encryptData(id,document.getElementById('loginForm:j_password').value);
-	if(encLoginID == null || encLoginID == "" || encPassword == null || encPassword == "")
-	{
-		alert(SGJ_getErrorMsg());
-		return;
-	}
+            // C-4. Get subscriber's signing certificate (PEM Type)
+            var strSignCert = SGJ_getCert(id, "SIGN");
+            if (strSignCert == null || strSignCert == "")
+            {
+            alert('ee');
+            alert(SGJ_getErrorMsg());
+            return;
+            }
 
-	// C-7. Encrypt (Session Key) with Server Certificate 
-	var encSessionKey = SG.SGJ_encryptSessionKey(id, svrCert);
-	if(encSessionKey == null || encSessionKey == "")
-	{
-		alert(SGJ_getErrorMsg());
-		return;
-	}
+            //3. generate 32byte nonce value to prevent REPLAY ATTACK
 
-	session.setAttribute( "NONCE", nonce);
-	
-	alert("Certificat test popUp")
-}
+            var nonce = "";
+            for (var i = 0; i & lt; 32; i++)
+            {
+            var rndVal = (Math.random() * 62);
+            if (rndVal & lt; 10)
+            {
+            nonce += rndVal;
+            } else if (rndVal & gt; 35)
+            {
+            nonce += (rndVal + 61);
+            } else
+            {
+            nonce += (rndVal + 55);
+            }
+            }
 
-</script>
+            // C-5. Generate digital signature for (Nonce Value + Login ID + Password)
+            // (nonce Value is added to protect replay-attack
+            var strOriginalMessage = nonce + "$" + document.loginForm.j_username.value + "$" + document.loginForm.j_password.value;
+            var strSignedData = SG.SGJ_getSignature(id, strOriginalMessage);
+            if (strSignedData == null || strSignedData == "")
+            {
+            alert(SG.SGJ_getErrorMsg());
+            return;
+            }
+
+            // C-6. Encrypt (Login ID and Password) with Session Key
+            var encLoginID = SG.SGJ_encryptData(id, document.getElementById('loginForm:j_username').value);
+            var encPassword = SG.SGJ_encryptData(id, document.getElementById('loginForm:j_password').value);
+            if (encLoginID == null || encLoginID == "" || encPassword == null || encPassword == "")
+            {
+            alert(SGJ_getErrorMsg());
+            return;
+            }
+
+            // C-7. Encrypt (Session Key) with Server Certificate
+            var encSessionKey = SG.SGJ_encryptSessionKey(id, svrCert);
+            if (encSessionKey == null || encSessionKey == "")
+            {
+            alert(SGJ_getErrorMsg());
+            return;
+            }
+
+            session.setAttribute("NONCE", nonce);
+            alert("Certificat test popUp")
+            }
+
+        </script>-->
 
 
-<h:body styleClass="bLoginImage">
+    <h:body styleClass="bLoginImage">
 
-	<p:graphicImage styleClass="bande-top" value="/images/bande.jpg" />
-
-
-	<p:layout styleClass="logPage">
-		<h:panelGroup styleClass="logpageblazon">
-			<span class="sprite sprite-blazon"></span>
-		</h:panelGroup>
-		<p:layoutUnit position="west">
-
-			<h:outputText styleClass="sprite sprite-logo" />
-			<h:outputText styleClass="siat-sce" value="#{bundle['systemName']}" />
-			<p:outputPanel deferred="true">
-				<h:outputText value="#{bundle['logPage_introduction']}" />
-			</p:outputPanel>
-		</p:layoutUnit>
-
-		<p:layoutUnit position="center">
-			<p:panel id="loginPnl" styleClass="panelLogin">
-
-				<h:form id="loginForm" rendered="#{resetPasswordBean.loginStatus == true}">
-					<h:outputLabel styleClass="ui-message-warn" value="#{bundle['logPage_sessionexpired']}" rendered="#{param['sessionexpired'] eq '1'}" />
-					<h:outputLabel styleClass="ui-message-warn" value="#{bundle['logPage_logoutOtherSession_yourAreLogOut']}"
-						rendered="#{param['sessionexpired'] eq '2'}" />
-					<p:messages id="loginFormMessages" showDetail="false" autoUpdate="true" closable="false" styleClass="login-message" />
-
-					<h:outputText styleClass="title" value="#{bundle['logPage_title']}" />
-					<p:panelGrid columns="2" columnClasses="labelColumn4, labelColumn3">
-
-						<h:panelGroup>
-							<h:outputLabel value="#{bundle['login_username']}" />
-							<h:outputText value="*" styleClass="required-star-right" />
-						</h:panelGroup>
-
-						<p:inputText id="j_username" value="#{loginMgmtBean.userName}" autocomplete="off" label="#{bundle['login_username']}">
-							<f:validateLength minimum="2" />
-						</p:inputText>
-
-						<h:panelGroup>
-							<h:outputLabel value="#{bundle['login_password']}" />
-							<h:outputText value="*" styleClass="required-star-right" />
-						</h:panelGroup>
-						<p:password id="j_password" value="#{loginMgmtBean.password}" autocomplete="off" label="Mot de passe" />
-
-						<h:panelGroup>
-							<h:outputLabel value="#{bundle['login_language']}" />
-							<h:outputText value="*" styleClass="required-star-right" />
-						</h:panelGroup>
-
-						<p:selectOneMenu value="#{language.localeCode}">
-							<f:selectItems value="#{language.languagesInMap}" />
-							<p:ajax event="change" listener="#{language.countryLocaleCodeChanged}" update="@form" />
-						</p:selectOneMenu>
-						<h:panelGroup>
-
-						</h:panelGroup>
+        <p:graphicImage styleClass="bande-top" value="/images/bande.jpg" />
 
 
-						<p:commandLink styleClass="resetPass" update=":loginPnl " actionListener="#{resetPasswordBean.changeLoginStatus(false)}">
-							<h:outputText value="#{bundle['reset_forgot_password']}" />
-						</p:commandLink>
+        <p:layout styleClass="logPage">
+            <h:panelGroup styleClass="logpageblazon">
+                <span class="sprite sprite-blazon"></span>
+            </h:panelGroup>
+            <p:layoutUnit position="west">
 
-					</p:panelGrid>
+                <h:outputText styleClass="sprite sprite-logo" />
+                <h:outputText styleClass="siat-sce" value="#{bundle['systemName']}" />
+                <p:outputPanel deferred="true">
+                    <h:outputText value="#{bundle['logPage_introduction']}" />
+                </p:outputPanel>
+            </p:layoutUnit>
 
-					<p:panelGrid columns="2" styleClass="btn" columnClasses="labelColumn4, labelColumn5">
+            <p:layoutUnit position="center">
+                <p:panel id="loginPnl" styleClass="panelLogin">
 
-						<p:commandButton onclick="do_login();" id="loginBtn" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"
-							update="loginForm" value="#{bundle['login_submit']}" action="#{loginMgmtBean.login}" styleClass="ui-priority-primary" />
+                    <h:form id="loginForm" rendered="#{resetPasswordBean.loginStatus == true}">
+                        <h:outputLabel styleClass="ui-message-warn" value="#{bundle['logPage_sessionexpired']}" rendered="#{param['sessionexpired'] eq '1'}" />
+                        <h:outputLabel styleClass="ui-message-warn" value="#{bundle['logPage_logoutOtherSession_yourAreLogOut']}"
+                                       rendered="#{param['sessionexpired'] eq '2'}" />
+                        <p:messages id="loginFormMessages" showDetail="false" autoUpdate="true" closable="false" styleClass="login-message" />
 
-						<h:panelGroup>
-							<p:commandButton id="resetnBtn" value="#{bundle['login_cancel']}" update="loginForm" process="@this">
-								<p:resetInput target="loginForm" styleClass="ui-priority-primary" />
-							</p:commandButton>
-						</h:panelGroup>
+                        <h:outputText styleClass="title" value="#{bundle['logPage_title']}" />
+                        <p:panelGrid columns="2" columnClasses="labelColumn4, labelColumn3">
 
-						<p:dialog closeOnEscape="true" header="#{bundle['login_loading_header']}" widgetVar="dlgLogin" modal="true" draggable="false"
-							closable="false" resizable="false" showHeader="false">
-							<h:panelGrid columns="2" style="width:400px;">
-								<h:graphicImage library="img" name="ajax-loader1.gif" style="margin-right: 12px; vertical-align: middle;" />
-								<h:outputText value="#{bundle['Ajax_loader']}" style="white-space: nowrap; font-size:20px" />
-							</h:panelGrid>
-						</p:dialog>
+                            <h:panelGroup>
+                                <h:outputLabel value="#{bundle['login_username']}" />
+                                <h:outputText value="*" styleClass="required-star-right" />
+                            </h:panelGroup>
 
-					</p:panelGrid>
+                            <p:inputText id="j_username" value="#{loginMgmtBean.userName}" autocomplete="off" label="#{bundle['login_username']}">
+                                <f:validateLength minimum="2" />
+                            </p:inputText>
 
-					<p:confirmDialog closeOnEscape="true" severity="error" header="#{bundle['logPage_maximumSessionsexceeded']}"
-						message="#{bundle['logPage_logoutOtherSession_msg']}" widgetVar="logoutAthorSession" global="true" showEffect="fade"
-						hideEffect="explode">
-						<div align="right">
-							<p:commandButton action="#{loginMgmtBean.confirmLogoutOtherSession}" value="#{bundle['logPage_logoutOtherSession_Yes']}"
-								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" oncomplete="PF('logoutAthorSession').hide()" />
-							<p:commandButton value="#{bundle['logPage_logoutOtherSession_No']}" type="button" styleClass="ui-confirmdialog-no"
-								icon="ui-icon-close" onclick="PF('logoutAthorSession').hide()" />
-						</div>
-					</p:confirmDialog>
+                            <h:panelGroup>
+                                <h:outputLabel value="#{bundle['login_password']}" />
+                                <h:outputText value="*" styleClass="required-star-right" />
+                            </h:panelGroup>
+                            <p:password id="j_password" value="#{loginMgmtBean.password}" autocomplete="off" label="Mot de passe" />
 
-				</h:form>
+                            <h:panelGroup>
+                                <h:outputLabel value="#{bundle['login_language']}" />
+                                <h:outputText value="*" styleClass="required-star-right" />
+                            </h:panelGroup>
+
+                            <p:selectOneMenu value="#{language.localeCode}">
+                                <f:selectItems value="#{language.languagesInMap}" />
+                                <p:ajax event="change" listener="#{language.countryLocaleCodeChanged}" update="@form" />
+                            </p:selectOneMenu>
+                            <h:panelGroup>
+
+                            </h:panelGroup>
 
 
-				<h:form id="resePasswordForm" rendered="#{resetPasswordBean.loginStatus == false}">
+                            <p:commandLink styleClass="resetPass" update=":loginPnl " actionListener="#{resetPasswordBean.changeLoginStatus(false)}">
+                                <h:outputText value="#{bundle['reset_forgot_password']}" />
+                            </p:commandLink>
 
-					<p:messages id="resetPasswordFormMessage" showDetail="false" autoUpdate="true" closable="false" styleClass="login-message" />
+                        </p:panelGrid>
 
-					<h:outputText styleClass="title" value="#{bundle['logPage_resetPassword_title']}" />
-					<p:panelGrid columns="2" columnClasses="labelColumn4, labelColumn3">
+                        <p:panelGrid columns="2" styleClass="btn" columnClasses="labelColumn4, labelColumn5">
 
-						<h:outputLabel value="#{bundle['authentificationLabel_login']}" for="user_login" />
-						<h:panelGroup>
-							<p:inputText id="user_login" value="#{resetPasswordBean.login}" title="#{bundle['authentificationTitle_login']}" required="true"
-								requiredMessage="#{bundle['authentificationRequiredMessage_login']}" validatorMessage="#{bundle['MailValidationFail']}" />
-							<p:message for="user_login" />
-						</h:panelGroup>
+                            <p:commandButton onclick="do_login();" id="loginBtn" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"
+                                             update="loginForm" value="#{bundle['login_submit']}" action="#{loginMgmtBean.login}" styleClass="ui-priority-primary" />
 
-					</p:panelGrid>
+                            <h:panelGroup>
+                                <p:commandButton id="resetnBtn" value="#{bundle['login_cancel']}" update="loginForm" process="@this">
+                                    <p:resetInput target="loginForm" styleClass="ui-priority-primary" />
+                                </p:commandButton>
+                            </h:panelGroup>
 
-					<p:panelGrid columns="2" columnClasses="labelColumn4, labelColumn5" styleClass="btn restBtn">
+                            <p:dialog closeOnEscape="true" header="#{bundle['login_loading_header']}" widgetVar="dlgLogin" modal="true" draggable="false"
+                                      closable="false" resizable="false" showHeader="false">
+                                <h:panelGrid columns="2" style="width:400px;">
+                                    <h:graphicImage library="img" name="ajax-loader1.gif" style="margin-right: 12px; vertical-align: middle;" />
+                                    <h:outputText value="#{bundle['Ajax_loader']}" style="white-space: nowrap; font-size:20px" />
+                                </h:panelGrid>
+                            </p:dialog>
 
-						<p:commandButton id="forgotBtn" onclick="PF('dlgReset').show();" oncomplete="PF('dlgReset').hide()" ajax="false"
-							value="#{bundle['reset_submit']}" action="#{resetPasswordBean.changePassword}" styleClass="ui-priority-primary"
-							rendered="#{resetPasswordBean.loginStatus == false}" />
+                        </p:panelGrid>
 
-						<h:panelGroup>
-							<p:commandButton id="resetnBtn" value="#{bundle['reset_cancel']}" update=":loginPnl" immediate="true"
-								actionListener="#{resetPasswordBean.changeLoginStatus(true)}">
-							</p:commandButton>
-						</h:panelGroup>
+                        <p:confirmDialog closeOnEscape="true" severity="error" header="#{bundle['logPage_maximumSessionsexceeded']}"
+                                         message="#{bundle['logPage_logoutOtherSession_msg']}" widgetVar="logoutAthorSession" global="true" showEffect="fade"
+                                         hideEffect="explode">
+                            <div align="right">
+                                <p:commandButton action="#{loginMgmtBean.confirmLogoutOtherSession}" value="#{bundle['logPage_logoutOtherSession_Yes']}"
+                                                 styleClass="ui-confirmdialog-yes" icon="ui-icon-check" oncomplete="PF('logoutAthorSession').hide()" />
+                                <p:commandButton value="#{bundle['logPage_logoutOtherSession_No']}" type="button" styleClass="ui-confirmdialog-no"
+                                                 icon="ui-icon-close" onclick="PF('logoutAthorSession').hide()" />
+                            </div>
+                        </p:confirmDialog>
 
-						<p:dialog closeOnEscape="true" header="#{bundle['login_loading_header']}" styleClass="loader" widgetVar="dlgReset" modal="true"
-							draggable="false" closable="false" resizable="false" showHeader="false">
-							<h:graphicImage value="/images/loading.gif" />
-						</p:dialog>
+                    </h:form>
 
-					</p:panelGrid>
 
-				</h:form>
+                    <h:form id="resePasswordForm" rendered="#{resetPasswordBean.loginStatus == false}">
 
-			</p:panel>
-		</p:layoutUnit>
-		<pe:blockUI widgetVar="statusDialog1">
+                        <p:messages id="resetPasswordFormMessage" showDetail="false" autoUpdate="true" closable="false" styleClass="login-message" />
 
-			<h:panelGrid columns="2" style="width:600px;">
-				<h:graphicImage library="img" name="ajax-loader1.gif" style="margin-right: 12px; vertical-align: middle;" />
-				<h:outputText value="#{bundle['Ajax_loader']}" style="white-space: nowrap; font-size:30px" />
-			</h:panelGrid>
-		</pe:blockUI>
-	</p:layout>
-	<p:graphicImage styleClass="bande-bottom" value="/images/bande.jpg" />
-	<div id="footer">
-		<h:outputText styleClass="footer_left" value="#{bundle['footer_left']} #{java.time.Year.now().getValue()}" />
-		<h:outputText styleClass="footer_center" value="#{bundle['footer_copyright']}" />
-		<h:outputText styleClass="footer_right" value="v #{globalBean.appVersion}" />
-	</div>
+                        <h:outputText styleClass="title" value="#{bundle['logPage_resetPassword_title']}" />
+                        <p:panelGrid columns="2" columnClasses="labelColumn4, labelColumn3">
 
-	<script type="text/javascript" src="#{facesContext.externalContext.request.contextPath}/js/script.js" />
-</h:body>
+                            <h:outputLabel value="#{bundle['authentificationLabel_login']}" for="user_login" />
+                            <h:panelGroup>
+                                <p:inputText id="user_login" value="#{resetPasswordBean.login}" title="#{bundle['authentificationTitle_login']}" required="true"
+                                             requiredMessage="#{bundle['authentificationRequiredMessage_login']}" validatorMessage="#{bundle['MailValidationFail']}" />
+                                <p:message for="user_login" />
+                            </h:panelGroup>
+
+                        </p:panelGrid>
+
+                        <p:panelGrid columns="2" columnClasses="labelColumn4, labelColumn5" styleClass="btn restBtn">
+
+                            <p:commandButton id="forgotBtn" onclick="PF('dlgReset').show();" oncomplete="PF('dlgReset').hide()" ajax="false"
+                                             value="#{bundle['reset_submit']}" action="#{resetPasswordBean.changePassword}" styleClass="ui-priority-primary"
+                                             rendered="#{resetPasswordBean.loginStatus == false}" />
+
+                            <h:panelGroup>
+                                <p:commandButton id="resetnBtn" value="#{bundle['reset_cancel']}" update=":loginPnl" immediate="true"
+                                                 actionListener="#{resetPasswordBean.changeLoginStatus(true)}">
+                                </p:commandButton>
+                            </h:panelGroup>
+
+                            <p:dialog closeOnEscape="true" header="#{bundle['login_loading_header']}" styleClass="loader" widgetVar="dlgReset" modal="true"
+                                      draggable="false" closable="false" resizable="false" showHeader="false">
+                                <h:graphicImage value="/images/loading.gif" />
+                            </p:dialog>
+
+                        </p:panelGrid>
+
+                    </h:form>
+
+                </p:panel>
+            </p:layoutUnit>
+            <pe:blockUI widgetVar="statusDialog1">
+
+                <h:panelGrid columns="2" style="width:600px;">
+                    <h:graphicImage library="img" name="ajax-loader1.gif" style="margin-right: 12px; vertical-align: middle;" />
+                    <h:outputText value="#{bundle['Ajax_loader']}" style="white-space: nowrap; font-size:30px" />
+                </h:panelGrid>
+            </pe:blockUI>
+        </p:layout>
+        <p:graphicImage styleClass="bande-bottom" value="/images/bande.jpg" />
+        <div id="footer">
+            <h:outputText styleClass="footer_left" value="#{bundle['footer_left']} #{java.time.Year.now().getValue()}" />
+            <h:outputText styleClass="footer_center" value="#{bundle['footer_copyright']}" />
+            <h:outputText styleClass="footer_right" value="v #{globalBean.appVersion}" />
+        </div>
+
+        <script type="text/javascript" src="#{facesContext.externalContext.request.contextPath}/js/script.js" />
+    </h:body>
 </html>

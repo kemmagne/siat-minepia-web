@@ -36,7 +36,7 @@
 
     <import resource="classpath:resend-mails-config.xml" />
     <!-- DataSource -->
-    <bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource">
+    <bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
         <property name="driverClass" value="oracle.jdbc.OracleDriver" />
         <property name="jdbcUrl" value="${database.url}" />
         <property name="user" value="${database.username}" />

@@ -28,7 +28,10 @@ public enum CctSpecificDecision
 	TRR("Treatment result"),
 	
         /** The documentary control certificate. */
-	DCC("Documentary control certificate");
+	DCC("Documentary control certificate"),
+        
+        /** Phytosanitary Certificate. */
+	CCT_CP("Phytosanitary Certificate");
 
 	/** The label. */
 	private String label;

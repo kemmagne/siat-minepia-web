@@ -83,7 +83,7 @@
 								value="#{bundle['User_etendre_roles_administration']}" for="administrationExtendRoles" />
 						</h:panelGroup>
 						<h:panelGroup id="userRoleAdministrationExtendGrp">
-							<p:selectOneMenu required="false" id="administrationExtendRoles" tyle="width: 133px" 
+							<p:selectOneMenu required="false" id="administrationExtendRoles" style="width: 133px" 
 											 rendered="#{userController.selectedEntity ne null and (userController.selected.position eq 'AGENT' or userController.selected.position eq 'OBSERVATEUR')}"
 											 value="#{userController.selected.administrationExtendRoles}">
 								<f:converter binding="#{administrationConverter}" />
@@ -140,6 +140,10 @@
 					<div class="btn-bloc">
 						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editBtn"
 										 actionListener="#{userController.edit}" value="#{bundle['Save']}"
+										 update=":userListForm:datalist :userCreateForm :userEditForm display :growl" />
+                                                
+                                                <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="initPswdBtn"
+                                                                 actionListener="#{userController.resetPassword()}" value="#{bundle['InitPassword']}"
 										 update=":userListForm:datalist :userCreateForm :userEditForm display :growl" />
 						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="cancelBtn"
 										 value="#{bundle['Cancel']}" immediate="true" process="@this" update="@form :userListForm:datalist"

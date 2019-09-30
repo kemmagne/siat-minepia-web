@@ -1,0 +1,128 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<p:panel header="#{bundle['simpleSearch_result']}">
+
+
+		<h:form id="filtredFileItemListForm">
+
+			<h:panelGrid columns="2">
+				<h:commandLink action="#{exporter.exportPDF(table, 'SEARCH_RESULT')}">
+					<h:outputText styleClass="sprite sprite-pdf" />
+				</h:commandLink>
+
+				<h:commandLink>
+					<h:graphicImage styleClass="sprite sprite-pdf" library="img" name="excel.png"
+						style="width: 34px;height: 34px;display: block;	top: 15px;	right: 52px;position: absolute;" />
+					<p:dataExporter type="xls" target="datalist" fileName="#{bundle['simpleSearch_result']}" />
+				</h:commandLink>
+			</h:panelGrid>
+			<br />
+
+			<p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable" value="#{searchController.simpleSearchItemList}" filteredValue=""
+				var="item" selectionMode="single" selection="#{searchController.selected}" rowKey="#{item.id}" rows="5" paginator="true"
+				rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+				<p:ajax event="rowSelect" />
+				<p:ajax event="rowUnselect" />
+				<p:ajax event="rowDblselect" listener="#{searchController.goToDetailPage}" onstart="PF('statusDialog1').block()"
+					onsuccess="PF('statusDialog1').unblock()" />
+
+				<p:column sortBy="#{item.file.referenceSiat}" filterBy="#{item.file.referenceSiat}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_num_siat']}" title="#{bundle['FileTitle_num_siat']}" />
+					</f:facet>
+					<h:outputText value="#{item.file.referenceSiat}" />
+				</p:column>
+
+				<p:column sortBy="#{item.file.numeroDossier}" filterBy="#{item.file.numeroDossier}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_num_eguce']}" title="#{bundle['FileTitle_num_eguce']}" />
+					</f:facet>
+					<h:outputText value="#{item.file.numeroDossier}" />
+				</p:column>
+
+				<p:column sortBy="#{item.file.numeroDemande}" filterBy="#{item.file.numeroDemande}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_numeroDemande']}" title="#{bundle['FileTitle_numeroDemande']}" />
+					</f:facet>
+					<h:outputText value="#{item.file.numeroDemande}" />
+				</p:column>
+
+				<p:column sortBy="#{dateBean.formatSimpleDate(item.file.createdDate)}" filterBy="#{dateBean.formatSimpleDate(item.file.createdDate)}"
+					filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_date_dossier']}" title="#{bundle['FileTitle_date_dossier']}" />
+					</f:facet>
+					<h:outputText value="#{item.file.createdDate}">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" locale="fr" />
+					</h:outputText>
+				</p:column>
+
+				<p:column sortBy="#{facesContext.viewRoot.locale eq 'en' ? item.file.fileType.labelEn : item.file.fileType.labelFr}"
+					filterBy="#{facesContext.viewRoot.locale eq 'en' ? item.file.fileType.labelEn : item.file.fileType.labelFr}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['File_type']}" title="#{bundle['File_type']}" />
+					</f:facet>
+                                    <h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? item.file.fileType.labelEn : item.file.fileType.labelFr}" />
+				</p:column>
+
+				<p:column sortBy="#{facesContext.viewRoot.locale eq 'en' ? item.redefinedLabelEn : item.redefinedLabelFr}"
+					filterBy="#{facesContext.viewRoot.locale eq 'en' ? item.redefinedLabelEn : item.redefinedLabelFr}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['FileLabel_step']}" title="#{bundle['FileTitle_step']}" />
+					</f:facet>
+					<h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? item.redefinedLabelEn : item.redefinedLabelFr}" />
+				</p:column>
+
+                                <p:column sortBy="#{item.file.assignedUser.firstName}" filterBy="#{item.file.assignedUser.firstName}" filterMatchMode="contains">
+					<f:facet name="header">
+						<h:outputText value="#{bundle['Inspector']}" title="#{bundle['Inspector']}" />
+					</f:facet>
+                                    <h:outputText value="#{item.file.assignedUser.firstName} #{item.file.assignedUser.lastName}" />
+				</p:column>
+                                
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Action" title="Action" />
+                                    </f:facet>
+                                    <p:commandButton icon="ui-icon-refresh" title="#{bundle['ButtonTransfert']}" value="#{bundle['ButtonTransfert']}"
+                                                     process="@this"
+                                                     actionListener="#{searchController.prepareDispatchFile()}" update=":filtredFileItemListForm:DialogCotation">
+                                        <f:setPropertyActionListener target="#{searchController.selected}" value="#{item}" />
+                                    </p:commandButton>
+                                </p:column>
+
+			</p:dataTable>
+
+                        <p:dialog header="#{bundle['TransferFile']}"  id="DialogCotation" modal="true" appendTo="filtredFileItemListForm"
+                                  widgetVar="DialogCotation" closable="false">
+                            <h:form id="transferForm">
+                                <h:panelGrid columns="2">
+                                    <h:outputLabel value="#{bundle['Inspector']}" />
+                                    <h:panelGroup>
+                                        <p:selectOneMenu required="true" requiredMessage="#{bundle['InspectorRequired']}" value="#{searchController.assignedUser}" id="SelectInspector"
+                                                         converter="#{userConverter}">
+                                            <f:selectItem itemValue="#{null}" itemLabel="#{bundle['SelectInspector']}" />
+                                            <f:selectItems value="#{searchController.inspectorList}" var="inspector" itemValue="#{inspector}" itemLabel="#{inspector.firstName} #{inspector.lastName}" />
+                                          
+                                        </p:selectOneMenu>
+                                        <p:message for="SelectInspector" />
+                                    </h:panelGroup>
+                                </h:panelGrid>                                                               
+                                <p:commandButton                                              
+                                    value="#{bundle['Validate']}" process="@form" update=":filtredFileItemListForm:datalist :assignedSearchForm :filtredFileItemListForm:transferForm"
+                                     action="#{searchController.saveTransfer()}"  ajax="true" />
+                                <p:spacer width="20px" />
+                                <p:commandButton  value="#{bundle['Cancel']}" process="@this" onclick="PF('DialogCotation').hide();"/>
+                            </h:form>  
+                        </p:dialog>
+		</h:form>
+
+	</p:panel>
+
+</ui:composition>

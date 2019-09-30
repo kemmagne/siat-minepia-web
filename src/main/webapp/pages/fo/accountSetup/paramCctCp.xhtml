@@ -1,0 +1,72 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:c="http://xmlns.jcp.org/jsp/jstl/core" 
+                template="/templates/template.xhtml">
+
+    <ui:define name="title">
+        <h:outputText value="#{bundle['param_cct_cp_config_title']}" />
+    </ui:define>
+
+    <ui:define name="body">
+
+        <br />
+
+        <p:panel header="#{bundle['param_cct_cp_config_title']}">
+
+
+            <h:form id="paramCctCtConfigForm" styleClass="themeConfigForm">
+
+                <h:panelGroup  id="display">
+
+                    <h:panelGrid columns="2">
+
+                        <p:outputLabel value="#{bundle['EditAccountSetupLabel_office']}" for="accountSetup_office" />
+                        <h:panelGroup>
+                            <p:selectOneMenu id="accountSetup_office" value="#{accountSetupController.selectedOffice}" 
+                                             title="#{bundle['EditAccountSetupLabel_office']}" required="true" requiredMessage="#{bundle['EditAccountSetupRequiredMessage_office']}">
+                                <f:converter binding="#{administrationConverter}" />
+                                <f:selectItem noSelectionOption="true" itemValue="#{null}" itemLabel="Bureau ..." />
+                                <f:selectItems value="#{accountSetupController.bureaux}" var="bu"
+                                               itemValue="#{bu}"
+                                               itemLabel="#{facesContext.viewRoot.locale eq 'fr' ? bu.labelFr : bu.labelEn}" />
+                                <p:ajax listener="#{accountSetupController.changeOffice}" update="numberOfContainer numberOfMerchendise numberOfPackage labelAttachment"/>
+                            </p:selectOneMenu>
+                            <p:message for="accountSetup_office" />
+                        </h:panelGroup>
+
+                        <h:outputLabel value="#{bundle['CctCp_NumberOfContainer']}* : " />
+                        <p:inputText id="numberOfContainer" title="#{bundle['CctCp_NumberOfContainer']}" required="true"
+                                     requiredMessage="#{bundle['CctCp_NumberOfContainerRequired']}"
+                                     value="#{accountSetupController.paramCCTCP.maxContainerNumber}" />
+
+                        <h:outputLabel value="#{bundle['CctCp_NumberOfMerchendise']}* : " />
+                        <p:inputText id="numberOfMerchendise" title="#{bundle['CctCp_NumberOfMerchendise']}" required="true"
+                                     requiredMessage="#{bundle['CctCp_NumberOfMerchendiseRequired']}"
+                                     value="#{accountSetupController.paramCCTCP.maxGoodsLineNumber}" />
+
+                        <h:outputLabel value="#{bundle['CctCp_NumberOfPackage']}* : " />
+                        <p:inputText id="numberOfPackage" title="#{bundle['CctCp_NumberOfPackage']}" required="true"
+                                     requiredMessage="#{bundle['CctCp_NumberOfPackageRequired']}"
+                                     value="#{accountSetupController.paramCCTCP.maxPackageNumber}" />
+
+
+                        <h:outputLabel value="#{bundle['CctCp_LabelAttachment']}* : " />
+                        <p:inputText id="labelAttachment" title="#{bundle['CctCp_LabelAttachment']}" required="true"
+                                     requiredMessage="#{bundle['CctCp_LabelAttachmentRequired']}"
+                                     value="#{accountSetupController.paramCCTCP.labelAttachment}" />
+                    </h:panelGrid>
+
+
+                    <div class="btn-bloc">
+                        <h:commandButton id="updateBtn" actionListener="#{accountSetupController.updateParam}" styleClass=" button-theme"
+                                         value="#{bundle['EditAccountSetupChangeButton_update']}" />
+                    </div>
+
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:panel>
+
+    </ui:define>
+
+</ui:composition>

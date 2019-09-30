@@ -27,6 +27,7 @@ public class CtCctTreatmentFileVo {
     private String fileNumber;
     private String decisionPlace;
     private Date decisionDate;
+    private Date treatmentDate;
     private List<CtCctTreatmentFileItemVo> fileItemList;
 
     /**
@@ -76,6 +77,9 @@ public class CtCctTreatmentFileVo {
 	private boolean treatmentModePulverisation;
 	private boolean treatmentModeSoaking;
 	private boolean treatmentModeHeat;
+        private String inspector;
+    
+        private String signatory;
 
     public String getDecisionNumber() {
         return decisionNumber;
@@ -556,6 +560,31 @@ public class CtCctTreatmentFileVo {
 	public void setTreatmentModeHeat(boolean treatmentModeHeat) {
 		this.treatmentModeHeat = treatmentModeHeat;
 	}	
+
+    public String getSignatory() {
+        return signatory;
+    }
+
+    public void setSignatory(String signatory) {
+        this.signatory = signatory;
+    }
+
+    public Date getTreatmentDate() {
+        return treatmentDate;
+    }
+
+    public void setTreatmentDate(Date treatmentDate) {
+        this.treatmentDate = treatmentDate;
+    }
+
+    public String getInspector() {
+        return inspector;
+    }
+
+    public void setInspector(String inspector) {
+        this.inspector = inspector;
+    }
+     
 
     /**
      *
