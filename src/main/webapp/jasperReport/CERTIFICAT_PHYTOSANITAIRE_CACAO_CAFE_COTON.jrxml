@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CERTIFICAT_PHYTOSANITAIRE" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6f5c0835-9f5c-4b28-b5db-296746e60a32">
 	<property name="ireport.zoom" value="1.3310000000000013"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="624"/>
 	<parameter name="MINADER_LOGO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -484,14 +484,14 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					<text><![CDATA[Duration and temperature]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="cb955573-2c75-425f-a8b1-eedeef57fd57" x="5" y="430" width="100" height="13"/>
+					<reportElement uuid="cb955573-2c75-425f-a8b1-eedeef57fd57" x="5" y="430" width="72" height="13"/>
 					<textElement>
 						<font size="8"/>
 					</textElement>
 					<text><![CDATA[Concentration]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="9ad01fcc-c9ca-434d-aaa0-a46b11e1d019" x="5" y="439" width="100" height="13"/>
+					<reportElement uuid="9ad01fcc-c9ca-434d-aaa0-a46b11e1d019" x="5" y="439" width="72" height="13"/>
 					<textElement>
 						<font size="8" isItalic="true"/>
 					</textElement>
@@ -533,7 +533,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					<textFieldExpression><![CDATA[$F{signatoryName} !=  null ? "Validé par : " + $F{signatoryName} : ""]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="7f5824b5-33b9-4def-8baf-4e7fdbd7335c" x="5" y="329" width="185" height="31"/>
+					<reportElement uuid="7f5824b5-33b9-4def-8baf-4e7fdbd7335c" x="5" y="329" width="200" height="31"/>
 					<textElement>
 						<font size="8" isBold="true"/>
 					</textElement>
@@ -585,7 +585,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					<textFieldExpression><![CDATA[$F{duration} + ", " + $F{temperature}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement uuid="78570e9a-2b01-48f7-90a6-15f213f1d07d" x="105" y="429" width="250" height="23"/>
+					<reportElement uuid="78570e9a-2b01-48f7-90a6-15f213f1d07d" x="77" y="429" width="278" height="23"/>
 					<textElement>
 						<font size="8" isBold="true"/>
 					</textElement>
@@ -667,7 +667,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 				<line>
 					<reportElement uuid="795ce32b-1750-459c-98ff-0a0e397eee5c" x="0" y="105" width="474" height="1"/>
 				</line>
-				<textField pattern="" isBlankWhenNull="true">
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 					<reportElement uuid="81486c17-ec8d-47a3-8a39-a9101a344285" x="270" y="406" width="81" height="21"/>
 					<textElement>
 						<font size="7" isBold="true"/>

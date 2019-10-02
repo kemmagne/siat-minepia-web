@@ -1312,6 +1312,18 @@ public class FileItemCctDetailController implements Serializable {
                             flows = flowService.findFlowsByFromStepAndFileType(referenceFileItemCheck.getStep(), referenceFileItemCheck
                                     .getFile().getFileType());
                         }
+                        // Ajout du flow de renouvellement de RDV ou inspection physique
+                        if (isCheckMinaderMinistry() && (FileTypeCode.CCT_CT_E_FSTP.equals(currentFile.getFileType().getCode()) || FileTypeCode.CCT_CT_E_PVI.equals(currentFile.getFileType().getCode()) || FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode()))
+                                && currentFile.getFileItemsList().get(0).getStep().getStepCode().equals(StepCode.ST_CT_04)){
+                            String flc = FlowCode.FL_CT_118.name();
+                            if (FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode())){
+                                flc = FlowCode.FL_CT_119.name();
+                            }
+                            Flow tmpFlow = flowService.findFlowByCode(flc);
+                            if (tmpFlow != null){
+                                flows.add(tmpFlow);
+                            }
+                        }
 
                         if (checkMinepiaMinistry
                                 && referenceFileItemCheck.getStep().getStepCode().name().equals("ST_CT_04")) {
