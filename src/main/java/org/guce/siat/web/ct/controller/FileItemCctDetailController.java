@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -183,6 +184,7 @@ import org.guce.siat.web.ct.controller.util.InspectionReportData;
 import org.guce.siat.web.ct.controller.util.InspectionReportEtiquetageVo;
 import org.guce.siat.web.ct.controller.util.InspectionReportTemperatureVo;
 import org.guce.siat.web.ct.controller.util.JsfUtil;
+import org.guce.siat.web.ct.controller.util.Utils;
 import org.guce.siat.web.ct.controller.util.enums.DataTypeEnnumeration;
 import org.guce.siat.web.ct.controller.util.enums.DataTypePropEnnum;
 import org.guce.siat.web.ct.controller.util.enums.DecisionsSuiteVisite;
@@ -1083,6 +1085,8 @@ public class FileItemCctDetailController implements Serializable {
 
     private List<DecisionHistory> decisionHistories;
     private boolean maskOfficialPosition;
+
+    private Set<File> filesList;
 
     private static final int GLOBAL_PROPAGATION_TRANSACTION_BEHAVIOUR = TransactionDefinition.PROPAGATION_REQUIRES_NEW;
 
@@ -7123,6 +7127,38 @@ public class FileItemCctDetailController implements Serializable {
 
     public void setMaskOfficialPosition(boolean maskOfficialPosition) {
         this.maskOfficialPosition = maskOfficialPosition;
+    }
+
+    public void setFilesList(Set<File> filesList) {
+        this.filesList = filesList;
+    }
+
+    public boolean canDecide() {
+
+        if (currentFile.getAssignedUser() == null) {
+            return true;
+        }
+
+        if (CollectionUtils.isNotEmpty(filesList)) {
+            return filesList.contains(currentFile);
+        }
+
+        if (comeFromSearch) {
+            List<FileItem> items = Utils.getItems(userAuthorityFileTypeService, fileItemService, getLoggedUser(), null);
+            Set<File> files = Utils.extractFilesFormItems(items);
+            return files.contains(currentFile);
+        }
+
+        return false;
+    }
+
+    public boolean canRollback() {
+        ItemFlow itemFlow = currentFileItem.getItemFlowsList().get(0);
+        return loggedUser.equals(itemFlow.getSender());
+    }
+
+    public boolean canProcess() {
+        return filesList.contains(currentFile);
     }
 
 }

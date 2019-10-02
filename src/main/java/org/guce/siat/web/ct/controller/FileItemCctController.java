@@ -24,16 +24,10 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Transformer;
-import org.guce.siat.common.model.Administration;
 import org.guce.siat.common.model.Authority;
-import org.guce.siat.common.model.Bureau;
-import org.guce.siat.common.model.Entity;
 import org.guce.siat.common.model.File;
 import org.guce.siat.common.model.FileItem;
 import org.guce.siat.common.model.ItemFlow;
-import org.guce.siat.common.model.User;
 import org.guce.siat.common.model.UserAuthorityFileType;
 import org.guce.siat.common.service.AuthorityService;
 import org.guce.siat.common.service.FileItemService;
@@ -42,14 +36,11 @@ import org.guce.siat.common.service.ItemFlowService;
 import org.guce.siat.common.service.UserAuthorityFileTypeService;
 import org.guce.siat.common.utils.Constants;
 import org.guce.siat.common.utils.DateUtils;
-import org.guce.siat.common.utils.SiatUtils;
-import org.guce.siat.common.utils.enums.InformationSystemCode;
-import org.guce.siat.core.ct.model.Laboratory;
-import org.guce.siat.core.ct.model.TreatmentCompany;
 import org.guce.siat.core.ct.service.CommonService;
 import org.guce.siat.web.common.AbstractController;
 import org.guce.siat.web.common.ControllerConstants;
 import org.guce.siat.web.ct.controller.util.JsfUtil;
+import org.guce.siat.web.ct.controller.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -199,6 +190,9 @@ public class FileItemCctController extends AbstractController<FileItem> {
             fileItemCctDetailController.setCurrentFileItem(fileItemService.find(selected.getId()));
             fileItemCctDetailController.init();
 
+            Set<File> files = extractFilesFormItems(getItems());
+            fileItemCctDetailController.setFilesList(files);
+
             final String url = extContext.encodeActionURL(context.getApplication().getViewHandler()
                     .getActionURL(context, detailPageUrl));
 
@@ -206,6 +200,16 @@ public class FileItemCctController extends AbstractController<FileItem> {
         } catch (final IOException ex) {
             LOG.error(ex.getMessage(), ex);
         }
+    }
+
+    /**
+     * Extract files form items.
+     *
+     * @param items the items
+     * @return the sets the
+     */
+    public static Set<File> extractFilesFormItems(final Collection<FileItem> items) {
+        return Utils.extractFilesFormItems(items);
     }
 
     /**
@@ -255,29 +259,7 @@ public class FileItemCctController extends AbstractController<FileItem> {
     public List<FileItem> getItems() {
         try {
             if (items == null) {
-                if (Objects.equals(listUserAuthorityFileTypes, null)) {
-                    listUserAuthorityFileTypes = userAuthorityFileTypeService.findUserAuthorityFileTypeByUserList(getLoggedUser()
-                            .getMergedDelegatorList());
-                }
-
-                // Merge the logged user and their delegator users list in the list
-                final Set<Administration> adminList = new HashSet<>();
-
-                if (getLoggedUser().getMergedDelegatorList() != null) {
-                    for (final User user : getLoggedUser().getMergedDelegatorList()) {
-                        if (user.getAdministration() instanceof Laboratory || user.getAdministration() instanceof TreatmentCompany) {
-                            adminList.add(((Entity) user.getAdministration()).getService());
-                        }
-                        adminList.add(user.getAdministration());
-                    }
-                }
-                // get the bureaus  for the administration of the logged user and their delegator users
-                final List<Bureau> bureauList = SiatUtils.findCombinedBureausByAdministrationList(new ArrayList<>(
-                        adminList));
-
-                items = fileItemService.findFileItemByServiceAndAuthoritiesAndFileType(bureauList, getLoggedUser(),
-                        InformationSystemCode.CCT, listUserAuthorityFileTypes);
-
+                items = Utils.getItems(userAuthorityFileTypeService, fileItemService, getLoggedUser(), listUserAuthorityFileTypes);
             }
         } catch (final Exception ex) {
             LOG.error(ex.getMessage(), ex);
@@ -370,19 +352,19 @@ public class FileItemCctController extends AbstractController<FileItem> {
     public void filterFormDashboard() {
         switch (actionFilter) {
             case "unread":
-                this.items = new ArrayList<FileItem>(unreadFileItemsList);
+                this.items = new ArrayList<>(unreadFileItemsList);
                 break;
             case "oneday":
-                this.items = new ArrayList<FileItem>(receivedBeforOneDayFileItemsList);
+                this.items = new ArrayList<>(receivedBeforOneDayFileItemsList);
                 break;
             case "towday":
-                this.items = new ArrayList<FileItem>(receivedMoreTowDayFileItemsList);
+                this.items = new ArrayList<>(receivedMoreTowDayFileItemsList);
                 break;
             case "between":
-                this.items = new ArrayList<FileItem>(receivedBeatweenTowDayFileItemsList);
+                this.items = new ArrayList<>(receivedBeatweenTowDayFileItemsList);
                 break;
             case "draft":
-                this.items = new ArrayList<FileItem>(draftFileItemsList);
+                this.items = new ArrayList<>(draftFileItemsList);
                 break;
             case "all":
                 this.items = null;
@@ -390,27 +372,6 @@ public class FileItemCctController extends AbstractController<FileItem> {
             default:
                 break;
         }
-    }
-
-    /**
-     * Extract files form items.
-     *
-     * @param items the items
-     * @return the sets the
-     */
-    public Set<File> extractFilesFormItems(final Collection<FileItem> items) {
-        @SuppressWarnings("unchecked")
-        final List<File> files = (List<File>) CollectionUtils.collect(items != null ? items : new HashSet<FileItem>(),
-                new Transformer() {
-            @Override
-            public Object transform(final Object input) {
-                return ((FileItem) input).getFile();
-            }
-        });
-        if (!Objects.equals(files, null)) {
-            return new HashSet<File>(files);
-        }
-        return Collections.emptySet();
     }
 
     /**
@@ -511,7 +472,7 @@ public class FileItemCctController extends AbstractController<FileItem> {
      */
     public Set<FileItem> getUnreadFileItemsList() {
         if (Objects.equals(unreadFileItemsList, null)) {
-            unreadFileItemsList = new HashSet<FileItem>();
+            unreadFileItemsList = new HashSet<>();
         }
         return unreadFileItemsList;
     }
@@ -532,7 +493,7 @@ public class FileItemCctController extends AbstractController<FileItem> {
      */
     public Set<FileItem> getDraftFileItemsList() {
         if (Objects.equals(draftFileItemsList, null)) {
-            draftFileItemsList = new HashSet<FileItem>();
+            draftFileItemsList = new HashSet<>();
         }
         return draftFileItemsList;
     }
@@ -553,7 +514,7 @@ public class FileItemCctController extends AbstractController<FileItem> {
      */
     public Set<FileItem> getReceivedBeforOneDayFileItemsList() {
         if (Objects.equals(receivedBeforOneDayFileItemsList, null)) {
-            receivedBeforOneDayFileItemsList = new HashSet<FileItem>();
+            receivedBeforOneDayFileItemsList = new HashSet<>();
         }
         return receivedBeforOneDayFileItemsList;
     }
@@ -575,7 +536,7 @@ public class FileItemCctController extends AbstractController<FileItem> {
      */
     public Set<FileItem> getReceivedMoreTowDayFileItemsList() {
         if (Objects.equals(receivedMoreTowDayFileItemsList, null)) {
-            receivedMoreTowDayFileItemsList = new HashSet<FileItem>();
+            receivedMoreTowDayFileItemsList = new HashSet<>();
         }
         return receivedMoreTowDayFileItemsList;
     }
@@ -597,7 +558,7 @@ public class FileItemCctController extends AbstractController<FileItem> {
      */
     public Set<FileItem> getReceivedBeatweenTowDayFileItemsList() {
         if (Objects.equals(receivedBeatweenTowDayFileItemsList, null)) {
-            receivedBeatweenTowDayFileItemsList = new HashSet<FileItem>();
+            receivedBeatweenTowDayFileItemsList = new HashSet<>();
         }
         return receivedBeatweenTowDayFileItemsList;
     }
@@ -700,4 +661,3 @@ public class FileItemCctController extends AbstractController<FileItem> {
     }
 
 }
-

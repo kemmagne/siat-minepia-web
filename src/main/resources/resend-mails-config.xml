@@ -10,8 +10,6 @@
 
     <task:scheduled-tasks scheduler="ctResendMessagesScheduler">
         <task:scheduled ref="taskMessageResender" method="resendMessage" fixed-delay="1800000" initial-delay="3000" />
-        <!--<task:scheduled ref="taskMessageResender" method="resendMessage" fixed-rate="5000" />-->
-        <!--<task:scheduled ref="taskMessageResender" method="resendMessage" cron="*/5 * * * * MON-FRI"/>-->
     </task:scheduled-tasks>
 
     <task:scheduler id="ctResendMessagesScheduler" pool-size="10" />
@@ -35,16 +33,8 @@
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="triggers">
             <list>
-                <!--<ref bean="ctEmailSenderCronTrigger"/>-->
+                <ref bean="ctEmailSenderCronTrigger"/>
             </list>
         </property>
     </bean>
-
 </beans>
-
-
-
-
-
-
-
