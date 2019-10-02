@@ -1327,7 +1327,7 @@ public class FileItemCctDetailController implements Serializable {
 
                         if (checkMinepiaMinistry
                                 && referenceFileItemCheck.getStep().getStepCode().name().equals("ST_CT_04")) {
-                            String MINEPIA_FLOW_CODE_LIST = "FL_CT_CVS_05";
+                            String MINEPIA_FLOW_CODE_LIST = "FL_CT_CVS_05,FL_CT_CVS_08,FL_CT_CVS_09 ";
                             List<String> flowsToRemove = new ArrayList<>();
                             for (Flow f : flows) {
                                 if (!MINEPIA_FLOW_CODE_LIST.contains(f.getCode())) {
@@ -1689,6 +1689,10 @@ public class FileItemCctDetailController implements Serializable {
                     setDecisionAllowed(Boolean.TRUE);
                     if (COTATION_STEP_LIST_ALLOW_DECISION.contains(fileItem.getStep().getStepCode())) {
                         setDecisionButtonAllowedAtCotationLevel(Boolean.TRUE);
+                    }
+                    StepCode sc = fileItem.getStep().getStepCode();
+                    if(StepCode.ST_CT_03.equals(sc) && isCheckMinepiaMinistry() && !sendDecisionAllowed){
+                        setDecisionButtonAllowed(Boolean.TRUE);
                     }
                 } else {
                     errorDecisionByFile = Boolean.TRUE;
@@ -3314,6 +3318,9 @@ public class FileItemCctDetailController implements Serializable {
                     sendDecisionAllowed = false;
                     if (COTATION_STEP_LIST_ALLOW_DECISION.contains(productInfoItems.get(0).getStep().getStepCode())) {
                         setDecisionButtonAllowedAtCotationLevel(Boolean.TRUE);
+                    }
+                    if(StepCode.ST_CT_03.equals(productInfoItems.get(0).getStep().getStepCode()) && isCheckMinepiaMinistry() && !sendDecisionAllowed){
+                        setDecisionButtonAllowed(Boolean.TRUE);
                     }
                 }
             } // Cas de Decision
