@@ -806,6 +806,8 @@ public class FileItemCctDetailController implements Serializable {
     private Boolean decisionButtonAllowed;
 
     private Boolean decisionButtonAllowedAtCotationLevel;
+    
+    private boolean displayGenerateDraft = true;
 
     /**
      * The cotation allowed.
@@ -2357,6 +2359,7 @@ public class FileItemCctDetailController implements Serializable {
         DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
         transactionDefinition.setPropagationBehavior(GLOBAL_PROPAGATION_TRANSACTION_BEHAVIOUR);
         TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+        displayGenerateDraft = true;
 //        MutableObject<TransactionStatus> vStatus = transactionHelper.beginTransaction();
         try {
             if (FlowCode.FL_CT_29.name().equals(selectedFlow.getCode()) && chckedListSize != Constants.ONE) {
@@ -2757,6 +2760,7 @@ public class FileItemCctDetailController implements Serializable {
         DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
         transactionDefinition.setPropagationBehavior(GLOBAL_PROPAGATION_TRANSACTION_BEHAVIOUR);
         TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+        displayGenerateDraft = false;
 //        MutableObject<TransactionStatus> vStatus = transactionHelper.beginTransaction();
         try {
             final List<ItemFlowData> flowDatas = new ArrayList<>();
@@ -4140,7 +4144,7 @@ public class FileItemCctDetailController implements Serializable {
         }
         fileTypeFlowReportsDraft = fileTypeFlowReportService
                 .findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getFileType());
-        generateDraftAllowed = sendDecisionAllowed && showDecisionButton
+        generateDraftAllowed = sendDecisionAllowed && showDecisionButton && displayGenerateDraft
                 && (StepCode.ST_CT_38.equals(currentFileItem.getStep().getStepCode())
                 || StepCode.ST_CT_31.equals(currentFileItem.getStep().getStepCode())
                 || StepCode.ST_CT_53.equals(currentFileItem.getStep().getStepCode())
@@ -6954,8 +6958,12 @@ public class FileItemCctDetailController implements Serializable {
                     final List<ItemFlow> itemFlowList = selectedItemFlowDto.getItemFlow().getFlow().getItemsFlowsList();
                     String service = StringUtils.EMPTY;
                     String documentType = StringUtils.EMPTY;
-                    if (FlowCode.FL_CT_89.name().equals(flowToSend.getCode()) || FlowCode.FL_CT_114.name().equalsIgnoreCase(flowToSend.getCode())
-                            || FlowCode.FL_CT_08.name().equals(flowToSend.getCode())) {
+                        if (FlowCode.FL_CT_89.name().equals(flowToSend.getCode())
+                                    || FlowCode.FL_CT_08.name().equals(flowToSend.getCode())
+                                    || FlowCode.FL_CT_114.name().equals(flowToSend.getCode())
+                                    || FlowCode.FL_CT_117.name().equals(flowToSend.getCode())
+                                    || FlowCode.FL_CT_CVS_03.name().equals(flowToSend.getCode())
+                                    || FlowCode.FL_CT_CVS_07.name().equals(flowToSend.getCode())){
 
                         // edit signature elements
                         Date now = java.util.Calendar.getInstance().getTime();
@@ -7246,7 +7254,7 @@ public class FileItemCctDetailController implements Serializable {
         @SuppressWarnings("rawtypes")
         final Class classe = Class.forName(nomClasse);
         @SuppressWarnings({"rawtypes", "unchecked"})
-        Constructor c1;
+//        Constructor c1;
         Map<String, Object> forAnnexes = null;
         byte[] report = null;
         AbstractReportInvoker reportInvoker = null;
@@ -7262,7 +7270,6 @@ public class FileItemCctDetailController implements Serializable {
             }
             switch (currentFile.getFileType().getCode()) {
                 case CCT_CT_E: {
-                    c1 = classe.getConstructor(File.class, TreatmentInfos.class, String.class);
                     ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(ffi, FlowCode.FL_CT_07);
                     if (itemFlow == null) {
                         itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(ffi, FlowCode.FL_CT_112);
@@ -7572,7 +7579,7 @@ public class FileItemCctDetailController implements Serializable {
             if (tmp != null) {
                 treatInfo = (TreatmentInfos) BeanUtils.cloneBean(tmp);
             }
-            if (tmp == null){
+//            if (tmp == null){
                 // Load TreatmentInfos from FileField
                 final List<FileFieldValue> fileFieldValueList = tmpFile.getFileFieldValueList();
                 if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
@@ -7616,7 +7623,7 @@ public class FileItemCctDetailController implements Serializable {
                         }
                     }
                 }
-            }
+//            }
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
         } finally {
@@ -7627,11 +7634,11 @@ public class FileItemCctDetailController implements Serializable {
     public TreatmentInfos createTreatmentInfos() {
         TreatmentInfos res;
         res = populateTreatmentInfos(currentFile);
-        if (res.getId() == null) {
-            if (currentFile.getParent() != null) {
-                res = populateTreatmentInfos(currentFile.getParent());
-            }
-        }
+//        if (res.getId() == null) {
+//            if (currentFile.getParent() != null) {
+//                res = populateTreatmentInfos(currentFile.getParent());
+//            }
+//        }
         if (res.getId() != null) {
             res.setId(null);
             res.setItemFlow(null);
