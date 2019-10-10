@@ -15,7 +15,7 @@
 						<f:selectItem itemLabel="#{bundle['statisticsOnBusinessSearch_transit']}" itemValue="2" />
 						<f:selectItem itemLabel="#{bundle['statisticsOnBusinessSearch_export']}" itemValue="0" />
 					</p:selectManyCheckbox>
-                                        <p:outputPanel autoUpdate="true" styleClass="search-select">
+                                        <p:outputPanel  styleClass="search-select">
                                             <h:panelGroup>
                                                     <p:outputLabel for="fileType" value="#{bundle['simpleSearch_fileTypeLabel']}" />
                                             </h:panelGroup>
@@ -24,7 +24,7 @@
                                                     <f:selectItems value="#{statisticController.fileTypeList}"  var="fileType" itemLabel="#{fileType.labelFr}" itemValue="#{fileType.id}"/>
                                             </p:selectCheckboxMenu>
                                         </p:outputPanel>
-                                    <p:outputPanel autoUpdate="true" styleClass="search-select">
+                                    <p:outputPanel  styleClass="search-select">
                                             <h:panelGroup>
                                                     <p:outputLabel for="productType" value="#{bundle['simpleSearch_productTypeLabel']}" />
                                             </h:panelGroup>
@@ -41,7 +41,7 @@
                                             </p:selectCheckboxMenu>
                                         </p:outputPanel>
 
-                                    <p:outputPanel autoUpdate="true" styleClass="search-select" rendered="#{request.isUserInRole('SUPER')}">
+                                    <p:outputPanel  styleClass="search-select" rendered="#{request.isUserInRole('SUPER')}">
 						<h:outputLabel
 							value="#{bundle['Office']}" for="office" />
                                                 <p:selectCheckboxMenu id="office" label="Office"
@@ -50,7 +50,7 @@
 							
 						</p:selectCheckboxMenu>
 					</p:outputPanel>
-                                        <p:outputPanel autoUpdate="true" styleClass="search-select">
+                                        <p:outputPanel  styleClass="search-select">
                                             <h:outputLabel value="#{bundle['exporterNiu']}" />
                                             <p:inputText value="#{statisticController.cteFilter.clientNiu}" />
                                         </p:outputPanel>
