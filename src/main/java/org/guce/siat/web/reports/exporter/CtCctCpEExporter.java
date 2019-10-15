@@ -196,13 +196,13 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
             if (StringUtils.isNotBlank(packageNumber)) {
 
                 String packagesNumbers[] = packageNumber.split(" ");
-                if (paramValue != null && packagesNumbers.length > paramValue.getFilePackageCountValue()) {
+                if (paramValue != null && packagesNumbers.length > paramValue.getMaxPackageNumber()) {
                     List<String> packages1 = new ArrayList<>();
                     List<String> packages2 = new ArrayList<>();
                     int containerCount = 0;
                     for (String containerNumber : packagesNumbers) {
                         containerCount++;
-                        if (containerCount <= paramValue.getMaxContainerNumber()) {
+                        if (containerCount <= paramValue.getMaxPackageNumber()) {
                             packages1.add(containerNumber);
                         } else {
                             packages2.add(containerNumber);
@@ -331,7 +331,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
         }
 
         ctCctCpEFileVo.setFileItemList(fileItemVos);
-        if (productType != null) {
+        if (productType != null && !"CERTIFICAT_PHYTOSANITAIRE_ANNEXE".equals(this.jasperFileName)) {
             if (Utils.getCacaProductsTypes().contains(productType) || Utils.COTONPRODUCTTYPE.equalsIgnoreCase(productType)) {
                 this.jasperFileName = CP_COTCOCAF;
             } else if (Utils.getWoodProductsTypes().contains(productType) && containersNumbers == null) {
