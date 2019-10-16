@@ -83,7 +83,7 @@
 								value="#{bundle['User_etendre_roles_administration']}" for="administrationExtendRoles" />
 						</h:panelGroup>
 						<h:panelGroup id="userRoleAdministrationExtendGrp">
-							<p:selectOneMenu required="false" id="administrationExtendRoles" tyle="width: 133px" 
+							<p:selectOneMenu required="false" id="administrationExtendRoles" style="width: 133px" 
 											 rendered="#{userController.selectedEntity ne null and (userController.selected.position eq 'AGENT' or userController.selected.position eq 'OBSERVATEUR')}"
 											 value="#{userController.selected.administrationExtendRoles}">
 								<f:converter binding="#{administrationConverter}" />
