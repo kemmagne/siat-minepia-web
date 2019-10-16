@@ -2,6 +2,7 @@ package org.guce.siat.web.reports.exporter;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +10,9 @@ import java.util.Map;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Transformer;
 import org.apache.commons.lang.StringUtils;
+import org.guce.siat.common.model.Container;
 import org.guce.siat.common.model.File;
 import org.guce.siat.common.model.FileFieldValue;
 import org.guce.siat.common.model.FileItem;
@@ -23,7 +26,7 @@ import org.guce.siat.web.reports.vo.CtCctCpEFileVo;
  * The Class CtCctCpEExporter.
  */
 public class CtCctCpEExporter extends AbstractReportInvoker {
-    
+
     public static final String CP_COTCOCAF = "CERTIFICAT_PHYTOSANITAIRE_CACAO_CAFE_COTON";
     public static final String CP_BOIS_CONV = "CERTIFICAT_PHYTOSANITAIRE_BOIS_CONVENTIONNEL";
     /**
@@ -101,10 +104,11 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
         final String productType = getFileFieldValueService()
                 .findValueByFileFieldAndFile("TYPE_PRODUIT_CODE", file).getValue();
         String emballage = Utils.getProductTypePackaging().get(productType);
-		ctCctCpEFileVo.setPackaging(productType);
+        ctCctCpEFileVo.setPackaging(productType);
         String containersNumbers = null;
+        boolean hasContainers = false;
         if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
-            
+
             for (final FileFieldValue fileFieldValue1 : fileFieldValueList) {
                 switch (fileFieldValue1.getFileField().getCode()) {
                     case "NUMERO_CT_CCT_CP_E":
@@ -143,6 +147,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
             }
             if (StringUtils.isNotBlank(containersNumbers)) {
 
+                hasContainers = true;
                 final String[] tab1 = containersNumbers.split(";");
                 final int size = tab1.length;
                 final int positionScelles = "Type".equalsIgnoreCase(tab1[0].split(",")[1]) ? 2 : 1;
@@ -155,9 +160,22 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                     builder.append(tab2[0]).append("/").append(tab2[positionScelles]).append(" ");
                 }
                 ctCctCpEFileVo.setContainersNumbers(builder.substring(0, builder.lastIndexOf(" ")));
+            } else {
+                hasContainers = true;
+                List<Container> containers = file.getContainers();
+                if (CollectionUtils.isNotEmpty(containers)) {
+                    Collection<String> list = CollectionUtils.collect(containers, new Transformer() {
+                        @Override
+                        public String transform(Object input) {
+                            Container container = (Container) input;
+                            return String.format("%s/%s", container.getContNumber(), container.getContSeal1());
+                        }
+                    });
+                    ctCctCpEFileVo.setContainersNumbers(StringUtils.join(list, ' '));
+                }
             }
         }
-		ctCctCpEFileVo.setDecisionNumber(file.getNumeroDossier());
+        ctCctCpEFileVo.setDecisionNumber(file.getNumeroDossier());
 
         final List<FileItem> fileItemList = file.getFileItemsList();
 
@@ -182,51 +200,51 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                 if (fileItemFieldValue != null) {
                     comName = fileItemFieldValue.getValue();
                 }
-				FileItemFieldValue botanicFileItemFieldValue = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("NOM_BOTANIQUE", fileItem);
-				if (botanicFileItemFieldValue != null){
-					comName += " (" + botanicFileItemFieldValue.getValue() + ")";
-				}
+                FileItemFieldValue botanicFileItemFieldValue = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("NOM_BOTANIQUE", fileItem);
+                if (botanicFileItemFieldValue != null) {
+                    comName += " (" + botanicFileItemFieldValue.getValue() + ")";
+                }
                 String nb = "";
                 if (Utils.getCacaProductsTypes().contains(productType)) {
-					FileItemFieldValue nsf = getFileFieldValueService()
-							.findFileItemFieldValueByCodeAndFileItem("NOMBRE_SACS", fileItem);
-					if (nsf != null){
-						nb = nsf.getValue();
-					}
-                    
+                    FileItemFieldValue nsf = getFileFieldValueService()
+                            .findFileItemFieldValueByCodeAndFileItem("NOMBRE_SACS", fileItem);
+                    if (nsf != null) {
+                        nb = nsf.getValue();
+                    }
+
                     netWeight = netWeight.add(new BigDecimal(fileItem.getQuantity()));
                 } else if (Utils.getWoodProductsTypes().contains(productType)) {
-					FileItemFieldValue ngf = getFileFieldValueService()
-							.findFileItemFieldValueByCodeAndFileItem("NOMBRE_GRUMES", fileItem);
-					if (ngf != null){
-						nb = ngf.getValue();
-					} else {
-						nb = fileItem.getQuantity();
-					}
-                    
+                    FileItemFieldValue ngf = getFileFieldValueService()
+                            .findFileItemFieldValueByCodeAndFileItem("NOMBRE_GRUMES", fileItem);
+                    if (ngf != null) {
+                        nb = ngf.getValue();
+                    } else {
+                        nb = fileItem.getQuantity();
+                    }
+
                     final String volumeStr = getFileFieldValueService()
                             .findFileItemFieldValueByCodeAndFileItem("VOLUME", fileItem).getValue();
                     netWeight = netWeight.add(new BigDecimal(volumeStr));
                 } else if (Utils.COTONPRODUCTTYPE.equalsIgnoreCase(productType)) {
                     FileItemFieldValue ngf = getFileFieldValueService()
-							.findFileItemFieldValueByCodeAndFileItem("NOMBRE_GRUMES", fileItem);
-					if (ngf != null){
-						nb = ngf.getValue();
-					} else {
-						nb = fileItem.getQuantity();
-					}
-                                        FileItemFieldValue pnf = getFileFieldValueService()
-							.findFileItemFieldValueByCodeAndFileItem("POIDS", fileItem);
-					if (pnf != null){
-						netWeight = netWeight.add(new BigDecimal(pnf.getValue()));
-					} 
-                                        unit = Utils.getProductTypePackaging().get(productType);
-                }else {
-					FileItemFieldValue nsf = getFileFieldValueService()
-							.findFileItemFieldValueByCodeAndFileItem("NOMBRE_SACS", fileItem);
-					if (nsf != null){
-						nb = nsf.getValue();
-					}
+                            .findFileItemFieldValueByCodeAndFileItem("NOMBRE_GRUMES", fileItem);
+                    if (ngf != null) {
+                        nb = ngf.getValue();
+                    } else {
+                        nb = fileItem.getQuantity();
+                    }
+                    FileItemFieldValue pnf = getFileFieldValueService()
+                            .findFileItemFieldValueByCodeAndFileItem("POIDS", fileItem);
+                    if (pnf != null) {
+                        netWeight = netWeight.add(new BigDecimal(pnf.getValue()));
+                    }
+                    unit = Utils.getProductTypePackaging().get(productType);
+                } else {
+                    FileItemFieldValue nsf = getFileFieldValueService()
+                            .findFileItemFieldValueByCodeAndFileItem("NOMBRE_SACS", fileItem);
+                    if (nsf != null) {
+                        nb = nsf.getValue();
+                    }
                     emballage = unit;
                     netWeight = netWeight.add(new BigDecimal(fileItem.getQuantity()));
                 }
@@ -245,7 +263,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
             } else if (Utils.COTONPRODUCTTYPE.equalsIgnoreCase(productType)) {
                 builder.append("PN : ");
                 unit = "KG";
-            }else {
+            } else {
                 builder.append("VN : ");
             }
             if (Utils.getWoodProductsTypes().contains(productType)) {
@@ -259,10 +277,10 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
         }
 
         ctCctCpEFileVo.setFileItemList(fileItemVos);
-        if (productType != null){
-            if (Utils.getCacaProductsTypes().contains(productType) || Utils.COTONPRODUCTTYPE.equalsIgnoreCase(productType)){
+        if (productType != null) {
+            if (Utils.getCacaProductsTypes().contains(productType) || Utils.COTONPRODUCTTYPE.equalsIgnoreCase(productType)) {
                 this.jasperFileName = CP_COTCOCAF;
-            } else if (Utils.getWoodProductsTypes().contains(productType) && containersNumbers == null){
+            } else if (Utils.getWoodProductsTypes().contains(productType) && !hasContainers) {
                 this.jasperFileName = CP_BOIS_CONV;
             }
         }
@@ -287,4 +305,3 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
     }
 
 }
-

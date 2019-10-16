@@ -64,6 +64,7 @@ import org.guce.siat.common.model.Appointment;
 import org.guce.siat.common.model.Attachment;
 import org.guce.siat.common.model.Authority;
 import org.guce.siat.common.model.Bureau;
+import org.guce.siat.common.model.Container;
 import org.guce.siat.common.model.CopyRecipient;
 import org.guce.siat.common.model.DataType;
 import org.guce.siat.common.model.FieldGroup;
@@ -1089,6 +1090,7 @@ public class FileItemCctDetailController implements Serializable {
     private Set<File> filesList;
 
     private static final int GLOBAL_PROPAGATION_TRANSACTION_BEHAVIOUR = TransactionDefinition.PROPAGATION_REQUIRES_NEW;
+    private boolean decided;
 
     /**
      * Inits the.
@@ -2555,6 +2557,7 @@ public class FileItemCctDetailController implements Serializable {
             TransactionStatus tsCommit = transactionStatus;
             transactionStatus = null;
             transactionManager.commit(tsCommit);
+            decided = true;
 //            transactionHelper.commit(vStatus);
             if (LOG.isDebugEnabled()) {
                 LOG.debug("####SAVE DECISION Transaction commited####");
@@ -2720,6 +2723,7 @@ public class FileItemCctDetailController implements Serializable {
             TransactionStatus tsCommit = transactionStatus;
             transactionStatus = null;
             transactionManager.commit(tsCommit);
+            decided = true;
 //            transactionHelper.commit(vStatus);
             if (LOG.isDebugEnabled()) {
                 LOG.info("####DISPATCH DECISION Transaction commited####");
@@ -7153,12 +7157,21 @@ public class FileItemCctDetailController implements Serializable {
     }
 
     public boolean canRollback() {
+        if (decided) {
+            decided = false;
+            return true;
+        }
+
         ItemFlow itemFlow = currentFileItem.getItemFlowsList().get(0);
         return loggedUser.equals(itemFlow.getSender());
     }
 
     public boolean canProcess() {
         return filesList.contains(currentFile);
+    }
+
+    public List<Container> getContainers() {
+        return currentFile.getContainers();
     }
 
 }
