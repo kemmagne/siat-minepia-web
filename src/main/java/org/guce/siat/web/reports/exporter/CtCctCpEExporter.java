@@ -17,6 +17,7 @@ import org.guce.siat.common.model.File;
 import org.guce.siat.common.model.FileFieldValue;
 import org.guce.siat.common.model.FileItem;
 import org.guce.siat.common.model.FileItemFieldValue;
+import org.guce.siat.core.ct.model.CCTCPParamValue;
 import org.guce.siat.core.ct.model.TreatmentInfos;
 import org.guce.siat.web.ct.controller.util.Utils;
 import org.guce.siat.web.reports.vo.CtCctCpEFileItemVo;
@@ -37,6 +38,10 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
      * the treatment order
      */
     private final TreatmentInfos treatmentInfos;
+    /**
+     * the paramValue
+     */
+    private final CCTCPParamValue paramValue;
 
     /**
      * Instantiates a new ct cct cp e exporter.
@@ -47,25 +52,28 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
         super("CT_CCT_CP_E", "CT_CCT_CP_E");
         this.file = file;
         this.treatmentInfos = null;
+        this.paramValue = null;
     }
 
-    public CtCctCpEExporter(final TreatmentInfos treatmentInfos, final String jasperFileName) {
+    public CtCctCpEExporter(final TreatmentInfos treatmentInfos, CCTCPParamValue paramValue, final String jasperFileName) {
         super(jasperFileName, jasperFileName + ".pdf");
         this.file = treatmentInfos.getItemFlow().getFileItem().getFile();
         this.treatmentInfos = treatmentInfos;
+        this.paramValue = paramValue;
+
     }
 
-    public CtCctCpEExporter(final File file, final TreatmentInfos treatmentInfos, final String jasperFileName) {
+    public CtCctCpEExporter(final File file, final TreatmentInfos treatmentInfos, CCTCPParamValue paramValue, final String jasperFileName) {
         super(jasperFileName, jasperFileName + ".pdf");
         this.file = file;
         this.treatmentInfos = treatmentInfos;
+        this.paramValue = paramValue;
     }
 
-
     /*
-	 * (non-Javadoc)
-	 *
-	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getReportDataSource()
+    * (non-Javadoc)
+    *
+    * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getReportDataSource()
      */
     @Override
     public JRBeanCollectionDataSource getReportDataSource() {
@@ -107,6 +115,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
         ctCctCpEFileVo.setPackaging(productType);
         String containersNumbers = null;
         boolean hasContainers = false;
+        String packageNumber = null;
         if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
 
             for (final FileFieldValue fileFieldValue1 : fileFieldValueList) {
@@ -134,11 +143,17 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                     case "DESTINATAIRE_ADRESSE_ADRESSE1":
                         ctCctCpEFileVo.setConsigneeAddress1(fileFieldValue1.getValue());
                         break;
+                    case "DESTINATAIRE_AUTRE_CONTACT":
+                        ctCctCpEFileVo.setConsignee(fileFieldValue1.getValue());
+                        break;
+                    case "CLIENT_AUTRE_CONTACT":
+                        ctCctCpEFileVo.setExporter(fileFieldValue1.getValue());
+                        break;
                     case "INSPECTION_CONTENEURS_CONTENEUR":
                         containersNumbers = fileFieldValue1.getValue();
                         break;
                     case "NUMEROS_LOTS":
-                        ctCctCpEFileVo.setLotsNumbers(fileFieldValue1.getValue());
+                        packageNumber = fileFieldValue1.getValue();
                         break;
                     case "TYPE_DOSSIER_EGUCE":
                         ctCctCpEFileVo.setTransit("2".equals(fileFieldValue1.getValue()));
@@ -159,20 +174,83 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                     final String[] tab2 = tab1[i].split(",");
                     builder.append(tab2[0]).append("/").append(tab2[positionScelles]).append(" ");
                 }
-                ctCctCpEFileVo.setContainersNumbers(builder.substring(0, builder.lastIndexOf(" ")));
+
+                String contNumbers = builder.toString().trim();
+                String containerNumbers[] = contNumbers.split(" ");
+                if (paramValue != null && containerNumbers.length > paramValue.getMaxContainerNumber()) {
+                    List<String> containers1 = new ArrayList<>();
+                    List<String> containers2 = new ArrayList<>();
+                    int containerCount = 0;
+                    for (String containerNumber : containerNumbers) {
+                        containerCount++;
+                        if (containerCount <= paramValue.getMaxContainerNumber()) {
+                            containers1.add(containerNumber);
+                        } else {
+                            containers2.add(containerNumber);
+                        }
+                    }
+                    containers1.add("- " + paramValue.getLabelMore());
+                    ctCctCpEFileVo.setContainersNumbers(StringUtils.join(containers1, " "));
+                    ctCctCpEFileVo.setContainersNumbersAnnex(StringUtils.join(containers2, " "));
+                } else {
+                    ctCctCpEFileVo.setContainersNumbers(contNumbers);
+                }
             } else {
-                hasContainers = true;
                 List<Container> containers = file.getContainers();
                 if (CollectionUtils.isNotEmpty(containers)) {
-                    Collection<String> list = CollectionUtils.collect(containers, new Transformer() {
+                    hasContainers = true;
+                    Collection<String> containerNumbers = CollectionUtils.collect(containers, new Transformer() {
                         @Override
                         public String transform(Object input) {
                             Container container = (Container) input;
                             return String.format("%s/%s", container.getContNumber(), container.getContSeal1());
                         }
                     });
-                    ctCctCpEFileVo.setContainersNumbers(StringUtils.join(list, ' '));
+
+                    if (paramValue != null && containers.size() > paramValue.getMaxContainerNumber()) {
+                        List<String> containers1 = new ArrayList<>();
+                        List<String> containers2 = new ArrayList<>();
+                        int containerCount = 0;
+                        for (String containerNumber : containerNumbers) {
+                            containerCount++;
+                            if (containerCount <= paramValue.getMaxContainerNumber()) {
+                                containers1.add(containerNumber);
+                            } else {
+                                containers2.add(containerNumber);
+                            }
+                        }
+                        containers1.add("- " + paramValue.getLabelMore());
+                        ctCctCpEFileVo.setContainersNumbers(StringUtils.join(containers1, " "));
+                        ctCctCpEFileVo.setContainersNumbersAnnex(StringUtils.join(containers2, " "));
+                    } else {
+                        ctCctCpEFileVo.setContainersNumbers(StringUtils.join(containerNumbers, ' '));
+                    }
                 }
+            }
+
+            if (StringUtils.isNotBlank(packageNumber)) {
+
+                String packagesNumbers[] = packageNumber.split(" ");
+                if (paramValue != null && packagesNumbers.length > paramValue.getMaxPackageNumber()) {
+                    List<String> packages1 = new ArrayList<>();
+                    List<String> packages2 = new ArrayList<>();
+                    int containerCount = 0;
+                    for (String containerNumber : packagesNumbers) {
+                        containerCount++;
+                        if (containerCount <= paramValue.getMaxPackageNumber()) {
+                            packages1.add(containerNumber);
+                        } else {
+                            packages2.add(containerNumber);
+                        }
+                    }
+                    packages1.add("- " + paramValue.getLabelMore());
+                    ctCctCpEFileVo.setLotsNumbers(StringUtils.join(packages1, " "));
+                    ctCctCpEFileVo.setLotsNumbersAnnex(StringUtils.join(packages2, " "));
+                } else {
+
+                    ctCctCpEFileVo.setLotsNumbers(packageNumber);
+                }
+
             }
         }
         ctCctCpEFileVo.setDecisionNumber(file.getNumeroDossier());
@@ -187,6 +265,8 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
         if (CollectionUtils.isNotEmpty(fileItemList)) {
 
             final List<String> commoditiesList = new ArrayList<>();
+            final List<String> commoditiesListAttachment = new ArrayList<>();
+            int commoditiesCount = 0;
 
             String unit = getFileFieldValueService()
                     .findFileItemFieldValueByCodeAndFileItem("UNITE", fileItemList.get(0)).getValue();
@@ -248,7 +328,12 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                     emballage = unit;
                     netWeight = netWeight.add(new BigDecimal(fileItem.getQuantity()));
                 }
-                commoditiesList.add(String.format("%s %s %s", nb, emballage, comName));
+                commoditiesCount++;
+                if (paramValue != null && commoditiesCount <= paramValue.getMaxGoodsLineNumber() - 1) {
+                    commoditiesList.add(String.format("%s %s %s", nb, emballage, comName));
+                } else {
+                    commoditiesListAttachment.add(String.format("%s %s %s", nb, emballage, comName));
+                }
 
                 fileItemFieldValue = getFileFieldValueService()
                         .findFileItemFieldValueByCodeAndFileItem("POIDS_BRUT", fileItem);
@@ -272,12 +357,16 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
             builder.append(netWeight).append(" ").append(unit);
             builder.append("<br/>").append("PB : ").append(grossWeight.toString()).append(" KG");
             ctCctCpEFileVo.setQuantities(builder.toString());
+            if (paramValue != null && !commoditiesListAttachment.isEmpty()) {
+                commoditiesList.add("- " + paramValue.getLabelMore());
+                ctCctCpEFileVo.setNamesAnnex(StringUtils.join(commoditiesListAttachment, "<br/>"));
+            }
 
             ctCctCpEFileVo.setNames(StringUtils.join(commoditiesList, "<br/>"));
         }
 
         ctCctCpEFileVo.setFileItemList(fileItemVos);
-        if (productType != null) {
+        if (productType != null && !"CERTIFICAT_PHYTOSANITAIRE_ANNEXE".equals(this.jasperFileName)) {
             if (Utils.getCacaProductsTypes().contains(productType) || Utils.COTONPRODUCTTYPE.equalsIgnoreCase(productType)) {
                 this.jasperFileName = CP_COTCOCAF;
             } else if (Utils.getWoodProductsTypes().contains(productType) && !hasContainers) {
@@ -303,5 +392,4 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
     public File getFile() {
         return file;
     }
-
 }
