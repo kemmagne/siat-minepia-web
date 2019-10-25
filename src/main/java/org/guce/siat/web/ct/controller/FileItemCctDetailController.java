@@ -7707,36 +7707,38 @@ public class FileItemCctDetailController implements Serializable {
     }
 
     public boolean canDecide() {
-
-        if (currentFile.getAssignedUser() == null) {
-            return true;
-        }
-
-        if (CollectionUtils.isNotEmpty(filesList)) {
-            return filesList.contains(currentFile);
-        }
-
-        if (comeFromSearch) {
-            List<FileItem> items = Utils.getItems(userAuthorityFileTypeService, fileItemService, getLoggedUser(), null);
-            Set<File> files = Utils.extractFilesFormItems(items);
-            return files.contains(currentFile);
-        }
-
-        return false;
+        return true;
+//        if (currentFile.getAssignedUser() == null) {
+//            return true;
+//        }
+//
+//        if (CollectionUtils.isNotEmpty(filesList)) {
+//            return filesList.contains(currentFile);
+//        }
+//
+//        if (comeFromSearch) {
+//            List<FileItem> items = Utils.getItems(userAuthorityFileTypeService, fileItemService, getLoggedUser(), null);
+//            Set<File> files = Utils.extractFilesFormItems(items);
+//            return files.contains(currentFile);
+//        }
+//
+//        return false;
     }
 
     public boolean canRollback() {
-        if (decided) {
-            decided = false;
-            return true;
-        }
-
-        ItemFlow itemFlow = currentFileItem.getItemFlowsList().get(0);
-        return loggedUser.equals(itemFlow.getSender());
+        return true;
+//        if (decided) {
+//            decided = false;
+//            return true;
+//        }
+//
+//        ItemFlow itemFlow = currentFileItem.getItemFlowsList().get(0);
+//        return loggedUser.equals(itemFlow.getSender());
     }
 
     public boolean canProcess() {
-        return filesList.contains(currentFile);
+        return true;
+//        return filesList.contains(currentFile);
     }
 
     public List<Container> getContainers() {

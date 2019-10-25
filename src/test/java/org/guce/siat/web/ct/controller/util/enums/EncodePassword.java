@@ -37,7 +37,7 @@ public class EncodePassword {
                 "PERABI", "NZOKOA", "SENABIONO", "EMPOAGHAM", "KENFACKJP", "NIMAYA", "KAMDEM", "ZEBAZE",
                 "AKONO", "TONYE", "JAMMULUMI", "KONGUEP", "FOKOUEN", "IJANGFONGOH", "TOUANDOP", "TAZOJACOB", "MEBIAME");
         final List<String> logins2 = Arrays.asList("MINADER-INSP-TIOMY-2", "KENFACK", "NOUNI", "TONYE", "EKONDE", "ALIYOU", "TOUANDOP");
-        for (String login : logins2) {
+        for (String login : logins1) {
             generateUpdateDb(login, "root");
         }
     }
