@@ -4,7 +4,7 @@
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="5"/>
+	<property name="ireport.y" value="78"/>
 	<style name="Title" forecolor="#000000" fontName="Century Gothic" fontSize="50" isBold="false"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Century Gothic" fontSize="18" isBold="false"/>
 	<style name="Column header" forecolor="#666666" fontName="Century Gothic" fontSize="14" isBold="true"/>
@@ -65,84 +65,84 @@
 	<title>
 		<band height="247" splitType="Stretch">
 			<staticText>
-				<reportElement x="78" y="108" width="390" height="20" uuid="73f56145-a1f4-4c8c-b15a-d90f2da04519"/>
+				<reportElement uuid="73f56145-a1f4-4c8c-b15a-d90f2da04519" x="78" y="108" width="390" height="20"/>
 				<textElement textAlignment="Center">
 					<font fontName="Century Gothic" size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[DECLARATION DES SPECIFICATIONS DES BOIS A L'EXPORTATION]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="47" y="136" width="199" height="18" uuid="82a8f537-24ff-4366-b0e4-5b2509293845"/>
+				<reportElement uuid="82a8f537-24ff-4366-b0e4-5b2509293845" x="47" y="136" width="199" height="18"/>
 				<textElement>
 					<font fontName="Century Gothic"/>
 				</textElement>
 				<text><![CDATA[- Nom ou raison sociale de l'Exportateur : ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="47" y="158" width="320" height="18" uuid="12d75d02-ce2a-446f-aa2f-481f62facf03"/>
+				<reportElement uuid="12d75d02-ce2a-446f-aa2f-481f62facf03" x="47" y="158" width="320" height="18"/>
 				<textElement>
 					<font fontName="Century Gothic"/>
 				</textElement>
 				<text><![CDATA[- N° d'enregistrement à la Direction des Eaux et Forets et Chasses : ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="47" y="180" width="112" height="18" uuid="c2b8072d-449d-4e3b-a1a1-d4a3284abeae"/>
+				<reportElement uuid="c2b8072d-449d-4e3b-a1a1-d4a3284abeae" x="47" y="180" width="112" height="18"/>
 				<textElement>
 					<font fontName="Century Gothic"/>
 				</textElement>
 				<text><![CDATA[- Lieu de l'Exportation :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="47" y="203" width="68" height="18" uuid="a0e77dd5-ceb4-44d5-b095-18c1f86963bd"/>
+				<reportElement uuid="a0e77dd5-ceb4-44d5-b095-18c1f86963bd" x="47" y="203" width="68" height="18"/>
 				<textElement>
 					<font fontName="Century Gothic"/>
 				</textElement>
 				<text><![CDATA[- Destination : ]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="115" y="203" width="414" height="18" uuid="390545b4-c93c-427b-9a29-5b972fd45f17"/>
+				<reportElement uuid="390545b4-c93c-427b-9a29-5b972fd45f17" x="115" y="203" width="414" height="18"/>
 				<textElement>
 					<font fontName="Century Gothic" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{destinationCountry} == null ? "" : $F{destinationCountry} + " - " + $F{dischargePlace} == null ? "" : $F{dischargePlace}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="159" y="180" width="370" height="18" uuid="126bf0ee-4f8a-425f-8042-55f1d8a378f4"/>
+				<reportElement uuid="126bf0ee-4f8a-425f-8042-55f1d8a378f4" x="159" y="180" width="370" height="18"/>
 				<textElement>
 					<font fontName="Century Gothic" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{loadingPlace} == null ? " - " : $F{loadingPlace}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="367" y="158" width="162" height="18" uuid="08b25827-e05a-4d8e-84bf-12885cd5d946"/>
+				<reportElement uuid="08b25827-e05a-4d8e-84bf-12885cd5d946" x="367" y="158" width="162" height="18"/>
 				<textElement>
 					<font fontName="Century Gothic" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{registrationNumber} == null ? " - " : $F{registrationNumber}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="246" y="136" width="283" height="19" uuid="71557aa8-1b52-4cac-ad59-ca6e62a46361"/>
+				<reportElement uuid="71557aa8-1b52-4cac-ad59-ca6e62a46361" x="246" y="136" width="283" height="19"/>
 				<textElement>
 					<font fontName="Century Gothic" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{importer} == null ? " - " : $F{importer}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="47" y="225" width="78" height="18" uuid="20625c2a-3e06-42a1-b9cf-6f734bdeac65"/>
+				<reportElement uuid="20625c2a-3e06-42a1-b9cf-6f734bdeac65" x="47" y="225" width="78" height="18"/>
 				<textElement>
 					<font fontName="Century Gothic"/>
 				</textElement>
 				<text><![CDATA[- Numero BSB : ]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="126" y="225" width="159" height="18" uuid="dbaf29f6-1d0e-463b-b40a-6ee4c9725b04"/>
+				<reportElement uuid="dbaf29f6-1d0e-463b-b40a-6ee4c9725b04" x="126" y="225" width="159" height="18"/>
 				<textElement>
 					<font fontName="Century Gothic" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{decisionNumber} == null ? " - " : $F{decisionNumber}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="345" y="5" width="200" height="40" uuid="ffd069a8-5864-4363-8918-fcbb4c253c49"/>
+				<reportElement uuid="ffd069a8-5864-4363-8918-fcbb4c253c49" x="345" y="5" width="200" height="40"/>
 				<textElement textAlignment="Center">
 					<font fontName="Century Gothic" size="10" isBold="true"/>
 				</textElement>
@@ -151,28 +151,28 @@ Peace - Work - Fatherland
 ------]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="410" y="225" width="119" height="18" uuid="c6a8beb1-b986-4ff0-a124-df59c785fe99"/>
+				<reportElement uuid="c6a8beb1-b986-4ff0-a124-df59c785fe99" x="410" y="225" width="119" height="18"/>
 				<textElement>
 					<font fontName="Century Gothic" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{referenceEforce} == null ? " - " : $F{referenceEforce}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="297" y="225" width="113" height="18" uuid="34e069a3-ab31-446d-be1c-a02a13867919"/>
+				<reportElement uuid="34e069a3-ab31-446d-be1c-a02a13867919" x="297" y="225" width="113" height="18"/>
 				<textElement>
 					<font fontName="Century Gothic"/>
 				</textElement>
 				<text><![CDATA[- Référence e-FORCE : ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="345" y="45" width="200" height="15" uuid="6a93c6a4-6283-400b-8cf6-f66d65f0cb42"/>
+				<reportElement uuid="6a93c6a4-6283-400b-8cf6-f66d65f0cb42" x="345" y="45" width="200" height="15"/>
 				<textElement textAlignment="Center">
 					<font fontName="Century Gothic" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[MINISTRY OF FORESTRY AND WILDLIFE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="345" y="60" width="200" height="34" uuid="2f15f796-0f8a-4806-be8c-69af8a9cebd0"/>
+				<reportElement uuid="2f15f796-0f8a-4806-be8c-69af8a9cebd0" x="345" y="60" width="200" height="34"/>
 				<textElement textAlignment="Center">
 					<font fontName="Century Gothic" size="9" isBold="true"/>
 				</textElement>
@@ -181,7 +181,7 @@ FORESTS DIRECTORATE
 -----]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="14" y="60" width="200" height="34" uuid="4d522c17-221d-4d06-8514-135a25612557"/>
+				<reportElement uuid="4d522c17-221d-4d06-8514-135a25612557" x="14" y="60" width="200" height="34"/>
 				<textElement textAlignment="Center">
 					<font fontName="Century Gothic" size="9" isBold="true"/>
 				</textElement>
@@ -190,7 +190,7 @@ DIRECTION DES FORETS
 -----]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="14" y="5" width="200" height="40" uuid="56a7873b-4199-4c3a-a98f-a1485ca08fc8"/>
+				<reportElement uuid="56a7873b-4199-4c3a-a98f-a1485ca08fc8" x="14" y="5" width="200" height="40"/>
 				<textElement textAlignment="Center">
 					<font fontName="Century Gothic" size="10" isBold="true"/>
 				</textElement>
@@ -199,14 +199,14 @@ Paix - Travail - Patrie
 ------]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="14" y="45" width="200" height="15" uuid="e2cc2860-2716-42e2-9da1-7edbd22abc13"/>
+				<reportElement uuid="e2cc2860-2716-42e2-9da1-7edbd22abc13" x="14" y="45" width="200" height="15"/>
 				<textElement textAlignment="Center">
 					<font fontName="Century Gothic" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[MINISTERE DES FORETS ET DE LA FAUNE]]></text>
 			</staticText>
 			<image>
-				<reportElement x="219" y="0" width="119" height="101" uuid="2f5e81f2-a700-4190-a096-ec9abd5f59cf"/>
+				<reportElement uuid="2f5e81f2-a700-4190-a096-ec9abd5f59cf" x="219" y="0" width="119" height="101"/>
 				<imageExpression><![CDATA["minfof_logo.png"]]></imageExpression>
 			</image>
 		</band>
@@ -217,15 +217,15 @@ Paix - Travail - Patrie
 	<detail>
 		<band height="112" splitType="Stretch">
 			<componentElement>
-				<reportElement key="table" style="table" mode="Opaque" x="0" y="13" width="555" height="80" uuid="38184627-8a63-4978-a34d-08ea75e57b3c"/>
+				<reportElement uuid="38184627-8a63-4978-a34d-08ea75e57b3c" key="table" style="table" mode="Opaque" x="0" y="13" width="555" height="80"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
 					<datasetRun subDataset="specsDataSet" uuid="5860654a-df3e-4cad-83dd-d4ce8c23f1f7">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{woodSpecs})]]></dataSourceExpression>
 					</datasetRun>
-					<jr:column width="64" uuid="c13cbdcd-b475-4c29-bcca-6a589d7ae288">
+					<jr:column uuid="c13cbdcd-b475-4c29-bcca-6a589d7ae288" width="64">
 						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="64" height="30" uuid="a9d06770-c3c5-4182-beca-c9d1e4494be7"/>
+								<reportElement uuid="a9d06770-c3c5-4182-beca-c9d1e4494be7" x="0" y="0" width="64" height="30"/>
 								<box>
 									<topPen lineWidth="1.0"/>
 									<leftPen lineWidth="1.0"/>
@@ -240,7 +240,7 @@ Paix - Travail - Patrie
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20" rowSpan="1">
 							<textField isStretchWithOverflow="true">
-								<reportElement x="0" y="0" width="64" height="20" uuid="ffff1f15-57a9-400d-8cef-a78ed9d8e64c"/>
+								<reportElement uuid="ffff1f15-57a9-400d-8cef-a78ed9d8e64c" x="0" y="0" width="64" height="20"/>
 								<textElement textAlignment="Center">
 									<font fontName="Century Gothic"/>
 								</textElement>
@@ -248,10 +248,10 @@ Paix - Travail - Patrie
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="86" uuid="4818841b-8d67-4f4c-a824-cf7fec36176b">
+					<jr:column uuid="4818841b-8d67-4f4c-a824-cf7fec36176b" width="86">
 						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="86" height="30" uuid="9256c483-aa52-40fe-840a-b03b7a33b17b"/>
+								<reportElement uuid="9256c483-aa52-40fe-840a-b03b7a33b17b" x="0" y="0" width="86" height="30"/>
 								<box>
 									<topPen lineWidth="1.0"/>
 									<bottomPen lineWidth="1.0"/>
@@ -265,7 +265,7 @@ Paix - Travail - Patrie
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20" rowSpan="1">
 							<textField isStretchWithOverflow="true">
-								<reportElement x="0" y="0" width="86" height="20" uuid="60f4dd06-ce36-4b51-898c-9af131aae5dd"/>
+								<reportElement uuid="60f4dd06-ce36-4b51-898c-9af131aae5dd" x="0" y="0" width="86" height="20"/>
 								<textElement textAlignment="Center">
 									<font fontName="Century Gothic"/>
 								</textElement>
@@ -273,10 +273,10 @@ Paix - Travail - Patrie
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="55" uuid="f787061b-76bf-4f2f-a16b-bfe5662e6d5e">
+					<jr:column uuid="f787061b-76bf-4f2f-a16b-bfe5662e6d5e" width="55">
 						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="55" height="30" uuid="8d340769-e0a0-48f0-9ccc-47f65b312ab8"/>
+								<reportElement uuid="8d340769-e0a0-48f0-9ccc-47f65b312ab8" x="0" y="0" width="55" height="30"/>
 								<box>
 									<topPen lineWidth="1.0"/>
 									<bottomPen lineWidth="1.0"/>
@@ -290,7 +290,7 @@ Paix - Travail - Patrie
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20" rowSpan="1">
 							<textField isStretchWithOverflow="true">
-								<reportElement x="0" y="0" width="55" height="20" uuid="51002c3e-33ac-45b7-bbdd-827775b18b8e"/>
+								<reportElement uuid="51002c3e-33ac-45b7-bbdd-827775b18b8e" x="0" y="0" width="55" height="20"/>
 								<textElement textAlignment="Center">
 									<font fontName="Century Gothic"/>
 								</textElement>
@@ -298,10 +298,10 @@ Paix - Travail - Patrie
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="55" uuid="796a6e1d-af7e-412a-a545-697f3f5510d2">
+					<jr:column uuid="796a6e1d-af7e-412a-a545-697f3f5510d2" width="55">
 						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="55" height="30" uuid="bf4a6a24-a20f-4fb2-af8c-6cbf55711c27"/>
+								<reportElement uuid="bf4a6a24-a20f-4fb2-af8c-6cbf55711c27" x="0" y="0" width="55" height="30"/>
 								<box>
 									<topPen lineWidth="1.0"/>
 									<bottomPen lineWidth="1.0"/>
@@ -315,7 +315,7 @@ Paix - Travail - Patrie
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20" rowSpan="1">
 							<textField isStretchWithOverflow="true">
-								<reportElement x="0" y="0" width="55" height="20" uuid="ad6ddb71-70f2-48b4-983b-871db71c094e"/>
+								<reportElement uuid="ad6ddb71-70f2-48b4-983b-871db71c094e" x="0" y="0" width="55" height="20"/>
 								<textElement textAlignment="Center">
 									<font fontName="Century Gothic"/>
 								</textElement>
@@ -323,10 +323,10 @@ Paix - Travail - Patrie
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="58" uuid="28c4805e-f8d9-4d8a-b1c6-30cd05197db1">
+					<jr:column uuid="28c4805e-f8d9-4d8a-b1c6-30cd05197db1" width="58">
 						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="58" height="30" uuid="affd6464-4d0e-4145-ab18-828e507932d0"/>
+								<reportElement uuid="affd6464-4d0e-4145-ab18-828e507932d0" x="0" y="0" width="58" height="30"/>
 								<box>
 									<topPen lineWidth="1.0"/>
 									<bottomPen lineWidth="1.0"/>
@@ -340,7 +340,7 @@ Paix - Travail - Patrie
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20" rowSpan="1">
 							<textField isStretchWithOverflow="true">
-								<reportElement x="0" y="0" width="58" height="20" uuid="01d07ab5-9d97-4106-8065-ea4682bde522"/>
+								<reportElement uuid="01d07ab5-9d97-4106-8065-ea4682bde522" x="0" y="0" width="58" height="20"/>
 								<textElement textAlignment="Center">
 									<font fontName="Century Gothic"/>
 								</textElement>
@@ -348,10 +348,10 @@ Paix - Travail - Patrie
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="49" uuid="d8a3f6b6-ba56-4299-b9b7-159432f33ee2">
+					<jr:column uuid="d8a3f6b6-ba56-4299-b9b7-159432f33ee2" width="49">
 						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="49" height="30" uuid="3224a95f-b33d-404e-b6e3-f2859579e256"/>
+								<reportElement uuid="3224a95f-b33d-404e-b6e3-f2859579e256" x="0" y="0" width="49" height="30"/>
 								<box>
 									<topPen lineWidth="1.0"/>
 									<bottomPen lineWidth="1.0"/>
@@ -365,18 +365,18 @@ Paix - Travail - Patrie
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20" rowSpan="1">
 							<textField isStretchWithOverflow="true">
-								<reportElement x="0" y="0" width="49" height="20" uuid="245a1964-433b-4493-b7cb-df299ea1a370"/>
+								<reportElement uuid="245a1964-433b-4493-b7cb-df299ea1a370" x="0" y="0" width="49" height="20"/>
 								<textElement textAlignment="Center">
 									<font fontName="Century Gothic"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{diamMoyen} == null ? "-" : $F{diamMoyen}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{longueurGrume} == null ? "-" : $F{longueurGrume}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="55" uuid="a3403cf3-8458-4256-8f84-18726c5ef789">
+					<jr:column uuid="a3403cf3-8458-4256-8f84-18726c5ef789" width="55">
 						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="55" height="30" uuid="5763b175-1eab-4844-bd42-9f013b33d26d"/>
+								<reportElement uuid="5763b175-1eab-4844-bd42-9f013b33d26d" x="0" y="0" width="55" height="30"/>
 								<box>
 									<topPen lineWidth="1.0"/>
 									<bottomPen lineWidth="1.0"/>
@@ -390,7 +390,7 @@ Paix - Travail - Patrie
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20" rowSpan="1">
 							<textField isStretchWithOverflow="true">
-								<reportElement x="0" y="0" width="55" height="20" uuid="bbfc1080-6703-416c-bf34-3894570816a9"/>
+								<reportElement uuid="bbfc1080-6703-416c-bf34-3894570816a9" x="0" y="0" width="55" height="20"/>
 								<textElement textAlignment="Center">
 									<font fontName="Century Gothic"/>
 								</textElement>
@@ -398,10 +398,10 @@ Paix - Travail - Patrie
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="52" uuid="6273d436-62e9-4735-8c9d-d3a0fa2c6b8a">
+					<jr:column uuid="6273d436-62e9-4735-8c9d-d3a0fa2c6b8a" width="52">
 						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="52" height="30" uuid="5763b175-1eab-4844-bd42-9f013b33d26d"/>
+								<reportElement uuid="5763b175-1eab-4844-bd42-9f013b33d26d" x="0" y="0" width="52" height="30"/>
 								<box>
 									<topPen lineWidth="1.0"/>
 									<bottomPen lineWidth="1.0"/>
@@ -415,7 +415,7 @@ Paix - Travail - Patrie
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20" rowSpan="1">
 							<textField isStretchWithOverflow="true">
-								<reportElement x="0" y="0" width="52" height="20" uuid="46c7a0ef-0e47-4959-a5a4-9fd656ceea06"/>
+								<reportElement uuid="46c7a0ef-0e47-4959-a5a4-9fd656ceea06" x="0" y="0" width="52" height="20"/>
 								<textElement textAlignment="Center">
 									<font fontName="Century Gothic"/>
 								</textElement>
@@ -423,10 +423,10 @@ Paix - Travail - Patrie
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="80" uuid="b4061b4d-9068-43e7-b113-498e67a7399a">
+					<jr:column uuid="b4061b4d-9068-43e7-b113-498e67a7399a" width="80">
 						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="80" height="30" uuid="4db4378f-9285-448a-b160-fd4d048d5162"/>
+								<reportElement uuid="4db4378f-9285-448a-b160-fd4d048d5162" x="0" y="0" width="80" height="30"/>
 								<box>
 									<topPen lineWidth="1.0"/>
 									<bottomPen lineWidth="1.0"/>
@@ -440,7 +440,7 @@ Paix - Travail - Patrie
 						</jr:columnHeader>
 						<jr:detailCell style="table_TD" height="20" rowSpan="1">
 							<textField isStretchWithOverflow="true">
-								<reportElement x="0" y="0" width="80" height="20" uuid="242bd6ea-3e81-42f3-ab3c-1f4cf246dd30"/>
+								<reportElement uuid="242bd6ea-3e81-42f3-ab3c-1f4cf246dd30" x="0" y="0" width="80" height="20"/>
 								<textElement textAlignment="Center">
 									<font fontName="Century Gothic"/>
 								</textElement>
@@ -455,7 +455,7 @@ Paix - Travail - Patrie
 	<columnFooter>
 		<band height="4" splitType="Stretch">
 			<line>
-				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="fab082df-3ca0-43ac-900e-4da3f8b5a45d"/>
+				<reportElement uuid="fab082df-3ca0-43ac-900e-4da3f8b5a45d" positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1"/>
 				<graphicElement>
 					<pen lineWidth="0.5" lineColor="#999999"/>
 				</graphicElement>
@@ -465,7 +465,7 @@ Paix - Travail - Patrie
 	<pageFooter>
 		<band height="101" splitType="Stretch">
 			<staticText>
-				<reportElement x="10" y="22" width="150" height="60" uuid="2d89c11d-793f-476d-bba9-2c297407c036"/>
+				<reportElement uuid="2d89c11d-793f-476d-bba9-2c297407c036" x="10" y="22" width="150" height="60"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -478,7 +478,7 @@ Paix - Travail - Patrie
 				<text><![CDATA[VISA DE L'EXPORTATEUR]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="364" y="22" width="181" height="60" uuid="a18629cd-5c36-4b90-a7ea-dc2467b376f3"/>
+				<reportElement uuid="a18629cd-5c36-4b90-a7ea-dc2467b376f3" x="364" y="22" width="181" height="60"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -491,35 +491,35 @@ Paix - Travail - Patrie
 				<text><![CDATA[SIGNATURE DE L'AGENT DES EAUX ET FORETS ET DES CHASSES]]></text>
 			</staticText>
 			<textField pattern="d/M/yyyy">
-				<reportElement style="Column header" x="396" y="2" width="72" height="13" forecolor="#000000" uuid="14d8de1e-8695-4078-a67f-0e69172574d5"/>
+				<reportElement uuid="14d8de1e-8695-4078-a67f-0e69172574d5" style="Column header" x="396" y="2" width="72" height="13" forecolor="#000000"/>
 				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{decisionDate} == null ? new java.util.Date() : $F{decisionDate}]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
-				<reportElement style="Column header" x="515" y="88" width="40" height="13" forecolor="#000000" uuid="2fba0f87-635e-476d-858f-d102b26146fe"/>
+				<reportElement uuid="2fba0f87-635e-476d-858f-d102b26146fe" style="Column header" x="515" y="88" width="40" height="13" forecolor="#000000"/>
 				<textElement verticalAlignment="Middle">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Column header" mode="Transparent" x="435" y="88" width="80" height="13" forecolor="#000000" uuid="e454d23d-bcfc-4c79-a399-0ef520a3150a"/>
+				<reportElement uuid="e454d23d-bcfc-4c79-a399-0ef520a3150a" style="Column header" mode="Transparent" x="435" y="88" width="80" height="13" forecolor="#000000"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}+" /"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="364" y="63" width="181" height="19" uuid="c53254fd-b9e1-483a-b1f5-6e63a5292f04"/>
+				<reportElement uuid="c53254fd-b9e1-483a-b1f5-6e63a5292f04" x="364" y="63" width="181" height="19"/>
 				<textElement textAlignment="Center">
 					<font fontName="Century Gothic" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{signatory} == null ? " - " : $F{signatory}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="364" y="2" width="32" height="13" uuid="65c460f9-6daa-45ef-89e1-85ec80b8a999"/>
+				<reportElement uuid="65c460f9-6daa-45ef-89e1-85ec80b8a999" x="364" y="2" width="32" height="13"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Century Gothic"/>
 				</textElement>
