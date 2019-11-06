@@ -6,9 +6,19 @@
 		<h:outputText />
 		<h:form id="costsForm" styleClass="costsForm">
 			<p:accordionPanel>
-				<p:tab title="#{bundle['payment_title']}" dynamic="true" cache="true" titleStyleClass="title" closable="false">
+                            <p:tab title="#{bundle['payment_title']}" dynamic="true" cache="true" titleStyleClass="title" closable="false">
 					<h:panelGroup id="paymentDisplay">
-
+                                            <p:fieldset legend="#{bundle['referenceDossier']}">
+                                                <p:panelGrid columns="4">
+                                                    <p:outputLabel value="#{bundle['FileLabel_num_siat']}" />
+                                                    <h:outputText value="#{costsController.currentFile.referenceSiat}" />
+                                                    <p:outputLabel value="#{bundle['FileLabel_num_eguce']}" />
+                                                    <h:outputText value="#{costsController.currentFile.numeroDossier}" />
+                                                    <p:outputLabel value="#{bundle['FileLabel_num_demande']}" />
+                                                    <h:outputText value="#{costsController.currentFile.numeroDemande}" />
+                                                </p:panelGrid>
+                                            </p:fieldset>    
+                                            
 						<p:fieldset legend="#{bundle['paymentTitleLabel_frais']}">
 
 							<p:panelGrid columns="4">
