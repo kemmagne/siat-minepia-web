@@ -7691,6 +7691,11 @@ public class FileItemCctDetailController implements Serializable {
                 }
                 String containerNumbers[] = builder.substring(0, builder.lastIndexOf(" ")).split(" ");
                 count.put(COUNT_CONTAINERS, containerNumbers.length);
+            } else {
+                List<Container> containers = file.getContainers();
+                if (CollectionUtils.isNotEmpty(containers)) {
+                    count.put(COUNT_CONTAINERS, containers.size());
+                }
             }
             if (org.apache.commons.lang.StringUtils.isNotBlank(packageNumber)) {
                 String packagesNumbers[] = packageNumber.split(" ");
