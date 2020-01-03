@@ -24,7 +24,12 @@ public class ReportGeneratorUtils {
         if (FileTypeCode.VT_MINEPDED.equals(currentFile.getFileType().getCode())) {
             c1 = classe.getConstructor(String.class, File.class);
             FileFieldValue fileFieldValue = fileFieldValueService.findValueByFileFieldAndFile(ControllerConstants.TYPE_OF_TECHNICAL_VISA, currentFile);
-            report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(fileFieldValue.getValue(), currentFile));
+            if (fileFieldValue == null){
+                report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile));
+            } else {
+                report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(fileFieldValue.getValue(), currentFile));
+            }
+            
         } else {
             c1 = classe.getConstructor(File.class);
             report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile));

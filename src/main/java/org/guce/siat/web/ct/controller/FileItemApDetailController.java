@@ -827,7 +827,7 @@ public class FileItemApDetailController implements Serializable {
      */
     private static final List<FileTypeCode> PROCESS_ALLOWING_DECISION_AT_COTATION_STEP = Arrays.asList(FileTypeCode.VTD_MINSANTE, FileTypeCode.VTP_MINSANTE,
             FileTypeCode.AI_MINSANTE, FileTypeCode.AT_MINSANTE, FileTypeCode.AE_MINADER, FileTypeCode.AE_MINMIDT, FileTypeCode.AIE_MINADER, FileTypeCode.AI_MINMIDT, FileTypeCode.AS_MINADER,
-            FileTypeCode.AS_MINFOF, FileTypeCode.AS_MINCOMMERCE, FileTypeCode.AT_MINEPIA, FileTypeCode.VT_MINEPIA, FileTypeCode.VT_MINEPDED, FileTypeCode.CP_MINEPDED);
+            FileTypeCode.AS_MINFOF, FileTypeCode.AS_MINCOMMERCE, FileTypeCode.AT_MINEPIA, FileTypeCode.VT_MINEPIA, FileTypeCode.CP_MINEPDED);
     /**
      * The transaction manager.
      */
@@ -1734,7 +1734,7 @@ public class FileItemApDetailController implements Serializable {
             }
         }
 
-        vtTypeSelectionViewable = FileTypeCode.VT_MINEPDED.equals(currentFile.getFileType().getCode()) && FlowCode.FL_AP_104.name().equals(selectedFlow.getCode());
+        vtTypeSelectionViewable = FileTypeCode.VT_MINEPDED.equals(currentFile.getFileType().getCode()) && (FlowCode.FL_AP_104.name().equals(selectedFlow.getCode()) || FlowCode.FL_AP_106.name().equals(selectedFlow.getCode()));
         vtTypeFileField = !vtTypeSelectionViewable ? null : fileFieldService.findFileFieldByCodeAndFileType(ControllerConstants.TYPE_OF_TECHNICAL_VISA, FileTypeCode.VT_MINEPDED);
 
         //Acceptation Suite Etude_3 AP EH Minader (affichage des formulaire : analyse result and test result)
@@ -3318,6 +3318,9 @@ public class FileItemApDetailController implements Serializable {
     private void checkGenerateReportAllowed() {
         generateReportAllowed = false;
         final Flow reportingFlow = flowService.findByToStep(selectedFileItem.getStep());
+        if (reportingFlow == null){
+            return;
+        }
         final List<FileTypeFlowReport> fileTypeFlowReportsList = reportingFlow.getFileTypeFlowReportsList();
 
         if (StepCode.ST_AP_44.name().equals(selectedFileItem.getStep().getStepCode().name())
