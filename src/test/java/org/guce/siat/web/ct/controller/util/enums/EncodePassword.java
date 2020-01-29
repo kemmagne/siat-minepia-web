@@ -1,6 +1,7 @@
 package org.guce.siat.web.ct.controller.util.enums;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 
@@ -25,6 +26,8 @@ public class EncodePassword {
     }
 
     public static void main(String[] args) {
+        System.out.println(new java.text.SimpleDateFormat("dd MMMM yyyy").format(new Date()));
+        System.out.println(new java.text.SimpleDateFormat("dd MMMM yyyy", java.util.Locale.FRANCE).format(new Date()));
 //        test2();
         test01();
 //        generateUpdateDb();
@@ -37,8 +40,8 @@ public class EncodePassword {
                 "PERABI", "NZOKOA", "SENABIONO", "EMPOAGHAM", "KENFACKJP", "NIMAYA", "KAMDEM", "ZEBAZE",
                 "AKONO", "TONYE", "JAMMULUMI", "KONGUEP", "FOKOUEN", "IJANGFONGOH", "TOUANDOP", "TAZOJACOB", "MEBIAME");
         final List<String> logins2 = Arrays.asList("MINADER-INSP-TIOMY-2", "KENFACK", "NOUNI", "TONYE", "EKONDE", "ALIYOU", "TOUANDOP");
-        for (String login : logins1) {
-            generateUpdateDb(login, "0123456789");
+        for (String login : Arrays.asList("MINEPDED-VT-AG-ALL")) {
+            generateUpdateDb(login, "root");
         }
     }
 

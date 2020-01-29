@@ -5,7 +5,7 @@
                  value="#{fileItemApDetailController.paymentData.paymentItemFlowList}">
 
         <p:column headerText="#{bundle['Payment_product_id']}">
-            <h:outputText title="#{bundle['Payment_product_id']}" value="#{invoiceLine.fileItemId}" />
+            <h:outputText title="#{bundle['Payment_product_id']}" value="#{invoiceLine.nsh ne null ? invoiceLine.nsh.goodsItemCode : invoiceLine.fileItemId}" />
         </p:column>
 
         <p:column headerText="#{bundle['Payment_amount_label']}">

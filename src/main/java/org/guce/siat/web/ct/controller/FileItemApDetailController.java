@@ -53,6 +53,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.guce.siat.common.data.FieldGroupDto;
 import org.guce.siat.common.data.ItemFlowDto;
 import org.guce.siat.common.mail.MailConstants;
@@ -1643,10 +1644,15 @@ public class FileItemApDetailController implements Serializable {
 
             paymentData.setPaymentItemFlowList(new ArrayList<PaymentItemFlow>());
             for (final FileItem fi : currentFile.getFileItemsList()) {
-                paymentData.getPaymentItemFlowList().add(new PaymentItemFlow(false, fi.getId()));
+                paymentData.getPaymentItemFlowList().add(new PaymentItemFlow(false, fi.getId(), fi.getNsh()));
             }
         }
         for (final DataType dataType : selectedFlow.getDataTypeList()) {
+
+            if (BooleanUtils.toBoolean(dataType.getDisabled())) {
+                continue;
+            }
+
             final FacesContext context = FacesContext.getCurrentInstance();
 
             if (dataType.getId() != null) {
@@ -1778,9 +1784,7 @@ public class FileItemApDetailController implements Serializable {
     public void paymentAmoutValueChangedListener() {
         invoiceTotalAmount = 0L;
         Long totalTva = 0L;
-        Iterator<PaymentItemFlow> it = paymentData.getPaymentItemFlowList().iterator();
-        while (it.hasNext()) {
-            PaymentItemFlow pi = it.next();
+        for (PaymentItemFlow pi : paymentData.getPaymentItemFlowList()) {
             if (pi.getMontantHt() == null) {
                 pi.setMontantHt(0L);
             }
@@ -2005,6 +2009,11 @@ public class FileItemApDetailController implements Serializable {
             final List<ItemFlowData> flowDatas = new ArrayList<>();
 
             for (final DataType dataType : selectedFlow.getDataTypeList()) {
+
+                if (BooleanUtils.toBoolean(dataType.getDisabled())) {
+                    continue;
+                }
+
                 final ItemFlowData itemFlowData = new ItemFlowData();
                 itemFlowData.setDataType(dataType);
                 final boolean isFimex = currentFile.getFileType().getCode().equals(FileTypeCode.FIMEX_WF)
@@ -2110,6 +2119,11 @@ public class FileItemApDetailController implements Serializable {
 
         flowDatas = new ArrayList<>();
         for (final DataType dataType : selectedFlow.getDataTypeList()) {
+
+            if (BooleanUtils.toBoolean(dataType.getDisabled())) {
+                continue;
+            }
+
             final ItemFlowData itemFlowData = new ItemFlowData();
             itemFlowData.setDataType(dataType);
 
@@ -2206,6 +2220,10 @@ public class FileItemApDetailController implements Serializable {
         userListToAffectedFileCotation = new ArrayList<>(users);
 
         for (final DataType dataType : selectedFlow.getDataTypeList()) {
+
+            if (BooleanUtils.toBoolean(dataType.getDisabled())) {
+                continue;
+            }
 
             final FacesContext context = FacesContext.getCurrentInstance();
             if (dataType.getId() != null) {

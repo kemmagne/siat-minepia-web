@@ -20,7 +20,7 @@
                                              required="true" requiredMessage="#{bundle['Dispatch_user_message_required']}">
                                 <f:selectItem itemLabel=" #{bundle['SelectOneMessage']}" itemValue="#{null}" />
                                 <f:selectItems value="#{fileItemApDetailController.userListToAffectedFileCotation}" var="affectedUser" itemValue="#{inspector}"
-                                               itemLabel="#{affectedUser.firstName} #{affectedUser.lastName} - #{affectedUser.administration.labelFr}" />
+                                               itemLabel="#{affectedUser.firstName} #{affectedUser.lastName}" />
                                 <f:converter binding="#{userConverter}" />
                             </p:selectOneMenu>
                             <p:message for="dispatch_affected_user" />
