@@ -12,126 +12,135 @@ import java.util.Date;
  *
  * @author yenke
  */
-public class GlobalDelayListingData implements Serializable{
-    
-    private String processName;
-    private String expecNumber;
-    private String subfileNumber;
-    private String exporterNiu;
-    private String exporterName;
-    private String productType;
-    private String destinationCountry;
-    private String step;
-    private Date entryDate;
-    private Date releaseDate;
-    private String globalDelay;
-    private String officeCode;
-    private String officeLabel;
+public class GlobalDelayListingData implements Serializable {
 
-    public String getProcessName() {
-        return processName;
-    }
+	private static final long serialVersionUID = 8842048170730589629L;
 
-    public void setProcessName(String processName) {
-        this.processName = processName;
-    }
+	private String processName;
+	private String expecNumber;
+	private String subfileNumber;
+	private String exporterNiu;
+	private String exporterName;
+	private String productType;
+	private String destinationCountry;
+	private String step;
+	private Date entryDate;
+	private Date releaseDate;
+	private String globalDelay;
+	private String officeCode;
+	private String officeLabel;
+	private String cdaName;
 
-    public String getExpecNumber() {
-        return expecNumber;
-    }
+	public String getProcessName() {
+		return processName;
+	}
 
-    public void setExpecNumber(String expecNumber) {
-        this.expecNumber = expecNumber;
-    }
+	public void setProcessName(String processName) {
+		this.processName = processName;
+	}
 
-    public String getSubfileNumber() {
-        return subfileNumber;
-    }
+	public String getExpecNumber() {
+		return expecNumber;
+	}
 
-    public void setSubfileNumber(String subfileNumber) {
-        this.subfileNumber = subfileNumber;
-    }
+	public void setExpecNumber(String expecNumber) {
+		this.expecNumber = expecNumber;
+	}
 
-    public String getExporterNiu() {
-        return exporterNiu;
-    }
+	public String getSubfileNumber() {
+		return subfileNumber;
+	}
 
-    public void setExporterNiu(String exporterNiu) {
-        this.exporterNiu = exporterNiu;
-    }
+	public void setSubfileNumber(String subfileNumber) {
+		this.subfileNumber = subfileNumber;
+	}
 
-    public String getExporterName() {
-        return exporterName;
-    }
+	public String getExporterNiu() {
+		return exporterNiu;
+	}
 
-    public void setExporterName(String exporterName) {
-        this.exporterName = exporterName;
-    }
+	public void setExporterNiu(String exporterNiu) {
+		this.exporterNiu = exporterNiu;
+	}
 
-    public String getProductType() {
-        return productType;
-    }
+	public String getExporterName() {
+		return exporterName;
+	}
 
-    public void setProductType(String productType) {
-        this.productType = productType;
-    }
+	public void setExporterName(String exporterName) {
+		this.exporterName = exporterName;
+	}
 
-    public String getDestinationCountry() {
-        return destinationCountry;
-    }
+	public String getProductType() {
+		return productType;
+	}
 
-    public void setDestinationCountry(String destinationCountry) {
-        this.destinationCountry = destinationCountry;
-    }
+	public void setProductType(String productType) {
+		this.productType = productType;
+	}
 
-    public String getStep() {
-        return step;
-    }
+	public String getDestinationCountry() {
+		return destinationCountry;
+	}
 
-    public void setStep(String step) {
-        this.step = step;
-    }
+	public void setDestinationCountry(String destinationCountry) {
+		this.destinationCountry = destinationCountry;
+	}
 
-    public Date getEntryDate() {
-        return entryDate;
-    }
+	public String getStep() {
+		return step;
+	}
 
-    public void setEntryDate(Date entryDate) {
-        this.entryDate = entryDate;
-    }
+	public void setStep(String step) {
+		this.step = step;
+	}
 
-    public Date getReleaseDate() {
-        return releaseDate;
-    }
+	public Date getEntryDate() {
+		return entryDate;
+	}
 
-    public void setReleaseDate(Date releaseDate) {
-        this.releaseDate = releaseDate;
-    }
+	public void setEntryDate(Date entryDate) {
+		this.entryDate = entryDate;
+	}
 
-    public String getGlobalDelay() {
-        return globalDelay;
-    }
+	public Date getReleaseDate() {
+		return releaseDate;
+	}
 
-    public void setGlobalDelay(String globalDelay) {
-        this.globalDelay = globalDelay;
-    }
+	public void setReleaseDate(Date releaseDate) {
+		this.releaseDate = releaseDate;
+	}
 
-    public String getOfficeCode() {
-        return officeCode;
-    }
+	public String getGlobalDelay() {
+		return globalDelay;
+	}
 
-    public void setOfficeCode(String officeCode) {
-        this.officeCode = officeCode;
-    }
+	public void setGlobalDelay(String globalDelay) {
+		this.globalDelay = globalDelay;
+	}
 
-    public String getOfficeLabel() {
-        return officeLabel;
-    }
+	public String getOfficeCode() {
+		return officeCode;
+	}
 
-    public void setOfficeLabel(String officeLabel) {
-        this.officeLabel = officeLabel;
-    }
-    
-    
-    
+	public void setOfficeCode(String officeCode) {
+		this.officeCode = officeCode;
+	}
+
+	public String getOfficeLabel() {
+		return officeLabel;
+	}
+
+	public void setOfficeLabel(String officeLabel) {
+		this.officeLabel = officeLabel;
+	}
+
+	public String getCdaName() {
+		return cdaName;
+	}
+
+	public void setCdaName(String cdaName) {
+		this.cdaName = cdaName;
+	}
+
 }

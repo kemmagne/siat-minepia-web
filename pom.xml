@@ -13,7 +13,7 @@
     <artifactId>siat-ct-web</artifactId>
     <packaging>war</packaging>
     <name>siat-ct-web</name>
-    <version>2.2.34</version>
+    <version>2.2.35-TEST</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -460,7 +460,7 @@
         <dependency>
             <groupId>org.guce.siat</groupId>
             <artifactId>siat-ct-core</artifactId>
-            <version>2.2.17</version>
+            <version>2.2.18</version>
         </dependency>
 
         <dependency>
