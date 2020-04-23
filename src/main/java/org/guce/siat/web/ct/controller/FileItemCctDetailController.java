@@ -163,6 +163,7 @@ import org.guce.siat.core.ct.service.AnalyseResultService;
 import org.guce.siat.core.ct.service.ApprovedDecisionService;
 import org.guce.siat.core.ct.service.CCTCPParamValueService;
 import org.guce.siat.core.ct.service.CommonService;
+import org.guce.siat.core.ct.service.CotationService;
 import org.guce.siat.core.ct.service.DecisionHistoryService;
 import org.guce.siat.core.ct.service.InspectionReportService;
 import org.guce.siat.core.ct.service.InterceptionNotificationService;
@@ -190,7 +191,6 @@ import org.guce.siat.web.ct.controller.util.InspectionReportData;
 import org.guce.siat.web.ct.controller.util.InspectionReportEtiquetageVo;
 import org.guce.siat.web.ct.controller.util.InspectionReportTemperatureVo;
 import org.guce.siat.web.ct.controller.util.JsfUtil;
-import org.guce.siat.web.ct.controller.util.Utils;
 import org.guce.siat.web.ct.controller.util.enums.DataTypeEnnumeration;
 import org.guce.siat.web.ct.controller.util.enums.DataTypePropEnnum;
 import org.guce.siat.web.ct.controller.util.enums.DecisionsSuiteVisite;
@@ -336,6 +336,9 @@ public class FileItemCctDetailController implements Serializable {
     private static final List<String> DECISION_FLOW_LIST_AT_COTATION_LEVEL = Arrays.asList(FlowCode.FL_CT_116.name(), FlowCode.FL_CT_117.name());
 
     private static final List<StepCode> COTATION_STEP_LIST_ALLOW_DECISION = Arrays.asList(StepCode.ST_CT_53);
+
+    private static final List<String> ADMISSIBILITY_VALIDATIONS_FLOWS_CODES = Arrays.asList(FlowCode.FL_CT_100.name(), FlowCode.FL_CT_05.name());
+
     /**
      * The administration service.
      */
@@ -1117,6 +1120,9 @@ public class FileItemCctDetailController implements Serializable {
      */
     @ManagedProperty(value = "#{decisionHistoryService}")
     private DecisionHistoryService decisionHistoryService;
+
+    @ManagedProperty(value = "#{cotationService}")
+    private CotationService cotationService;
 
     private List<DecisionHistory> decisionHistories;
     private boolean maskOfficialPosition;
@@ -2850,8 +2856,7 @@ public class FileItemCctDetailController implements Serializable {
         // let find the cotation flow
         final FlowCode flowCode;
         final FileTypeCode currentFileTypeCode = currentFile.getFileType().getCode();
-        if (FileTypeCode.CCT_CT_E_FSTP.equals(currentFileTypeCode)
-                || FileTypeCode.CCT_CT_E_PVI.equals(currentFileTypeCode)) {
+        if (FileTypeCode.CCT_CT_E_FSTP.equals(currentFileTypeCode) || FileTypeCode.CCT_CT_E_PVI.equals(currentFileTypeCode)) {
             flowCode = FlowCode.FL_CT_103;
         } else {
             flowCode = FlowCode.FL_CT_06;
@@ -2876,10 +2881,13 @@ public class FileItemCctDetailController implements Serializable {
         }
         List<User> cotationActors;
         if (checkMinepiaMinistry) {
-            cotationActors = userService.findCotationsAgentByBureauAndRole(currentFile.getBureau(),
-                    AuthorityConstants.SOCIETE_TRAITEMENT.getCode());
+            cotationActors = userService.findCotationsAgentByBureauAndRole(currentFile.getBureau(), AuthorityConstants.SOCIETE_TRAITEMENT.getCode());
         } else {
-            cotationActors = userService.findInspectorsByBureau(currentFile.getBureau());
+            if (checkMinaderMinistry && isPhyto()) {
+                cotationActors = cotationService.findCotationAgentsByBureauAndRoleAndProductType(currentFile);
+            } else {
+                cotationActors = userService.findInspectorsByBureau(currentFile.getBureau());
+            }
         }
         setInspectorList(cotationActors);
 
@@ -3226,6 +3234,9 @@ public class FileItemCctDetailController implements Serializable {
                                     LOG.debug("Message sent to SIAT queue");
                                 }
                             }
+                        }
+                        if (ADMISSIBILITY_VALIDATIONS_FLOWS_CODES.contains(selectedFlow.getCode())) {
+                            cotationService.dispatch(currentFile, loggedUser, selectedFlow);
                         }
                     }
 
@@ -7748,6 +7759,18 @@ public class FileItemCctDetailController implements Serializable {
 
     public List<Container> getContainers() {
         return currentFile.getContainers();
+    }
+
+    public CotationService getCotationService() {
+        return cotationService;
+    }
+
+    public void setCotationService(CotationService cotationService) {
+        this.cotationService = cotationService;
+    }
+
+    public boolean isPhyto() {
+        return Arrays.asList(FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI).contains(currentFile.getFileType().getCode());
     }
 
 }

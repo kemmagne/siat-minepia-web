@@ -3,15 +3,12 @@
 <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"  template="/templates/template.xhtml">
 
     <ui:define name="title">
-        <h:outputText value="#{bundle['user_title']}" />
+        <h:outputText value="#{bundle['appmenu_agents_assignment']}" />
     </ui:define>
 
     <ui:define name="body">
-
         <ui:include src="list.xhtml" />
-        <ui:include src="create.xhtml" />
         <ui:include src="edit.xhtml" />
-
     </ui:define>
 
 </ui:composition>

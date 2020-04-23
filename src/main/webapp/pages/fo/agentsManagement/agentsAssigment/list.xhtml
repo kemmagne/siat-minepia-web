@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <br />
+
+    <p:panel header="#{bundle['appmenu_agents_assignment_phyto']}">
+        <h:form id="agentsAssigmentForm" styleClass="userStyle">
+
+            <p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable" value="#{agentsManagementController.items}" filteredValue="" var="item"
+                         selectionMode="single" selection="#{agentsManagementController.selected}" rowKey="#{item.id}" rows="5" paginator="true"
+                         rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}" styleClass="newui-datatable fixeColumnWidth"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+                <p:ajax event="rowSelect" resetValues="true" oncomplete="clickedItem()" listener="#{agentsManagementController.prepareEdit}"
+                        update="datalist :userEditForm :userEditForm:display"  onsuccess="PF('statusDialog1').unblock()" />
+                <p:ajax resetValues="true" event="rowUnselect" oncomplete="clickedItem()" listener="#{agentsManagementController.prepareEdit}"
+                        update="datalist :userEditForm" onsuccess="PF('statusDialog1').unblock()" />
+
+                <p:column id="loginColumn" sortBy="#{item.login}" filterBy="#{item.login}" filterMatchMode="contains">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['UserLabel_login']}" title="#{bundle['UserTitle_login']}" />
+                    </f:facet>
+                    <h:outputText value="#{item.login}" />
+                </p:column>
+
+                <p:column id="firstNameColumn" sortBy="#{item.firstName}" filterBy="#{item.firstName}" filterMatchMode="contains">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['UserLabel_firstName']}" title="#{bundle['UserTitle_firstName']}" />
+                    </f:facet>
+                    <h:outputText value="#{item.firstName}" />
+                </p:column>
+
+                <p:column id="lastNameColumn" sortBy="#{item.lastName}" filterBy="#{item.lastName}" filterMatchMode="contains">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['UserLabel_lastName']}" title="#{bundle['UserTitle_lastName']}" />
+                    </f:facet>
+                    <h:outputText value="#{item.lastName}" />
+                </p:column>
+
+                <p:column id="emailColumn" sortBy="#{item.email}" filterBy="#{item.email}" filterMatchMode="contains">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['UserLabel_email']}" title="#{bundle['UserTitle_email']}" />
+                    </f:facet>
+                    <h:outputText value="#{item.email}" />
+                </p:column>
+
+                <p:column id="administrationNameColumn" sortBy="#{item.administration.labelFr}" filterBy="#{item.administration.labelFr}"
+                          filterMatchMode="contains">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['UserLabel_administration']}" title="#{bundle['UserTitle_administration']}" />
+                    </f:facet>
+                    <h:outputText value="#{item.administration.labelFr}" />
+                </p:column>
+
+                <p:column id="authoritiesImagesList">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['UserLabel_role']}" title="#{bundle['UserTitle_role']}" />
+                    </f:facet>
+
+                    <ui:repeat value="#{agentsManagementController.getListAuthoritiesByUser(item)}" var="grantedAuthority">
+                        <p:spacer width="3" />
+                        <p:graphicImage value="/images/icons/icon-#{grantedAuthority.role}.png" width="20" height="20" />
+                    </ui:repeat>
+
+                </p:column>
+
+                <p:column id="productTypesList">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['UserLabel_productTypes']}" title="#{bundle['UserTitle_productTypes']}" />
+                    </f:facet>
+
+                    <ui:repeat value="#{agentsManagementController.getProductTypesByUser(item)}" var="pt">
+                        <p:spacer width="5" />
+                        <h:outputText value="#{pt.label}" />
+                    </ui:repeat>
+
+                </p:column>
+
+            </p:dataTable>
+
+        </h:form>
+    </p:panel>
+
+</ui:composition>

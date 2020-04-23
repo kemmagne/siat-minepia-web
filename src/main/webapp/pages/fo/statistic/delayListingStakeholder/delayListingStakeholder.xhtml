@@ -1,112 +1,105 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 
-	<br />
+    <br />
 
-	<h:form id="delaiListingStakeholderSearchForm" class="search-style">
+    <h:form id="delaiListingStakeholderSearchForm" class="search-style">
 
-		<p:accordionPanel styleClass="search">
+        <p:accordionPanel styleClass="search">
 
-			<p:tab title="#{bundle['DelayListingStakeholder_Search']}" dynamic="true" cache="true">
+            <p:tab title="#{bundle['DelayListingStakeholder_Search']}" dynamic="true" cache="true">
 
-				<h:panelGrid columns="6">
-					<h:outputLabel value="#{bundle['statisticsOnBusinessSearch_operation']}" for="operation" />
-                                        <p:selectManyCheckbox id="operation" value="#{statisticController.cteFilter.operationType}">
-						<f:selectItem itemLabel="#{bundle['statisticsOnBusinessSearch_transit']}" itemValue="2" />
-						<f:selectItem itemLabel="#{bundle['statisticsOnBusinessSearch_export']}" itemValue="0" />
-					</p:selectManyCheckbox>
-                                        <p:outputPanel  styleClass="search-select">
-                                            <h:panelGroup>
-                                                    <p:outputLabel for="fileType" value="#{bundle['simpleSearch_fileTypeLabel']}" />
-                                            </h:panelGroup>
-                                                <p:selectCheckboxMenu id="fileType" title="#{bundle['simpleSearch_fileTypeTitle']}" label="#{bundle['simpleSearch_fileTypeTitle']}" value="#{statisticController.cteFilter.processCodeList}"
-                                                    filter="true" filterMatchMode="contains">
-                                                    <f:selectItems value="#{statisticController.fileTypeList}"  var="fileType" itemLabel="#{fileType.labelFr}" itemValue="#{fileType.id}"/>
-                                            </p:selectCheckboxMenu>
-                                        </p:outputPanel>
-                                    <p:outputPanel  styleClass="search-select">
-                                            <h:panelGroup>
-                                                    <p:outputLabel for="productType" value="#{bundle['simpleSearch_productTypeLabel']}" />
-                                            </h:panelGroup>
-                                        <p:selectCheckboxMenu id="productType" title="#{bundle['simpleSearch_productTypeTitle']}" label="#{bundle['simpleSearch_productTypeTitle']}" value="#{statisticController.cteFilter.productNatureList}"
-                                                    filter="true" filterMatchMode="contains">
-                                            <f:selectItem itemLabel="CAFE" itemValue="CF" />
-                                            <f:selectItem itemLabel="CACAO" itemValue="CC" />
-                                            <f:selectItem itemLabel="COTON" itemValue="COTON" />
-                                            <f:selectItem itemLabel="BOIS TRANSFORMES" itemValue="BT" />
-                                            <f:selectItem itemLabel="GRUMES" itemValue="GR" />
-                                            <f:selectItem itemLabel="OBJETS D'ART" itemValue="OA" />
-                                            <f:selectItem itemLabel="PRODUITS SPECIAUX" itemValue="PS" />
-                                            <f:selectItem itemLabel="AUTRES" itemValue="AUTRES" />
-                                            </p:selectCheckboxMenu>
-                                        </p:outputPanel>
+                <h:panelGrid columns="6">
+                    <h:outputLabel value="#{bundle['statisticsOnBusinessSearch_operation']}" for="operation" />
+                    <p:selectManyCheckbox id="operation" value="#{statisticController.cteFilter.operationType}">
+                        <f:selectItem itemLabel="#{bundle['statisticsOnBusinessSearch_transit']}" itemValue="2" />
+                        <f:selectItem itemLabel="#{bundle['statisticsOnBusinessSearch_export']}" itemValue="0" />
+                    </p:selectManyCheckbox>
+                    <p:outputPanel  styleClass="search-select">
+                        <h:panelGroup>
+                            <p:outputLabel for="fileType" value="#{bundle['simpleSearch_fileTypeLabel']}" />
+                        </h:panelGroup>
+                        <p:selectCheckboxMenu id="fileType" title="#{bundle['simpleSearch_fileTypeTitle']}" label="#{bundle['simpleSearch_fileTypeTitle']}" value="#{statisticController.cteFilter.processCodeList}"
+                                              filter="true" filterMatchMode="contains">
+                            <f:selectItems value="#{statisticController.fileTypeList}"  var="fileType" itemLabel="#{fileType.labelFr}" itemValue="#{fileType.id}"/>
+                        </p:selectCheckboxMenu>
+                    </p:outputPanel>
+                    <p:outputPanel  styleClass="search-select">
+                        <h:panelGroup>
+                            <p:outputLabel for="productType" value="#{bundle['simpleSearch_productTypeLabel']}" />
+                        </h:panelGroup>
+                        <p:selectCheckboxMenu id="productType" title="#{bundle['simpleSearch_productTypeTitle']}" label="#{bundle['simpleSearch_productTypeTitle']}" value="#{statisticController.cteFilter.productNatureList}" filter="true" filterMatchMode="contains">
+                            <!--<f:selectItem itemValue="#{null}" itemLabel="{bundle['simpleSearch_productTypeLabel']}" />-->
+                            <f:selectItems value="#{statisticController.productTypesMap.entrySet()}" var="entry" itemValue="#{entry.key}" itemLabel="#{entry.value}" />
+                        </p:selectCheckboxMenu>
+                    </p:outputPanel>
 
-                                    <p:outputPanel  styleClass="search-select" rendered="#{request.isUserInRole('SUPER')}">
-						<h:outputLabel
-							value="#{bundle['Office']}" for="office" />
-                                                <p:selectCheckboxMenu id="office" label="Office"
-                                                                 value="#{statisticController.cteFilter.officeCodeList}" >
-                                                    <f:selectItems value="#{statisticController.bureauList}" var="bureau" itemLabel="#{bureau.labelFr}" itemValue="#{bureau.id}" />
-							
-						</p:selectCheckboxMenu>
-					</p:outputPanel>
-                                        <p:outputPanel  styleClass="search-select">
-                                            <h:outputLabel value="#{bundle['exporterNiu']}" />
-                                            <p:inputText value="#{statisticController.cteFilter.clientNiu}" />
-                                        </p:outputPanel>
-				</h:panelGrid>
+                    <p:outputPanel  styleClass="search-select" rendered="#{request.isUserInRole('SUPER')}">
+                        <h:outputLabel
+                            value="#{bundle['Office']}" for="office" />
+                        <p:selectCheckboxMenu id="office" label="Office"
+                                              value="#{statisticController.cteFilter.officeCodeList}" >
+                            <f:selectItems value="#{statisticController.bureauList}" var="bureau" itemLabel="#{bureau.labelFr}" itemValue="#{bureau.id}" />
 
-				<h:panelGrid columns="10" cellpadding="10">
-                                    <h:outputLabel value="#{bundle['createDate']}" />
-					<h:panelGroup>
-						<p:outputLabel for="fromDate" value="#{bundle['statisticsOnBusinessSearch_fromDateLabel']}" />
-                                                <p:calendar navigator="true" id="fromDate" value="#{statisticController.cteFilter.creationFromDate}"
-							title="#{bundle['statisticsOnBusinessSearch_fromDateTitre']}" showOn="button" pattern="dd/MM/yyyy" readonlyInput="true">
-							<p:ajax event="dateSelect" update="toDate" />
-						</p:calendar>
-					</h:panelGroup>
+                        </p:selectCheckboxMenu>
+                    </p:outputPanel>
+                    <p:outputPanel  styleClass="search-select">
+                        <h:outputLabel value="#{bundle['exporterNiu']}" />
+                        <p:inputText value="#{statisticController.cteFilter.clientNiu}" />
+                    </p:outputPanel>
+                </h:panelGrid>
 
-					<h:panelGroup>
-						<p:outputLabel for="toDate" value="#{bundle['statisticsOnBusinessSearch_toDateLabel']}" />
-                                                <p:calendar navigator="true" id="toDate" value="#{statisticController.cteFilter.creationToDate}"
-							title="#{bundle['statisticsOnBusinessSearch_toDateTitre']}" showOn="button" pattern="dd/MM/yyyy"
-                                                        mindate="#{statisticController.cteFilter.creationFromDate}" readonlyInput="true">
-						</p:calendar>
-					</h:panelGroup>
-                                    
-                                    <h:outputLabel value="#{bundle['signatureDate']}" />
-					<h:panelGroup>
-						<p:outputLabel for="fromDate" value="#{bundle['statisticsOnBusinessSearch_fromDateLabel']}" />
-                                                <p:calendar navigator="true" id="fromDateSignature" value="#{statisticController.cteFilter.validationFromDate}"
-							title="#{bundle['statisticsOnBusinessSearch_fromDateTitre']}" showOn="button" pattern="dd/MM/yyyy" readonlyInput="true">
-							<p:ajax event="dateSelect" update="toDate" />
-						</p:calendar>
-					</h:panelGroup>
+                <h:panelGrid columns="10" cellpadding="10">
+                    <h:outputLabel value="#{bundle['createDate']}" />
+                    <h:panelGroup>
+                        <p:outputLabel for="fromDate" value="#{bundle['statisticsOnBusinessSearch_fromDateLabel']}" />
+                        <p:calendar navigator="true" id="fromDate" value="#{statisticController.cteFilter.creationFromDate}"
+                                    title="#{bundle['statisticsOnBusinessSearch_fromDateTitre']}" showOn="button" pattern="dd/MM/yyyy" readonlyInput="true">
+                            <p:ajax event="dateSelect" update="toDate" />
+                        </p:calendar>
+                    </h:panelGroup>
 
-					<h:panelGroup>
-						<p:outputLabel for="toDate" value="#{bundle['statisticsOnBusinessSearch_toDateLabel']}" />
-                                                <p:calendar navigator="true" id="toDateSignature" value="#{statisticController.cteFilter.validationToDate}"
-							title="#{bundle['statisticsOnBusinessSearch_toDateTitre']}" showOn="button" pattern="dd/MM/yyyy"
-                                                        mindate="#{statisticController.cteFilter.validationToDate}" readonlyInput="true">
-						</p:calendar>
-					</h:panelGroup>
+                    <h:panelGroup>
+                        <p:outputLabel for="toDate" value="#{bundle['statisticsOnBusinessSearch_toDateLabel']}" />
+                        <p:calendar navigator="true" id="toDate" value="#{statisticController.cteFilter.creationToDate}"
+                                    title="#{bundle['statisticsOnBusinessSearch_toDateTitre']}" showOn="button" pattern="dd/MM/yyyy"
+                                    mindate="#{statisticController.cteFilter.creationFromDate}" readonlyInput="true">
+                        </p:calendar>
+                    </h:panelGroup>
 
-					<h:panelGroup>
-						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" icon="ui-icon-search"
-                                                                 title="#{bundle['ButtonSearch']}" action="#{statisticController.doDelayListingStakeholderFilter()}"
-							update=":filtredFileItemListForm:datalist delaiListingStakeholderSearchForm :growl" oncomplete="PF('datalistTable').filter();" />
+                    <h:outputLabel value="#{bundle['signatureDate']}" />
+                    <h:panelGroup>
+                        <p:outputLabel for="fromDate" value="#{bundle['statisticsOnBusinessSearch_fromDateLabel']}" />
+                        <p:calendar navigator="true" id="fromDateSignature" value="#{statisticController.cteFilter.validationFromDate}"
+                                    title="#{bundle['statisticsOnBusinessSearch_fromDateTitre']}" showOn="button" pattern="dd/MM/yyyy" readonlyInput="true">
+                            <p:ajax event="dateSelect" update="toDate" />
+                        </p:calendar>
+                    </h:panelGroup>
 
-						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" icon="ui-icon-refresh"
-                                                                 title="#{bundle['ButtonReset']}" action="#{statisticController.initDelayListingStakeholderSearch()}"
-							oncomplete="PF('datalistTable').filter();" update=":filtredFileItemListForm:datalist delaiListingStakeholderSearchForm" />
+                    <h:panelGroup>
+                        <p:outputLabel for="toDate" value="#{bundle['statisticsOnBusinessSearch_toDateLabel']}" />
+                        <p:calendar navigator="true" id="toDateSignature" value="#{statisticController.cteFilter.validationToDate}"
+                                    title="#{bundle['statisticsOnBusinessSearch_toDateTitre']}" showOn="button" pattern="dd/MM/yyyy"
+                                    mindate="#{statisticController.cteFilter.validationToDate}" readonlyInput="true">
+                        </p:calendar>
+                    </h:panelGroup>
 
-					</h:panelGroup>
+                    <h:panelGroup>
+                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" icon="ui-icon-search"
+                                         title="#{bundle['ButtonSearch']}" action="#{statisticController.doDelayListingStakeholderFilter()}"
+                                         update=":filtredFileItemListForm:datalist delaiListingStakeholderSearchForm :growl" oncomplete="PF('datalistTable').filter();" />
 
-				</h:panelGrid>
+                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" icon="ui-icon-refresh"
+                                         title="#{bundle['ButtonReset']}" action="#{statisticController.initDelayListingStakeholderSearch()}"
+                                         oncomplete="PF('datalistTable').filter();" update=":filtredFileItemListForm:datalist delaiListingStakeholderSearchForm" />
 
-			</p:tab>
+                    </h:panelGroup>
 
-		</p:accordionPanel>
+                </h:panelGrid>
 
-	</h:form>
+            </p:tab>
+
+        </p:accordionPanel>
+
+    </h:form>
 </ui:composition>

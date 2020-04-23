@@ -300,6 +300,8 @@ public interface ControllerConstants {
              */
             String SEARCH_SAMPLE_BY_LABORATORY = "/pages/fo/statistic/sampleByLab/index.xhtml";
 
+            String AGENTS_ASSIGNMENT_PAGE = "/pages/fo/agentsManagement/agentsAssigment/index.xhtml";
+
             /**
              * The SEARC h_ analys e_ b y_l aboratory.
              */
@@ -373,7 +375,7 @@ public interface ControllerConstants {
              * The statistic pinding files.
              */
             String STATISTIC_PINDING_FILES = "/pages/fo/statistic/pendingFiles/index.xhtml";
-            
+
             String STATISTIC_ACTIVITY_REPORT = "/pages/fo/statistic/activityReport/index.xhtml";
             String STATISTIC_GLOBAL_DELAY_LISTING = "/pages/fo/statistic/globalDelayListing/index.xhtml";
             String STATISTIC_DELAY_LISTING_STAKEHOLDER = "/pages/fo/statistic/delayListingStakeholder/index.xhtml";

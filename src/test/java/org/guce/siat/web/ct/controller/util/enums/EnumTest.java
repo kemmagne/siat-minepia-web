@@ -105,17 +105,17 @@ public class EnumTest {
     @Test
     public void test01() {
 
-        final List<String> logins = Arrays.asList("MINSANTE-D-DPM", "MINSANTE-SD-SDM", "DJIOSSI");
+        final List<String> logins = Arrays.asList("MINADER-AG-GA1");
         final List<String> logins1 = Arrays.asList("CCIMA", "EKATA", "MOMONOUNI", "GOUROUMAHA", "AYABI", "NGANOGO",
                 "PERABI", "NZOKOA", "SENABIONO", "EMPOAGHAM", "KENFACKJP", "NIMAYA", "KAMDEM", "ZEBAZE",
                 "AKONO", "TONYE", "JAMMULUMI", "KONGUEP", "FOKOUEN", "IJANGFONGOH", "TOUANDOP", "TAZOJACOB", "MEBIAME");
         for (String login : logins) {
-            generateUpdateDb(login, "0123456789");
+            generateUpdateDb(login, "root");
         }
     }
 
     private static void generateUpdateDb(final String login, final String password) {
-        String q = "UPDATE USERS SET FIRST_LOGIN = 1, PASSWORD='" + ENCODER.encodePassword(password, login) + "' WHERE LOGIN='" + login + "';";
+        String q = "UPDATE USERS SET FIRST_LOGIN = 0, PASSWORD='" + ENCODER.encodePassword(password, login) + "' WHERE LOGIN='" + login + "';";
         System.out.println(q);
     }
 
