@@ -815,7 +815,9 @@ public class UserController extends AbstractController<User> {
      * @return the authorities list for filter
      */
     private List<AuthorityConstants> getAuthoritiesListForFilter() {
+
         final List<AuthorityConstants> authoritiesListForFilter = new ArrayList<>();
+
         authoritiesListForFilter.add(AuthorityConstants.AGENT_RECEVABILITE);
         authoritiesListForFilter.add(AuthorityConstants.INSPECTEUR);
         authoritiesListForFilter.add(AuthorityConstants.CONTROLEUR);
@@ -832,6 +834,7 @@ public class UserController extends AbstractController<User> {
         authoritiesListForFilter.add(AuthorityConstants.SUPERVISEUR);
         authoritiesListForFilter.add(AuthorityConstants.CONSULTER);
         authoritiesListForFilter.add(AuthorityConstants.STATISTIQUE);
+        authoritiesListForFilter.add(AuthorityConstants.GESTION_AGENTS);
 
         return authoritiesListForFilter;
     }

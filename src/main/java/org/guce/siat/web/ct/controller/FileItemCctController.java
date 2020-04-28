@@ -2,12 +2,14 @@ package org.guce.siat.web.ct.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -26,17 +28,21 @@ import javax.faces.context.FacesContext;
 
 import org.guce.siat.common.model.Authority;
 import org.guce.siat.common.model.File;
+import org.guce.siat.common.model.FileFieldValue;
 import org.guce.siat.common.model.FileItem;
 import org.guce.siat.common.model.ItemFlow;
 import org.guce.siat.common.model.UserAuthorityFileType;
 import org.guce.siat.common.service.AuthorityService;
+import org.guce.siat.common.service.FileFieldValueService;
 import org.guce.siat.common.service.FileItemService;
 import org.guce.siat.common.service.FileTypeStepService;
 import org.guce.siat.common.service.ItemFlowService;
 import org.guce.siat.common.service.UserAuthorityFileTypeService;
 import org.guce.siat.common.utils.Constants;
 import org.guce.siat.common.utils.DateUtils;
+import org.guce.siat.common.utils.enums.FileTypeCode;
 import org.guce.siat.core.ct.service.CommonService;
+import org.guce.siat.core.ct.util.enums.CctExportProductType;
 import org.guce.siat.web.common.AbstractController;
 import org.guce.siat.web.common.ControllerConstants;
 import org.guce.siat.web.ct.controller.util.JsfUtil;
@@ -60,6 +66,8 @@ public class FileItemCctController extends AbstractController<FileItem> {
      * The Constant LOG.
      */
     private static final Logger LOG = LoggerFactory.getLogger(FileItemCctController.class);
+
+    public static final String MINADER_MINISTRY = "MINADER";
 
     /**
      * The file type step service.
@@ -96,6 +104,12 @@ public class FileItemCctController extends AbstractController<FileItem> {
      */
     @ManagedProperty(value = "#{commonService}")
     private CommonService commonService;
+
+    /**
+     * The file field value service.
+     */
+    @ManagedProperty(value = "#{fileFieldValueService}")
+    private FileFieldValueService fileFieldValueService;
 
     /**
      * The unread file items list.
@@ -193,8 +207,7 @@ public class FileItemCctController extends AbstractController<FileItem> {
             Set<File> files = extractFilesFormItems(getItems());
             fileItemCctDetailController.setFilesList(files);
 
-            final String url = extContext.encodeActionURL(context.getApplication().getViewHandler()
-                    .getActionURL(context, detailPageUrl));
+            final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, detailPageUrl));
 
             extContext.redirect(url);
         } catch (final IOException ex) {
@@ -260,6 +273,27 @@ public class FileItemCctController extends AbstractController<FileItem> {
         try {
             if (items == null) {
                 items = Utils.getItems(userAuthorityFileTypeService, fileItemService, getLoggedUser(), listUserAuthorityFileTypes);
+
+                List<CctExportProductType> userProductTypes = commonService.findProductTypesByUser(getLoggedUser());
+                for (Iterator<FileItem> iterator = items.iterator(); iterator.hasNext();) {
+
+                    FileItem item = iterator.next();
+                    File file = item.getFile();
+
+                    if (!isPhyto(file)) {
+                        continue;
+                    }
+
+                    FileFieldValue ffv = fileFieldValueService.findValueByFileFieldAndFile(CctExportProductType.getFileFieldCode(), file);
+                    if (ffv == null) {
+                        continue;
+                    }
+
+                    CctExportProductType productType = CctExportProductType.valueOf(ffv.getValue());
+                    if (!userProductTypes.contains(productType)) {
+                        iterator.remove();
+                    }
+                }
             }
         } catch (final Exception ex) {
             LOG.error(ex.getMessage(), ex);
@@ -291,6 +325,11 @@ public class FileItemCctController extends AbstractController<FileItem> {
             setFirstCheck(false);
         }
         return items;
+    }
+
+    public boolean isPhyto(File currentFile) {
+        boolean checkMinaderMinistry = currentFile.getDestinataire().equalsIgnoreCase(MINADER_MINISTRY);
+        return checkMinaderMinistry && Arrays.asList(FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI).contains(currentFile.getFileType().getCode());
     }
 
     /**
@@ -658,6 +697,14 @@ public class FileItemCctController extends AbstractController<FileItem> {
      */
     public void setFirstCheck(Boolean firstCheck) {
         this.firstCheck = firstCheck;
+    }
+
+    public FileFieldValueService getFileFieldValueService() {
+        return fileFieldValueService;
+    }
+
+    public void setFileFieldValueService(FileFieldValueService fileFieldValueService) {
+        this.fileFieldValueService = fileFieldValueService;
     }
 
 }

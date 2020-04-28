@@ -55,7 +55,7 @@
                     <h:outputText value="#{item.administration.labelFr}" />
                 </p:column>
 
-                <p:column id="authoritiesImagesList">
+                <p:column id="authoritiesImagesList" filterBy="#{item.authoritiesString}" filterOptions="#{agentsManagementController.authoritiesOptions}" filterMatchMode="contains">
                     <f:facet name="header">
                         <h:outputText value="#{bundle['UserLabel_role']}" title="#{bundle['UserTitle_role']}" />
                     </f:facet>

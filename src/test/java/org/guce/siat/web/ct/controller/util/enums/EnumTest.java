@@ -105,7 +105,9 @@ public class EnumTest {
     @Test
     public void test01() {
 
-        final List<String> logins = Arrays.asList("MINADER-AG-GA1");
+        final List<String> logins = Arrays.asList("MINADER-AG-AR-CC", "MINADER-AG-AR-BOIS", "MINADER-AG-AR-AUTRES",
+                "MINADER-AG-INSP-CC", "MINADER-AG-INSP-BOIS", "MINADER-AG-INSP-AUTRES", "MINADER-AG-AGENT",
+                "MINADER-AG-SIGN-CC", "MINADER-AG-SIGN-BOIS", "MINADER-AG-SIGN-AUTRES", "MINADER-AG-GA");
         final List<String> logins1 = Arrays.asList("CCIMA", "EKATA", "MOMONOUNI", "GOUROUMAHA", "AYABI", "NGANOGO",
                 "PERABI", "NZOKOA", "SENABIONO", "EMPOAGHAM", "KENFACKJP", "NIMAYA", "KAMDEM", "ZEBAZE",
                 "AKONO", "TONYE", "JAMMULUMI", "KONGUEP", "FOKOUEN", "IJANGFONGOH", "TOUANDOP", "TAZOJACOB", "MEBIAME");

@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -154,7 +156,7 @@ public class AgentsManagementController extends AbstractController<User> {
         }
 
         Bureau bureau = (Bureau) admin;
-        items = userService.findUsersByAdministrationAndAuthorities(bureau, AuthorityConstants.INSPECTEUR.getCode());
+        items = userService.findUsersByAdministrationAndAuthorities(bureau, AuthorityConstants.AGENT_RECEVABILITE.getCode(), AuthorityConstants.INSPECTEUR.getCode(), AuthorityConstants.SIGNATAIRE.getCode());
 
         return items;
     }
@@ -165,15 +167,15 @@ public class AgentsManagementController extends AbstractController<User> {
      * @param user the user
      * @return the list authorities by user
      */
-    public List<Authority> getListAuthoritiesByUser(User user) {
+    public List<Authority> getAuthoritiesByUser(User user) {
 
         if (user == null) {
             return null;
         }
 
-        final List<Authority> listAuthoritiesByUser = new ArrayList<>(user.getAuthorities());
+        final List<Authority> authoritiesByUser = new ArrayList<>(user.getAuthorities());
 
-        return listAuthoritiesByUser;
+        return authoritiesByUser;
     }
 
     public List<CctExportProductType> getProductTypesByUser(User user) {
@@ -226,6 +228,39 @@ public class AgentsManagementController extends AbstractController<User> {
 
     public void setUserService(UserService userService) {
         this.userService = userService;
+    }
+
+    /**
+     * Gets the authorities options.
+     *
+     * @return the authorities options
+     */
+    public SelectItem[] getAuthoritiesOptions() {
+
+        final SelectItem[] grantedAuthoritiesOptions = new SelectItem[getAuthoritiesListForFilter().size() + 1];
+
+        grantedAuthoritiesOptions[0] = new SelectItem(StringUtils.EMPTY, ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(SELECT_ONE_MESSAGE));
+        for (int i = 0; i < getAuthoritiesListForFilter().size(); i++) {
+            grantedAuthoritiesOptions[i + 1] = new SelectItem(getAuthoritiesListForFilter().get(i).getCode(), getAuthoritiesListForFilter().get(i).getLabel());
+        }
+
+        return grantedAuthoritiesOptions;
+    }
+
+    /**
+     * Gets the authorities list for filter.
+     *
+     * @return the authorities list for filter
+     */
+    private List<AuthorityConstants> getAuthoritiesListForFilter() {
+
+        final List<AuthorityConstants> authoritiesListForFilter = new ArrayList<>();
+
+        authoritiesListForFilter.add(AuthorityConstants.AGENT_RECEVABILITE);
+        authoritiesListForFilter.add(AuthorityConstants.INSPECTEUR);
+        authoritiesListForFilter.add(AuthorityConstants.SIGNATAIRE);
+
+        return authoritiesListForFilter;
     }
 
 }
