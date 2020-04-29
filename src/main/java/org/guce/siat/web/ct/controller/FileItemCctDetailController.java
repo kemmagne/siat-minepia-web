@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.io.StringReader;
-import java.lang.reflect.Constructor;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,6 +23,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -44,10 +44,12 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.activemq.util.ByteArrayInputStream;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisConnectionException;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.collections.Transformer;
@@ -63,6 +65,7 @@ import org.guce.siat.common.model.Appointment;
 import org.guce.siat.common.model.Attachment;
 import org.guce.siat.common.model.Authority;
 import org.guce.siat.common.model.Bureau;
+import org.guce.siat.common.model.Container;
 import org.guce.siat.common.model.CopyRecipient;
 import org.guce.siat.common.model.DataType;
 import org.guce.siat.common.model.FieldGroup;
@@ -137,12 +140,14 @@ import org.guce.siat.core.ct.model.AnalyseOrder;
 import org.guce.siat.core.ct.model.AnalysePart;
 import org.guce.siat.core.ct.model.AnalyseResult;
 import org.guce.siat.core.ct.model.ApprovedDecision;
+import org.guce.siat.core.ct.model.CCTCPParamValue;
 import org.guce.siat.core.ct.model.DecisionHistory;
 import org.guce.siat.core.ct.model.Infraction;
 import org.guce.siat.core.ct.model.InspectionController;
 import org.guce.siat.core.ct.model.InspectionReport;
 import org.guce.siat.core.ct.model.InterceptionNotification;
 import org.guce.siat.core.ct.model.Laboratory;
+import org.guce.siat.core.ct.model.ParamCCTCP;
 import org.guce.siat.core.ct.model.PaymentData;
 import org.guce.siat.core.ct.model.PaymentItemFlow;
 import org.guce.siat.core.ct.model.Sample;
@@ -156,11 +161,14 @@ import org.guce.siat.core.ct.service.AnalyseOrderService;
 import org.guce.siat.core.ct.service.AnalysePartService;
 import org.guce.siat.core.ct.service.AnalyseResultService;
 import org.guce.siat.core.ct.service.ApprovedDecisionService;
+import org.guce.siat.core.ct.service.CCTCPParamValueService;
 import org.guce.siat.core.ct.service.CommonService;
+import org.guce.siat.core.ct.service.CotationService;
 import org.guce.siat.core.ct.service.DecisionHistoryService;
 import org.guce.siat.core.ct.service.InspectionReportService;
 import org.guce.siat.core.ct.service.InterceptionNotificationService;
 import org.guce.siat.core.ct.service.LaboratoryService;
+import org.guce.siat.core.ct.service.ParamCCTCPService;
 import org.guce.siat.core.ct.service.PaymentDataService;
 import org.guce.siat.core.ct.service.TreatmentCompanyService;
 import org.guce.siat.core.ct.service.TreatmentInfosService;
@@ -206,6 +214,7 @@ import org.guce.siat.web.gr.controller.RiskController;
 import org.guce.siat.web.gr.util.GrUtilsWeb;
 import org.guce.siat.web.gr.util.ScenarioType;
 import org.guce.siat.web.reports.exporter.AbstractReportInvoker;
+import org.guce.siat.web.reports.exporter.CtCctCpEExporter;
 import org.guce.siat.web.reports.exporter.CtCctCqeExporter;
 import org.guce.siat.web.reports.exporter.CtCctCsvExporter;
 import org.guce.siat.web.reports.exporter.CtCctTreatmentExporter;
@@ -324,6 +333,12 @@ public class FileItemCctDetailController implements Serializable {
      */
     private static final String EMAIL_BODY_NOTIFICATION_EN = "emailBodyNotification_en.vm";
 
+    private static final List<String> DECISION_FLOW_LIST_AT_COTATION_LEVEL = Arrays.asList(FlowCode.FL_CT_116.name(), FlowCode.FL_CT_117.name());
+
+    private static final List<StepCode> COTATION_STEP_LIST_ALLOW_DECISION = Arrays.asList(StepCode.ST_CT_53);
+
+    private static final List<String> ADMISSIBILITY_VALIDATIONS_FLOWS_CODES = Arrays.asList(FlowCode.FL_CT_100.name(), FlowCode.FL_CT_05.name());
+
     /**
      * The administration service.
      */
@@ -389,6 +404,18 @@ public class FileItemCctDetailController implements Serializable {
      */
     @ManagedProperty(value = "#{approvedDecisionService}")
     private ApprovedDecisionService approvedDecisionService;
+
+    /**
+     * The CCT CP param value service.
+     */
+    @ManagedProperty(value = "#{cCTCPParamValueService}")
+    private CCTCPParamValueService cCTCPParamValueService;
+
+    /**
+     * The CCT CP param value service.
+     */
+    @ManagedProperty(value = "#{paramCCTCPService}")
+    private ParamCCTCPService paramCCTCPService;
 
     /**
      * The field group service.
@@ -783,6 +810,10 @@ public class FileItemCctDetailController implements Serializable {
      */
     private Boolean decisionButtonAllowed;
 
+    private Boolean decisionButtonAllowedAtCotationLevel;
+
+    private boolean displayGenerateDraft = true;
+
     /**
      * The cotation allowed.
      */
@@ -937,6 +968,8 @@ public class FileItemCctDetailController implements Serializable {
 
     private ApprovedDecision approvedDecision;
 
+    private CCTCPParamValue cCTCPParamValue;
+
     /**
      * The treatment companys.
      */
@@ -1014,6 +1047,11 @@ public class FileItemCctDetailController implements Serializable {
     private PlatformTransactionManager transactionManager;
 
     /**
+     * the transaction helper
+     */
+//    @ManagedProperty(value = "#{transactionHelper}")
+//    private TransactionHelper transactionHelper;
+    /**
      * The infraction type list.
      */
     private List<Infraction> infractionList;
@@ -1036,6 +1074,10 @@ public class FileItemCctDetailController implements Serializable {
      * this is minepia ministry
      */
     private boolean checkMinepiaMinistry;
+    /**
+     * Determine if it is last decision step for phyto
+     */
+    private boolean phytoEnd;
 
     /**
      * The is payment.
@@ -1064,11 +1106,13 @@ public class FileItemCctDetailController implements Serializable {
 
     private InterceptionNotification interceptionNotification;
 
-    private final String MINADER_MINISTRY = "MINADER";
     private final String MINEPIA_MINISTRY = "MINEPIA";
 
     private final String TRANSITE_SUPER_FILE_TYPE = "2";
     private final String TRANSITE_SUPER_FILE_TYPE_KEY = "TYPE_DOSSIER_EGUCE";
+    private final String COUNT_GOODS = "goods";
+    private final String COUNT_CONTAINERS = "containers";
+    private final String COUNT_PACKAGES = "packages";
 
     /**
      * The decision history service.
@@ -1076,15 +1120,23 @@ public class FileItemCctDetailController implements Serializable {
     @ManagedProperty(value = "#{decisionHistoryService}")
     private DecisionHistoryService decisionHistoryService;
 
+    @ManagedProperty(value = "#{cotationService}")
+    private CotationService cotationService;
+
     private List<DecisionHistory> decisionHistories;
     private boolean maskOfficialPosition;
+
+    private Set<File> filesList;
+
+    private static final int GLOBAL_PROPAGATION_TRANSACTION_BEHAVIOUR = TransactionDefinition.PROPAGATION_REQUIRES_NEW;
+    private boolean decided;
 
     /**
      * Inits the.
      */
     public void init() {
         currentFile = currentFileItem.getFile();
-        checkMinaderMinistry = currentFile.getDestinataire().equalsIgnoreCase(MINADER_MINISTRY);
+        checkMinaderMinistry = currentFile.getDestinataire().equalsIgnoreCase(FileItemCctController.MINADER_MINISTRY);
         checkMinepiaMinistry = currentFile.getDestinataire().equalsIgnoreCase(MINEPIA_MINISTRY);
         loggedUser = getLoggedUser();
         allowedRecommandation = checkIsAllowadRecommandation();
@@ -1261,14 +1313,33 @@ public class FileItemCctDetailController implements Serializable {
                         if (isCheckMinaderMinistry() && (FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode()))) {
                             flows = flowService.findFlowsByFromStepAndFileType2(referenceFileItemCheck.getStep(), referenceFileItemCheck
                                     .getFile().getFileType());
+                            List<String> flowsToRemove = new ArrayList<>();
+                            for (Flow fli : flows) {
+                                if (fli.getIsCota()) {
+                                    flowsToRemove.add(fli.getCode());
+                                }
+                            }
+                            flows = deleteFlowFromFlowList(flows, flowsToRemove.toArray(new String[0]));
                         } else {
                             flows = flowService.findFlowsByFromStepAndFileType(referenceFileItemCheck.getStep(), referenceFileItemCheck
                                     .getFile().getFileType());
                         }
+                        // Ajout du flow de renouvellement de RDV ou inspection physique
+                        if (isCheckMinaderMinistry() && (FileTypeCode.CCT_CT_E_FSTP.equals(currentFile.getFileType().getCode()) || FileTypeCode.CCT_CT_E_PVI.equals(currentFile.getFileType().getCode()) || FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode()))
+                                && currentFile.getFileItemsList().get(0).getStep().getStepCode().equals(StepCode.ST_CT_04)) {
+                            String flc = FlowCode.FL_CT_118.name();
+                            if (FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode())) {
+                                flc = FlowCode.FL_CT_119.name();
+                            }
+                            Flow tmpFlow = flowService.findFlowByCode(flc);
+                            if (tmpFlow != null) {
+                                flows.add(tmpFlow);
+                            }
+                        }
 
                         if (checkMinepiaMinistry
                                 && referenceFileItemCheck.getStep().getStepCode().name().equals("ST_CT_04")) {
-                            String MINEPIA_FLOW_CODE_LIST = "FL_CT_CVS_05";
+                            String MINEPIA_FLOW_CODE_LIST = "FL_CT_CVS_05,FL_CT_CVS_08,FL_CT_CVS_09 ";
                             List<String> flowsToRemove = new ArrayList<>();
                             for (Flow f : flows) {
                                 if (!MINEPIA_FLOW_CODE_LIST.contains(f.getCode())) {
@@ -1321,7 +1392,7 @@ public class FileItemCctDetailController implements Serializable {
                                         it.remove();
                                     }
                                 }
-                                break hist;
+//                                break hist;
                             }
 
                         }
@@ -1612,6 +1683,7 @@ public class FileItemCctDetailController implements Serializable {
             if (CollectionUtils.isEmpty(productInfoItemsEnabled)) {
                 decisionAllowed = Boolean.FALSE;
                 decisionButtonAllowed = Boolean.FALSE;
+                decisionButtonAllowedAtCotationLevel = Boolean.FALSE;
             }
             // GET THE STEP CODE FROM THE FIRST FILEITEM IN THE FOLDER TO
             // COMPARE IT WITH OTHER FILEITEM
@@ -1622,11 +1694,18 @@ public class FileItemCctDetailController implements Serializable {
                     decisionByFile = Boolean.TRUE;
                     setCotationAllowed(Boolean.FALSE);
                 } else if (oneCurrentStep.equals(fileItem.getStep().getId())
-                        && (StepCode.ST_CT_03.equals(fileItem.getStep().getStepCode()) || StepCode.ST_CT_47.equals(fileItem.getStep().getStepCode()))
+                        && (StepCode.ST_CT_03.equals(fileItem.getStep().getStepCode()) || StepCode.ST_CT_47.equals(fileItem.getStep().getStepCode()) || StepCode.ST_CT_53.equals(fileItem.getStep().getStepCode()))
                         && hasCotationRule(loggedUser)) {
                     decisionByFile = Boolean.TRUE;
                     setCotationAllowed(Boolean.TRUE);
                     setDecisionAllowed(Boolean.TRUE);
+                    if (COTATION_STEP_LIST_ALLOW_DECISION.contains(fileItem.getStep().getStepCode())) {
+                        setDecisionButtonAllowedAtCotationLevel(Boolean.TRUE);
+                    }
+                    StepCode sc = fileItem.getStep().getStepCode();
+                    if (StepCode.ST_CT_03.equals(sc) && isCheckMinepiaMinistry() && !sendDecisionAllowed) {
+                        setDecisionButtonAllowed(Boolean.TRUE);
+                    }
                 } else {
                     errorDecisionByFile = Boolean.TRUE;
                     setCotationAllowed(Boolean.FALSE);
@@ -1708,7 +1787,6 @@ public class FileItemCctDetailController implements Serializable {
     public void changeDecisionHandler() {
         specificDecision = null;
         decisionDiv.getChildren().clear();
-        String stringId = null;
         final List<FileItemCheck> checksProduct = selectCheckedFileItemCheck();
         isPayment = Boolean.FALSE;
         //paiement;FlowCode.FL_CO_155.name().equals(selectedFlow.getCode())
@@ -1745,11 +1823,7 @@ public class FileItemCctDetailController implements Serializable {
 
             approvedDecision = approvedDecisionService.findApprovedDecisionByItemFlow(lastDecisions);
 
-            if (selectedFlow.getCode().equals(FlowCode.FL_CT_CVS_05.name())) {
-                maskOfficialPosition = true;
-            } else {
-                maskOfficialPosition = false;
-            }
+            maskOfficialPosition = selectedFlow.getCode().equals(FlowCode.FL_CT_CVS_05.name());
 
             if (approvedDecision == null) {
                 approvedDecision = new ApprovedDecision();
@@ -1818,8 +1892,19 @@ public class FileItemCctDetailController implements Serializable {
             }
         } // fourniture des informations relatives au traitement
         else if (isPhytoReadyForSignature(selectedFlow)) {
-            treatmentInfos = new TreatmentInfos();
-        } // Demande de Traitement
+            treatmentInfos = createTreatmentInfos();
+        } // Signature effective du certificat phytosanitaire
+        else if (isPhytoReadyForSignatureEnd(selectedFlow)) {
+            buildGenericFormFromDataType(selectedFlow.getDataTypeList());
+            cCTCPParamValue = cCTCPParamValueService.findCCTCPParamValueByItemFlow(lastDecisions);
+
+            if (cCTCPParamValue == null) {
+                cCTCPParamValue = new CCTCPParamValue();
+                fillCCTCPParamValue(cCTCPParamValue);
+            }
+
+            specificDecision = CctSpecificDecision.CCT_CP;
+        }// Demande de Traitement
         else if (FlowCode.FL_CT_64.name().equals(selectedFlow.getCode())) {
             treatmentOrder = new TreatmentOrder();
             treatmentOrder.setDate(java.util.Calendar.getInstance().getTime());
@@ -1880,98 +1965,104 @@ public class FileItemCctDetailController implements Serializable {
             }
         } // Generic : construction du formulaire à partir des DataType
         else {
-            for (final DataType dataType : selectedFlow.getDataTypeList()) {
-                final FacesContext context = FacesContext.getCurrentInstance();
+            buildGenericFormFromDataType(selectedFlow.getDataTypeList());
+        }
+    }
 
-                if (dataType.getId() != null) {
-                    stringId = String.valueOf(dataType.getId());
-                }
-                // Label for the component
-                final HtmlOutputLabel htmlOutputLabel = (HtmlOutputLabel) context.getApplication().createComponent(
-                        HtmlOutputLabel.COMPONENT_TYPE);
-                htmlOutputLabel.setFor(ID_DECISION_LABEL + stringId);
-                if (FacesContext.getCurrentInstance().getViewRoot().getLocale().equals(Locale.FRENCH)) {
-                    htmlOutputLabel.setValue(dataType.getLabel());
-                } else {
-                    htmlOutputLabel.setValue(dataType.getLabelEn());
-                }
-                decisionDiv.getChildren().add(htmlOutputLabel);
+    private void buildGenericFormFromDataType(List<DataType> dataTypes) {
+        String stringId = null;
 
-                final HtmlPanelGroup htmlPanelGroup = (HtmlPanelGroup) context.getApplication().createComponent(
-                        HtmlPanelGroup.COMPONENT_TYPE);
+        for (final DataType dataType : dataTypes) {
+            final FacesContext context = FacesContext.getCurrentInstance();
 
-                if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode())) {
-                    final HtmlInputText inputText = (HtmlInputText) context.getApplication().createComponent(
-                            HtmlInputText.COMPONENT_TYPE);
-                    if (dataType.getRequired()) {
-                        inputText.setRequired(true);
-                        inputText.setRequiredMessage(dataType.getLabel()
-                                + Constants.SPACE
-                                + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                                        "RequiredMessage_standard"));
-                    }
-                    inputText.setId(ID_DECISION_LABEL + stringId);
-                    htmlPanelGroup.getChildren().add(inputText);
-                } else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode())) {
-                    final HtmlSelectBooleanCheckbox booleanCheckbox = (HtmlSelectBooleanCheckbox) context.getApplication()
-                            .createComponent(HtmlSelectBooleanCheckbox.COMPONENT_TYPE);
-                    if (dataType.getRequired()) {
-                        booleanCheckbox.setRequired(true);
-                        booleanCheckbox.setRequiredMessage(dataType.getLabel()
-                                + Constants.SPACE
-                                + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                                        "RequiredMessage_standard"));
-                    }
-                    booleanCheckbox.setId(ID_DECISION_LABEL + stringId);
-                    htmlPanelGroup.getChildren().add(booleanCheckbox);
-                } else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
-                    final Calendar calendar = (Calendar) context.getApplication().createComponent(Calendar.COMPONENT_TYPE);
-                    calendar.setShowOn("button");
-                    if (dataType.getRequired()) {
-                        calendar.setRequired(true);
-                        calendar.setRequiredMessage(dataType.getLabel()
-                                + Constants.SPACE
-                                + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                                        "RequiredMessage_standard"));
-                    }
-                    calendar.setId(ID_DECISION_LABEL + stringId);
-                    final String dataTypeProps = dataType.getProps();
-                    String pattern = DateUtils.FRENCH_DATE;
-                    if (dataTypeProps != null) {
-                        Properties properties = new Properties();
-                        try {
-                            properties.load(new StringReader(dataTypeProps));
-                            pattern = properties.getProperty(DataTypePropEnnum.PATTERN.getCode(), pattern);
-                        } catch (IOException ex) {
-                            LOG.debug("Problem occured when trying to load properties of data type : " + dataType, ex);
-                        }
-                    }
-                    calendar.setPattern(pattern);
-                    calendar.setLocale(Locale.FRANCE);
-                    calendar.setNavigator(true);
-                    htmlPanelGroup.getChildren().add(calendar);
-
-                } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode())) {
-                    final HtmlInputTextarea inputTextarea = (HtmlInputTextarea) context.getApplication().createComponent(
-                            HtmlInputTextarea.COMPONENT_TYPE);
-                    if (dataType.getRequired()) {
-                        inputTextarea.setRequired(true);
-                        inputTextarea.setRequiredMessage(dataType.getLabel()
-                                + Constants.SPACE
-                                + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                                        "RequiredMessage_standard"));
-                    }
-                    inputTextarea.setRows(10);
-                    inputTextarea.setId(ID_DECISION_LABEL + stringId);
-                    htmlPanelGroup.getChildren().add(inputTextarea);
-                }
-
-                final Message message = (Message) context.getApplication().createComponent(Message.COMPONENT_TYPE);
-                message.setFor(ID_DECISION_LABEL + stringId);
-                htmlPanelGroup.getChildren().add(message);
-
-                decisionDiv.getChildren().add(htmlPanelGroup);
+            if (dataType.getId() != null) {
+                stringId = String.valueOf(dataType.getId());
             }
+            // Label for the component
+            final HtmlOutputLabel htmlOutputLabel = (HtmlOutputLabel) context.getApplication().createComponent(
+                    HtmlOutputLabel.COMPONENT_TYPE);
+            htmlOutputLabel.setFor(ID_DECISION_LABEL + stringId);
+            if (FacesContext.getCurrentInstance().getViewRoot().getLocale().equals(Locale.FRENCH)) {
+                htmlOutputLabel.setValue(dataType.getLabel());
+            } else {
+                htmlOutputLabel.setValue(dataType.getLabelEn());
+            }
+            decisionDiv.getChildren().add(htmlOutputLabel);
+
+            final HtmlPanelGroup htmlPanelGroup = (HtmlPanelGroup) context.getApplication().createComponent(
+                    HtmlPanelGroup.COMPONENT_TYPE);
+
+            if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode())) {
+                final HtmlInputText inputText = (HtmlInputText) context.getApplication().createComponent(
+                        HtmlInputText.COMPONENT_TYPE);
+                if (dataType.getRequired()) {
+                    inputText.setRequired(true);
+                    inputText.setRequiredMessage(dataType.getLabel()
+                            + Constants.SPACE
+                            + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
+                                    "RequiredMessage_standard"));
+                }
+                inputText.setId(ID_DECISION_LABEL + stringId);
+                htmlPanelGroup.getChildren().add(inputText);
+            } else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode())) {
+                final HtmlSelectBooleanCheckbox booleanCheckbox = (HtmlSelectBooleanCheckbox) context.getApplication()
+                        .createComponent(HtmlSelectBooleanCheckbox.COMPONENT_TYPE);
+                if (dataType.getRequired()) {
+                    booleanCheckbox.setRequired(true);
+                    booleanCheckbox.setRequiredMessage(dataType.getLabel()
+                            + Constants.SPACE
+                            + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
+                                    "RequiredMessage_standard"));
+                }
+                booleanCheckbox.setId(ID_DECISION_LABEL + stringId);
+                htmlPanelGroup.getChildren().add(booleanCheckbox);
+            } else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
+                final Calendar calendar = (Calendar) context.getApplication().createComponent(Calendar.COMPONENT_TYPE);
+                calendar.setShowOn("button");
+                if (dataType.getRequired()) {
+                    calendar.setRequired(true);
+                    calendar.setRequiredMessage(dataType.getLabel()
+                            + Constants.SPACE
+                            + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
+                                    "RequiredMessage_standard"));
+                }
+                calendar.setId(ID_DECISION_LABEL + stringId);
+                final String dataTypeProps = dataType.getProps();
+                String pattern = DateUtils.FRENCH_DATE;
+                if (dataTypeProps != null) {
+                    Properties properties = new Properties();
+                    try {
+                        properties.load(new StringReader(dataTypeProps));
+                        pattern = properties.getProperty(DataTypePropEnnum.PATTERN.getCode(), pattern);
+                    } catch (IOException ex) {
+                        LOG.debug("Problem occured when trying to load properties of data type : " + dataType, ex);
+                    }
+                }
+                calendar.setPattern(pattern);
+                calendar.setLocale(Locale.FRANCE);
+                calendar.setNavigator(true);
+                htmlPanelGroup.getChildren().add(calendar);
+
+            } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode())) {
+                final HtmlInputTextarea inputTextarea = (HtmlInputTextarea) context.getApplication().createComponent(
+                        HtmlInputTextarea.COMPONENT_TYPE);
+                if (dataType.getRequired()) {
+                    inputTextarea.setRequired(true);
+                    inputTextarea.setRequiredMessage(dataType.getLabel()
+                            + Constants.SPACE
+                            + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
+                                    "RequiredMessage_standard"));
+                }
+                inputTextarea.setRows(10);
+                inputTextarea.setId(ID_DECISION_LABEL + stringId);
+                htmlPanelGroup.getChildren().add(inputTextarea);
+            }
+
+            final Message message = (Message) context.getApplication().createComponent(Message.COMPONENT_TYPE);
+            message.setFor(ID_DECISION_LABEL + stringId);
+            htmlPanelGroup.getChildren().add(message);
+
+            decisionDiv.getChildren().add(htmlPanelGroup);
         }
     }
 
@@ -2024,13 +2115,16 @@ public class FileItemCctDetailController implements Serializable {
             specificDecisionsHistory.setLastDecisionApp(appointmentService.findAppointmentsByItemFlow(lastDecisions));
         } else if (DCC_FLOW_CODES.contains(lastDecisions.getFlow().getCode())) {
             specificDecisionsHistory.setApprovedDecision(approvedDecisionService.findApprovedDecisionByItemFlow(lastDecisions));
+        } else if (isPhytoReadyForSignatureEnd(lastDecisions.getFlow())) {
+            specificDecisionsHistory.setcCTCPParamValue(cCTCPParamValueService.findCCTCPParamValueByItemFlow(lastDecisions));
         } else if (FlowCode.FL_CT_29.name().equals(lastDecisions.getFlow().getCode())) {
             specificDecisionsHistory.setLastAnalyseOrder(analyseOrderService.findByItemFlow(lastDecisions));
         } else if (isPhytoReadyForSignature(lastDecisions.getFlow())) {
             specificDecisionsHistory.setLastTreatmentInfos(treatmentInfosService.findTreatmentInfosByItemFlow(lastDecisions));
         } else if (isPviReadyForSignature(lastDecisions.getFlow())) {
-            specificDecisionsHistory.setLastDecisionIR(inspectionReportService.findLastInspectionReportsByFileItem(lastDecisions
-                    .getFileItem()));
+//            specificDecisionsHistory.setLastDecisionIR(inspectionReportService.findLastInspectionReportsByFileItem(lastDecisions
+//                    .getFileItem()));
+            specificDecisionsHistory.setLastDecisionIR(inspectionReportService.findByItemFlow(lastDecisions));
         } else if (isAtReadyForSignature(lastDecisions.getFlow())) {
             specificDecisionsHistory.setLastTreatmentResult(treatmentResultService.findTreatmentResultByItemFlow(lastDecisions));
 //            final List<Long> servicesIds = serviceService.findServicesIdsByAdministration(loggedUser.getAdministration());
@@ -2073,6 +2167,9 @@ public class FileItemCctDetailController implements Serializable {
         } else if (DCC_FLOW_CODES.contains(selectedItemFlowDto.getItemFlow().getFlow().getCode())) {
             specificDecisionsHistory.setApprovedDecision(approvedDecisionService.findApprovedDecisionByItemFlow(selectedItemFlowDto
                     .getItemFlow()));
+        } else if (isPhytoReadyForSignatureEnd(selectedItemFlowDto.getItemFlow().getFlow())) {
+            specificDecisionsHistory.setcCTCPParamValue(cCTCPParamValueService.findCCTCPParamValueByItemFlow(selectedItemFlowDto
+                    .getItemFlow()));
         } else if (FlowCode.FL_CT_29.name().equals(selectedItemFlowDto.getItemFlow().getFlow().getCode())) {
             specificDecisionsHistory.setDecisionDetailsAO(analyseOrderService.findByItemFlow(selectedItemFlowDto.getItemFlow()));
         } else if (isPhytoReadyForSignature(selectedItemFlowDto.getItemFlow().getFlow())) {
@@ -2080,7 +2177,7 @@ public class FileItemCctDetailController implements Serializable {
                     .setDecisionDetailsTI(treatmentInfosService.findTreatmentInfosByItemFlow(selectedItemFlowDto.getItemFlow()));
         } else if (isPviReadyForSignature(selectedItemFlowDto.getItemFlow().getFlow())) {
             specificDecisionsHistory.setDecisionDetailsIR(inspectionReportService
-                    .findLastInspectionReportsByFileItem(selectedItemFlowDto.getItemFlow().getFileItem()));
+                    .findByItemFlow(selectedItemFlowDto.getItemFlow()));
         } else if (isAtReadyForSignature(selectedItemFlowDto.getItemFlow().getFlow())) {
             specificDecisionsHistory.setDecisionDetailsTR(treatmentResultService.findTreatmentResultByItemFlow(selectedItemFlowDto
                     .getItemFlow()));
@@ -2223,17 +2320,13 @@ public class FileItemCctDetailController implements Serializable {
                     ControllerConstants.Bundle.Messages.HISTORY_DURATION_LESS_THAN_HOUR));
         } else {
             if (days > 0) {
-                duration.append(days
-                        + " "
-                        + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                                ControllerConstants.Bundle.Messages.HISTORY_DURATION_DAYS) + ", ");
+                duration.append(days).append(" ").append(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
+                        ControllerConstants.Bundle.Messages.HISTORY_DURATION_DAYS)).append(", ");
             }
 
             if (hours > 0) {
-                duration.append(hours
-                        + " "
-                        + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                                ControllerConstants.Bundle.Messages.HISTORY_DURATION_HOURS));
+                duration.append(hours).append(" ").append(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
+                        ControllerConstants.Bundle.Messages.HISTORY_DURATION_HOURS));
             }
         }
         return duration.toString();
@@ -2265,9 +2358,11 @@ public class FileItemCctDetailController implements Serializable {
      * @throws ParseException the parse exception
      */
     public synchronized void saveDecision() throws ParseException {
-        final DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
-        transactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-        final TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+        DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
+        transactionDefinition.setPropagationBehavior(GLOBAL_PROPAGATION_TRANSACTION_BEHAVIOUR);
+        TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+        displayGenerateDraft = true;
+//        MutableObject<TransactionStatus> vStatus = transactionHelper.beginTransaction();
         try {
             if (FlowCode.FL_CT_29.name().equals(selectedFlow.getCode()) && chckedListSize != Constants.ONE) {
                 showErrorFacesMessage(ControllerConstants.Bundle.Messages.CHECK_ANALYSE_DECISION_ERROR,
@@ -2395,6 +2490,7 @@ public class FileItemCctDetailController implements Serializable {
                 }
             } else if (isPhytoReadyForSignature(selectedFlow)) {
                 commonService.takeDecisionAndSaveTreatmentInfos(treatmentInfos, itemFlowsToAdd);
+//                commonService.takeDecisionAndSaveCCTCPParamValue(cCTCPParamValue, itemFlowsToAdd);
             } // Demande de Traitement
             else if ((FlowCode.FL_CT_64.name().equals(selectedFlow.getCode()) && chckedListSize == Constants.ONE)) {
                 if (CollectionUtils.isNotEmpty(treatmentPartsList)) {
@@ -2484,49 +2580,18 @@ public class FileItemCctDetailController implements Serializable {
             } // DCC (Signature Certificat Controle Documentaire)
             else if (DCC_FLOW_CODES.contains(selectedFlow.getCode())) {
                 commonService.takeDecisionAndSaveApprovedDecision(approvedDecision, itemFlowsToAdd);
+            } // CCT_CP (Signature du phytosanitaire)
+            else if (isPhytoReadyForSignatureEnd(selectedFlow)) {
+
+                List<ItemFlowData> flowDatas = getValuesOfDataTypeForDecision(itemFlowsToAdd, selectedFlow.getDataTypeList());
+
+                commonService.takeDecisionAndSaveCCTCPParamValueAndDataType(cCTCPParamValue, flowDatas, itemFlowsToAdd);
+
             } // Geniric (affichage des itemFlowData)
             else {
                 // Recuperate the values of DataType (Observation text area ...)
-                List<ItemFlowData> flowDatas;
+                List<ItemFlowData> flowDatas = getValuesOfDataTypeForDecision(itemFlowsToAdd, selectedFlow.getDataTypeList());
 
-                flowDatas = new ArrayList<>();
-                for (final DataType dataType : selectedFlow.getDataTypeList()) {
-                    final ItemFlowData itemFlowData = new ItemFlowData();
-                    itemFlowData.setDataType(dataType);
-
-                    if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode())) {
-                        final HtmlInputText valueDataType = (HtmlInputText) decisionDiv.findComponent(ID_DECISION_LABEL
-                                + dataType.getId());
-                        itemFlowData.setValue(valueDataType.getValue().toString());
-                    } else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode())) {
-                        final HtmlSelectBooleanCheckbox valueDataType = (HtmlSelectBooleanCheckbox) decisionDiv
-                                .findComponent(ID_DECISION_LABEL + dataType.getId());
-                        itemFlowData.setValue(valueDataType.getValue().toString());
-
-                    } else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
-                        final Calendar valueDataType = (Calendar) decisionDiv.findComponent(ID_DECISION_LABEL + dataType.getId());
-                        final String dataTypeProps = dataType.getProps();
-                        String pattern = DateUtils.FRENCH_DATE;
-                        if (StringUtils.isNotBlank(dataTypeProps)) {
-                            final Properties properties = new Properties();
-                            try {
-                                properties.load(new StringReader(dataTypeProps));
-                                pattern = properties.getProperty(DataTypePropEnnum.PATTERN.getCode(), pattern);
-                            } catch (IOException ex) {
-                                LOG.debug("Problem occured when trying to load properties of data type : " + dataType, ex);
-                            }
-                        }
-                        final String itemFlowDataTypeValue = DateUtils.formatSimpleDateFromObject(pattern, valueDataType.getValue());
-                        itemFlowData.setValue(itemFlowDataTypeValue);
-
-                    } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode())) {
-                        final HtmlInputTextarea valueDataType = (HtmlInputTextarea) decisionDiv.findComponent(ID_DECISION_LABEL
-                                + dataType.getId());
-                        itemFlowData.setValue(valueDataType.getValue().toString());
-                    }
-
-                    flowDatas.add(itemFlowData);
-                }
                 if (FlowCode.FL_CT_92.name().equals(selectedFlow.getCode())) {
                     commonService.takeDacisionAndSavePayment(itemFlowsToAdd, paymentData);
                 } else {
@@ -2539,34 +2604,83 @@ public class FileItemCctDetailController implements Serializable {
             currentFile.setLastDecisionDate(java.util.Calendar.getInstance().getTime());
             fileService.update(currentFile);
 
-            transactionManager.commit(transactionStatus);
+            TransactionStatus tsCommit = transactionStatus;
+            transactionStatus = null;
+            transactionManager.commit(tsCommit);
+            decided = true;
+//            transactionHelper.commit(vStatus);
             if (LOG.isDebugEnabled()) {
                 LOG.debug("####SAVE DECISION Transaction commited####");
             }
         } catch (final Exception ex) {
             LOG.error(null, ex);
-            showErrorFacesMessage(ex.getMessage(), null);
-            try {
-                transactionManager.rollback(transactionStatus);
-            } catch (final Exception ex1) {
-                LOG.error(Objects.toString(ex1), ex1);
-            }
+            showErrorFacesMessage(ControllerConstants.Bundle.Messages.SAVE_DECISION_FAILED, null);
             if (LOG.isDebugEnabled()) {
                 LOG.debug("####SAVE DECISION Transaction rollbacked####");
             }
+        } finally {
+            if (transactionStatus != null) {
+                transactionManager.rollback(transactionStatus);
+            }
+//            transactionHelper.rollback(vStatus);
         }
 
         resetDataGridInofrmationProducts();
         reloadPage();
     }
 
+    private List<ItemFlowData> getValuesOfDataTypeForDecision(List<ItemFlow> itemsFlows, List<DataType> dataTypes) {
+        List<ItemFlowData> flowDatas = new ArrayList<>();
+        for (final DataType dataType : dataTypes) {
+            final ItemFlowData itemFlowData = new ItemFlowData();
+            itemFlowData.setDataType(dataType);
+
+            if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode())) {
+                final HtmlInputText valueDataType = (HtmlInputText) decisionDiv.findComponent(ID_DECISION_LABEL
+                        + dataType.getId());
+                itemFlowData.setValue(valueDataType.getValue().toString());
+            } else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode())) {
+                final HtmlSelectBooleanCheckbox valueDataType = (HtmlSelectBooleanCheckbox) decisionDiv
+                        .findComponent(ID_DECISION_LABEL + dataType.getId());
+                itemFlowData.setValue(valueDataType.getValue().toString());
+
+            } else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
+                final Calendar valueDataType = (Calendar) decisionDiv.findComponent(ID_DECISION_LABEL + dataType.getId());
+                final String dataTypeProps = dataType.getProps();
+                String pattern = DateUtils.FRENCH_DATE;
+                if (StringUtils.isNotBlank(dataTypeProps)) {
+                    final Properties properties = new Properties();
+                    try {
+                        properties.load(new StringReader(dataTypeProps));
+                        pattern = properties.getProperty(DataTypePropEnnum.PATTERN.getCode(), pattern);
+                    } catch (IOException ex) {
+                        LOG.debug("Problem occured when trying to load properties of data type : " + dataType, ex);
+                    }
+                }
+                final String itemFlowDataTypeValue = DateUtils.formatSimpleDateFromObject(pattern, valueDataType.getValue());
+                itemFlowData.setValue(itemFlowDataTypeValue);
+
+            } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode())) {
+                final HtmlInputTextarea valueDataType = (HtmlInputTextarea) decisionDiv.findComponent(ID_DECISION_LABEL
+                        + dataType.getId());
+                itemFlowData.setValue(valueDataType.getValue().toString());
+            }
+
+            flowDatas.add(itemFlowData);
+        }
+
+        return flowDatas;
+
+    }
+
     /**
      * Annuler decisions.
      */
     public void annulerDecisions() {
-        final DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
-        transactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-        final TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+        DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
+        transactionDefinition.setPropagationBehavior(GLOBAL_PROPAGATION_TRANSACTION_BEHAVIOUR);
+        TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+//        MutableObject<TransactionStatus> vStatus = transactionHelper.beginTransaction();
         try {
             //
             final List<Long> chckedProductInfoChecksList = getCheckedRollBacksFileItemCheckList();
@@ -2578,8 +2692,8 @@ public class FileItemCctDetailController implements Serializable {
 
                 decisionDiv.getChildren().clear();
             } else {
-                itemFlowService.rollBackDecisionForDispatchFile(chckedProductInfoChecksList);
-
+//                itemFlowService.rollBackDecisionForDispatchFile(chckedProductInfoChecksList);
+                commonService.rollbackDecision(chckedProductInfoChecksList);
                 // If the las decision is a cotation flow then rollback the
                 // assigned user to the current user
                 if (lastDecisions.getFlow().getIsCota()) {
@@ -2599,21 +2713,24 @@ public class FileItemCctDetailController implements Serializable {
             currentFile.setLastDecisionDate(currentFileItem.getItemFlowsList().get(0).getCreated());
             fileService.update(currentFile);
 
-            transactionManager.commit(transactionStatus);
+            TransactionStatus tsCommit = transactionStatus;
+            transactionStatus = null;
+            transactionManager.commit(tsCommit);
+//            transactionHelper.commit(vStatus);
             if (LOG.isDebugEnabled()) {
                 LOG.debug("####ROLLBACK DECISION Transaction commited####");
             }
         } catch (final Exception ex) {
             LOG.error(Objects.toString(ex), ex);
             showErrorFacesMessage(ControllerConstants.Bundle.Messages.ROLL_BACK_FAIL, null);
-            try {
-                transactionManager.rollback(transactionStatus);
-            } catch (Exception ex1) {
-                LOG.error(Objects.toString(ex1), ex1);
-            }
             if (LOG.isDebugEnabled()) {
                 LOG.debug("####ROLLBACK DECISION Transaction rollbacked####");
             }
+        } finally {
+            if (transactionStatus != null) {
+                transactionManager.rollback(transactionStatus);
+            }
+//            transactionHelper.rollback(vStatus);
         }
 
         productInfoItems = disableDraftFromProductInfoItem(productInfoItems);
@@ -2643,10 +2760,11 @@ public class FileItemCctDetailController implements Serializable {
      * Mark file.
      */
     public synchronized void dispatchFile() {
-        //
-        final DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
-        transactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-        final TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+        DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
+        transactionDefinition.setPropagationBehavior(GLOBAL_PROPAGATION_TRANSACTION_BEHAVIOUR);
+        TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+        displayGenerateDraft = false;
+//        MutableObject<TransactionStatus> vStatus = transactionHelper.beginTransaction();
         try {
             final List<ItemFlowData> flowDatas = new ArrayList<>();
             for (final DataType dataType : selectedFlow.getDataTypeList()) {
@@ -2685,7 +2803,7 @@ public class FileItemCctDetailController implements Serializable {
                     itemFlow.setSent(Boolean.FALSE);
                     itemFlow.setUnread(Boolean.TRUE);
                     itemFlow.setReceived(AperakType.APERAK_D.getCharCode());
-                    if(assignedUserForCotation != null){
+                    if (assignedUserForCotation != null) {
                         itemFlow.setAssignedUser(assignedUserForCotation);
                     }
                     itemFlowsToAdd.add(itemFlow);
@@ -2696,20 +2814,25 @@ public class FileItemCctDetailController implements Serializable {
                 currentFile.setAssignedUser(assignedUserForCotation);
                 fileService.update(currentFile);
             }
-            transactionManager.commit(transactionStatus);
+
+            TransactionStatus tsCommit = transactionStatus;
+            transactionStatus = null;
+            transactionManager.commit(tsCommit);
+            decided = true;
+//            transactionHelper.commit(vStatus);
             if (LOG.isDebugEnabled()) {
                 LOG.info("####DISPATCH DECISION Transaction commited####");
             }
         } catch (Exception ex) {
             LOG.error(Objects.toString(ex), ex);
-            try {
-                transactionManager.rollback(transactionStatus);
-            } catch (final Exception ex1) {
-                LOG.error(Objects.toString(ex1), ex1);
-            }
             if (LOG.isDebugEnabled()) {
                 LOG.info("####DISPATCH DECISION Transaction rollbacked####");
             }
+        } finally {
+            if (transactionStatus != null) {
+                transactionManager.rollback(transactionStatus);
+            }
+//            transactionHelper.rollback(vStatus);
         }
         resetDataGridInofrmationProducts();
     }
@@ -2724,19 +2847,38 @@ public class FileItemCctDetailController implements Serializable {
         // let find the cotation flow
         final FlowCode flowCode;
         final FileTypeCode currentFileTypeCode = currentFile.getFileType().getCode();
-        if (FileTypeCode.CCT_CT_E_FSTP.equals(currentFileTypeCode)
-                || FileTypeCode.CCT_CT_E_PVI.equals(currentFileTypeCode)) {
+        if (FileTypeCode.CCT_CT_E_FSTP.equals(currentFileTypeCode) || FileTypeCode.CCT_CT_E_PVI.equals(currentFileTypeCode)) {
             flowCode = FlowCode.FL_CT_103;
         } else {
             flowCode = FlowCode.FL_CT_06;
         }
-        selectedFlow = flowService.findFlowByCode(flowCode.name());
+        FileItem fi = currentFile.getFileItemsList().get(0);
+        Flow cotationFlow = null;
+        if (isCheckMinaderMinistry() && (FileTypeCode.CCT_CT_E_FSTP.equals(currentFileTypeCode) || FileTypeCode.CCT_CT_E_PVI.equals(currentFileTypeCode)
+                || FileTypeCode.CCT_CT_E_ATP.equals(currentFileTypeCode) || FileTypeCode.CCT_CT_E.equals(currentFileTypeCode))) {
+            final List<Flow> flowList = flowService.findFlowsByFromStepAndFileType2(fi.getStep(), currentFile.getFileType());
+            if (flowList != null && !flowList.isEmpty()) {
+                for (Flow flowItem : flowList) {
+                    if (flowItem.getIsCota()) {
+                        cotationFlow = flowItem;
+                    }
+                }
+            }
+        }
+        if (cotationFlow != null) {
+            selectedFlow = cotationFlow;
+        } else {
+            selectedFlow = flowService.findFlowByCode(flowCode.name());
+        }
         List<User> cotationActors;
         if (checkMinepiaMinistry) {
-            cotationActors = userService.findCotationsAgentByBureauAndRole(currentFile.getBureau(),
-                    AuthorityConstants.SOCIETE_TRAITEMENT.getCode());
+            cotationActors = userService.findCotationsAgentByBureauAndRole(currentFile.getBureau(), AuthorityConstants.SOCIETE_TRAITEMENT.getCode());
         } else {
-            cotationActors = userService.findInspectorsByBureau(currentFile.getBureau());
+            if (isPhyto()) {
+                cotationActors = cotationService.findCotationAgentsByBureauAndRoleAndProductType(currentFile);
+            } else {
+                cotationActors = userService.findInspectorsByBureau(currentFile.getBureau());
+            }
         }
         setInspectorList(cotationActors);
 
@@ -2896,11 +3038,21 @@ public class FileItemCctDetailController implements Serializable {
      * Send decisions.
      */
     public synchronized void sendDecisions() {
-        final DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
-        transactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-        final TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+        DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
+        transactionDefinition.setPropagationBehavior(GLOBAL_PROPAGATION_TRANSACTION_BEHAVIOUR);
+        TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+//        MutableObject<TransactionStatus> vStatus = transactionHelper.beginTransaction();
         try {
-            if (currentFile.getFileItemsList() != null && cotationAllowed != null && cotationAllowed) {
+            List<ItemFlow> lastItemFlowList = null;
+            ItemFlow lastItemFlow = null;
+            if (currentFile.getFileItemsList() != null) {
+                lastItemFlowList = itemFlowService.findLastItemFlowsByFileItemList(currentFile.getFileItemsList());
+                if (lastItemFlowList != null && !lastItemFlowList.isEmpty()) {
+                    lastItemFlow = lastItemFlowList.get(0);
+                }
+            }
+
+            if (currentFile.getFileItemsList() != null && cotationAllowed != null && cotationAllowed && (lastItemFlowList != null && lastItemFlow != null && !DECISION_FLOW_LIST_AT_COTATION_LEVEL.contains(lastItemFlow.getFlow().getCode()))) {
                 itemFlowService.sendDecisionsToDispatchCctFile(currentFile, productInfoItemsEnabled);
 
                 JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
@@ -2919,12 +3071,12 @@ public class FileItemCctDetailController implements Serializable {
                 if (sameStep) {
                     for (final FileItem selected : currentFile.getFileItemsList()) {
                         if (BooleanUtils.isNotTrue(selected.getDraft())) {
-                            allHasDecision = false;
+//                            allHasDecision = false;
                             break;
                         } else {
                             final ItemFlow draftItemFlow = itemFlowService.findDraftByFileItem(selected);
                             if (!draftItemFlow.getSender().getId().equals(getLoggedUser().getId())) {
-                                allHasDecision = false;
+//                                allHasDecision = false;
                                 break;
                             }
                         }
@@ -2941,7 +3093,10 @@ public class FileItemCctDetailController implements Serializable {
                 }
                 if (!allHasDecision) {
                     showErrorFacesMessage(ControllerConstants.Bundle.Messages.ALL_PRODUCT_MUST_BE_SELECTED, null);
-                    transactionManager.rollback(transactionStatus);
+                    if (transactionStatus != null) {
+                        transactionManager.rollback(transactionStatus);
+                    }
+//                    transactionHelper.rollback(vStatus);
                     return;
                 }
 
@@ -2978,60 +3133,49 @@ public class FileItemCctDetailController implements Serializable {
 
                             //generate report
                             Map<String, byte[]> attachedByteFiles = null;
-                            try {
-                                String reportNumber;
-                                if (FlowCode.FL_CT_89.name().equals(flowToSend.getCode())
-                                        || FlowCode.FL_CT_08.name().equals(flowToSend.getCode())
-                                        || FlowCode.FL_CT_CVS_03.name().equals(flowToSend.getCode())
-                                        || FlowCode.FL_CT_CVS_07.name().equals(flowToSend.getCode())) {
+                            String reportNumber;
+                            if (FlowCode.FL_CT_89.name().equals(flowToSend.getCode())
+                                    || FlowCode.FL_CT_08.name().equals(flowToSend.getCode())
+                                    || FlowCode.FL_CT_114.name().equals(flowToSend.getCode())
+                                    || FlowCode.FL_CT_117.name().equals(flowToSend.getCode())
+                                    || FlowCode.FL_CT_CVS_03.name().equals(flowToSend.getCode())
+                                    || FlowCode.FL_CT_CVS_07.name().equals(flowToSend.getCode())) {
 
-                                    // edit signature elements
-                                    Date now = java.util.Calendar.getInstance().getTime();
-                                    currentFile.setSignatureDate(now);
-                                    currentFile.setSignatory(loggedUser);
+                                // edit signature elements
+                                Date now = java.util.Calendar.getInstance().getTime();
+                                currentFile.setSignatureDate(now);
+                                currentFile.setSignatory(loggedUser);
 
-                                    attachedByteFiles = new HashMap<>();
+                                attachedByteFiles = new HashMap<>();
 
-                                    final List<FileTypeFlowReport> fileTypeFlowReportList = fileTypeFlowReportService
-                                            .findReportClassNameByFlowAndFileType(flowToSend, currentFile.getFileType());
-                                    for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportList) {
-                                        //Begin Add new field value with report Number
+                                final List<FileTypeFlowReport> fileTypeFlowReportList = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(flowToSend, currentFile.getFileType());
+                                for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportList) {
+
+                                    String reportFieldCode = fileTypeFlowReport.getFileFieldName();
+                                    FileFieldValue reportFieldValue = fileFieldValueService.findValueByFileFieldAndFile(reportFieldCode, currentFile);
+                                    if (reportFieldValue == null) {
                                         final ReportOrganism reportOrganism = reportOrganismService.findReportByFileTypeFlowReport(fileTypeFlowReport);
-                                        final FileField reportField = fileFieldService.findFileFieldByCodeAndFileType(
-                                                fileTypeFlowReport.getFileFieldName(), fileTypeFlowReport.getFileType().getCode());
+                                        final FileField reportField = fileFieldService.findFileFieldByCodeAndFileType(reportFieldCode, fileTypeFlowReport.getFileType().getCode());
                                         final String eforceRef = currentFile.getNumeroDemande();
                                         reportNumber = eforceRef
                                                 + "/" + java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)
                                                 + ((reportOrganism != null && reportOrganism.getValue() != null) ? reportOrganism.getValue() : StringUtils.EMPTY);
-                                        final FileFieldValue reportFieldValue = new FileFieldValue();
+                                        reportFieldValue = new FileFieldValue();
                                         reportFieldValue.setFile(currentFile);
                                         reportFieldValue.setFileField(reportField);
                                         reportFieldValue.setValue(reportNumber);
                                         currentFile.getFileFieldValueList().add(reportFieldValue);
                                         fileFieldValueService.save(reportFieldValue);
-                                        fileService.update(currentFile);
-                                        //End Add new field value with report Number
+                                    }
 
-                                        final byte[] report = getReportBytes(fileTypeFlowReport, false);
+                                    final byte[] report = getReportBytes(fileTypeFlowReport, false);
 
-                                        if (report != null) {
-                                            attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
-                                        }
-
-                                        /**
-                                         * *
-                                         */
-                                        final java.io.File targetAttachment = new java.io.File(String.format(
-                                                applicationPropretiesService.getAttachementFolder() + "%s%s", java.io.File.separator,
-                                                fileTypeFlowReport.getReportName()));
-
-                                        try (FileOutputStream fileOuputStream = new FileOutputStream(targetAttachment)) {
-                                            fileOuputStream.write(report);
-                                        }
+                                    if (report != null) {
+                                        attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
                                     }
                                 }
-                            } catch (final Exception e) {
-                                LOG.error("Error occured when loading report: " + e.getMessage(), e);
+
+                                fileService.update(currentFile);
                             }
 
                             // convert file to document
@@ -3084,6 +3228,18 @@ public class FileItemCctDetailController implements Serializable {
                         }
                     }
 
+                    Flow f = selectedFlow;
+                    if (f == null) {
+                        f = itemFlowService.findLastItemFlowByFileItem(productInfoItems.get(0)).getFlow();
+                    }
+                    List<Flow> list = flowService.findAdmissibilityValidationFlows(currentFile);
+                    for (Flow f1 : list) {
+                        if (f1.getCode().equals(f.getCode())) {
+                            cotationService.dispatch(currentFile, loggedUser, f);
+                            break;
+                        }
+                    }
+
                     JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
                             getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.SEND_SUCCESS));
 
@@ -3093,7 +3249,11 @@ public class FileItemCctDetailController implements Serializable {
             } else {
                 showErrorFacesMessage(ControllerConstants.Bundle.Messages.SEND_ERROR, null);
             }
-            transactionManager.commit(transactionStatus);
+
+            TransactionStatus tsCommit = transactionStatus;
+            transactionStatus = null;
+            transactionManager.commit(tsCommit);
+//            transactionHelper.commit(vStatus);
             if (LOG.isDebugEnabled()) {
                 LOG.info("####SEND DECISION Transaction commited####");
             }
@@ -3103,14 +3263,14 @@ public class FileItemCctDetailController implements Serializable {
             notificationEmail(currentFile, currentStep);
         } catch (final Exception e) {
             LOG.error(Objects.toString(e), e);
-            try {
-                transactionManager.rollback(transactionStatus);
-            } catch (final Exception ex) {
-                LOG.error(Objects.toString(ex), ex);
-            }
             if (LOG.isDebugEnabled()) {
                 LOG.info("####SEND DECISION Transaction rollbacked####");
             }
+        } finally {
+            if (transactionStatus != null) {
+                transactionManager.rollback(transactionStatus);
+            }
+//            transactionHelper.rollback(vStatus);
         }
 
     }
@@ -3158,6 +3318,7 @@ public class FileItemCctDetailController implements Serializable {
     public void refreshViewForProductInformations() {
         decisionButtonAllowed = Boolean.FALSE;
         cotationButtonAllowed = Boolean.FALSE;
+        decisionButtonAllowedAtCotationLevel = Boolean.FALSE;
 
         if (CollectionUtils.isEmpty(productInfoItems)) {
             productInfoItems = initFileItemsForCCt();
@@ -3172,10 +3333,17 @@ public class FileItemCctDetailController implements Serializable {
                     cotationButtonAllowed = false;
                     rollBackDecisionsAllowed = true;
                     sendDecisionAllowed = true;
+                    decisionButtonAllowedAtCotationLevel = false;
                 } else {
                     cotationButtonAllowed = true;
                     rollBackDecisionsAllowed = false;
                     sendDecisionAllowed = false;
+                    if (COTATION_STEP_LIST_ALLOW_DECISION.contains(productInfoItems.get(0).getStep().getStepCode())) {
+                        setDecisionButtonAllowedAtCotationLevel(Boolean.TRUE);
+                    }
+                    if (StepCode.ST_CT_03.equals(productInfoItems.get(0).getStep().getStepCode()) && isCheckMinepiaMinistry() && !sendDecisionAllowed) {
+                        setDecisionButtonAllowed(Boolean.TRUE);
+                    }
                 }
             } // Cas de Decision
             else if (BooleanUtils.isTrue(decisionAllowed)) {
@@ -3271,11 +3439,7 @@ public class FileItemCctDetailController implements Serializable {
                 }
             }
         }
-        if (allDraft && !oneIsNotDraft) {
-            return true;
-        }
-
-        return false;
+        return allDraft && !oneIsNotDraft;
     }
 
     /**
@@ -3285,7 +3449,7 @@ public class FileItemCctDetailController implements Serializable {
      * @return the list
      */
     private List<FileItem> disableDraftFromProductInfoItem(final List<FileItem> infoItems) {
-        final List<FileItem> returnedInfoItems = new ArrayList<FileItem>();
+        final List<FileItem> returnedInfoItems = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(productInfoChecks) && !decisionByFileAllowed) {
             for (final FileItem fileItem : infoItems) {
                 for (final FileItemCheck check : productInfoChecks) {
@@ -3329,7 +3493,7 @@ public class FileItemCctDetailController implements Serializable {
 
         final String systemDecision = GrUtilsWeb.getScenario(synthesisConfig, synthesisResult).name();
         trendPerformance.setSystemDecision(systemDecision);
-        trendPerformance.setConcordance(systemDecision.equals(userDecision) ? true : false);
+        trendPerformance.setConcordance(systemDecision.equals(userDecision));
         trendPerformanceService.update(trendPerformance);
     }
 
@@ -3605,6 +3769,7 @@ public class FileItemCctDetailController implements Serializable {
         if (!authorizedUser) {
             decisionButtonAllowed = Boolean.FALSE;
             cotationButtonAllowed = Boolean.FALSE;
+            decisionButtonAllowedAtCotationLevel = Boolean.FALSE;
             decisionAllowed = Boolean.FALSE;
         }
     }
@@ -3647,8 +3812,7 @@ public class FileItemCctDetailController implements Serializable {
      * Refresh recommandation list.
      */
     public void refreshRecommandationList() {
-        recommandationList = recommandationService.findRecommandationByFileAndAuthorties(currentFile, (new ArrayList<Authority>(
-                getLoggedUser().getAuthorities())));
+        recommandationList = recommandationService.findRecommandationByFileAndAuthorties(currentFile, (new ArrayList<>(getLoggedUser().getAuthorities())));
     }
 
     /**
@@ -3774,12 +3938,12 @@ public class FileItemCctDetailController implements Serializable {
         if (fieldGroupsItems.isEmpty()) {
             fieldGroupsItems = fieldGroupService.findAllByFileType(currentFile.getFileType(), "02");
         }
-        fileItemFieldGroupDtos = new ArrayList<FieldGroupDto<FileItemFieldValue>>();
+        fileItemFieldGroupDtos = new ArrayList<>();
         for (final FieldGroup fieldGroupItem : fieldGroupsItems) {
-            final FieldGroupDto<FileItemFieldValue> fileItemFieldGroupDto = new FieldGroupDto<FileItemFieldValue>();
+            final FieldGroupDto<FileItemFieldValue> fileItemFieldGroupDto = new FieldGroupDto<>();
             fileItemFieldGroupDto.setLabelFr(fieldGroupItem.getLabelFr());
             fileItemFieldGroupDto.setLabelEn(fieldGroupItem.getLabelEn());
-            final List<FileItemFieldValue> listFileItemFieldValues = new ArrayList<FileItemFieldValue>();
+            final List<FileItemFieldValue> listFileItemFieldValues = new ArrayList<>();
             for (final FileItemFieldValue fileItemFieldValue : fileItemFieldValues) {
                 if (fieldGroupItem.getId().equals(fileItemFieldValue.getFileItemField().getGroup().getId())) {
                     listFileItemFieldValues.add(fileItemFieldValue);
@@ -3950,7 +4114,7 @@ public class FileItemCctDetailController implements Serializable {
         selectedRecommandationArticle = new Recommandation();
 
         authorityList = fileTypeService.findAuthoritiesByFileType(selectedFileItemCheck.getFileItem().getFile().getFileType());
-        authoritiesList = new DualListModel<Authority>(new ArrayList<Authority>(), new ArrayList<Authority>());
+        authoritiesList = new DualListModel<>(new ArrayList<Authority>(), new ArrayList<Authority>());
         authoritiesList.getSource().addAll(authorityList);
     }
 
@@ -3961,7 +4125,7 @@ public class FileItemCctDetailController implements Serializable {
         this.setSelectedRecommandationArticle(recommandationService.find(this.getSelectedRecommandationArticle().getId()));
         authorityList = fileTypeService.findAuthoritiesByFileType(selectedFileItemCheck.getFileItem().getFile().getFileType());
 
-        authoritiesList = new DualListModel<Authority>(new ArrayList<Authority>(), new ArrayList<Authority>());
+        authoritiesList = new DualListModel<>(new ArrayList<Authority>(), new ArrayList<Authority>());
         authoritiesList.getSource().addAll(authorityList);
 
         for (final RecommandationAuthority recAuthority : this.getSelectedRecommandationArticle().getAuthorizedAuthorityList()) {
@@ -3987,11 +4151,18 @@ public class FileItemCctDetailController implements Serializable {
      * Check generate draft allowed.
      */
     private void checkGenerateDraftAllowed() {
-        final Flow reportingFlow = flowService.findFlowByCode(FlowCode.FL_CT_08.name());
+        Flow reportingFlow = flowService.findFlowByCode(FlowCode.FL_CT_08.name());
+        if (reportingFlow == null) {
+            reportingFlow = flowService.findFlowByCode(FlowCode.FL_CT_114.name());
+        }
         fileTypeFlowReportsDraft = fileTypeFlowReportService
                 .findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getFileType());
-        generateDraftAllowed = sendDecisionAllowed && showDecisionButton
-                && (StepCode.ST_CT_38.equals(currentFileItem.getStep().getStepCode()) || StepCode.ST_CT_31.equals(currentFileItem.getStep().getStepCode()))
+        generateDraftAllowed = sendDecisionAllowed && showDecisionButton && displayGenerateDraft
+                && (StepCode.ST_CT_38.equals(currentFileItem.getStep().getStepCode())
+                || StepCode.ST_CT_31.equals(currentFileItem.getStep().getStepCode())
+                || StepCode.ST_CT_53.equals(currentFileItem.getStep().getStepCode())
+                || StepCode.ST_CT_55.equals(currentFileItem.getStep().getStepCode())
+                || StepCode.ST_CT_56.equals(currentFileItem.getStep().getStepCode()))
                 && CollectionUtils.isNotEmpty(fileTypeFlowReportsDraft);
     }
 
@@ -4023,8 +4194,12 @@ public class FileItemCctDetailController implements Serializable {
                     final byte[] report = getReportBytes(fileTypeFlowReport, draft);
                     if (report != null) {
                         final InputStream is = new ByteArrayInputStream(report);
+                        String name = currentFile.getReferenceSiat() + '_' + fileTypeFlowReport.getReportName();
+                        if (isPhytoEnd() && draft) {
+                            name = "PREVIEW_" + name;
+                        }
                         final StreamedContent fileToDownload = new DefaultStreamedContent(is, "application/pdf",
-                                currentFile.getReferenceSiat() + '_' + fileTypeFlowReport.getReportName());
+                                name);
 
                         return fileToDownload;
                     }
@@ -4037,6 +4212,39 @@ public class FileItemCctDetailController implements Serializable {
 
             }
         }
+        return null;
+    }
+
+    public StreamedContent downloadReferenceBaseReport(final boolean draft) {
+        if (currentFile.getParent() != null) {
+            FileItem pfi = currentFile.getParent().getFileItemsList().get(0);
+            final Flow reportingFlow = flowService.findByToStep(pfi.getStep());
+            List<FileTypeFlowReport> ftfr = fileTypeFlowReportService
+                    .findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getParent().getFileType());
+
+            if (CollectionUtils.isNotEmpty(ftfr)) {
+                for (final FileTypeFlowReport fileTypeFlowReport : ftfr) {
+                    //Begin Add new field value with report Number
+                    try {
+                        final byte[] report = getReportBytes(currentFile.getParent(), fileTypeFlowReport, draft);
+                        if (report != null) {
+                            final InputStream is = new ByteArrayInputStream(report);
+                            final StreamedContent fileToDownload = new DefaultStreamedContent(is, "application/pdf",
+                                    currentFile.getParent().getReferenceSiat() + '_' + fileTypeFlowReport.getReportName());
+
+                            return fileToDownload;
+                        }
+                    } catch (Exception e) {
+                        final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
+                                .getString(ControllerConstants.Bundle.Messages.GENERATE_REPORT_FAILED);
+                        JsfUtil.addErrorMessage(msg);
+                        LOG.error(e.getMessage(), e);
+                    }
+
+                }
+            }
+        }
+
         return null;
     }
 
@@ -4822,6 +5030,14 @@ public class FileItemCctDetailController implements Serializable {
      */
     public void setDecisionButtonAllowed(final Boolean decisionButtonAllowed) {
         this.decisionButtonAllowed = decisionButtonAllowed;
+    }
+
+    public Boolean getDecisionButtonAllowedAtCotationLevel() {
+        return decisionButtonAllowedAtCotationLevel;
+    }
+
+    public void setDecisionButtonAllowedAtCotationLevel(Boolean decisionButtonAllowedAtCotationLevel) {
+        this.decisionButtonAllowedAtCotationLevel = decisionButtonAllowedAtCotationLevel;
     }
 
     /**
@@ -6061,6 +6277,22 @@ public class FileItemCctDetailController implements Serializable {
     }
 
     /**
+     * Gets the transaction helper
+     *
+     * @return the transaction helper
+     */
+//    public TransactionHelper getTransactionHelper() {
+//        return transactionHelper;
+//    }
+    /**
+     * Sets the transaction helper
+     *
+     * @param transactionHelper the new transaction helper
+     */
+//    public void setTransactionHelper(final TransactionHelper transactionHelper) {
+//        this.transactionHelper = transactionHelper;
+//    }
+    /**
      * Gets the detail.
      *
      * @return the detail
@@ -6166,6 +6398,30 @@ public class FileItemCctDetailController implements Serializable {
      */
     public ReportOrganismService getReportOrganismService() {
         return reportOrganismService;
+    }
+
+    public CCTCPParamValueService getcCTCPParamValueService() {
+        return cCTCPParamValueService;
+    }
+
+    public void setcCTCPParamValueService(CCTCPParamValueService cCTCPParamValueService) {
+        this.cCTCPParamValueService = cCTCPParamValueService;
+    }
+
+    public ParamCCTCPService getParamCCTCPService() {
+        return paramCCTCPService;
+    }
+
+    public void setParamCCTCPService(ParamCCTCPService paramCCTCPService) {
+        this.paramCCTCPService = paramCCTCPService;
+    }
+
+    public boolean isPhytoEnd() {
+        return phytoEnd;
+    }
+
+    public void setPhytoEnd(boolean phytoEnd) {
+        this.phytoEnd = phytoEnd;
     }
 
     /**
@@ -6702,9 +6958,10 @@ public class FileItemCctDetailController implements Serializable {
                 JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
                         getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.RESEND_SUCCESS));
             } else {
-                final DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
-                transactionDefinition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-                final TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+                DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
+                transactionDefinition.setPropagationBehavior(GLOBAL_PROPAGATION_TRANSACTION_BEHAVIOUR);
+                TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+//                MutableObject<TransactionStatus> vStatus = transactionHelper.beginTransaction();
                 try {
                     final Flow flowToSend = selectedItemFlowDto.getItemFlow().getFlow();
                     final File selectedFile = selectedItemFlowDto.getItemFlow().getFileItem().getFile();
@@ -6715,7 +6972,11 @@ public class FileItemCctDetailController implements Serializable {
                     String service = StringUtils.EMPTY;
                     String documentType = StringUtils.EMPTY;
                     if (FlowCode.FL_CT_89.name().equals(flowToSend.getCode())
-                            || FlowCode.FL_CT_08.name().equals(flowToSend.getCode())) {
+                            || FlowCode.FL_CT_08.name().equals(flowToSend.getCode())
+                            || FlowCode.FL_CT_114.name().equals(flowToSend.getCode())
+                            || FlowCode.FL_CT_117.name().equals(flowToSend.getCode())
+                            || FlowCode.FL_CT_CVS_03.name().equals(flowToSend.getCode())
+                            || FlowCode.FL_CT_CVS_07.name().equals(flowToSend.getCode())) {
 
                         // edit signature elements
                         Date now = java.util.Calendar.getInstance().getTime();
@@ -6783,7 +7044,10 @@ public class FileItemCctDetailController implements Serializable {
                         }
                     }
 
-                    transactionManager.commit(transactionStatus);
+                    TransactionStatus tsCommit = transactionStatus;
+                    transactionStatus = null;
+                    transactionManager.commit(tsCommit);
+//                    transactionHelper.commit(vStatus);
                     if (LOG.isDebugEnabled()) {
                         LOG.info("####RESEND DECISION Transaction commited####");
                     }
@@ -6791,8 +7055,12 @@ public class FileItemCctDetailController implements Serializable {
                     JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
                             getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.RESEND_SUCCESS));
                 } catch (Exception ex) {
-                    transactionManager.rollback(transactionStatus);
                     throw ex;
+                } finally {
+                    if (transactionStatus != null) {
+                        transactionManager.rollback(transactionStatus);
+                    }
+//                    transactionHelper.rollback(vStatus);
                 }
             }
         } catch (Exception ex) {
@@ -6802,23 +7070,33 @@ public class FileItemCctDetailController implements Serializable {
     }
 
     public boolean isPhytoReadyForSignature(Flow flow) {
-        return flow != null && checkMinaderMinistry && FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode()) && FlowCode.FL_CT_07.name().equals(flow.getCode());
+        boolean ok = flow != null && checkMinaderMinistry && FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode()) && (FlowCode.FL_CT_07.name().equals(flow.getCode()) || FlowCode.FL_CT_112.name().equals(flow.getCode()) || FlowCode.FL_CT_117.name().equals(flow.getCode()));
+        return ok;
+    }
+
+    public boolean isPhytoReadyForSignatureEnd(Flow flow) {
+        phytoEnd = flow != null && checkMinaderMinistry && FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode()) && FlowCode.FL_CT_08.name().equals(flow.getCode());
+        return phytoEnd;
     }
 
     public boolean isFstpReadyForSignature(Flow flow) {
-        return flow != null && checkMinaderMinistry && FileTypeCode.CCT_CT_E_FSTP.equals(currentFile.getFileType().getCode()) && FlowCode.FL_CT_07.name().equals(flow.getCode());
+        boolean ok = flow != null && checkMinaderMinistry && FileTypeCode.CCT_CT_E_FSTP.equals(currentFile.getFileType().getCode()) && (FlowCode.FL_CT_07.name().equals(flow.getCode()) || FlowCode.FL_CT_112.name().equals(flow.getCode()) || FlowCode.FL_CT_117.name().equals(flow.getCode()));
+        return ok;
     }
 
     public boolean isPviReadyForSignature(Flow flow) {
-        return flow != null && checkMinaderMinistry && FileTypeCode.CCT_CT_E_PVI.equals(currentFile.getFileType().getCode()) && FlowCode.FL_CT_07.name().equals(flow.getCode());
+        boolean ok = flow != null && checkMinaderMinistry && FileTypeCode.CCT_CT_E_PVI.equals(currentFile.getFileType().getCode()) && (FlowCode.FL_CT_07.name().equals(flow.getCode()) || FlowCode.FL_CT_112.name().equals(flow.getCode()) || FlowCode.FL_CT_117.name().equals(flow.getCode()));
+        return ok;
     }
 
     public boolean isAtReadyForSignature(Flow flow) {
-        return flow != null && checkMinaderMinistry && FileTypeCode.CCT_CT_E_ATP.equals(currentFile.getFileType().getCode()) && FlowCode.FL_CT_07.name().equals(flow.getCode());
+        boolean ok = flow != null && checkMinaderMinistry && FileTypeCode.CCT_CT_E_ATP.equals(currentFile.getFileType().getCode()) && (FlowCode.FL_CT_07.name().equals(flow.getCode()) || FlowCode.FL_CT_112.name().equals(flow.getCode()) || FlowCode.FL_CT_117.name().equals(flow.getCode()));
+        return ok;
     }
 
     public boolean isRDVConfirm(Flow flow) {
-        return flow != null && checkMinaderMinistry && FileTypeCode.CCT_CT_E_FSTP.equals(currentFile.getFileType().getCode()) && FlowCode.FL_CT_105.name().equals(flow.getCode());
+        boolean ok = flow != null && checkMinaderMinistry && FileTypeCode.CCT_CT_E_FSTP.equals(currentFile.getFileType().getCode()) && (FlowCode.FL_CT_07.name().equals(flow.getCode()) || FlowCode.FL_CT_112.name().equals(flow.getCode()));
+        return ok;
     }
 
     public boolean isPhytoTransitFile() {
@@ -6827,7 +7105,8 @@ public class FileItemCctDetailController implements Serializable {
             return false;
         }
         final String superFileType = fileFieldValue.getValue();
-        return checkMinaderMinistry && FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode()) && "2".equals(superFileType);
+        boolean ok = checkMinaderMinistry && FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode()) && "2".equals(superFileType);
+        return ok;
     }
 
     public boolean isPrintRelatedDecisions() {
@@ -6863,25 +7142,58 @@ public class FileItemCctDetailController implements Serializable {
         @SuppressWarnings("rawtypes")
         final Class classe = Class.forName(nomClasse);
         @SuppressWarnings({"rawtypes", "unchecked"})
-        Constructor c1;
         byte[] report = null;
+        Map<String, Object> forAnnexes = null;
         AbstractReportInvoker reportInvoker = null;
         if (checkMinaderMinistry) {
             String reportNumber = null;
-            if (draft){
+            if (draft) {
                 final ReportOrganism reportOrganism = reportOrganismService.findReportByFileTypeFlowReport(fileTypeFlowReport);
                 reportNumber = currentFile.getNumeroDemande()
-                    + "/" + java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)
-                    + ((reportOrganism != null && reportOrganism.getValue() != null) ? reportOrganism.getValue() : StringUtils.EMPTY);             
+                        + "/" + java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)
+                        + ((reportOrganism != null && reportOrganism.getValue() != null) ? reportOrganism.getValue() : StringUtils.EMPTY);
 
             }
             switch (currentFile.getFileType().getCode()) {
                 case CCT_CT_E: {
-                    c1 = classe.getConstructor(File.class, TreatmentInfos.class, String.class);
-                    final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
+                    ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(currentFileItem, FlowCode.FL_CT_07);
+                    if (itemFlow == null) {
+                        itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(currentFileItem, FlowCode.FL_CT_112);
+                    }
+                    if (itemFlow == null) {
+                        itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(currentFileItem, FlowCode.FL_CT_117);
+                    }
+
                     final TreatmentInfos ti = treatmentInfosService.findTreatmentInfosByItemFlow(itemFlow);
+                    if (ti == null || ti.getId() == null) {
+                        final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
+                                .getString("draftNotAllowedForReject");
+                        JsfUtil.addErrorMessage(msg);
+                        return null;
+                    }
+
+                    final ItemFlow itemFlow2 = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_08);
+
+                    CCTCPParamValue paramValue = cCTCPParamValueService.findCCTCPParamValueByItemFlow(itemFlow2);
+                    if (phytoEnd && paramValue == null) {
+                        paramValue = cCTCPParamValue;
+                    }
+                    if (paramValue == null) {
+                        paramValue = new CCTCPParamValue();
+                        fillCCTCPParamValue(paramValue);
+                    }
                     if (ti.getDelivrableType() == null || "CCT_CT_E".equals(ti.getDelivrableType())) {
-                        reportInvoker = (AbstractReportInvoker) c1.newInstance(currentFile, ti, "CERTIFICAT_PHYTOSANITAIRE");
+                        Map<String, Integer> count = countFileContainerAndPackage(currentFile);
+                        if (count.get(COUNT_GOODS) > paramValue.getMaxGoodsLineNumber()
+                                || count.get(COUNT_CONTAINERS) > paramValue.getMaxContainerNumber()
+                                || count.get(COUNT_PACKAGES) > paramValue.getMaxPackageNumber()) {
+                            forAnnexes = new HashMap();
+                            forAnnexes.put("ti", ti);
+                            forAnnexes.put("paramValue", paramValue);
+                            forAnnexes.put("fileNameAnnex", "CERTIFICAT_PHYTOSANITAIRE_ANNEXE");
+                        }
+                        reportInvoker = new CtCctCpEExporter(currentFile, ti, paramValue, "CERTIFICAT_PHYTOSANITAIRE");
+
                     } else if ("CQ_CT".equals(ti.getDelivrableType())) {
                         reportInvoker = new CtCctCqeExporter(currentFile, ti);
                     }
@@ -6890,11 +7202,11 @@ public class FileItemCctDetailController implements Serializable {
                 case CCT_CT_E_PVI: {
                     final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
                     final InspectionReport ir = inspectionReportService.findByItemFlow(itemFlow);
-                    if (draft){
+                    if (draft) {
                         reportInvoker = new CtPviExporter(ir, reportNumber);
                     } else {
                         reportInvoker = new CtPviExporter(ir);
-                    }                    
+                    }
                     break;
                 }
                 case CCT_CT_E_ATP:
@@ -6902,17 +7214,17 @@ public class FileItemCctDetailController implements Serializable {
                     final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
                     final TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
                     if (FileTypeCode.CCT_CT_E_ATP.equals(currentFile.getFileType().getCode())) {
-                        if (draft){
+                        if (draft) {
                             reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_ATP", tr, reportNumber);
                         } else {
                             reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_ATP", tr);
-                        }                        
+                        }
                     } else {
-                        if (draft){
+                        if (draft) {
                             reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_FSTP", tr, reportNumber);
                         } else {
                             reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_FSTP", tr);
-                        }                    
+                        }
                     }
                     break;
                 }
@@ -6934,7 +7246,154 @@ public class FileItemCctDetailController implements Serializable {
         if (reportInvoker != null) {
             reportInvoker.setDraft(draft);
             reportInvoker.setFileFieldValueService(fileFieldValueService);
-            report = JsfUtil.getReport(reportInvoker);
+            if (forAnnexes != null) {
+                JasperPrint page1 = JsfUtil.getReportJP(reportInvoker);
+                TreatmentInfos ti = (TreatmentInfos) forAnnexes.get("ti");
+                CCTCPParamValue paramValue = (CCTCPParamValue) forAnnexes.get("paramValue");
+                String fileAnnexName = (String) forAnnexes.get("fileNameAnnex");
+                CtCctCpEExporter exporter = new CtCctCpEExporter(currentFile, ti, paramValue, fileAnnexName);
+                exporter.setDraft(draft);
+                exporter.setFileFieldValueService(fileFieldValueService);
+                JasperPrint report2 = JsfUtil.getReportJP(exporter);
+
+                List<JasperPrint> inputStreams = new ArrayList<>();
+                inputStreams.add(page1);
+                inputStreams.add(report2);
+
+                report = JsfUtil.mergePdf(inputStreams);
+            } else {
+                report = JsfUtil.getReport(reportInvoker);
+            }
+        }
+        return report;
+    }
+
+    private byte[] getReportBytes(final File file, final FileTypeFlowReport fileTypeFlowReport, final boolean draft) throws Exception {
+        final String nomClasse = fileTypeFlowReport.getReportClassName();
+        @SuppressWarnings("rawtypes")
+        final Class classe = Class.forName(nomClasse);
+        @SuppressWarnings({"rawtypes", "unchecked"})
+//        Constructor c1;
+        Map<String, Object> forAnnexes = null;
+        byte[] report = null;
+        AbstractReportInvoker reportInvoker = null;
+        FileItem ffi = file.getFileItemsList().get(0);
+        if (checkMinaderMinistry) {
+            String reportNumber = null;
+            if (draft) {
+                final ReportOrganism reportOrganism = reportOrganismService.findReportByFileTypeFlowReport(fileTypeFlowReport);
+                reportNumber = file.getNumeroDemande()
+                        + "/" + java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)
+                        + ((reportOrganism != null && reportOrganism.getValue() != null) ? reportOrganism.getValue() : StringUtils.EMPTY);
+
+            }
+            switch (currentFile.getFileType().getCode()) {
+                case CCT_CT_E: {
+                    ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(ffi, FlowCode.FL_CT_07);
+                    if (itemFlow == null) {
+                        itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(ffi, FlowCode.FL_CT_112);
+                    }
+                    if (itemFlow == null) {
+                        itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(ffi, FlowCode.FL_CT_117);
+                    }
+                    final TreatmentInfos ti = treatmentInfosService.findTreatmentInfosByItemFlow(itemFlow);
+                    if (ti == null || ti.getId() == null) {
+                        final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
+                                .getString("draftNotAllowedForReject");
+                        JsfUtil.addErrorMessage(msg);
+                        return null;
+                    }
+                    ItemFlow itemFlow2 = itemFlowService.findItemFlowByFileItemAndFlow(file.getFileItemsList().get(0), FlowCode.FL_CT_08);
+                    if (itemFlow2 == null) {
+                        itemFlow2 = itemFlowService.findItemFlowByFileItemAndFlow(file.getFileItemsList().get(0), FlowCode.FL_CT_114);
+                    }
+                    CCTCPParamValue paramValue = cCTCPParamValueService.findCCTCPParamValueByItemFlow(itemFlow2);
+                    if (paramValue == null) {
+                        fillCCTCPParamValue(paramValue);
+                    }
+
+                    if (ti.getDelivrableType() == null || "CCT_CT_E".equals(ti.getDelivrableType())) {
+                        Map<String, Integer> count = countFileContainerAndPackage(file);
+                        if (count.get(COUNT_GOODS) > paramValue.getMaxGoodsLineNumber()
+                                || count.get(COUNT_CONTAINERS) > paramValue.getMaxContainerNumber()
+                                || count.get(COUNT_PACKAGES) > paramValue.getMaxPackageNumber()) {
+                            forAnnexes = new HashMap();
+                            forAnnexes.put("ti", ti);
+                            forAnnexes.put("paramValue", paramValue);
+                            forAnnexes.put("fileNameAnnex", "CERTIFICAT_PHYTOSANITAIRE_ANNEXE");
+                        }
+                        reportInvoker = new CtCctCpEExporter(file, ti, paramValue, "CERTIFICAT_PHYTOSANITAIRE");
+
+                    } else if ("CQ_CT".equals(ti.getDelivrableType())) {
+                        reportInvoker = new CtCctCqeExporter(file, ti);
+                    }
+                    break;
+                }
+                case CCT_CT_E_PVI: {
+                    final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(ffi, FlowCode.FL_CT_07);
+                    final InspectionReport ir = inspectionReportService.findByItemFlow(itemFlow);
+                    if (draft) {
+                        reportInvoker = new CtPviExporter(ir, reportNumber);
+                    } else {
+                        reportInvoker = new CtPviExporter(ir);
+                    }
+                    break;
+                }
+                case CCT_CT_E_ATP:
+                case CCT_CT_E_FSTP: {
+                    final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(ffi, FlowCode.FL_CT_07);
+                    final TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
+                    if (FileTypeCode.CCT_CT_E_ATP.equals(file.getFileType().getCode())) {
+                        if (draft) {
+                            reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_ATP", tr, reportNumber);
+                        } else {
+                            reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_ATP", tr);
+                        }
+                    } else {
+                        if (draft) {
+                            reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_FSTP", tr, reportNumber);
+                        } else {
+                            reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_FSTP", tr);
+                        }
+                    }
+                    break;
+                }
+            }
+
+        } else if (checkMinepiaMinistry) {
+            switch (currentFile.getFileType().getCode()) {
+                case CCT_CT: {
+                    if (approvedDecision == null) {
+                        lastDecisions = itemFlowService.findLastSentItemFlowByFileItem(selectedFileItemCheck.getFileItem());
+
+                        approvedDecision = approvedDecisionService.findApprovedDecisionByItemFlow(lastDecisions);
+                    }
+                    reportInvoker = new CtCctCsvExporter(file, loggedUser, approvedDecision);
+                    break;
+                }
+            }
+        }
+        if (reportInvoker != null) {
+            reportInvoker.setDraft(draft);
+            reportInvoker.setFileFieldValueService(fileFieldValueService);
+            if (forAnnexes != null) {
+                JasperPrint page1 = JsfUtil.getReportJP(reportInvoker);
+                TreatmentInfos ti = (TreatmentInfos) forAnnexes.get("ti");
+                CCTCPParamValue paramValue = (CCTCPParamValue) forAnnexes.get("paramValue");
+                String fileAnnexName = (String) forAnnexes.get("fileNameAnnex");
+                CtCctCpEExporter exporter = new CtCctCpEExporter(currentFile, ti, paramValue, fileAnnexName);
+                exporter.setDraft(draft);
+                exporter.setFileFieldValueService(fileFieldValueService);
+                JasperPrint report2 = JsfUtil.getReportJP(exporter);
+
+                List<JasperPrint> inputStreams = new ArrayList<>();
+                inputStreams.add(page1);
+                inputStreams.add(report2);
+
+                report = JsfUtil.mergePdf(inputStreams);
+            } else {
+                report = JsfUtil.getReport(reportInvoker);
+            }
         }
         return report;
     }
@@ -6966,7 +7425,7 @@ public class FileItemCctDetailController implements Serializable {
             final BufferedInputStream in = new BufferedInputStream(contentStream.getStream());
             final ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-            int val = -1;
+            int val;
             try {
                 while ((val = in.read()) != -1) {
                     out.write(val);
@@ -6992,6 +7451,14 @@ public class FileItemCctDetailController implements Serializable {
 
     public void setApprovedDecision(ApprovedDecision approvedDecision) {
         this.approvedDecision = approvedDecision;
+    }
+
+    public CCTCPParamValue getcCTCPParamValue() {
+        return cCTCPParamValue;
+    }
+
+    public void setcCTCPParamValue(CCTCPParamValue cCTCPParamValue) {
+        this.cCTCPParamValue = cCTCPParamValue;
     }
 
     private void fillApprovedDecision(ApprovedDecision approvedDecision) {
@@ -7078,12 +7545,233 @@ public class FileItemCctDetailController implements Serializable {
         }
     }
 
+    private void fillCCTCPParamValue(CCTCPParamValue cCTCPParamValue) {
+        Service uService = serviceService.findServiceByUser(getLoggedUser());
+        ParamCCTCP params = paramCCTCPService.findParamCCTCPByAdministration(uService);
+        if (params != null) {
+            cCTCPParamValue.setMaxContainerNumber(params.getMaxContainerNumber());
+            cCTCPParamValue.setMaxGoodsLineNumber(params.getMaxGoodsLineNumber());
+            cCTCPParamValue.setMaxPackageNumber(params.getMaxPackageNumber());
+            cCTCPParamValue.setLabelMore(params.getLabelAttachment());
+        } else {
+            params = paramCCTCPService.findParamCCTCPDefault();
+            if (params != null) {
+                cCTCPParamValue.setMaxContainerNumber(params.getMaxContainerNumber());
+                cCTCPParamValue.setMaxGoodsLineNumber(params.getMaxGoodsLineNumber());
+                cCTCPParamValue.setMaxPackageNumber(params.getMaxPackageNumber());
+                cCTCPParamValue.setLabelMore(params.getLabelAttachment());
+            } else {
+                //LOAD DEFAULT NOT REGISTERED VALUE HERE
+                cCTCPParamValue.setMaxContainerNumber(18);
+                cCTCPParamValue.setMaxGoodsLineNumber(6);
+                cCTCPParamValue.setMaxPackageNumber(6);
+                cCTCPParamValue.setLabelMore("Voir pièce jointe");
+            }
+        }
+
+        Map<String, Integer> count = countFileContainerAndPackage(currentFile);
+        cCTCPParamValue.setFileGoodsCountValue(count.get(COUNT_GOODS));
+        cCTCPParamValue.setFileContainerCountValue(count.get(COUNT_CONTAINERS));
+        cCTCPParamValue.setFilePackageCountValue(count.get(COUNT_PACKAGES));
+
+    }
+
     public boolean isMaskOfficialPosition() {
         return maskOfficialPosition;
     }
 
     public void setMaskOfficialPosition(boolean maskOfficialPosition) {
         this.maskOfficialPosition = maskOfficialPosition;
+    }
+
+    public TreatmentInfos populateTreatmentInfos(File tmpFile) {
+        TreatmentInfos treatInfo = new TreatmentInfos();
+        try {
+            ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(tmpFile.getFileItemsList().get(0), FlowCode.FL_CT_07);
+            if (itemFlow == null) {
+                itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(tmpFile.getFileItemsList().get(0), FlowCode.FL_CT_112);
+            }
+            if (itemFlow == null) {
+                itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(tmpFile.getFileItemsList().get(0), FlowCode.FL_CT_117);
+            }
+            TreatmentInfos tmp = treatmentInfosService.findTreatmentInfosByItemFlow(itemFlow);
+            if (tmp != null) {
+                treatInfo = (TreatmentInfos) BeanUtils.cloneBean(tmp);
+            }
+//            if (tmp == null){
+            // Load TreatmentInfos from FileField
+            final List<FileFieldValue> fileFieldValueList = tmpFile.getFileFieldValueList();
+            if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
+                for (final FileFieldValue fileFieldValue1 : fileFieldValueList) {
+                    switch (fileFieldValue1.getFileField().getCode()) {
+                        case "AUTRE_INFORMATION_DECLARATION_ADDITIONNELLE":
+                            treatInfo.setAdditionnalDeclaration(fileFieldValue1.getValue());
+                            break;
+                        case "AUTRE_INFORMATION_DATE_TRAITEMENT":
+                            treatInfo.setTreatmentDate(new SimpleDateFormat("dd/MM/yyyy").parse(fileFieldValue1.getValue()));
+                            break;
+                        case "AUTRE_INFORMATION_TYPE_TRAITEMENT":
+                            treatInfo.setTypeOfTreatment(fileFieldValue1.getValue());
+                            break;
+                        case "AUTRE_INFORMATION_DUREE_TRAITEMENT":
+                            treatInfo.setDuration(fileFieldValue1.getValue());
+                            break;
+                        case "AUTRE_INFORMATION_TEMPERATURE":
+                            treatInfo.setTemperature(fileFieldValue1.getValue());
+                            break;
+                        case "AUTRE_INFORMATION_TRAITEMENT_EFFECTUE":
+                            treatInfo.setTreatmentsCarriedOut(fileFieldValue1.getValue());
+                            break;
+                        case "AUTRE_INFORMATION_PRODUIT_CHIMIQUE":
+                            treatInfo.setChemicalProduct(fileFieldValue1.getValue());
+                            break;
+                        case "AUTRE_INFORMATION_CONCENTRATION":
+                            treatInfo.setConcentration(fileFieldValue1.getValue());
+                            break;
+                        case "AUTRE_INFORMATION_RENSEIGNEMENT_COMPLEMENTAIRE":
+                            treatInfo.setAdditionalInfos(fileFieldValue1.getValue());
+                            break;
+                        case "AUTRE_INFORMATION_FUMIGATION":
+                            treatInfo.setFumigation(Boolean.parseBoolean(fileFieldValue1.getValue()));
+                            break;
+                        case "AUTRE_INFORMATION_DESINFECTION":
+                            treatInfo.setDisinfection(Boolean.parseBoolean(fileFieldValue1.getValue()));
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+//            }
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+        }
+
+        return treatInfo;
+    }
+
+    public TreatmentInfos createTreatmentInfos() {
+        TreatmentInfos res;
+        res = populateTreatmentInfos(currentFile);
+//        if (res.getId() == null) {
+//            if (currentFile.getParent() != null) {
+//                res = populateTreatmentInfos(currentFile.getParent());
+//            }
+//        }
+        if (res.getId() != null) {
+            res.setId(null);
+            res.setItemFlow(null);
+        }
+        return res;
+
+    }
+
+    private Map<String, Integer> countFileContainerAndPackage(File file) {
+        Map<String, Integer> count = new HashMap<>();
+
+        count.put(COUNT_GOODS, 0);
+        count.put(COUNT_CONTAINERS, 0);
+        count.put(COUNT_PACKAGES, 0);
+
+        final List<FileItem> fileItemList = file.getFileItemsList();
+        count.put(COUNT_GOODS, fileItemList.size());
+        final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
+        if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
+            String containersNumbers = null;
+            String packageNumber = null;
+            for (final FileFieldValue fileFieldValue1 : fileFieldValueList) {
+                switch (fileFieldValue1.getFileField().getCode()) {
+                    case "INSPECTION_CONTENEURS_CONTENEUR":
+                        containersNumbers = fileFieldValue1.getValue();
+                        break;
+                    case "NUMEROS_LOTS":
+                        packageNumber = fileFieldValue1.getValue();
+                        break;
+                }
+            }
+            if (org.apache.commons.lang.StringUtils.isNotBlank(containersNumbers)) {
+                final String[] tab1 = containersNumbers.split(";");
+                final int size = tab1.length;
+                final int positionScelles = "Type".equalsIgnoreCase(tab1[0].split(",")[1]) ? 2 : 1;
+                final StringBuilder builder = new StringBuilder();
+                for (int i = 1; i < size; i++) {
+                    if (org.apache.commons.lang.StringUtils.isBlank(tab1[i])) {
+                        continue;
+                    }
+                    final String[] tab2 = tab1[i].split(",");
+                    builder.append(tab2[0]).append("/").append(tab2[positionScelles]).append(" ");
+                }
+                String containerNumbers[] = builder.substring(0, builder.lastIndexOf(" ")).split(" ");
+                count.put(COUNT_CONTAINERS, containerNumbers.length);
+            } else {
+                List<Container> containers = file.getContainers();
+                if (CollectionUtils.isNotEmpty(containers)) {
+                    count.put(COUNT_CONTAINERS, containers.size());
+                }
+            }
+            if (org.apache.commons.lang.StringUtils.isNotBlank(packageNumber)) {
+                String packagesNumbers[] = packageNumber.split(" ");
+                count.put(COUNT_PACKAGES, packagesNumbers.length);
+
+            }
+
+        }
+        return count;
+    }
+
+    public void setFilesList(Set<File> filesList) {
+        this.filesList = filesList;
+    }
+
+    public boolean canDecide() {
+        return true;
+//        if (currentFile.getAssignedUser() == null) {
+//            return true;
+//        }
+//
+//        if (CollectionUtils.isNotEmpty(filesList)) {
+//            return filesList.contains(currentFile);
+//        }
+//
+//        if (comeFromSearch) {
+//            List<FileItem> items = Utils.getItems(userAuthorityFileTypeService, fileItemService, getLoggedUser(), null);
+//            Set<File> files = Utils.extractFilesFormItems(items);
+//            return files.contains(currentFile);
+//        }
+//
+//        return false;
+    }
+
+    public boolean canRollback() {
+        return true;
+//        if (decided) {
+//            decided = false;
+//            return true;
+//        }
+//
+//        ItemFlow itemFlow = currentFileItem.getItemFlowsList().get(0);
+//        return loggedUser.equals(itemFlow.getSender());
+    }
+
+    public boolean canProcess() {
+        return true;
+//        return filesList.contains(currentFile);
+    }
+
+    public List<Container> getContainers() {
+        return currentFile.getContainers();
+    }
+
+    public CotationService getCotationService() {
+        return cotationService;
+    }
+
+    public void setCotationService(CotationService cotationService) {
+        this.cotationService = cotationService;
+    }
+
+    public boolean isPhyto() {
+        return checkMinaderMinistry && Arrays.asList(FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI).contains(currentFile.getFileType().getCode());
     }
 
 }

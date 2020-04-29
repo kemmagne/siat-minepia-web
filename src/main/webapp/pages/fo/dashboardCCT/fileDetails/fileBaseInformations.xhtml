@@ -1,0 +1,43 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+    <br />
+
+    <h:form id="fileBaseInformationsForm">
+
+        <p:accordionPanel rendered="#{fileItemCctDetailController.currentFile.parent != null}">
+
+            <p:tab title="#{bundle['FileBaseLabel']}" dynamic="true" cache="true" titleStyleClass="titleColor">
+                <h:panelGrid styleClass="remindDecision" columns="2" columnClasses="labelColumnLeft, labelColumnRight" cellspacing="4">
+                    <h:outputLabel value="#{bundle['GUCEFileNumber']}" title="#{bundle['GUCEFileNumber']}" />
+                    <h:outputLabel
+                        value="#{fileItemCctDetailController.currentFile.parent.numeroDossier}" />
+                    
+                    <h:outputLabel value="#{bundle['SIATFileNumber']}" title="#{bundle['SIATFileNumber']}" />
+                    <h:outputLabel
+                        value="#{fileItemCctDetailController.currentFile.parent.referenceSiat}" />
+                    
+                    <h:outputLabel value="#{bundle['signatoryDate']}" title="#{bundle['signatoryDate']}" />
+                    <h:outputLabel
+                        value="#{fileItemCctDetailController.currentFile.parent.signatureDate}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputLabel>
+                                     
+                    
+                    <h:outputLabel value="#{bundle['signatory']}" title="#{bundle['signatory']}" />
+                    <h:outputLabel
+                        value="#{fileItemCctDetailController.currentFile.parent.signatory != null ? fileItemCctDetailController.currentFile.parent.signatory.firstName : ''} #{fileItemCctDetailController.currentFile.parent.signatory != null ? fileItemCctDetailController.currentFile.parent.signatory.lastName : ''}" />
+                    
+                </h:panelGrid>  
+                <p:commandButton ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" id="baseReporting"
+                                             value="#{bundle['BouttonGenerateReport']}" >
+                    <p:fileDownload value="#{fileItemCctDetailController.downloadReferenceBaseReport(false)}" />
+                </p:commandButton>
+                
+            </p:tab>
+
+        </p:accordionPanel>
+
+    </h:form>
+
+</ui:composition>

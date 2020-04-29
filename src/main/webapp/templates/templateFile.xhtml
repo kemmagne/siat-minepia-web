@@ -1,63 +1,63 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://primefaces.org/ui" 	 xmlns:pe="http://primefaces.org/ui/extensions">
+      xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions">
 
 
-<h:head>
+    <h:head>
 
-	<title><ui:insert name="title">Siat Default Title</ui:insert> v#{globalBean.appVersion} </title>
+        <title><ui:insert name="title">Siat Default Title</ui:insert> v#{globalBean.appVersion} </title>
 
-	<link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.request.contextPath}/css/style.css" />
-	<link rel="stylesheet" type="text/css"
-		href="#{facesContext.externalContext.request.contextPath}/css/#{not empty accountSetupController.loggedUser ? accountSetupController.loggedUser.theme.code : (not empty accountSetupController.cookieTheme ? accountSetupController.cookieTheme :'color-blue' )}.css" />
-	<link rel="shortcut icon" href="#{facesContext.externalContext.request.contextPath}/images/icons/cameroon_flag.ico" type="image/x-icon" />
-	
-	
-</h:head>
+        <link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.request.contextPath}/css/style.css" />
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.request.contextPath}/css/#{not empty accountSetupController.loggedUser ? accountSetupController.loggedUser.theme.code : (not empty accountSetupController.cookieTheme ? accountSetupController.cookieTheme :'color-blue' )}.css" />
+        <link rel="shortcut icon" href="#{facesContext.externalContext.request.contextPath}/images/icons/cameroon_flag.ico" type="image/x-icon" />
 
-<h:body styleClass="bLogonImage">
 
-	<p:growl id="growl" for="growl" autoUpdate="false" life="5000" />
+    </h:head>
 
-	<div id="header">
-		<ui:insert name="header">
-			<ui:include src="/pages/common/commonHeader.xhtml" />
-		</ui:insert>
-	</div>
+    <h:body styleClass="bLogonImage">
 
-	<div id="content" class="clearfix content-body">
-		<ui:insert name="body" />
-	</div>
+        <p:growl id="growl" for="growl" autoUpdate="false" life="5000" />
 
-	<div id="footer">
-		<ui:insert name="footer">
-			<ui:include src="/pages/common/commonFooter.xhtml" />
-		</ui:insert>
-	</div>
-<pe:blockUI widgetVar="statusDialog1"  > 
+        <div id="header">
+            <ui:insert name="header">
+                <ui:include src="/pages/common/commonHeader.xhtml" />
+            </ui:insert>
+        </div>
 
-    <h:panelGrid columns="2" style="width:400px;">  
-        <h:graphicImage library="img" name="ajax-loader1.gif"  
-                        style="margin-right: 12px; vertical-align: middle;"/>  
-        <h:outputText  value="#{bundle['Ajax_loader']}" style="white-space: nowrap; font-size:20px"/>  
-    </h:panelGrid>  
-  </pe:blockUI> 
-  <script type="text/javascript" src="#{facesContext.externalContext.request.contextPath}/js/script.js" />
+        <div id="content" class="clearfix content-body">
+            <ui:insert name="body" />
+        </div>
 
-	<script type="text/javascript" src="#{facesContext.externalContext.request.contextPath}/js/highcharts.js" />
-	<script type="text/javascript" src="#{facesContext.externalContext.request.contextPath}/js/modules/exporting.js" />
-	<script type="text/javascript" src="#{facesContext.externalContext.request.contextPath}/js/calendar.js" />
-	  <script type="text/javascript">
-			function start() {
-				PF('statusDialog1').block();
-			}
-	
-			function stop() {
-				PF('statusDialog1').unblock();
-			}
-		</script>
-	
-</h:body>
+        <div id="footer">
+            <ui:insert name="footer">
+                <ui:include src="/pages/common/commonFooter.xhtml" />
+            </ui:insert>
+        </div>
+        <pe:blockUI widgetVar="statusDialog1"  >
+
+            <h:panelGrid columns="2" style="width:400px;">
+                <h:graphicImage library="img" name="ajax-loader1.gif"
+                                style="margin-right: 12px; vertical-align: middle;"/>
+                <h:outputText  value="#{bundle['Ajax_loader']}" style="white-space: nowrap; font-size:20px"/>
+            </h:panelGrid>
+        </pe:blockUI>
+        <script type="text/javascript" src="#{facesContext.externalContext.request.contextPath}/js/script.js" />
+
+        <script type="text/javascript" src="#{facesContext.externalContext.request.contextPath}/js/highcharts.js" />
+        <script type="text/javascript" src="#{facesContext.externalContext.request.contextPath}/js/modules/exporting.js" />
+        <script type="text/javascript" src="#{facesContext.externalContext.request.contextPath}/js/calendar.js" />
+        <script type="text/javascript">
+            function start() {
+                PF('statusDialog1').block();
+            }
+
+            function stop() {
+                PF('statusDialog1').unblock();
+            }
+        </script>
+
+    </h:body>
 
 </html>

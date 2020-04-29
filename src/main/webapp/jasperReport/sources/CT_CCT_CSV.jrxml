@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="file" language="groovy" pageWidth="595" pageHeight="842" columnWidth="585" leftMargin="5" rightMargin="5" topMargin="5" bottomMargin="5" uuid="28078ea8-15af-47d5-9f91-aa95db5f187e">
 	<property name="ireport.zoom" value="1.272292855117456"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="192"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<style name="table">
 		<box>
@@ -672,7 +671,7 @@
 						<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<text><![CDATA[1.13 CITES permit No(No dpermis CITES)]]></text>
+					<text><![CDATA[1.13 CITES permit No(No de permis CITES)]]></text>
 				</staticText>
 				<textField>
 					<reportElement x="278" y="34" width="261" height="12" uuid="e6a4016c-e1da-42dc-ac40-1c0bb5fbf4fc"/>
@@ -1013,7 +1012,7 @@
 				</textField>
 				<textField>
 					<reportElement x="3" y="19" width="317" height="33" uuid="f05b797c-71c0-4a53-a766-44a743f917d6"/>
-					<textElement verticalAlignment="Middle" markup="none">
+					<textElement verticalAlignment="Top" markup="none">
 						<font size="8"/>
 					</textElement>
 					<textFieldExpression><![CDATA[($F{cvsIdContainersSeals}!= null && $F{cvsIdContainersSeals}.trim().length()>0 ? $F{cvsIdContainersSeals} : "-")]]></textFieldExpression>

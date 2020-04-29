@@ -146,6 +146,10 @@
                             <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.approvedDecision}">
                                 <ui:include src="../specificDecisions/dcc/dccHistory.xhtml" />
                             </h:panelGroup>
+                            
+                            <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.cCTCPParamValue}">
+                                <ui:include src="../specificDecisions/cctCp/cctCpHistory.xhtml" />
+                            </h:panelGroup>
                         </p:panel>
 
                     </h:panelGroup>

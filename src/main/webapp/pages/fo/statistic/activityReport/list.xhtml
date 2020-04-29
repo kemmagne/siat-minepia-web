@@ -1,0 +1,93 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+	<p:panel header="#{bundle['fileItemDesicionSearch_result']}">
+
+
+		<h:form id="filtredFileItemListForm">
+
+			<h:panelGrid columns="2">
+				<h:commandLink action="#{exporter.exportPDF(table, 'ACTIVITY_REPORT')}">
+					<h:outputText styleClass="sprite sprite-pdf" />
+				</h:commandLink>
+
+				<h:commandLink>
+					<h:graphicImage styleClass="sprite sprite-pdf" library="img" name="excel.png"
+						style="width: 34px;height: 34px;display: block;	top: 15px;	right: 52px;position: absolute;" />
+					<p:dataExporter type="xls" target="datalist" fileName="#{bundle['fileItemDesicionSearch_result']}" />
+				</h:commandLink>
+			</h:panelGrid>
+			<br />
+
+                        <p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable" value="#{statisticController.activityReportDataList}"
+				filteredValue="" var="activity" rows="5" paginator="true" rowsPerPageTemplate="5,10,20"
+				emptyMessage="#{bundle['AucuneResultat']}"
+				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{bundle['processName']}" title="#{bundle['processName']}" />
+					</f:facet>
+                                    <h:outputText value="#{activity.processName}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{bundle['fileReceivedCount']}" title="#{bundle['fileReceivedCount']}" />
+					</f:facet>
+                                    <h:outputText value="#{activity.fileReceivedCount}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{bundle['fileSignedCount']}" title="#{bundle['fileSignedCount']}" />
+					</f:facet>
+                                    <h:outputText value="#{activity.fileSignedCount}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{bundle['fileReceivedSignedCount']}" title="#{bundle['fileReceivedSignedCount']}" />
+					</f:facet>
+                                    <h:outputText value="#{activity.fileReceivedSignedCount}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{bundle['fileRejectedCount']}" title="#{bundle['fileRejectedCount']}" />
+					</f:facet>
+                                    <h:outputText value="#{activity.fileRejectedCount}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{bundle['fileReceivedRejectedCount']}" title="#{bundle['fileReceivedRejectedCount']}" />
+					</f:facet>
+                                    <h:outputText value="#{activity.fileReceivedRejectedCount}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{bundle['filePendingCount']}" title="#{bundle['filePendingCount']}" />
+					</f:facet>
+                                    <h:outputText value="#{activity.filePendingCount}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{bundle['officeCode']}" title="#{bundle['officeCode']}" />
+					</f:facet>
+                                    <h:outputText value="#{activity.officeCode}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{bundle['officeLabel']}" title="#{bundle['officeLabel']}" />
+					</f:facet>
+                                    <h:outputText value="#{activity.officeLabel}" />
+				</p:column>
+
+				
+
+			</p:dataTable>
+
+		</h:form>
+
+	</p:panel>
+
+</ui:composition>

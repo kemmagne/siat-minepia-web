@@ -114,7 +114,7 @@ public class UserController extends AbstractController<User> {
      * The all posts affected notification message.
      */
     private static final String ALL_POSTS_AFFECTED_NOTIF_MSG = "CreateUser_NotifPostsAffected";
-    
+
     private static final String DEFAULT_STRING_PASSWORD = "12345678";
 
     /**
@@ -348,7 +348,7 @@ public class UserController extends AbstractController<User> {
                             CREATE_SIAT_ACCOUNT_MAIL_SUBJECT);
 
                     final String templateFileName = localeFileTemplate(WELCOME_MAIL_BODY, getCurrentLocale().getLanguage());
-                    Map<String, String> map = new HashMap<String, String>();
+                    Map<String, String> map = new HashMap<>();
                     map = prepareMap(subject, mailService.getFromValue(), selected, radomPassword, templateFileName);
                     mailService.sendMail(map);
                     resetAttributes();
@@ -401,28 +401,37 @@ public class UserController extends AbstractController<User> {
             this.setSelected(userService.find(getSelected().getId()));
         }
         if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ADMIN_ORGANISME.getCode())) {
-            if (PositionType.SOUS_DIRECTEUR.equals(selected.getPosition())) {
-                selectedsSubDepartment = (SubDepartment) selected.getAdministration();
-            } else if (PositionType.CHEF_SERVICE.equals(selected.getPosition())) {
-                selectedService = (Service) selected.getAdministration();
-                selectedsSubDepartment = selectedService.getSubDepartment();
-            } else if (PositionType.AGENT.equals(selected.getPosition()) || PositionType.CHEF_BUREAU.equals(selected.getPosition())
-                    || PositionType.OBSERVATEUR.equals(selected.getPosition())) {
-                selectedEntity = (Entity) selected.getAdministration();
-                selectedService = selectedEntity.getService();
-                selectedsSubDepartment = selectedService.getSubDepartment();
-                if (this.selected != null && (PositionType.AGENT.equals(selected.getPosition())
-                        || PositionType.OBSERVATEUR.equals(selected.getPosition()))) {
-                    userAdministrationHierarchy = this.getAdministrationHierarchy(selected.getAdministration());
+            if (null != selected.getPosition()) {
+                switch (selected.getPosition()) {
+                    case SOUS_DIRECTEUR:
+                        selectedsSubDepartment = (SubDepartment) selected.getAdministration();
+                        break;
+                    case CHEF_SERVICE:
+                        selectedService = (Service) selected.getAdministration();
+                        selectedsSubDepartment = selectedService.getSubDepartment();
+                        break;
+                    case AGENT:
+                    case CHEF_BUREAU:
+                    case OBSERVATEUR:
+                        selectedEntity = (Entity) selected.getAdministration();
+                        selectedService = selectedEntity.getService();
+                        selectedsSubDepartment = selectedService.getSubDepartment();
+                        if (this.selected != null && (PositionType.AGENT.equals(selected.getPosition())
+                                || PositionType.OBSERVATEUR.equals(selected.getPosition()))) {
+                            userAdministrationHierarchy = this.getAdministrationHierarchy(selected.getAdministration());
+                        }
+                        break;
+                    default:
+                        break;
                 }
             }
         }
-        fileTypeAutorityDatas = new ArrayList<List<FileTypeAutorityData>>();
+        fileTypeAutorityDatas = new ArrayList<>();
         userAuthFileTypes = userAuthorityFileTypeService.getFileTypeAndAuthorityByUser(selected);
         fileTypeList = fileTypeService.findFileTypeByMinistry(getCurrentMinistry());
         authoritiesList = authorityService.findDistinctAutoritiesByPosition(selected.getPosition());
         for (final FileType fileType : fileTypeList) {
-            final List<FileTypeAutorityData> innerList = new ArrayList<FileTypeAutorityData>();
+            final List<FileTypeAutorityData> innerList = new ArrayList<>();
             for (final Authority authority : authoritiesList) {
                 boolean matched = false;
                 for (final UserAuthorityFileType userAuthorityFileType : userAuthFileTypes) {
@@ -445,8 +454,8 @@ public class UserController extends AbstractController<User> {
      * Fill user authority file type.
      */
     private void fillUserAuthorityFileType() {
-        userAuthFileTypes = new ArrayList<UserAuthorityFileType>();
-        final Set<UserAuthority> authorities = new HashSet<UserAuthority>();
+        userAuthFileTypes = new ArrayList<>();
+        final Set<UserAuthority> authorities = new HashSet<>();
         for (final List<FileTypeAutorityData> vos : fileTypeAutorityDatas) {
             for (final FileTypeAutorityData fileTypeAutorityVo : vos) {
                 if (fileTypeAutorityVo.isChecked()) {
@@ -467,21 +476,20 @@ public class UserController extends AbstractController<User> {
         userAuthorities.addAll(authorities);
         selected.setUserAuthorityList(userAuthorities);
     }
-    
-    public void resetPassword(){
-        if (selected != null){
+
+    public void resetPassword() {
+        if (selected != null) {
             try {
                 selected.setPassword(DEFAULT_STRING_PASSWORD);
                 userService.updateUser(selected);
                 userService.update(selected);
-            } catch (Exception e){
+            } catch (Exception e) {
                 LOG.error(null, e);
                 JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
                         "ResetPasswordError"));
-            } 
+            }
         }
     }
-    
 
     /**
      * Edits the.
@@ -669,12 +677,12 @@ public class UserController extends AbstractController<User> {
      * Init the file type authority data.
      */
     private void initFileTypeAuthorityDatas() {
-        fileTypeAutorityDatas = new ArrayList<List<FileTypeAutorityData>>();
+        fileTypeAutorityDatas = new ArrayList<>();
         if (selected.getPosition() != null) {
             authoritiesList = authorityService.findDistinctAutoritiesByPosition(selected.getPosition());
         }
         for (final FileType fileType : fileTypeList) {
-            final List<FileTypeAutorityData> innerList = new ArrayList<FileTypeAutorityData>();
+            final List<FileTypeAutorityData> innerList = new ArrayList<>();
             if (authoritiesList != null) {
                 for (final Authority authority : authoritiesList) {
                     innerList.add(new FileTypeAutorityData(authority, fileType, false));
@@ -688,7 +696,7 @@ public class UserController extends AbstractController<User> {
      * Handle position changed.
      */
     public void positionChangedHandler() {
-        subDepartmentsItems = new ArrayList<SelectItem>();
+        subDepartmentsItems = new ArrayList<>();
         userAdministrationHierarchy = new ArrayList<>();
 
         if (this.selected != null && !PositionType.DIRECTEUR.equals(this.selected.getPosition())) {
@@ -709,11 +717,11 @@ public class UserController extends AbstractController<User> {
      * Sub department changed handler.
      */
     public void subDepartmentChangedHandler() {
-        servicesItems = new ArrayList<SelectItem>();
+        servicesItems = new ArrayList<>();
 
         if (this.selectedsSubDepartment != null && !PositionType.DIRECTEUR.equals(this.selected.getPosition())
                 && !PositionType.SOUS_DIRECTEUR.equals(this.selected.getPosition())) {
-            List<Service> services = null;
+            List<Service> services;
             if (PositionType.CHEF_SERVICE.equals(this.selected.getPosition())) {
                 services = serviceService.findNonAffectedServicesBySubDepartment(selectedsSubDepartment);
             } else {
@@ -730,7 +738,7 @@ public class UserController extends AbstractController<User> {
      * Service changed handler.
      */
     public void serviceChangedHandler() {
-        entitiesItems = new ArrayList<SelectItem>();
+        entitiesItems = new ArrayList<>();
 
         if (selectedService != null
                 && (PositionType.CHEF_BUREAU.equals(selected.getPosition()) || PositionType.AGENT.equals(selected.getPosition()) || PositionType.OBSERVATEUR
@@ -760,7 +768,7 @@ public class UserController extends AbstractController<User> {
      * @return the positions list for filter
      */
     private List<PositionType> getPositionsListForFilter() {
-        final List<PositionType> positionsList = new ArrayList<PositionType>();
+        final List<PositionType> positionsList = new ArrayList<>();
         if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ADMIN_ORGANISME.getCode())) {
             if (!organismService.hasDirectorAffected(getCurrentOrganism())) {
                 positionsList.add(PositionType.DIRECTEUR);
@@ -807,7 +815,9 @@ public class UserController extends AbstractController<User> {
      * @return the authorities list for filter
      */
     private List<AuthorityConstants> getAuthoritiesListForFilter() {
-        final List<AuthorityConstants> authoritiesListForFilter = new ArrayList<AuthorityConstants>();
+
+        final List<AuthorityConstants> authoritiesListForFilter = new ArrayList<>();
+
         authoritiesListForFilter.add(AuthorityConstants.AGENT_RECEVABILITE);
         authoritiesListForFilter.add(AuthorityConstants.INSPECTEUR);
         authoritiesListForFilter.add(AuthorityConstants.CONTROLEUR);
@@ -823,12 +833,14 @@ public class UserController extends AbstractController<User> {
         authoritiesListForFilter.add(AuthorityConstants.AGENT_COTATION_6);
         authoritiesListForFilter.add(AuthorityConstants.SUPERVISEUR);
         authoritiesListForFilter.add(AuthorityConstants.CONSULTER);
+        authoritiesListForFilter.add(AuthorityConstants.STATISTIQUE);
+        authoritiesListForFilter.add(AuthorityConstants.GESTION_AGENTS);
 
         return authoritiesListForFilter;
     }
 
     private List<Administration> getAdministrationHierarchy(Administration a) {
-        List<Administration> adms = new ArrayList<Administration>();
+        List<Administration> adms = new ArrayList<>();
         adms.add(a);
         if (a instanceof Organism) {
             adms.addAll(getAdministrationHierarchy(((Organism) a).getMinistry()));
@@ -1084,7 +1096,7 @@ public class UserController extends AbstractController<User> {
      */
     public List<SelectItem> getSubDepartmentsItems() {
         if (subDepartmentsItems == null) {
-            subDepartmentsItems = new ArrayList<SelectItem>();
+            subDepartmentsItems = new ArrayList<>();
         }
         return subDepartmentsItems;
     }
@@ -1096,7 +1108,7 @@ public class UserController extends AbstractController<User> {
      */
     public List<SelectItem> getServicesItems() {
         if (servicesItems == null) {
-            servicesItems = new ArrayList<SelectItem>();
+            servicesItems = new ArrayList<>();
         }
         return servicesItems;
     }
@@ -1108,7 +1120,7 @@ public class UserController extends AbstractController<User> {
      */
     public List<SelectItem> getEntitiesItems() {
         if (entitiesItems == null) {
-            entitiesItems = new ArrayList<SelectItem>();
+            entitiesItems = new ArrayList<>();
         }
         return entitiesItems;
     }
@@ -1158,4 +1170,3 @@ public class UserController extends AbstractController<User> {
     }
 
 }
-

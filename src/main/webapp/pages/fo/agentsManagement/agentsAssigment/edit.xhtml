@@ -1,0 +1,55 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" >
+    <ui:composition>
+
+        <h:form id="userEditForm">
+
+            <p:panel id="userEditPanel" rendered="#{not empty agentsManagementController.selected and not empty agentsManagementController.selected.id}"
+                     widgetVar="userEditPanelWidget" resizable="false" header="#{bundle['EditUserAssigmentTitle']}">
+                <h:panelGroup id="display" styleClass="userPage">
+
+                    <p:panelGrid columns="6">
+
+                        <p:outputLabel value="#{bundle['UserLabel_login']}" for="user_login" />
+                        <p:inputText id="user_login" value="#{agentsManagementController.selected.login}" readonly="true" />
+
+                        <p:outputLabel value="#{bundle['UserLabel_lastName']}" for="user_lastName" />
+                        <p:inputText id="user_lastName" value="#{agentsManagementController.selected.lastName}" readonly="true" />
+
+                        <p:outputLabel value="#{bundle['EditUserLabel_telephone']}" for="user_telephone" />
+                        <p:inputText id="user_telephone" value="#{agentsManagementController.selected.telephone}" readonly="true" />
+                    </p:panelGrid>
+
+                    <p:dataTable id="userProductType" styleClass="usercreate"
+                                 widgetVar="userProductTypeWV" var="row" value="#{agentsManagementController.singletonList}">
+
+                        <p:columns var="column" value="#{agentsManagementController.productTypes}" headerText="#{column.label}" columnIndexVar="colIdx">
+                            <p:selectBooleanCheckbox value="#{agentsManagementController.productTypeDatas.get(0).get(colIdx).checked}" />
+                        </p:columns>
+                    </p:dataTable>
+
+                    <p:blockUI block="userProductType" trigger="editBtn">
+                        <p:graphicImage styleClass="loading" value="/images/ajax-loader.gif" />
+                    </p:blockUI>
+
+                    <br />
+
+                    <div class="btn-bloc">
+                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editBtn"
+                                         actionListener="#{agentsManagementController.edit}" value="#{bundle['Save']}"
+                                         update=":agentsAssigmentForm:datalist :userEditForm display :growl" />
+
+                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="cancelBtn"
+                                         value="#{bundle['Cancel']}" immediate="true" process="@this" update="@form :agentsAssigmentForm:datalist"
+                                         actionListener="#{agentsManagementController.resetForm}">
+                            <p:resetInput target="userEditForm" />
+                        </p:commandButton>
+                    </div>
+
+                </h:panelGroup>
+
+            </p:panel>
+
+        </h:form>
+
+    </ui:composition>
+</html>

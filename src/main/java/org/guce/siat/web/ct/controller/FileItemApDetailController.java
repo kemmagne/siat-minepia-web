@@ -18,12 +18,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -51,6 +53,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.guce.siat.common.data.FieldGroupDto;
 import org.guce.siat.common.data.ItemFlowDto;
 import org.guce.siat.common.mail.MailConstants;
@@ -559,7 +562,7 @@ public class FileItemApDetailController implements Serializable {
     /**
      * The field groups items.
      */
-    private List<FieldGroup> fieldGroupsItems = new ArrayList<FieldGroup>();
+    private List<FieldGroup> fieldGroupsItems = new ArrayList<>();
     /**
      * The file field group dtos.
      */
@@ -827,7 +830,7 @@ public class FileItemApDetailController implements Serializable {
      */
     private static final List<FileTypeCode> PROCESS_ALLOWING_DECISION_AT_COTATION_STEP = Arrays.asList(FileTypeCode.VTD_MINSANTE, FileTypeCode.VTP_MINSANTE,
             FileTypeCode.AI_MINSANTE, FileTypeCode.AT_MINSANTE, FileTypeCode.AE_MINADER, FileTypeCode.AE_MINMIDT, FileTypeCode.AIE_MINADER, FileTypeCode.AI_MINMIDT, FileTypeCode.AS_MINADER,
-            FileTypeCode.AS_MINFOF, FileTypeCode.AS_MINCOMMERCE, FileTypeCode.AT_MINEPIA, FileTypeCode.VT_MINEPIA, FileTypeCode.VT_MINEPDED, FileTypeCode.CP_MINEPDED);
+            FileTypeCode.AS_MINFOF, FileTypeCode.AS_MINCOMMERCE, FileTypeCode.AT_MINEPIA, FileTypeCode.VT_MINEPIA, FileTypeCode.CP_MINEPDED);
     /**
      * The transaction manager.
      */
@@ -1027,7 +1030,7 @@ public class FileItemApDetailController implements Serializable {
                     //Pour la Retreive Seulement une seule decision
                     if (FileTypeCode.BSBE_MINFOF.equals(currentFile.getFileType().getCode())) {
                         flows = flowService.findFlowsByFromStepAndFileType2(referenceFileItem.getStep(), referenceFileItem
-                                    .getFile().getFileType());
+                                .getFile().getFileType());
                         if (!CollectionUtils.isEmpty(flows)) {
                             for (Flow elt : flows) {
                                 final FileTypeFlow fileTypeFlow = fileTypeFlowService.findByFlowAndFileType(currentFile.getFileType(), elt);
@@ -1164,7 +1167,7 @@ public class FileItemApDetailController implements Serializable {
             final BufferedInputStream in = new BufferedInputStream(contentStream.getStream());
             final ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-            int val = -1;
+            int val;
             try {
                 while ((val = in.read()) != -1) {
                     out.write(val);
@@ -1200,7 +1203,7 @@ public class FileItemApDetailController implements Serializable {
         final BufferedInputStream in = new BufferedInputStream(contentStream.getStream());
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        int val = -1;
+        int val;
         try {
             while ((val = in.read()) != -1) {
                 out.write(val);
@@ -1413,8 +1416,8 @@ public class FileItemApDetailController implements Serializable {
 
             // Ici, on va remplir la liste des flow qui vont apparaitre dans la view Decision ainsi setter les variable boolean pour l'affichage des button
             if (stepListByFileType != null && stepListByFileType.contains(currentStep) && currentStep.getFromStepFlowsList() != null) {
-                destinationFlowsFromCurrentStep = new ArrayList<Flow>();
-                destinationFlowsFromCurrentCotationStep = new ArrayList<Flow>();
+                destinationFlowsFromCurrentStep = new ArrayList<>();
+                destinationFlowsFromCurrentCotationStep = new ArrayList<>();
                 returnAllowed = false;
                 acceptationFlowFound = false;
                 for (final Flow flow : currentStep.getFromStepFlowsList()) {
@@ -1442,7 +1445,7 @@ public class FileItemApDetailController implements Serializable {
                                 && Arrays.asList(FlowCode.FL_AP_155.name(), FlowCode.FL_AP_156.name(), FlowCode.FL_AP_157.name(),
                                         FlowCode.FL_AP_158.name(), FlowCode.FL_AP_159.name()).contains(flow.getCode())) {
 //							destinationFlowsFromCurrentStep = Collections.singletonList(flow);
-                            destinationFlowsFromCurrentStep = new ArrayList<Flow>();
+                            destinationFlowsFromCurrentStep = new ArrayList<>();
                             if (fileTypeFlow != null || !bsbeMinfofFileType) {
                                 destinationFlowsFromCurrentStep.add(flow);
                             }
@@ -1641,10 +1644,15 @@ public class FileItemApDetailController implements Serializable {
 
             paymentData.setPaymentItemFlowList(new ArrayList<PaymentItemFlow>());
             for (final FileItem fi : currentFile.getFileItemsList()) {
-                paymentData.getPaymentItemFlowList().add(new PaymentItemFlow(false, fi.getId()));
+                paymentData.getPaymentItemFlowList().add(new PaymentItemFlow(false, fi.getId(), fi.getNsh()));
             }
         }
         for (final DataType dataType : selectedFlow.getDataTypeList()) {
+
+            if (BooleanUtils.toBoolean(dataType.getDisabled())) {
+                continue;
+            }
+
             final FacesContext context = FacesContext.getCurrentInstance();
 
             if (dataType.getId() != null) {
@@ -1734,7 +1742,7 @@ public class FileItemApDetailController implements Serializable {
             }
         }
 
-        vtTypeSelectionViewable = FileTypeCode.VT_MINEPDED.equals(currentFile.getFileType().getCode()) && FlowCode.FL_AP_104.name().equals(selectedFlow.getCode());
+        vtTypeSelectionViewable = FileTypeCode.VT_MINEPDED.equals(currentFile.getFileType().getCode()) && (FlowCode.FL_AP_104.name().equals(selectedFlow.getCode()) || FlowCode.FL_AP_106.name().equals(selectedFlow.getCode()));
         vtTypeFileField = !vtTypeSelectionViewable ? null : fileFieldService.findFileFieldByCodeAndFileType(ControllerConstants.TYPE_OF_TECHNICAL_VISA, FileTypeCode.VT_MINEPDED);
 
         //Acceptation Suite Etude_3 AP EH Minader (affichage des formulaire : analyse result and test result)
@@ -1775,15 +1783,25 @@ public class FileItemApDetailController implements Serializable {
      */
     public void paymentAmoutValueChangedListener() {
         invoiceTotalAmount = 0L;
-        invoiceTotalTtcAmount = 0L;
         Long totalTva = 0L;
-        for (final PaymentItemFlow pi : paymentData.getPaymentItemFlowList()) {
-            invoiceTotalAmount += pi.getMontantHt() != null ? pi.getMontantHt() : 0;
-            invoiceTotalAmount += invoiceOtherAmount != null ? invoiceOtherAmount : 0;
-            invoiceTotalTtcAmount += invoiceTotalAmount;
-            invoiceTotalTtcAmount += pi.getMontantTva() != null ? pi.getMontantTva() : 0;
-            totalTva += pi.getMontantTva() != null ? pi.getMontantTva() : 0;
+        for (PaymentItemFlow pi : paymentData.getPaymentItemFlowList()) {
+            if (pi.getMontantHt() == null) {
+                pi.setMontantHt(0L);
+            }
+            if (pi.getMontantTva() == null) {
+                pi.setMontantTva(0L);
+            }
+
+            invoiceTotalAmount += pi.getMontantHt();
+            totalTva += pi.getMontantTva();
         }
+
+        if (invoiceOtherAmount == null) {
+            invoiceOtherAmount = 0L;
+        }
+
+        invoiceTotalTtcAmount = invoiceTotalAmount + totalTva + invoiceOtherAmount;
+
         paymentData.setMontantHt(invoiceTotalAmount);
         paymentData.setMontantTva(totalTva);
         paymentData.setAutreMontant(invoiceOtherAmount);
@@ -1856,7 +1874,7 @@ public class FileItemApDetailController implements Serializable {
      * Load product history list.
      */
     private void loadProductHistoryList() {
-        itemFlowHistoryDtoList = new ArrayList<ItemFlowDto>();
+        itemFlowHistoryDtoList = new ArrayList<>();
         final List<ItemFlow> itemFlowHistoryList = itemFlowService.findItemFlowByFileItem(selectedFileItem);
         //final List<FileItem> itemstepHistoryList = fileItemService.findFileItemsByFile(selectedFileItem.getFile());
 
@@ -1918,17 +1936,13 @@ public class FileItemApDetailController implements Serializable {
                     ControllerConstants.Bundle.Messages.HISTORY_DURATION_LESS_THAN_HOUR));
         } else {
             if (days > 0) {
-                duration.append(days
-                        + " "
-                        + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                                ControllerConstants.Bundle.Messages.HISTORY_DURATION_DAYS) + ", ");
+                duration.append(days).append(" ").append(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
+                        ControllerConstants.Bundle.Messages.HISTORY_DURATION_DAYS)).append(", ");
             }
 
             if (hours > 0) {
-                duration.append(hours
-                        + " "
-                        + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                                ControllerConstants.Bundle.Messages.HISTORY_DURATION_HOURS));
+                duration.append(hours).append(" ").append(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
+                        ControllerConstants.Bundle.Messages.HISTORY_DURATION_HOURS));
             }
         }
         return duration.toString();
@@ -1995,6 +2009,11 @@ public class FileItemApDetailController implements Serializable {
             final List<ItemFlowData> flowDatas = new ArrayList<>();
 
             for (final DataType dataType : selectedFlow.getDataTypeList()) {
+
+                if (BooleanUtils.toBoolean(dataType.getDisabled())) {
+                    continue;
+                }
+
                 final ItemFlowData itemFlowData = new ItemFlowData();
                 itemFlowData.setDataType(dataType);
                 final boolean isFimex = currentFile.getFileType().getCode().equals(FileTypeCode.FIMEX_WF)
@@ -2100,6 +2119,11 @@ public class FileItemApDetailController implements Serializable {
 
         flowDatas = new ArrayList<>();
         for (final DataType dataType : selectedFlow.getDataTypeList()) {
+
+            if (BooleanUtils.toBoolean(dataType.getDisabled())) {
+                continue;
+            }
+
             final ItemFlowData itemFlowData = new ItemFlowData();
             itemFlowData.setDataType(dataType);
 
@@ -2189,8 +2213,17 @@ public class FileItemApDetailController implements Serializable {
 
         userListToAffectedFileCotation = userAuthorityFileTypeService.findUserByFileTypeAndStepAuthorities(
                 currentFile.getFileType(), selectedFlow.getToStep(), currentFile, getLoggedUser());
+        Set<User> users = new HashSet<>();
+        for (User user : userListToAffectedFileCotation) {
+            users.add(user);
+        }
+        userListToAffectedFileCotation = new ArrayList<>(users);
 
         for (final DataType dataType : selectedFlow.getDataTypeList()) {
+
+            if (BooleanUtils.toBoolean(dataType.getDisabled())) {
+                continue;
+            }
 
             final FacesContext context = FacesContext.getCurrentInstance();
             if (dataType.getId() != null) {
@@ -2307,7 +2340,7 @@ public class FileItemApDetailController implements Serializable {
                         //generate report
                         Map<String, byte[]> attachedByteFiles = null;
                         try {
-                            String reportNumber = StringUtils.EMPTY;
+                            String reportNumber;
                             if (FlowCode.FL_AP_107.name().equals(flowToSend.getCode()) || FlowCode.FL_AP_169.name().equals(flowToSend.getCode()) || FlowCode.FL_AP_202.name().equals(flowToSend.getCode())) {
                                 ItemFlow decisionFlow = null;
                                 if (currentFile.getFileType().getCode().equals(FileTypeCode.VTP_MINSANTE)) {
@@ -2808,7 +2841,7 @@ public class FileItemApDetailController implements Serializable {
         selectedRecommandation = new Recommandation();
 
         authorityList = fileTypeService.findAuthoritiesByFileType(currentFile.getFileType());
-        authoritiesList = new DualListModel<Authority>(new ArrayList<Authority>(), new ArrayList<Authority>());
+        authoritiesList = new DualListModel<>(new ArrayList<Authority>(), new ArrayList<Authority>());
         authoritiesList.getSource().addAll(authorityList);
     }
 
@@ -2820,7 +2853,7 @@ public class FileItemApDetailController implements Serializable {
 
         authorityList = fileTypeService.findAuthoritiesByFileType(currentFile.getFileType());
 
-        authoritiesList = new DualListModel<Authority>(new ArrayList<Authority>(), new ArrayList<Authority>());
+        authoritiesList = new DualListModel<>(new ArrayList<Authority>(), new ArrayList<Authority>());
         authoritiesList.getSource().addAll(authorityList);
 
         for (final RecommandationAuthority recAuthority : this.getSelectedRecommandation().getAuthorizedAuthorityList()) {
@@ -2838,7 +2871,7 @@ public class FileItemApDetailController implements Serializable {
      * Refresh recommandation list.
      */
     public void refreshRecommandationList() {
-        recommandationList = recommandationService.findRecommandationByFileAndAuthorties(currentFile, (new ArrayList<Authority>(
+        recommandationList = recommandationService.findRecommandationByFileAndAuthorties(currentFile, (new ArrayList<>(
                 getLoggedUser().getAuthorities())));
     }
 
@@ -2966,7 +2999,7 @@ public class FileItemApDetailController implements Serializable {
         selectedRecommandationArticle = new Recommandation();
 
         authorityList = fileTypeService.findAuthoritiesByFileType(currentFile.getFileType());
-        authoritiesList = new DualListModel<Authority>(new ArrayList<Authority>(), new ArrayList<Authority>());
+        authoritiesList = new DualListModel<>(new ArrayList<Authority>(), new ArrayList<Authority>());
         authoritiesList.getSource().addAll(authorityList);
     }
 
@@ -2978,7 +3011,7 @@ public class FileItemApDetailController implements Serializable {
 
         authorityList = fileTypeService.findAuthoritiesByFileType(currentFile.getFileType());
 
-        authoritiesList = new DualListModel<Authority>(new ArrayList<Authority>(), new ArrayList<Authority>());
+        authoritiesList = new DualListModel<>(new ArrayList<Authority>(), new ArrayList<Authority>());
         authoritiesList.getSource().addAll(authorityList);
 
         for (final RecommandationAuthority recAuthority : this.getSelectedRecommandationArticle().getAuthorizedAuthorityList()) {
@@ -2997,7 +3030,7 @@ public class FileItemApDetailController implements Serializable {
      */
     public void refreshRecommandationArticleList() {
         recommandationArticleList = recommandationService.findRecommandationByFileItemAndAuthorties(selectedFileItem,
-                (new ArrayList<Authority>(getLoggedUser().getAuthorities())));
+                (new ArrayList<>(getLoggedUser().getAuthorities())));
     }
 
     /**
@@ -3122,7 +3155,7 @@ public class FileItemApDetailController implements Serializable {
         final List<String> authorityTypes = getLoggedUser().getAuthoritiesList();
         Boolean authorizeUser = Boolean.FALSE;
         for (final Authority stepAut : selectedFileItem.getStep().getRoleList()) {
-            User assignedUser = null;
+            User assignedUser;
             if (selectedFileItem != null) {
                 assignedUser = selectedFileItem.getFile().getAssignedUser();
             } else {
@@ -3166,12 +3199,12 @@ public class FileItemApDetailController implements Serializable {
         if (fieldGroupsItems.isEmpty()) {
             fieldGroupsItems = fieldGroupService.findAllByFileType(currentFile.getFileType(), "02");
         }
-        fileItemFieldGroupDtos = new ArrayList<FieldGroupDto<FileItemFieldValue>>();
+        fileItemFieldGroupDtos = new ArrayList<>();
         for (final FieldGroup fieldGroupItem : fieldGroupsItems) {
-            final FieldGroupDto<FileItemFieldValue> fileItemFieldGroupDto = new FieldGroupDto<FileItemFieldValue>();
+            final FieldGroupDto<FileItemFieldValue> fileItemFieldGroupDto = new FieldGroupDto<>();
             fileItemFieldGroupDto.setLabelFr(fieldGroupItem.getLabelFr());
             fileItemFieldGroupDto.setLabelEn(fieldGroupItem.getLabelEn());
-            final List<FileItemFieldValue> listFileItemFieldValues = new ArrayList<FileItemFieldValue>();
+            final List<FileItemFieldValue> listFileItemFieldValues = new ArrayList<>();
             for (final FileItemFieldValue fileItemFieldValue : fileItemFieldValues) {
                 if (fileItemFieldValue.getFileItemField().getGroup() != null
                         && fieldGroupItem.getId().equals(fileItemFieldValue.getFileItemField().getGroup().getId())) {
@@ -3318,6 +3351,9 @@ public class FileItemApDetailController implements Serializable {
     private void checkGenerateReportAllowed() {
         generateReportAllowed = false;
         final Flow reportingFlow = flowService.findByToStep(selectedFileItem.getStep());
+        if (reportingFlow == null) {
+            return;
+        }
         final List<FileTypeFlowReport> fileTypeFlowReportsList = reportingFlow.getFileTypeFlowReportsList();
 
         if (StepCode.ST_AP_44.name().equals(selectedFileItem.getStep().getStepCode().name())
@@ -5125,7 +5161,7 @@ public class FileItemApDetailController implements Serializable {
         } else {
 
             final Administration administration = administrationService.find(file.getBureau().getId());
-            final List<Administration> adminList = new ArrayList<Administration>();
+            final List<Administration> adminList = new ArrayList<>();
             adminList.add(administration);
 
             // get the bureaus  for the administration of the logged user and their delegator users

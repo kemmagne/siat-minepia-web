@@ -1,18 +1,15 @@
 package org.guce.siat.web.reports.exporter;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import net.sf.jasperreports.engine.JRParameter;
 
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
 import org.guce.siat.common.model.File;
 import org.guce.siat.common.model.FileFieldValue;
 import org.guce.siat.common.model.FileItem;
@@ -71,7 +68,11 @@ public class VtMinepdedExporter extends AbstractReportInvoker {
 
         if ((file != null)) {
             vtMinepdedVo.setFileCreationDate(file.getCreatedDate());
-            vtMinepdedVo.setDecisionDate(file.getSignatureDate());
+            Date decisionDate = file.getSignatureDate();
+            if (decisionDate == null) {
+                decisionDate = file.getLastDecisionDate();
+            }
+            vtMinepdedVo.setDecisionDate(decisionDate);
             String numeroFacture = null;
             vtMinepdedVo.setInvoice(numeroFacture);
             vtMinepdedVo.setCountryOfOrigin(null != file.getCountryOfOrigin() ? file.getCountryOfOrigin().getCountryName() : null);

@@ -49,7 +49,11 @@
     <p:panel rendered="#{fileItemCctDetailController.checkMinaderMinistry and fileItemCctDetailController.currentFile.fileType.code eq 'CCT_CT_E_ATP'}">
 
         <h:panelGrid columns="2">
-
+            <h:outputLabel value="#{bundle['TreatmentResultDateLabel']} : " />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.treatmentDate}" >
+                <f:convertDateTime pattern="dd/MM/yyyy" />
+            </h:outputLabel>
+            
             <h:outputLabel value="#{bundle['TreatmentType']}" />
             <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.treatmentType}" />
 

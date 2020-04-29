@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -12,12 +11,14 @@
 
     <artifactId>siat-ct-web</artifactId>
     <packaging>war</packaging>
+    <version>2.2.36-beta.1</version>
+
     <name>siat-ct-web</name>
-    <version>2.2.17</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <resource.dir>src/main/resources</resource.dir>
+        <java.version>1.7</java.version>
     </properties>
 
     <distributionManagement>
@@ -38,13 +39,14 @@
             <id>profile-ht</id>
             <properties>
                 <environment>ht</environment>
-                <db.username>siat_ct</db.username>
+                <db.username>SIAT_CT</db.username>
                 <db.password>siat</db.password>
-                <db.url>jdbc:oracle:thin:@agserver:1521:GUCE</db.url>
+                <db.url>jdbc:oracle:thin:@htserver:1521:GUCE</db.url>
                 <!--d-->
                 <database.maxConnectionsPerPartition>10</database.maxConnectionsPerPartition>
                 <database.minConnectionsPerPartition>2</database.minConnectionsPerPartition>
                 <database.partitionCount>2</database.partitionCount>
+                <database.acquireIncrement>3</database.acquireIncrement>
                 <!--d-->
                 <ged.url>http://gedurl:8080</ged.url>
                 <jms.url>failover:(tcp://brokerurl:61616)</jms.url>
@@ -55,25 +57,25 @@
                 <uri.out>SIAT</uri.out>
                 <uri.dead.in>direct:dead</uri.dead.in>
                 <uri.dead.out>amq:deadQueue</uri.dead.out>
-                <ebxml.folder>/root/siat/eguce/ebxml</ebxml.folder>
-                <xml.folder>/root/siat/eguce/xml</xml.folder>
-                <attachement.folder>/root/siat/eguce/attachement</attachement.folder>
+                <ebxml.folder>/opt/glassfish/data/siat/eguce/ebxml</ebxml.folder>
+                <xml.folder>/opt/glassfish/data/siat/eguce/xml</xml.folder>
+                <attachement.folder>/opt/glassfish/data/siat/eguce/attachement</attachement.folder>
                 <hibernate.default_schema>SIAT_CT</hibernate.default_schema>
                 <jms.username>admin</jms.username>
                 <jms.password>admin</jms.password>
-                <mailSender.host>smtp.gmail.com</mailSender.host>
-                <mailSender.port>587</mailSender.port>
-                <mailSender.username>guce.technical.notifier</mailSender.username>
-                <mailSender.password>P@ssword2015</mailSender.password>
-                <mailSender.from>guce.technical.notifier@gmail.com</mailSender.from>
-                <mailSender.replyTo>hycient.forum@gmail.com</mailSender.replyTo>
+                <mailSender.host>thehost</mailSender.host>
+                <mailSender.port>25</mailSender.port>
+                <mailSender.username>siat@guce-lu-cameroun.org</mailSender.username>
+                <mailSender.password>s1@t</mailSender.password>
+                <mailSender.from>siat@guce-lu-cameroun.org</mailSender.from>
+                <mailSender.replyTo></mailSender.replyTo>
                 <!--new-->
                 <webservice.url>http://thehost:9759/orchestra/privacy/siat/messageService/ebxml</webservice.url>
-                <messages.folder>/data/glassfish/siat/eguce/messages/ct</messages.folder>
-                <mails.folder>/data/glassfish/siat/eguce/mails/ct</mails.folder>
+                <messages.folder>/opt/glassfish/data/siat/eguce/messages/ct</messages.folder>
+                <mails.folder>/opt/glassfish/data/siat/eguce/mails/ct</mails.folder>
             </properties>
             <activation>
-                <activeByDefault>false</activeByDefault>
+                <activeByDefault>true</activeByDefault>
                 <property>
                     <name>environment</name>
                     <value>ht</value>
@@ -91,6 +93,7 @@
                 <database.maxConnectionsPerPartition>10</database.maxConnectionsPerPartition>
                 <database.minConnectionsPerPartition>2</database.minConnectionsPerPartition>
                 <database.partitionCount>2</database.partitionCount>
+                <database.acquireIncrement>3</database.acquireIncrement>
                 <!--d-->
                 <ged.url>http://gedurl:17483</ged.url>
                 <jms.url>failover:(tcp://brokerurl:61616)</jms.url>
@@ -132,10 +135,13 @@
                 <db.username>siat_ct</db.username>
                 <db.password>siat</db.password>
                 <db.url>jdbc:oracle:thin:@yserver:1521:XE</db.url>
+                <!--<db.url>jdbc:oracle:thin:@siat-prod-bd:1528:SIAT</db.url>-->
+                <!--<db.url>jdbc:oracle:thin:@guce.test:1518:GUCETEST</db.url>-->
                 <!--d-->
                 <database.maxConnectionsPerPartition>10</database.maxConnectionsPerPartition>
                 <database.minConnectionsPerPartition>2</database.minConnectionsPerPartition>
                 <database.partitionCount>2</database.partitionCount>
+                <database.acquireIncrement>3</database.acquireIncrement>
                 <!--d-->
                 <ged.url>http://yserver:8080</ged.url>
                 <jms.url>failover:(tcp://brokerurl:61616)</jms.url>
@@ -176,11 +182,17 @@
         <profile>
             <id>profile-lyd</id>
             <properties>
-                <environment>dev</environment>
+                <environment>lyd</environment>
                 <db.username>siat_ct</db.username>
                 <db.password>siat</db.password>
+                <!--d-->
+                <database.maxConnectionsPerPartition>10</database.maxConnectionsPerPartition>
+                <database.minConnectionsPerPartition>2</database.minConnectionsPerPartition>
+                <database.partitionCount>2</database.partitionCount>
+                <database.acquireIncrement>3</database.acquireIncrement>
+                <!--d-->
                 <!--<db.url>jdbc:oracle:thin:@test:1518:GUCETEST</db.url>-->
-                <db.url>jdbc:oracle:thin:@vm:1521:GUCE</db.url>
+                <db.url>jdbc:oracle:thin:@vm:1521:xe</db.url>
                 <ged.url>http://gedurl:17483</ged.url>
                 <jms.url>failover:(tcp://brokerurl:61616)</jms.url>
                 <version>${application.version}</version>
@@ -190,9 +202,9 @@
                 <uri.out>SIAT</uri.out>
                 <uri.dead.in>direct:dead</uri.dead.in>
                 <uri.dead.out>amq:deadQueue</uri.dead.out>
-                <ebxml.folder>d:/Developement/GUCE/eGuce/ebxml</ebxml.folder>
-                <xml.folder>d:/Developement/GUCE/eGuce/xml</xml.folder>
-                <attachement.folder>d:/Developement/GUCE/eGuce/attachement</attachement.folder>
+                <ebxml.folder>d:/Development/GUCE/eGuce/ebxml</ebxml.folder>
+                <xml.folder>d:/Development/GUCE/eGuce/xml</xml.folder>
+                <attachement.folder>d:/Development/GUCE/eGuce/attachment</attachement.folder>
                 <hibernate.default_schema>SIAT_CT</hibernate.default_schema>
                 <jms.username>admin</jms.username>
                 <jms.password>admin</jms.password>
@@ -208,6 +220,7 @@
                 <mails.folder>/data/glassfish/siat/eguce/mails/ct</mails.folder>
             </properties>
             <activation>
+                <!--<activeByDefault>true</activeByDefault>-->
                 <property>
                     <name>environment</name>
                     <value>lyd</value>
@@ -226,6 +239,7 @@
                 <database.maxConnectionsPerPartition>10</database.maxConnectionsPerPartition>
                 <database.minConnectionsPerPartition>2</database.minConnectionsPerPartition>
                 <database.partitionCount>2</database.partitionCount>
+                <database.acquireIncrement>3</database.acquireIncrement>
                 <!--d-->
                 <!-- <ged.url>http://172.24.2.134:8080</ged.url> -->
                 <ged.url>http://siat-ged:8080</ged.url>
@@ -273,6 +287,7 @@
                 <database.maxConnectionsPerPartition>50</database.maxConnectionsPerPartition>
                 <database.minConnectionsPerPartition>20</database.minConnectionsPerPartition>
                 <database.partitionCount>4</database.partitionCount>
+                <database.acquireIncrement>10</database.acquireIncrement>
                 <!--d-->
                 <ged.url>http://siat-ged:8080</ged.url>
                 <jms.url>failover:(tcp://siat-esb0:61618,tcp://siat-esb1:61618)</jms.url>
@@ -319,6 +334,7 @@
                 <database.maxConnectionsPerPartition>10</database.maxConnectionsPerPartition>
                 <database.minConnectionsPerPartition>2</database.minConnectionsPerPartition>
                 <database.partitionCount>2</database.partitionCount>
+                <database.acquireIncrement>3</database.acquireIncrement>
                 <!--d-->
                 <ged.url>http://siat-ged:18080</ged.url>
                 <jms.url>failover:(tcp://siat-esb0:61618)</jms.url>
@@ -423,7 +439,7 @@
         <dependency>
             <groupId>com.lowagie</groupId>
             <artifactId>itext</artifactId>
-            <version>2.1.0</version>
+            <version>2.1.7.js2</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -439,7 +455,7 @@
         <dependency>
             <groupId>org.guce.siat</groupId>
             <artifactId>siat-ct-core</artifactId>
-            <version>2.2.6</version>
+            <version>2.2.19-beta.1</version>
         </dependency>
 
         <dependency>
@@ -473,7 +489,7 @@
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
-            <version>5.6.0</version>
+            <version>6.1.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>commons-collections</groupId>
@@ -487,9 +503,20 @@
             <version>6.0.0</version>
         </dependency>
         <dependency>
+            <groupId>ar.com.fdvs</groupId>
+            <artifactId>DynamicJasper-core-fonts</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
             <version>2.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.6</version>
+            <type>jar</type>
         </dependency>
     </dependencies>
 
@@ -497,14 +524,21 @@
         <finalName>siat-ct-web</finalName>
         <plugins>
             <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <encoding>ISO-8859-1</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.7.0</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                    <testSource>1.7</testSource>
-                    <testTarget>1.7</testTarget>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <testSource>${java.version}</testSource>
+                    <testTarget>${java.version}</testTarget>
                 </configuration>
             </plugin>
             <plugin>
