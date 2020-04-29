@@ -3228,15 +3228,17 @@ public class FileItemCctDetailController implements Serializable {
                         }
                     }
 
-                    Flow f = selectedFlow;
-                    if (f == null) {
-                        f = itemFlowService.findLastItemFlowByFileItem(productInfoItems.get(0)).getFlow();
-                    }
-                    List<Flow> list = flowService.findAdmissibilityValidationFlows(currentFile);
-                    for (Flow f1 : list) {
-                        if (f1.getCode().equals(f.getCode())) {
-                            cotationService.dispatch(currentFile, loggedUser, f);
-                            break;
+                    if (isPhyto()) {
+                        Flow f = selectedFlow;
+                        if (f == null) {
+                            f = itemFlowService.findLastItemFlowByFileItem(productInfoItems.get(0)).getFlow();
+                        }
+                        List<Flow> list = flowService.findAdmissibilityValidationFlows(currentFile);
+                        for (Flow f1 : list) {
+                            if (f1.getCode().equals(f.getCode())) {
+                                cotationService.dispatch(currentFile, f);
+                                break;
+                            }
                         }
                     }
 
