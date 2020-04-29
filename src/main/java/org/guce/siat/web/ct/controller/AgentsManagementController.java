@@ -75,7 +75,7 @@ public class AgentsManagementController extends AbstractController<User> {
 
         try {
             initAgentsAssigment();
-            goTo(ControllerConstants.Pages.FO.AGENTS_ASSIGNMENT_PAGE);
+            goTo(ControllerConstants.Pages.BO.AGENTS_ASSIGNMENT_PAGE);
         } catch (final IOException ioe) {
             LOG.error(ioe.getMessage(), ioe);
         }

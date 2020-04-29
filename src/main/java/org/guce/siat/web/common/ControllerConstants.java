@@ -192,6 +192,8 @@ public interface ControllerConstants {
              */
             String GUCE_SIAT_OFFICES_PAGE = "/pages/bo/bureauGuceSiat/bureauGuceSiatCellEditor.xhtml";
 
+            String AGENTS_ASSIGNMENT_PAGE = "/pages/bo/agentsManagement/agentsAssigment/index.xhtml";
+
             /**
              * The Interface GR.
              */
@@ -299,8 +301,6 @@ public interface ControllerConstants {
              * The search sample by laboratory.
              */
             String SEARCH_SAMPLE_BY_LABORATORY = "/pages/fo/statistic/sampleByLab/index.xhtml";
-
-            String AGENTS_ASSIGNMENT_PAGE = "/pages/fo/agentsManagement/agentsAssigment/index.xhtml";
 
             /**
              * The SEARC h_ analys e_ b y_l aboratory.
