@@ -463,13 +463,13 @@ public class LoginBean implements Serializable {
             paymentRender = Boolean.TRUE;
         }
 
-        if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.GESTION_AGENTS.getCode())) {
-            sessionMap.put("apRendred", false);
-            sessionMap.put("cctRendred", false);
-            apRendred = Boolean.FALSE;
-            cctRendred = Boolean.FALSE;
-            paymentRender = Boolean.FALSE;
-        }
+//        if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.GESTION_AGENTS.getCode())) {
+//            sessionMap.put("apRendred", false);
+//            sessionMap.put("cctRendred", false);
+//            apRendred = Boolean.FALSE;
+//            cctRendred = Boolean.FALSE;
+//            paymentRender = Boolean.FALSE;
+//        }
     }
 
     /**
