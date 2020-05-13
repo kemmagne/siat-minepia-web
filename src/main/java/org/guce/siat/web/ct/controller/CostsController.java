@@ -9,7 +9,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -301,7 +300,7 @@ public class CostsController extends AbstractController<PaymentData> implements 
                 }
             }
 
-            if (isPhyto() && flowService.findBeforeCotationStepFlows(currentFile).contains(flowToExecute)) {
+            if (isPhyto()) {
                 cotationService.dispatch(currentFile, flowToExecute);
             }
             transactionManager.commit(status);
