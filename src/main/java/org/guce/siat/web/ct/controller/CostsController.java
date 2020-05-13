@@ -38,12 +38,14 @@ import org.guce.siat.common.model.Attachment;
 import org.guce.siat.common.model.CopyRecipient;
 import org.guce.siat.common.model.File;
 import org.guce.siat.common.model.Flow;
+import org.guce.siat.common.model.ItemFlow;
 import org.guce.siat.common.service.AttachmentService;
 import org.guce.siat.common.service.EbxmlPropertiesService;
 import org.guce.siat.common.service.FileItemService;
 import org.guce.siat.common.service.FileProducer;
 import org.guce.siat.common.service.FileService;
 import org.guce.siat.common.service.FlowService;
+import org.guce.siat.common.service.ItemFlowService;
 import org.guce.siat.common.service.XmlConverterService;
 import static org.guce.siat.common.service.impl.AlfrescoDirectoryCreatorImpl.SLASH;
 import org.guce.siat.common.utils.Constants;
@@ -53,6 +55,7 @@ import org.guce.siat.common.utils.enums.FlowCode;
 import org.guce.siat.common.utils.ged.CmisSession;
 import org.guce.siat.common.utils.ged.CmisUtils;
 import org.guce.siat.core.ct.model.PaymentData;
+import org.guce.siat.core.ct.service.CotationService;
 import org.guce.siat.core.ct.service.PaymentDataService;
 import org.guce.siat.core.utils.SendDocumentUtils;
 import org.guce.siat.web.common.AbstractController;
@@ -109,6 +112,12 @@ public class CostsController extends AbstractController<PaymentData> implements 
     private PaymentData currentPaymentData;
 
     /**
+     * The item flow service.
+     */
+    @ManagedProperty(value = "#{itemFlowService}")
+    private ItemFlowService itemFlowService;
+
+    /**
      * The payment data service.
      */
     @ManagedProperty(value = "#{paymentDataService}")
@@ -138,6 +147,9 @@ public class CostsController extends AbstractController<PaymentData> implements 
     @ManagedProperty(value = "#{transactionManager}")
     private PlatformTransactionManager transactionManager;
 
+    @ManagedProperty(value = "#{cotationService}")
+    private CotationService cotationService;
+
     /**
      * The xml converter service.
      */
@@ -158,15 +170,7 @@ public class CostsController extends AbstractController<PaymentData> implements 
     @ManagedProperty(value = "#{attachmentService}")
     private AttachmentService attachmentService;
 
-    private static final CharsetEncoder asciiEncoder
-            = Charset.forName("US-ASCII").newEncoder(); // or "ISO-8859-1" for ISO Latin 1
-
-    /**
-     * Instantiates a new costs controller.
-     */
-    public CostsController() {
-
-    }
+    private static final CharsetEncoder ASCII_ENCODER = Charset.forName("US-ASCII").newEncoder(); // or "ISO-8859-1" for ISO Latin 1
 
     /**
      * Inits the.
@@ -185,7 +189,7 @@ public class CostsController extends AbstractController<PaymentData> implements 
     /**
      * Validate payment.
      */
-    public void validatePayment() throws IOException {
+    public synchronized void validatePayment() throws IOException {
 
         // Check if the step of fileItems was changed by another user when the decision popup is open
         if (fileItemService.verifyStepChangedWhileDecisionInProgress(currentFile.getFileItemsList())) {
@@ -212,7 +216,6 @@ public class CostsController extends AbstractController<PaymentData> implements 
         }
         sendPayment();
         returnToPaymentView();
-
     }
 
     /**
@@ -225,8 +228,11 @@ public class CostsController extends AbstractController<PaymentData> implements 
         final TransactionStatus status = transactionManager.getTransaction(def);
         try {
             Flow flowToExecute;
-            if (Arrays.asList(FileTypeCode.CCT_CT, FileTypeCode.CCT_CT_E, FileTypeCode.CC_CT, FileTypeCode.CQ_CT).contains(
-                    currentFile.getFileType().getCode())) {
+            if (Arrays.asList(FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP).contains(currentFile.getFileType().getCode())) {
+                flowToExecute = flowService.findFlowByCode(FlowCode.FL_CT_123.name());
+            } else if (Arrays.asList(FileTypeCode.CCT_CT_E_PVI, FileTypeCode.CCT_CT_E_FSTP).contains(currentFile.getFileType().getCode())) {
+                flowToExecute = flowService.findFlowByCode(FlowCode.FL_CT_126.name());
+            } else if (Arrays.asList(FileTypeCode.CCT_CT, FileTypeCode.CC_CT, FileTypeCode.CQ_CT).contains(currentFile.getFileType().getCode())) {
                 flowToExecute = flowService.findFlowByCode(FlowCode.FL_CT_93.name());
             } else {
                 if (currentFile.getFileType().getCode().equals(FileTypeCode.PIVPSRP_MINADER)) {
@@ -237,16 +243,18 @@ public class CostsController extends AbstractController<PaymentData> implements 
             }
 
             paymentDataService.takeDecisionForPayment(currentFile, getLoggedUser(), flowToExecute, currentPaymentData);
+            List<ItemFlow> lastItemFlows = itemFlowService.findLastItemFlowsByFileItemList(currentFile.getFileItemsList());
             // convert file to document
             final String service = StringUtils.EMPTY;
             final String documentType = StringUtils.EMPTY;
-            final Serializable documentSerializable = xmlConverterService.convertFileToDocument(currentFile,
-                    Collections.singletonList(currentPaymentData.getPaymentItemFlowList().get(0).getItemFlow().getFileItem()),
-                    Collections.singletonList(currentPaymentData.getPaymentItemFlowList().get(0).getItemFlow()), flowToExecute);
+            final Serializable documentSerializable = xmlConverterService.convertFileToDocument(currentFile, currentFile.getFileItemsList(), lastItemFlows, flowToExecute);
             byte[] xmlBytes;
             // prepare document to send
-            if (Arrays.asList(FileTypeCode.CCT_CT, FileTypeCode.CCT_CT_E, FileTypeCode.CC_CT, FileTypeCode.CQ_CT).contains(
-                    currentFile.getFileType().getCode())) {
+            if (isPhyto()) {
+                try (final ByteArrayOutputStream output = SendDocumentUtils.preparePaymentDocument(documentSerializable, service, documentType)) {
+                    xmlBytes = output.toByteArray();
+                }
+            } else if (Arrays.asList(FileTypeCode.CCT_CT, FileTypeCode.CC_CT, FileTypeCode.CQ_CT).contains(currentFile.getFileType().getCode())) {
                 try (final ByteArrayOutputStream output = SendDocumentUtils.prepareCctDocument(documentSerializable, service, documentType)) {
                     xmlBytes = output.toByteArray();
                 }
@@ -256,10 +264,8 @@ public class CostsController extends AbstractController<PaymentData> implements 
                 }
             }
 
-            if (CollectionUtils.isNotEmpty(currentPaymentData.getPaymentItemFlowList().get(0).getItemFlow().getFlow()
-                    .getCopyRecipientsList())) {
-                final List<CopyRecipient> copyRecipients = currentPaymentData.getPaymentItemFlowList().get(0).getItemFlow().getFlow()
-                        .getCopyRecipientsList();
+            if (CollectionUtils.isNotEmpty(currentPaymentData.getPaymentItemFlowList().get(0).getItemFlow().getFlow().getCopyRecipientsList())) {
+                final List<CopyRecipient> copyRecipients = currentPaymentData.getPaymentItemFlowList().get(0).getItemFlow().getFlow().getCopyRecipientsList();
                 for (final CopyRecipient copyRecipient : copyRecipients) {
                     LOG.info("SEND COPY RECIPIENT TO {}", copyRecipient.getToAuthority().getRole());
                     final Map<String, Object> data = new HashMap<>();
@@ -271,13 +277,32 @@ public class CostsController extends AbstractController<PaymentData> implements 
                     data.put(ESBConstants.EBXML_TYPE, "STANDARD");
                     data.put(ESBConstants.TO_PARTY_ID, copyRecipient.getToAuthority().getRole());
                     data.put(ESBConstants.DEAD, "0");
-                    data.put(ESBConstants.ITEM_FLOWS, currentPaymentData.getPaymentItemFlowList().get(0).getItemFlow().getFlow().getItemsFlowsList());
+                    data.put(ESBConstants.ITEM_FLOWS, lastItemFlows);
                     fileProducer.sendFile(data);
                     if (LOG.isDebugEnabled()) {
                         LOG.debug("Message sent to OUT queue");
                     }
-
                 }
+            } else if (isPhyto()) {
+                final Map<String, Object> data = new HashMap<>();
+                data.put(ESBConstants.FLOW, xmlBytes);
+                data.put(ESBConstants.ATTACHMENT, new HashMap<>());
+                data.put(ESBConstants.SERVICE, service);
+                data.put(ESBConstants.TYPE_DOCUMENT, documentType);
+                data.put(ESBConstants.MESSAGE, null);
+                data.put(ESBConstants.EBXML_TYPE, "STANDARD");
+                data.put(ESBConstants.TO_PARTY_ID, ebxmlPropertiesService.getToPartyId());
+                data.put(ESBConstants.DEAD, "0");
+                //
+                data.put(ESBConstants.ITEM_FLOWS, lastItemFlows);
+                fileProducer.sendFile(data);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Message sent to OUT queue");
+                }
+            }
+
+            if (isPhyto() && flowService.findBeforeCotationStepFlows(currentFile).contains(flowToExecute)) {
+                cotationService.dispatch(currentFile, flowToExecute);
             }
             transactionManager.commit(status);
         } catch (final Exception e) {
@@ -306,7 +331,7 @@ public class CostsController extends AbstractController<PaymentData> implements 
     }
 
     private static boolean isPureAscii(String v) {
-        return asciiEncoder.canEncode(v);
+        return ASCII_ENCODER.canEncode(v);
     }
 
     public void handleFileUpload(FileUploadEvent event) {
@@ -324,7 +349,7 @@ public class CostsController extends AbstractController<PaymentData> implements 
             if (event.getFile().getContents().length > 1024000) {
                 JsfUtil.addErrorMessage(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString("File_too_large"));
                 fileToSave = null;
-                name = "";
+//                name = "";
             } else {
                 fileToSave = new java.io.File(name.replaceAll("/[^A-Za-z0-9]/", ""));
                 newAttachmentName = fileToSave.getName();
@@ -336,13 +361,13 @@ public class CostsController extends AbstractController<PaymentData> implements 
             }
         } else {
             JsfUtil.addErrorMessage(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString("Invalid_file_name"));
-            file = null;
-            name = "";
+//            file = null;
+//            name = "";
         }
     }
 
     public void saveAttachment() {
-        Folder rootFolder = null;
+        Folder rootFolder;
         //try {
         final Session sessionCmisClient = CmisSession.getInstance();
         if (fileToSave == null) {
@@ -672,5 +697,26 @@ public class CostsController extends AbstractController<PaymentData> implements 
                 AttachmentController.class);
         return (AttachmentController) createValueExpression.getValue(context);
     }
-}
 
+    public CotationService getCotationService() {
+        return cotationService;
+    }
+
+    public void setCotationService(CotationService cotationService) {
+        this.cotationService = cotationService;
+    }
+
+    public ItemFlowService getItemFlowService() {
+        return itemFlowService;
+    }
+
+    public void setItemFlowService(ItemFlowService itemFlowService) {
+        this.itemFlowService = itemFlowService;
+    }
+
+    public boolean isPhyto() {
+        boolean checkMinaderMinistry = currentFile.getDestinataire().equalsIgnoreCase(FileItemCctController.MINADER_MINISTRY);
+        return checkMinaderMinistry && Arrays.asList(FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI).contains(currentFile.getFileType().getCode());
+    }
+
+}

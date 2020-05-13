@@ -57,8 +57,12 @@
                     <ui:include src="../specificDecisions/treatmentInfos/treatmentInfosRemindDecision.xhtml" />
                 </h:panelGroup>
 
-                <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastPaymentData}">
+                <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastPaymentData and empty fileItemCctDetailController.lastSpecificDecision}">
                     <ui:include src="../specificDecisions/paymentValidation/paymentValidationRemindDecision.xhtml" />
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastPaymentData and fileItemCctDetailController.lastSpecificDecision eq 'CCT_CT_E_BILL'}">
+                    <ui:include src="../specificDecisions/payment/billing/billingRemindDecision.xhtml" />
                 </h:panelGroup>
 
                 <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.approvedDecision}">

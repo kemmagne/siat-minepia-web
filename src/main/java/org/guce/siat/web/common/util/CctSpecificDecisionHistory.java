@@ -104,7 +104,7 @@ public class CctSpecificDecisionHistory implements Serializable {
     private TreatmentInfos decisionDetailsTI;
 
     private ApprovedDecision approvedDecision;
-    
+
     private CCTCPParamValue cCTCPParamValue;
 
     /**

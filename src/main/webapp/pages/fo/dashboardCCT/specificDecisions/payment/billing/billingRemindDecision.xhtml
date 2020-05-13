@@ -1,0 +1,31 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" >
+
+    <p:dataTable widgetVar="PaymentDataTableWdg" id="PaymentDataTable" var="invoiceLine" value="#{fileItemCctDetailController.specificDecisionsHistory.lastPaymentData.invoiceLines}"
+                 rowKey="#{invoiceLine.id}" rowIndexVar="rowIdx">
+
+        <p:column headerText="#">
+            <h:outputText value="#{rowIdx + 1}" />
+        </p:column>
+
+        <p:column headerText="#{bundle['InvoiceLine_Operation']}">
+            <h:outputText value="#{invoiceLine.natureFrais}" />
+        </p:column>
+
+        <p:column headerText="#{bundle['InvoiceLine_amount']} (FCFA)">
+            <h:outputText value="#{invoiceLine.montantHt}" />
+        </p:column>
+
+        <p:column headerText="#{bundle['InvoiceLine_Observation']}">
+            <h:outputText value="#{invoiceLine.observation}" />
+        </p:column>
+
+    </p:dataTable>
+    <br />
+    <h:panelGrid columns="2" cellspacing="5">
+
+        <h:outputText value="Total (FCFA) :" />
+        <h:outputText id="total" value="#{fileItemCctDetailController.specificDecisionsHistory.lastPaymentData.montantHt}" />
+
+    </h:panelGrid>
+</ui:composition>

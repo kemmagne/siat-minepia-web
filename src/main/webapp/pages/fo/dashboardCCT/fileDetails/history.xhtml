@@ -82,10 +82,10 @@
                             <br />
                             <h:panelGroup rendered="#{fileItemCctDetailController.selectedItemFlowDto.itemFlow.assignedUser != null}">
                                 <h:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight" cellspacing="4">
-                                        <h:outputLabel value="#{bundle['assignedUser']} :" title="#{bundle['assignedUser']}" />
-                                        <h:outputLabel
-                                            value="#{fileItemCctDetailController.selectedItemFlowDto.itemFlow.assignedUser.firstName} #{fileItemCctDetailController.selectedItemFlowDto.itemFlow.assignedUser.lastName}" />
-                                    </h:panelGrid>
+                                    <h:outputLabel value="#{bundle['assignedUser']} :" title="#{bundle['assignedUser']}" />
+                                    <h:outputLabel
+                                        value="#{fileItemCctDetailController.selectedItemFlowDto.itemFlow.assignedUser.firstName} #{fileItemCctDetailController.selectedItemFlowDto.itemFlow.assignedUser.lastName}" />
+                                </h:panelGrid>
                             </h:panelGroup>
                             <h:panelGroup
                                 rendered="#{empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsApp and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAO and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTO and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAR and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTR}">
@@ -139,14 +139,18 @@
                                 <ui:include src="../specificDecisions/paymentValidation/paymentValidationHistory.xhtml" />
                             </h:panelGroup>
 
+                            <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPayData and fileItemCctDetailController.lastSpecificDecision eq 'CCT_CT_E_BILL'}">
+                                <ui:include src="../specificDecisions/payment/billing/billingHistory.xhtml" />
+                            </h:panelGroup>
+
                             <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTI}">
                                 <ui:include src="../specificDecisions/treatmentInfos/treatmentInfosHistory.xhtml" />
                             </h:panelGroup>
-                            
+
                             <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.approvedDecision}">
                                 <ui:include src="../specificDecisions/dcc/dccHistory.xhtml" />
                             </h:panelGroup>
-                            
+
                             <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.cCTCPParamValue}">
                                 <ui:include src="../specificDecisions/cctCp/cctCpHistory.xhtml" />
                             </h:panelGroup>

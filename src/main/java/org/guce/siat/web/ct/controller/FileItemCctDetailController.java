@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.io.StringReader;
+import java.lang.reflect.Constructor;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -146,6 +147,7 @@ import org.guce.siat.core.ct.model.Infraction;
 import org.guce.siat.core.ct.model.InspectionController;
 import org.guce.siat.core.ct.model.InspectionReport;
 import org.guce.siat.core.ct.model.InterceptionNotification;
+import org.guce.siat.core.ct.model.InvoiceLine;
 import org.guce.siat.core.ct.model.Laboratory;
 import org.guce.siat.core.ct.model.ParamCCTCP;
 import org.guce.siat.core.ct.model.PaymentData;
@@ -1000,6 +1002,8 @@ public class FileItemCctDetailController implements Serializable {
      */
     private CctSpecificDecision specificDecision;
 
+    private CctSpecificDecision lastSpecificDecision;
+
     /**
      * The allowed recommandation.
      */
@@ -1089,6 +1093,8 @@ public class FileItemCctDetailController implements Serializable {
      */
     private PaymentData paymentData;
 
+    private InvoiceLine selectedInvoiceLine;
+
     /**
      * The invoice total amount.
      */
@@ -1130,6 +1136,8 @@ public class FileItemCctDetailController implements Serializable {
 
     private static final int GLOBAL_PROPAGATION_TRANSACTION_BEHAVIOUR = TransactionDefinition.PROPAGATION_REQUIRES_NEW;
     private boolean decided;
+
+    private Long counter;
 
     /**
      * Inits the.
@@ -1311,8 +1319,7 @@ public class FileItemCctDetailController implements Serializable {
 
                     if (equalsSteps) {
                         if (isCheckMinaderMinistry() && (FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode()))) {
-                            flows = flowService.findFlowsByFromStepAndFileType2(referenceFileItemCheck.getStep(), referenceFileItemCheck
-                                    .getFile().getFileType());
+                            flows = flowService.findFlowsByFromStepAndFileType2(referenceFileItemCheck.getStep(), referenceFileItemCheck.getFile().getFileType());
                             List<String> flowsToRemove = new ArrayList<>();
                             for (Flow fli : flows) {
                                 if (fli.getIsCota()) {
@@ -1321,8 +1328,7 @@ public class FileItemCctDetailController implements Serializable {
                             }
                             flows = deleteFlowFromFlowList(flows, flowsToRemove.toArray(new String[0]));
                         } else {
-                            flows = flowService.findFlowsByFromStepAndFileType(referenceFileItemCheck.getStep(), referenceFileItemCheck
-                                    .getFile().getFileType());
+                            flows = flowService.findFlowsByFromStepAndFileType(referenceFileItemCheck.getStep(), referenceFileItemCheck.getFile().getFileType());
                         }
                         // Ajout du flow de renouvellement de RDV ou inspection physique
                         if (isCheckMinaderMinistry() && (FileTypeCode.CCT_CT_E_FSTP.equals(currentFile.getFileType().getCode()) || FileTypeCode.CCT_CT_E_PVI.equals(currentFile.getFileType().getCode()) || FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode()))
@@ -1789,7 +1795,6 @@ public class FileItemCctDetailController implements Serializable {
         decisionDiv.getChildren().clear();
         final List<FileItemCheck> checksProduct = selectCheckedFileItemCheck();
         isPayment = Boolean.FALSE;
-        //paiement;FlowCode.FL_CO_155.name().equals(selectedFlow.getCode())
         if (FlowCode.FL_CT_92.name().equals(selectedFlow.getCode())) {
             isPayment = Boolean.TRUE;
             paymentData = new PaymentData();
@@ -1800,6 +1805,24 @@ public class FileItemCctDetailController implements Serializable {
                 }
             }
         }
+
+        if (FlowCode.FL_CT_120.name().equals(selectedFlow.getCode()) || FlowCode.FL_CT_124.name().equals(selectedFlow.getCode())) {
+            counter = 0L;
+            invoiceTotalAmount = 0L;
+            specificDecision = CctSpecificDecision.CCT_CT_E_BILL;
+            paymentData = new PaymentData();
+            paymentData.setMontantTva(0L);
+            paymentData.setLieuSignature(currentFile.getBureau().getLabelFr());
+            paymentData.setNomSignature(String.format("%s %s", loggedUser.getLastName(), loggedUser.getFirstName()));
+            paymentData.setDateSignature(java.util.Calendar.getInstance().getTime());
+            paymentData.setNatureFrais("Frais ".concat(currentFile.getFileType().getLabelFr()));
+            paymentData.setInvoiceLines(new ArrayList<InvoiceLine>());
+            paymentData.setPaymentItemFlowList(new ArrayList<PaymentItemFlow>());
+            for (FileItem fileItem : currentFile.getFileItemsList()) {
+                paymentData.getPaymentItemFlowList().add(new PaymentItemFlow(false, fileItem.getId()));
+            }
+        }
+
         // Rendez-vous
         if (APPOINTMENT_DECISIONS_LIST.contains(selectedFlow.getCode())) {
             specificDecision = CctSpecificDecision.APP;
@@ -2085,6 +2108,31 @@ public class FileItemCctDetailController implements Serializable {
         paymentData.setAutreMontant(invoiceOtherAmount);
     }
 
+    public synchronized void addInvoiceLine() {
+        InvoiceLine invoiceLine = new InvoiceLine();
+        invoiceLine.setId(++counter);
+        invoiceLine.setMontantTva(0L);
+        paymentData.getInvoiceLines().add(invoiceLine);
+    }
+
+    public synchronized void removeInvoiceLine() {
+
+        if (selectedInvoiceLine == null) {
+            return;
+        }
+
+        paymentData.getInvoiceLines().remove(selectedInvoiceLine);
+        paymentAmoutValueChangedListenerCte();
+    }
+
+    public void paymentAmoutValueChangedListenerCte() {
+        invoiceTotalAmount = 0L;
+        for (InvoiceLine invoiceLine : paymentData.getInvoiceLines()) {
+            invoiceTotalAmount += invoiceLine.getMontantHt();
+        }
+        paymentData.setMontantHt(invoiceTotalAmount);
+    }
+
     /**
      * Remplir la liste des valeurs des filed Values pour le un article.
      */
@@ -2145,6 +2193,9 @@ public class FileItemCctDetailController implements Serializable {
             downloadAttachment(treatmentParts);
         } else if (FlowCode.FL_CT_93.name().equals(lastDecisions.getFlow().getCode())) {
             specificDecisionsHistory.setLastPaymentData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
+        } else if (FlowCode.FL_CT_120.name().equals(lastDecisions.getFlow().getCode()) || FlowCode.FL_CT_124.name().equals(lastDecisions.getFlow().getCode())) {
+            specificDecisionsHistory.setLastPaymentData(paymentDataService.findPaymentDataByFileItem(lastDecisions.getFileItem()));
+            lastSpecificDecision = CctSpecificDecision.CCT_CT_E_BILL;
         }
     }
 
@@ -2194,13 +2245,14 @@ public class FileItemCctDetailController implements Serializable {
                     .getAnalysePartsList();
             downloadAttachment(analyseParts);
         } else if (FlowCode.FL_CT_66.name().equals(selectedItemFlowDto.getItemFlow().getFlow().getCode())) {
-            specificDecisionsHistory.setDecisionDetailsTR(treatmentResultService.findTreatmentResultByItemFlow(selectedItemFlowDto
-                    .getItemFlow()));
-            final List<TreatmentPart> treatmentParts = specificDecisionsHistory.getDecisionDetailsTR().getTreatmentOrder()
-                    .getTreatmentPartsList();
+            specificDecisionsHistory.setDecisionDetailsTR(treatmentResultService.findTreatmentResultByItemFlow(selectedItemFlowDto.getItemFlow()));
+            final List<TreatmentPart> treatmentParts = specificDecisionsHistory.getDecisionDetailsTR().getTreatmentOrder().getTreatmentPartsList();
             downloadAttachment(treatmentParts);
         } else if (FlowCode.FL_CT_93.name().equals(lastDecisions.getFlow().getCode())) {
             specificDecisionsHistory.setDecisionDetailsPayData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
+        } else if (FlowCode.FL_CT_120.name().equals(selectedItemFlowDto.getItemFlow().getFlow().getCode()) || FlowCode.FL_CT_124.name().equals(selectedItemFlowDto.getItemFlow().getFlow().getCode())) {
+            specificDecisionsHistory.setDecisionDetailsPayData(paymentDataService.findPaymentDataByFileItem(selectedItemFlowDto.getItemFlow().getFileItem()));
+            lastSpecificDecision = CctSpecificDecision.CCT_CT_E_BILL;
         }
     }
 
@@ -2592,7 +2644,7 @@ public class FileItemCctDetailController implements Serializable {
                 // Recuperate the values of DataType (Observation text area ...)
                 List<ItemFlowData> flowDatas = getValuesOfDataTypeForDecision(itemFlowsToAdd, selectedFlow.getDataTypeList());
 
-                if (FlowCode.FL_CT_92.name().equals(selectedFlow.getCode())) {
+                if (FlowCode.FL_CT_92.name().equals(selectedFlow.getCode()) || FlowCode.FL_CT_120.name().equals(selectedFlow.getCode()) || FlowCode.FL_CT_124.name().equals(selectedFlow.getCode())) {
                     commonService.takeDacisionAndSavePayment(itemFlowsToAdd, paymentData);
                 } else {
                     itemFlowService.takeDecision(itemFlowsToAdd, flowDatas);
@@ -2680,7 +2732,6 @@ public class FileItemCctDetailController implements Serializable {
         DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
         transactionDefinition.setPropagationBehavior(GLOBAL_PROPAGATION_TRANSACTION_BEHAVIOUR);
         TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
-//        MutableObject<TransactionStatus> vStatus = transactionHelper.beginTransaction();
         try {
             //
             final List<Long> chckedProductInfoChecksList = getCheckedRollBacksFileItemCheckList();
@@ -3041,7 +3092,6 @@ public class FileItemCctDetailController implements Serializable {
         DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
         transactionDefinition.setPropagationBehavior(GLOBAL_PROPAGATION_TRANSACTION_BEHAVIOUR);
         TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
-//        MutableObject<TransactionStatus> vStatus = transactionHelper.beginTransaction();
         try {
             List<ItemFlow> lastItemFlowList = null;
             ItemFlow lastItemFlow = null;
@@ -3096,7 +3146,6 @@ public class FileItemCctDetailController implements Serializable {
                     if (transactionStatus != null) {
                         transactionManager.rollback(transactionStatus);
                     }
-//                    transactionHelper.rollback(vStatus);
                     return;
                 }
 
@@ -3176,6 +3225,17 @@ public class FileItemCctDetailController implements Serializable {
                                 }
 
                                 fileService.update(currentFile);
+                            } else if (FlowCode.FL_CT_121.name().equals(flowToSend.getCode())) {
+
+                                attachedByteFiles = new HashMap<>();
+
+                                List<FileTypeFlowReport> fileTypeFlowReportList = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(flowToSend, currentFile.getFileType());
+                                FileTypeFlowReport fileTypeFlowReport = fileTypeFlowReportList.get(0);
+                                final byte[] report = getReportBytes(fileTypeFlowReport, false);
+
+                                if (report != null) {
+                                    attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
+                                }
                             }
 
                             // convert file to document
@@ -3233,7 +3293,7 @@ public class FileItemCctDetailController implements Serializable {
                         if (f == null) {
                             f = itemFlowService.findLastItemFlowByFileItem(productInfoItems.get(0)).getFlow();
                         }
-                        List<Flow> list = flowService.findAdmissibilityValidationFlows(currentFile);
+                        List<Flow> list = flowService.findBeforeCotationStepFlows(currentFile);
                         for (Flow f1 : list) {
                             if (f1.getCode().equals(f.getCode())) {
                                 cotationService.dispatch(currentFile, f);
@@ -4157,14 +4217,22 @@ public class FileItemCctDetailController implements Serializable {
         if (reportingFlow == null) {
             reportingFlow = flowService.findFlowByCode(FlowCode.FL_CT_114.name());
         }
-        fileTypeFlowReportsDraft = fileTypeFlowReportService
-                .findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getFileType());
+
+        boolean okInvoice = StepCode.ST_CT_57.equals(currentFileItem.getStep().getStepCode());
+        ItemFlow draftItemFlow = itemFlowService.findDraftByFileItem(currentFileItem);
+        okInvoice = okInvoice && draftItemFlow != null && FlowCode.FL_CT_121.name().equals(draftItemFlow.getFlow().getCode());
+        if (okInvoice) {
+            reportingFlow = draftItemFlow.getFlow();
+        }
+
+        fileTypeFlowReportsDraft = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getFileType());
         generateDraftAllowed = sendDecisionAllowed && showDecisionButton && displayGenerateDraft
                 && (StepCode.ST_CT_38.equals(currentFileItem.getStep().getStepCode())
                 || StepCode.ST_CT_31.equals(currentFileItem.getStep().getStepCode())
                 || StepCode.ST_CT_53.equals(currentFileItem.getStep().getStepCode())
                 || StepCode.ST_CT_55.equals(currentFileItem.getStep().getStepCode())
-                || StepCode.ST_CT_56.equals(currentFileItem.getStep().getStepCode()))
+                || StepCode.ST_CT_56.equals(currentFileItem.getStep().getStepCode())
+                || okInvoice)
                 && CollectionUtils.isNotEmpty(fileTypeFlowReportsDraft);
     }
 
@@ -5970,6 +6038,14 @@ public class FileItemCctDetailController implements Serializable {
         this.specificDecision = specificDecision;
     }
 
+    public CctSpecificDecision getLastSpecificDecision() {
+        return lastSpecificDecision;
+    }
+
+    public void setLastSpecificDecision(CctSpecificDecision lastSpecificDecision) {
+        this.lastSpecificDecision = lastSpecificDecision;
+    }
+
     /**
      * Gets the specific decisions history.
      *
@@ -6745,6 +6821,14 @@ public class FileItemCctDetailController implements Serializable {
         this.paymentData = paymentData;
     }
 
+    public InvoiceLine getSelectedInvoiceLine() {
+        return selectedInvoiceLine;
+    }
+
+    public void setSelectedInvoiceLine(InvoiceLine selectedInvoiceLine) {
+        this.selectedInvoiceLine = selectedInvoiceLine;
+    }
+
     /**
      * Gets the payment data service.
      *
@@ -6978,7 +7062,8 @@ public class FileItemCctDetailController implements Serializable {
                             || FlowCode.FL_CT_114.name().equals(flowToSend.getCode())
                             || FlowCode.FL_CT_117.name().equals(flowToSend.getCode())
                             || FlowCode.FL_CT_CVS_03.name().equals(flowToSend.getCode())
-                            || FlowCode.FL_CT_CVS_07.name().equals(flowToSend.getCode())) {
+                            || FlowCode.FL_CT_CVS_07.name().equals(flowToSend.getCode())
+                            || FlowCode.FL_CT_121.name().equals(flowToSend.getCode())) {
 
                         // edit signature elements
                         Date now = java.util.Calendar.getInstance().getTime();
@@ -7156,80 +7241,88 @@ public class FileItemCctDetailController implements Serializable {
                         + ((reportOrganism != null && reportOrganism.getValue() != null) ? reportOrganism.getValue() : StringUtils.EMPTY);
 
             }
-            switch (currentFile.getFileType().getCode()) {
-                case CCT_CT_E: {
-                    ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(currentFileItem, FlowCode.FL_CT_07);
-                    if (itemFlow == null) {
-                        itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(currentFileItem, FlowCode.FL_CT_112);
-                    }
-                    if (itemFlow == null) {
-                        itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(currentFileItem, FlowCode.FL_CT_117);
-                    }
-
-                    final TreatmentInfos ti = treatmentInfosService.findTreatmentInfosByItemFlow(itemFlow);
-                    if (ti == null || ti.getId() == null) {
-                        final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
-                                .getString("draftNotAllowedForReject");
-                        JsfUtil.addErrorMessage(msg);
-                        return null;
-                    }
-
-                    final ItemFlow itemFlow2 = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_08);
-
-                    CCTCPParamValue paramValue = cCTCPParamValueService.findCCTCPParamValueByItemFlow(itemFlow2);
-                    if (phytoEnd && paramValue == null) {
-                        paramValue = cCTCPParamValue;
-                    }
-                    if (paramValue == null) {
-                        paramValue = new CCTCPParamValue();
-                        fillCCTCPParamValue(paramValue);
-                    }
-                    if (ti.getDelivrableType() == null || "CCT_CT_E".equals(ti.getDelivrableType())) {
-                        Map<String, Integer> count = countFileContainerAndPackage(currentFile);
-                        if (count.get(COUNT_GOODS) > paramValue.getMaxGoodsLineNumber()
-                                || count.get(COUNT_CONTAINERS) > paramValue.getMaxContainerNumber()
-                                || count.get(COUNT_PACKAGES) > paramValue.getMaxPackageNumber()) {
-                            forAnnexes = new HashMap();
-                            forAnnexes.put("ti", ti);
-                            forAnnexes.put("paramValue", paramValue);
-                            forAnnexes.put("fileNameAnnex", "CERTIFICAT_PHYTOSANITAIRE_ANNEXE");
+            Flow flow = fileTypeFlowReport.getFlow();
+            if (BooleanUtils.toBoolean(flow.getToStep().getIsFinal())) {
+                switch (currentFile.getFileType().getCode()) {
+                    case CCT_CT_E: {
+                        ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(currentFileItem, FlowCode.FL_CT_07);
+                        if (itemFlow == null) {
+                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(currentFileItem, FlowCode.FL_CT_112);
                         }
-                        reportInvoker = new CtCctCpEExporter(currentFile, ti, paramValue, "CERTIFICAT_PHYTOSANITAIRE");
+                        if (itemFlow == null) {
+                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(currentFileItem, FlowCode.FL_CT_117);
+                        }
 
-                    } else if ("CQ_CT".equals(ti.getDelivrableType())) {
-                        reportInvoker = new CtCctCqeExporter(currentFile, ti);
+                        final TreatmentInfos ti = treatmentInfosService.findTreatmentInfosByItemFlow(itemFlow);
+                        if (ti == null || ti.getId() == null) {
+                            final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
+                                    .getString("draftNotAllowedForReject");
+                            JsfUtil.addErrorMessage(msg);
+                            return null;
+                        }
+
+                        final ItemFlow itemFlow2 = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_08);
+
+                        CCTCPParamValue paramValue = cCTCPParamValueService.findCCTCPParamValueByItemFlow(itemFlow2);
+                        if (phytoEnd && paramValue == null) {
+                            paramValue = cCTCPParamValue;
+                        }
+                        if (paramValue == null) {
+                            paramValue = new CCTCPParamValue();
+                            fillCCTCPParamValue(paramValue);
+                        }
+                        if (ti.getDelivrableType() == null || "CCT_CT_E".equals(ti.getDelivrableType())) {
+                            Map<String, Integer> count = countFileContainerAndPackage(currentFile);
+                            if (count.get(COUNT_GOODS) > paramValue.getMaxGoodsLineNumber()
+                                    || count.get(COUNT_CONTAINERS) > paramValue.getMaxContainerNumber()
+                                    || count.get(COUNT_PACKAGES) > paramValue.getMaxPackageNumber()) {
+                                forAnnexes = new HashMap();
+                                forAnnexes.put("ti", ti);
+                                forAnnexes.put("paramValue", paramValue);
+                                forAnnexes.put("fileNameAnnex", "CERTIFICAT_PHYTOSANITAIRE_ANNEXE");
+                            }
+                            reportInvoker = new CtCctCpEExporter(currentFile, ti, paramValue, "CERTIFICAT_PHYTOSANITAIRE");
+
+                        } else if ("CQ_CT".equals(ti.getDelivrableType())) {
+                            reportInvoker = new CtCctCqeExporter(currentFile, ti);
+                        }
+                        break;
                     }
-                    break;
-                }
-                case CCT_CT_E_PVI: {
-                    final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
-                    final InspectionReport ir = inspectionReportService.findByItemFlow(itemFlow);
-                    if (draft) {
-                        reportInvoker = new CtPviExporter(ir, reportNumber);
-                    } else {
-                        reportInvoker = new CtPviExporter(ir);
-                    }
-                    break;
-                }
-                case CCT_CT_E_ATP:
-                case CCT_CT_E_FSTP: {
-                    final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
-                    final TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
-                    if (FileTypeCode.CCT_CT_E_ATP.equals(currentFile.getFileType().getCode())) {
+                    case CCT_CT_E_PVI: {
+                        final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
+                        final InspectionReport ir = inspectionReportService.findByItemFlow(itemFlow);
                         if (draft) {
-                            reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_ATP", tr, reportNumber);
+                            reportInvoker = new CtPviExporter(ir, reportNumber);
                         } else {
-                            reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_ATP", tr);
+                            reportInvoker = new CtPviExporter(ir);
                         }
-                    } else {
-                        if (draft) {
-                            reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_FSTP", tr, reportNumber);
-                        } else {
-                            reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_FSTP", tr);
-                        }
+                        break;
                     }
-                    break;
+                    case CCT_CT_E_ATP:
+                    case CCT_CT_E_FSTP: {
+                        final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
+                        final TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
+                        if (FileTypeCode.CCT_CT_E_ATP.equals(currentFile.getFileType().getCode())) {
+                            if (draft) {
+                                reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_ATP", tr, reportNumber);
+                            } else {
+                                reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_ATP", tr);
+                            }
+                        } else {
+                            if (draft) {
+                                reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_FSTP", tr, reportNumber);
+                            } else {
+                                reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_FSTP", tr);
+                            }
+                        }
+                        break;
+                    }
                 }
+            } else if (FlowCode.FL_CT_121.name().equals(flow.getCode())) {
+                PaymentData payData;
+                payData = paymentDataService.findPaymentDataByFileItem(currentFile.getFileItemsList().get(0));
+                Constructor constructor = classe.getConstructor(File.class, PaymentData.class);
+                reportInvoker = (AbstractReportInvoker) constructor.newInstance(currentFile, payData);
             }
 
         } else if (checkMinepiaMinistry) {
@@ -7248,6 +7341,7 @@ public class FileItemCctDetailController implements Serializable {
         if (reportInvoker != null) {
             reportInvoker.setDraft(draft);
             reportInvoker.setFileFieldValueService(fileFieldValueService);
+            reportInvoker.setItemFlowService(itemFlowService);
             if (forAnnexes != null) {
                 JasperPrint page1 = JsfUtil.getReportJP(reportInvoker);
                 TreatmentInfos ti = (TreatmentInfos) forAnnexes.get("ti");
@@ -7267,6 +7361,7 @@ public class FileItemCctDetailController implements Serializable {
                 report = JsfUtil.getReport(reportInvoker);
             }
         }
+
         return report;
     }
 

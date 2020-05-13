@@ -76,6 +76,10 @@
                     <p:panel rendered="#{fileItemCctDetailController.isPayment}">
                         <ui:include src="../specificDecisions/paymentValidation/payment.xhtml" />
                     </p:panel>
+
+                    <p:panel rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'CCT_CT_E_BILL'}">
+                        <ui:include src="../specificDecisions/payment/billing/billing.xhtml" />
+                    </p:panel>
                 </p:scrollPanel>
 
 
@@ -88,7 +92,7 @@
                     <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" value="#{bundle['Cancel']}"
                                      styleClass="ui-priority-primary" onclick="PF('decisionDialog').hide();" immediate="true" />
 
-                    <p:commandButton ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" id="reporting" 
+                    <p:commandButton ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" id="reporting"
                                      value="#{bundle['PreviewFile']}" styleClass="ui-priority-primary" rendered="#{fileItemCctDetailController.phytoEnd}">
                         <p:fileDownload value="#{fileItemCctDetailController.downloadReport(true)}" />
                     </p:commandButton>

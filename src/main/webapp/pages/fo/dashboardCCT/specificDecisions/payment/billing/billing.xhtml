@@ -1,0 +1,58 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" >
+
+    <p:dataTable widgetVar="PaymentDataTableWdg" id="PaymentDataTable" var="invoiceLine" value="#{fileItemCctDetailController.paymentData.invoiceLines}"
+                 rowKey="#{invoiceLine.id}" rowIndexVar="rowIdx" selectionMode="single" selection="#{fileItemCctDetailController.selectedInvoiceLine}">
+
+        <p:ajax event="rowSelect" resetValues="true" oncomplete="clickedItem()" onsuccess="PF('statusDialog1').unblock()" />
+        <p:ajax event="rowUnselect" resetValues="true" oncomplete="clickedItem()" onsuccess="PF('statusDialog1').unblock()" />
+
+        <p:column headerText="#">
+            <h:outputText value="#{rowIdx + 1}" />
+        </p:column>
+
+        <p:column headerText="#{bundle['InvoiceLine_Operation']}">
+            <h:panelGroup>
+                <p:inputText id="paymentNature" value="#{invoiceLine.natureFrais}" title="#{bundle['InvoiceLine_Operation']}" required="true"
+                             requiredMessage="#{bundle['Field']} #{bundle['InvoiceLine_Operation']} #{bundle['RequiredMessage']}" />
+                <p:message for="paymentNature" />
+            </h:panelGroup>
+        </p:column>
+
+        <p:column headerText="#{bundle['InvoiceLine_amount']} (FCFA)">
+            <h:panelGroup>
+                <p:inputText id="paymentAmount" value="#{invoiceLine.montantHt}" title="#{bundle['InvoiceLine_amount']}" required="true"
+                             requiredMessage="#{bundle['Field']} #{bundle['InvoiceLine_amount']} #{bundle['RequiredMessage']}">
+                    <p:message for="paymentAmount" />
+                    <p:ajax event="blur" listener="#{fileItemCctDetailController.paymentAmoutValueChangedListenerCte}" update=":paymentTotalAmount" />
+                </p:inputText>
+            </h:panelGroup>
+        </p:column>
+
+        <p:column headerText="#{bundle['InvoiceLine_Observation']}">
+            <p:inputText id="InvoiceLine_Observation" value="#{invoiceLine.observation}" title="#{bundle['InvoiceLine_Observation']}" />
+        </p:column>
+
+        <p:column headerText="#{bundle['Delete']}" rendered="false">
+            <p:commandButton id="InvoiceLine_Delete1" styleClass="btn" icon="sprite sprite-delete"
+                             actionListener="#{fileItemCctDetailController.removeInvoiceLine()}"
+                             update=":PaymentDataTable :paymentTotalAmount" />
+        </p:column>
+
+        <f:facet name="footer">
+            <p:commandButton id="InvoiceLine_Ajouter" styleClass="btn" icon="sprite sprite-plus" value="#{bundle['Create']}"
+                             actionListener="#{fileItemCctDetailController.addInvoiceLine}" update=":PaymentDataTable" />
+            <p:commandButton id="InvoiceLine_Delete" styleClass="btn" icon="sprite sprite-delete" value="#{bundle['Delete']}"
+                             actionListener="#{fileItemCctDetailController.removeInvoiceLine()}"
+                             update=":PaymentDataTable :paymentTotalAmount" />
+        </f:facet>
+
+    </p:dataTable>
+    <br />
+    <h:panelGrid columns="2" cellspacing="5">
+
+        <h:outputText value="Total (FCFA) :" />
+        <h:outputText id="paymentTotalAmount" value="#{fileItemCctDetailController.invoiceTotalAmount}" />
+
+    </h:panelGrid>
+</ui:composition>

@@ -16,6 +16,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.guce.siat.common.service.FileFieldValueService;
+import org.guce.siat.common.service.ItemFlowService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +42,10 @@ public abstract class AbstractReportInvoker implements ReportCommand {
     protected String jasperFileName;
 
     private boolean draft;
+
     private FileFieldValueService fileFieldValueService;
+
+    private ItemFlowService itemFlowService;
 
     /**
      * Instantiates a new jasper report builder.
@@ -188,6 +192,14 @@ public abstract class AbstractReportInvoker implements ReportCommand {
 
     public void setFileFieldValueService(FileFieldValueService fileFieldValueService) {
         this.fileFieldValueService = fileFieldValueService;
+    }
+
+    public ItemFlowService getItemFlowService() {
+        return itemFlowService;
+    }
+
+    public void setItemFlowService(ItemFlowService itemFlowService) {
+        this.itemFlowService = itemFlowService;
     }
 
 }
