@@ -300,9 +300,8 @@ public class CostsController extends AbstractController<PaymentData> implements 
                 }
             }
 
-            if (isPhyto()) {
-                cotationService.dispatch(currentFile, flowToExecute);
-            }
+            cotationService.dispatch(currentFile, flowToExecute);
+
             transactionManager.commit(status);
         } catch (final Exception e) {
             transactionManager.rollback(status);

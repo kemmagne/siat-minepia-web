@@ -3288,13 +3288,7 @@ public class FileItemCctDetailController implements Serializable {
                         }
                     }
 
-                    if (isPhyto()) {
-                        Flow currentFlow = selectedFlow;
-                        if (currentFlow == null) {
-                            currentFlow = itemFlowService.findLastItemFlowByFileItem(productInfoItems.get(0)).getFlow();
-                        }
-                        cotationService.dispatch(currentFile, currentFlow);
-                    }
+                    cotationService.dispatch(currentFile, selectedFlow);
 
                     JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
                             getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.SEND_SUCCESS));
