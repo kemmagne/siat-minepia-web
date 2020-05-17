@@ -5,192 +5,195 @@
  */
 package org.guce.siat.web.ct.data;
 
+import java.io.Serializable;
 
 /**
  *
  * @author yenke
  */
-public class DelayListingStakeholderData {
-    private String processName;
-    private String expecNumber;
-    private String subfileNumber;
-    private String exporterNiu;
-    private String exporterName;
-    private String productType;
-    private String destinationCountry;
-    private String officeCode;
-    private String officeLabel;
-    private String admisibilityAgent;
-    private String admisibilityDelay;
-    private String cotationAgent;
-    private String cotationDelay;
-    private String treatmentAgent;
-    private String treatmentDelay;
-    private String confirmationAppointmentDelay;
-    private String signatoryAgent;
-    private String signatoryDelay;
-    private String ciResnponseDelay;
-    private String ciCount;
+public class DelayListingStakeholderData implements Serializable {
 
-    public String getProcessName() {
-        return processName;
-    }
+	private static final long serialVersionUID = 1888312798401501733L;
 
-    public void setProcessName(String processName) {
-        this.processName = processName;
-    }
+	private String processName;
+	private String expecNumber;
+	private String subfileNumber;
+	private String exporterNiu;
+	private String exporterName;
+	private String productType;
+	private String destinationCountry;
+	private String officeCode;
+	private String officeLabel;
+	private String admisibilityAgent;
+	private String admisibilityDelay;
+	private String cotationAgent;
+	private String cotationDelay;
+	private String treatmentAgent;
+	private String treatmentDelay;
+	private String confirmationAppointmentDelay;
+	private String signatoryAgent;
+	private String signatoryDelay;
+	private String ciResnponseDelay;
+	private String ciCount;
 
-    public String getExpecNumber() {
-        return expecNumber;
-    }
+	public String getProcessName() {
+		return processName;
+	}
 
-    public void setExpecNumber(String expecNumber) {
-        this.expecNumber = expecNumber;
-    }
+	public void setProcessName(String processName) {
+		this.processName = processName;
+	}
 
-    public String getSubfileNumber() {
-        return subfileNumber;
-    }
+	public String getExpecNumber() {
+		return expecNumber;
+	}
 
-    public void setSubfileNumber(String subfileNumber) {
-        this.subfileNumber = subfileNumber;
-    }
+	public void setExpecNumber(String expecNumber) {
+		this.expecNumber = expecNumber;
+	}
 
-    public String getExporterNiu() {
-        return exporterNiu;
-    }
+	public String getSubfileNumber() {
+		return subfileNumber;
+	}
 
-    public void setExporterNiu(String exporterNiu) {
-        this.exporterNiu = exporterNiu;
-    }
+	public void setSubfileNumber(String subfileNumber) {
+		this.subfileNumber = subfileNumber;
+	}
 
-    public String getExporterName() {
-        return exporterName;
-    }
+	public String getExporterNiu() {
+		return exporterNiu;
+	}
 
-    public void setExporterName(String exporterName) {
-        this.exporterName = exporterName;
-    }
+	public void setExporterNiu(String exporterNiu) {
+		this.exporterNiu = exporterNiu;
+	}
 
-    public String getProductType() {
-        return productType;
-    }
+	public String getExporterName() {
+		return exporterName;
+	}
 
-    public void setProductType(String productType) {
-        this.productType = productType;
-    }
+	public void setExporterName(String exporterName) {
+		this.exporterName = exporterName;
+	}
 
-    public String getDestinationCountry() {
-        return destinationCountry;
-    }
+	public String getProductType() {
+		return productType;
+	}
 
-    public void setDestinationCountry(String destinationCountry) {
-        this.destinationCountry = destinationCountry;
-    }
+	public void setProductType(String productType) {
+		this.productType = productType;
+	}
 
-    public String getOfficeCode() {
-        return officeCode;
-    }
+	public String getDestinationCountry() {
+		return destinationCountry;
+	}
 
-    public void setOfficeCode(String officeCode) {
-        this.officeCode = officeCode;
-    }
+	public void setDestinationCountry(String destinationCountry) {
+		this.destinationCountry = destinationCountry;
+	}
 
-    public String getOfficeLabel() {
-        return officeLabel;
-    }
+	public String getOfficeCode() {
+		return officeCode;
+	}
 
-    public void setOfficeLabel(String officeLabel) {
-        this.officeLabel = officeLabel;
-    }
+	public void setOfficeCode(String officeCode) {
+		this.officeCode = officeCode;
+	}
 
-    public String getAdmisibilityAgent() {
-        return admisibilityAgent;
-    }
+	public String getOfficeLabel() {
+		return officeLabel;
+	}
 
-    public void setAdmisibilityAgent(String admisibilityAgent) {
-        this.admisibilityAgent = admisibilityAgent;
-    }
+	public void setOfficeLabel(String officeLabel) {
+		this.officeLabel = officeLabel;
+	}
 
-    public String getAdmisibilityDelay() {
-        return admisibilityDelay;
-    }
+	public String getAdmisibilityAgent() {
+		return admisibilityAgent;
+	}
 
-    public void setAdmisibilityDelay(String admisibilityDelay) {
-        this.admisibilityDelay = admisibilityDelay;
-    }
+	public void setAdmisibilityAgent(String admisibilityAgent) {
+		this.admisibilityAgent = admisibilityAgent;
+	}
 
-    public String getCotationAgent() {
-        return cotationAgent;
-    }
+	public String getAdmisibilityDelay() {
+		return admisibilityDelay;
+	}
 
-    public void setCotationAgent(String cotationAgent) {
-        this.cotationAgent = cotationAgent;
-    }
+	public void setAdmisibilityDelay(String admisibilityDelay) {
+		this.admisibilityDelay = admisibilityDelay;
+	}
 
-    public String getCotationDelay() {
-        return cotationDelay;
-    }
+	public String getCotationAgent() {
+		return cotationAgent;
+	}
 
-    public void setCotationDelay(String cotationDelay) {
-        this.cotationDelay = cotationDelay;
-    }
+	public void setCotationAgent(String cotationAgent) {
+		this.cotationAgent = cotationAgent;
+	}
 
-    public String getTreatmentAgent() {
-        return treatmentAgent;
-    }
+	public String getCotationDelay() {
+		return cotationDelay;
+	}
 
-    public void setTreatmentAgent(String treatmentAgent) {
-        this.treatmentAgent = treatmentAgent;
-    }
+	public void setCotationDelay(String cotationDelay) {
+		this.cotationDelay = cotationDelay;
+	}
 
-    public String getTreatmentDelay() {
-        return treatmentDelay;
-    }
+	public String getTreatmentAgent() {
+		return treatmentAgent;
+	}
 
-    public void setTreatmentDelay(String treatmentDelay) {
-        this.treatmentDelay = treatmentDelay;
-    }
+	public void setTreatmentAgent(String treatmentAgent) {
+		this.treatmentAgent = treatmentAgent;
+	}
 
-    public String getConfirmationAppointmentDelay() {
-        return confirmationAppointmentDelay;
-    }
+	public String getTreatmentDelay() {
+		return treatmentDelay;
+	}
 
-    public void setConfirmationAppointmentDelay(String confirmationAppointmentDelay) {
-        this.confirmationAppointmentDelay = confirmationAppointmentDelay;
-    }
+	public void setTreatmentDelay(String treatmentDelay) {
+		this.treatmentDelay = treatmentDelay;
+	}
 
-    public String getSignatoryAgent() {
-        return signatoryAgent;
-    }
+	public String getConfirmationAppointmentDelay() {
+		return confirmationAppointmentDelay;
+	}
 
-    public void setSignatoryAgent(String signatoryAgent) {
-        this.signatoryAgent = signatoryAgent;
-    }
+	public void setConfirmationAppointmentDelay(String confirmationAppointmentDelay) {
+		this.confirmationAppointmentDelay = confirmationAppointmentDelay;
+	}
 
-    public String getSignatoryDelay() {
-        return signatoryDelay;
-    }
+	public String getSignatoryAgent() {
+		return signatoryAgent;
+	}
 
-    public void setSignatoryDelay(String signatoryDelay) {
-        this.signatoryDelay = signatoryDelay;
-    }
+	public void setSignatoryAgent(String signatoryAgent) {
+		this.signatoryAgent = signatoryAgent;
+	}
 
-    public String getCiResnponseDelay() {
-        return ciResnponseDelay;
-    }
+	public String getSignatoryDelay() {
+		return signatoryDelay;
+	}
 
-    public void setCiResnponseDelay(String ciResnponseDelay) {
-        this.ciResnponseDelay = ciResnponseDelay;
-    }
+	public void setSignatoryDelay(String signatoryDelay) {
+		this.signatoryDelay = signatoryDelay;
+	}
 
-    public String getCiCount() {
-        return ciCount;
-    }
+	public String getCiResnponseDelay() {
+		return ciResnponseDelay;
+	}
 
-    public void setCiCount(String ciCount) {
-        this.ciCount = ciCount;
-    }
-    
-    
+	public void setCiResnponseDelay(String ciResnponseDelay) {
+		this.ciResnponseDelay = ciResnponseDelay;
+	}
+
+	public String getCiCount() {
+		return ciCount;
+	}
+
+	public void setCiCount(String ciCount) {
+		this.ciCount = ciCount;
+	}
+
 }

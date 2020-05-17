@@ -214,7 +214,7 @@
                                 styleClass="pendingFiles" value="#{bundle['appmenu_statistic_exportNshDestination']}"
                                 actionListener="#{statisticController.goToExportNshDestinationSearchPage()}" rendered="#{request.isUserInRole('SUPER') or request.isUserInRole('STAT')}" />
 
-                    <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="exportNshDestinationSenderMenuItem"
+                    <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="exportNshDestSenderMenuItem"
                                 styleClass="pendingFiles" value="#{bundle['appmenu_statistic_exportNshDestinationSender']}"
                                 actionListener="#{statisticController.goToExportNshDestinationSenderSearchPage()}" rendered="#{request.isUserInRole('SUPER') or request.isUserInRole('STAT')}" />
 

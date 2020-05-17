@@ -5,157 +5,159 @@
  */
 package org.guce.siat.web.ct.data;
 
+import java.io.Serializable;
+
 /**
  *
  * @author yenke
  */
-public class ExportNshDestinationData {
-    
-    private String nsh;
-    private String nshDescription;
-    private String productType;
-    private String destinationCountryCode;
-    private String destinationCountryLabel;
-    private String woodColisCount;
-    private String bagCount;
-    private String volume;
-    private String weightBrut;
-    private String weight;
-    private String originCountryCode;
-    private String originCountryLabel;
-    private String officeCode;
-    private String officeLabel;
-    private String exporterNiu;
-    private String exporterName;
+public class ExportNshDestinationData implements Serializable {
 
-    public String getNsh() {
-        return nsh;
-    }
+	private static final long serialVersionUID = -8312463606343247645L;
 
-    public void setNsh(String nsh) {
-        this.nsh = nsh;
-    }
+	private String nsh;
+	private String nshDescription;
+	private String productType;
+	private String destinationCountryCode;
+	private String destinationCountryLabel;
+	private String woodColisCount;
+	private String bagCount;
+	private String volume;
+	private String weightBrut;
+	private String weight;
+	private String originCountryCode;
+	private String originCountryLabel;
+	private String officeCode;
+	private String officeLabel;
+	private String exporterNiu;
+	private String exporterName;
 
-    public String getNshDescription() {
-        return nshDescription;
-    }
+	public String getNsh() {
+		return nsh;
+	}
 
-    public void setNshDescription(String nshDescription) {
-        this.nshDescription = nshDescription;
-    }
+	public void setNsh(String nsh) {
+		this.nsh = nsh;
+	}
 
-    public String getProductType() {
-        return productType;
-    }
+	public String getNshDescription() {
+		return nshDescription;
+	}
 
-    public void setProductType(String productType) {
-        this.productType = productType;
-    }
+	public void setNshDescription(String nshDescription) {
+		this.nshDescription = nshDescription;
+	}
 
-    public String getDestinationCountryCode() {
-        return destinationCountryCode;
-    }
+	public String getProductType() {
+		return productType;
+	}
 
-    public void setDestinationCountryCode(String destinationCountryCode) {
-        this.destinationCountryCode = destinationCountryCode;
-    }
+	public void setProductType(String productType) {
+		this.productType = productType;
+	}
 
-    public String getDestinationCountryLabel() {
-        return destinationCountryLabel;
-    }
+	public String getDestinationCountryCode() {
+		return destinationCountryCode;
+	}
 
-    public void setDestinationCountryLabel(String destinationCountryLabel) {
-        this.destinationCountryLabel = destinationCountryLabel;
-    }
+	public void setDestinationCountryCode(String destinationCountryCode) {
+		this.destinationCountryCode = destinationCountryCode;
+	}
 
-    public String getWoodColisCount() {
-        return woodColisCount;
-    }
+	public String getDestinationCountryLabel() {
+		return destinationCountryLabel;
+	}
 
-    public void setWoodColisCount(String woodColisCount) {
-        this.woodColisCount = woodColisCount;
-    }
+	public void setDestinationCountryLabel(String destinationCountryLabel) {
+		this.destinationCountryLabel = destinationCountryLabel;
+	}
 
-    public String getBagCount() {
-        return bagCount;
-    }
+	public String getWoodColisCount() {
+		return woodColisCount;
+	}
 
-    public void setBagCount(String bagCount) {
-        this.bagCount = bagCount;
-    }
+	public void setWoodColisCount(String woodColisCount) {
+		this.woodColisCount = woodColisCount;
+	}
 
-    public String getVolume() {
-        return volume;
-    }
+	public String getBagCount() {
+		return bagCount;
+	}
 
-    public void setVolume(String volume) {
-        this.volume = volume;
-    }
+	public void setBagCount(String bagCount) {
+		this.bagCount = bagCount;
+	}
 
-    public String getWeightBrut() {
-        return weightBrut;
-    }
+	public String getVolume() {
+		return volume;
+	}
 
-    public void setWeightBrut(String weightBrut) {
-        this.weightBrut = weightBrut;
-    }
+	public void setVolume(String volume) {
+		this.volume = volume;
+	}
 
-    public String getWeight() {
-        return weight;
-    }
+	public String getWeightBrut() {
+		return weightBrut;
+	}
 
-    public void setWeight(String weight) {
-        this.weight = weight;
-    }
+	public void setWeightBrut(String weightBrut) {
+		this.weightBrut = weightBrut;
+	}
 
-    public String getOriginCountryCode() {
-        return originCountryCode;
-    }
+	public String getWeight() {
+		return weight;
+	}
 
-    public void setOriginCountryCode(String originCountryCode) {
-        this.originCountryCode = originCountryCode;
-    }
+	public void setWeight(String weight) {
+		this.weight = weight;
+	}
 
-    public String getOriginCountryLabel() {
-        return originCountryLabel;
-    }
+	public String getOriginCountryCode() {
+		return originCountryCode;
+	}
 
-    public void setOriginCountryLabel(String originCountryLabel) {
-        this.originCountryLabel = originCountryLabel;
-    }
+	public void setOriginCountryCode(String originCountryCode) {
+		this.originCountryCode = originCountryCode;
+	}
 
-    public String getOfficeCode() {
-        return officeCode;
-    }
+	public String getOriginCountryLabel() {
+		return originCountryLabel;
+	}
 
-    public void setOfficeCode(String officeCode) {
-        this.officeCode = officeCode;
-    }
+	public void setOriginCountryLabel(String originCountryLabel) {
+		this.originCountryLabel = originCountryLabel;
+	}
 
-    public String getOfficeLabel() {
-        return officeLabel;
-    }
+	public String getOfficeCode() {
+		return officeCode;
+	}
 
-    public void setOfficeLabel(String officeLabel) {
-        this.officeLabel = officeLabel;
-    }
+	public void setOfficeCode(String officeCode) {
+		this.officeCode = officeCode;
+	}
 
-    public String getExporterNiu() {
-        return exporterNiu;
-    }
+	public String getOfficeLabel() {
+		return officeLabel;
+	}
 
-    public void setExporterNiu(String exporterNiu) {
-        this.exporterNiu = exporterNiu;
-    }
+	public void setOfficeLabel(String officeLabel) {
+		this.officeLabel = officeLabel;
+	}
 
-    public String getExporterName() {
-        return exporterName;
-    }
+	public String getExporterNiu() {
+		return exporterNiu;
+	}
 
-    public void setExporterName(String exporterName) {
-        this.exporterName = exporterName;
-    }
-    
-    
-    
+	public void setExporterNiu(String exporterNiu) {
+		this.exporterNiu = exporterNiu;
+	}
+
+	public String getExporterName() {
+		return exporterName;
+	}
+
+	public void setExporterName(String exporterName) {
+		this.exporterName = exporterName;
+	}
+
 }
