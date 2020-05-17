@@ -339,8 +339,6 @@ public class FileItemCctDetailController implements Serializable {
 
     private static final List<StepCode> COTATION_STEP_LIST_ALLOW_DECISION = Arrays.asList(StepCode.ST_CT_53);
 
-    private static final List<String> ADMISSIBILITY_VALIDATIONS_FLOWS_CODES = Arrays.asList(FlowCode.FL_CT_100.name(), FlowCode.FL_CT_05.name());
-
     /**
      * The administration service.
      */
