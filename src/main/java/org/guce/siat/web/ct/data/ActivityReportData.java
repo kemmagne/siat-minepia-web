@@ -11,91 +11,90 @@ import java.io.Serializable;
  *
  * @author yenke
  */
-public class ActivityReportData implements Serializable{
-    
-    
-    private String processName;
-    private String fileReceivedCount;
-    private String fileSignedCount;
-    private String fileReceivedSignedCount;
-    private String fileRejectedCount;
-    private String fileReceivedRejectedCount;
-    private String filePendingCount;
-    private String officeCode;
-    private String officeLabel;
+public class ActivityReportData implements Serializable {
 
-    public String getProcessName() {
-        return processName;
-    }
+	private static final long serialVersionUID = 7032087126272984947L;
 
-    public void setProcessName(String processName) {
-        this.processName = processName;
-    }
+	private String processName;
+	private String fileReceivedCount;
+	private String fileSignedCount;
+	private String fileReceivedSignedCount;
+	private String fileRejectedCount;
+	private String fileReceivedRejectedCount;
+	private String filePendingCount;
+	private String officeCode;
+	private String officeLabel;
 
-    public String getFileReceivedCount() {
-        return fileReceivedCount;
-    }
+	public String getProcessName() {
+		return processName;
+	}
 
-    public void setFileReceivedCount(String fileReceivedCount) {
-        this.fileReceivedCount = fileReceivedCount;
-    }
+	public void setProcessName(String processName) {
+		this.processName = processName;
+	}
 
-    public String getFileSignedCount() {
-        return fileSignedCount;
-    }
+	public String getFileReceivedCount() {
+		return fileReceivedCount;
+	}
 
-    public void setFileSignedCount(String fileSignedCount) {
-        this.fileSignedCount = fileSignedCount;
-    }
+	public void setFileReceivedCount(String fileReceivedCount) {
+		this.fileReceivedCount = fileReceivedCount;
+	}
 
-    public String getFileReceivedSignedCount() {
-        return fileReceivedSignedCount;
-    }
+	public String getFileSignedCount() {
+		return fileSignedCount;
+	}
 
-    public void setFileReceivedSignedCount(String fileReceivedSignedCount) {
-        this.fileReceivedSignedCount = fileReceivedSignedCount;
-    }
+	public void setFileSignedCount(String fileSignedCount) {
+		this.fileSignedCount = fileSignedCount;
+	}
 
-    public String getFileRejectedCount() {
-        return fileRejectedCount;
-    }
+	public String getFileReceivedSignedCount() {
+		return fileReceivedSignedCount;
+	}
 
-    public void setFileRejectedCount(String fileRejectedCount) {
-        this.fileRejectedCount = fileRejectedCount;
-    }
+	public void setFileReceivedSignedCount(String fileReceivedSignedCount) {
+		this.fileReceivedSignedCount = fileReceivedSignedCount;
+	}
 
-    public String getFileReceivedRejectedCount() {
-        return fileReceivedRejectedCount;
-    }
+	public String getFileRejectedCount() {
+		return fileRejectedCount;
+	}
 
-    public void setFileReceivedRejectedCount(String fileReceivedRejectedCount) {
-        this.fileReceivedRejectedCount = fileReceivedRejectedCount;
-    }
+	public void setFileRejectedCount(String fileRejectedCount) {
+		this.fileRejectedCount = fileRejectedCount;
+	}
 
-    public String getFilePendingCount() {
-        return filePendingCount;
-    }
+	public String getFileReceivedRejectedCount() {
+		return fileReceivedRejectedCount;
+	}
 
-    public void setFilePendingCount(String filePendingCount) {
-        this.filePendingCount = filePendingCount;
-    }
+	public void setFileReceivedRejectedCount(String fileReceivedRejectedCount) {
+		this.fileReceivedRejectedCount = fileReceivedRejectedCount;
+	}
 
-    public String getOfficeCode() {
-        return officeCode;
-    }
+	public String getFilePendingCount() {
+		return filePendingCount;
+	}
 
-    public void setOfficeCode(String officeCode) {
-        this.officeCode = officeCode;
-    }
+	public void setFilePendingCount(String filePendingCount) {
+		this.filePendingCount = filePendingCount;
+	}
 
-    public String getOfficeLabel() {
-        return officeLabel;
-    }
+	public String getOfficeCode() {
+		return officeCode;
+	}
 
-    public void setOfficeLabel(String officeLabel) {
-        this.officeLabel = officeLabel;
-    }
-    
-    
-    
+	public void setOfficeCode(String officeCode) {
+		this.officeCode = officeCode;
+	}
+
+	public String getOfficeLabel() {
+		return officeLabel;
+	}
+
+	public void setOfficeLabel(String officeLabel) {
+		this.officeLabel = officeLabel;
+	}
+
 }

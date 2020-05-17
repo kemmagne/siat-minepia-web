@@ -1,5 +1,5 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+				xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 
 	<br />
 
@@ -15,103 +15,109 @@
 
 				<h:commandLink>
 					<h:graphicImage styleClass="sprite sprite-pdf" library="img" name="excel.png"
-						style="width: 34px;height: 34px;display: block;	top: 15px;	right: 52px;position: absolute;" />
+									style="width: 34px;height: 34px;display: block;	top: 15px;	right: 52px;position: absolute;" />
 					<p:dataExporter type="xls" target="datalist" fileName="#{bundle['fileItemDesicionSearch_result']}" />
 				</h:commandLink>
 			</h:panelGrid>
 			<br />
 
-                        <p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable" value="#{statisticController.exportNshDestinationDataList}"
-				filteredValue="" var="exportNsh" rows="10" paginator="true" rowsPerPageTemplate="10,20,30"
-				emptyMessage="#{bundle['AucuneResultat']}"
-				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+			<p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable" value="#{statisticController.exportNshDestinationDataList}"
+						 filteredValue="" var="exportNsh" rows="10" paginator="true" rowsPerPageTemplate="5,10,20,30"
+						 emptyMessage="#{bundle['AucuneResultat']}" rowKey="#{exportNsh.hashCode()}"
+						 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+						 currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
 
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Index" title="Index" />
+					</f:facet>
+					<h:outputText value="#{exportNsh.nsh}" />
+				</p:column>
 				<p:column>
 					<f:facet name="header">
 						<h:outputText value="#{bundle['nshCode']}" title="#{bundle['nshCode']}" />
 					</f:facet>
-                                    <h:outputText value="#{exportNsh.nsh}" />
+					<h:outputText value="#{exportNsh.nsh}" />
 				</p:column>
 				<p:column>
 					<f:facet name="header">
 						<h:outputText value="#{bundle['destinationCountryCode']}" title="#{bundle['destinationCountryCode']}" />
 					</f:facet>
-                                    <h:outputText value="#{exportNsh.destinationCountryCode}" />
+					<h:outputText value="#{exportNsh.destinationCountryCode}" />
 				</p:column>
 				<p:column>
 					<f:facet name="header">
 						<h:outputText value="#{bundle['productType']}" title="#{bundle['productType']}" />
 					</f:facet>
-                                    <h:outputText value="#{exportNsh.productType}" />
+					<h:outputText value="#{exportNsh.productType}" />
 				</p:column>
 				<p:column>
 					<f:facet name="header">
 						<h:outputText value="#{bundle['nshDescription']}" title="#{bundle['nshDescription']}" />
 					</f:facet>
-                                    <h:outputText value="#{exportNsh.nshDescription}" />
+					<h:outputText value="#{exportNsh.nshDescription}" />
 				</p:column>
 				<p:column>
 					<f:facet name="header">
 						<h:outputText value="#{bundle['woodColisCount']}" title="#{bundle['woodColisCount']}" />
 					</f:facet>
-                                    <h:outputText value="#{exportNsh.woodColisCount}" />
+					<h:outputText value="#{exportNsh.woodColisCount}" />
 				</p:column>
 				<p:column>
 					<f:facet name="header">
 						<h:outputText value="#{bundle['bagCount']}" title="#{bundle['bagCount']}" />
 					</f:facet>
-                                    <h:outputText value="#{exportNsh.bagCount}" />
+					<h:outputText value="#{exportNsh.bagCount}" />
 				</p:column>
 				<p:column>
 					<f:facet name="header">
 						<h:outputText value="#{bundle['volume']}" title="#{bundle['volume']}" />
 					</f:facet>
-                                    <h:outputText value="#{exportNsh.volume}" />
+					<h:outputText value="#{exportNsh.volume}" />
 				</p:column>
 				<p:column>
 					<f:facet name="header">
 						<h:outputText value="#{bundle['weightBrut']}" title="#{bundle['weightBrut']}" />
 					</f:facet>
-                                    <h:outputText value="#{exportNsh.weightBrut}" />
+					<h:outputText value="#{exportNsh.weightBrut}" />
 				</p:column>
 				<p:column>
 					<f:facet name="header">
 						<h:outputText value="#{bundle['weight']}" title="#{bundle['weight']}" />
 					</f:facet>
-                                    <h:outputText value="#{exportNsh.weight}" />
+					<h:outputText value="#{exportNsh.weight}" />
 				</p:column>
 				<p:column>
 					<f:facet name="header">
 						<h:outputText value="#{bundle['destinationCountryLabel']}" title="#{bundle['destinationCountryLabel']}" />
 					</f:facet>
-                                    <h:outputText value="#{exportNsh.destinationCountryLabel}" />
+					<h:outputText value="#{exportNsh.destinationCountryLabel}" />
 				</p:column>
 				<p:column>
 					<f:facet name="header">
 						<h:outputText value="#{bundle['originCountryCode']}" title="#{bundle['originCountryCode']}" />
 					</f:facet>
-                                    <h:outputText value="#{exportNsh.originCountryCode}" />
+					<h:outputText value="#{exportNsh.originCountryCode}" />
 				</p:column>
 				<p:column>
 					<f:facet name="header">
 						<h:outputText value="#{bundle['originCountryLabel']}" title="#{bundle['originCountryLabel']}" />
 					</f:facet>
-                                    <h:outputText value="#{exportNsh.originCountryLabel}" />
+					<h:outputText value="#{exportNsh.originCountryLabel}" />
 				</p:column>
 				<p:column>
 					<f:facet name="header">
 						<h:outputText value="#{bundle['officeCode']}" title="#{bundle['officeCode']}" />
 					</f:facet>
-                                    <h:outputText value="#{exportNsh.officeCode}" />
+					<h:outputText value="#{exportNsh.officeCode}" />
 				</p:column>
 				<p:column>
 					<f:facet name="header">
 						<h:outputText value="#{bundle['officeLabel']}" title="#{bundle['officeLabel']}" />
 					</f:facet>
-                                    <h:outputText value="#{exportNsh.officeLabel}" />
+					<h:outputText value="#{exportNsh.officeLabel}" />
 				</p:column>
-				
+
 
 			</p:dataTable>
 

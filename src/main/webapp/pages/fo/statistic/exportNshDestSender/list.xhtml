@@ -22,7 +22,7 @@
 			<br />
 
                         <p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable" value="#{statisticController.exportNshDestinationDataList}"
-				filteredValue="" var="exportNsh" rows="10" paginator="true" rowsPerPageTemplate="10,20,30"
+				filteredValue="" var="exportNsh" rows="10" paginator="true" rowsPerPageTemplate="5,10,20,30"
 				emptyMessage="#{bundle['AucuneResultat']}"
 				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
 				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">

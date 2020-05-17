@@ -10,53 +10,55 @@ import org.guce.siat.core.ct.util.enums.CctExportProductType;
  */
 public class ProductTypeData implements Serializable {
 
-    private CctExportProductType productType;
-    private Boolean checked;
+	private static final long serialVersionUID = 8758595446750305292L;
 
-    public ProductTypeData() {
-    }
+	private CctExportProductType productType;
+	private Boolean checked;
 
-    public ProductTypeData(CctExportProductType productType, Boolean selected) {
-        this.productType = productType;
-        this.checked = selected;
-    }
+	public ProductTypeData() {
+	}
 
-    public CctExportProductType getProductType() {
-        return productType;
-    }
+	public ProductTypeData(CctExportProductType productType, Boolean selected) {
+		this.productType = productType;
+		this.checked = selected;
+	}
 
-    public void setProductType(CctExportProductType productType) {
-        this.productType = productType;
-    }
+	public CctExportProductType getProductType() {
+		return productType;
+	}
 
-    public Boolean getChecked() {
-        return checked;
-    }
+	public void setProductType(CctExportProductType productType) {
+		this.productType = productType;
+	}
 
-    public void setChecked(Boolean checked) {
-        this.checked = checked;
-    }
+	public Boolean getChecked() {
+		return checked;
+	}
 
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 97 * hash + Objects.hashCode(this.productType);
-        return hash;
-    }
+	public void setChecked(Boolean checked) {
+		this.checked = checked;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final ProductTypeData other = (ProductTypeData) obj;
-        return this.productType == other.productType;
-    }
+	@Override
+	public int hashCode() {
+		int hash = 5;
+		hash = 97 * hash + Objects.hashCode(this.productType);
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final ProductTypeData other = (ProductTypeData) obj;
+		return this.productType == other.productType;
+	}
 
 }
