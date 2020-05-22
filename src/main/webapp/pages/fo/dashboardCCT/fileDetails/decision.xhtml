@@ -59,6 +59,10 @@
                         <ui:include src="../specificDecisions/pviInfos/pviInfos.xhtml" />
                     </p:panel>
 
+                    <p:panel rendered="#{fileItemCctDetailController.isPveReadyForSignature(fileItemCctDetailController.selectedFlow)}">
+                        <ui:include src="../specificDecisions/pveValidation/pveValidation.xhtml" />
+                    </p:panel>
+
                     <ui:include src="../specificDecisions/analyseRequest/analyseRequest.xhtml" />
 
                     <ui:include src="../specificDecisions/analyseResult/analyseResult.xhtml" />

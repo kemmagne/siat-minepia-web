@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
-
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -29,7 +28,6 @@ import javax.faces.context.FacesContext;
 import org.apache.chemistry.opencmis.client.api.Folder;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
@@ -229,7 +227,7 @@ public class CostsController extends AbstractController<PaymentData> implements 
             Flow flowToExecute;
             if (Arrays.asList(FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP).contains(currentFile.getFileType().getCode())) {
                 flowToExecute = flowService.findFlowByCode(FlowCode.FL_CT_123.name());
-            } else if (Arrays.asList(FileTypeCode.CCT_CT_E_PVI, FileTypeCode.CCT_CT_E_FSTP).contains(currentFile.getFileType().getCode())) {
+            } else if (Arrays.asList(FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI, FileTypeCode.CCT_CT_E_FSTP).contains(currentFile.getFileType().getCode())) {
                 flowToExecute = flowService.findFlowByCode(FlowCode.FL_CT_126.name());
             } else if (Arrays.asList(FileTypeCode.CCT_CT, FileTypeCode.CC_CT, FileTypeCode.CQ_CT).contains(currentFile.getFileType().getCode())) {
                 flowToExecute = flowService.findFlowByCode(FlowCode.FL_CT_93.name());
@@ -713,7 +711,7 @@ public class CostsController extends AbstractController<PaymentData> implements 
     }
 
     public boolean isPhyto() {
-        boolean checkMinaderMinistry = currentFile.getDestinataire().equalsIgnoreCase(FileItemCctController.MINADER_MINISTRY);
+        boolean checkMinaderMinistry = currentFile.getDestinataire().equalsIgnoreCase(Constants.MINADER_MINISTRY);
         return checkMinaderMinistry && Arrays.asList(FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI).contains(currentFile.getFileType().getCode());
     }
 

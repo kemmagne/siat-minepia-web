@@ -8,7 +8,8 @@ public enum DataTypePropEnnum {
     /**
      * The inputtextarea.
      */
-    PATTERN("pattern");
+    PATTERN("pattern"),
+    FILE_TYPES("fileTypes");
 
     /**
      * The inputnumber.

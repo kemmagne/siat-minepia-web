@@ -5,11 +5,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -17,7 +15,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.guce.siat.common.service.FileFieldValueService;
 import org.guce.siat.common.service.ItemFlowService;
-
+import org.guce.siat.core.ct.service.CommonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +44,8 @@ public abstract class AbstractReportInvoker implements ReportCommand {
     private FileFieldValueService fileFieldValueService;
 
     private ItemFlowService itemFlowService;
+
+    private CommonService commonService;
 
     /**
      * Instantiates a new jasper report builder.
@@ -200,6 +200,22 @@ public abstract class AbstractReportInvoker implements ReportCommand {
 
     public void setItemFlowService(ItemFlowService itemFlowService) {
         this.itemFlowService = itemFlowService;
+    }
+
+    public String getJasperFileName() {
+        return jasperFileName;
+    }
+
+    public void setJasperFileName(String jasperFileName) {
+        this.jasperFileName = jasperFileName;
+    }
+
+    public CommonService getCommonService() {
+        return commonService;
+    }
+
+    public void setCommonService(CommonService commonService) {
+        this.commonService = commonService;
     }
 
 }

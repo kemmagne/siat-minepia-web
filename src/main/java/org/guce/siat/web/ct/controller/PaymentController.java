@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
-
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -18,7 +17,6 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
-
 import org.apache.commons.lang.StringUtils;
 import org.guce.siat.common.model.Administration;
 import org.guce.siat.common.model.Attachment;
@@ -677,7 +675,7 @@ public class PaymentController extends AbstractController<FileItem> {
     }
 
     public boolean isPhyto(File currentFile) {
-        boolean checkMinaderMinistry = currentFile.getDestinataire().equalsIgnoreCase(FileItemCctController.MINADER_MINISTRY);
+        boolean checkMinaderMinistry = currentFile.getDestinataire().equalsIgnoreCase(Constants.MINADER_MINISTRY);
         return checkMinaderMinistry && Arrays.asList(FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI).contains(currentFile.getFileType().getCode());
     }
 

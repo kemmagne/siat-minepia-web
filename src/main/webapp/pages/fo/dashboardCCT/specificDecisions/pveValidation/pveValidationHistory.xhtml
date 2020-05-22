@@ -1,0 +1,95 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" >
+
+
+    <p:scrollPanel mode="native" styleClass="table-decision">
+
+        <p:dataTable id="dataListContainerValidation" widgetVar="dataListContainer" value="#{fileItemCctDetailController.containers}"
+                     var="cont" styleClass="datalist-checkbtn" reflow="true" resizableColumns="true" style="margin-bottom:20px"
+                     rowKey="#{cont.id}" rows="5" paginator="true" rowsPerPageTemplate="5,10,20"
+                     emptyMessage="#{bundle['AucunResultat']}" rowIndexVar="rowIdx"
+                     paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                     currentPageReportTemplate="({startRecord} - {endRecord} / {totalRecords})">
+
+            <f:facet name="header">
+                <h:outputText value="#{bundle['Containers']}" />
+            </f:facet>
+
+            <p:column headerText="#">
+                <h:outputText value="#{rowIdx + 1}" />
+            </p:column>
+
+            <p:column style="width:15%">
+                <f:facet name="header">
+                    <h:outputText value="#{bundle['Number']}" title="#{bundle['Number']}" />
+                </f:facet>
+                <h:outputText value="#{cont.contNumber}" />
+            </p:column>
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{bundle['Type']}" title="#{bundle['Type']}" />
+                </f:facet>
+                <h:outputText value="#{cont.contType}" />
+            </p:column>
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{bundle['Weight']}" title="#{bundle['Weight']}" />
+                </f:facet>
+                <h:outputText value="#{cont.contGrossMass}" />
+            </p:column>
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{bundle['Volume']}" title="#{bundle['Volume']}" />
+                </f:facet>
+                <h:outputText value="#{cont.contVolume}" />
+            </p:column>
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{bundle['Mark']}" title="#{bundle['Mark']}" />
+                </f:facet>
+                <h:outputText value="#{cont.contMark}" />
+            </p:column>
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{bundle['Seal']}" title="#{bundle['Seal']}" />
+                </f:facet>
+                <h:outputText value="#{cont.contSeal1}" />
+            </p:column>
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{bundle['Essence']}" title="#{bundle['Essence']}" />
+                </f:facet>
+                <h:outputText value="#{cont.contDenomination}" />
+            </p:column>
+
+        </p:dataTable>
+
+        <br />
+
+        <p:dataTable widgetVar="PottingPresentsTableWdg" id="PottingPresentsTable" var="pp" value="#{fileItemCctDetailController.pottingPresents}" rowKey="#{pp.id}" rowIndexVar="rowIdx">
+
+            <f:facet name="header">
+                <h:outputText value="#{bundle['PottingPresentsList']}" />
+            </f:facet>
+
+            <p:column headerText="#">
+                <h:outputText value="#{rowIdx + 1}" />
+            </p:column>
+
+            <p:column headerText="#{bundle['PottingPresent_name']}">
+                <h:outputText value="#{pp.name}" />
+            </p:column>
+
+            <p:column headerText="#{bundle['PottingPresent_quality']}">
+                <h:outputText value="#{pp.quality}" />
+            </p:column>
+
+            <p:column headerText="#{bundle['PottingPresent_organism']}">
+                <h:outputText value="#{pp.organism}" />
+            </p:column>
+
+        </p:dataTable>
+
+    </p:scrollPanel>
+
+</ui:composition>

@@ -305,6 +305,7 @@
 			</frame>
 		</band>
 		<band height="120">
+			<printWhenExpression><![CDATA[$F{file}.fileType.code != "CCT_CT_E_PVE"]]></printWhenExpression>
 			<componentElement>
 				<reportElement key="table" style="table" x="0" y="20" width="555" height="80" isPrintWhenDetailOverflows="true" uuid="d7eeec10-a906-4172-a5eb-b4fa97a56452"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
