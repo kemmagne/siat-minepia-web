@@ -380,7 +380,7 @@ public interface ControllerConstants {
             String STATISTIC_GLOBAL_DELAY_LISTING = "/pages/fo/statistic/globalDelayListing/index.xhtml";
             String STATISTIC_DELAY_LISTING_STAKEHOLDER = "/pages/fo/statistic/delayListingStakeholder/index.xhtml";
             String STATISTIC_EXPORT_NSH_DESTINIATION = "/pages/fo/statistic/exportNshDestination/index.xhtml";
-            String STATISTIC_EXPORT_NSH_DESTINIATION_SENDER = "/pages/fo/statistic/exportNshDestinationSender/index.xhtml";
+            String STATISTIC_EXPORT_NSH_DESTINIATION_SENDER = "/pages/fo/statistic/exportNshDestSender/index.xhtml";
 
             /**
              * The Interface GR.
