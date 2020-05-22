@@ -1393,8 +1393,7 @@ public class FileItemCctDetailController implements Serializable {
                         }
 
                         boolean payed = false;
-                        hist:
-                        for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
+hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                             if (hist.getItemFlow().getFlow().getCode().equals(FlowCode.FL_CT_93.name())) {
                                 payed = true;
                                 final Iterator<Flow> it = flows.iterator();
@@ -2869,7 +2868,6 @@ public class FileItemCctDetailController implements Serializable {
         transactionDefinition.setPropagationBehavior(GLOBAL_PROPAGATION_TRANSACTION_BEHAVIOUR);
         TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
         displayGenerateDraft = false;
-//        MutableObject<TransactionStatus> vStatus = transactionHelper.beginTransaction();
         try {
             final List<ItemFlowData> flowDatas = new ArrayList<>();
             for (final DataType dataType : selectedFlow.getDataTypeList()) {
@@ -2880,8 +2878,7 @@ public class FileItemCctDetailController implements Serializable {
                     final HtmlInputText valueDataType = (HtmlInputText) dipatchDiv.findComponent(ID_DISPATCH_LABEL + dataType.getId());
                     itemFlowData.setValue(valueDataType.getValue().toString());
                 } else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode())) {
-                    final HtmlSelectBooleanCheckbox valueDataType = (HtmlSelectBooleanCheckbox) dipatchDiv
-                            .findComponent(ID_DISPATCH_LABEL + dataType.getId());
+                    final HtmlSelectBooleanCheckbox valueDataType = (HtmlSelectBooleanCheckbox) dipatchDiv.findComponent(ID_DISPATCH_LABEL + dataType.getId());
                     itemFlowData.setValue(valueDataType.getValue().toString());
 
                 } else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
@@ -2889,8 +2886,7 @@ public class FileItemCctDetailController implements Serializable {
                     itemFlowData.setValue(DateUtils.formatSimpleDateFromObject(DateUtils.FRENCH_DATE, valueDataType.getValue()));
 
                 } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode())) {
-                    final HtmlInputTextarea valueDataType = (HtmlInputTextarea) dipatchDiv.findComponent(ID_DISPATCH_LABEL
-                            + dataType.getId());
+                    final HtmlInputTextarea valueDataType = (HtmlInputTextarea) dipatchDiv.findComponent(ID_DISPATCH_LABEL + dataType.getId());
                     itemFlowData.setValue(valueDataType.getValue().toString());
                 }
                 flowDatas.add(itemFlowData);
@@ -2924,7 +2920,6 @@ public class FileItemCctDetailController implements Serializable {
             transactionStatus = null;
             transactionManager.commit(tsCommit);
             decided = true;
-//            transactionHelper.commit(vStatus);
             if (LOG.isDebugEnabled()) {
                 LOG.info("####DISPATCH DECISION Transaction commited####");
             }
@@ -2937,7 +2932,6 @@ public class FileItemCctDetailController implements Serializable {
             if (transactionStatus != null) {
                 transactionManager.rollback(transactionStatus);
             }
-//            transactionHelper.rollback(vStatus);
         }
         resetDataGridInofrmationProducts();
     }
@@ -2952,15 +2946,14 @@ public class FileItemCctDetailController implements Serializable {
         // let find the cotation flow
         final FlowCode flowCode;
         final FileTypeCode currentFileTypeCode = currentFile.getFileType().getCode();
-        if (FileTypeCode.CCT_CT_E_FSTP.equals(currentFileTypeCode) || FileTypeCode.CCT_CT_E_PVI.equals(currentFileTypeCode)) {
+        if (FileTypeCode.CCT_CT_E_FSTP.equals(currentFileTypeCode) || FileTypeCode.CCT_CT_E_PVI.equals(currentFileTypeCode) || FileTypeCode.CCT_CT_E_PVE.equals(currentFileTypeCode)) {
             flowCode = FlowCode.FL_CT_103;
         } else {
             flowCode = FlowCode.FL_CT_06;
         }
         FileItem fi = currentFile.getFileItemsList().get(0);
         Flow cotationFlow = null;
-        if (isCheckMinaderMinistry() && (FileTypeCode.CCT_CT_E_FSTP.equals(currentFileTypeCode) || FileTypeCode.CCT_CT_E_PVI.equals(currentFileTypeCode)
-                || FileTypeCode.CCT_CT_E_ATP.equals(currentFileTypeCode) || FileTypeCode.CCT_CT_E.equals(currentFileTypeCode))) {
+        if (isCheckMinaderMinistry() && isPhyto()) {
             final List<Flow> flowList = flowService.findFlowsByFromStepAndFileType2(fi.getStep(), currentFile.getFileType());
             if (flowList != null && !flowList.isEmpty()) {
                 for (Flow flowItem : flowList) {
