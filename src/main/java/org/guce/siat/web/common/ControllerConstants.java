@@ -475,6 +475,11 @@ public interface ControllerConstants {
             /**
              * The Constant SEND_ERROR.
              */
+            String BILLING_WITHOUT_INVOICE_LINES_ERROR = "billingWithoutInvoiceLines_Error";
+
+            /**
+             * The Constant SEND_ERROR.
+             */
             String RESEND_ERROR = "ReSendError";
 
             /**

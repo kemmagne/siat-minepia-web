@@ -93,7 +93,7 @@
 
                     <ui:repeat value="#{userController.getListAuthoritiesByUser(item)}" var="grantedAuthority">
                         <p:spacer width="3" />
-                        <p:graphicImage value="/images/icons/icon-#{grantedAuthority.role}.png" width="20" height="20" />
+                        <p:graphicImage value="/images/icons/icon-#{grantedAuthority.role}.png" width="20" height="20" alt="#{grantedAuthority.role}" />
                     </ui:repeat>
 
                 </p:column>

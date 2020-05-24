@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.guce.siat.common.model.File;
 import org.guce.siat.core.ct.model.PottingPresent;
+import org.guce.siat.core.ct.model.PottingReport;
 
 /**
  *
@@ -15,6 +16,7 @@ public class CtCctPveFileVo implements Serializable {
     private File file;
     private List<PottingPresent> presents;
     private List<ContainerVo> containers;
+    private PottingReport pottingReport;
 
     private String appointmentDate;
     private String pottingEndDate;
@@ -40,6 +42,14 @@ public class CtCctPveFileVo implements Serializable {
 
     public void setFile(File file) {
         this.file = file;
+    }
+
+    public PottingReport getPottingReport() {
+        return pottingReport;
+    }
+
+    public void setPottingReport(PottingReport pottingReport) {
+        this.pottingReport = pottingReport;
     }
 
     public List<PottingPresent> getPresents() {

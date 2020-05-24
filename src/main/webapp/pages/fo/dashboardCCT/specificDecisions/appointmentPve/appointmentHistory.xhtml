@@ -1,0 +1,20 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+
+
+    <h:panelGroup rendered="#{not empty fileItemCctDetailController.selectedItemFlowDto and (fileItemCctDetailController.selectedItemFlowDto.itemFlow.flow.code eq 'FL_CT_104' or fileItemCctDetailController.selectedItemFlowDto.itemFlow.flow.code eq 'FL_CT_118')}">
+
+        <p:panelGrid columns="2">
+            <h:outputLabel for="PveAppointmentDate" value="#{bundle['AppointmentDate']}" />
+            <h:outputText value="#{fileItemCctDetailController.pottingReport.appointmentDate}">
+                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+            </h:outputText>
+
+            <h:outputLabel value="Observations" />
+            <h:outputText value="#{fileItemCctDetailController.pottingReport.appointmentDetails}" />
+
+        </p:panelGrid>
+
+    </h:panelGroup>
+
+</ui:composition>

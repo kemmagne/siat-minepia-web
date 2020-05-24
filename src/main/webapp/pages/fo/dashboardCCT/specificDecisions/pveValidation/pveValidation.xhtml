@@ -1,126 +1,75 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" >
 
+    <p:panelGrid columns="2">
+        <h:outputLabel for="PveAuthorizationNumber" value="#{bundle['AuthorizationNumber']}" />
+        <h:panelGroup>
+            <p:inputText value="#{fileItemCctDetailController.pottingReport.authorizationNumber}" id="PveAuthorizationNumber" required="true"
+                         requiredMessage="#{bundle['Field']} #{bundle['AuthorizationNumber']} #{bundle['RequiredMessage']}">
+                <f:validateLength maximum="35" />
+            </p:inputText>
+            <p:message for="PveAuthorizationNumber" />
+        </h:panelGroup>
 
-    <p:scrollPanel mode="native" styleClass="decisionForm">
+        <h:outputLabel for="PveAuthorizationDate" value="#{bundle['AuthorizationDate']}" />
+        <h:panelGroup>
+            <p:calendar navigator="true" readonlyInput="true" pattern="dd/MM/yyyy"
+                        value="#{fileItemCctDetailController.pottingReport.authorizationDate}" showOn="button" id="PveAuthorizationDate" required="true"
+                        requiredMessage="#{bundle['Field']} #{bundle['AuthorizationDate']} #{bundle['RequiredMessage']}" />
+            <p:message for="PveAuthorizationDate" />
+        </h:panelGroup>
 
-        <p:dataTable id="dataListContainerValidation" widgetVar="dataListContainer" value="#{fileItemCctDetailController.containers}"
-                     var="cont" styleClass="datalist-checkbtn" reflow="true" resizableColumns="true" style="margin-bottom:20px"
-                     rowKey="#{cont.id}" rows="5" paginator="true" rowsPerPageTemplate="5,10,20"
-                     emptyMessage="#{bundle['AucunResultat']}" rowIndexVar="rowIdx"
-                     paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-                     currentPageReportTemplate="({startRecord} - {endRecord} / {totalRecords})">
+        <h:outputLabel for="PvePottingEndDate" value="#{bundle['PottingEndDate']}" />
+        <h:panelGroup>
+            <p:calendar navigator="true" readonlyInput="true" pattern="dd/MM/yyyy HH:mm" mindate="#{fileItemCctDetailController.pottingReport.appointmentDate}"
+                        value="#{fileItemCctDetailController.pottingReport.pottingEndDate}" showOn="button" id="PvePottingEndDate" required="true"
+                        requiredMessage="#{bundle['Field']} #{bundle['PottingEndDate']} #{bundle['RequiredMessage']}" />
+            <p:message for="PvePottingEndDate" />
+        </h:panelGroup>
 
-            <f:facet name="header">
-                <h:outputText value="#{bundle['Containers']}" />
-            </f:facet>
+        <h:outputLabel for="PveTreatmentCertNumber" value="#{bundle['TreatmentCertNumber']}" />
+        <h:panelGroup>
+            <p:inputText value="#{fileItemCctDetailController.pottingReport.treatmentCertNumber}" id="PveTreatmentCertNumber" required="true"
+                         requiredMessage="#{bundle['Field']} #{bundle['TreatmentCertNumber']} #{bundle['RequiredMessage']}">
+                <f:validateLength maximum="35" />
+            </p:inputText>
+            <p:message for="PveTreatmentCertNumber" />
+        </h:panelGroup>
 
-            <p:column headerText="#">
-                <h:outputText value="#{rowIdx + 1}" />
-            </p:column>
+        <h:outputLabel for="PveTreatmentCertDate" value="#{bundle['TreatmentCertDate']}" />
+        <h:panelGroup>
+            <p:calendar navigator="true" readonlyInput="true" pattern="dd/MM/yyyy"
+                        value="#{fileItemCctDetailController.pottingReport.treatmentCertDate}" showOn="button" id="PveTreatmentCertDate" required="true"
+                        requiredMessage="#{bundle['Field']} #{bundle['TreatmentCertDate']} #{bundle['RequiredMessage']}" />
+            <p:message for="PveTreatmentCertDate" />
+        </h:panelGroup>
 
-            <p:column style="width:15%">
-                <f:facet name="header">
-                    <h:outputText value="#{bundle['Number']}" title="#{bundle['Number']}" />
-                </f:facet>
-                <h:outputText value="#{cont.contNumber}" />
-            </p:column>
-            <p:column>
-                <f:facet name="header">
-                    <h:outputText value="#{bundle['Type']}" title="#{bundle['Type']}" />
-                </f:facet>
-                <h:outputText value="#{cont.contType}" />
-            </p:column>
-            <p:column>
-                <f:facet name="header">
-                    <h:outputText value="#{bundle['Weight']}" title="#{bundle['Weight']}" />
-                </f:facet>
-                <h:outputText value="#{cont.contGrossMass}" />
-            </p:column>
-            <p:column>
-                <f:facet name="header">
-                    <h:outputText value="#{bundle['Volume']}" title="#{bundle['Volume']}" />
-                </f:facet>
-                <h:outputText value="#{cont.contVolume}" />
-            </p:column>
-            <p:column>
-                <f:facet name="header">
-                    <h:outputText value="#{bundle['Mark']}" title="#{bundle['Mark']}" />
-                </f:facet>
-                <h:outputText value="#{cont.contMark}" />
-            </p:column>
-            <p:column>
-                <f:facet name="header">
-                    <h:outputText value="#{bundle['Seal']}" title="#{bundle['Seal']}" />
-                </f:facet>
-                <h:panelGroup>
-                    <p:inputText id="ContSeal" value="#{cont.contSeal1}" title="#{bundle['Seal']}" required="true" requiredMessage="#{bundle['Field']} #{bundle['Seal']} #{bundle['RequiredMessage']}">
-                        <f:validateLength maximum="10" />
-                    </p:inputText>
-                    <p:message for="ContSeal" />
-                </h:panelGroup>
-            </p:column>
-            <p:column>
-                <f:facet name="header">
-                    <h:outputText value="#{bundle['Essence']}" title="#{bundle['Essence']}" />
-                </f:facet>
-                <h:outputText value="#{cont.contDenomination}" />
-            </p:column>
+        <h:outputLabel for="PveAdditionalInformations" value="#{bundle['PveAdditionalInformations']}" />
+        <h:panelGroup>
+            <p:inputTextarea value="#{fileItemCctDetailController.pottingReport.additionalInformations}" id="PveAdditionalInformations" required="true"
+                             requiredMessage="#{bundle['Field']} #{bundle['PveAdditionalInformations']} #{bundle['RequiredMessage']}">
+                <f:validateLength maximum="255" />
+            </p:inputTextarea>
+            <p:message for="PveAdditionalInformations" />
+        </h:panelGroup>
 
-        </p:dataTable>
+        <h:outputLabel for="PveOther" value="#{bundle['PveOther']}" />
+        <h:panelGroup>
+            <p:inputText value="#{fileItemCctDetailController.pottingReport.otherProcductTypeDescription}" id="PveOther" required="true"
+                         requiredMessage="#{bundle['Field']} #{bundle['PveOther']} #{bundle['RequiredMessage']}">
+                <f:validateLength maximum="100" />
+            </p:inputText>
+            <p:message for="PveOther" />
+        </h:panelGroup>
 
-        <br />
-
-        <p:dataTable widgetVar="PottingPresentsTableWdg" id="PottingPresentsTable" var="pp" value="#{fileItemCctDetailController.pottingPresents}"
-                     rowKey="#{pp.hashCode()}" rowIndexVar="rowIdx" selectionMode="single" selection="#{fileItemCctDetailController.selectedPottingPresent}">
-
-            <p:ajax event="rowSelect" resetValues="true" oncomplete="clickedItem()" onsuccess="PF('statusDialog1').unblock()" />
-            <p:ajax event="rowUnselect" resetValues="true" oncomplete="clickedItem()" onsuccess="PF('statusDialog1').unblock()" />
-
-            <f:facet name="header">
-                <h:outputText value="#{bundle['PottingPresentsList']}" />
-            </f:facet>
-
-            <p:column headerText="#">
-                <h:outputText value="#{rowIdx + 1}" />
-            </p:column>
-
-            <p:column headerText="#{bundle['PottingPresent_name']}">
-                <h:panelGroup>
-                    <p:inputText id="PottingPresent_name" value="#{pp.name}" title="#{bundle['PottingPresent_name']}" required="true"
-                                 requiredMessage="#{bundle['Field']} #{bundle['PottingPresent_name']} #{bundle['RequiredMessage']}" />
-                    <p:message for="PottingPresent_name" />
-                </h:panelGroup>
-            </p:column>
-
-            <p:column headerText="#{bundle['PottingPresent_quality']}">
-                <h:panelGroup>
-                    <p:inputText id="PottingPresent_quality" value="#{pp.quality}" title="#{bundle['PottingPresent_quality']}" required="true"
-                                 requiredMessage="#{bundle['Field']} #{bundle['PottingPresent_quality']} #{bundle['RequiredMessage']}" />
-                    <p:message for="PottingPresent_quality" />
-                </h:panelGroup>
-            </p:column>
-
-            <p:column headerText="#{bundle['PottingPresent_organism']}">
-                <h:panelGroup>
-                    <p:selectOneMenu id="PottingPresent_organism" value="#{pp.organism}" required="true"
-                                     requiredMessage="#{bundle['Field']} #{bundle['PottingPresent_organism']} #{bundle['RequiredMessage']}">
-                        <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-                        <f:selectItems value="#{fileItemCctDetailController.pottingPresentsOrganisms}" var="ppo" itemValue="#{ppo}" itemLabel="#{ppo}" />
-                    </p:selectOneMenu>
-                    <p:message for="PottingPresent_organism" />
-                </h:panelGroup>
-            </p:column>
-
-            <f:facet name="footer">
-                <p:commandButton id="PottingPresent_Ajouter" styleClass="btn" icon="sprite sprite-plus" value="#{bundle['Create']}"
-                                 actionListener="#{fileItemCctDetailController.addPottingPresent()}" update=":PottingPresentsTable" />
-                <p:commandButton id="PottingPresent_Delete" styleClass="btn" icon="sprite sprite-delete" value="#{bundle['Delete']}"
-                                 actionListener="#{fileItemCctDetailController.removePottingPresent()}" update=":PottingPresentsTable" />
-            </f:facet>
-
-        </p:dataTable>
-
-    </p:scrollPanel>
+        <h:outputLabel for="PveQuality" value="#{bundle['Quality']}" />
+        <h:panelGroup>
+            <p:inputText value="#{fileItemCctDetailController.pottingReport.quality}" id="PveQuality" required="true"
+                         requiredMessage="#{bundle['Field']} #{bundle['Quality']} #{bundle['RequiredMessage']}">
+                <f:validateLength maximum="35" />
+            </p:inputText>
+            <p:message for="PveQuality" />
+        </h:panelGroup>
+    </p:panelGrid>
 
 </ui:composition>

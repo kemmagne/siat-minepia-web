@@ -9,14 +9,20 @@ import java.math.BigDecimal;
 public class ContainerVo {
 
     private String contNumber;
-    private String contSeal;
-    private String contEssenceDenomination;
+    private String contSeal1;
+    private String contDenomination;
     private Integer contNumberOfPackages;
     private BigDecimal contGrossMass;
     private BigDecimal contVolume;
     private String contMark;
     private String contType;
     private Boolean contRefrigerated;
+
+    private String productType;
+
+    private String contDenominationLabel;
+    private String contNumberOfPackagesLabel;
+    private String contQuantityLabel;
 
     public String getContNumber() {
         return contNumber;
@@ -26,20 +32,20 @@ public class ContainerVo {
         this.contNumber = contNumber;
     }
 
-    public String getContSeal() {
-        return contSeal;
+    public String getContSeal1() {
+        return contSeal1;
     }
 
-    public void setContSeal(String contSeal) {
-        this.contSeal = contSeal;
+    public void setContSeal1(String contSeal1) {
+        this.contSeal1 = contSeal1;
     }
 
-    public String getContEssenceDenomination() {
-        return contEssenceDenomination;
+    public String getContDenomination() {
+        return contDenomination;
     }
 
-    public void setContEssenceDenomination(String contEssenceDenomination) {
-        this.contEssenceDenomination = contEssenceDenomination;
+    public void setContDenomination(String contDenomination) {
+        this.contDenomination = contDenomination;
     }
 
     public Integer getContNumberOfPackages() {
@@ -88,6 +94,38 @@ public class ContainerVo {
 
     public void setContRefrigerated(Boolean contRefrigerated) {
         this.contRefrigerated = contRefrigerated;
+    }
+
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
+    }
+
+    public String getContDenominationLabel() {
+        return contDenominationLabel;
+    }
+
+    public void setContDenominationLabel(String contDenominationLabel) {
+        this.contDenominationLabel = contDenominationLabel;
+    }
+
+    public String getContNumberOfPackagesLabel() {
+        return contNumberOfPackagesLabel;
+    }
+
+    public void setContNumberOfPackagesLabel(String contNumberOfPackagesLabel) {
+        this.contNumberOfPackagesLabel = contNumberOfPackagesLabel;
+    }
+
+    public String getContQuantityLabel() {
+        return contQuantityLabel;
+    }
+
+    public void setContQuantityLabel(String contQuantityLabel) {
+        this.contQuantityLabel = contQuantityLabel;
     }
 
 }

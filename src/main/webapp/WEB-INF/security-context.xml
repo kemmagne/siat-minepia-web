@@ -68,6 +68,7 @@
         <sec:intercept-url pattern="/pages/bo/fileType/**" access="hasRole('ROOT')" />
         <sec:intercept-url pattern="/pages/bo/positionAuthority/**" access="hasRole('ADMIN_ORG')" />
         <sec:intercept-url pattern="/pages/bo/gr/**" access="hasAnyRole('ADMIN_ORG','ROOT')" />
+        <sec:intercept-url pattern="/pages/bo/agentsManagement/**" access="hasAnyRole('GA')" />
 
         <!-- USERS WORKFLOW PAGES ACCESS -->
         <sec:intercept-url pattern="/pages/fo/**" access="hasAnyRole('SUPER', 'CONS', 'AC1', 'AC2', 'AC3', 'AC4', 'AC5', 'AC6', 'AR', 'INS', 'CONT', 'LAB', 'TREAT', 'SIGN', 'RT', 'CA', 'GA', 'VF')" />

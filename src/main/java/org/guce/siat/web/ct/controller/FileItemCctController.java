@@ -39,6 +39,7 @@ import org.guce.siat.common.service.UserAuthorityFileTypeService;
 import org.guce.siat.common.utils.Constants;
 import org.guce.siat.common.utils.DateUtils;
 import org.guce.siat.common.utils.enums.FileTypeCode;
+import org.guce.siat.common.utils.enums.StepCode;
 import org.guce.siat.core.ct.service.CommonService;
 import org.guce.siat.core.ct.util.enums.CctExportProductType;
 import org.guce.siat.web.common.AbstractController;
@@ -276,7 +277,7 @@ public class FileItemCctController extends AbstractController<FileItem> {
                     FileItem item = iterator.next();
                     File file = item.getFile();
 
-                    if (!isPhyto(file)) {
+                    if (!isPhyto(file) || getLoggedUser().equals(file.getAssignedUser()) || Arrays.asList(StepCode.ST_CT_57, StepCode.ST_CT_60, StepCode.ST_CT_03, StepCode.ST_CT_47, StepCode.ST_CT_53, StepCode.ST_CT_62).contains(item.getStep().getStepCode())) {
                         continue;
                     }
 

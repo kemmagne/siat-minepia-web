@@ -29,12 +29,21 @@
                                 value="#{facesContext.viewRoot.locale eq 'en' ? item.itemFlow.flow.redefinedLabelEn :  item.itemFlow.flow.redefinedLabelFr}" />
                         </p:column>
 
-                        <p:column sortBy="#{item.itemFlow.sender.firstName}" filterBy="#{item.itemFlow.sender.firstName}" filterMatchMode="contains"
+                        <p:column sortBy="#{item.itemFlow.sender.lastName}" filterBy="#{item.itemFlow.sender.lastName}" filterMatchMode="contains"
                                   style="width:90px">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle['History_person']}" title="#{bundle['History_person']}" />
                             </f:facet>
                             <h:outputText value="#{item.itemFlow.sender.firstName} #{item.itemFlow.sender.lastName}" />
+                        </p:column>
+
+                        <p:column style="width:90px">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle['History_assignedUser']}" title="#{bundle['History_assignedUser']}" />
+                            </f:facet>
+                            <h:panelGroup rendered="#{not empty item.itemFlow.assignedUser}">
+                                <h:outputText value="#{item.itemFlow.assignedUser.firstName} #{item.itemFlow.assignedUser.lastName}" />
+                            </h:panelGroup>
                         </p:column>
 
                         <p:column sortBy="#{dateBean.formatSimpleDate(item.itemFlow.created)}" filterBy="#{dateBean.formatSimpleDate(item.itemFlow.created)}"
@@ -46,8 +55,6 @@
                                 <f:convertDateTime type="date" pattern="dd/MM/yyyy - HH:mm:ss" />
                             </h:outputText>
                         </p:column>
-
-
 
                         <p:column rendered="#{request.isUserInRole('SUPER')}" style="width:90px">
                             <f:facet name="header">
@@ -154,6 +161,8 @@
                             <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.approvedDecision}">
                                 <ui:include src="../specificDecisions/dcc/dccHistory.xhtml" />
                             </h:panelGroup>
+
+                            <ui:include src="../specificDecisions/appointmentPve/appointmentHistory.xhtml" />
 
                             <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.cCTCPParamValue}">
                                 <ui:include src="../specificDecisions/cctCp/cctCpHistory.xhtml" />

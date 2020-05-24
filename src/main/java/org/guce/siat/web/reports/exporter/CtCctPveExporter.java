@@ -5,12 +5,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import org.apache.commons.lang3.StringUtils;
 import org.guce.siat.common.model.Container;
 import org.guce.siat.common.model.File;
 import org.guce.siat.common.model.FileFieldValue;
 import org.guce.siat.common.utils.Constants;
-import org.guce.siat.core.ct.model.PottingPresent;
+import org.guce.siat.core.ct.model.PottingReport;
 import org.guce.siat.core.ct.util.enums.CctExportProductType;
 import static org.guce.siat.web.reports.exporter.ReportCommand.IMAGES_PATH;
 import org.guce.siat.web.reports.vo.ContainerVo;
@@ -36,13 +35,21 @@ public class CtCctPveExporter extends AbstractReportInvoker {
 
         fileVo.setFile(file);
 
+        PottingReport pottingReport = getPottingReportService().findPottingReportByFile(file);
+        fileVo.setPottingReport(pottingReport);
+
+        String productTypeCode = getFileFieldValueService().findValueByFileFieldAndFile(CctExportProductType.getFileFieldCode(), file).getValue();
+        fileVo.setProductTypeCode(productTypeCode);
+        addJRParameters(productTypeCode);
+
+        List<ContainerVo> containerVos = new ArrayList<>();
         for (Container container : file.getContainers()) {
 
             ContainerVo containerVo = new ContainerVo();
 
             containerVo.setContNumber(container.getContNumber());
-            containerVo.setContSeal(container.getContSeal1());
-            containerVo.setContEssenceDenomination(container.getContDenomination());
+            containerVo.setContSeal1(container.getContSeal1());
+            containerVo.setContDenomination(container.getContDenomination());
             containerVo.setContGrossMass(container.getContGrossMass());
             containerVo.setContVolume(container.getContVolume());
             containerVo.setContMark(container.getContMark());
@@ -50,25 +57,25 @@ public class CtCctPveExporter extends AbstractReportInvoker {
             containerVo.setContRefrigerated(container.getContRefrigerated());
             containerVo.setContType(container.getContType());
 
-            fileVo.getContainers().add(containerVo);
+            containerVo.setProductType(productTypeCode);
+
+            addJRParameters(productTypeCode, containerVo);
+
+            containerVos.add(containerVo);
         }
+        fileVo.setContainers(containerVos);
 
-        List<PottingPresent> presents = getCommonService().findPottingPresentsByFile(file);
-        fileVo.setPresents(presents);
-        List<String> list = new ArrayList<>();
-        for (PottingPresent present : presents) {
-            if (!Constants.MINADER_MINISTRY.equals(present.getOrganism())) {
-                continue;
-            }
-
-            list.add(String.format("%s : %s", present.getName(), present.getQuality()));
-        }
-        fileVo.setAgents(StringUtils.join(list, " ; "));
-
-        String productTypeCode = getFileFieldValueService().findValueByFileFieldAndFile(CctExportProductType.getFileFieldCode(), file).getValue();
-        fileVo.setProductTypeCode(productTypeCode);
-        addJRParameters(productTypeCode);
-
+//        List<PottingPresent> presents = getPottingReportService().findPottingPresentsByFile(file);
+//        fileVo.setPresents(presents);
+//        List<String> list = new ArrayList<>();
+//        for (PottingPresent present : presents) {
+//            if (!Constants.MINADER_MINISTRY.equals(present.getOrganism())) {
+//                continue;
+//            }
+//
+//            list.add(String.format("%s : %s", present.getName(), present.getQuality()));
+//        }
+//        fileVo.setAgents(StringUtils.join(list, " ; "));
         List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
 
         for (final FileFieldValue fileFieldValue1 : fileFieldValueList) {
@@ -120,6 +127,47 @@ public class CtCctPveExporter extends AbstractReportInvoker {
 
     public File getFile() {
         return file;
+    }
+
+    private void addJRParameters(String productTypeCode, ContainerVo container) {
+        CctExportProductType productType = CctExportProductType.valueOf(productTypeCode);
+        switch (productType) {
+            case GR:
+                container.setContDenominationLabel("ESSENCE");
+                container.setContNumberOfPackagesLabel("BILLES");
+                container.setContQuantityLabel("VOLUME (m3)");
+                break;
+            case BT:
+                container.setContDenominationLabel("ESSENCE");
+                container.setContNumberOfPackagesLabel("N/COLIS");
+                container.setContQuantityLabel("VOLUME (m3)");
+                break;
+            case PS:
+                container.setContDenominationLabel("DENOMINATION");
+                container.setContNumberOfPackagesLabel("N.COLIS/SAC");
+                container.setContQuantityLabel("TONNAGE (t)");
+                break;
+            case OA:
+                container.setContDenominationLabel("DENOMINATION");
+                container.setContNumberOfPackagesLabel("N/PIECES");
+                container.setContQuantityLabel("TONNAGE (t)");
+                break;
+            case CC:
+                container.setContDenominationLabel("DENOMINATION");
+                container.setContNumberOfPackagesLabel("NOMBRE SACS");
+                container.setContQuantityLabel("TONNAGE (t)");
+                break;
+            case CF:
+                container.setContDenominationLabel("DENOMINATION");
+                container.setContNumberOfPackagesLabel("N. SACS");
+                container.setContQuantityLabel("TONNAGE (t)");
+                break;
+            case COTON:
+                container.setContDenominationLabel("DENOMINATION");
+                container.setContNumberOfPackagesLabel("N. COLIS");
+                container.setContQuantityLabel("TONNAGE (t)");
+                break;
+        }
     }
 
     private void addJRParameters(String productTypeCode) {

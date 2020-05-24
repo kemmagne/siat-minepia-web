@@ -15,7 +15,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.guce.siat.common.service.FileFieldValueService;
 import org.guce.siat.common.service.ItemFlowService;
-import org.guce.siat.core.ct.service.CommonService;
+import org.guce.siat.core.ct.service.PottingReportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +45,7 @@ public abstract class AbstractReportInvoker implements ReportCommand {
 
     private ItemFlowService itemFlowService;
 
-    private CommonService commonService;
+    private PottingReportService pottingReportService;
 
     /**
      * Instantiates a new jasper report builder.
@@ -75,7 +75,7 @@ public abstract class AbstractReportInvoker implements ReportCommand {
 
             //set pdf type
             try ( // Provides an output stream for sending binary data
-                    ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream()) {
+                     ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream()) {
                 //set pdf type
                 httpServletResponse.setContentType("application/pdf");
                 httpServletResponse.setContentLength(bytes.length);
@@ -210,12 +210,12 @@ public abstract class AbstractReportInvoker implements ReportCommand {
         this.jasperFileName = jasperFileName;
     }
 
-    public CommonService getCommonService() {
-        return commonService;
+    public PottingReportService getPottingReportService() {
+        return pottingReportService;
     }
 
-    public void setCommonService(CommonService commonService) {
-        this.commonService = commonService;
+    public void setPottingReportService(PottingReportService pottingReportService) {
+        this.pottingReportService = pottingReportService;
     }
 
 }

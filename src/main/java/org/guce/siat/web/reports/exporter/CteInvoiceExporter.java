@@ -64,6 +64,9 @@ public class CteInvoiceExporter extends AbstractReportInvoker {
         invoiceVo.setOperationType("EXPORT");
 
         ItemFlow invValidItemFlow = getItemFlowService().findItemFlowByFileItemAndFlow2(file.getFileItemsList().get(0), FlowCode.FL_CT_121);
+        if (invValidItemFlow == null) {
+            invValidItemFlow = getItemFlowService().findItemFlowByFileItemAndFlow2(file.getFileItemsList().get(0), FlowCode.FL_CT_133);
+        }
         invoiceVo.setSignatory(invValidItemFlow.getSender());
         invoiceVo.setSignatureDate(invValidItemFlow.getCreated());
         if (invoiceVo.getSignatureDate() == null) {
