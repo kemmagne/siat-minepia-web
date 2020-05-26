@@ -180,6 +180,7 @@ import org.guce.siat.core.ct.service.TreatmentCompanyService;
 import org.guce.siat.core.ct.service.TreatmentInfosService;
 import org.guce.siat.core.ct.service.TreatmentOrderService;
 import org.guce.siat.core.ct.service.TreatmentResultService;
+import org.guce.siat.core.ct.util.enums.CctExportProductType;
 import org.guce.siat.core.gr.model.TrendPerformance;
 import org.guce.siat.core.gr.service.InfractionService;
 import org.guce.siat.core.gr.service.RiskService;
@@ -1152,6 +1153,8 @@ public class FileItemCctDetailController implements Serializable {
 
     private PottingReport pottingReport;
 
+    private CctExportProductType productType;
+
     /**
      * Inits the.
      */
@@ -2005,13 +2008,22 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
 
         if (isPveReadyForSignature(selectedFlow)) {
             pottingReport = commonService.findPottingReportByFile(currentFile);
-        } else if (FileTypeCode.CCT_CT_E_PVE.equals(currentFile.getFileType().getCode()) && Arrays.asList(FlowCode.FL_CT_104.name(), FlowCode.FL_CT_118.name()).contains(selectedFlow.getCode())) {
+            pottingReport.setPottingController(getLoggedUser());
+            FileFieldValue ptFieldValue = fileFieldValueService.findValueByFileFieldAndFile(CctExportProductType.getFileFieldCode(), currentFile);
+            if (ptFieldValue != null) {
+                try {
+                    productType = CctExportProductType.valueOf(ptFieldValue.getValue());
+                } catch (Exception ex) {
+                }
+            }
+        } else if (isAppointmentOkForPve(selectedFlow)) {
             if (FlowCode.FL_CT_104.name().equals(selectedFlow.getCode())) {
                 pottingReport = new PottingReport();
                 pottingReport.setFile(currentFile);
                 pottingReport.setPottingController(getLoggedUser());
             } else {
                 pottingReport = commonService.findPottingReportByFile(currentFile);
+                pottingReport.setAppointmentDateBack(pottingReport.getAppointmentDate());
             }
         }
     }
@@ -2238,8 +2250,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
         } else if (Arrays.asList(FlowCode.FL_CT_120.name(), FlowCode.FL_CT_124.name(), FlowCode.FL_CT_132.name()).contains(lastDecisions.getFlow().getCode())) {
             specificDecisionsHistory.setLastPaymentData(paymentDataService.findPaymentDataByFileItem(lastDecisions.getFileItem()));
             lastSpecificDecision = CctSpecificDecision.CCT_CT_E_BILL;
-        } else if (isPveReadyForSignature(lastDecisions.getFlow())
-                || Arrays.asList(FlowCode.FL_CT_104.name(), FlowCode.FL_CT_118.name()).contains(lastDecisions.getFlow().getCode())) {
+        } else if (isPveReadyForSignature(lastDecisions.getFlow()) || isAppointmentOkForPve(lastDecisions.getFlow())) {
             pottingReport = pottingReportService.findPottingReportByFile(currentFile);
         }
     }
@@ -2287,8 +2298,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
         } else if (Arrays.asList(FlowCode.FL_CT_120.name(), FlowCode.FL_CT_124.name(), FlowCode.FL_CT_132.name()).contains(selectedItemFlowDto.getItemFlow().getFlow().getCode())) {
             specificDecisionsHistory.setDecisionDetailsPayData(paymentDataService.findPaymentDataByFileItem(selectedItemFlowDto.getItemFlow().getFileItem()));
             lastSpecificDecision = CctSpecificDecision.CCT_CT_E_BILL;
-        } else if (isPveReadyForSignature(selectedItemFlowDto.getItemFlow().getFlow())
-                || Arrays.asList(FlowCode.FL_CT_104.name(), FlowCode.FL_CT_118.name()).contains(selectedItemFlowDto.getItemFlow().getFlow().getCode())) {
+        } else if (isPveReadyForSignature(selectedItemFlowDto.getItemFlow().getFlow()) || isAppointmentOkForPve(selectedItemFlowDto.getItemFlow().getFlow())) {
             pottingReport = pottingReportService.findPottingReportByFile(currentFile);
         }
     }
@@ -2661,17 +2671,13 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             } // Geniric (affichage des itemFlowData)
             else {
 
-                if (isPveReadyForSignature(selectedFlow)) {
-                    commonService.takeDecisionAndSavePottingInformations(pottingPresents, currentFile.getContainers());
-                }
-
                 // Recuperate the values of DataType (Observation text area ...)
                 List<ItemFlowData> flowDatas = getValuesOfDataTypeForDecision(itemFlowsToAdd, selectedFlow.getDataTypeList());
 
                 if (Arrays.asList(FlowCode.FL_CT_92.name(), FlowCode.FL_CT_120.name(), FlowCode.FL_CT_124.name(), FlowCode.FL_CT_132.name()).contains(selectedFlow.getCode())) {
 
                     if (Arrays.asList(FlowCode.FL_CT_120.name(), FlowCode.FL_CT_124.name(), FlowCode.FL_CT_132.name()).contains(selectedFlow.getCode())) {
-                        if (CollectionUtils.isNotEmpty(paymentData.getInvoiceLines())) {
+                        if (CollectionUtils.isEmpty(paymentData.getInvoiceLines())) {
                             showErrorFacesMessage(ControllerConstants.Bundle.Messages.BILLING_WITHOUT_INVOICE_LINES_ERROR, null);
                             return;
                         }
@@ -2680,6 +2686,16 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                     commonService.takeDacisionAndSavePayment(itemFlowsToAdd, paymentData);
                 } else {
                     itemFlowService.takeDecision(itemFlowsToAdd, flowDatas);
+
+                    if (isAppointmentOkForPve(selectedFlow)) {
+                        pottingReport.setAppointmentItemFlow(itemFlowsToAdd.get(0));
+                    }
+                    if (isPveReadyForSignature(selectedFlow)) {
+                        pottingReport.setValidationItemFlow(itemFlowsToAdd.get(0));
+                    }
+                    if (isPveReadyForSignature(selectedFlow) || isAppointmentOkForPve(selectedFlow)) {
+                        commonService.takeDecisionAndSavePottingReport(pottingReport);
+                    }
                 }
                 decisionDiv.getChildren().clear();
             }
@@ -2816,7 +2832,6 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             TransactionStatus tsCommit = transactionStatus;
             transactionStatus = null;
             transactionManager.commit(tsCommit);
-//            transactionHelper.commit(vStatus);
             if (LOG.isDebugEnabled()) {
                 LOG.debug("####ROLLBACK DECISION Transaction commited####");
             }
@@ -2830,7 +2845,6 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             if (transactionStatus != null) {
                 transactionManager.rollback(transactionStatus);
             }
-//            transactionHelper.rollback(vStatus);
         }
 
         productInfoItems = disableDraftFromProductInfoItem(productInfoItems);
@@ -4198,8 +4212,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
      * @param clientId the client id
      */
     private static void showErrorFacesMessage(final String bundle, final String clientId) {
-        final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
-                FacesContext.getCurrentInstance().getViewRoot().getLocale()).getString(bundle);
+        final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, FacesContext.getCurrentInstance().getViewRoot().getLocale()).getString(bundle);
         if (StringUtils.isEmpty(clientId)) {
             JsfUtil.addErrorMessage(msg);
         } else {
@@ -4305,6 +4318,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                 ? new ArrayList<>(fileTypeFlowReportsDraft)
                 : new ArrayList<>(fileTypeFlowReports);
         if (CollectionUtils.isNotEmpty(fileTypeFlowReportsList)) {
+            currentFile.setSignatory(getLoggedUser());
             for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
                 //Begin Add new field value with report Number
                 try {
@@ -4325,8 +4339,8 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                     JsfUtil.addErrorMessage(msg);
                     LOG.error(e.getMessage(), e);
                 }
-
             }
+            currentFile.setSignatory(null);
         }
         return null;
     }
@@ -7236,6 +7250,11 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
         return ok;
     }
 
+    public boolean isAppointmentOkForPve(Flow flow) {
+        boolean ok = flow != null && checkMinaderMinistry && FileTypeCode.CCT_CT_E_PVE.equals(currentFile.getFileType().getCode()) && (FlowCode.FL_CT_104.name().equals(flow.getCode()) || FlowCode.FL_CT_118.name().equals(flow.getCode()));
+        return ok;
+    }
+
     public boolean isPveReadyForSignature(Flow flow) {
         boolean ok = flow != null && checkMinaderMinistry && FileTypeCode.CCT_CT_E_PVE.equals(currentFile.getFileType().getCode()) && (FlowCode.FL_CT_07.name().equals(flow.getCode()) || FlowCode.FL_CT_138.name().equals(flow.getCode()));
         return ok;
@@ -7998,6 +8017,10 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
 
     public void setPottingReportService(PottingReportService pottingReportService) {
         this.pottingReportService = pottingReportService;
+    }
+
+    public CctExportProductType getProductType() {
+        return productType;
     }
 
 }

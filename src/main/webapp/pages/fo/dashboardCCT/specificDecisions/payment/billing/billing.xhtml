@@ -24,6 +24,7 @@
                 <p:inputText id="paymentAmount" value="#{invoiceLine.montantHt}" title="#{bundle['InvoiceLine_amount']}" required="true"
                              requiredMessage="#{bundle['Field']} #{bundle['InvoiceLine_amount']} #{bundle['RequiredMessage']}">
                     <f:convertNumber type="number" integerOnly="true" />
+                    <f:validateLongRange minimum="1" />
                     <p:ajax event="blur" listener="#{fileItemCctDetailController.paymentAmoutValueChangedListenerCte}" update=":paymentTotalAmount" />
                 </p:inputText>
                 <p:message for="paymentAmount" />
@@ -42,10 +43,11 @@
 
         <f:facet name="footer">
             <p:commandButton id="InvoiceLine_Ajouter" styleClass="btn" icon="sprite sprite-plus" value="#{bundle['Create']}"
-                             actionListener="#{fileItemCctDetailController.addInvoiceLine}" process="@this" update=":PaymentDataTable" />
-            <p:commandButton id="InvoiceLine_Delete" styleClass="btn" icon="sprite sprite-delete" value="#{bundle['Delete']}"
-                             actionListener="#{fileItemCctDetailController.removeInvoiceLine()}"
-                             update=":PaymentDataTable :paymentTotalAmount" />
+                             actionListener="#{fileItemCctDetailController.addInvoiceLine}" update=":PaymentDataTable" />
+            <p:commandButton styleClass="btn" icon="sprite sprite-delete" value="#{bundle['Delete']}" immediate="true"
+                             actionListener="#{fileItemCctDetailController.removeInvoiceLine()}" update=":PaymentDataTable :paymentTotalAmount">
+                <f:param name="skipValidator" value="true"/>
+            </p:commandButton>
         </f:facet>
 
     </p:dataTable>

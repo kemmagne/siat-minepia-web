@@ -278,7 +278,7 @@ public class FileItemCctController extends AbstractController<FileItem> {
                     File file = item.getFile();
 
                     if (!isPhyto(file) || getLoggedUser().equals(file.getAssignedUser()) || Arrays.asList(StepCode.ST_CT_57, StepCode.ST_CT_60, StepCode.ST_CT_03, StepCode.ST_CT_47, StepCode.ST_CT_53, StepCode.ST_CT_62).contains(item.getStep().getStepCode())) {
-                        continue;
+                        continue; // si on a assigné le dossier à un utilisateur qui est aussi signataire, il vera produit même s'il ne signe pas les dossiers dont le produit est de ce type
                     }
 
                     FileFieldValue ffv = fileFieldValueService.findValueByFileFieldAndFile(CctExportProductType.getFileFieldCode(), file);

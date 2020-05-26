@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CCT_CT_E_PVE" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7a809a72-f080-4526-a48b-8df309c7056d">
 	<property name="ireport.zoom" value="1.331000000000001"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="177"/>
+	<property name="ireport.y" value="20"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -37,10 +37,6 @@
 		<field name="contSeal1" class="java.lang.String"/>
 		<field name="contDenomination" class="java.lang.String"/>
 		<field name="contGrossMass" class="java.math.BigDecimal"/>
-		<field name="contDenominationLabel" class="java.lang.String"/>
-		<field name="contNumberOfPackagesLabel" class="java.lang.String"/>
-		<field name="contQuantityLabel" class="java.lang.String"/>
-		<field name="productType" class="java.lang.String"/>
 	</subDataset>
 	<parameter name="EMP_ESSENCE_DENOMINATION" class="java.lang.String"/>
 	<parameter name="EMP_BILLE_COLIS_PIECE" class="java.lang.String" isForPrompting="false"/>
@@ -64,8 +60,6 @@
 	<field name="atDate" class="java.lang.String"/>
 	<field name="productTypeCode" class="java.lang.String"/>
 	<field name="natureProduit" class="java.lang.String"/>
-	<field name="authorizationNumber" class="java.lang.String"/>
-	<field name="authorizationDate" class="java.lang.String"/>
 	<field name="pottingReport" class="java.lang.Object"/>
 	<background>
 		<band height="802">
@@ -286,22 +280,24 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 			<frame>
 				<reportElement x="0" y="116" width="555" height="30" uuid="396f9e92-2c89-4276-b4e7-dce8bb40d37a"/>
 				<staticText>
-					<reportElement x="0" y="0" width="79" height="15" uuid="7a061596-f463-45c0-92d9-60fede3665e1"/>
-					<textElement verticalAlignment="Bottom">
+					<reportElement x="0" y="0" width="79" height="30" uuid="7a061596-f463-45c0-92d9-60fede3665e1"/>
+					<textElement verticalAlignment="Middle">
 						<font size="10"/>
 					</textElement>
-					<text><![CDATA[A l'empotage de]]></text>
+					<text><![CDATA[A l'empotage de :]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement x="79" y="0" width="474" height="30" uuid="4568de3e-24d1-4171-b6fc-dee67dd5b485"/>
-					<textElement>
-						<font size="9"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{pottingReport}.additionalInformations]]></textFieldExpression>
 				</textField>
 			</frame>
 			<frame>
-				<reportElement x="0" y="146" width="555" height="15" uuid="7443ba81-045e-4bce-956c-c48b6b759d67"/>
+				<reportElement x="0" y="146" width="555" height="15" uuid="7443ba81-045e-4bce-956c-c48b6b759d67">
+					<printWhenExpression><![CDATA[!"AUTRES".equals($F{productTypeCode})]]></printWhenExpression>
+				</reportElement>
 				<staticText>
 					<reportElement x="2" y="0" width="100" height="15" uuid="0e60a02a-c3ca-413b-a8fd-25b51091ae93"/>
 					<textElement verticalAlignment="Middle"/>
@@ -309,6 +305,9 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 				</staticText>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement x="102" y="0" width="451" height="15" uuid="48d35224-8fe9-435d-b120-ea4da84ef60f"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
 					<textFieldExpression><![CDATA[$F{natureProduit}]]></textFieldExpression>
 				</textField>
 			</frame>
@@ -326,7 +325,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement x="81" y="0" width="455" height="15" uuid="1d1ea912-56f1-4c60-979f-f659b82e8d5d"/>
 					<textElement verticalAlignment="Bottom">
-						<font size="10" isBold="false"/>
+						<font size="10" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{pottingReport}.otherProcductTypeDescription]]></textFieldExpression>
 				</textField>
@@ -455,16 +454,16 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="75" uuid="901eeb5d-fcc3-47a1-9af6-fc0ea11edbef">
-						<jr:columnHeader height="30" rowSpan="1">
+						<jr:columnHeader style="table_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="75" height="30" uuid="7dd941e1-5012-4ed0-b982-87d67776acc9"/>
+								<reportElement x="0" y="0" width="75" height="26" uuid="7dd941e1-5012-4ed0-b982-87d67776acc9"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font isBold="true"/>
 								</textElement>
 								<text><![CDATA[VOLUME]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell height="30" rowSpan="1">
+						<jr:detailCell style="table_TD" height="30" rowSpan="1">
 							<textField isStretchWithOverflow="true" pattern="#,##0.000" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="75" height="20" isPrintWhenDetailOverflows="true" uuid="5ef96bc0-cd8b-4cad-b09f-a55e689dc96c"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -497,7 +496,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 				</jr:table>
 			</componentElement>
 		</band>
-		<band height="227" splitType="Immediate">
+		<band height="250" splitType="Immediate">
 			<line>
 				<reportElement x="79" y="23" width="339" height="1" uuid="a8988fe2-07f3-4861-a88a-1ab96c112150"/>
 				<graphicElement>
@@ -580,7 +579,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 				<textFieldExpression><![CDATA["Fait à " + $F{pottingTown} + ", le " + ($F{file}.signatureDate != null ? new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{file}.signatureDate) : ($F{atDate} == null ? "-" : new java.text.SimpleDateFormat("dd/MM/yyyy").format(new java.text.SimpleDateFormat("yyyyMMdd").parse($F{atDate}))))]]></textFieldExpression>
 			</textField>
 			<frame>
-				<reportElement x="0" y="153" width="515" height="74" uuid="7c5cb5d2-979e-483e-b882-db304f7ae3b7"/>
+				<reportElement x="0" y="153" width="515" height="97" uuid="7c5cb5d2-979e-483e-b882-db304f7ae3b7"/>
 				<staticText>
 					<reportElement x="156" y="11" width="177" height="20" uuid="7a061596-f463-45c0-92d9-60fede3665e1"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -602,6 +601,20 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					</textElement>
 					<text><![CDATA[Le Chef de Poste]]></text>
 				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="20" y="67" width="97" height="20" uuid="1b424422-068c-42bc-8058-9952709bfe81"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{file}.client.companyName]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="348" y="67" width="157" height="20" uuid="15484992-c0d2-4217-973f-45a01f50b619"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[java.lang.String.format("%s %s", $F{file}.signatory.lastName, $F{file}.signatory.firstName)]]></textFieldExpression>
+				</textField>
 			</frame>
 			<staticText>
 				<reportElement x="0" y="4" width="86" height="20" uuid="7a061596-f463-45c0-92d9-60fede3665e1"/>
