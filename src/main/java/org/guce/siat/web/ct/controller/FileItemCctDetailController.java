@@ -1819,7 +1819,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             }
         }
 
-        if (Arrays.asList(FlowCode.FL_CT_120.name(), FlowCode.FL_CT_124.name(), FlowCode.FL_CT_132.name()).contains(selectedFlow.getCode())) {
+        if (Arrays.asList(FlowCode.FL_CT_120.name(), FlowCode.FL_CT_124.name(), FlowCode.FL_CT_132.name(), FlowCode.FL_CT_143.name()).contains(selectedFlow.getCode())) {
             counter = -1L;
             invoiceTotalAmount = 0L;
             specificDecision = CctSpecificDecision.CCT_CT_E_BILL;
@@ -1949,14 +1949,6 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             treatmentOrder.setDate(java.util.Calendar.getInstance().getTime());
             treatmentTypeDtosList = null;
             selectedTreatmentCompany = null;
-//            if (chckedListSize == Constants.ONE) {
-//                specificDecision = CctSpecificDecision.TR;
-//                final List<Long> servicesIds = serviceService.findServicesIdsByAdministration(loggedUser.getAdministration());
-//                treatmentCompanys = treatmentCompanyService.findByAdministration(servicesIds);
-//            } else {
-//                showErrorFacesMessage(ControllerConstants.Bundle.Messages.CHECK_TREATMENT_DECISION_ERROR,
-//                        ControllerConstants.Bundle.Messages.CHECK_PRODUCTS_DECISION_MSG);
-//            }
         } // Envoie Résultat d Analyse
         else if (FlowCode.FL_CT_31.name().equals(selectedFlow.getCode())) {
             if (chckedListSize == Constants.ONE) {
@@ -1979,10 +1971,6 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
         } // Envoie Résultat de Traitement
         else if (isFstpReadyForSignature(selectedFlow) || isAtReadyForSignature(selectedFlow)) {
             treatmentResult = new TreatmentResult();
-//            if (isAtReadyForSignature(selectedFlow)) {
-//                final List<Long> servicesIds = serviceService.findServicesIdsByAdministration(loggedUser.getAdministration());
-//                treatmentCompanys = treatmentCompanyService.findByAdministration(servicesIds);
-//            }
         } else if (FlowCode.FL_CT_66.name().equals(selectedFlow.getCode())) {
             if (chckedListSize == Constants.ONE) {
                 specificDecision = CctSpecificDecision.TRR;
@@ -2007,7 +1995,16 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
         }
 
         if (isPveReadyForSignature(selectedFlow)) {
-            pottingReport = commonService.findPottingReportByFile(currentFile);
+            pottingReport = pottingReportService.findPottingReportByFile(currentFile);
+
+            if (currentFile.getParent() != null) {
+                PottingReport pottingReportNew = new PottingReport();
+                org.springframework.beans.BeanUtils.copyProperties(pottingReport, pottingReportNew, "id", "file");
+                pottingReport = new PottingReport();
+                org.springframework.beans.BeanUtils.copyProperties(pottingReportNew, pottingReport);
+                pottingReport.setFile(currentFile);
+            }
+
             pottingReport.setPottingController(getLoggedUser());
             FileFieldValue ptFieldValue = fileFieldValueService.findValueByFileFieldAndFile(CctExportProductType.getFileFieldCode(), currentFile);
             if (ptFieldValue != null) {
@@ -2022,7 +2019,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                 pottingReport.setFile(currentFile);
                 pottingReport.setPottingController(getLoggedUser());
             } else {
-                pottingReport = commonService.findPottingReportByFile(currentFile);
+                pottingReport = pottingReportService.findPottingReportByFile(currentFile);
                 pottingReport.setAppointmentDateBack(pottingReport.getAppointmentDate());
             }
         }
@@ -2247,7 +2244,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             downloadAttachment(treatmentParts);
         } else if (FlowCode.FL_CT_93.name().equals(lastDecisions.getFlow().getCode())) {
             specificDecisionsHistory.setLastPaymentData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
-        } else if (Arrays.asList(FlowCode.FL_CT_120.name(), FlowCode.FL_CT_124.name(), FlowCode.FL_CT_132.name()).contains(lastDecisions.getFlow().getCode())) {
+        } else if (Arrays.asList(FlowCode.FL_CT_120.name(), FlowCode.FL_CT_124.name(), FlowCode.FL_CT_132.name(), FlowCode.FL_CT_143.name()).contains(lastDecisions.getFlow().getCode())) {
             specificDecisionsHistory.setLastPaymentData(paymentDataService.findPaymentDataByFileItem(lastDecisions.getFileItem()));
             lastSpecificDecision = CctSpecificDecision.CCT_CT_E_BILL;
         } else if (isPveReadyForSignature(lastDecisions.getFlow()) || isAppointmentOkForPve(lastDecisions.getFlow())) {
@@ -2295,7 +2292,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             downloadAttachment(treatmentParts);
         } else if (FlowCode.FL_CT_93.name().equals(lastDecisions.getFlow().getCode())) {
             specificDecisionsHistory.setDecisionDetailsPayData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
-        } else if (Arrays.asList(FlowCode.FL_CT_120.name(), FlowCode.FL_CT_124.name(), FlowCode.FL_CT_132.name()).contains(selectedItemFlowDto.getItemFlow().getFlow().getCode())) {
+        } else if (Arrays.asList(FlowCode.FL_CT_120.name(), FlowCode.FL_CT_124.name(), FlowCode.FL_CT_132.name(), FlowCode.FL_CT_143.name()).contains(selectedItemFlowDto.getItemFlow().getFlow().getCode())) {
             specificDecisionsHistory.setDecisionDetailsPayData(paymentDataService.findPaymentDataByFileItem(selectedItemFlowDto.getItemFlow().getFileItem()));
             lastSpecificDecision = CctSpecificDecision.CCT_CT_E_BILL;
         } else if (isPveReadyForSignature(selectedItemFlowDto.getItemFlow().getFlow()) || isAppointmentOkForPve(selectedItemFlowDto.getItemFlow().getFlow())) {
@@ -2674,9 +2671,9 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                 // Recuperate the values of DataType (Observation text area ...)
                 List<ItemFlowData> flowDatas = getValuesOfDataTypeForDecision(itemFlowsToAdd, selectedFlow.getDataTypeList());
 
-                if (Arrays.asList(FlowCode.FL_CT_92.name(), FlowCode.FL_CT_120.name(), FlowCode.FL_CT_124.name(), FlowCode.FL_CT_132.name()).contains(selectedFlow.getCode())) {
+                if (Arrays.asList(FlowCode.FL_CT_92.name(), FlowCode.FL_CT_120.name(), FlowCode.FL_CT_124.name(), FlowCode.FL_CT_132.name(), FlowCode.FL_CT_143.name()).contains(selectedFlow.getCode())) {
 
-                    if (Arrays.asList(FlowCode.FL_CT_120.name(), FlowCode.FL_CT_124.name(), FlowCode.FL_CT_132.name()).contains(selectedFlow.getCode())) {
+                    if (Arrays.asList(FlowCode.FL_CT_120.name(), FlowCode.FL_CT_124.name(), FlowCode.FL_CT_132.name(), FlowCode.FL_CT_143.name()).contains(selectedFlow.getCode())) {
                         if (CollectionUtils.isEmpty(paymentData.getInvoiceLines())) {
                             showErrorFacesMessage(ControllerConstants.Bundle.Messages.BILLING_WITHOUT_INVOICE_LINES_ERROR, null);
                             return;
@@ -3231,8 +3228,9 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                         }
 
                     }
-                    final Map<FileItem, Flow> mapWithinAllFileItemAndFlowsToSend = itemFlowService.sendDecisions(currentFile,
-                            productInfoItemsEnabled);
+                    final Map<FileItem, Flow> mapWithinAllFileItemAndFlowsToSend = itemFlowService.sendDecisions(currentFile, productInfoItemsEnabled);
+
+                    pottingReportService.updateAfterSignature(pottingReport);
 
                     if (!mapWithinAllFileItemAndFlowsToSend.isEmpty()) {
                         final Map<Flow, List<FileItem>> groupedFlow = groupFileItemsToSendByFlow(mapWithinAllFileItemAndFlowsToSend);
@@ -3245,13 +3243,8 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                             //generate report
                             Map<String, byte[]> attachedByteFiles = null;
                             String reportNumber;
-                            if (FlowCode.FL_CT_89.name().equals(flowToSend.getCode())
-                                    || FlowCode.FL_CT_08.name().equals(flowToSend.getCode())
-                                    || FlowCode.FL_CT_114.name().equals(flowToSend.getCode())
-                                    || FlowCode.FL_CT_117.name().equals(flowToSend.getCode())
-                                    || FlowCode.FL_CT_140.name().equals(flowToSend.getCode())
-                                    || FlowCode.FL_CT_CVS_03.name().equals(flowToSend.getCode())
-                                    || FlowCode.FL_CT_CVS_07.name().equals(flowToSend.getCode())) {
+                            if (Arrays.asList(FlowCode.FL_CT_89.name(), FlowCode.FL_CT_08.name(), FlowCode.FL_CT_114.name(), FlowCode.FL_CT_117.name(), FlowCode.FL_CT_140.name(), FlowCode.FL_CT_CVS_03.name(), FlowCode.FL_CT_CVS_07.name())
+                                    .contains(flowToSend.getCode())) {
 
                                 // edit signature elements
                                 Date now = java.util.Calendar.getInstance().getTime();
@@ -3290,7 +3283,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                                 }
 
                                 fileService.update(currentFile);
-                            } else if (FlowCode.FL_CT_121.name().equals(flowToSend.getCode()) || FlowCode.FL_CT_133.name().equals(flowToSend.getCode())) {
+                            } else if (Arrays.asList(FlowCode.FL_CT_121.name(), FlowCode.FL_CT_133.name()).contains(flowToSend.getCode())) {
 
                                 attachedByteFiles = new HashMap<>();
 
@@ -4277,6 +4270,10 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
 
         if (StepCode.ST_CT_63.equals(currentFileItem.getStep().getStepCode()) || StepCode.ST_CT_64.equals(currentFileItem.getStep().getStepCode())) {
             reportingFlow = flowService.findFlowByCode(FlowCode.FL_CT_140.name());
+        }
+
+        if (FileTypeCode.CCT_CT_E_PVE.equals(currentFile.getFileType().getCode()) && currentFile.getParent() != null) {
+            reportingFlow = flowService.findFlowByCode(FlowCode.FL_CT_114.name());
         }
 
         boolean okInvoice = StepCode.ST_CT_57.equals(currentFileItem.getStep().getStepCode()) || StepCode.ST_CT_60.equals(currentFileItem.getStep().getStepCode());
@@ -7117,15 +7114,9 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                     final List<ItemFlow> itemFlowList = selectedItemFlowDto.getItemFlow().getFlow().getItemsFlowsList();
                     String service = StringUtils.EMPTY;
                     String documentType = StringUtils.EMPTY;
-                    if (FlowCode.FL_CT_89.name().equals(flowToSend.getCode())
-                            || FlowCode.FL_CT_08.name().equals(flowToSend.getCode())
-                            || FlowCode.FL_CT_114.name().equals(flowToSend.getCode())
-                            || FlowCode.FL_CT_117.name().equals(flowToSend.getCode())
-                            || FlowCode.FL_CT_CVS_03.name().equals(flowToSend.getCode())
-                            || FlowCode.FL_CT_CVS_07.name().equals(flowToSend.getCode())
-                            || FlowCode.FL_CT_121.name().equals(flowToSend.getCode())
-                            || FlowCode.FL_CT_133.name().equals(flowToSend.getCode())
-                            || FlowCode.FL_CT_140.name().equals(flowToSend.getCode())) {
+
+                    if (Arrays.asList(FlowCode.FL_CT_89.name(), FlowCode.FL_CT_08.name(), FlowCode.FL_CT_114.name(), FlowCode.FL_CT_117.name(), FlowCode.FL_CT_140.name(), FlowCode.FL_CT_CVS_03.name(), FlowCode.FL_CT_CVS_07.name(), FlowCode.FL_CT_121.name(), FlowCode.FL_CT_133.name())
+                            .contains(flowToSend.getCode())) {
 
                         // edit signature elements
                         Date now = java.util.Calendar.getInstance().getTime();
@@ -7256,7 +7247,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
     }
 
     public boolean isPveReadyForSignature(Flow flow) {
-        boolean ok = flow != null && checkMinaderMinistry && FileTypeCode.CCT_CT_E_PVE.equals(currentFile.getFileType().getCode()) && (FlowCode.FL_CT_07.name().equals(flow.getCode()) || FlowCode.FL_CT_138.name().equals(flow.getCode()));
+        boolean ok = flow != null && checkMinaderMinistry && FileTypeCode.CCT_CT_E_PVE.equals(currentFile.getFileType().getCode()) && Arrays.asList(FlowCode.FL_CT_07.name(), FlowCode.FL_CT_138.name(), FlowCode.FL_CT_112.name()).contains(flow.getCode());
         return ok;
     }
 
