@@ -16,6 +16,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.guce.siat.common.service.FileFieldValueService;
 import org.guce.siat.common.service.ItemFlowService;
 import org.guce.siat.core.ct.service.PottingReportService;
+import org.guce.siat.web.ct.controller.FileItemCctDetailController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +47,8 @@ public abstract class AbstractReportInvoker implements ReportCommand {
     private ItemFlowService itemFlowService;
 
     private PottingReportService pottingReportService;
+
+    private FileItemCctDetailController cctDetailController;
 
     /**
      * Instantiates a new jasper report builder.
@@ -216,6 +219,14 @@ public abstract class AbstractReportInvoker implements ReportCommand {
 
     public void setPottingReportService(PottingReportService pottingReportService) {
         this.pottingReportService = pottingReportService;
+    }
+
+    public FileItemCctDetailController getCctDetailController() {
+        return cctDetailController;
+    }
+
+    public void setCctDetailController(FileItemCctDetailController cctDetailController) {
+        this.cctDetailController = cctDetailController;
     }
 
 }

@@ -1333,9 +1333,16 @@ public class FileItemCctDetailController implements Serializable {
                         if (isCheckMinaderMinistry() && (FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode()) || FileTypeCode.CCT_CT_E_PVE.equals(currentFile.getFileType().getCode()))) {
                             flows = flowService.findFlowsByFromStepAndFileType2(referenceFileItemCheck.getStep(), referenceFileItemCheck.getFile().getFileType());
                             List<String> flowsToRemove = new ArrayList<>();
-                            for (Flow fli : flows) {
-                                if (fli.getIsCota()) {
-                                    flowsToRemove.add(fli.getCode());
+                            for (Flow flx : flows) {
+                                if (flx.getIsCota()) {
+                                    flowsToRemove.add(flx.getCode());
+                                }
+                                if (FileTypeCode.CCT_CT_E_PVE.equals(currentFile.getFileType().getCode()) && StepCode.ST_CT_57.equals(currentFileItem.getStep().getStepCode())) {
+                                    if (currentFile.getParent() == null && FlowCode.FL_CT_144.name().equals(flx.getCode())) {
+                                        flowsToRemove.add(flx.getCode());
+                                    } else if (currentFile.getParent() != null && FlowCode.FL_CT_125.name().equals(flx.getCode())) {
+                                        flowsToRemove.add(flx.getCode());
+                                    }
                                 }
                             }
                             flows = deleteFlowFromFlowList(flows, flowsToRemove.toArray(new String[0]));
@@ -1378,18 +1385,14 @@ public class FileItemCctDetailController implements Serializable {
 						 * n’ont pas le même statut concernant les décisions de destruction.
                          */
                         if (DECISION_STEPS_LIST.contains(referenceFileItemCheck.getStep().getStepCode()) && !productsHaveSameRDDStatus) {
-                            flows = deleteFlowFromFlowList(flows, FlowCode.FL_CT_11.name(), FlowCode.FL_CT_13.name(),
-                                    FlowCode.FL_CT_33.name(), FlowCode.FL_CT_35.name());
+                            flows = deleteFlowFromFlowList(flows, FlowCode.FL_CT_11.name(), FlowCode.FL_CT_13.name(), FlowCode.FL_CT_33.name(), FlowCode.FL_CT_35.name());
                         } /*
 						 * Si le/les produit(s) sélectionnés ont atteints la valeur seuil des RDD (nbRDD) --> il faut
 						 * supprimer le flux "RDD" dans la liste des décisions sinon il faut supprimer le flux "RDD Final"
 						 * dans la liste des décisions.
-                         */ else if (DECISION_STEPS_LIST.contains(referenceFileItemCheck.getStep().getStepCode())
-                                && productsHaveSameRDDStatus) {
-                            final Long nbrRDDReference = itemFlowService.findNbrDecisionByFileItemHistory(RDD_FLOW_CODES,
-                                    referenceFileItemCheck);
-                            final Long nbRDDParam = paramsOrganismService.findLongParamsOrganismByOrganismAndName(referenceFileItemCheck
-                                    .getFile().getBureau().getService().getSubDepartment().getOrganism(), "nbRDD");
+                         */ else if (DECISION_STEPS_LIST.contains(referenceFileItemCheck.getStep().getStepCode()) && productsHaveSameRDDStatus) {
+                            final Long nbrRDDReference = itemFlowService.findNbrDecisionByFileItemHistory(RDD_FLOW_CODES, referenceFileItemCheck);
+                            final Long nbRDDParam = paramsOrganismService.findLongParamsOrganismByOrganismAndName(referenceFileItemCheck.getFile().getBureau().getService().getSubDepartment().getOrganism(), "nbRDD");
 
                             if (nbRDDParam != null && nbrRDDReference >= nbRDDParam) {
                                 flows = deleteFlowFromFlowList(flows, FlowCode.FL_CT_11.name(), FlowCode.FL_CT_35.name());
@@ -1413,8 +1416,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                             }
 
                         }
-                        if (!payed
-                                && !(FileTypeCode.CCT_CT_E_PVI.equals(currentFile.getFileType().getCode())
+                        if (!payed && !(FileTypeCode.CCT_CT_E_PVI.equals(currentFile.getFileType().getCode())
                                 || FileTypeCode.CCT_CT_E_ATP.equals(currentFile.getFileType().getCode())
                                 || FileTypeCode.CCT_CT_E_FSTP.equals(currentFile.getFileType().getCode())
                                 || FileTypeCode.CCT_CT_E_PVE.equals(currentFile.getFileType().getCode()))) {
@@ -1995,13 +1997,19 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
         }
 
         if (isPveReadyForSignature(selectedFlow)) {
+
             pottingReport = pottingReportService.findPottingReportByFile(currentFile);
 
-            if (currentFile.getParent() != null) {
-                PottingReport pottingReportNew = new PottingReport();
-                org.springframework.beans.BeanUtils.copyProperties(pottingReport, pottingReportNew, "id", "file");
-                pottingReport = new PottingReport();
-                org.springframework.beans.BeanUtils.copyProperties(pottingReportNew, pottingReport);
+            if (pottingReport == null && currentFile.getParent() != null) {
+                pottingReport = pottingReportService.findPottingReportByFile(currentFile.getParent());
+                if (pottingReport != null) {
+                    PottingReport pottingReportNew = new PottingReport();
+                    org.springframework.beans.BeanUtils.copyProperties(pottingReport, pottingReportNew, "id", "file");
+                    pottingReport = new PottingReport();
+                    org.springframework.beans.BeanUtils.copyProperties(pottingReportNew, pottingReport);
+                } else {
+                    pottingReport = new PottingReport();
+                }
                 pottingReport.setFile(currentFile);
             }
 
@@ -4310,10 +4318,8 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
      * @param draft
      * @return the streamed content
      */
-    public StreamedContent downloadReport(final boolean draft) {
-        final List<FileTypeFlowReport> fileTypeFlowReportsList = draft
-                ? new ArrayList<>(fileTypeFlowReportsDraft)
-                : new ArrayList<>(fileTypeFlowReports);
+    public synchronized StreamedContent downloadReport(final boolean draft) {
+        final List<FileTypeFlowReport> fileTypeFlowReportsList = draft ? new ArrayList<>(fileTypeFlowReportsDraft) : new ArrayList<>(fileTypeFlowReports);
         if (CollectionUtils.isNotEmpty(fileTypeFlowReportsList)) {
             currentFile.setSignatory(getLoggedUser());
             for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
@@ -4342,12 +4348,11 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
         return null;
     }
 
-    public StreamedContent downloadReferenceBaseReport(final boolean draft) {
+    public synchronized StreamedContent downloadReferenceBaseReport(final boolean draft) {
         if (currentFile.getParent() != null) {
             FileItem pfi = currentFile.getParent().getFileItemsList().get(0);
             final Flow reportingFlow = flowService.findByToStep(pfi.getStep());
-            List<FileTypeFlowReport> ftfr = fileTypeFlowReportService
-                    .findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getParent().getFileType());
+            List<FileTypeFlowReport> ftfr = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getParent().getFileType());
 
             if (CollectionUtils.isNotEmpty(ftfr)) {
                 for (final FileTypeFlowReport fileTypeFlowReport : ftfr) {
@@ -4356,14 +4361,12 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                         final byte[] report = getReportBytes(currentFile.getParent(), fileTypeFlowReport, draft);
                         if (report != null) {
                             final InputStream is = new ByteArrayInputStream(report);
-                            final StreamedContent fileToDownload = new DefaultStreamedContent(is, "application/pdf",
-                                    currentFile.getParent().getReferenceSiat() + '_' + fileTypeFlowReport.getReportName());
+                            final StreamedContent fileToDownload = new DefaultStreamedContent(is, "application/pdf", currentFile.getParent().getReferenceSiat() + '_' + fileTypeFlowReport.getReportName());
 
                             return fileToDownload;
                         }
                     } catch (Exception e) {
-                        final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
-                                .getString(ControllerConstants.Bundle.Messages.GENERATE_REPORT_FAILED);
+                        final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.GENERATE_REPORT_FAILED);
                         JsfUtil.addErrorMessage(msg);
                         LOG.error(e.getMessage(), e);
                     }
@@ -7422,6 +7425,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             reportInvoker.setFileFieldValueService(fileFieldValueService);
             reportInvoker.setItemFlowService(itemFlowService);
             reportInvoker.setPottingReportService(pottingReportService);
+            reportInvoker.setCctDetailController(this);
             if (forAnnexes != null) {
                 JasperPrint page1 = JsfUtil.getReportJP(reportInvoker);
                 TreatmentInfos ti = (TreatmentInfos) forAnnexes.get("ti");

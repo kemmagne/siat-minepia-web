@@ -36,6 +36,9 @@ public class CtCctPveExporter extends AbstractReportInvoker {
         fileVo.setFile(file);
 
         PottingReport pottingReport = getPottingReportService().findPottingReportByFile(file);
+        if (pottingReport == null) {
+            pottingReport = getCctDetailController().getPottingReport();
+        }
         fileVo.setPottingReport(pottingReport);
 
         String productTypeCode = getFileFieldValueService().findValueByFileFieldAndFile(CctExportProductType.getFileFieldCode(), file).getValue();
