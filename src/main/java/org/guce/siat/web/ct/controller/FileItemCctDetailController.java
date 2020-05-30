@@ -1101,6 +1101,8 @@ public class FileItemCctDetailController implements Serializable {
      */
     private PaymentData paymentData;
 
+    private PaymentData payDataBack;
+
     private InvoiceLine selectedInvoiceLine;
 
     /**
@@ -1821,7 +1823,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             }
         }
 
-        if (Arrays.asList(FlowCode.FL_CT_120.name(), FlowCode.FL_CT_124.name(), FlowCode.FL_CT_132.name(), FlowCode.FL_CT_143.name()).contains(selectedFlow.getCode())) {
+        if (isPhytoBilling(selectedFlow)) {
             counter = -1L;
             invoiceTotalAmount = 0L;
             specificDecision = CctSpecificDecision.CCT_CT_E_BILL;
@@ -1834,10 +1836,8 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                 paymentData.setDateSignature(java.util.Calendar.getInstance().getTime());
                 paymentData.setNatureFrais("Frais ".concat(currentFile.getFileType().getLabelFr()));
                 paymentData.setInvoiceLines(new ArrayList<InvoiceLine>());
-                paymentData.setPaymentItemFlowList(new ArrayList<PaymentItemFlow>());
-                for (FileItem fileItem : currentFile.getFileItemsList()) {
-                    paymentData.getPaymentItemFlowList().add(new PaymentItemFlow(false, fileItem.getId()));
-                }
+            } else {
+                invoiceTotalAmount = paymentData.getMontantHt();
             }
         }
 
@@ -2252,7 +2252,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             downloadAttachment(treatmentParts);
         } else if (FlowCode.FL_CT_93.name().equals(lastDecisions.getFlow().getCode())) {
             specificDecisionsHistory.setLastPaymentData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
-        } else if (Arrays.asList(FlowCode.FL_CT_120.name(), FlowCode.FL_CT_124.name(), FlowCode.FL_CT_132.name(), FlowCode.FL_CT_143.name()).contains(lastDecisions.getFlow().getCode())) {
+        } else if (isPhytoBilling(lastDecisions.getFlow())) {
             specificDecisionsHistory.setLastPaymentData(paymentDataService.findPaymentDataByFileItem(lastDecisions.getFileItem()));
             lastSpecificDecision = CctSpecificDecision.CCT_CT_E_BILL;
         } else if (isPveReadyForSignature(lastDecisions.getFlow()) || isAppointmentOkForPve(lastDecisions.getFlow())) {
@@ -2300,7 +2300,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             downloadAttachment(treatmentParts);
         } else if (FlowCode.FL_CT_93.name().equals(lastDecisions.getFlow().getCode())) {
             specificDecisionsHistory.setDecisionDetailsPayData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
-        } else if (Arrays.asList(FlowCode.FL_CT_120.name(), FlowCode.FL_CT_124.name(), FlowCode.FL_CT_132.name(), FlowCode.FL_CT_143.name()).contains(selectedItemFlowDto.getItemFlow().getFlow().getCode())) {
+        } else if (isPhytoBilling(selectedItemFlowDto.getItemFlow().getFlow())) {
             specificDecisionsHistory.setDecisionDetailsPayData(paymentDataService.findPaymentDataByFileItem(selectedItemFlowDto.getItemFlow().getFileItem()));
             lastSpecificDecision = CctSpecificDecision.CCT_CT_E_BILL;
         } else if (isPveReadyForSignature(selectedItemFlowDto.getItemFlow().getFlow()) || isAppointmentOkForPve(selectedItemFlowDto.getItemFlow().getFlow())) {
@@ -2679,14 +2679,20 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                 // Recuperate the values of DataType (Observation text area ...)
                 List<ItemFlowData> flowDatas = getValuesOfDataTypeForDecision(itemFlowsToAdd, selectedFlow.getDataTypeList());
 
-                if (Arrays.asList(FlowCode.FL_CT_92.name(), FlowCode.FL_CT_120.name(), FlowCode.FL_CT_124.name(), FlowCode.FL_CT_132.name(), FlowCode.FL_CT_143.name()).contains(selectedFlow.getCode())) {
+                if (Arrays.asList(FlowCode.FL_CT_92.name()).contains(selectedFlow.getCode()) || isPhytoBilling(selectedFlow)) {
 
-                    if (Arrays.asList(FlowCode.FL_CT_120.name(), FlowCode.FL_CT_124.name(), FlowCode.FL_CT_132.name(), FlowCode.FL_CT_143.name()).contains(selectedFlow.getCode())) {
+                    if (isPhytoBilling(selectedFlow)) {
                         if (CollectionUtils.isEmpty(paymentData.getInvoiceLines())) {
                             showErrorFacesMessage(ControllerConstants.Bundle.Messages.BILLING_WITHOUT_INVOICE_LINES_ERROR, null);
                             return;
                         }
+
+                        if (CollectionUtils.isNotEmpty(paymentData.getPaymentItemFlowList())) {
+                            coreService.delete(paymentData.getPaymentItemFlowList());
+                        }
                     }
+
+                    paymentAmoutValueChangedListenerCte();
 
                     commonService.takeDacisionAndSavePayment(itemFlowsToAdd, paymentData);
                 } else {
@@ -8016,6 +8022,10 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
 
     public CctExportProductType getProductType() {
         return productType;
+    }
+
+    private boolean isPhytoBilling(Flow flow) {
+        return flow != null && Arrays.asList(FlowCode.FL_CT_120.name(), FlowCode.FL_CT_124.name(), FlowCode.FL_CT_132.name(), FlowCode.FL_CT_143.name()).contains(flow.getCode());
     }
 
 }
