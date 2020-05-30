@@ -410,10 +410,10 @@
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="100" uuid="58fc393b-d2d8-4036-ae58-c2e0e60169e5">
+					<jr:column width="123" uuid="58fc393b-d2d8-4036-ae58-c2e0e60169e5">
 						<jr:columnHeader style="table 2_CH" height="20" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="100" height="20" uuid="1de1d3c7-3857-47de-bf25-dd2837beef3d"/>
+								<reportElement x="0" y="0" width="123" height="20" uuid="1de1d3c7-3857-47de-bf25-dd2837beef3d"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font isBold="true"/>
 								</textElement>
@@ -422,7 +422,7 @@
 						</jr:columnHeader>
 						<jr:detailCell style="table 2_TD" height="20" rowSpan="1">
 							<textField pattern="#,##0" isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="100" height="20" uuid="5ffb1d87-be0e-4c91-bbfc-54ccf754a9f8"/>
+								<reportElement x="0" y="0" width="123" height="20" uuid="5ffb1d87-be0e-4c91-bbfc-54ccf754a9f8"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
 								<textFieldExpression><![CDATA[$F{montantTtc}]]></textFieldExpression>
 							</textField>

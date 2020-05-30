@@ -1998,13 +1998,13 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
 
         if (isPveReadyForSignature(selectedFlow)) {
 
-            pottingReport = pottingReportService.findPottingReportByFile(currentFile);
+            pottingReport = pottingReportService.findPottingReportByFile(currentFile, false);
 
             if (pottingReport == null && currentFile.getParent() != null) {
                 pottingReport = pottingReportService.findPottingReportByFile(currentFile.getParent());
                 if (pottingReport != null) {
                     PottingReport pottingReportNew = new PottingReport();
-                    org.springframework.beans.BeanUtils.copyProperties(pottingReport, pottingReportNew, "id", "file");
+                    org.springframework.beans.BeanUtils.copyProperties(pottingReport, pottingReportNew, "id", "file", "validated");
                     pottingReport = new PottingReport();
                     org.springframework.beans.BeanUtils.copyProperties(pottingReportNew, pottingReport);
                 } else {
@@ -2027,7 +2027,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                 pottingReport.setFile(currentFile);
                 pottingReport.setPottingController(getLoggedUser());
             } else {
-                pottingReport = pottingReportService.findPottingReportByFile(currentFile);
+                pottingReport = pottingReportService.findPottingReportByFile(currentFile, false);
                 pottingReport.setAppointmentDateBack(pottingReport.getAppointmentDate());
             }
         }
@@ -2256,7 +2256,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             specificDecisionsHistory.setLastPaymentData(paymentDataService.findPaymentDataByFileItem(lastDecisions.getFileItem()));
             lastSpecificDecision = CctSpecificDecision.CCT_CT_E_BILL;
         } else if (isPveReadyForSignature(lastDecisions.getFlow()) || isAppointmentOkForPve(lastDecisions.getFlow())) {
-            pottingReport = pottingReportService.findPottingReportByFile(currentFile);
+            pottingReport = pottingReportService.findPottingReportByFile(currentFile, false);
         }
     }
 
@@ -2305,6 +2305,9 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             lastSpecificDecision = CctSpecificDecision.CCT_CT_E_BILL;
         } else if (isPveReadyForSignature(selectedItemFlowDto.getItemFlow().getFlow()) || isAppointmentOkForPve(selectedItemFlowDto.getItemFlow().getFlow())) {
             pottingReport = pottingReportService.findPottingReportByFile(currentFile);
+            if (pottingReport == null) {
+                pottingReport = pottingReportService.findPottingReportByFile(currentFile, false);
+            }
         }
     }
 
