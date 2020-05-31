@@ -1157,10 +1157,15 @@ public class FileItemCctDetailController implements Serializable {
 
     private CctExportProductType productType;
 
+    private List<FileType> phytoFileTypes;
+
     /**
      * Inits the.
      */
     public void init() {
+
+        phytoFileTypes = fileTypeService.findFileTypesByCodes(FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI);
+
         currentFile = currentFileItem.getFile();
         checkMinaderMinistry = currentFile.getDestinataire().equalsIgnoreCase(Constants.MINADER_MINISTRY);
         checkMinepiaMinistry = currentFile.getDestinataire().equalsIgnoreCase(MINEPIA_MINISTRY);
@@ -1169,6 +1174,14 @@ public class FileItemCctDetailController implements Serializable {
         listUserAuthorityFileTypes = userAuthorityFileTypeService.findUserAuthorityFileTypeByFileTypeAndUserList(currentFile.getFileType(), loggedUser.getMergedDelegatorList());
 
         selectedFileItemCheck = new FileItemCheck(getCurrentFileItem(), false, false, false);
+
+        FileFieldValue ptFieldValue = fileFieldValueService.findValueByFileFieldAndFile(CctExportProductType.getFileFieldCode(), currentFile);
+        if (ptFieldValue != null) {
+            try {
+                productType = CctExportProductType.valueOf(ptFieldValue.getValue());
+            } catch (Exception ex) {
+            }
+        }
 
         final FileTypeStep fileTypeStep = fileTypeStepService.findFileTypeStepByFileTypeAndStep(selectedFileItemCheck.getFileItem().getFile().getFileType(), selectedFileItemCheck.getFileItem().getStep());
         if (fileTypeStep != null && fileTypeStep.getLabelFr() != null) {
@@ -2014,13 +2027,6 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             }
 
             pottingReport.setPottingController(getLoggedUser());
-            FileFieldValue ptFieldValue = fileFieldValueService.findValueByFileFieldAndFile(CctExportProductType.getFileFieldCode(), currentFile);
-            if (ptFieldValue != null) {
-                try {
-                    productType = CctExportProductType.valueOf(ptFieldValue.getValue());
-                } catch (Exception ex) {
-                }
-            }
         } else if (isAppointmentOkForPve(selectedFlow)) {
             if (FlowCode.FL_CT_104.name().equals(selectedFlow.getCode())) {
                 pottingReport = new PottingReport();
@@ -3250,6 +3256,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                     pottingReportService.updateAfterSignature(pottingReport);
 
                     if (!mapWithinAllFileItemAndFlowsToSend.isEmpty()) {
+
                         final Map<Flow, List<FileItem>> groupedFlow = groupFileItemsToSendByFlow(mapWithinAllFileItemAndFlowsToSend);
                         for (final Flow flowToSend : groupedFlow.keySet()) {
                             final List<FileItem> fileItemList = groupedFlow.get(flowToSend);
@@ -3260,8 +3267,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                             //generate report
                             Map<String, byte[]> attachedByteFiles = null;
                             String reportNumber;
-                            if (Arrays.asList(FlowCode.FL_CT_89.name(), FlowCode.FL_CT_08.name(), FlowCode.FL_CT_114.name(), FlowCode.FL_CT_117.name(), FlowCode.FL_CT_140.name(), FlowCode.FL_CT_CVS_03.name(), FlowCode.FL_CT_CVS_07.name())
-                                    .contains(flowToSend.getCode())) {
+                            if (Arrays.asList(FlowCode.FL_CT_89.name(), FlowCode.FL_CT_08.name(), FlowCode.FL_CT_114.name(), FlowCode.FL_CT_117.name(), FlowCode.FL_CT_140.name(), FlowCode.FL_CT_CVS_03.name(), FlowCode.FL_CT_CVS_07.name()).contains(flowToSend.getCode())) {
 
                                 // edit signature elements
                                 Date now = java.util.Calendar.getInstance().getTime();
@@ -3417,8 +3423,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             setIndexPageUrl(ControllerConstants.Pages.FO.DASHBOARD_CCT_INDEX_PAGE);
             final FacesContext context = FacesContext.getCurrentInstance();
             final ExternalContext extContext = context.getExternalContext();
-            final String url = extContext.encodeActionURL(context.getApplication().getViewHandler()
-                    .getActionURL(context, indexPageUrl));
+            final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, indexPageUrl));
 
             extContext.redirect(url);
 
@@ -4358,30 +4363,39 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
     }
 
     public synchronized StreamedContent downloadReferenceBaseReport(final boolean draft) {
-        if (currentFile.getParent() != null) {
-            FileItem pfi = currentFile.getParent().getFileItemsList().get(0);
-            final Flow reportingFlow = flowService.findByToStep(pfi.getStep());
-            List<FileTypeFlowReport> ftfr = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getParent().getFileType());
+        return downloadPrevReport(currentFile.getParent());
+    }
 
-            if (CollectionUtils.isNotEmpty(ftfr)) {
-                for (final FileTypeFlowReport fileTypeFlowReport : ftfr) {
-                    //Begin Add new field value with report Number
-                    try {
-                        final byte[] report = getReportBytes(currentFile.getParent(), fileTypeFlowReport, draft);
-                        if (report != null) {
-                            final InputStream is = new ByteArrayInputStream(report);
-                            final StreamedContent fileToDownload = new DefaultStreamedContent(is, "application/pdf", currentFile.getParent().getReferenceSiat() + '_' + fileTypeFlowReport.getReportName());
+    public synchronized StreamedContent downloadPrevReport(File file) {
 
-                            return fileToDownload;
-                        }
-                    } catch (Exception e) {
-                        final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.GENERATE_REPORT_FAILED);
-                        JsfUtil.addErrorMessage(msg);
-                        LOG.error(e.getMessage(), e);
-                    }
+        if (file == null) {
+            return null;
+        }
 
+        FileItem pfi = file.getFileItemsList().get(0);
+        final Flow reportingFlow = flowService.findByToStep(pfi.getStep(), file.getFileType());
+
+        List<FileTypeFlowReport> ftfr = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(reportingFlow, file.getFileType());
+
+        if (CollectionUtils.isEmpty(ftfr)) {
+            return null;
+        }
+
+        for (final FileTypeFlowReport fileTypeFlowReport : ftfr) {
+            try {
+                final byte[] report = getReportBytes(file, fileTypeFlowReport, false);
+                if (report != null) {
+                    final InputStream is = new ByteArrayInputStream(report);
+                    final StreamedContent fileToDownload = new DefaultStreamedContent(is, "application/pdf", file.getReferenceSiat() + '_' + fileTypeFlowReport.getReportName());
+
+                    return fileToDownload;
                 }
+            } catch (Exception e) {
+                final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.GENERATE_REPORT_FAILED);
+                JsfUtil.addErrorMessage(msg);
+                LOG.error(e.getMessage(), e);
             }
+
         }
 
         return null;
@@ -8028,7 +8042,16 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
     }
 
     private boolean isPhytoBilling(Flow flow) {
-        return flow != null && Arrays.asList(FlowCode.FL_CT_120.name(), FlowCode.FL_CT_124.name(), FlowCode.FL_CT_132.name(), FlowCode.FL_CT_143.name()).contains(flow.getCode());
+        return isPhyto() && flow != null && Arrays.asList(FlowCode.FL_CT_120.name(), FlowCode.FL_CT_124.name(), FlowCode.FL_CT_132.name(), FlowCode.FL_CT_143.name()).contains(flow.getCode());
+    }
+
+    public FileType getFileType(FileTypeCode fileTypeCode) {
+        List<FileType> fileTypes = fileTypeService.findFileTypesByCodes(fileTypeCode);
+        return CollectionUtils.isNotEmpty(fileTypes) ? fileTypes.get(0) : null;
+    }
+
+    public List<FileType> getPhytoFileTypes() {
+        return phytoFileTypes;
     }
 
 }

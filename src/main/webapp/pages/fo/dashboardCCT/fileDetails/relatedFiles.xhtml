@@ -1,0 +1,22 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+    <br />
+
+    <h:form id="fileBaseInformationsForm">
+
+        <p:accordionPanel rendered="true">
+
+            <p:panelGrid columns="2">
+                <ui:repeat value="#{fileItemCctDetailController.phytoFileTypes}" var="ft">
+                    <h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? ft.labelEn : ft.labelFr}" />
+                    <h:panelGroup>
+                        <p:inputText readonly="true" value="#{}" />
+                    </h:panelGroup>
+                </ui:repeat>
+            </p:panelGrid>
+
+        </p:accordionPanel>
+
+    </h:form>
+
+</ui:composition>

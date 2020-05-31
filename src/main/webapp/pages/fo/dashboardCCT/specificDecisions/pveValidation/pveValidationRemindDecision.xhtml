@@ -26,11 +26,12 @@
         <h:outputLabel value="#{bundle['PveAdditionalInformations']}" />
         <h:outputText value="#{fileItemCctDetailController.pottingReport.additionalInformations}" />
 
-        <h:outputLabel value="#{bundle['PveOther']}" />
-        <h:outputText value="#{fileItemCctDetailController.pottingReport.otherProcductTypeDescription}" />
-
-        <h:outputLabel value="#{bundle['Quality']}" />
-        <h:outputText value="#{fileItemCctDetailController.pottingReport.quality}" />
+        <p:outputPanel rendered="#{not empty fileItemCctDetailController.productType and fileItemCctDetailController.productType eq 'AUTRES'}">
+            <h:outputLabel value="#{bundle['PveOther']}" />
+            <h:outputText value="#{fileItemCctDetailController.pottingReport.otherProcductTypeDescription}" />
+            <h:outputLabel value="#{bundle['Quality']}" />
+            <h:outputText value="#{fileItemCctDetailController.pottingReport.quality}" />
+        </p:outputPanel>
     </p:panelGrid>
 
 </ui:composition>
