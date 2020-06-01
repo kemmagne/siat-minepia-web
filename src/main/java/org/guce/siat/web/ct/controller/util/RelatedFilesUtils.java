@@ -82,6 +82,8 @@ public final class RelatedFilesUtils {
         ItemFlow lastDecision = controller.getItemFlowService().findLastItemFlowByFileItem(fileItem);
         Flow currentFlow = lastDecision != null ? lastDecision.getFlow() : null;
 
+        line.put(MAIN_REPORT, file);
+
         if (currentFlow == null) {
             return new HashMap<>();
         }

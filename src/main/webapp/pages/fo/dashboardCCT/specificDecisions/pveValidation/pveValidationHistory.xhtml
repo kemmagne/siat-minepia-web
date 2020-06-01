@@ -1,37 +1,36 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" >
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" >
 
     <p:panelGrid columns="2">
         <h:outputLabel value="#{bundle['AuthorizationNumber']}" />
-        <h:outputText value="#{fileItemCctDetailController.pottingReport.authorizationNumber}" />
+        <h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPR.authorizationNumber}" />
 
         <h:outputLabel value="#{bundle['AuthorizationDate']}" />
-        <h:outputText value="#{fileItemCctDetailController.pottingReport.authorizationDate}">
+        <h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPR.authorizationDate}">
             <f:convertDateTime pattern="dd/MM/yyyy" />
         </h:outputText>
 
         <h:outputLabel value="#{bundle['PottingEndDate']}" />
-        <h:outputText value="#{fileItemCctDetailController.pottingReport.pottingEndDate}">
+        <h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPR.pottingEndDate}">
             <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
         </h:outputText>
 
         <h:outputLabel value="#{bundle['TreatmentCertNumber']}" />
-        <h:outputText value="#{fileItemCctDetailController.pottingReport.treatmentCertNumber}" />
+        <h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPR.treatmentCertNumber}" />
 
         <h:outputLabel value="#{bundle['TreatmentCertDate']}" />
-        <h:outputText value="#{fileItemCctDetailController.pottingReport.treatmentCertDate}">
+        <h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPR.treatmentCertDate}">
             <f:convertDateTime pattern="dd/MM/yyyy" />
         </h:outputText>
 
         <h:outputLabel value="#{bundle['PveAdditionalInformations']}" />
-        <h:outputText value="#{fileItemCctDetailController.pottingReport.additionalInformations}" />
+        <h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPR.additionalInformations}" />
+    </p:panelGrid>
 
-        <p:outputPanel rendered="#{not empty fileItemCctDetailController.productType and fileItemCctDetailController.productType eq 'AUTRES'}">
-            <h:outputLabel value="#{bundle['PveOther']}" />
-            <h:outputText value="#{fileItemCctDetailController.pottingReport.otherProcductTypeDescription}" />
-            <h:outputLabel value="#{bundle['Quality']}" />
-            <h:outputText value="#{fileItemCctDetailController.pottingReport.quality}" />
-        </p:outputPanel>
+    <p:panelGrid columns="2" rendered="#{not empty fileItemCctDetailController.productType and fileItemCctDetailController.productType eq 'AUTRES'}">
+        <h:outputLabel value="#{bundle['PveOther']}" />
+        <h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPR.otherProcductTypeDescription}" />
+        <h:outputLabel value="#{bundle['Quality']}" />
+        <h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPR.quality}" />
     </p:panelGrid>
 
 </ui:composition>

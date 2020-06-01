@@ -52,25 +52,24 @@
             </p:inputTextarea>
             <p:message for="PveAdditionalInformations" />
         </h:panelGroup>
-
-        <p:outputPanel rendered="#{not empty fileItemCctDetailController.productType and fileItemCctDetailController.productType eq 'AUTRES'}">
-            <h:outputLabel for="PveOther" value="#{bundle['PveOther']}" />
-            <h:panelGroup>
-                <p:inputText value="#{fileItemCctDetailController.pottingReport.otherProcductTypeDescription}" id="PveOther" required="true"
-                             requiredMessage="#{bundle['Field']} #{bundle['PveOther']} #{bundle['RequiredMessage']}">
-                    <f:validateLength maximum="100" />
-                </p:inputText>
-                <p:message for="PveOther" />
-            </h:panelGroup>
-            <h:outputLabel for="PveQuality" value="#{bundle['Quality']}" />
-            <h:panelGroup>
-                <p:inputText value="#{fileItemCctDetailController.pottingReport.quality}" id="PveQuality" required="true"
-                             requiredMessage="#{bundle['Field']} #{bundle['Quality']} #{bundle['RequiredMessage']}">
-                    <f:validateLength maximum="35" />
-                </p:inputText>
-                <p:message for="PveQuality" />
-            </h:panelGroup>
-        </p:outputPanel>
+    </p:panelGrid>
+    <p:panelGrid columns="2" rendered="#{not empty fileItemCctDetailController.productType and fileItemCctDetailController.productType eq 'AUTRES'}">
+        <h:outputLabel for="PveOther" value="#{bundle['PveOther']}" />
+        <h:panelGroup>
+            <p:inputText value="#{fileItemCctDetailController.pottingReport.otherProcductTypeDescription}" id="PveOther" required="true"
+                         requiredMessage="#{bundle['Field']} #{bundle['PveOther']} #{bundle['RequiredMessage']}">
+                <f:validateLength maximum="100" />
+            </p:inputText>
+            <p:message for="PveOther" />
+        </h:panelGroup>
+        <h:outputLabel for="PveQuality" value="#{bundle['Quality']}" />
+        <h:panelGroup>
+            <p:inputText value="#{fileItemCctDetailController.pottingReport.quality}" id="PveQuality" required="true"
+                         requiredMessage="#{bundle['Field']} #{bundle['Quality']} #{bundle['RequiredMessage']}">
+                <f:validateLength maximum="35" />
+            </p:inputText>
+            <p:message for="PveQuality" />
+        </h:panelGroup>
     </p:panelGrid>
 
     <p:spacer height="10" />

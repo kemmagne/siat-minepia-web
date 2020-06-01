@@ -118,7 +118,7 @@
                                 <ui:include src="../specificDecisions/inspectionReport/inspectionReportHistory.xhtml" />
                             </h:panelGroup>
 
-                            <h:panelGroup rendered="#{fileItemCctDetailController.isPveReadyForSignature(fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.itemFlow.flow)}">
+                            <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPR}">
                                 <ui:include src="../specificDecisions/pveValidation/pveValidationHistory.xhtml" />
                             </h:panelGroup>
 

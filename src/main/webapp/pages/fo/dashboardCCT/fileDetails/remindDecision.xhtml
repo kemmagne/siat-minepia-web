@@ -15,7 +15,7 @@
                 </h:panelGrid>
 
                 <h:panelGroup
-                    rendered="#{empty fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR and empty fileItemCctDetailController.specificDecisionsHistory.lastDecisionApp and empty fileItemCctDetailController.specificDecisionsHistory.lastAnalyseOrder and empty fileItemCctDetailController.specificDecisionsHistory.lastTreatmentOrder and empty fileItemCctDetailController.specificDecisionsHistory.lastAnalyseResult and empty fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult}">
+                    rendered="#{(empty fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR and empty fileItemCctDetailController.specificDecisionsHistory.lastDecisionApp and empty fileItemCctDetailController.specificDecisionsHistory.lastAnalyseOrder and empty fileItemCctDetailController.specificDecisionsHistory.lastTreatmentOrder and empty fileItemCctDetailController.specificDecisionsHistory.lastAnalyseResult and empty fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult) or (fileItemCctDetailController.lastSpecificDecision eq 'CCT_CT_E_BILL')}">
                     <ui:repeat value="#{fileItemCctDetailController.lastDecisions.itemFlowsDataList}" var="itemFlowData" varStatus="status">
                         <h:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight" cellspacing="4">
                             <h:outputLabel value="#{itemFlowData.dataType.label} : " title="#{itemFlowData.dataType.label}" />
@@ -29,7 +29,7 @@
                     <ui:include src="../specificDecisions/inspectionReport/inspectionReportRemindDecision.xhtml" />
                 </h:panelGroup>
 
-                <h:panelGroup rendered="#{fileItemCctDetailController.isPveReadyForSignature(fileItemCctDetailController.lastDecisions.flow)}">
+                <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastPottingReport}">
                     <ui:include src="../specificDecisions/pveValidation/pveValidationRemindDecision.xhtml" />
                 </h:panelGroup>
 

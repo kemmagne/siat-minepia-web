@@ -1,7 +1,6 @@
 package org.guce.siat.web.common.util;
 
 import java.io.Serializable;
-
 import org.guce.siat.common.model.Appointment;
 import org.guce.siat.core.ct.model.AnalyseOrder;
 import org.guce.siat.core.ct.model.AnalyseResult;
@@ -10,6 +9,7 @@ import org.guce.siat.core.ct.model.CCTCPParamValue;
 import org.guce.siat.core.ct.model.InspectionReport;
 import org.guce.siat.core.ct.model.InterceptionNotification;
 import org.guce.siat.core.ct.model.PaymentData;
+import org.guce.siat.core.ct.model.PottingReport;
 import org.guce.siat.core.ct.model.TreatmentInfos;
 import org.guce.siat.core.ct.model.TreatmentOrder;
 import org.guce.siat.core.ct.model.TreatmentResult;
@@ -106,6 +106,10 @@ public class CctSpecificDecisionHistory implements Serializable {
     private ApprovedDecision approvedDecision;
 
     private CCTCPParamValue cCTCPParamValue;
+
+    private PottingReport lastPottingReport;
+
+    private PottingReport decisionDetailsPR;
 
     /**
      * Gets the last decision ir.
@@ -405,6 +409,22 @@ public class CctSpecificDecisionHistory implements Serializable {
 
     public void setcCTCPParamValue(CCTCPParamValue cCTCPParamValue) {
         this.cCTCPParamValue = cCTCPParamValue;
+    }
+
+    public PottingReport getLastPottingReport() {
+        return lastPottingReport;
+    }
+
+    public void setLastPottingReport(PottingReport lastPottingReport) {
+        this.lastPottingReport = lastPottingReport;
+    }
+
+    public PottingReport getDecisionDetailsPR() {
+        return decisionDetailsPR;
+    }
+
+    public void setDecisionDetailsPR(PottingReport decisionDetailsPR) {
+        this.decisionDetailsPR = decisionDetailsPR;
     }
 
 }

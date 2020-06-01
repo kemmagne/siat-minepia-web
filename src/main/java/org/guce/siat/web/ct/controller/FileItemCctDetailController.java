@@ -2262,7 +2262,8 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             specificDecisionsHistory.setLastPaymentData(paymentDataService.findPaymentDataByFileItem(lastDecisions.getFileItem()));
             lastSpecificDecision = CctSpecificDecision.CCT_CT_E_BILL;
         } else if (isPveReadyForSignature(lastDecisions.getFlow()) || isAppointmentOkForPve(lastDecisions.getFlow())) {
-            pottingReport = pottingReportService.findPottingReportByFile(currentFile, false);
+            PottingReport pr = pottingReportService.findPottingReportByFile(currentFile, false);
+            specificDecisionsHistory.setLastPottingReport(pr);
         }
     }
 
@@ -2310,10 +2311,11 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             specificDecisionsHistory.setDecisionDetailsPayData(paymentDataService.findPaymentDataByFileItem(selectedItemFlowDto.getItemFlow().getFileItem()));
             lastSpecificDecision = CctSpecificDecision.CCT_CT_E_BILL;
         } else if (isPveReadyForSignature(selectedItemFlowDto.getItemFlow().getFlow()) || isAppointmentOkForPve(selectedItemFlowDto.getItemFlow().getFlow())) {
-            pottingReport = pottingReportService.findPottingReportByFile(currentFile);
-            if (pottingReport == null) {
-                pottingReport = pottingReportService.findPottingReportByFile(currentFile, false);
+            PottingReport pr = pottingReportService.findPottingReportByFile(currentFile);
+            if (pr == null) {
+                pr = pottingReportService.findPottingReportByFile(currentFile, false);
             }
+            specificDecisionsHistory.setDecisionDetailsPR(pr);
         }
     }
 
@@ -2704,6 +2706,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                     paymentAmoutValueChangedListenerCte();
 
                     commonService.takeDacisionAndSavePayment(itemFlowsToAdd, paymentData);
+                    itemFlowService.takeDecision(itemFlowsToAdd, flowDatas);
                 } else {
                     itemFlowService.takeDecision(itemFlowsToAdd, flowDatas);
 
@@ -3253,7 +3256,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                     }
                     final Map<FileItem, Flow> mapWithinAllFileItemAndFlowsToSend = itemFlowService.sendDecisions(currentFile, productInfoItemsEnabled);
 
-                    pottingReportService.updateAfterSignature(pottingReport);
+                    pottingReportService.updateAfterSignature(currentFile);
 
                     if (!mapWithinAllFileItemAndFlowsToSend.isEmpty()) {
 
