@@ -194,10 +194,12 @@ import org.guce.siat.web.common.util.CctSpecificDecisionHistory;
 import org.guce.siat.web.common.util.UploadFileManager;
 import org.guce.siat.web.ct.controller.util.CustumMap;
 import org.guce.siat.web.ct.controller.util.FileItemCheck;
+import org.guce.siat.web.ct.controller.util.FileTypeDto;
 import org.guce.siat.web.ct.controller.util.InspectionReportData;
 import org.guce.siat.web.ct.controller.util.InspectionReportEtiquetageVo;
 import org.guce.siat.web.ct.controller.util.InspectionReportTemperatureVo;
 import org.guce.siat.web.ct.controller.util.JsfUtil;
+import org.guce.siat.web.ct.controller.util.RelatedFilesUtils;
 import org.guce.siat.web.ct.controller.util.enums.DataTypeEnnumeration;
 import org.guce.siat.web.ct.controller.util.enums.DataTypePropEnnum;
 import org.guce.siat.web.ct.controller.util.enums.DecisionsSuiteVisite;
@@ -1159,12 +1161,12 @@ public class FileItemCctDetailController implements Serializable {
 
     private List<FileType> phytoFileTypes;
 
+    private List<FileTypeDto> relatedFileTypesInfos;
+
     /**
      * Inits the.
      */
     public void init() {
-
-        phytoFileTypes = fileTypeService.findFileTypesByCodes(FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI);
 
         currentFile = currentFileItem.getFile();
         checkMinaderMinistry = currentFile.getDestinataire().equalsIgnoreCase(Constants.MINADER_MINISTRY);
@@ -1172,6 +1174,8 @@ public class FileItemCctDetailController implements Serializable {
         loggedUser = getLoggedUser();
         allowedRecommandation = checkIsAllowadRecommandation();
         listUserAuthorityFileTypes = userAuthorityFileTypeService.findUserAuthorityFileTypeByFileTypeAndUserList(currentFile.getFileType(), loggedUser.getMergedDelegatorList());
+
+        getRelatedFileTypesInfos();
 
         selectedFileItemCheck = new FileItemCheck(getCurrentFileItem(), false, false, false);
 
@@ -4366,10 +4370,10 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
     }
 
     public synchronized StreamedContent downloadReferenceBaseReport(final boolean draft) {
-        return downloadPrevReport(currentFile.getParent());
+        return downloadReportByFile(currentFile.getParent());
     }
 
-    public synchronized StreamedContent downloadPrevReport(File file) {
+    public synchronized StreamedContent downloadReportByFile(File file) {
 
         if (file == null) {
             return null;
@@ -8055,6 +8059,15 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
 
     public List<FileType> getPhytoFileTypes() {
         return phytoFileTypes;
+    }
+
+    public List<FileTypeDto> getRelatedFileTypesInfos() {
+
+        phytoFileTypes = fileTypeService.findFileTypesByCodes(FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI);
+        phytoFileTypes.remove(currentFile.getFileType());
+        relatedFileTypesInfos = RelatedFilesUtils.getRelatedFileTypesInfos(this, phytoFileTypes);
+
+        return relatedFileTypesInfos;
     }
 
 }

@@ -2,18 +2,36 @@
 
     <br />
 
-    <h:form id="fileBaseInformationsForm">
+    <h:form id="relatedFileTypesInfos">
 
-        <p:accordionPanel rendered="true">
+        <p:accordionPanel rendered="#{not empty fileItemCctDetailController.relatedFileTypesInfos}">
 
-            <p:panelGrid columns="2">
-                <ui:repeat value="#{fileItemCctDetailController.phytoFileTypes}" var="ft">
-                    <h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? ft.labelEn : ft.labelFr}" />
-                    <h:panelGroup>
-                        <p:inputText readonly="true" value="#{}" />
-                    </h:panelGroup>
+            <p:tab title="#{bundle['AssociatedFiles']}" dynamic="true" cache="true" titleStyleClass="titleColor">
+
+                <ui:repeat value="#{fileItemCctDetailController.relatedFileTypesInfos}" var="ftDto">
+
+                    <h:panelGrid columns="1" cellspacing="3">
+                        <h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? ftDto.fileType.labelEn : ftDto.fileType.labelFr}" />
+                        <h:panelGroup>
+                            <p:inputText rendered="#{ftDto.infos.mainReport eq false}" readonly="true" value="#{ftDto.infos.label}" size="#{ftDto.infos.label.length()}" />
+                            <p:commandButton rendered="#{ftDto.infos.mainReport eq true}" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" value="#{bundle['BouttonGenerateReport']}" >
+                                <p:fileDownload value="#{fileItemCctDetailController.downloadReportByFile(ftDto.infos.file)}" />
+                            </p:commandButton>
+                            <h:panelGroup rendered="#{not empty ftDto.infos.modifs}">
+                                <ui:repeat value="#{ftDto.infos.modifs}" var="mf">
+                                    <p:spacer width="5" />
+                                    <p:commandButton ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" value="#{mf.numeroDossier}" >
+                                        <p:fileDownload value="#{fileItemCctDetailController.downloadReportByFile(mf)}" />
+                                    </p:commandButton>
+                                </ui:repeat>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:panelGrid>
+
+                    <p:separator />
+
                 </ui:repeat>
-            </p:panelGrid>
+            </p:tab>
 
         </p:accordionPanel>
 

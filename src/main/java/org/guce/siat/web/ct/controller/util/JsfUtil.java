@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.component.UIComponent;
@@ -18,7 +17,6 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRPrintPage;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.guce.siat.common.model.FileFieldValue;
@@ -453,4 +451,17 @@ public final class JsfUtil {
         }
         return null;
     }
+
+    public static <T, S> List<Map.Entry<T, S>> mapToList(Map<T, S> map) {
+
+        if (map == null) {
+            return null;
+        }
+
+        List<Map.Entry<T, S>> list = new ArrayList<>();
+        list.addAll(map.entrySet());
+
+        return list;
+    }
+
 }

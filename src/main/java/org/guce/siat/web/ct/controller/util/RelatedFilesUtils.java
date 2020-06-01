@@ -2,14 +2,17 @@ package org.guce.siat.web.ct.controller.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.guce.siat.common.model.File;
 import org.guce.siat.common.model.FileItem;
 import org.guce.siat.common.model.FileType;
+import org.guce.siat.common.model.FileTypeStep;
 import org.guce.siat.common.model.Flow;
 import org.guce.siat.common.model.ItemFlow;
 import org.guce.siat.common.model.Step;
@@ -23,25 +26,28 @@ import org.guce.siat.web.ct.controller.FileItemCctDetailController;
  */
 public final class RelatedFilesUtils {
 
-    private static final List<StepCode> ADMISSIBILITY_STEPS_CODES = Arrays.asList(StepCode.ST_AM_42);
-    private static final List<StepCode> SIGNATURE_STEPS_CODES = Arrays.asList(StepCode.ST_AM_42);
-    private static final List<StepCode> TREATMENT_STEPS_CODES = Arrays.asList(StepCode.ST_AM_42);
+    private static final List<StepCode> TREATMENT_STEPS_CODES = Arrays.asList(StepCode.ST_CT_04, StepCode.ST_CT_48, StepCode.ST_CT_63);
 
     private static final String LABEL = "label";
     private static final String MAIN_REPORT = "mainReport";
+    private static final String FILE = "file";
+    private static final String MODIFS = "modifs";
 
-    public static Map<FileType, Map<String, Object>> getRelatedFileTypesInfos(FileItemCctDetailController controller, List<FileType> fileTypes) {
+    public static List<FileTypeDto> getRelatedFileTypesInfos(FileItemCctDetailController controller, List<FileType> fileTypes) {
 
-        Map<FileType, Map<String, Object>> map = new HashMap<>(fileTypes.size());
+        List<FileTypeDto> fileTypeDtos = new ArrayList<>();
 
         for (FileType fileType : fileTypes) {
 
-            Map<String, Object> line = new HashMap<>();
+            FileTypeDto fileTypeDto = new FileTypeDto();
 
-            map.put(fileType, line);
+            fileTypeDto.setFileType(fileType);
+            fileTypeDto.setInfos(getLineMap(controller, fileType));
+
+            fileTypeDtos.add(fileTypeDto);
         }
 
-        return map;
+        return fileTypeDtos;
     }
 
     public static Map<String, Object> getLineMap(FileItemCctDetailController controller, FileType fileType) {
@@ -53,7 +59,7 @@ public final class RelatedFilesUtils {
         List<File> modifFiles = new ArrayList<>();
 
         if (files.isEmpty()) {
-            return new HashMap<>();
+            return Collections.singletonMap(LABEL, (Object) "Aucun dossier");
         }
 
         Iterator<File> iterator = files.iterator();
@@ -62,8 +68,7 @@ public final class RelatedFilesUtils {
             if (next.getParent() != null) {
                 modifFiles.add(next);
                 iterator.remove();
-            }
-            if (!StepCode.ST_CT_06.equals(next.getFileItemsList().get(0).getStep().getStepCode())) {
+            } else if (StepCode.ST_CT_05.equals(next.getFileItemsList().get(0).getStep().getStepCode())) {
                 iterator.remove();
             }
         }
@@ -82,15 +87,22 @@ public final class RelatedFilesUtils {
         ItemFlow lastDecision = controller.getItemFlowService().findLastItemFlowByFileItem(fileItem);
         Flow currentFlow = lastDecision != null ? lastDecision.getFlow() : null;
 
-        line.put(MAIN_REPORT, file);
-
         if (currentFlow == null) {
-            return new HashMap<>();
+            return Collections.singletonMap(LABEL, (Object) "Aucun dossier");
         }
+
+        line.put(FILE, file);
+        line.put(MODIFS, modifFiles);
+        line.put(MAIN_REPORT, currentStep != null && BooleanUtils.toBoolean(currentStep.getIsFinal()) && file.getSignatureDate() != null);
 
         List<String> labels = new ArrayList<>();
         labels.add(file.getNumeroDossier());
-        labels.add(currentStep.getLabelFr());
+        String stepLabel = currentStep.getLabelFr();
+        FileTypeStep fts = controller.getFileTypeStepService().findFileTypeStepByFileTypeAndStep(file.getFileType(), currentStep);
+        if (fts != null) {
+            stepLabel = fts.getLabelFr();
+        }
+        labels.add(stepLabel);
 
         Flow ciFlow = controller.getFlowService().findCiResponseFlow(currentFlow.getCode());
         boolean ci = ciFlow != null;
@@ -98,9 +110,10 @@ public final class RelatedFilesUtils {
             labels.add(CompanyType.DECLARANT.name());
         }
 
-        boolean admissibility = ADMISSIBILITY_STEPS_CODES.contains(currentStep.getStepCode());
         boolean treatment = TREATMENT_STEPS_CODES.contains(currentStep.getStepCode());
-        boolean signature = SIGNATURE_STEPS_CODES.contains(currentStep.getStepCode());
+        if (treatment && file.getAssignedUser() != null) {
+            labels.add(String.format("%s", file.getAssignedUser().getLastName()));
+        }
 
         line.put(LABEL, StringUtils.join(labels, ", "));
 
