@@ -35,7 +35,7 @@ public class CtCctPveExporter extends AbstractReportInvoker {
 
         fileVo.setFile(file);
 
-        PottingReport pottingReport = getPottingReportService().findPottingReportByFile(file);
+        PottingReport pottingReport = getPottingReportService().findPottingReportByFile(file, !isDraft());
         if (pottingReport == null) {
             pottingReport = getCctDetailController().getPottingReport();
         }
@@ -68,17 +68,6 @@ public class CtCctPveExporter extends AbstractReportInvoker {
         }
         fileVo.setContainers(containerVos);
 
-//        List<PottingPresent> presents = getPottingReportService().findPottingPresentsByFile(file);
-//        fileVo.setPresents(presents);
-//        List<String> list = new ArrayList<>();
-//        for (PottingPresent present : presents) {
-//            if (!Constants.MINADER_MINISTRY.equals(present.getOrganism())) {
-//                continue;
-//            }
-//
-//            list.add(String.format("%s : %s", present.getName(), present.getQuality()));
-//        }
-//        fileVo.setAgents(StringUtils.join(list, " ; "));
         List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
 
         for (final FileFieldValue fileFieldValue1 : fileFieldValueList) {

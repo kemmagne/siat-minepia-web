@@ -3260,9 +3260,9 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                     }
                     final Map<FileItem, Flow> mapWithinAllFileItemAndFlowsToSend = itemFlowService.sendDecisions(currentFile, productInfoItemsEnabled);
 
-                    pottingReportService.updateAfterSignature(currentFile);
-
                     if (!mapWithinAllFileItemAndFlowsToSend.isEmpty()) {
+
+                        pottingReportService.updateAfterSignature(currentFile);
 
                         final Map<Flow, List<FileItem>> groupedFlow = groupFileItemsToSendByFlow(mapWithinAllFileItemAndFlowsToSend);
                         for (final Flow flowToSend : groupedFlow.keySet()) {
@@ -4339,7 +4339,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
      * @param draft
      * @return the streamed content
      */
-    public synchronized StreamedContent downloadReport(final boolean draft) {
+    public synchronized StreamedContent downloadReport(boolean draft) {
         final List<FileTypeFlowReport> fileTypeFlowReportsList = draft ? new ArrayList<>(fileTypeFlowReportsDraft) : new ArrayList<>(fileTypeFlowReports);
         if (CollectionUtils.isNotEmpty(fileTypeFlowReportsList)) {
             currentFile.setSignatory(getLoggedUser());
@@ -7500,7 +7500,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             }
             Flow flow = fileTypeFlowReport.getFlow();
             if (BooleanUtils.toBoolean(flow.getToStep().getIsFinal())) {
-                switch (currentFile.getFileType().getCode()) {
+                switch (file.getFileType().getCode()) {
                     case CCT_CT_E: {
                         ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(ffi, FlowCode.FL_CT_07);
                         if (itemFlow == null) {
@@ -7580,11 +7580,11 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                 PaymentData payData;
                 payData = paymentDataService.findPaymentDataByFileItem(file.getFileItemsList().get(0));
                 Constructor constructor = classe.getConstructor(File.class, PaymentData.class);
-                reportInvoker = (AbstractReportInvoker) constructor.newInstance(currentFile, payData);
+                reportInvoker = (AbstractReportInvoker) constructor.newInstance(file, payData);
             }
 
         } else if (checkMinepiaMinistry) {
-            switch (currentFile.getFileType().getCode()) {
+            switch (file.getFileType().getCode()) {
                 case CCT_CT: {
                     if (approvedDecision == null) {
                         lastDecisions = itemFlowService.findLastSentItemFlowByFileItem(selectedFileItemCheck.getFileItem());
@@ -7601,12 +7601,13 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             reportInvoker.setFileFieldValueService(fileFieldValueService);
             reportInvoker.setItemFlowService(itemFlowService);
             reportInvoker.setPottingReportService(pottingReportService);
+            reportInvoker.setCctDetailController(this);
             if (forAnnexes != null) {
                 JasperPrint page1 = JsfUtil.getReportJP(reportInvoker);
                 TreatmentInfos ti = (TreatmentInfos) forAnnexes.get("ti");
                 CCTCPParamValue paramValue = (CCTCPParamValue) forAnnexes.get("paramValue");
                 String fileAnnexName = (String) forAnnexes.get("fileNameAnnex");
-                CtCctCpEExporter exporter = new CtCctCpEExporter(currentFile, ti, paramValue, fileAnnexName);
+                CtCctCpEExporter exporter = new CtCctCpEExporter(file, ti, paramValue, fileAnnexName);
                 exporter.setDraft(draft);
                 exporter.setFileFieldValueService(fileFieldValueService);
                 JasperPrint report2 = JsfUtil.getReportJP(exporter);
