@@ -153,7 +153,6 @@ import org.guce.siat.core.ct.model.Laboratory;
 import org.guce.siat.core.ct.model.ParamCCTCP;
 import org.guce.siat.core.ct.model.PaymentData;
 import org.guce.siat.core.ct.model.PaymentItemFlow;
-import org.guce.siat.core.ct.model.PottingPresent;
 import org.guce.siat.core.ct.model.PottingReport;
 import org.guce.siat.core.ct.model.Sample;
 import org.guce.siat.core.ct.model.TreatmentCompany;
@@ -323,8 +322,7 @@ public class FileItemCctDetailController implements Serializable {
     /**
      * The Constant RDD_FLOW_CODES.
      */
-    private static final List<String> RDD_FLOW_CODES = Arrays.asList(FlowCode.FL_CT_12.name(), FlowCode.FL_CT_14.name(),
-            FlowCode.FL_CT_73.name(), FlowCode.FL_CT_74.name());
+    private static final List<String> RDD_FLOW_CODES = Arrays.asList(FlowCode.FL_CT_12.name(), FlowCode.FL_CT_14.name(), FlowCode.FL_CT_73.name(), FlowCode.FL_CT_74.name());
 
     /**
      * The Constant DCC_FLOW_CODES.
@@ -1103,8 +1101,6 @@ public class FileItemCctDetailController implements Serializable {
      */
     private PaymentData paymentData;
 
-    private PaymentData payDataBack;
-
     private InvoiceLine selectedInvoiceLine;
 
     /**
@@ -1123,6 +1119,9 @@ public class FileItemCctDetailController implements Serializable {
     private Long invoiceOtherAmount;
 
     private InterceptionNotification interceptionNotification;
+
+    List<Appointment> relatedAppointments;
+    private Appointment appointment;
 
     private final String MINEPIA_MINISTRY = "MINEPIA";
 
@@ -1151,15 +1150,9 @@ public class FileItemCctDetailController implements Serializable {
 
     private Long counter;
 
-    private List<PottingPresent> pottingPresents;
-    private List<String> pottingPresentsOrganisms;
-    private PottingPresent selectedPottingPresent;
-
     private PottingReport pottingReport;
 
     private CctExportProductType productType;
-
-    private List<FileType> phytoFileTypes;
 
     private List<FileTypeDto> relatedFileTypesInfos;
 
@@ -1826,6 +1819,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
      */
     public void changeDecisionHandler() throws ParseException {
         specificDecision = null;
+        relatedAppointments = null;
         decisionDiv.getChildren().clear();
         final List<FileItemCheck> checksProduct = selectCheckedFileItemCheck();
         isPayment = Boolean.FALSE;
@@ -1858,19 +1852,44 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             }
         }
 
+        List<FileTypeCode> codes = new ArrayList<>(Arrays.asList(FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI));
+        if (isPhytoAppointment(selectedFlow)) {
+            specificDecision = CctSpecificDecision.CCT_CT_E_APP;
+
+            codes.remove(currentFile.getFileType().getCode());
+
+            relatedAppointments = appointmentService.findRelatedAppointments(currentFile, codes.toArray(new FileTypeCode[0]));
+
+            Appointment app;
+            if (Arrays.asList(FlowCode.FL_CT_118.name()).contains(selectedFlow.getCode())) {
+                appointment = appointmentService.findAppointmentByFileItem(currentFileItem);
+                if (appointment == null) {
+                    appointment = new Appointment();
+                    app = appointmentService.findDeletedAppointmentByFileItem(currentFileItem);
+                    if (app != null) {
+                        appointment.setBeginTime(app.getBeginTime());
+                    }
+                }
+            } else {
+                appointment = new Appointment();
+            }
+
+            appointment.setController(getLoggedUser());
+            appointment.setBundle("Appointment_".concat(currentFile.getFileType().getCode().name()));
+        }
+
         // Rendez-vous
         if (APPOINTMENT_DECISIONS_LIST.contains(selectedFlow.getCode())) {
             specificDecision = CctSpecificDecision.APP;
             final ScheduleController scheduleController = getInstanceOfPageScheduleController();
             scheduleController.setCurrentService(getCurrentFile().getBureau().getService());
             scheduleController.init();
-            if (FlowCode.FL_CT_42.name().equals(selectedFlow.getCode())
-                    || lastDecisions.getFlow().getCode().equals(FlowCode.FL_CT_27.toString())) {
+            if (FlowCode.FL_CT_42.name().equals(selectedFlow.getCode()) || lastDecisions.getFlow().getCode().equals(FlowCode.FL_CT_27.toString())) {
                 final List<ItemFlow> lastItemFlowList = itemFlowService.findLastItemFlowsByFileItemList(productInfoItems);
-                final Appointment appointment = appointmentService.findAppointmentByItemFlowList(lastItemFlowList);
-                if (appointment != null) {
-                    scheduleController.getAppointmentList().remove(appointment);
-                    scheduleController.createNewEventFromApoitment(appointment);
+                final Appointment appointment1 = appointmentService.findAppointmentByItemFlowList(lastItemFlowList);
+                if (appointment1 != null) {
+                    scheduleController.getAppointmentList().remove(appointment1);
+                    scheduleController.createNewEventFromApoitment(appointment1);
                 }
             }
         } else if (isPviReadyForSignature(selectedFlow)) {
@@ -1901,8 +1920,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                     && currentFileItem.getSubfamily().getService().getSubDepartment() != null
                     && currentFileItem.getSubfamily().getService().getSubDepartment().getOrganism() != null
                     && currentFileItem.getSubfamily().getService().getSubDepartment().getOrganism().getMinistry() != null
-                    && currentFileItem.getSubfamily().getService().getSubDepartment().getOrganism().getMinistry().getLabelFr()
-                            .equals(Constants.MINEPDED_MINISTRY)) {
+                    && currentFileItem.getSubfamily().getService().getSubDepartment().getOrganism().getMinistry().getLabelFr().equals(Constants.MINEPDED_MINISTRY)) {
                 checkMinepdedMinistry = true;
             }
             infraction = new Infraction();
@@ -2041,22 +2059,6 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                 pottingReport.setAppointmentDateBack(pottingReport.getAppointmentDate());
             }
         }
-    }
-
-    public synchronized void addPottingPresent() {
-        PottingPresent pp = new PottingPresent();
-        pp.setId(++counter);
-        pp.setFile(currentFile);
-        pottingPresents.add(pp);
-    }
-
-    public synchronized void removePottingPresent() {
-
-        if (selectedPottingPresent == null) {
-            return;
-        }
-
-        pottingPresents.remove(selectedPottingPresent);
     }
 
     private void buildGenericFormFromDataType(List<DataType> dataTypes) {
@@ -2263,11 +2265,14 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
         } else if (FlowCode.FL_CT_93.name().equals(lastDecisions.getFlow().getCode())) {
             specificDecisionsHistory.setLastPaymentData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
         } else if (isPhytoBilling(lastDecisions.getFlow())) {
-            specificDecisionsHistory.setLastPaymentData(paymentDataService.findPaymentDataByFileItem(lastDecisions.getFileItem()));
             lastSpecificDecision = CctSpecificDecision.CCT_CT_E_BILL;
+            specificDecisionsHistory.setLastPaymentData(paymentDataService.findPaymentDataByFileItem(lastDecisions.getFileItem()));
         } else if (isPveReadyForSignature(lastDecisions.getFlow()) || isAppointmentOkForPve(lastDecisions.getFlow())) {
             PottingReport pr = pottingReportService.findPottingReportByFile(currentFile, false);
             specificDecisionsHistory.setLastPottingReport(pr);
+        } else if (isPhytoAppointment(lastDecisions.getFlow())) {
+            lastSpecificDecision = CctSpecificDecision.CCT_CT_E_APP;
+            specificDecisionsHistory.setLastDecisionApp(appointmentService.findAppointmentByFileItem(currentFileItem));
         }
     }
 
@@ -2320,6 +2325,8 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                 pr = pottingReportService.findPottingReportByFile(currentFile, false);
             }
             specificDecisionsHistory.setDecisionDetailsPR(pr);
+        } else if (isPhytoAppointment(selectedItemFlowDto.getItemFlow().getFlow())) {
+            specificDecisionsHistory.setDecisionDetailsApp(appointmentService.findAppointmentByFileItem(currentFileItem));
         }
     }
 
@@ -2607,13 +2614,13 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             } // Rendez-vous
             else if (APPOINTMENT_DECISIONS_LIST.contains(selectedFlow.getCode())) {
                 if (getInstanceOfPageScheduleController() != null && getInstanceOfPageScheduleController().getAddedEvent() != null) {
-                    final Appointment appointment = getInstanceOfPageScheduleController().getAddedEvent().getAppointment();
+                    final Appointment appointment1 = getInstanceOfPageScheduleController().getAddedEvent().getAppointment();
                     if (FlowCode.FL_CT_26.name().equals(selectedFlow.getCode())) {
-                        appointment.setInspectionOnDock(Boolean.FALSE);
+                        appointment1.setInspectionOnDock(Boolean.FALSE);
                     } else {
-                        appointment.setInspectionOnDock(Boolean.TRUE);
+                        appointment1.setInspectionOnDock(Boolean.TRUE);
                     }
-                    commonService.takeDecisionAndAppointment(itemFlowsToAdd, appointment);
+                    commonService.takeDecisionAndAppointment(itemFlowsToAdd, appointment1);
                 } else {
                     showErrorFacesMessage(ControllerConstants.Bundle.Messages.CALENDAR_ERROR_CHOOSE_APPOINTMENT, null);
                     return;
@@ -2623,12 +2630,12 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                 commonService.takeDecisionAndSaveInspectionReport(inspectionReports.get(0), itemFlowsToAdd);
             } // Saisie Constat
             else if (CONSTAT_FLOW_LIST.contains(selectedFlow.getCode())) {
-                final Appointment appointment = appointmentService.findAppoitmentByFileItemAndController(productInfoItemsEnabled, loggedUser);
+                final Appointment appointment1 = appointmentService.findAppoitmentByFileItemAndController(productInfoItemsEnabled, loggedUser);
                 inspectionReportData.setControllers(inspectionControllers);
                 if (infraction != null && StringUtils.isNotBlank(infraction.getinfractionCode())) {
                     inspectionReportData.setInfraction(infraction.getinfractionCode());
                 }
-                final List<InspectionReport> inspectionReports = inspectionReportData.transformToReportList(appointment);
+                final List<InspectionReport> inspectionReports = inspectionReportData.transformToReportList(appointment1);
                 commonService.takeDecisionAndSaveInspectionReports(inspectionReports, itemFlowsToAdd);
             } // Envoie Résultat d Analyse
             else if (FlowCode.FL_CT_31.name().equals(selectedFlow.getCode())) {
@@ -2712,16 +2719,26 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                     commonService.takeDacisionAndSavePayment(itemFlowsToAdd, paymentData);
                     itemFlowService.takeDecision(itemFlowsToAdd, flowDatas);
                 } else {
-                    itemFlowService.takeDecision(itemFlowsToAdd, flowDatas);
+
+                    List<ItemFlow> addedItemFlows = itemFlowService.takeDecision(itemFlowsToAdd, flowDatas);
 
                     if (isAppointmentOkForPve(selectedFlow)) {
-                        pottingReport.setAppointmentItemFlow(itemFlowsToAdd.get(0));
+                        appointment.setBeginTime(pottingReport.getAppointmentDate());
+                        appointment.setController(getLoggedUser());
+                        appointment.setObservations(pottingReport.getAppointmentDetails());
+                        pottingReport.setAppointmentItemFlow(addedItemFlows.get(0));
                     }
+
                     if (isPveReadyForSignature(selectedFlow)) {
-                        pottingReport.setValidationItemFlow(itemFlowsToAdd.get(0));
+                        pottingReport.setValidationItemFlow(addedItemFlows.get(0));
                     }
+
                     if (isPveReadyForSignature(selectedFlow) || isAppointmentOkForPve(selectedFlow)) {
                         commonService.takeDecisionAndSavePottingReport(pottingReport);
+                    }
+
+                    if (CctSpecificDecision.CCT_CT_E_APP.equals(specificDecision)) {
+                        appointmentService.saveAppointment(appointment, addedItemFlows);
                     }
                 }
                 decisionDiv.getChildren().clear();
@@ -2836,6 +2853,11 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
 
                 decisionDiv.getChildren().clear();
             } else {
+
+//                ItemFlow lastItemFlow = itemFlowService.findDraftByFileItem(currentFileItem);
+//                if (lastItemFlow != null && isPhytoAppointment(lastItemFlow.getFlow()) && FlowCode.FL_CT_104.name().equals(lastItemFlow.getFlow().getCode())) {
+////                    appointmentService.rollbackAppointmentDecision(currentFileItem);
+//                }
 //                itemFlowService.rollBackDecisionForDispatchFile(chckedProductInfoChecksList);
                 commonService.rollbackDecision(chckedProductInfoChecksList);
                 // If the las decision is a cotation flow then rollback the
@@ -3194,8 +3216,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             if (currentFile.getFileItemsList() != null && cotationAllowed != null && cotationAllowed && (lastItemFlowList != null && lastItemFlow != null && !DECISION_FLOW_LIST_AT_COTATION_LEVEL.contains(lastItemFlow.getFlow().getCode()))) {
                 itemFlowService.sendDecisionsToDispatchCctFile(currentFile, productInfoItemsEnabled);
 
-                JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
-                        getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.SEND_SUCCESS));
+                JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.SEND_SUCCESS));
                 goToDetailPage();
             } else if (hasDraftAndEnabledForDecision()) {
                 boolean allHasDecision = true;
@@ -3828,14 +3849,12 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                 selectedRecommandation = null;
                 refreshRecommandationList();
             } else {
-                final String errorMsg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
-                        .getString(ControllerConstants.Bundle.Messages.EDIT_RECOMMANDATION_REQUIRED_MESSAGE);
+                final String errorMsg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.EDIT_RECOMMANDATION_REQUIRED_MESSAGE);
                 JsfUtil.addErrorMessage(errorMsg);
             }
         } catch (final Exception e) {
             LOG.error(e.getMessage(), e);
-            JsfUtil.addErrorMessage(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
-                    .getString(ControllerConstants.Bundle.Messages.PERSISTENCE_ERROR_OCCURED));
+            JsfUtil.addErrorMessage(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.PERSISTENCE_ERROR_OCCURED));
         }
     }
 
@@ -8005,22 +8024,6 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
         fileFieldValues.add(ffv);
     }
 
-    public List<PottingPresent> getPottingPresents() {
-        return pottingPresents;
-    }
-
-    public List<String> getPottingPresentsOrganisms() {
-        return pottingPresentsOrganisms;
-    }
-
-    public PottingPresent getSelectedPottingPresent() {
-        return selectedPottingPresent;
-    }
-
-    public void setSelectedPottingPresent(PottingPresent selectedPottingPresent) {
-        this.selectedPottingPresent = selectedPottingPresent;
-    }
-
     public CoreService getCoreService() {
         return coreService;
     }
@@ -8058,17 +8061,29 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
         return CollectionUtils.isNotEmpty(fileTypes) ? fileTypes.get(0) : null;
     }
 
-    public List<FileType> getPhytoFileTypes() {
-        return phytoFileTypes;
-    }
-
     public List<FileTypeDto> getRelatedFileTypesInfos() {
 
-        phytoFileTypes = fileTypeService.findFileTypesByCodes(FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI);
-        phytoFileTypes.remove(currentFile.getFileType());
-        relatedFileTypesInfos = RelatedFilesUtils.getRelatedFileTypesInfos(this, phytoFileTypes);
+        List<FileTypeCode> codes = new ArrayList<>(Arrays.asList(FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI));
+        codes.remove(currentFile.getFileType().getCode());
+
+        List<FileType> fileTypes = fileTypeService.findFileTypesByCodes(codes.toArray(new FileTypeCode[0]));
+        relatedFileTypesInfos = RelatedFilesUtils.getRelatedFileTypesInfos(this, fileTypes);
 
         return relatedFileTypesInfos;
+    }
+
+    public boolean isPhytoAppointment(Flow flow) {
+        List<FileTypeCode> codes = new ArrayList<>(Arrays.asList(FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI));
+        boolean ok = checkMinaderMinistry && flow != null && codes.contains(currentFile.getFileType().getCode()) && Arrays.asList(FlowCode.FL_CT_104.name(), FlowCode.FL_CT_118.name()).contains(flow.getCode());
+        return ok;
+    }
+
+    public List<Appointment> getRelatedAppointments() {
+        return relatedAppointments;
+    }
+
+    public Appointment getAppointment() {
+        return appointment;
     }
 
 }

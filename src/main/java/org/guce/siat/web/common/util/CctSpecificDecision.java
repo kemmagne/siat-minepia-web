@@ -40,7 +40,11 @@ public enum CctSpecificDecision {
     /**
      * Phytosanitary Certificate.
      */
-    CCT_CT_E_BILL("Phytosanitary Certificate Billing");
+    CCT_CT_E_BILL("Phytosanitary Certificate Billing"),
+    /**
+     * Phytosanitary Certificate.
+     */
+    CCT_CT_E_APP("Phytosanitary Certificate Appointement");
 
     /**
      * The label.

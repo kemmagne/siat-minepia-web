@@ -19,6 +19,8 @@
                         <br />
                     </h:panelGroup>
 
+                    <ui:include src="../specificDecisions/phytoAppointment/relatedAppointments.xhtml" />
+
                     <h:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight">
 
                         <h:outputLabel value="#{bundle['Flow_newDecision']} : " />
@@ -65,7 +67,11 @@
 
                     <ui:include src="../specificDecisions/analyseRequest/analyseRequest.xhtml" />
 
-                    <ui:include src="../specificDecisions/appointmentPve/appointment.xhtml" />
+                    <p:panel rendered="#{fileItemCctDetailController.isAppointmentOkForPve(fileItemCctDetailController.selectedFlow)}">
+                        <ui:include src="../specificDecisions/appointmentPve/appointment.xhtml" />
+                    </p:panel>
+
+                    <ui:include src="../specificDecisions/phytoAppointment/appointment.xhtml" />
 
                     <ui:include src="../specificDecisions/analyseResult/analyseResult.xhtml" />
 

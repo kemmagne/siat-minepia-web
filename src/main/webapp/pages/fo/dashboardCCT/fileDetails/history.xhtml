@@ -1,8 +1,6 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 
-    <p:dialog closeOnEscape="true" id="historyDlg" widgetVar="historyDialog" modal="true" resizable="false" appendTo="@(body)"
-              header="#{bundle['History']}" width="900px">
+    <p:dialog closeOnEscape="true" id="historyDlg" widgetVar="historyDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle['History']}" width="900px">
 
         <h:form id="historyForm" styleClass="historyform">
 
@@ -126,7 +124,7 @@
                                 <ui:include src="../specificDecisions/pviInfos/pviInfosHistory.xhtml" />
                             </h:panelGroup>
 
-                            <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsApp}">
+                            <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsApp and !fileItemCctDetailController.isPhytoAppointment(fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.itemFlow.flow)}">
                                 <ui:include src="../specificDecisions/appointment/appointmentHistory.xhtml" />
                             </h:panelGroup>
 
@@ -162,7 +160,11 @@
                                 <ui:include src="../specificDecisions/dcc/dccHistory.xhtml" />
                             </h:panelGroup>
 
-                            <ui:include src="../specificDecisions/appointmentPve/appointmentHistory.xhtml" />
+                            <p:panel rendered="#{fileItemCctDetailController.selectedItemFlowDto ne null and fileItemCctDetailController.isAppointmentOkForPve(fileItemCctDetailController.selectedItemFlowDto.itemFlow.flow)}">
+                                <ui:include src="../specificDecisions/appointmentPve/appointmentHistory.xhtml" />
+                            </p:panel>
+
+                            <ui:include src="../specificDecisions/phytoAppointment/appointmentHistory.xhtml" />
 
                             <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.cCTCPParamValue}">
                                 <ui:include src="../specificDecisions/cctCp/cctCpHistory.xhtml" />

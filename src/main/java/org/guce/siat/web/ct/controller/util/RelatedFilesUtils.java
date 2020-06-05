@@ -2,12 +2,11 @@ package org.guce.siat.web.ct.controller.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang3.BooleanUtils;
+import java.util.ResourceBundle;
 import org.apache.commons.lang3.StringUtils;
 import org.guce.siat.common.model.File;
 import org.guce.siat.common.model.FileItem;
@@ -18,6 +17,7 @@ import org.guce.siat.common.model.ItemFlow;
 import org.guce.siat.common.model.Step;
 import org.guce.siat.common.utils.enums.CompanyType;
 import org.guce.siat.common.utils.enums.StepCode;
+import org.guce.siat.web.common.ControllerConstants;
 import org.guce.siat.web.ct.controller.FileItemCctDetailController;
 
 /**
@@ -59,7 +59,15 @@ public final class RelatedFilesUtils {
         List<File> modifFiles = new ArrayList<>();
 
         if (files.isEmpty()) {
-            return Collections.singletonMap(LABEL, (Object) "Aucun dossier");
+
+            try {
+                String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, controller.getCurrentLocale()).getString("AucuneResultat");
+                line.put(LABEL, msg);
+            } catch (Exception ex) {
+                line.put(LABEL, "Aucun dossier");
+            }
+
+            return line;
         }
 
         Iterator<File> iterator = files.iterator();
@@ -85,15 +93,11 @@ public final class RelatedFilesUtils {
         FileItem fileItem = file.getFileItemsList().get(0);
         Step currentStep = fileItem.getStep();
         ItemFlow lastDecision = controller.getItemFlowService().findLastItemFlowByFileItem(fileItem);
-        Flow currentFlow = lastDecision != null ? lastDecision.getFlow() : null;
-
-        if (currentFlow == null) {
-            return Collections.singletonMap(LABEL, (Object) "Aucun dossier");
-        }
+        Flow currentFlow = lastDecision.getFlow();
 
         line.put(FILE, file);
         line.put(MODIFS, modifFiles);
-        line.put(MAIN_REPORT, currentStep != null && BooleanUtils.toBoolean(currentStep.getIsFinal()) && file.getSignatureDate() != null);
+        line.put(MAIN_REPORT, StepCode.ST_CT_06.equals(currentStep.getStepCode()));
 
         List<String> labels = new ArrayList<>();
         labels.add(file.getNumeroDossier());
