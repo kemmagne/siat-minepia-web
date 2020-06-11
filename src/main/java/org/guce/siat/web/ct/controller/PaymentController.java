@@ -251,6 +251,10 @@ public class PaymentController extends AbstractController<FileItem> {
                     paymentData.setNumRecu(new DecimalFormat(PREFIXE_RECU + "SIAT-000000").format(paymentData.getId()));
                 }
 
+                if (StringUtils.isBlank(paymentData.getNumQuittance())) {
+                    paymentData.setNumQuittance(new DecimalFormat(PREFIXE_QUITTANCE + "SIAT-000000").format(paymentData.getId()));
+                }
+
                 User user = getLoggedUser();
                 paymentData.setNomSignature(user.getFirstName() + " " + user.getLastName());
                 paymentData.setDateSignature(java.util.Calendar.getInstance().getTime());

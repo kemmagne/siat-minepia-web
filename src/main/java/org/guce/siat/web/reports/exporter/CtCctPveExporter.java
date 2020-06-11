@@ -36,8 +36,11 @@ public class CtCctPveExporter extends AbstractReportInvoker {
         fileVo.setFile(file);
 
         PottingReport pottingReport = getPottingReportService().findPottingReportByFile(file, !isDraft());
+        if (pottingReport == null && getCctDetailController() != null && getCctDetailController().getSpecificDecisionsHistory() != null) {
+            pottingReport = getCctDetailController().getSpecificDecisionsHistory().getDecisionDetailsPR();
+        }
         if (pottingReport == null) {
-            pottingReport = getCctDetailController().getPottingReport();
+            pottingReport = getPottingReportService().findPottingReportByFile(file, false);
         }
         fileVo.setPottingReport(pottingReport);
 

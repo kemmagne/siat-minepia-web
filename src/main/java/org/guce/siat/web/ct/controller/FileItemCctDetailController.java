@@ -3300,7 +3300,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                                 // edit signature elements
                                 Date now = java.util.Calendar.getInstance().getTime();
                                 currentFile.setSignatureDate(now);
-                                currentFile.setSignatory(loggedUser);
+                                currentFile.setSignatory(getLoggedUser());
 
                                 attachedByteFiles = new HashMap<>();
 
@@ -7419,9 +7419,9 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                         final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
                         final InspectionReport ir = inspectionReportService.findByItemFlow(itemFlow);
                         if (draft) {
-                            reportInvoker = new CtPviExporter(ir, reportNumber);
+                            reportInvoker = new CtPviExporter(currentFile, ir, reportNumber);
                         } else {
-                            reportInvoker = new CtPviExporter(ir);
+                            reportInvoker = new CtPviExporter(currentFile, ir);
                         }
                         break;
                     }
@@ -7431,15 +7431,15 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                         final TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
                         if (FileTypeCode.CCT_CT_E_ATP.equals(currentFile.getFileType().getCode())) {
                             if (draft) {
-                                reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_ATP", tr, reportNumber);
+                                reportInvoker = new CtCctTreatmentExporter(currentFile, "CCT_CT_E_ATP", tr, reportNumber);
                             } else {
-                                reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_ATP", tr);
+                                reportInvoker = new CtCctTreatmentExporter(currentFile, "CCT_CT_E_ATP", tr);
                             }
                         } else {
                             if (draft) {
-                                reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_FSTP", tr, reportNumber);
+                                reportInvoker = new CtCctTreatmentExporter(currentFile, "CCT_CT_E_FSTP", tr, reportNumber);
                             } else {
-                                reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_FSTP", tr);
+                                reportInvoker = new CtCctTreatmentExporter(currentFile, "CCT_CT_E_FSTP", tr);
                             }
                         }
                         break;
@@ -7565,9 +7565,9 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                         final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(ffi, FlowCode.FL_CT_07);
                         final InspectionReport ir = inspectionReportService.findByItemFlow(itemFlow);
                         if (draft) {
-                            reportInvoker = new CtPviExporter(ir, reportNumber);
+                            reportInvoker = new CtPviExporter(file, ir, reportNumber);
                         } else {
-                            reportInvoker = new CtPviExporter(ir);
+                            reportInvoker = new CtPviExporter(file, ir);
                         }
                         break;
                     }
@@ -7577,15 +7577,15 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                         final TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
                         if (FileTypeCode.CCT_CT_E_ATP.equals(file.getFileType().getCode())) {
                             if (draft) {
-                                reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_ATP", tr, reportNumber);
+                                reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_ATP", tr, reportNumber);
                             } else {
-                                reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_ATP", tr);
+                                reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_ATP", tr);
                             }
                         } else {
                             if (draft) {
-                                reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_FSTP", tr, reportNumber);
+                                reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_FSTP", tr, reportNumber);
                             } else {
-                                reportInvoker = new CtCctTreatmentExporter("CCT_CT_E_FSTP", tr);
+                                reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_FSTP", tr);
                             }
                         }
                         break;

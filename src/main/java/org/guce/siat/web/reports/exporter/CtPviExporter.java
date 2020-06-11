@@ -16,6 +16,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
+import org.guce.siat.common.model.File;
 import org.guce.siat.common.model.FileFieldValue;
 import org.guce.siat.core.ct.model.InspectionController;
 import org.guce.siat.core.ct.model.InspectionReport;
@@ -32,20 +33,24 @@ public class CtPviExporter extends AbstractReportInvoker {
     /**
      * The inspection report.
      */
-    private final InspectionReport inspectionReport;
     protected static final String LOCAL_BUNDLE_NAME = "org.guce.siat.messages.locale";
     private static final String CONSTAT_BUNDLE_TRUE = "constatBundleTrue";
     private static final String CONSTAT_BUNDLE_FALSE = "constatBundleFalse";
-    private final String referenceNumber;
 
-    public CtPviExporter(final InspectionReport inspectionReport) {
+    private final InspectionReport inspectionReport;
+    private final String referenceNumber;
+    private final File file;
+
+    public CtPviExporter(File file, InspectionReport inspectionReport) {
         super("CCT_CT_E_PVI", "CCT_CT_E_PVI");
+        this.file = file;
         this.inspectionReport = inspectionReport;
         this.referenceNumber = null;
     }
-    
-    public CtPviExporter(final InspectionReport inspectionReport, final String referenceNumber){
+
+    public CtPviExporter(File file, InspectionReport inspectionReport, final String referenceNumber) {
         super("CCT_CT_E_PVI", "CCT_CT_E_PVI");
+        this.file = file;
         this.inspectionReport = inspectionReport;
         this.referenceNumber = referenceNumber;
     }
@@ -191,15 +196,15 @@ public class CtPviExporter extends AbstractReportInvoker {
             if (CollectionUtils.isNotEmpty(controllerDataVoList)) {
                 entryInspectionFindingDataVo.setControlerList(controllerDataVoList);
             }
-            if (inspectionReport.getItemFlow().getFileItem().getFile().getDestinataire().equalsIgnoreCase("MINADER")) {
+            if (file.getDestinataire().equalsIgnoreCase("MINADER")) {
                 // Specific field for MINADER
-                if (inspectionReport.getItemFlow().getFileItem().getFile().getCountryOfProvenance() != null) {
-                    entryInspectionFindingDataVo.setNativeCountry(inspectionReport.getItemFlow().getFileItem().getFile().getCountryOfProvenance().getCountryName());
+                if (file.getCountryOfProvenance() != null) {
+                    entryInspectionFindingDataVo.setNativeCountry(file.getCountryOfProvenance().getCountryName());
                 }
-                if (inspectionReport.getItemFlow().getFileItem().getFile().getCountryOfOrigin() != null) {
-                    entryInspectionFindingDataVo.setOriginCountry(inspectionReport.getItemFlow().getFileItem().getFile().getCountryOfOrigin().getCountryName());
+                if (file.getCountryOfOrigin() != null) {
+                    entryInspectionFindingDataVo.setOriginCountry(file.getCountryOfOrigin().getCountryName());
                 }
-                entryInspectionFindingDataVo.setSender(new StringBuilder(inspectionReport.getItemFlow().getFileItem().getFile().getClient().getCompanyName()).append(" ").append(inspectionReport.getItemFlow().getFileItem().getFile().getClient().getFullAddress()).toString());
+                entryInspectionFindingDataVo.setSender(new StringBuilder(file.getClient().getCompanyName()).append(" ").append(file.getClient().getFullAddress()).toString());
                 entryInspectionFindingDataVo.setGants(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale())
                         .getString(CONSTAT_BUNDLE_FALSE));
                 if (inspectionReport.getGants() != null && inspectionReport.getGants()) {
@@ -253,10 +258,11 @@ public class CtPviExporter extends AbstractReportInvoker {
                 } else {
                     entryInspectionFindingDataVo.setSignatairePVIPhyto(inspectionReport.getControllerName());
                 }
-                entryInspectionFindingDataVo.setSignatureDate(inspectionReport.getFileItem().getFile().getSignatureDate());
-                if (inspectionReport.getFileItem().getFile().getSignatory() != null)
-                    entryInspectionFindingDataVo.setSignatory(inspectionReport.getFileItem().getFile().getSignatory().getFirstName() + " " + inspectionReport.getFileItem().getFile().getSignatory().getLastName());
-                entryInspectionFindingDataVo.setSignaturePlace(inspectionReport.getFileItem().getFile().getBureau().getLabelFr());
+                entryInspectionFindingDataVo.setSignatureDate(file.getSignatureDate());
+                if (file.getSignatory() != null) {
+                    entryInspectionFindingDataVo.setSignatory(String.format("%s %s", file.getSignatory().getLastName(), file.getSignatory().getFirstName()));
+                }
+                entryInspectionFindingDataVo.setSignaturePlace(file.getBureau().getLabelFr());
                 entryInspectionFindingDataVo.setTypeTraitement(inspectionReport.getTreatmentTypesList());
                 entryInspectionFindingDataVo.setEtatDateDernierTraitement(inspectionReport.getEtatDateDernierTraitement());
                 entryInspectionFindingDataVo.setProduitUtilise(inspectionReport.getProduitUtilise());
@@ -267,19 +273,22 @@ public class CtPviExporter extends AbstractReportInvoker {
                 entryInspectionFindingDataVo.setMesureProtection(inspectionReport.getMesureProtection());
                 entryInspectionFindingDataVo.setObservations(inspectionReport.getObservations());
                 entryInspectionFindingDataVo.setArticleReglemente(inspectionReport.getArticleReglemente());
-                entryInspectionFindingDataVo.setExporterName(inspectionReport.getItemFlow().getFileItem().getFile().getClient().getCompanyName());
+                entryInspectionFindingDataVo.setExporterName(file.getClient().getCompanyName());
                 entryInspectionFindingDataVo.setPviCouvertDoc(inspectionReport.isPviCouvertDoc());
                 entryInspectionFindingDataVo.setPviDestination(inspectionReport.getPviDestination());
                 entryInspectionFindingDataVo.setPviDispositionsPrises(inspectionReport.getPviDispositionsPrises());
                 entryInspectionFindingDataVo.setPviNatureArticleInspecte(inspectionReport.getPviNatureArticleInspecte());
                 entryInspectionFindingDataVo.setPviQuantite(inspectionReport.getPviQuantite());
-                entryInspectionFindingDataVo.setPviReference(inspectionReport.getItemFlow().getFileItem().getFile().getNumeroDossier());
+                entryInspectionFindingDataVo.setPviReference(file.getNumeroDossier());
                 entryInspectionFindingDataVo.setPviSituationArticle(inspectionReport.getPviSituationArticle());
                 entryInspectionFindingDataVo.setInspectionStartDate(inspectionReport.getInspectionStartDate());
                 entryInspectionFindingDataVo.setInspectionEndDate(inspectionReport.getInspectionEndDate());
-                if (inspectionReport.getFileItem().getFile().getAssignedUser() != null)
-                    entryInspectionFindingDataVo.setInspector(inspectionReport.getFileItem().getFile().getAssignedUser().getFirstName() + " " + inspectionReport.getFileItem().getFile().getAssignedUser().getLastName());
-                for (FileFieldValue fileFieldValue : inspectionReport.getItemFlow().getFileItem().getFile().getFileFieldValueList()) {
+
+                if (file.getAssignedUser() != null) {
+                    entryInspectionFindingDataVo.setInspector(String.format("%s %s", file.getAssignedUser().getLastName(), file.getAssignedUser().getFirstName()));
+                }
+
+                for (FileFieldValue fileFieldValue : file.getFileFieldValueList()) {
                     if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("DESTINATAIRE_RAISONSOCIALE")) {
                         entryInspectionFindingDataVo.setRecipient(fileFieldValue.getValue());
                     }
@@ -306,8 +315,9 @@ public class CtPviExporter extends AbstractReportInvoker {
                     if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("NUMERO_CCT_CT_E_PVI")) {
                         entryInspectionFindingDataVo.setNumeroDecisionPVI(fileFieldValue.getValue());
                     }
-                    }
-                if (this.referenceNumber != null){
+                }
+
+                if (this.referenceNumber != null) {
                     entryInspectionFindingDataVo.setNumeroDecisionPVI(referenceNumber);
                 }
             }
@@ -340,4 +350,3 @@ public class CtPviExporter extends AbstractReportInvoker {
     }
 
 }
-

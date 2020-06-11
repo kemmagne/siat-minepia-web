@@ -24,17 +24,20 @@ import org.guce.siat.web.reports.vo.CtCctTreatmentFileVo;
  */
 public class CtCctTreatmentExporter extends AbstractReportInvoker {
 
+    private final File file;
     private final TreatmentResult treatmentResult;
     private final String referenceNumber;
 
-    public CtCctTreatmentExporter(String jasperFileName, TreatmentResult treatmentResult) {
+    public CtCctTreatmentExporter(File file, String jasperFileName, TreatmentResult treatmentResult) {
         super(jasperFileName, jasperFileName);
+        this.file = file;
         this.treatmentResult = treatmentResult;
         this.referenceNumber = null;
     }
 
-    public CtCctTreatmentExporter(String jasperFileName, TreatmentResult treatmentResult, String referenceNumber) {
+    public CtCctTreatmentExporter(File file, String jasperFileName, TreatmentResult treatmentResult, String referenceNumber) {
         super(jasperFileName, jasperFileName);
+        this.file = file;
         this.treatmentResult = treatmentResult;
         this.referenceNumber = referenceNumber;
     }
@@ -42,7 +45,6 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
     @Override
     protected JRBeanCollectionDataSource getReportDataSource() {
         final CtCctTreatmentFileVo treatmentVo = new CtCctTreatmentFileVo();
-        final File file = treatmentResult.getItemFlow().getFileItem().getFile();
         treatmentVo.setFileNumber(file.getNumeroDossier());
         if (null != file.getClient()) {
             treatmentVo.setExporterName(file.getClient().getCompanyName());
@@ -113,11 +115,11 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
             }
         }
         //
-        if(file.getSignatory() != null){
-            treatmentVo.setSignatory(file.getSignatory().getFirstName() + " " + file.getSignatory().getLastName());
+        if (file.getSignatory() != null) {
+            treatmentVo.setSignatory(String.format("%s %s", file.getSignatory().getLastName(), file.getSignatory().getFirstName()));
         }
-        if (file.getAssignedUser() != null){
-            treatmentVo.setInspector(file.getAssignedUser().getFirstName() + " " + file.getAssignedUser().getLastName());
+        if (file.getAssignedUser() != null) {
+            treatmentVo.setInspector(String.format("%s %s", file.getAssignedUser().getLastName(), file.getAssignedUser().getFirstName()));
         }
         treatmentVo.setActiveIngredient(treatmentResult.getActiveIngredient());
         treatmentVo.setApplicationDose(treatmentResult.getTreatmentDose());
@@ -160,7 +162,7 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
 //		treatmentVo.setTreatmentModeHeat(treatmentResult.isTreatmentModeHeat());
 //		treatmentVo.setTreatmentModePulverisation(treatmentResult.isTreatmentModePulverisation());
 //		treatmentVo.setTreatmentModeSoaking(treatmentResult.isTreatmentModeSoaking());
-//		
+//
 //		treatmentVo.setProductUsedFungicide(treatmentResult.isProductUsedFungicide());
 //		treatmentVo.setProductUsedInsecticide(treatmentResult.isProductUsedInsecticide());
 //		treatmentVo.setProductUsedInsecticideFungicide(treatmentResult.isProductUsedInsecticideFungicide());
@@ -199,12 +201,12 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
                     treatmentVo.setItemNature(tradeNameFieldValue.getValue());
                 }
                 String unit = Utils.getProductTypePackaging().get(productType);
-                
+
                 final FileItemFieldValue volumeFieldValue = getFileFieldValueService()
-                            .findFileItemFieldValueByCodeAndFileItem("VOLUME", fileItem);
-                    if (volumeFieldValue != null) {
-                        fileItemVo.setVolume(volumeFieldValue.getValue());
-                    }
+                        .findFileItemFieldValueByCodeAndFileItem("VOLUME", fileItem);
+                if (volumeFieldValue != null) {
+                    fileItemVo.setVolume(volumeFieldValue.getValue());
+                }
 
                 if (Utils.getCacaProductsTypes().contains(productType)) {
                     fileItemVo.setVolumeWeightLabel("POIDS");
@@ -232,7 +234,7 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
                     if (fileItemVo.getNumber() == null) {
                         fileItemVo.setNumber(fileItem.getQuantity());
                     }
-                } else if (Utils.COTONPRODUCTTYPE.equalsIgnoreCase(productType)){
+                } else if (Utils.COTONPRODUCTTYPE.equalsIgnoreCase(productType)) {
                     fileItemVo.setQuantityLabel("NOMBRE DE BALLES");
                     fileItemVo.setVolumeWeightLabel("POIDS");
                     FileItemFieldValue ng = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("NOMBRE_GRUMES", fileItem);
@@ -240,7 +242,7 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
                         fileItemVo.setNumber(ng.getValue());
                     }
                     final FileItemFieldValue grossWeightFieldValue = getFileFieldValueService()
-                        .findFileItemFieldValueByCodeAndFileItem("POIDS_BRUT", fileItem);
+                            .findFileItemFieldValueByCodeAndFileItem("POIDS_BRUT", fileItem);
                     if (grossWeightFieldValue != null) {
                         fileItemVo.setVolume(grossWeightFieldValue.getValue());
                     }
@@ -266,7 +268,7 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
             treatmentVo.setItemQuantity(itemQuantity.toString());
             if (Utils.getCacaProductsTypes().contains(productType)) {
                 treatmentVo.setItemQuantity(treatmentVo.getItemQuantity().concat(" KG"));
-            } else if (Utils.COTONPRODUCTTYPE.equalsIgnoreCase(productType)){
+            } else if (Utils.COTONPRODUCTTYPE.equalsIgnoreCase(productType)) {
                 treatmentVo.setItemQuantity(treatmentVo.getItemQuantity().concat(" BALLES"));
             } else if (Utils.getCacaProductsTypes().contains(productType)) {
                 treatmentVo.setItemQuantity(treatmentVo.getItemQuantity().concat(" M3"));

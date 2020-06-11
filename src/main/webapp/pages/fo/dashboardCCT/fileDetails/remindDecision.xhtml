@@ -28,9 +28,9 @@
                     <ui:include src="../specificDecisions/inspectionReport/inspectionReportRemindDecision.xhtml" />
                 </h:panelGroup>
 
-                <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastPottingReport}">
+                <p:panel rendered="#{fileItemCctDetailController.lastDecisions ne null and fileItemCctDetailController.isPveReadyForSignature(fileItemCctDetailController.lastDecisions.flow)}">
                     <ui:include src="../specificDecisions/pveValidation/pveValidationRemindDecision.xhtml" />
-                </h:panelGroup>
+                </p:panel>
 
                 <p:panel rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR}">
                     <ui:include src="../specificDecisions/pviInfos/pviInfosRemindDecision.xhtml" />
