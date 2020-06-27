@@ -60,9 +60,9 @@
                         <h:outputText value="#{bundle['UserLabel_role']}" title="#{bundle['UserTitle_role']}" />
                     </f:facet>
 
-                    <ui:repeat value="#{agentsManagementController.getListAuthoritiesByUser(item)}" var="grantedAuthority">
+                    <ui:repeat value="#{agentsManagementController.getAuthoritiesByUser(item)}" var="grantedAuthority">
                         <p:spacer width="3" />
-                        <p:graphicImage value="/images/icons/icon-#{grantedAuthority.role}.png" width="20" height="20" />
+                        <p:graphicImage value="/images/icons/icon-#{grantedAuthority.role}.png" width="20" height="20" alt="#{grantedAuthority.role}" />
                     </ui:repeat>
 
                 </p:column>

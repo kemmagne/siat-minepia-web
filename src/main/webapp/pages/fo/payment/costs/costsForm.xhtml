@@ -34,7 +34,7 @@
                         </p:fieldset>
                         <p:fieldset rendered="#{not empty costsController.currentPaymentData.paymentItemFlowList}" legend="#{bundle['payment_invoiceDetail']}">
                             <br />
-                            <p:dataTable widgetVar="PaymentDTWdg" id="paymentDT" var="invoiceLine"
+                            <p:dataTable rendered="#{!costsController.phyto}" widgetVar="PaymentDTWdg" id="paymentDT" var="invoiceLine"
                                          value="#{costsController.currentPaymentData.paymentItemFlowList}">
 
                                 <p:column headerText="#{bundle['Payment_product_id']}">
@@ -54,6 +54,27 @@
                                     <h:outputText id="paymentNature" value="#{invoiceLine.natureFrais}" title="#{bundle['Payment_nature_title']}" required="true"
                                                   requiredMessage="#{bundle['CreatePaymentNatureRequiredMessage']}" />
                                 </p:column>
+                            </p:dataTable>
+
+                            <p:dataTable widgetVar="paymentDTIL" id="paymentDTIL" var="invoiceLine" value="#{costsController.currentPaymentData.invoiceLines}"
+                                         rendered="#{costsController.phyto}" rowKey="#{invoiceLine.id}" rowIndexVar="rowIdx">
+
+                                <p:column headerText="#">
+                                    <h:outputText value="#{rowIdx + 1}" />
+                                </p:column>
+
+                                <p:column headerText="#{bundle['InvoiceLine_Operation']}">
+                                    <h:outputText value="#{invoiceLine.natureFrais}" />
+                                </p:column>
+
+                                <p:column headerText="#{bundle['InvoiceLine_amount']} (FCFA)">
+                                    <h:outputText value="#{invoiceLine.montantHt}" />
+                                </p:column>
+
+                                <p:column headerText="#{bundle['InvoiceLine_Observation']}">
+                                    <h:outputText value="#{invoiceLine.observation}" />
+                                </p:column>
+
                             </p:dataTable>
                         </p:fieldset>
 
@@ -139,7 +160,9 @@
                                 <p:outputLabel value="#{bundle['paymentTitleLabel_observation']}" for="observation" />
                                 <h:panelGroup>
                                     <p:inputTextarea id="observation" rows="10" cols="30" value="#{costsController.currentPaymentData.observation}"
-                                                     title="#{bundle['paymentTitleTitle_observation']}" />
+                                                     title="#{bundle['paymentTitleTitle_observation']}">
+                                        <f:validateLength maximum="255" />
+                                    </p:inputTextarea>
                                     <p:message for="observation" />
                                 </h:panelGroup>
 

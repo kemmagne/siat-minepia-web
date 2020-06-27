@@ -1,8 +1,6 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 
-    <p:dialog closeOnEscape="true" id="historyDlg" widgetVar="historyDialog" modal="true" resizable="false" appendTo="@(body)"
-              header="#{bundle['History']}" width="900px">
+    <p:dialog closeOnEscape="true" id="historyDlg" widgetVar="historyDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle['History']}" width="900px">
 
         <h:form id="historyForm" styleClass="historyform">
 
@@ -29,12 +27,21 @@
                                 value="#{facesContext.viewRoot.locale eq 'en' ? item.itemFlow.flow.redefinedLabelEn :  item.itemFlow.flow.redefinedLabelFr}" />
                         </p:column>
 
-                        <p:column sortBy="#{item.itemFlow.sender.firstName}" filterBy="#{item.itemFlow.sender.firstName}" filterMatchMode="contains"
+                        <p:column sortBy="#{item.itemFlow.sender.lastName}" filterBy="#{item.itemFlow.sender.lastName}" filterMatchMode="contains"
                                   style="width:90px">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle['History_person']}" title="#{bundle['History_person']}" />
                             </f:facet>
                             <h:outputText value="#{item.itemFlow.sender.firstName} #{item.itemFlow.sender.lastName}" />
+                        </p:column>
+
+                        <p:column style="width:90px">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle['History_assignedUser']}" title="#{bundle['History_assignedUser']}" />
+                            </f:facet>
+                            <h:panelGroup rendered="#{not empty item.itemFlow.assignedUser}">
+                                <h:outputText value="#{item.itemFlow.assignedUser.firstName} #{item.itemFlow.assignedUser.lastName}" />
+                            </h:panelGroup>
                         </p:column>
 
                         <p:column sortBy="#{dateBean.formatSimpleDate(item.itemFlow.created)}" filterBy="#{dateBean.formatSimpleDate(item.itemFlow.created)}"
@@ -46,8 +53,6 @@
                                 <f:convertDateTime type="date" pattern="dd/MM/yyyy - HH:mm:ss" />
                             </h:outputText>
                         </p:column>
-
-
 
                         <p:column rendered="#{request.isUserInRole('SUPER')}" style="width:90px">
                             <f:facet name="header">
@@ -82,10 +87,10 @@
                             <br />
                             <h:panelGroup rendered="#{fileItemCctDetailController.selectedItemFlowDto.itemFlow.assignedUser != null}">
                                 <h:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight" cellspacing="4">
-                                        <h:outputLabel value="#{bundle['assignedUser']} :" title="#{bundle['assignedUser']}" />
-                                        <h:outputLabel
-                                            value="#{fileItemCctDetailController.selectedItemFlowDto.itemFlow.assignedUser.firstName} #{fileItemCctDetailController.selectedItemFlowDto.itemFlow.assignedUser.lastName}" />
-                                    </h:panelGrid>
+                                    <h:outputLabel value="#{bundle['assignedUser']} :" title="#{bundle['assignedUser']}" />
+                                    <h:outputLabel
+                                        value="#{fileItemCctDetailController.selectedItemFlowDto.itemFlow.assignedUser.firstName} #{fileItemCctDetailController.selectedItemFlowDto.itemFlow.assignedUser.lastName}" />
+                                </h:panelGrid>
                             </h:panelGroup>
                             <h:panelGroup
                                 rendered="#{empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsApp and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAO and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTO and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsAR and empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTR}">
@@ -111,11 +116,15 @@
                                 <ui:include src="../specificDecisions/inspectionReport/inspectionReportHistory.xhtml" />
                             </h:panelGroup>
 
+                            <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPR}">
+                                <ui:include src="../specificDecisions/pveValidation/pveValidationHistory.xhtml" />
+                            </h:panelGroup>
+
                             <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR}">
                                 <ui:include src="../specificDecisions/pviInfos/pviInfosHistory.xhtml" />
                             </h:panelGroup>
 
-                            <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsApp}">
+                            <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsApp and !fileItemCctDetailController.isPhytoAppointment(fileItemCctDetailController.specificDecisionsHistory.decisionDetailsIR.itemFlow.flow)}">
                                 <ui:include src="../specificDecisions/appointment/appointmentHistory.xhtml" />
                             </h:panelGroup>
 
@@ -139,14 +148,24 @@
                                 <ui:include src="../specificDecisions/paymentValidation/paymentValidationHistory.xhtml" />
                             </h:panelGroup>
 
+                            <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPayData and fileItemCctDetailController.lastSpecificDecision eq 'CCT_CT_E_BILL'}">
+                                <ui:include src="../specificDecisions/payment/billing/billingHistory.xhtml" />
+                            </h:panelGroup>
+
                             <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTI}">
                                 <ui:include src="../specificDecisions/treatmentInfos/treatmentInfosHistory.xhtml" />
                             </h:panelGroup>
-                            
+
                             <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.approvedDecision}">
                                 <ui:include src="../specificDecisions/dcc/dccHistory.xhtml" />
                             </h:panelGroup>
-                            
+
+                            <p:panel rendered="#{fileItemCctDetailController.selectedItemFlowDto ne null and fileItemCctDetailController.isAppointmentOkForPve(fileItemCctDetailController.selectedItemFlowDto.itemFlow.flow)}">
+                                <ui:include src="../specificDecisions/appointmentPve/appointmentHistory.xhtml" />
+                            </p:panel>
+
+                            <ui:include src="../specificDecisions/phytoAppointment/appointmentHistory.xhtml" />
+
                             <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.cCTCPParamValue}">
                                 <ui:include src="../specificDecisions/cctCp/cctCpHistory.xhtml" />
                             </h:panelGroup>

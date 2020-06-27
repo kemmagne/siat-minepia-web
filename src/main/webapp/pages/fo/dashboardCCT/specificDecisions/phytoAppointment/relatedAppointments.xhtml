@@ -1,0 +1,20 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:panelGroup rendered="#{fileItemCctDetailController.specificDecision eq 'CCT_CT_E_APP' and not empty fileItemCctDetailController.relatedAppointments}">
+
+        <ui:repeat value="#{fileItemCctDetailController.relatedAppointments}" var="app">
+            <p:panelGrid columns="4">
+                <h:outputLabel value="#{bundle[app.bundle]}" />
+                <h:outputText value="#{app.beginTime}">
+                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                </h:outputText>
+                <h:outputLabel rendered="#{app.controller ne null}" value="#{bundle['Controller']}" />
+                <h:outputText rendered="#{app.controller ne null}" value="#{app.controller.lastName} #{app.controller.firstName}" />
+            </p:panelGrid>
+        </ui:repeat>
+
+        <p:spacer height="10" />
+
+    </h:panelGroup>
+
+</ui:composition>

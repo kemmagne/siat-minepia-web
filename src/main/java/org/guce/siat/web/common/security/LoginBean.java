@@ -46,6 +46,7 @@ import org.guce.siat.common.service.SubDepartmentService;
 import org.guce.siat.common.service.UserService;
 import org.guce.siat.common.utils.Constants;
 import org.guce.siat.common.utils.DateUtils;
+import org.guce.siat.common.utils.enums.AuthorityConstants;
 import org.guce.siat.common.utils.enums.FileTypeCode;
 import org.guce.siat.common.utils.enums.ParamsCategory;
 import org.guce.siat.web.common.ControllerConstants;
@@ -449,17 +450,26 @@ public class LoginBean implements Serializable {
                 cctRendred = Boolean.TRUE;
             }
         }
-        if (getLoggedUser().getAuthoritiesList().contains("SUPER") || getLoggedUser().getAuthoritiesList().contains("CONS")) {
+
+        if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.SUPERVISEUR.getCode()) || getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.CONSULTER.getCode())) {
             apRendred = Boolean.FALSE;
             cctRendred = Boolean.FALSE;
             searchRender = Boolean.TRUE;
         }
-        if (getLoggedUser().getAuthoritiesList().contains("CA")) {
+
+        if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.CAISSIER.getCode())) {
             apRendred = Boolean.FALSE;
             cctRendred = Boolean.FALSE;
             paymentRender = Boolean.TRUE;
         }
 
+//        if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.GESTION_AGENTS.getCode())) {
+//            sessionMap.put("apRendred", false);
+//            sessionMap.put("cctRendred", false);
+//            apRendred = Boolean.FALSE;
+//            cctRendred = Boolean.FALSE;
+//            paymentRender = Boolean.FALSE;
+//        }
     }
 
     /**

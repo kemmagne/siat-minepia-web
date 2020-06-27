@@ -1,0 +1,18 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" >
+
+    <p:panelGrid columns="2">
+
+        <h:outputLabel for="PveAppointmentDate" value="#{bundle['AppointmentDate']}" />
+        <h:panelGroup>
+            <p:calendar navigator="true" readonlyInput="true" pattern="dd/MM/yyyy HH:mm"
+                        value="#{fileItemCctDetailController.pottingReport.appointmentDate}" showOn="button" id="PveAppointmentDate" required="true"
+                        requiredMessage="#{bundle['Field']} #{bundle['AppointmentDate']} #{bundle['RequiredMessage']}" />
+            <p:message for="PveAppointmentDate" />
+        </h:panelGroup>
+
+        <h:outputLabel for="PveAppointmentObservations" value="Observations" />
+        <p:inputTextarea id="PveAppointmentObservations" value="#{fileItemCctDetailController.pottingReport.appointmentDetails}" />
+
+    </p:panelGrid>
+
+</ui:composition>

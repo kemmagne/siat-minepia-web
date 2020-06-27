@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Set;
-
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -25,7 +24,6 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-
 import org.guce.siat.common.model.Authority;
 import org.guce.siat.common.model.File;
 import org.guce.siat.common.model.FileFieldValue;
@@ -41,6 +39,7 @@ import org.guce.siat.common.service.UserAuthorityFileTypeService;
 import org.guce.siat.common.utils.Constants;
 import org.guce.siat.common.utils.DateUtils;
 import org.guce.siat.common.utils.enums.FileTypeCode;
+import org.guce.siat.common.utils.enums.StepCode;
 import org.guce.siat.core.ct.service.CommonService;
 import org.guce.siat.core.ct.util.enums.CctExportProductType;
 import org.guce.siat.web.common.AbstractController;
@@ -66,8 +65,6 @@ public class FileItemCctController extends AbstractController<FileItem> {
      * The Constant LOG.
      */
     private static final Logger LOG = LoggerFactory.getLogger(FileItemCctController.class);
-
-    public static final String MINADER_MINISTRY = "MINADER";
 
     /**
      * The file type step service.
@@ -280,8 +277,8 @@ public class FileItemCctController extends AbstractController<FileItem> {
                     FileItem item = iterator.next();
                     File file = item.getFile();
 
-                    if (!isPhyto(file)) {
-                        continue;
+                    if (!isPhyto(file) || getLoggedUser().equals(file.getAssignedUser()) || Arrays.asList(StepCode.ST_CT_57, StepCode.ST_CT_60, StepCode.ST_CT_03, StepCode.ST_CT_47, StepCode.ST_CT_53, StepCode.ST_CT_62).contains(item.getStep().getStepCode())) {
+                        continue; // si on a assigné le dossier à un utilisateur qui est aussi signataire, il vera produit même s'il ne signe pas les dossiers dont le produit est de ce type
                     }
 
                     FileFieldValue ffv = fileFieldValueService.findValueByFileFieldAndFile(CctExportProductType.getFileFieldCode(), file);
@@ -328,7 +325,7 @@ public class FileItemCctController extends AbstractController<FileItem> {
     }
 
     public boolean isPhyto(File currentFile) {
-        boolean checkMinaderMinistry = currentFile.getDestinataire().equalsIgnoreCase(MINADER_MINISTRY);
+        boolean checkMinaderMinistry = currentFile.getDestinataire().equalsIgnoreCase(Constants.MINADER_MINISTRY);
         return checkMinaderMinistry && Arrays.asList(FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI).contains(currentFile.getFileType().getCode());
     }
 

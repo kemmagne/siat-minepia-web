@@ -6,9 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Transformer;
 import org.apache.commons.lang.StringUtils;
@@ -19,6 +17,7 @@ import org.guce.siat.common.model.FileItem;
 import org.guce.siat.common.model.FileItemFieldValue;
 import org.guce.siat.core.ct.model.CCTCPParamValue;
 import org.guce.siat.core.ct.model.TreatmentInfos;
+import org.guce.siat.core.ct.util.enums.CctExportProductType;
 import org.guce.siat.web.ct.controller.util.Utils;
 import org.guce.siat.web.reports.vo.CtCctCpEFileItemVo;
 import org.guce.siat.web.reports.vo.CtCctCpEFileVo;
@@ -109,8 +108,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
 
         final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
 
-        final String productType = getFileFieldValueService()
-                .findValueByFileFieldAndFile("TYPE_PRODUIT_CODE", file).getValue();
+        final String productType = getFileFieldValueService().findValueByFileFieldAndFile(CctExportProductType.getFileFieldCode(), file).getValue();
         String emballage = Utils.getProductTypePackaging().get(productType);
         ctCctCpEFileVo.setPackaging(productType);
         String containersNumbers = null;
@@ -392,4 +390,5 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
     public File getFile() {
         return file;
     }
+
 }

@@ -57,8 +57,7 @@ public class Utils {
         return Arrays.asList("GR", "BT", "OA", "PS");
     }
 
-    public static List<FileItem> getItems(UserAuthorityFileTypeService userAuthorityFileTypeService, FileItemService fileItemService,
-            User loggedUser, List<UserAuthorityFileType> listUserAuthorityFileTypes) {
+    public static List<FileItem> getItems(UserAuthorityFileTypeService userAuthorityFileTypeService, FileItemService fileItemService, User loggedUser, List<UserAuthorityFileType> listUserAuthorityFileTypes) {
 
         if (Objects.equals(listUserAuthorityFileTypes, null)) {
             listUserAuthorityFileTypes = userAuthorityFileTypeService.findUserAuthorityFileTypeByUserList(loggedUser.getMergedDelegatorList());
@@ -76,11 +75,9 @@ public class Utils {
             }
         }
         // get the bureaus  for the administration of the logged user and their delegator users
-        List<Bureau> bureauList = SiatUtils.findCombinedBureausByAdministrationList(new ArrayList<>(
-                adminList));
+        List<Bureau> bureauList = SiatUtils.findCombinedBureausByAdministrationList(new ArrayList<>(adminList));
 
-        List<FileItem> items = fileItemService.findFileItemByServiceAndAuthoritiesAndFileType(bureauList, loggedUser,
-                InformationSystemCode.CCT, listUserAuthorityFileTypes);
+        List<FileItem> items = fileItemService.findFileItemByServiceAndAuthoritiesAndFileType(bureauList, loggedUser, InformationSystemCode.CCT, listUserAuthorityFileTypes);
 
         return items;
     }

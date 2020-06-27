@@ -19,6 +19,8 @@
                         <br />
                     </h:panelGroup>
 
+                    <ui:include src="../specificDecisions/phytoAppointment/relatedAppointments.xhtml" />
+
                     <h:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight">
 
                         <h:outputLabel value="#{bundle['Flow_newDecision']} : " />
@@ -59,7 +61,17 @@
                         <ui:include src="../specificDecisions/pviInfos/pviInfos.xhtml" />
                     </p:panel>
 
+                    <p:panel rendered="#{fileItemCctDetailController.isPveReadyForSignature(fileItemCctDetailController.selectedFlow)}">
+                        <ui:include src="../specificDecisions/pveValidation/pveValidation.xhtml" />
+                    </p:panel>
+
                     <ui:include src="../specificDecisions/analyseRequest/analyseRequest.xhtml" />
+
+                    <p:panel rendered="#{fileItemCctDetailController.isAppointmentOkForPve(fileItemCctDetailController.selectedFlow)}">
+                        <ui:include src="../specificDecisions/appointmentPve/appointment.xhtml" />
+                    </p:panel>
+
+                    <ui:include src="../specificDecisions/phytoAppointment/appointment.xhtml" />
 
                     <ui:include src="../specificDecisions/analyseResult/analyseResult.xhtml" />
 
@@ -76,6 +88,10 @@
                     <p:panel rendered="#{fileItemCctDetailController.isPayment}">
                         <ui:include src="../specificDecisions/paymentValidation/payment.xhtml" />
                     </p:panel>
+
+                    <p:panel rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'CCT_CT_E_BILL'}">
+                        <ui:include src="../specificDecisions/payment/billing/billing.xhtml" />
+                    </p:panel>
                 </p:scrollPanel>
 
 
@@ -88,7 +104,7 @@
                     <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" value="#{bundle['Cancel']}"
                                      styleClass="ui-priority-primary" onclick="PF('decisionDialog').hide();" immediate="true" />
 
-                    <p:commandButton ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" id="reporting" 
+                    <p:commandButton ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" id="reporting"
                                      value="#{bundle['PreviewFile']}" styleClass="ui-priority-primary" rendered="#{fileItemCctDetailController.phytoEnd}">
                         <p:fileDownload value="#{fileItemCctDetailController.downloadReport(true)}" />
                     </p:commandButton>

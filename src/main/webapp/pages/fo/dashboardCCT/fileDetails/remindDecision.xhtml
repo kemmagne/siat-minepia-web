@@ -1,5 +1,4 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 
     <br />
 
@@ -15,7 +14,7 @@
                 </h:panelGrid>
 
                 <h:panelGroup
-                    rendered="#{empty fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR and empty fileItemCctDetailController.specificDecisionsHistory.lastDecisionApp and empty fileItemCctDetailController.specificDecisionsHistory.lastAnalyseOrder and empty fileItemCctDetailController.specificDecisionsHistory.lastTreatmentOrder and empty fileItemCctDetailController.specificDecisionsHistory.lastAnalyseResult and empty fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult}">
+                    rendered="#{(empty fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR and empty fileItemCctDetailController.specificDecisionsHistory.lastDecisionApp and empty fileItemCctDetailController.specificDecisionsHistory.lastAnalyseOrder and empty fileItemCctDetailController.specificDecisionsHistory.lastTreatmentOrder and empty fileItemCctDetailController.specificDecisionsHistory.lastAnalyseResult and empty fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult) or (fileItemCctDetailController.lastSpecificDecision eq 'CCT_CT_E_BILL')}">
                     <ui:repeat value="#{fileItemCctDetailController.lastDecisions.itemFlowsDataList}" var="itemFlowData" varStatus="status">
                         <h:panelGrid columns="2" columnClasses="labelColumnLeft, labelColumnRight" cellspacing="4">
                             <h:outputLabel value="#{itemFlowData.dataType.label} : " title="#{itemFlowData.dataType.label}" />
@@ -29,11 +28,15 @@
                     <ui:include src="../specificDecisions/inspectionReport/inspectionReportRemindDecision.xhtml" />
                 </h:panelGroup>
 
+                <p:panel rendered="#{fileItemCctDetailController.lastDecisions ne null and fileItemCctDetailController.isPveReadyForSignature(fileItemCctDetailController.lastDecisions.flow)}">
+                    <ui:include src="../specificDecisions/pveValidation/pveValidationRemindDecision.xhtml" />
+                </p:panel>
+
                 <p:panel rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR}">
                     <ui:include src="../specificDecisions/pviInfos/pviInfosRemindDecision.xhtml" />
                 </p:panel>
 
-                <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastDecisionApp}">
+                <h:panelGroup rendered="#{fileItemCctDetailController.lastSpecificDecision ne 'CCT_CT_E_APP' and not empty fileItemCctDetailController.specificDecisionsHistory.lastDecisionApp}">
                     <ui:include src="../specificDecisions/appointment/appointmentRemindDecision.xhtml" />
                 </h:panelGroup>
 
@@ -57,8 +60,12 @@
                     <ui:include src="../specificDecisions/treatmentInfos/treatmentInfosRemindDecision.xhtml" />
                 </h:panelGroup>
 
-                <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastPaymentData}">
+                <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastPaymentData and empty fileItemCctDetailController.lastSpecificDecision}">
                     <ui:include src="../specificDecisions/paymentValidation/paymentValidationRemindDecision.xhtml" />
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastPaymentData and fileItemCctDetailController.lastSpecificDecision eq 'CCT_CT_E_BILL'}">
+                    <ui:include src="../specificDecisions/payment/billing/billingRemindDecision.xhtml" />
                 </h:panelGroup>
 
                 <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.approvedDecision}">
@@ -69,9 +76,11 @@
                     <ui:include src="../specificDecisions/cctCp/cctCpRemindDecision.xhtml" />
                 </h:panelGroup>
 
-                <h:panelGroup rendered="#{fileItemCctDetailController.phyto}">
+                <p:panel rendered="#{fileItemCctDetailController.lastDecisions ne null and fileItemCctDetailController.isAppointmentOkForPve(fileItemCctDetailController.lastDecisions.flow)}">
+                    <ui:include src="../specificDecisions/appointmentPve/appointmentRemindDecision.xhtml" />
+                </p:panel>
 
-                </h:panelGroup>
+                <ui:include src="../specificDecisions/phytoAppointment/appointmentRemindDecision.xhtml" />
 
             </p:tab>
 

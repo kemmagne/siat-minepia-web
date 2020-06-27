@@ -1,14 +1,11 @@
-/*
- *
- */
 package org.guce.siat.web.ct.controller;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
-
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -20,7 +17,6 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
-
 import org.apache.commons.lang.StringUtils;
 import org.guce.siat.common.model.Administration;
 import org.guce.siat.common.model.Attachment;
@@ -207,11 +203,10 @@ public class PaymentController extends AbstractController<FileItem> {
      * Populate file type items.
      */
     private void populateFileTypeItems() {
-        fileTypeItems = new ArrayList<SelectItem>();
+        fileTypeItems = new ArrayList<>();
         final List<FileType> fileTypes = fileTypeService.findDistinctFileTypesByUser(getLoggedUser());
         for (final FileType fileType : fileTypes) {
-            fileTypeItems.add(new SelectItem(fileType, "fr".equals(getCurrentLocaleCode()) ? fileType.getLabelFr() : fileType
-                    .getLabelEn()));
+            fileTypeItems.add(new SelectItem(fileType, "fr".equals(getCurrentLocaleCode()) ? fileType.getLabelFr() : fileType.getLabelEn()));
         }
     }
 
@@ -240,17 +235,24 @@ public class PaymentController extends AbstractController<FileItem> {
         try {
             final FileItem selectedFileItem = selectedFile.getFile().getFileItemsList().get(0);
             final ItemFlow lastItemFlow = itemFlowService.findLastSentItemFlowByFileItem(selectedFileItem);
-            final PaymentData paymentData = paymentDataService.findPaymentDataByItemFlow(lastItemFlow);
+            final PaymentData paymentData;
+            if (isPhyto(selectedFile.getFile())) {
+                paymentData = paymentDataService.findPaymentDataByFileItem(selectedFileItem);
+            } else {
+                paymentData = paymentDataService.findPaymentDataByItemFlow(lastItemFlow);
+            }
 
             if (paymentData != null) {
                 if (StringUtils.isBlank(paymentData.getRefFacture())) {
-                    paymentData.setRefFacture(new DecimalFormat(PREFIXE_FACTURE + "SIAT" + "-000000")
-                            .format(paymentData.getId()));
+                    paymentData.setRefFacture(new DecimalFormat(PREFIXE_FACTURE + "SIAT-000000").format(paymentData.getId()));
                 }
 
                 if (StringUtils.isBlank(paymentData.getNumRecu())) {
-                    paymentData.setNumRecu(new DecimalFormat(PREFIXE_RECU + "SIAT" + "-000000")
-                            .format(paymentData.getId()));
+                    paymentData.setNumRecu(new DecimalFormat(PREFIXE_RECU + "SIAT-000000").format(paymentData.getId()));
+                }
+
+                if (StringUtils.isBlank(paymentData.getNumQuittance())) {
+                    paymentData.setNumQuittance(new DecimalFormat(PREFIXE_QUITTANCE + "SIAT-000000").format(paymentData.getId()));
                 }
 
                 User user = getLoggedUser();
@@ -259,12 +261,19 @@ public class PaymentController extends AbstractController<FileItem> {
                 paymentData.setDateEncaissement(java.util.Calendar.getInstance().getTime());
                 paymentData.setQualiteSignature(user.getPosition().getLabelFr());
                 paymentData.setLieuSignature(user.getAdministration().getLabelFr());
+                Long amount = paymentData.getMontantHt() + paymentData.getMontantTva();
+                paymentData.setMontantEncaissement(Double.parseDouble(amount.toString()));
 
                 if (selectedFile.getFile().getClient() != null) {
                     paymentData.setPartVersCont(selectedFile.getFile().getClient().getNumContribuable());
                     paymentData.setPartVersRs(selectedFile.getFile().getClient().getCompanyName());
                 }
-                paymentData.setNatureEncaissement(FileTypeCode.VT_MINEPDED.equals(selectedFile.getFile().getFileType().getCode()) ? NATURE_FRAIS_VT : NATURE_FRAIS_CP);
+
+                if (isPhyto(selectedFile.getFile())) {
+                    paymentData.setNatureEncaissement("Frais ".concat(selectedFile.getFile().getFileType().getLabelFr()));
+                } else {
+                    paymentData.setNatureEncaissement(FileTypeCode.VT_MINEPDED.equals(selectedFile.getFile().getFileType().getCode()) ? NATURE_FRAIS_VT : NATURE_FRAIS_CP);
+                }
             }
             setCostsPageUrl(ControllerConstants.Pages.FO.COSTS_INDEX_PAGE);
             final FacesContext context = FacesContext.getCurrentInstance();
@@ -275,8 +284,7 @@ public class PaymentController extends AbstractController<FileItem> {
             List<Attachment> attachmentList = selectedFile.getFile().getAttachmentsList();
             costsController.setAttachmentList(attachmentList);
 
-            final String url = extContext.encodeActionURL(context.getApplication().getViewHandler()
-                    .getActionURL(context, costsPageUrl));
+            final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, costsPageUrl));
 
             extContext.redirect(url);
         } catch (final IOException ex) {
@@ -294,8 +302,7 @@ public class PaymentController extends AbstractController<FileItem> {
         final Application application = fctx.getApplication();
         final ELContext context = fctx.getELContext();
         final ExpressionFactory expressionFactory = application.getExpressionFactory();
-        final ValueExpression createValueExpression = expressionFactory.createValueExpression(context, "#{costsController}",
-                CostsController.class);
+        final ValueExpression createValueExpression = expressionFactory.createValueExpression(context, "#{costsController}", CostsController.class);
         return (CostsController) createValueExpression.getValue(context);
     }
 
@@ -306,7 +313,7 @@ public class PaymentController extends AbstractController<FileItem> {
      */
     public List<File> getFilesList() {
         final List<FileItem> fileItems = items;
-        filesList = new ArrayList<File>();
+        filesList = new ArrayList<>();
         for (final FileItem fileItem : fileItems) {
             if (!filesList.contains(fileItem.getFile())) {
                 filesList.add(fileItem.getFile());
@@ -329,8 +336,12 @@ public class PaymentController extends AbstractController<FileItem> {
             PaymentData paymentData;
             fileDto.setFile(paymentFile);
 
-            final ItemFlow lastItemFlow = itemFlowService.findLastSentItemFlowByFileItem(paymentFile.getFileItemsList().get(0));
-            paymentData = paymentDataService.findPaymentDataByItemFlow(lastItemFlow);
+            if (isPhyto(paymentFile)) {
+                paymentData = paymentDataService.findPaymentDataByFileItem(paymentFile.getFileItemsList().get(0));
+            } else {
+                final ItemFlow lastItemFlow = itemFlowService.findLastSentItemFlowByFileItem(paymentFile.getFileItemsList().get(0));
+                paymentData = paymentDataService.findPaymentDataByItemFlow(lastItemFlow);
+            }
 
             if (paymentData != null) {
                 fileDto.setAmount(paymentData.getMontantHt());
@@ -348,16 +359,13 @@ public class PaymentController extends AbstractController<FileItem> {
      */
     public void doSearchByFilter() {
         if (filter.getFromDate() != null && filter.getToDate() != null && filter.getFromDate().after(filter.getToDate())) {
-            JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                    DATE_VALIDATION_ERROR_MESSAGE));
-            return;
+            JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(DATE_VALIDATION_ERROR_MESSAGE));
         } else {
             try {
-                listUserAuthorityFileTypes = userAuthorityFileTypeService.findUserAuthorityFileTypeByUserList(getLoggedUser()
-                        .getMergedDelegatorList());
+                listUserAuthorityFileTypes = userAuthorityFileTypeService.findUserAuthorityFileTypeByUserList(getLoggedUser().getMergedDelegatorList());
 
                 // Merge the logged user and their delegator users list in the list
-                final List<Administration> adminList = new ArrayList<Administration>();
+                final List<Administration> adminList = new ArrayList<>();
 
                 if (getLoggedUser().getMergedDelegatorList() != null) {
                     for (final User user : getLoggedUser().getMergedDelegatorList()) {
@@ -367,8 +375,7 @@ public class PaymentController extends AbstractController<FileItem> {
 
                 items = commonService.findByFilter(filter, getLoggedUser(), getCurrentAdministration());
             } catch (final Exception ex) {
-                JsfUtil.addErrorMessage(ex,
-                        ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(PERSISTENCE_ERROR_OCCURED));
+                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(PERSISTENCE_ERROR_OCCURED));
             }
         }
     }
@@ -669,6 +676,11 @@ public class PaymentController extends AbstractController<FileItem> {
      */
     public void setItemFlowService(final ItemFlowService itemFlowService) {
         this.itemFlowService = itemFlowService;
+    }
+
+    public boolean isPhyto(File currentFile) {
+        boolean checkMinaderMinistry = currentFile.getDestinataire().equalsIgnoreCase(Constants.MINADER_MINISTRY);
+        return checkMinaderMinistry && Arrays.asList(FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI).contains(currentFile.getFileType().getCode());
     }
 
 }

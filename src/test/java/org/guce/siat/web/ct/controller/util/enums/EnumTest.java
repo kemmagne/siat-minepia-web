@@ -101,7 +101,7 @@ public class EnumTest {
         System.out.println(objects);
     }
 
-//    @Ignore
+    @Ignore
     @Test
     public void test01() {
 

@@ -192,6 +192,8 @@ public interface ControllerConstants {
              */
             String GUCE_SIAT_OFFICES_PAGE = "/pages/bo/bureauGuceSiat/bureauGuceSiatCellEditor.xhtml";
 
+            String AGENTS_ASSIGNMENT_PAGE = "/pages/bo/agentsManagement/agentsAssigment/index.xhtml";
+
             /**
              * The Interface GR.
              */
@@ -300,8 +302,6 @@ public interface ControllerConstants {
              */
             String SEARCH_SAMPLE_BY_LABORATORY = "/pages/fo/statistic/sampleByLab/index.xhtml";
 
-            String AGENTS_ASSIGNMENT_PAGE = "/pages/fo/agentsManagement/agentsAssigment/index.xhtml";
-
             /**
              * The SEARC h_ analys e_ b y_l aboratory.
              */
@@ -380,7 +380,7 @@ public interface ControllerConstants {
             String STATISTIC_GLOBAL_DELAY_LISTING = "/pages/fo/statistic/globalDelayListing/index.xhtml";
             String STATISTIC_DELAY_LISTING_STAKEHOLDER = "/pages/fo/statistic/delayListingStakeholder/index.xhtml";
             String STATISTIC_EXPORT_NSH_DESTINIATION = "/pages/fo/statistic/exportNshDestination/index.xhtml";
-            String STATISTIC_EXPORT_NSH_DESTINIATION_SENDER = "/pages/fo/statistic/exportNshDestinationSender/index.xhtml";
+            String STATISTIC_EXPORT_NSH_DESTINIATION_SENDER = "/pages/fo/statistic/exportNshDestSender/index.xhtml";
 
             /**
              * The Interface GR.
@@ -471,6 +471,11 @@ public interface ControllerConstants {
              * The Constant SEND_ERROR.
              */
             String SEND_ERROR = "SendError";
+
+            /**
+             * The Constant SEND_ERROR.
+             */
+            String BILLING_WITHOUT_INVOICE_LINES_ERROR = "billingWithoutInvoiceLines_Error";
 
             /**
              * The Constant SEND_ERROR.

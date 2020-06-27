@@ -1,0 +1,18 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" >
+
+    <p:panelGrid columns="2" rendered="#{fileItemCctDetailController.currentFile.fileType.code ne 'CCT_CT_E_PVE' and fileItemCctDetailController.specificDecision eq 'CCT_CT_E_APP'}">
+
+        <h:outputLabel for="Appointment_beginTime" value="#{bundle['AppointmentDate']}" />
+        <h:panelGroup>
+            <p:calendar navigator="true" readonlyInput="true" pattern="dd/MM/yyyy HH:mm"
+                        value="#{fileItemCctDetailController.appointment.beginTime}" showOn="button" id="Appointment_beginTime" required="true"
+                        requiredMessage="#{bundle['Field']} #{bundle['AppointmentDate']} #{bundle['RequiredMessage']}" />
+            <p:message for="Appointment_beginTime" />
+        </h:panelGroup>
+
+        <h:outputLabel for="Appointment_Observations" value="Observations" />
+        <p:inputTextarea id="Appointment_Observations" value="#{fileItemCctDetailController.appointment.observations}" />
+
+    </p:panelGrid>
+
+</ui:composition>

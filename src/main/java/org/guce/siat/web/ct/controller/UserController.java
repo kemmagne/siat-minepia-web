@@ -7,14 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
-
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.model.SelectItem;
 import javax.persistence.PersistenceException;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
@@ -472,7 +470,7 @@ public class UserController extends AbstractController<User> {
                 }
             }
         }
-        final List<UserAuthority> userAuthorities = new ArrayList<UserAuthority>();
+        final List<UserAuthority> userAuthorities = new ArrayList<>();
         userAuthorities.addAll(authorities);
         selected.setUserAuthorityList(userAuthorities);
     }

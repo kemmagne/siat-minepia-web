@@ -1,0 +1,86 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+	<br />
+
+    <h:form id="exportNshDestinationSenderSearchForm" class="search-style">
+
+		<p:accordionPanel styleClass="search">
+
+			<p:tab title="#{bundle['exportNshDestinationSender_Search']}" dynamic="true" cache="true">
+
+				<h:panelGrid columns="4">
+					<h:outputLabel value="#{bundle['statisticsOnBusinessSearch_operation']}" for="operation" />
+					<p:selectManyCheckbox id="operation" value="#{statisticController.cteFilter.operationType}">
+						<f:selectItem itemLabel="#{bundle['statisticsOnBusinessSearch_transit']}" itemValue="2" />
+						<f:selectItem itemLabel="#{bundle['statisticsOnBusinessSearch_export']}" itemValue="0" />
+					</p:selectManyCheckbox>
+					<p:outputPanel  styleClass="search-select">
+						<h:outputLabel value="#{bundle['exporterNiu']}" />
+						<p:inputText value="#{statisticController.cteFilter.clientNiu}" />
+					</p:outputPanel>
+				</h:panelGrid>
+
+				<h:panelGrid columns="10" cellpadding="10">
+
+					<p:outputPanel  styleClass="search-select">
+						<h:panelGroup>
+							<p:outputLabel for="productType" value="#{bundle['simpleSearch_productTypeLabel']}" />
+						</h:panelGroup>
+						<p:selectCheckboxMenu id="productType" title="#{bundle['simpleSearch_productTypeTitle']}" label="#{bundle['simpleSearch_productTypeTitle']}" value="#{statisticController.cteFilter.productNatureList}"
+											  filter="true" filterMatchMode="contains">
+							<f:selectItem itemLabel="CAFE" itemValue="CF" />
+							<f:selectItem itemLabel="CACAO" itemValue="CC" />
+							<f:selectItem itemLabel="COTON" itemValue="COTON" />
+							<f:selectItem itemLabel="BOIS TRANSFORMES" itemValue="BT" />
+							<f:selectItem itemLabel="GRUMES" itemValue="GR" />
+							<f:selectItem itemLabel="OBJETS D'ART" itemValue="OA" />
+							<f:selectItem itemLabel="PRODUITS SPECIAUX" itemValue="PS" />
+							<f:selectItem itemLabel="AUTRES" itemValue="AUTRES" />
+						</p:selectCheckboxMenu>
+					</p:outputPanel>
+					<p:outputPanel  styleClass="search-select" rendered="#{request.isUserInRole('SUPER')}">
+						<h:outputLabel
+							value="#{bundle['Office']}" for="office" />
+						<p:selectCheckboxMenu id="office" label="Office"
+											  value="#{statisticController.cteFilter.officeCodeList}" >
+							<f:selectItems value="#{statisticController.bureauList}" var="bureau" itemLabel="#{bureau.labelFr}" itemValue="#{bureau.id}" />
+
+						</p:selectCheckboxMenu>
+					</p:outputPanel>
+
+					<h:panelGroup>
+						<p:outputLabel for="fromDate" value="#{bundle['statisticsOnBusinessSearch_fromDateLabel']}" />
+						<p:calendar navigator="true" id="fromDate" value="#{statisticController.cteFilter.validationFromDate}"
+									title="#{bundle['statisticsOnBusinessSearch_fromDateTitre']}" showOn="button" pattern="dd/MM/yyyy" readonlyInput="true">
+							<p:ajax event="dateSelect" update="toDate" />
+						</p:calendar>
+					</h:panelGroup>
+
+					<h:panelGroup>
+						<p:outputLabel for="toDate" value="#{bundle['statisticsOnBusinessSearch_toDateLabel']}" />
+						<p:calendar navigator="true" id="toDate" value="#{statisticController.cteFilter.validationToDate}"
+									title="#{bundle['statisticsOnBusinessSearch_toDateTitre']}" showOn="button" pattern="dd/MM/yyyy"
+									mindate="#{statisticController.cteFilter.validationFromDate}" readonlyInput="true">
+						</p:calendar>
+					</h:panelGroup>
+
+					<h:panelGroup>
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" icon="ui-icon-search"
+										 title="#{bundle['ButtonSearch']}" action="#{statisticController.doExportNshDestinationSenderFilter()}"
+										 update=":filtredFileItemListForm:datalist exportNshDestinationSenderSearchForm :growl" oncomplete="PF('datalistTable').filter();" />
+
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" icon="ui-icon-refresh"
+										 title="#{bundle['ButtonReset']}" action="#{statisticController.initExportNshDestinationSearch()}"
+										 oncomplete="PF('datalistTable').filter();" update=":filtredFileItemListForm:datalist exportNshDestinationSenderSearchForm" />
+
+					</h:panelGroup>
+
+				</h:panelGrid>
+
+			</p:tab>
+
+		</p:accordionPanel>
+
+	</h:form>
+</ui:composition>

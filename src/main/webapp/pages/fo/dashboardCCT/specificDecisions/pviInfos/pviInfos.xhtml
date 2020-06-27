@@ -1,5 +1,4 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" >
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 
 
     <p:scrollPanel mode="native" styleClass="decisionForm">
@@ -11,14 +10,14 @@
             <h:panelGroup>
                 <p:calendar navigator="true" readonlyInput="true" showOn="button"
                             value="#{fileItemCctDetailController.inspectionReportData.inspectionStartDate}"  pattern="dd/MM/yyyy HH:mm" id="InspectionStartDate"
-                            required="true" requiredMessage="#{bundle['InspectionStartDateRequired']}" widgetVar="InspectionStartDate" />
+                            required="true" requiredMessage="#{bundle['Field']} #{bundle['InspectionStartDate']} #{bundle['RequiredMessage']}" widgetVar="InspectionStartDate" />
                 <p:message for="InspectionStartDate" />
             </h:panelGroup>
             <h:outputLabel value="#{bundle['InspectionEndDate']}" for="InspectionEndDate" />
             <h:panelGroup>
                 <p:calendar navigator="true" readonlyInput="true" showOn="button"
                             value="#{fileItemCctDetailController.inspectionReportData.inspectionEndDate}"  pattern="dd/MM/yyyy HH:mm" id="InspectionEndDate"
-                            required="true" requiredMessage="#{bundle['InspectionEndDateRequired']}" widgetVar="InspectionEndDate" />
+                            required="true" requiredMessage="#{bundle['Field']} #{bundle['InspectionEndDate']} #{bundle['RequiredMessage']}" widgetVar="InspectionEndDate" />
                 <p:message for="InspectionEndDate" />
             </h:panelGroup>
             <p:outputLabel for="NomControleur" value="#{bundle['NomControleur']}" />
