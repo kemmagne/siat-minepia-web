@@ -1894,6 +1894,15 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             }
         } else if (isPviReadyForSignature(selectedFlow)) {
             inspectionReportData = new InspectionReportData();
+            InspectionReport ir = inspectionReportService.findLastInspectionReportsByFileItem(currentFileItem);
+            if (ir == null && currentFile.getParent() != null) {
+                ItemFlow validationForSignItemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFile.getParent().getFileItemsList().get(0), FlowCode.FL_CT_07);
+                ir = inspectionReportService.findByItemFlow(validationForSignItemFlow);
+            }
+
+            if (ir != null) {
+                inspectionReportData.from(ir);
+            }
         } // Signature de DCC (Certificat de Contrôle Documentaire)
         else if (DCC_FLOW_CODES.contains(selectedFlow.getCode())) {
             lastDecisions = itemFlowService.findLastSentItemFlowByFileItem(selectedFileItemCheck.getFileItem());
