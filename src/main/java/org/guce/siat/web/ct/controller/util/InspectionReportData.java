@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.guce.siat.common.model.Appointment;
@@ -38,7 +37,7 @@ public class InspectionReportData implements Serializable {
      * The inspection time.
      */
     private Date inspectionTime;
-    
+
     private Date inspectionStartDate, inspectionEndDate;
 
     /**
@@ -243,6 +242,59 @@ public class InspectionReportData implements Serializable {
     private String pviDispositionsPrises;
 
     private String controllerName;
+
+    public void from(InspectionReport ir) {
+        setInspectionPlace(ir.getPlace());
+        setInspectionDate(ir.getReportDate());
+        setInspectionStartDate(ir.getInspectionStartDate());
+        setInspectionEndDate(ir.getInspectionEndDate());
+        setInspectionTime(ir.getReportTime());
+        setControllerDecision(ir.getControllerDecision());
+        setQuarantinedCulturePlace(ir.getQuarantinedCulturePlace());
+        setOtherGoodness(ir.getOtherGoodness());
+        setObservation(ir.getObservation());
+        setMotif(ir.getMotif());
+        setInspectionFees(ir.getInspectionFees());
+        setOtherCertificate(ir.getOtherCertificate());
+        setInspectionFeesFCFA(ir.getInspectionFeesFCFA());
+        setOtherSpecialFees(ir.getOtherSpecialFees());
+        setOriginCertificate(ir.getOriginCertificate());
+        setPhytoGeneralCertificate(ir.getPhytoGeneralCertificate());
+        setPhytoSpecialCertificate(ir.getPhytoSpecialCertificate());
+        setQualityAttestation(ir.getQualityAttestation());
+        setSanitaryVetCertificate(ir.getSanitaryVetCertificate());
+        setWholesomenessCertificate(ir.getWholesomenessCertificate());
+        setConformityCertificate(ir.getConformityCertificate());
+        setAutocontrolDocument(ir.getAutocontrolDocument());
+        setAutocontrolEquipement(ir.getAutocontrolEquipement());
+        setDechet(ir.getDechet());
+        setWater(ir.getWater());
+        setCasque(ir.getCasque());
+        setGants(ir.getGants());
+        setCombinaison(ir.getCombinaison());
+        setRespectNorme(ir.getRespectNorme());
+        setSourcePropagationPeste(ir.getSourcePropagationPeste());
+        setProcedure(ir.getProcedure());
+        setProcessAnalyse(ir.getProcessAnalyse());
+        //
+        setTreatmentTypesList(ir.getTreatmentTypesList());
+        setEtatDateDernierTraitement(ir.getEtatDateDernierTraitement());
+        setProduitUtilise(ir.getProduitUtilise());
+        setDosage(ir.getDosage());
+        setStorageEnvsList(ir.getStorageEnvsList());
+        setEnvironnementTransport(ir.getEnvironnementTransport());
+        setConditionClimatique(ir.getConditionClimatique());
+        setMesureProtection(ir.getMesureProtection());
+        setObservations(ir.getObservations());
+        setArticleReglemente(ir.getArticleReglemente());
+        setPviCouvertDoc(ir.isPviCouvertDoc());
+        setPviDestination(ir.getPviDestination());
+        setPviDispositionsPrises(ir.getPviDispositionsPrises());
+        setPviNatureArticleInspecte(ir.getPviNatureArticleInspecte());
+        setPviQuantite(ir.getPviQuantite());
+        setPviSituationArticle(ir.getPviSituationArticle());
+        setControllerName(ir.getControllerName());
+    }
 
     /**
      * Transform to report list.
@@ -453,7 +505,6 @@ public class InspectionReportData implements Serializable {
     public void setInspectionEndDate(Date inspectionEndDate) {
         this.inspectionEndDate = inspectionEndDate;
     }
-    
 
     /**
      * Gets the inspection time.
@@ -1129,4 +1180,3 @@ public class InspectionReportData implements Serializable {
     }
 
 }
-
