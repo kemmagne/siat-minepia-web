@@ -1896,8 +1896,7 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             inspectionReportData = new InspectionReportData();
             InspectionReport ir = inspectionReportService.findLastInspectionReportsByFileItem(currentFileItem);
             if (ir == null && currentFile.getParent() != null) {
-                ItemFlow validationForSignItemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFile.getParent().getFileItemsList().get(0), FlowCode.FL_CT_07);
-                ir = inspectionReportService.findByItemFlow(validationForSignItemFlow);
+                ir = inspectionReportService.findLastInspectionReportsByFileItem(currentFile.getParent().getFileItemsList().get(0));
             }
 
             if (ir != null) {
@@ -2011,12 +2010,18 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                     analysesFileManagers.add(fileManager);
                 }
             } else {
-                showErrorFacesMessage(ControllerConstants.Bundle.Messages.CHECK_ANALYSE_DECISION_ERROR,
-                        ControllerConstants.Bundle.Messages.CHECK_PRODUCTS_DECISION_MSG);
+                showErrorFacesMessage(ControllerConstants.Bundle.Messages.CHECK_ANALYSE_DECISION_ERROR, ControllerConstants.Bundle.Messages.CHECK_PRODUCTS_DECISION_MSG);
             }
         } // Envoie Résultat de Traitement
         else if (isFstpReadyForSignature(selectedFlow) || isAtReadyForSignature(selectedFlow)) {
+            TreatmentResult tr = treatmentResultService.findLastTreatmentResultByFileItem(currentFileItem);
+            if (tr == null && currentFile.getParent() != null) {
+                tr = treatmentResultService.findLastTreatmentResultByFileItem(currentFile.getParent().getFileItemsList().get(0));
+            }
             treatmentResult = new TreatmentResult();
+            if (tr != null) {
+                org.springframework.beans.BeanUtils.copyProperties(tr, treatmentResult, "id", "itemFlow");
+            }
         } else if (FlowCode.FL_CT_66.name().equals(selectedFlow.getCode())) {
             if (chckedListSize == Constants.ONE) {
                 specificDecision = CctSpecificDecision.TRR;
@@ -7425,7 +7430,12 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                         break;
                     }
                     case CCT_CT_E_PVI: {
-                        final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
+                        final ItemFlow itemFlow;
+                        if (currentFile.getParent() == null) {
+                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
+                        } else {
+                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_112);
+                        }
                         final InspectionReport ir = inspectionReportService.findByItemFlow(itemFlow);
                         if (draft) {
                             reportInvoker = new CtPviExporter(currentFile, ir, reportNumber);
@@ -7436,7 +7446,12 @@ hist:                   for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                     }
                     case CCT_CT_E_ATP:
                     case CCT_CT_E_FSTP: {
-                        final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
+                        final ItemFlow itemFlow;
+                        if (currentFile.getParent() == null) {
+                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
+                        } else {
+                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_112);
+                        }
                         final TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
                         if (FileTypeCode.CCT_CT_E_ATP.equals(currentFile.getFileType().getCode())) {
                             if (draft) {
