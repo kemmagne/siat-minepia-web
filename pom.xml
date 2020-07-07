@@ -11,22 +11,22 @@
 
     <artifactId>siat-ct-web</artifactId>
     <packaging>war</packaging>
-    <version>2.4.0-beta.1</version>
+    <version>2.4.0-beta.2</version>
 
     <name>siat-ct-web</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <resource.dir>src/main/resources</resource.dir>
-        <java.version>1.7</java.version>
+        <java.version>1.8</java.version>
     </properties>
 
     <distributionManagement>
         <repository>
             <id>guce-repository</id>
             <name>Depot Maven du GUCE</name>
-            <!--<url>https://repo.guce.local/maven/repository/releases</url>-->
-            <url>https://git.guichetunique.cm/maven/repository/releases/</url>
+            <url>https://repo.guce.local/maven/repository/releases</url>
+            <!--<url>https://git.guichetunique.cm/maven/repository/releases/</url>-->
         </repository>
         <snapshotRepository>
             <id>guce-repository</id>
