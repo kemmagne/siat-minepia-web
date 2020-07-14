@@ -1,169 +1,167 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
-				xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 
-	<br />
+    <br />
 
-	<p:panel header="#{bundle['fileItemDesicionSearch_result']}">
-
-
-		<h:form id="filtredFileItemListForm">
-
-			<h:panelGrid columns="2">
-				<h:commandLink action="#{exporter.exportPDF(table, 'DELAI_LISTING_INTERVENANT')}">
-					<h:outputText styleClass="sprite sprite-pdf" />
-				</h:commandLink>
-
-				<h:commandLink>
-					<h:graphicImage styleClass="sprite sprite-pdf" library="img" name="excel.png"
-									style="width: 34px;height: 34px;display: block;	top: 15px;	right: 52px;position: absolute;" />
-					<p:dataExporter type="xls" target="datalist" fileName="#{bundle['fileItemDesicionSearch_result']}" />
-				</h:commandLink>
-			</h:panelGrid>
-			<br />
-
-			<p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable" value="#{statisticController.delayListingStakeholderDataList}"
-						 filteredValue="" var="delay" rows="10" paginator="true" rowsPerPageTemplate="10,20,30"
-						 emptyMessage="#{bundle['AucuneResultat']}"
-						 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-						 currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
-
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="#{bundle['processName']}" title="#{bundle['processName']}" />
-					</f:facet>
-					<h:outputText value="#{delay.processName}" />
-				</p:column>
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="#{bundle['expecNumber']}" title="#{bundle['expecNumber']}" />
-					</f:facet>
-					<h:outputText value="#{delay.expecNumber}" />
-				</p:column>
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="#{bundle['subfileNumber']}" title="#{bundle['subfileNumber']}" />
-					</f:facet>
-					<h:outputText value="#{delay.subfileNumber}" />
-				</p:column>
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="#{bundle['exporterNiu']}" title="#{bundle['exporterNiu']}" />
-					</f:facet>
-					<h:outputText value="#{delay.exporterNiu}" />
-				</p:column>
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="#{bundle['exporterName']}" title="#{bundle['exporterName']}" />
-					</f:facet>
-					<h:outputText value="#{delay.exporterName}" />
-				</p:column>
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="#{bundle['productType']}" title="#{bundle['productType']}" />
-					</f:facet>
-					<h:outputText value="#{delay.productType}" />
-				</p:column>
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="#{bundle['destinationCountry']}" title="#{bundle['destinationCountry']}" />
-					</f:facet>
-					<h:outputText value="#{delay.destinationCountry}" />
-				</p:column>
-
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="#{bundle['admisibilityAgent']}" title="#{bundle['admisibilityAgent']}" />
-					</f:facet>
-					<h:outputText value="#{delay.admisibilityAgent}" />
-				</p:column>
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="#{bundle['admisibilityDelay']}" title="#{bundle['admisibilityDelay']}" />
-					</f:facet>
-					<h:outputText value="#{delay.admisibilityDelay}"/>
-
-				</p:column>
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="#{bundle['cotationAgent']}" title="#{bundle['cotationAgent']}" />
-					</f:facet>
-					<h:outputText value="#{delay.cotationAgent}"/>
-				</p:column>
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="#{bundle['cotationDelay']}" title="#{bundle['cotationDelay']}" />
-					</f:facet>
-					<h:outputText value="#{delay.cotationDelay}"/>
-				</p:column>
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="#{bundle['treatmentAgent']}" title="#{bundle['treatmentAgent']}" />
-					</f:facet>
-					<h:outputText value="#{delay.treatmentAgent}" />
-				</p:column>
-
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="#{bundle['confirmationAppointmentDelay']}" title="#{bundle['confirmationAppointmentDelay']}" />
-					</f:facet>
-					<h:outputText value="#{delay.confirmationAppointmentDelay}" />
-				</p:column>
-
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="#{bundle['treatmentDelay']}" title="#{bundle['treatmentDelay']}" />
-					</f:facet>
-					<h:outputText value="#{delay.treatmentDelay}" />
-				</p:column>
-
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="#{bundle['signatoryAgent']}" title="#{bundle['signatoryAgent']}" />
-					</f:facet>
-					<h:outputText value="#{delay.signatoryAgent}" />
-				</p:column>
-
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="#{bundle['signatoryDelay']}" title="#{bundle['signatoryDelay']}" />
-					</f:facet>
-					<h:outputText value="#{delay.signatoryDelay}" />
-				</p:column>
-
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="#{bundle['ciResnponseDelay']}" title="#{bundle['ciResnponseDelay']}" />
-					</f:facet>
-					<h:outputText value="#{delay.ciResnponseDelay}" />
-				</p:column>
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="#{bundle['ciCount']}" title="#{bundle['ciCount']}" />
-					</f:facet>
-					<h:outputText value="#{delay.ciCount}" />
-				</p:column>
+    <p:panel header="#{bundle['fileItemDesicionSearch_result']}">
 
 
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="#{bundle['officeCode']}" title="#{bundle['officeCode']}" />
-					</f:facet>
-					<h:outputText value="#{delay.officeCode}" />
-				</p:column>
+        <h:form id="filtredFileItemListForm">
 
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="#{bundle['officeLabel']}" title="#{bundle['officeLabel']}" />
-					</f:facet>
-					<h:outputText value="#{delay.officeLabel}" />
-				</p:column>
+            <h:panelGrid columns="2">
+                <h:commandLink action="#{exporter.exportPDF(table, 'DELAI_LISTING_INTERVENANT')}">
+                    <h:outputText styleClass="sprite sprite-pdf" />
+                </h:commandLink>
+
+                <h:commandLink>
+                    <h:graphicImage styleClass="sprite sprite-pdf" library="img" name="excel.png"
+                                    style="width: 34px;height: 34px;display: block;	top: 15px;	right: 52px;position: absolute;" />
+                    <p:dataExporter type="xls" target="datalist" fileName="#{bundle['fileItemDesicionSearch_result']}" />
+                </h:commandLink>
+            </h:panelGrid>
+            <br />
+
+            <p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable" value="#{statisticController.delayListingStakeholderDataList}"
+                         filteredValue="" var="delay" rows="10" paginator="true" rowsPerPageTemplate="10,20,30"
+                         emptyMessage="#{bundle['AucuneResultat']}"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['processName']}" title="#{bundle['processName']}" />
+                    </f:facet>
+                    <h:outputText value="#{delay.processName}" />
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['expecNumber']}" title="#{bundle['expecNumber']}" />
+                    </f:facet>
+                    <h:outputText value="#{delay.expecNumber}" />
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['subfileNumber']}" title="#{bundle['subfileNumber']}" />
+                    </f:facet>
+                    <h:outputText value="#{delay.subfileNumber}" />
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['exporterNiu']}" title="#{bundle['exporterNiu']}" />
+                    </f:facet>
+                    <h:outputText value="#{delay.exporterNiu}" />
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['exporterName']}" title="#{bundle['exporterName']}" />
+                    </f:facet>
+                    <h:outputText value="#{delay.exporterName}" />
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['productType']}" title="#{bundle['productType']}" />
+                    </f:facet>
+                    <h:outputText value="#{delay.productType}" />
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['destinationCountry']}" title="#{bundle['destinationCountry']}" />
+                    </f:facet>
+                    <h:outputText value="#{delay.destinationCountry}" />
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['admisibilityAgent']}" title="#{bundle['admisibilityAgent']}" />
+                    </f:facet>
+                    <h:outputText value="#{delay.admisibilityAgent}" />
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['admisibilityDelay']}" title="#{bundle['admisibilityDelay']}" />
+                    </f:facet>
+                    <h:outputText value="#{delay.admisibilityDelay}"/>
+
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['cotationAgent']}" title="#{bundle['cotationAgent']}" />
+                    </f:facet>
+                    <h:outputText value="#{delay.cotationAgent}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['cotationDelay']}" title="#{bundle['cotationDelay']}" />
+                    </f:facet>
+                    <h:outputText value="#{delay.cotationDelay}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['treatmentAgent']}" title="#{bundle['treatmentAgent']}" />
+                    </f:facet>
+                    <h:outputText value="#{delay.treatmentAgent}" />
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['confirmationAppointmentDelay']}" title="#{bundle['confirmationAppointmentDelay']}" />
+                    </f:facet>
+                    <h:outputText value="#{delay.confirmationAppointmentDelay}" />
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['treatmentDelay']}" title="#{bundle['treatmentDelay']}" />
+                    </f:facet>
+                    <h:outputText value="#{delay.treatmentDelay}" />
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['signatoryAgent']}" title="#{bundle['signatoryAgent']}" />
+                    </f:facet>
+                    <h:outputText value="#{delay.signatoryAgent}" />
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['signatoryDelay']}" title="#{bundle['signatoryDelay']}" />
+                    </f:facet>
+                    <h:outputText value="#{delay.signatoryDelay}" />
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['ciResnponseDelay']}" title="#{bundle['ciResnponseDelay']}" />
+                    </f:facet>
+                    <h:outputText value="#{delay.ciResnponseDelay}" />
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['ciCount']}" title="#{bundle['ciCount']}" />
+                    </f:facet>
+                    <h:outputText value="#{delay.ciCount}" />
+                </p:column>
 
 
+                <p:column rendered="false">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['officeCode']}" title="#{bundle['officeCode']}" />
+                    </f:facet>
+                    <h:outputText value="#{delay.officeCode}" />
+                </p:column>
 
-			</p:dataTable>
+                <p:column rendered="false">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['officeLabel']}" title="#{bundle['officeLabel']}" />
+                    </f:facet>
+                    <h:outputText value="#{delay.officeLabel}" />
+                </p:column>
 
-		</h:form>
+            </p:dataTable>
 
-	</p:panel>
+        </h:form>
+
+    </p:panel>
 
 </ui:composition>

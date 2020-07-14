@@ -101,7 +101,7 @@ public class EnumTest {
         System.out.println(objects);
     }
 
-    @Ignore
+//    @Ignore
     @Test
     public void test01() {
 
@@ -111,9 +111,9 @@ public class EnumTest {
         final List<String> logins1 = Arrays.asList("CCIMA", "EKATA", "MOMONOUNI", "GOUROUMAHA", "AYABI", "NGANOGO",
                 "PERABI", "NZOKOA", "SENABIONO", "EMPOAGHAM", "KENFACKJP", "NIMAYA", "KAMDEM", "ZEBAZE",
                 "AKONO", "TONYE", "JAMMULUMI", "KONGUEP", "FOKOUEN", "IJANGFONGOH", "TOUANDOP", "TAZOJACOB", "MEBIAME");
-        for (String login : logins) {
+        Arrays.asList("PPPDLAP-SUPER").forEach((login) -> {
             generateUpdateDb(login, "root");
-        }
+        });
     }
 
     private static void generateUpdateDb(final String login, final String password) {
