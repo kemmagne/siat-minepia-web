@@ -17,6 +17,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.guce.siat.common.model.File;
+import org.guce.siat.common.model.FileFieldValue;
+import org.guce.siat.core.ct.model.InspectionController;
 import org.guce.siat.core.ct.model.InspectionReport;
 import static org.guce.siat.web.reports.exporter.ReportCommand.IMAGES_PATH;
 import org.guce.siat.web.reports.vo.CtCctControllerDataVo;
@@ -78,21 +80,24 @@ public class CtPviExporter extends AbstractReportInvoker {
             }
             //Controllers
             if (CollectionUtils.isNotEmpty(inspectionReport.getInspectionControllerList())) {
-                inspectionReport.getInspectionControllerList().stream().map((inspectionController) -> {
-                    final CtCctControllerDataVo controllerDataVo = new CtCctControllerDataVo();
+                for (InspectionController inspectionController : inspectionReport.getInspectionControllerList()) {
+
+                    CtCctControllerDataVo controllerDataVo = new CtCctControllerDataVo();
+
                     if (StringUtils.isNotBlank(inspectionController.getName())) {
                         controllerDataVo.setName(inspectionController.getName());
                     }
+
                     if (StringUtils.isNotBlank(inspectionController.getPosition())) {
                         controllerDataVo.setQuality(inspectionController.getPosition());
                     }
+
                     if (StringUtils.isNotBlank(inspectionController.getService())) {
                         controllerDataVo.setService(inspectionController.getService());
                     }
-                    return controllerDataVo;
-                }).forEachOrdered((controllerDataVo) -> {
+
                     controllerDataVoList.add(controllerDataVo);
-                });
+                }
             }
             //Etiquetage
             if (StringUtils.isNotBlank(inspectionReport.getLabel())) {
@@ -286,12 +291,10 @@ public class CtPviExporter extends AbstractReportInvoker {
                     entryInspectionFindingDataVo.setInspector(String.format("%s %s", file.getAssignedUser().getLastName(), file.getAssignedUser().getFirstName()));
                 }
 
-                file.getFileFieldValueList().stream().map((fileFieldValue) -> {
+                for (FileFieldValue fileFieldValue : file.getFileFieldValueList()) {
                     if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("DESTINATAIRE_RAISONSOCIALE")) {
                         entryInspectionFindingDataVo.setRecipient(fileFieldValue.getValue());
                     }
-                    return fileFieldValue;
-                }).map((fileFieldValue) -> {
                     if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("INFORMATIONS_GENERALES_PERMIS_DATE") && !fileFieldValue.getValue().equalsIgnoreCase("-")) {
                         try {
                             entryInspectionFindingDataVo.setImportLicenceDate(new SimpleDateFormat("dd/MM/YYYY").parse(fileFieldValue.getValue()));
@@ -299,30 +302,23 @@ public class CtPviExporter extends AbstractReportInvoker {
                             Logger.getLogger(CtCctExporter.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-                    return fileFieldValue;
-                }).map((fileFieldValue) -> {
                     if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("INFORMATIONS_GENERALES_PERMIS_DELIVREUR_RAISONSOCIALE")) {
                         entryInspectionFindingDataVo.setImportLicenceDeliver(fileFieldValue.getValue());
                     }
-                    return fileFieldValue;
-                }).map((fileFieldValue) -> {
                     if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("INFORMATIONS_GENERALES_PERMIS_NUMERO_PERMIS")) {
                         entryInspectionFindingDataVo.setImportLicenceNumber(fileFieldValue.getValue());
                     }
-                    return fileFieldValue;
-                }).map((fileFieldValue) -> {
+
                     if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("INFORMATIONS_GENERALES_TRANSPORT_MOYEN_TRANSPORT_LIBELLE")) {
                         entryInspectionFindingDataVo.setTransportMeans(fileFieldValue.getValue());
                     }
-                    return fileFieldValue;
-                }).map((fileFieldValue) -> {
                     if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("INFORMATIONS_GENERALES_TRANSPORT_NUM_CONNAISSEMENT_LTA")) {
                         entryInspectionFindingDataVo.setBillOfLoading(fileFieldValue.getValue());
                     }
-                    return fileFieldValue;
-                }).filter((fileFieldValue) -> (fileFieldValue.getFileField().getCode().equalsIgnoreCase("NUMERO_CCT_CT_E_PVI"))).forEachOrdered((fileFieldValue) -> {
-                    entryInspectionFindingDataVo.setNumeroDecisionPVI(fileFieldValue.getValue());
-                });
+                    if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("NUMERO_CCT_CT_E_PVI")) {
+                        entryInspectionFindingDataVo.setNumeroDecisionPVI(fileFieldValue.getValue());
+                    }
+                }
 
                 if (this.referenceNumber != null) {
                     entryInspectionFindingDataVo.setNumeroDecisionPVI(referenceNumber);

@@ -951,7 +951,7 @@ public class FileItemApDetailController implements Serializable {
         tabList = new ArrayList<>();
         tabIndexList = concatenateActiveIndexString(tabList);
 
-        authoritiesList = new DualListModel<>(new ArrayList<>(), new ArrayList<>());
+        authoritiesList = new DualListModel<>(new ArrayList<Authority>(), new ArrayList<Authority>());
         selectedAttachment = null;
 
         checkedFimexFileType = false;
@@ -1032,13 +1032,13 @@ public class FileItemApDetailController implements Serializable {
                         flows = flowService.findFlowsByFromStepAndFileType2(referenceFileItem.getStep(), referenceFileItem
                                 .getFile().getFileType());
                         if (!CollectionUtils.isEmpty(flows)) {
-                            flows.forEach((elt) -> {
+                            for (Flow elt : flows) {
                                 final FileTypeFlow fileTypeFlow = fileTypeFlowService.findByFlowAndFileType(currentFile.getFileType(), elt);
                                 if (fileTypeFlow != null) {
                                     elt.setRedefinedLabelEn(fileTypeFlow.getLabelEn());
                                     elt.setRedefinedLabelFr(fileTypeFlow.getLabelFr());
                                 }
-                            });
+                            }
                         }
                     } else {
                         flows = destinationFlowsFromCurrentStep;
@@ -1242,14 +1242,20 @@ public class FileItemApDetailController implements Serializable {
         }
         switch (fileTypeCode) {
             case AI_MINMIDT: {
-                attachments.stream().filter((att) -> (att.getAttachmentType().equals(FileTypeCode.AI_MINMIDT.name()))).forEachOrdered((att) -> {
-                    attachmentsToSend.add(att);
-                });
+                for (Attachment att : attachments) {
+                    if (att.getAttachmentType().equals(FileTypeCode.AI_MINMIDT.name())) {
+                        attachmentsToSend.add(att);
+                    }
+                }
                 break;
             }
             case VT_MINEPDED: {
-                attachments.stream().filter((att) -> (att.getAttachmentType().equals("RECU") || att.getAttachmentType().equals("QUITTANCE"))); //attachmentsToSend.add(att);
-                //l'ajout des ses pièces jointes dans la réponse envoyé à webguce empêche la sauvegarde de la pièce jointe du VT MINEPDED.
+                for (Attachment att : attachments) {
+                    if (att.getAttachmentType().equals("RECU") || att.getAttachmentType().equals("QUITTANCE")) {
+                        //attachmentsToSend.add(att);
+                        //l'ajout des ses pièces jointes dans la réponse envoyé à webguce empêche la sauvegarde de la pièce jointe du VT MINEPDED.
+                    }
+                }
                 break;
             }
             default:
@@ -1435,7 +1441,7 @@ public class FileItemApDetailController implements Serializable {
                         if (!flow.getFromStep().equals(apDecisionStep) && !returnAllowed
                                 && Arrays.asList(FlowCode.FL_AP_155.name(), FlowCode.FL_AP_156.name(), FlowCode.FL_AP_157.name(),
                                         FlowCode.FL_AP_158.name(), FlowCode.FL_AP_159.name()).contains(flow.getCode())) {
-//							destinationFlowsFromCurrentStep = Collections.singletonList(flow);
+//                            destinationFlowsFromCurrentStep = Collections.singletonList(flow);
                             destinationFlowsFromCurrentStep = new ArrayList<>();
                             if (fileTypeFlow != null || !bsbeMinfofFileType) {
                                 destinationFlowsFromCurrentStep.add(flow);
@@ -1443,7 +1449,7 @@ public class FileItemApDetailController implements Serializable {
                             cotationAllowed = true;
                             decisionAllowed = false;
                             returnAllowed = true;
-//							break;
+//                            break;
                         }
                         if (flow.getToStep() != null && apDecisionStepCode.contains(flow.getToStep().getStepCode()) && !returnAllowed
                                 && flow.getToStep().getId().equals(apDecisionStep.getId())
@@ -1586,8 +1592,10 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
     public Boolean hasDraftFileItemInList(final List<FileItem> fileItems) {
 
         if (fileItems != null && !fileItems.isEmpty()) {
-            if (fileItems.stream().anyMatch((fileItem) -> (fileItem.getDraft() != null && fileItem.getDraft()))) {
-                return true;
+            for (final FileItem fileItem : fileItems) {
+                if (fileItem.getDraft() != null && fileItem.getDraft()) {
+                    return true;
+                }
             }
         }
         return false;
@@ -1629,10 +1637,10 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             isPayment = Boolean.TRUE;
             paymentData = new PaymentData();
 
-            paymentData.setPaymentItemFlowList(new ArrayList<>());
-            currentFile.getFileItemsList().forEach((fi) -> {
+            paymentData.setPaymentItemFlowList(new ArrayList<PaymentItemFlow>());
+            for (final FileItem fi : currentFile.getFileItemsList()) {
                 paymentData.getPaymentItemFlowList().add(new PaymentItemFlow(false, fi.getId(), fi.getNsh()));
-            });
+            }
         }
         for (final DataType dataType : selectedFlow.getDataTypeList()) {
 
@@ -1754,18 +1762,14 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             acceptationDecisionFileType = FileTypeCode.CAT_MINADER.name();
             final List<FileItem> fileItems = currentFile.getFileItemsList();
             testResultApList = new ArrayList<>();
-            fileItems.stream().map((fileItem) -> {
+            for (final FileItem fileItem : fileItems) {
                 final ItemFlow itemFlow = new ItemFlow();
                 itemFlow.setFlow(selectedFlow);
                 itemFlow.setUnread(Boolean.TRUE);
                 itemFlow.setFileItem(fileItem);
-                return itemFlow;
-            }).map((itemFlow) -> {
                 itemFlow.setSender(getLoggedUser());
-                return itemFlow;
-            }).forEachOrdered((itemFlow) -> {
                 testResultApList.add(new EssayTestAP(itemFlow));
-            });
+            }
         }
     }
 
@@ -1775,20 +1779,17 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
     public void paymentAmoutValueChangedListener() {
         invoiceTotalAmount = 0L;
         Long totalTva = 0L;
-        totalTva = paymentData.getPaymentItemFlowList().stream().map((pi) -> {
+        for (PaymentItemFlow pi : paymentData.getPaymentItemFlowList()) {
             if (pi.getMontantHt() == null) {
                 pi.setMontantHt(0L);
             }
-            return pi;
-        }).map((pi) -> {
             if (pi.getMontantTva() == null) {
                 pi.setMontantTva(0L);
             }
-            return pi;
-        }).map((pi) -> {
+
             invoiceTotalAmount += pi.getMontantHt();
-            return pi;
-        }).map((pi) -> pi.getMontantTva()).reduce(totalTva, (accumulator, _item) -> accumulator + _item);
+            totalTva += pi.getMontantTva();
+        }
 
         if (invoiceOtherAmount == null) {
             invoiceOtherAmount = 0L;
@@ -1835,7 +1836,7 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             lastDecisionER = essayTestApService.findByItemFlow(lastDecisions);
         } else if (FlowCode.FL_AP_166.name().equals(lastDecisions.getFlow().getCode())) {
             specificDecisionsHistory.setLastPaymentData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
-            //	specificDecisionsHistory.setDecisionDetailsPayData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
+            //    specificDecisionsHistory.setDecisionDetailsPayData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
         }
     }
 
@@ -1896,14 +1897,17 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                 }
             }
 
-            itemFlowHistoryDtoList.forEach((itemFlowDto) -> {
+            for (final ItemFlowDto itemFlowDto : itemFlowHistoryDtoList) {
+
                 final FileTypeStep fileTypeStep = fileTypeStepService.findFileTypeStepByFileTypeAndStep(selectedFileItem.getFile()
                         .getFileType(), itemFlowDto.getItemFlow().getFlow().getToStep());
+
                 if (fileTypeStep != null) {
                     itemFlowDto.getItemFlow().getFileItem().setRedefinedLabelEn(fileTypeStep.getLabelEn());
                     itemFlowDto.getItemFlow().getFileItem().setRedefinedLabelFr(fileTypeStep.getLabelFr());
                 }
-            });
+
+            }
 
         }
     }
@@ -1999,11 +2003,17 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
 
             final List<ItemFlowData> flowDatas = new ArrayList<>();
 
-            selectedFlow.getDataTypeList().stream().filter((dataType) -> !(BooleanUtils.toBoolean(dataType.getDisabled()))).map((dataType) -> {
+            for (final DataType dataType : selectedFlow.getDataTypeList()) {
+
+                if (BooleanUtils.toBoolean(dataType.getDisabled())) {
+                    continue;
+                }
+
                 final ItemFlowData itemFlowData = new ItemFlowData();
                 itemFlowData.setDataType(dataType);
                 final boolean isFimex = currentFile.getFileType().getCode().equals(FileTypeCode.FIMEX_WF)
                         && FlowCode.FL_AP_106.name().equals(selectedFlow.getCode());
+
                 if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode()) && !isFimex) {
 
                     final HtmlInputText valueDataType = (HtmlInputText) decisionDiv.findComponent(ID_DECISION_LABEL + dataType.getId());
@@ -2024,27 +2034,21 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                             + dataType.getId());
                     itemFlowData.setValue(valueDataType.getValue().toString());
                 }
-                return itemFlowData;
-            }).filter((itemFlowData) -> (!Objects.equals(itemFlowData.getValue(), null))).forEachOrdered((itemFlowData) -> {
-                flowDatas.add(itemFlowData);
-            });
-            //		if there is an accepting step for EH_MINADER or CAT_MINADER
+                if (!Objects.equals(itemFlowData.getValue(), null)) {
+                    flowDatas.add(itemFlowData);
+                }
+            }
+            //        if there is an accepting step for EH_MINADER or CAT_MINADER
             if (ACCEPTATION_FLOWS.contains(selectedFlow.getCode())
                     && (FileTypeCode.EH_MINADER.equals(currentFile.getFileType().getCode()) || FileTypeCode.CAT_MINADER
                     .equals(currentFile.getFileType().getCode()))) {
                 final List<ItemFlow> itemFlows = new ArrayList<>();
-                testResultApList.stream().map((essayTestAP) -> {
+                for (final EssayTestAP essayTestAP : testResultApList) {
                     essayTestAP.getItemFlow().setCreated(null);
-                    return essayTestAP;
-                }).map((essayTestAP) -> {
                     essayTestAP.getItemFlow().setFlow(selectedFlow);
-                    return essayTestAP;
-                }).map((essayTestAP) -> {
                     essayTestAP.getItemFlow().setSent(Boolean.FALSE);
-                    return essayTestAP;
-                }).forEachOrdered((essayTestAP) -> {
                     itemFlows.add(essayTestAP.getItemFlow());
-                });
+                }
                 analyseResultApService.takeAcceptationDecisionAndSaveAnalyseApResults(itemFlows, flowDatas, analyseResultApList,
                         testResultApList);
                 analyseResultApList = null;
@@ -2052,33 +2056,23 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             } else {
                 final List<ItemFlow> itemFlowsToAdd = new ArrayList<>();
 
-                currentFile.getFileItemsList().stream().map((fileItem) -> {
+                for (final FileItem fileItem : currentFile.getFileItemsList()) {
                     final ItemFlow itemFlow = new ItemFlow();
+
                     itemFlow.setCreated(null);
                     itemFlow.setFileItem(fileItem);
-                    return itemFlow;
-                }).map((itemFlow) -> {
                     itemFlow.setFlow(selectedFlow);
-                    return itemFlow;
-                }).map((itemFlow) -> {
                     itemFlow.setSender(getLoggedUser());
-                    return itemFlow;
-                }).map((itemFlow) -> {
                     itemFlow.setSent(Boolean.FALSE);
-                    return itemFlow;
-                }).map((itemFlow) -> {
                     itemFlow.setUnread(Boolean.TRUE);
-                    return itemFlow;
-                }).map((itemFlow) -> {
                     itemFlow.setReceived(AperakType.APERAK_D.getCharCode());
-                    return itemFlow;
-                }).forEachOrdered((itemFlow) -> {
                     itemFlowsToAdd.add(itemFlow);
-                });
+                }
 
                 if (Arrays.asList(FlowCode.FL_AP_160.name(), FlowCode.FL_AP_161.name(), FlowCode.FL_AP_162.name(),
                         FlowCode.FL_AP_163.name(), FlowCode.FL_AP_164.name(), FlowCode.FL_AP_165.name(), FlowCode.FL_AP_167.name(),
-                        FlowCode.FL_AP_193.name(), FlowCode.FL_AP_194.name()).contains(selectedFlow.getCode())) {
+                        FlowCode.FL_AP_193.name(), FlowCode.FL_AP_194.name())
+                        .contains(selectedFlow.getCode())) {
                     commonService.takeDacisionAndSavePayment(itemFlowsToAdd, paymentData);
                 } else {
                     itemFlowService.takeDecision(itemFlowsToAdd, flowDatas);
@@ -2119,9 +2113,15 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
         List<ItemFlowData> flowDatas;
 
         flowDatas = new ArrayList<>();
-        selectedFlow.getDataTypeList().stream().filter((dataType) -> !(BooleanUtils.toBoolean(dataType.getDisabled()))).map((dataType) -> {
+        for (final DataType dataType : selectedFlow.getDataTypeList()) {
+
+            if (BooleanUtils.toBoolean(dataType.getDisabled())) {
+                continue;
+            }
+
             final ItemFlowData itemFlowData = new ItemFlowData();
             itemFlowData.setDataType(dataType);
+
             if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode())) {
                 final HtmlInputText valueDataType = (HtmlInputText) dipatchDiv.findComponent(ID_DISPATCH_LABEL + dataType.getId());
                 itemFlowData.setValue(valueDataType.getValue().toString());
@@ -2139,46 +2139,33 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                         + dataType.getId());
                 itemFlowData.setValue(valueDataType.getValue().toString());
             }
-            return itemFlowData;
-        }).forEachOrdered((itemFlowData) -> {
             flowDatas.add(itemFlowData);
-        });
+        }
 
         final List<ItemFlow> itemFlowsToAdd = new ArrayList<>();
-        currentFile.getFileItemsList().stream().map((fileItem) -> {
+        for (final FileItem fileItem : currentFile.getFileItemsList()) {
             final ItemFlow itemFlow = new ItemFlow();
+
             fileItem.setDraft(true);
             itemFlow.setFileItem(fileItem);
-            return itemFlow;
-        }).map((itemFlow) -> {
+
             itemFlow.setCreated(null);
-            return itemFlow;
-        }).map((itemFlow) -> {
             itemFlow.setFlow(selectedFlow);
-            return itemFlow;
-        }).map((itemFlow) -> {
             itemFlow.setSender(getLoggedUser());
-            return itemFlow;
-        }).map((itemFlow) -> {
             itemFlow.setSent(Boolean.FALSE);
-            return itemFlow;
-        }).map((itemFlow) -> {
             itemFlow.setUnread(Boolean.TRUE);
-            return itemFlow;
-        }).map((itemFlow) -> {
             itemFlow.setReceived(AperakType.APERAK_D.getCharCode());
-            return itemFlow;
-        }).forEachOrdered((itemFlow) -> {
             itemFlowsToAdd.add(itemFlow);
-        });
-        //		if (FlowCode.FL_AP_155.name().equals(selectedFlow.getCode()))
-        //		{
-        //			commonService.takeDacisionAndSavePayment(itemFlowsToAdd, paymentData);
-        //		}
-        //		else
-        //		{
+
+        }
+        //        if (FlowCode.FL_AP_155.name().equals(selectedFlow.getCode()))
+        //        {
+        //            commonService.takeDacisionAndSavePayment(itemFlowsToAdd, paymentData);
+        //        }
+        //        else
+        //        {
         itemFlowService.takeDecision(itemFlowsToAdd, flowDatas);
-        //		}
+        //        }
 
         if (assignedUserForCotation != null) {
             currentFile.setAssignedUser(assignedUserForCotation);
@@ -2186,16 +2173,18 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             List<FileAdministration> fadList = currentFile.getFileAdministrationsList();
             if (fadList != null && !fadList.isEmpty()) {
                 List<Administration> candidates = new ArrayList<>();
-                fadList.forEach((fa) -> {
+                for (FileAdministration fa : fadList) {
                     candidates.add(fa.getAdministration());
-                });
+                }
                 List<Bureau> offices = SiatUtils.findCombinedBureausByAdministrationList(Arrays.asList(assignedUserForCotation.getAdministration()));
                 List<Bureau> candidatesOffices = SiatUtils.findCombinedBureausByAdministrationList(candidates);
                 //remove offices behind the assigned user which are not part on the candidates offiches behind the currentFile
                 List<Bureau> filteredOffices = new ArrayList<>();
-                offices.stream().filter((o) -> (candidatesOffices.contains(o))).forEachOrdered((o) -> {
-                    filteredOffices.add(o);
-                });
+                for (Bureau o : offices) {
+                    if (candidatesOffices.contains(o)) {
+                        filteredOffices.add(o);
+                    }
+                }
                 if (!filteredOffices.isEmpty() && !filteredOffices.contains(currentFile.getBureau())) {
                     //we suppose that the file has been coted to a user outside of the current office of the file, so it's an reassignment
                     currentFile.setBureau(filteredOffices.get(0));
@@ -2220,9 +2209,9 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
         userListToAffectedFileCotation = userAuthorityFileTypeService.findUserByFileTypeAndStepAuthorities(
                 currentFile.getFileType(), selectedFlow.getToStep(), currentFile, getLoggedUser());
         Set<User> users = new HashSet<>();
-        userListToAffectedFileCotation.forEach((user) -> {
+        for (User user : userListToAffectedFileCotation) {
             users.add(user);
-        });
+        }
         userListToAffectedFileCotation = new ArrayList<>(users);
 
         for (final DataType dataType : selectedFlow.getDataTypeList()) {
@@ -2397,7 +2386,8 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                                     final List<ItemFlowData> itemFlowDataList = decisionFlow.getItemFlowsDataList();
                                     for (final ItemFlowData ifd : itemFlowDataList) {
                                         if (ifd.getDataType().getLabel().equalsIgnoreCase("Date validité")) {
-                                            final FileField dateValidityField = fileFieldService.findFileFieldByCodeAndFileType(VALIDITY_DATE_FIELD_NAME, currentFile.getFileType().getCode());
+                                            final FileField dateValidityField = fileFieldService.findFileFieldByCodeAndFileType(
+                                                    VALIDITY_DATE_FIELD_NAME, currentFile.getFileType().getCode());
                                             if (dateValidityField != null) {
                                                 FileFieldValue dateValidityFieldValue = fileFieldValueService.findValueByFileFieldAndFile(dateValidityField.getCode(), currentFile);
                                                 if (dateValidityFieldValue != null) {
@@ -2459,9 +2449,11 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
 
                                 if (fileTypeFlowReportsList != null) {
 
-                                    fileTypeFlowReportsList.stream().filter((fileTypeFlowReport) -> (currentFile.getFileType().equals(fileTypeFlowReport.getFileType()))).forEachOrdered((fileTypeFlowReport) -> {
-                                        fileTypeFlowReports.add(fileTypeFlowReport);
-                                    });
+                                    for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
+                                        if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType())) {
+                                            fileTypeFlowReports.add(fileTypeFlowReport);
+                                        }
+                                    }
                                 }
                                 for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
 
@@ -2677,9 +2669,9 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
      */
     public synchronized void annulerDecisions() {
         final List<Long> fileItemListIds = new ArrayList<>();
-        currentFile.getFileItemsList().forEach((fileItem) -> {
+        for (final FileItem fileItem : currentFile.getFileItemsList()) {
             fileItemListIds.add(fileItem.getId());
-        });
+        }
         final DefaultTransactionDefinition def = new DefaultTransactionDefinition();
         def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
         final TransactionStatus transactionStatus = transactionManager.getTransaction(def);
@@ -2740,15 +2732,13 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
      * @return the list
      */
     private List<FileItem> disableDraftFromProductInfoItem(final List<FileItem> infoItems) {
-        final List<FileItem> returnedInfoItems = new ArrayList<>();
-        infoItems.stream().map((fileItem) -> {
+        final List<FileItem> returnedInfoItems = new ArrayList<FileItem>();
+        for (final FileItem fileItem : infoItems) {
             if (fileItem.getDraft() != null && fileItem.getDraft()) {
                 fileItem.setDraft(false);
             }
-            return fileItem;
-        }).forEachOrdered((fileItem) -> {
             returnedInfoItems.add(fileItem);
-        });
+        }
         return returnedInfoItems;
     }
 
@@ -2846,7 +2836,7 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
         selectedRecommandation = new Recommandation();
 
         authorityList = fileTypeService.findAuthoritiesByFileType(currentFile.getFileType());
-        authoritiesList = new DualListModel<>(new ArrayList<>(), new ArrayList<>());
+        authoritiesList = new DualListModel<>(new ArrayList<Authority>(), new ArrayList<Authority>());
         authoritiesList.getSource().addAll(authorityList);
     }
 
@@ -2858,7 +2848,7 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
 
         authorityList = fileTypeService.findAuthoritiesByFileType(currentFile.getFileType());
 
-        authoritiesList = new DualListModel<>(new ArrayList<>(), new ArrayList<>());
+        authoritiesList = new DualListModel<>(new ArrayList<Authority>(), new ArrayList<Authority>());
         authoritiesList.getSource().addAll(authorityList);
 
         for (final RecommandationAuthority recAuthority : this.getSelectedRecommandation().getAuthorizedAuthorityList()) {
@@ -2891,18 +2881,17 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                 selectedRecommandation.setSupervisor(this.getLoggedUser());
                 selectedRecommandation.setCreated(java.util.Calendar.getInstance().getTime());
 
-                selectedRecommandation.setAuthorizedAuthorityList(new ArrayList<>());
+                selectedRecommandation.setAuthorizedAuthorityList(new ArrayList<RecommandationAuthority>());
 
-                authoritiesList.getTarget().stream().map((authority) -> {
+                for (final Authority authority : authoritiesList.getTarget()) {
                     final RecommandationAuthorityId recommandationAuthorityId = new RecommandationAuthorityId();
                     recommandationAuthorityId.setAuthority(authority);
-                    return recommandationAuthorityId;
-                }).map((recommandationAuthorityId) -> {
                     recommandationAuthorityId.setRecommandation(selectedRecommandation);
-                    return recommandationAuthorityId;
-                }).map((recommandationAuthorityId) -> new RecommandationAuthority(recommandationAuthorityId)).forEachOrdered((recommandationAuthority) -> {
+
+                    final RecommandationAuthority recommandationAuthority = new RecommandationAuthority(recommandationAuthorityId);
+
                     selectedRecommandation.getAuthorizedAuthorityList().add(recommandationAuthority);
-                });
+                }
 
                 recommandationService.save(selectedRecommandation);
 
@@ -2935,20 +2924,16 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             if (selectedRecommandation != null && selectedRecommandation.getValue().trim().length() > 0) {
                 selectedRecommandation.setCreated(java.util.Calendar.getInstance().getTime());
 
-                selectedRecommandation.setAuthorizedAuthorityList(new ArrayList<>());
-                authoritiesList.getTarget().stream().map((authority) -> {
+                selectedRecommandation.setAuthorizedAuthorityList(new ArrayList<RecommandationAuthority>());
+                for (final Authority authority : authoritiesList.getTarget()) {
                     final RecommandationAuthorityId recommandationAuthorityId = new RecommandationAuthorityId();
                     recommandationAuthorityId.setAuthority(authority);
-                    return recommandationAuthorityId;
-                }).map((recommandationAuthorityId) -> {
                     recommandationAuthorityId.setRecommandation(selectedRecommandation);
-                    return recommandationAuthorityId;
-                }).map((recommandationAuthorityId) -> new RecommandationAuthority(recommandationAuthorityId)).map((recommandationAuthority) -> {
+
+                    final RecommandationAuthority recommandationAuthority = new RecommandationAuthority(recommandationAuthorityId);
                     selectedRecommandation.getAuthorizedAuthorityList().add(recommandationAuthority);
-                    return recommandationAuthority;
-                }).forEachOrdered((recommandationAuthority) -> {
                     recommandationAuthorityService.update(recommandationAuthority);
-                });
+                }
 
                 selectedRecommandation.setCreated(java.util.Calendar.getInstance().getTime());
 
@@ -3009,7 +2994,7 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
         selectedRecommandationArticle = new Recommandation();
 
         authorityList = fileTypeService.findAuthoritiesByFileType(currentFile.getFileType());
-        authoritiesList = new DualListModel<>(new ArrayList<>(), new ArrayList<>());
+        authoritiesList = new DualListModel<>(new ArrayList<Authority>(), new ArrayList<Authority>());
         authoritiesList.getSource().addAll(authorityList);
     }
 
@@ -3021,7 +3006,7 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
 
         authorityList = fileTypeService.findAuthoritiesByFileType(currentFile.getFileType());
 
-        authoritiesList = new DualListModel<>(new ArrayList<>(), new ArrayList<>());
+        authoritiesList = new DualListModel<>(new ArrayList<Authority>(), new ArrayList<Authority>());
         authoritiesList.getSource().addAll(authorityList);
 
         for (final RecommandationAuthority recAuthority : this.getSelectedRecommandationArticle().getAuthorizedAuthorityList()) {
@@ -3055,18 +3040,17 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                 selectedRecommandationArticle.setSupervisor(getLoggedUser());
                 selectedRecommandationArticle.setCreated(java.util.Calendar.getInstance().getTime());
 
-                selectedRecommandationArticle.setAuthorizedAuthorityList(new ArrayList<>());
+                selectedRecommandationArticle.setAuthorizedAuthorityList(new ArrayList<RecommandationAuthority>());
 
-                authoritiesList.getTarget().stream().map((authority) -> {
+                for (final Authority authority : authoritiesList.getTarget()) {
                     final RecommandationAuthorityId recommandationAuthorityId = new RecommandationAuthorityId();
                     recommandationAuthorityId.setAuthority(authority);
-                    return recommandationAuthorityId;
-                }).map((recommandationAuthorityId) -> {
                     recommandationAuthorityId.setRecommandation(selectedRecommandationArticle);
-                    return recommandationAuthorityId;
-                }).map((recommandationAuthorityId) -> new RecommandationAuthority(recommandationAuthorityId)).forEachOrdered((recommandationAuthority) -> {
+
+                    final RecommandationAuthority recommandationAuthority = new RecommandationAuthority(recommandationAuthorityId);
+
                     selectedRecommandationArticle.getAuthorizedAuthorityList().add(recommandationAuthority);
-                });
+                }
 
                 recommandationService.save(selectedRecommandationArticle);
 
@@ -3172,9 +3156,11 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             } else {
                 assignedUser = currentFile.getAssignedUser();
             }
-            final boolean assignedUserAuthorized = assignedUser == null || (assignedUser != null && assignedUser.getId().equals(getLoggedUser().getId()));
+            final boolean assignedUserAuthorized = assignedUser == null
+                    || (assignedUser != null && assignedUser.getId().equals(getLoggedUser().getId()));
             if (authorityTypes.contains(stepAut.getRole()) && assignedUserAuthorized) {
                 authorizeUser = Boolean.TRUE;
+
                 break;
             }
         }
@@ -3209,15 +3195,17 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             fieldGroupsItems = fieldGroupService.findAllByFileType(currentFile.getFileType(), "02");
         }
         fileItemFieldGroupDtos = new ArrayList<>();
-        fieldGroupsItems.forEach((fieldGroupItem) -> {
+        for (final FieldGroup fieldGroupItem : fieldGroupsItems) {
             final FieldGroupDto<FileItemFieldValue> fileItemFieldGroupDto = new FieldGroupDto<>();
             fileItemFieldGroupDto.setLabelFr(fieldGroupItem.getLabelFr());
             fileItemFieldGroupDto.setLabelEn(fieldGroupItem.getLabelEn());
             final List<FileItemFieldValue> listFileItemFieldValues = new ArrayList<>();
-            fileItemFieldValues.stream().filter((fileItemFieldValue) -> (fileItemFieldValue.getFileItemField().getGroup() != null
-                    && fieldGroupItem.getId().equals(fileItemFieldValue.getFileItemField().getGroup().getId()))).forEachOrdered((fileItemFieldValue) -> {
-                listFileItemFieldValues.add(fileItemFieldValue);
-            });
+            for (final FileItemFieldValue fileItemFieldValue : fileItemFieldValues) {
+                if (fileItemFieldValue.getFileItemField().getGroup() != null
+                        && fieldGroupItem.getId().equals(fileItemFieldValue.getFileItemField().getGroup().getId())) {
+                    listFileItemFieldValues.add(fileItemFieldValue);
+                }
+            }
             fileItemFieldGroupDto.setFieldValues(listFileItemFieldValues);
             if (fieldGroupItem.getId().equals(1L)) {
                 final FileItemFieldValue fileItemFieldValueFob = generateFobValue();
@@ -3235,7 +3223,7 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
             if (!listFileItemFieldValues.isEmpty()) {
                 fileItemFieldGroupDtos.add(fileItemFieldGroupDto);
             }
-        });
+        }
     }
 
     /**
@@ -3366,9 +3354,11 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
         if (StepCode.ST_AP_44.name().equals(selectedFileItem.getStep().getStepCode().name())
                 && CollectionUtils.isNotEmpty(fileTypeFlowReportsList)) {
 
-            fileTypeFlowReportsList.stream().filter((fileTypeFlowReport) -> (currentFile.getFileType().equals(fileTypeFlowReport.getFileType()))).forEachOrdered((_item) -> {
-                generateReportAllowed = true;
-            });
+            for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
+                if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType())) {
+                    generateReportAllowed = true;
+                }
+            }
         }
         if (aiMinmidtFileType) {
             generateReportAllowed = false;
@@ -3387,9 +3377,11 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
         final List<FileTypeFlowReport> fileTypeFlowReportsList = reportingFlow.getFileTypeFlowReportsList();
 
         if (fileTypeFlowReportsList != null && !aiMinmidtFileType) {
-            fileTypeFlowReportsList.stream().filter((fileTypeFlowReport) -> (currentFile.getFileType().equals(fileTypeFlowReport.getFileType()))).forEachOrdered((fileTypeFlowReport) -> {
-                fileTypeFlowReports.add(fileTypeFlowReport);
-            });
+            for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
+                if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType())) {
+                    fileTypeFlowReports.add(fileTypeFlowReport);
+                }
+            }
         }
         for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
 
@@ -5135,9 +5127,9 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
      */
     public void notificationEmail(final File file, final Step step) {
 
-        final Map<String, String> map = new HashMap<>();
+        final Map<String, String> map = new HashMap<String, String>();
 
-        String object;
+        String object = null;
 
         if (file.getAssignedUser() != null) {
             final User usr = file.getAssignedUser();
@@ -5510,9 +5502,11 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
 
                         if (fileTypeFlowReportsList != null) {
 
-                            fileTypeFlowReportsList.stream().filter((fileTypeFlowReport) -> (currentFile.getFileType().equals(fileTypeFlowReport.getFileType()))).forEachOrdered((fileTypeFlowReport) -> {
-                                fileTypeFlowReports.add(fileTypeFlowReport);
-                            });
+                            for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
+                                if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType())) {
+                                    fileTypeFlowReports.add(fileTypeFlowReport);
+                                }
+                            }
                         }
                         for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
                             final String nomClasse = fileTypeFlowReport.getReportClassName();
