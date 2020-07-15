@@ -26,7 +26,7 @@ import org.guce.siat.web.ct.controller.FileItemCctDetailController;
  */
 public final class RelatedFilesUtils {
 
-    private static final List<StepCode> TREATMENT_STEPS_CODES = Arrays.asList(StepCode.ST_CT_04, StepCode.ST_CT_48, StepCode.ST_CT_63);
+    private static final List<StepCode> TREATMENT_STEPS_CODES = Arrays.asList(StepCode.ST_CT_04, StepCode.ST_CT_48, StepCode.ST_CT_63, StepCode.ST_CT_55);
 
     private static final String LABEL = "label";
     private static final String MAIN_REPORT = "mainReport";

@@ -1,0 +1,81 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+    <br />
+
+    <h:form id="doMinaderFilesTrackingSearchForm" class="search-style">
+
+        <p:accordionPanel styleClass="search">
+
+            <p:tab title="#{bundle['appmenu_file_tracking_minader']}" dynamic="true" cache="true">
+
+                <h:panelGrid columns="6">
+                    <p:outputPanel styleClass="search-select">
+                        <h:panelGroup>
+                            <p:outputLabel for="fileType" value="#{bundle['simpleSearch_fileTypeLabel']}" />
+                        </h:panelGroup>
+                        <p:selectCheckboxMenu id="fileType" title="#{bundle['simpleSearch_fileTypeTitle']}" label="#{bundle['simpleSearch_fileTypeTitle']}" value="#{fileTrackingController.minaderFileTrackingFilter.fileTypesList}" filter="true" filterMatchMode="contains">
+                            <f:selectItems value="#{fileTrackingController.fileTypeList}"  var="fileType" itemLabel="#{fileType.labelFr}" itemValue="#{fileType.code}"/>
+                        </p:selectCheckboxMenu>
+                    </p:outputPanel>
+                    <p:outputPanel styleClass="search-select">
+                        <h:panelGroup>
+                            <p:outputLabel for="productType" value="#{bundle['simpleSearch_productTypeLabel']}" />
+                        </h:panelGroup>
+                        <p:selectCheckboxMenu id="productType" title="#{bundle['simpleSearch_productTypeTitle']}" label="#{bundle['simpleSearch_productTypeTitle']}" value="#{fileTrackingController.minaderFileTrackingFilter.producTypesList}" filter="true" filterMatchMode="contains">
+                            <f:selectItems value="#{fileTrackingController.productTypesMap.entrySet()}" var="entry" itemValue="#{entry.key}" itemLabel="#{entry.value}" />
+                        </p:selectCheckboxMenu>
+                    </p:outputPanel>
+                    <p:outputPanel styleClass="search-select">
+                        <h:outputLabel for="eForceNumber" value="#{bundle['FileLabel_eforce_num']}" />
+                        <p:inputText id="eForceNumber" value="#{fileTrackingController.minaderFileTrackingFilter.requestNumber}" />
+                    </p:outputPanel>
+                    <p:outputPanel rendered="false" styleClass="search-select">
+                        <h:outputLabel for="num_eguce" value="#{bundle['FileLabel_num_eguce']}" />
+                        <p:inputText id="num_eguce" value="#{fileTrackingController.minaderFileTrackingFilter.fileNumber}" />
+                    </p:outputPanel>
+
+                    <p:outputPanel styleClass="search-select" rendered="#{false and request.isUserInRole('SUPER')}">
+                        <h:outputLabel value="#{bundle['Office']}" for="office" />
+                        <p:selectCheckboxMenu id="office" label="Office" value="#{fileTrackingController.minaderFileTrackingFilter.officesList}" >
+                            <f:selectItems value="#{fileTrackingController.bureauList}" var="bureau" itemLabel="#{bureau.labelFr}" itemValue="#{bureau.id}" />
+                        </p:selectCheckboxMenu>
+                    </p:outputPanel>
+                </h:panelGrid>
+
+                <h:panelGrid columns="10" cellpadding="10">
+                    <h:outputLabel value="#{bundle['createDate']}" />
+                    <h:panelGroup>
+                        <p:outputLabel for="fromDate" value="#{bundle['statisticsOnBusinessSearch_fromDateLabel']}" />
+                        <p:calendar navigator="true" id="fromDate" value="#{fileTrackingController.minaderFileTrackingFilter.fromDate}"
+                                    title="#{bundle['statisticsOnBusinessSearch_fromDateTitre']}" showOn="button" pattern="dd/MM/yyyy" readonlyInput="true">
+                            <p:ajax event="dateSelect" update="toDate" />
+                        </p:calendar>
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <p:outputLabel for="toDate" value="#{bundle['statisticsOnBusinessSearch_toDateLabel']}" />
+                        <p:calendar navigator="true" id="toDate" value="#{fileTrackingController.minaderFileTrackingFilter.toDate}"
+                                    title="#{bundle['statisticsOnBusinessSearch_toDateTitre']}" showOn="button" pattern="dd/MM/yyyy"
+                                    mindate="#{fileTrackingController.minaderFileTrackingFilter.fromDate}" readonlyInput="true">
+                        </p:calendar>
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" icon="ui-icon-refresh"
+                                         title="#{bundle['ButtonReset']}" action="#{fileTrackingController.init()}"
+                                         oncomplete="PF('datalistTable').filter();" update=":fileTrackingListForm:datalist doMinaderFilesTrackingSearchForm" />
+
+                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" icon="ui-icon-search"
+                                         title="#{bundle['ButtonSearch']}" action="#{fileTrackingController.doMinaderFilesTrackingFilter()}"
+                                         oncomplete="PF('datalistTable').filter();" update=":fileTrackingListForm:datalist doMinaderFilesTrackingSearchForm :growl" />
+                    </h:panelGroup>
+
+                </h:panelGrid>
+
+            </p:tab>
+
+        </p:accordionPanel>
+
+    </h:form>
+</ui:composition>

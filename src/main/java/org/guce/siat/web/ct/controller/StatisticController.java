@@ -321,7 +321,7 @@ public class StatisticController extends AbstractController<FileItem> {
     @PostConstruct
     public void init() {
         if (LOG.isDebugEnabled()) {
-            LOG.debug(Constants.INIT_LOG_INFO_MESSAGE, StatisticController.class.getName());
+            LOG.debug(Constants.INIT_LOG_INFO_MESSAGE, getClass().getName());
         }
         decisionType.add(FinalDecisionType.CCT.getType());
         decisionType.add(FinalDecisionType.AP.getType());
@@ -897,7 +897,7 @@ public class StatisticController extends AbstractController<FileItem> {
 
         final List<Object[]> objectList = commonService.getExportNshDestinationSender(cteFilter, loggedUser);
         exportNshDestinationDataList = new ArrayList<>();
-        objectList.stream().map((object) -> {
+        for (Object[] object : objectList) {
             ExportNshDestinationData exportNshDestinationData = new ExportNshDestinationData();
             if (object[0] != null) {
                 exportNshDestinationData.setNsh(object[0].toString());
@@ -947,10 +947,8 @@ public class StatisticController extends AbstractController<FileItem> {
             if (object[15] != null) {
                 exportNshDestinationData.setExporterName(object[15].toString());
             }
-            return exportNshDestinationData;
-        }).forEachOrdered((exportNshDestinationData) -> {
             exportNshDestinationDataList.add(exportNshDestinationData);
-        });
+        }
     }
 
     public void doExportNshDestinationFilter() {
@@ -967,7 +965,7 @@ public class StatisticController extends AbstractController<FileItem> {
 
         final List<Object[]> objectList = commonService.getExportNshDestination(cteFilter, loggedUser);
         exportNshDestinationDataList = new ArrayList<>();
-        objectList.stream().map((object) -> {
+        for (Object[] object : objectList) {
             ExportNshDestinationData exportNshDestinationData = new ExportNshDestinationData();
             if (object[0] != null) {
                 exportNshDestinationData.setNsh(object[0].toString());
@@ -1011,10 +1009,8 @@ public class StatisticController extends AbstractController<FileItem> {
             if (object[13] != null) {
                 exportNshDestinationData.setOfficeLabel(object[13].toString());
             }
-            return exportNshDestinationData;
-        }).forEachOrdered((exportNshDestinationData) -> {
             exportNshDestinationDataList.add(exportNshDestinationData);
-        });
+        }
     }
 
     public void doDelayListingStakeholderFilter() {
@@ -1039,7 +1035,7 @@ public class StatisticController extends AbstractController<FileItem> {
 
         final List<Object[]> objectList = commonService.getDelayListingStakeholder(cteFilter, loggedUser);
         delayListingStakeholderDataList = new ArrayList<>();
-        objectList.stream().map((object) -> {
+        for (Object[] object : objectList) {
             DelayListingStakeholderData delayListingData = new DelayListingStakeholderData();
             if (object[0] != null) {
                 delayListingData.setSubfileNumber(object[0].toString());
@@ -1101,10 +1097,8 @@ public class StatisticController extends AbstractController<FileItem> {
             if (object[19] != null) {
                 delayListingData.setCiCount(object[19].toString());
             }
-            return delayListingData;
-        }).forEachOrdered((delayListingData) -> {
             delayListingStakeholderDataList.add(delayListingData);
-        });
+        }
     }
 
     public void doGlobalDelayListingFilter() {
@@ -1128,7 +1122,7 @@ public class StatisticController extends AbstractController<FileItem> {
         }
         final List<Object[]> objectList = commonService.getGlobalDelayListing(cteFilter, loggedUser);
         globalDelayListingDataList = new ArrayList<>();
-        objectList.forEach((object) -> {
+        for (Object[] object : objectList) {
             try {
                 GlobalDelayListingData globalDelay = new GlobalDelayListingData();
                 if (object[1] != null) {
@@ -1175,7 +1169,7 @@ public class StatisticController extends AbstractController<FileItem> {
             } catch (ParseException ex) {
                 java.util.logging.Logger.getLogger(StatisticController.class.getName()).log(Level.SEVERE, null, ex);
             }
-        });
+        }
     }
 
     public static void main(String[] args) {
@@ -1239,7 +1233,7 @@ public class StatisticController extends AbstractController<FileItem> {
         }
         final List<Object[]> objectList = commonService.getActivitiesReport(cteFilter, getLoggedUser());
         activityReportDataList = new ArrayList<>();
-        objectList.stream().map((object) -> {
+        for (Object[] object : objectList) {
             ActivityReportData data = new ActivityReportData();
             data.setProcessName(object[1].toString());
             data.setOfficeCode(object[2].toString());
@@ -1250,10 +1244,9 @@ public class StatisticController extends AbstractController<FileItem> {
             data.setFileRejectedCount(object[7].toString());
             data.setFileReceivedRejectedCount(object[8].toString());
             data.setFilePendingCount(object[9].toString());
-            return data;
-        }).forEachOrdered((data) -> {
+
             activityReportDataList.add(data);
-        });
+        }
     }
 
     /**
@@ -1268,7 +1261,7 @@ public class StatisticController extends AbstractController<FileItem> {
 
         final List<Object[]> objectsList = commonService.serviceItemProductsQuantitiesByFilter(filter, getLoggedUser(), getCurrentAdministration());
         serviceItemDtoByProductsQuantitiesList = new ArrayList<>();
-        objectsList.stream().map((objects) -> {
+        for (Object[] objects : objectsList) {
             final ServiceItemDto serviceItemDto = new ServiceItemDto();
             serviceItemDto.setSsnh(objects[0].toString());
             serviceItemDto.setLabel(objects[1].toString());
@@ -1278,10 +1271,9 @@ public class StatisticController extends AbstractController<FileItem> {
             if (objects[3] != null) {
                 serviceItemDto.setSumValeurFob(objects[3].toString());
             }
-            return serviceItemDto;
-        }).forEachOrdered((serviceItemDto) -> {
+
             serviceItemDtoByProductsQuantitiesList.add(serviceItemDto);
-        });
+        }
     }
 
     /**
@@ -1296,7 +1288,7 @@ public class StatisticController extends AbstractController<FileItem> {
 
         final List<Object[]> objectsList = commonService.serviceItemProductsQuantitiesByDrdByFilter(filter, Arrays.asList(FlowCode.FL_CT_14.name(), FlowCode.FL_CT_74.name()), getLoggedUser(), getCurrentAdministration());
         serviceItemDtoByProductsQuantitiesByDrdList = new ArrayList<>();
-        objectsList.stream().map((objects) -> {
+        for (Object[] objects : objectsList) {
             final ServiceItemDto serviceItemDto = new ServiceItemDto();
             serviceItemDto.setSsnh(objects[0].toString());
             serviceItemDto.setLabel(objects[1].toString());
@@ -1306,10 +1298,9 @@ public class StatisticController extends AbstractController<FileItem> {
             if (objects[3] != null) {
                 serviceItemDto.setSumValeurFob(objects[3].toString());
             }
-            return serviceItemDto;
-        }).forEachOrdered((serviceItemDto) -> {
+
             serviceItemDtoByProductsQuantitiesByDrdList.add(serviceItemDto);
-        });
+        }
     }
 
     /**
@@ -1958,9 +1949,11 @@ public class StatisticController extends AbstractController<FileItem> {
      */
     public void execute() {
         final List<FileItem> fileItems = new ArrayList<>();
-        fileItemsSauv.stream().filter((fileItem) -> (type.equals(fileItem.getDecisionType().getType()))).forEachOrdered((fileItem) -> {
-            fileItems.add(fileItem);
-        });
+        for (final FileItem fileItem : fileItemsSauv) {
+            if (type.equals(fileItem.getDecisionType().getType())) {
+                fileItems.add(fileItem);
+            }
+        }
 
         fileItemByDecisionsDelivreesList = fileItems;
     }
