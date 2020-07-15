@@ -222,11 +222,8 @@ public class FileTrackingController extends AbstractController<File> {
          */
         Calendar calendar = Calendar.getInstance();
 
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
         minaderFileTrackingFilter.setFromDate(calendar.getTime());
-
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-        minaderFileTrackingFilter.setToDate(calendar.getTime());
     }
 
     public boolean isMinader() {

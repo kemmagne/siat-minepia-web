@@ -23,8 +23,6 @@ CREATE OR REPLACE FORCE VIEW "SIAT_CT"."MINADER_FILES" (
     "ASSIGNED_USER_ID",
     "BUREAU_ID",
     "CLIENT_ID",
-    "NUM_CONTRIBUABLE",
-    "COMPANY_NAME",
     "COUNTRY_OF_DESTINATION",
     "COUNTRY_OF_ORIGIN",
     "COUNTRY_OF_PROVENANCE",
@@ -42,8 +40,6 @@ CREATE OR REPLACE FORCE VIEW "SIAT_CT"."MINADER_FILES" (
     "DATE_REJET",
     "CODE_BUREAU",
     "NOM_BUREAU",
-    "BUREAU_NAME_FR",
-    "BUREAU_NAME_EN",
     "FILE_TYPE_NAME",
     "TRANSITAIRE_NOM"
 ) AS
@@ -64,10 +60,8 @@ CREATE OR REPLACE FORCE VIEW "SIAT_CT"."MINADER_FILES" (
         f."REFERENCE_GUCE_PAIEMENT",
         f."REFERENCE_SIAT",
         f."ASSIGNED_USER_ID",
-        f."BUREAU_ID",
+        f."BUREAU_ID" "ID_BUREAU",
         f."CLIENT_ID",
-        C.NUM_CONTRIBUABLE,
-        C.COMPANY_NAME,
         f."COUNTRY_OF_DESTINATION",
         f."COUNTRY_OF_ORIGIN",
         f."COUNTRY_OF_PROVENANCE",
@@ -130,8 +124,6 @@ CREATE OR REPLACE FORCE VIEW "SIAT_CT"."MINADER_FILES" (
         ) date_rejet,
         ent.code code_bureau,
         adm.label_fr nom_bureau,
-        adm.label_fr BUREAU_NAME_FR,
-        adm.label_en BUREAU_NAME_EN,
         ft.label_fr file_type_name,
         (
             SELECT
@@ -147,13 +139,10 @@ CREATE OR REPLACE FORCE VIEW "SIAT_CT"."MINADER_FILES" (
     FROM
         files f
         JOIN file_type ft ON ft.id = f.file_type_id and ft.code IN ('CCT_CT_E_PVI','CCT_CT_E_PVE','CCT_CT_E_FSTP','CCT_CT_E_ATP','CCT_CT_E')
-        JOIN COMPANY            C ON C.ID = F.CLIENT_ID
-        JOIN entity ent ON ent.id = f.bureau_id
-        JOIN administration adm ON adm.id = f.bureau_id
+        LEFT JOIN entity ent ON ent.id = f.bureau_id
+        LEFT JOIN administration adm ON adm.id = f.bureau_id
     WHERE
-        f."NUMERO_DEMANDE" IS NOT NULL
-    ORDER BY
-        f."ID" DESC;
+        f."BUREAU_ID" IS NOT NULL;
 
 -- MINADER_FILE_ITEM
 CREATE OR REPLACE FORCE VIEW "SIAT_CT"."MINADER_FILE_ITEM" (
@@ -253,3 +242,47 @@ CREATE OR REPLACE FORCE VIEW "SIAT_CT"."MINADER_FILE_ITEM" (
         JOIN files f ON fi.file_id = f.id AND f."BUREAU_ID" IS NOT NULL AND f.file_type_id IN (
             SELECT ID FROM FILE_TYPE WHERE CODE IN ('CCT_CT_E_PVI','CCT_CT_E_PVE','CCT_CT_E_FSTP','CCT_CT_E_ATP','CCT_CT_E')
         );
+
+-- MINADER_FILES_TRACKING
+CREATE OR REPLACE FORCE VIEW SIAT_CT.MINADER_FILES_TRACKING AS
+    SELECT
+        F.NUMERO_DEMANDE,
+        F.NUMERO_DOSSIER,
+        FT.CODE       FILE_TYPE_CODE,
+        FT.LABEL_FR   FILE_TYPE_NAME_FR,
+        FT.LABEL_EN   FILE_TYPE_NAME_EN,
+        F.CREATED_DATE,
+        C.NUM_CONTRIBUABLE,
+        C.COMPANY_NAME,
+        TPC.VALUE     "TYPE_PRODUIT_CODE",
+        TPN.VALUE     "TYPE_PRODUIT_NOM",
+        E.ID          BUREAU_ID,
+        E.CODE        BUREAU_CODE,
+        AD.LABEL_FR   BUREAU_NAME_FR,
+        AD.LABEL_EN   BUREAU_NAME_EN
+    FROM
+        FILES              F
+        JOIN FILE_TYPE          FT ON FT.ID = F.FILE_TYPE_ID AND FT.CODE IN (
+            'CCT_CT_E_PVI',
+            'CCT_CT_E_PVE',
+            'CCT_CT_E_FSTP',
+            'CCT_CT_E_ATP',
+            'CCT_CT_E'
+        )
+        JOIN COMPANY            C ON C.ID = F.CLIENT_ID
+        JOIN FILE_FIELD         TPCFF ON TPCFF.FILE_TYPE_ID = FT.ID
+                                 AND TPCFF.CODE = 'TYPE_PRODUIT_CODE'
+        JOIN FILE_FIELD_VALUE   TPC ON TPC.FILE_FIELD_ID = TPCFF.ID
+                                     AND TPC.FILE_ID = F.ID
+        JOIN FILE_FIELD         TPNFF ON TPNFF.FILE_TYPE_ID = FT.ID
+                                 AND TPNFF.CODE = 'TYPE_PRODUIT_NOM'
+        JOIN FILE_FIELD_VALUE   TPN ON TPN.FILE_FIELD_ID = TPNFF.ID
+                                     AND TPN.FILE_ID = F.ID
+        JOIN ENTITY             E ON E.ID = F.BUREAU_ID
+        JOIN ADMINISTRATION     AD ON AD.ID = F.BUREAU_ID
+    WHERE
+        F.BUREAU_ID IS NOT NULL
+        AND F.NUMERO_DEMANDE IS NOT NULL
+    ORDER BY
+        F.ID DESC;
+
