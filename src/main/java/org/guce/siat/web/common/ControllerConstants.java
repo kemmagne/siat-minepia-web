@@ -361,6 +361,8 @@ public interface ControllerConstants {
              */
             String SEARCH_STATISTICS_ON_BUSINESS = "/pages/fo/statistic/statisticsOnBusiness/index.xhtml";
 
+            String FILES_TRACKING = "/pages/fo/fileTracking/index.xhtml";
+
             /**
              * The Payment_ index_ page.
              */

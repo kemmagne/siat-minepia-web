@@ -5,6 +5,7 @@ import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -119,6 +120,18 @@ public class EnumTest {
     private static void generateUpdateDb(final String login, final String password) {
         String q = "UPDATE USERS SET FIRST_LOGIN = 0, PASSWORD='" + ENCODER.encodePassword(password, login) + "' WHERE LOGIN='" + login + "';";
         System.out.println(q);
+    }
+
+//    @Ignore
+    @Test
+    public void testCalendar() {
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        System.out.println(calendar.getTime());
+
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+        System.out.println(calendar.getTime());
     }
 
     private class TestObject {
