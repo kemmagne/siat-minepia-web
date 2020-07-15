@@ -180,13 +180,13 @@ CREATE OR REPLACE FORCE VIEW "SIAT_CT"."MINADER_FILE_ITEM" (
     SELECT
         fi."ID",
         fi."DRAFT",
-        TO_NUMBER(fi."VALEUR_FOB") VALEUR_FOB,
+        TO_NUMBER2(fi."VALEUR_FOB") VALEUR_FOB,
         fi."FICTIVE",
         fi."LINE_NUMBER",
         fi."NUM_EBMS_MSG",
         fi."NUM_EBMS_MSG_ANNULATION",
         fi."NUM_EBMS_MSG_PAIEMENT",
-        TO_NUMBER(fi."QUANTITY") QUANTITY,
+        TO_NUMBER2(fi."QUANTITY") QUANTITY,
         fi."FILE_ID",
         fi."NSH_ID",
         fi."STEP_ID",
@@ -194,7 +194,7 @@ CREATE OR REPLACE FORCE VIEW "SIAT_CT"."MINADER_FILE_ITEM" (
         n.goods_item_desc,
         (
             SELECT
-                TO_NUMBER(MAX(fifv.value))
+                TO_NUMBER2(MAX(fifv.value))
             FROM
                 file_item_field_value fifv
                 JOIN file_item_field fif ON fif.id = fifv.file_item_field_id
@@ -205,7 +205,7 @@ CREATE OR REPLACE FORCE VIEW "SIAT_CT"."MINADER_FILE_ITEM" (
         ) nombre_grumes,
         (
             SELECT
-                TO_NUMBER(MAX(fifv.value))
+                TO_NUMBER2(MAX(fifv.value))
             FROM
                 file_item_field_value fifv
                 JOIN file_item_field fif ON fif.id = fifv.file_item_field_id
@@ -216,7 +216,7 @@ CREATE OR REPLACE FORCE VIEW "SIAT_CT"."MINADER_FILE_ITEM" (
         ) nombre_sacs,
         (
             SELECT
-                TO_NUMBER(MAX(fifv.value))
+                TO_NUMBER2(MAX(fifv.value))
             FROM
                 file_item_field_value fifv
                 JOIN file_item_field fif ON fif.id = fifv.file_item_field_id
@@ -227,7 +227,7 @@ CREATE OR REPLACE FORCE VIEW "SIAT_CT"."MINADER_FILE_ITEM" (
         ) volume,
         (
             SELECT
-                TO_NUMBER(MAX(fifv.value))
+                TO_NUMBER2(MAX(fifv.value))
             FROM
                 file_item_field_value fifv
                 JOIN file_item_field fif ON fif.id = fifv.file_item_field_id
@@ -238,7 +238,7 @@ CREATE OR REPLACE FORCE VIEW "SIAT_CT"."MINADER_FILE_ITEM" (
         ) poids_brut,
         (
             SELECT
-                TO_NUMBER(MAX(fifv.value))
+                TO_NUMBER2(MAX(fifv.value))
             FROM
                 file_item_field_value fifv
                 JOIN file_item_field fif ON fif.id = fifv.file_item_field_id
