@@ -102,7 +102,7 @@ public class EnumTest {
         System.out.println(objects);
     }
 
-    @Ignore
+//    @Ignore
     @Test
     public void test01() {
 
@@ -112,7 +112,8 @@ public class EnumTest {
         final List<String> logins1 = Arrays.asList("CCIMA", "EKATA", "MOMONOUNI", "GOUROUMAHA", "AYABI", "NGANOGO",
                 "PERABI", "NZOKOA", "SENABIONO", "EMPOAGHAM", "KENFACKJP", "NIMAYA", "KAMDEM", "ZEBAZE",
                 "AKONO", "TONYE", "JAMMULUMI", "KONGUEP", "FOKOUEN", "IJANGFONGOH", "TOUANDOP", "TAZOJACOB", "MEBIAME");
-        for (String login : logins) {
+//        for (String login : logins) {
+        for (String login : Arrays.asList("PPPDLAP-CB")) {
             generateUpdateDb(login, "root");
         }
     }
@@ -127,7 +128,7 @@ public class EnumTest {
     public void testCalendar() {
         Calendar calendar = Calendar.getInstance();
 
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        calendar.set(Calendar.DAY_OF_MONTH, Calendar.MONDAY);
         System.out.println(calendar.getTime());
 
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);

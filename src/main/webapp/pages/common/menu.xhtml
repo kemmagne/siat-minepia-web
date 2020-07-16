@@ -267,10 +267,10 @@
                 </p:submenu>
 
                 <p:submenu id="filesTrackingMenu" label="#{bundle['appmenu_file_tracking']}" styleClass="staticMenuItem"
-                           rendered="#{request.isUserInRole('SUPER') or request.isUserInRole('ADMIN_MIN')}">
+                           rendered="#{request.isUserInRole('SUPER') or request.isUserInRole('STAT')}">
                     <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="filesTrackingMenuItem"
                                 value="#{bundle['appmenu_file_tracking_minader']}" actionListener="#{fileTrackingController.goToFileTrackingPage}"
-                                rendered="#{request.isUserInRole('SUPER') and fileTrackingController.minader}" />
+                                rendered="#{(request.isUserInRole('SUPER') or request.isUserInRole('STAT')) and fileTrackingController.minader}" />
                 </p:submenu>
 
                 <p:submenu rendered="#{globalBean.currentMinistry.id eq 221 and !request.isUserInRole('ADMIN_MIN')}" id="foreignTradeMonitoringMenuItem"

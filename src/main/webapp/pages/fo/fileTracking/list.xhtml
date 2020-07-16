@@ -8,6 +8,18 @@
 
         <h:form id="fileTrackingListForm">
 
+            <h:panelGrid columns="2">
+                <h:commandLink action="#{exporter.exportPDF(table, 'SUIVI_DES_DOSSIERS')}">
+                    <h:outputText styleClass="sprite sprite-pdf" />
+                </h:commandLink>
+
+                <h:commandLink>
+                    <h:graphicImage styleClass="sprite sprite-pdf" library="img" name="excel.png" style="width:34px;height:34px;display:block;top:15px;right:52px;position:absolute;" />
+                    <p:dataExporter type="xls" target="datalist" fileName="SUIVI_DES_DOSSIERS" />
+                </h:commandLink>
+            </h:panelGrid>
+            <br />
+
             <p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable" value="#{fileTrackingController.fileTrackingsList}"
                          filteredValue="" var="fileTracking" rows="10" paginator="true" rowsPerPageTemplate="10,20,30"
                          emptyMessage="#{bundle['AucuneResultat']}"
@@ -31,6 +43,14 @@
                         <h:outputText value="#{bundle['subfileNumber']}" title="#{bundle['subfileNumber']}" />
                     </f:facet>
                     <h:outputText value="#{fileTracking.fileNumber}" />
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['FileLabel_date_dossier']}" title="#{bundle['FileLabel_date_dossier']}" />
+                    </f:facet>
+                    <h:outputText value="#{fileTracking.creationDate}">
+                        <f:convertDateTime pattern="#{bundle['DateTime_pattern']}" />
+                    </h:outputText>
                 </p:column>
                 <p:column rendered="false">
                     <f:facet name="header">
@@ -69,9 +89,19 @@
                 </p:column>
                 <p:column>
                     <f:facet name="header">
+                        <h:outputText value="#{bundle['AppointmentDate']}" title="#{bundle['AppointmentDate']}" />
+                    </f:facet>
+                    <h:outputText value="#{fileTracking.appointmentDate}">
+                        <f:convertDateTime pattern="#{bundle['DateTime_pattern']}" />
+                    </h:outputText>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
                         <h:outputText value="#{bundle['currenStepUserReceivedDate']}" title="#{bundle['currenStepUserReceivedDate']}" />
                     </f:facet>
-                    <h:outputText value="#{fileTracking.userReceivedDate}"/>
+                    <h:outputText value="#{fileTracking.userReceivedDate}">
+                        <f:convertDateTime pattern="#{bundle['DateTime_pattern']}" />
+                    </h:outputText>
                 </p:column>
                 <p:column>
                     <f:facet name="header">
