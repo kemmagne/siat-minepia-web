@@ -210,6 +210,8 @@ public class FileTrackingController extends AbstractController<File> {
 
     private void initFilter() {
 
+        minaderFileTrackingFilter.setFileState(MinaderFileTrackingFilter.FileStateFilter.IN_PROCESS);
+
         minaderFileTrackingFilter.setFileTypesList(new ArrayList<String>());
         for (FileType fileType : getFileTypeList()) {
             minaderFileTrackingFilter.getFileTypesList().add(fileType.getCode().name());

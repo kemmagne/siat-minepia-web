@@ -83,13 +83,13 @@
                     <h:outputText value="#{delay.admisibilityDelay}"/>
 
                 </p:column>
-                <p:column>
+                <p:column rendered="false">
                     <f:facet name="header">
                         <h:outputText value="#{bundle['cotationAgent']}" title="#{bundle['cotationAgent']}" />
                     </f:facet>
                     <h:outputText value="#{delay.cotationAgent}"/>
                 </p:column>
-                <p:column>
+                <p:column rendered="false">
                     <f:facet name="header">
                         <h:outputText value="#{bundle['cotationDelay']}" title="#{bundle['cotationDelay']}" />
                     </f:facet>
@@ -142,7 +142,6 @@
                     </f:facet>
                     <h:outputText value="#{delay.ciCount}" />
                 </p:column>
-
 
                 <p:column rendered="false">
                     <f:facet name="header">

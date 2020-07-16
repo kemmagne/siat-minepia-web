@@ -26,6 +26,15 @@
                             <f:selectItems value="#{fileTrackingController.productTypesMap.entrySet()}" var="entry" itemValue="#{entry.key}" itemLabel="#{entry.value}" />
                         </p:selectCheckboxMenu>
                     </p:outputPanel>
+                    <p:outputPanel rendered="true" styleClass="search-select">
+                        <h:panelGrid columns="1">
+                            <p:selectOneRadio value="#{fileTrackingController.minaderFileTrackingFilter.fileState}">
+                                <f:selectItem itemLabel="#{bundle['Tous']}" itemValue="ALL" />
+                                <f:selectItem itemLabel="#{bundle['IN_PROCESS']}" itemValue="IN_PROCESS" />
+                                <f:selectItem itemLabel="#{bundle['CLOSED']}" itemValue="CLOSED" />
+                            </p:selectOneRadio>
+                        </h:panelGrid>
+                    </p:outputPanel>
                     <p:outputPanel styleClass="search-select">
                         <h:outputLabel for="eForceNumber" value="#{bundle['FileLabel_eforce_num']}" />
                         <p:inputText id="eForceNumber" value="#{fileTrackingController.minaderFileTrackingFilter.requestNumber}" />
@@ -62,13 +71,15 @@
                     </h:panelGroup>
 
                     <h:panelGroup>
-                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" icon="ui-icon-refresh"
-                                         title="#{bundle['ButtonReset']}" action="#{fileTrackingController.init()}"
-                                         oncomplete="PF('datalistTable').filter();" update=":fileTrackingListForm:datalist doMinaderFilesTrackingSearchForm" />
-
                         <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" icon="ui-icon-search"
                                          title="#{bundle['ButtonSearch']}" action="#{fileTrackingController.doMinaderFilesTrackingFilter()}"
-                                         oncomplete="PF('datalistTable').filter();" update=":fileTrackingListForm:datalist doMinaderFilesTrackingSearchForm :growl" />
+                                         oncomplete="PF('datalistTable').filter();"
+                                         update=":fileTrackingListForm:datalist doMinaderFilesTrackingSearchForm :growl" />
+
+                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" icon="ui-icon-refresh"
+                                         title="#{bundle['ButtonReset']}" action="#{fileTrackingController.init()}"
+                                         oncomplete="PF('datalistTable').filter();"
+                                         update=":fileTrackingListForm:datalist doMinaderFilesTrackingSearchForm" />
                     </h:panelGroup>
 
                 </h:panelGrid>
