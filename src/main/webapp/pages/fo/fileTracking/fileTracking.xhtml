@@ -77,7 +77,7 @@
                                          update=":fileTrackingListForm:datalist doMinaderFilesTrackingSearchForm :growl" />
 
                         <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" icon="ui-icon-refresh"
-                                         title="#{bundle['ButtonReset']}" action="#{fileTrackingController.init()}"
+                                         title="#{bundle['ButtonReset']}" action="#{fileTrackingController.initDefaultView()}"
                                          oncomplete="PF('datalistTable').filter();"
                                          update=":fileTrackingListForm:datalist doMinaderFilesTrackingSearchForm" />
                     </h:panelGroup>
