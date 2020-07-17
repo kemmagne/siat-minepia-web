@@ -73,9 +73,6 @@ public class FileTrackingController extends AbstractController<File> {
     @PostConstruct
     public void init() {
         minaderFileTrackingFilter = new MinaderFileTrackingFilter();
-        minaderFileTrackingFilter.setLoggedUser(getLoggedUser());
-        initFilter();
-        doMinaderFilesTrackingFilter();
     }
 
     public void doMinaderFilesTrackingFilter() {
@@ -86,6 +83,11 @@ public class FileTrackingController extends AbstractController<File> {
         }
 
         fileTrackingsList = minaderStatisticsService.retrieveFilesForTracking(minaderFileTrackingFilter);
+    }
+
+    public void initDefaultView() {
+        initFilter();
+        doMinaderFilesTrackingFilter();
     }
 
     public String displayDateDifference(Long diff) {
@@ -108,7 +110,7 @@ public class FileTrackingController extends AbstractController<File> {
 
     public void goToFileTrackingPage() {
         try {
-            init();
+            initDefaultView();
             final FacesContext context = FacesContext.getCurrentInstance();
             final ExternalContext extContext = context.getExternalContext();
             final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, ControllerConstants.Pages.FO.FILES_TRACKING));
@@ -209,6 +211,7 @@ public class FileTrackingController extends AbstractController<File> {
     }
 
     private void initFilter() {
+        minaderFileTrackingFilter.setLoggedUser(getLoggedUser());
 
         minaderFileTrackingFilter.setFileState(MinaderFileTrackingFilter.FileStateFilter.IN_PROCESS);
 
@@ -220,9 +223,11 @@ public class FileTrackingController extends AbstractController<File> {
         isLocalOffice();
 
         /**
-         * current week by default
+         * current month by default
          */
         Calendar calendar = Calendar.getInstance();
+
+        minaderFileTrackingFilter.setToDate(calendar.getTime());
 
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         minaderFileTrackingFilter.setFromDate(calendar.getTime());
