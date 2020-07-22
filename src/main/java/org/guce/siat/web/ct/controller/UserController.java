@@ -331,7 +331,7 @@ public class UserController extends AbstractController<User> {
         selected.setFirstLogin(Boolean.TRUE);
         selected.setAttempts(Constants.ZERO);
         selected.setTheme(Theme.BLUE);
-        final String radomPassword = RandomStringUtils.randomAlphanumeric(Constants.SIX);
+        final String radomPassword = RandomStringUtils.randomAlphanumeric(Constants.EIGHT);
         selected.setPassword(radomPassword);
         fillUserAuthorityFileType();
         try {
@@ -396,10 +396,10 @@ public class UserController extends AbstractController<User> {
     public void prepareEdit() {
         userAdministrationHierarchy = new ArrayList<>();
         if (getSelected() != null) {
-            this.setSelected(userService.find(getSelected().getId()));
+            setSelected(userService.find(getSelected().getId()));
         }
         if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ADMIN_ORGANISME.getCode())) {
-            if (null != selected.getPosition()) {
+            if (null != getSelected().getPosition()) {
                 switch (selected.getPosition()) {
                     case SOUS_DIRECTEUR:
                         selectedsSubDepartment = (SubDepartment) selected.getAdministration();
@@ -476,15 +476,29 @@ public class UserController extends AbstractController<User> {
     }
 
     public void resetPassword() {
+
         if (selected != null) {
+
             try {
+
+                selected.setFirstLogin(Boolean.TRUE);
+                selected.setAttempts(Constants.ZERO);
+//                String radomPassword = RandomStringUtils.randomAlphanumeric(Constants.EIGHT);
                 selected.setPassword(DEFAULT_STRING_PASSWORD);
+
                 userService.updateUser(selected);
                 userService.update(selected);
+
+                //send mail params
+//                String subject = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(CREATE_SIAT_ACCOUNT_MAIL_SUBJECT);
+//                String templateFileName = localeFileTemplate(WELCOME_MAIL_BODY, getCurrentLocale().getLanguage());
+//
+//                Map<String, String> map = prepareMap(subject, mailService.getFromValue(), selected, radomPassword, templateFileName);
+//
+//                mailService.sendMail(map);
             } catch (Exception e) {
                 LOG.error(null, e);
-                JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                        "ResetPasswordError"));
+                JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString("ResetPasswordError"));
             }
         }
     }
@@ -1165,6 +1179,11 @@ public class UserController extends AbstractController<User> {
 
     public void setUserAdministrationHierarchy(List<Administration> userAdministrationHierarchy) {
         this.userAdministrationHierarchy = userAdministrationHierarchy;
+    }
+
+    @Override
+    public User getSelected() {
+        return super.getSelected();
     }
 
 }
