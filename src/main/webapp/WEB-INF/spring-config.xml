@@ -90,7 +90,6 @@
     <tx:annotation-driven transaction-manager="transactionManager" />
 
     <!-- MAIL SETTINGS -->
-
     <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
         <property name="velocityProperties">
             <value>
@@ -109,7 +108,7 @@
         <property name="javaMailProperties">
             <props>
                 <prop key="mail.smtp.auth">true</prop>
-                <prop key="mail.smtp.starttls.enable">true</prop>
+                <prop key="mail.smtp.starttls.enable">${mail.smtp.starttls.enable}</prop>
             </props>
         </property>
     </bean>
