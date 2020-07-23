@@ -89,6 +89,18 @@ public final class RelatedFilesUtils {
             }
         }
 
+        if (files.isEmpty()) {
+
+            try {
+                String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, controller.getCurrentLocale()).getString("AucuneResultat");
+                line.put(LABEL, msg);
+            } catch (Exception ex) {
+                line.put(LABEL, "Aucun dossier");
+            }
+
+            return line;
+        }
+
         File file = files.get(0);
         FileItem fileItem = file.getFileItemsList().get(0);
         Step currentStep = fileItem.getStep();

@@ -1970,18 +1970,18 @@ public class StatisticController extends AbstractController<FileItem> {
             //	final FileItem fileItem = fileItemService.find(selected.getId());
             final List<FileTypeCode> cctCodes = Arrays.asList(FileTypeCode.CCT_CT, FileTypeCode.CC_CT, FileTypeCode.CQ_CT);
 
-            if (cctCodes.contains(selected.getFile().getFileType().getCode())) {
+            if (cctCodes.contains(getSelected().getFile().getFileType().getCode())) {
                 setDetailPageUrl(ControllerConstants.Pages.FO.DETAILS_CCT_INDEX_PAGE);
 
                 final FileItemCctDetailController fileItemCctDetailController = getInstanceOfPageFileItemCctDetailController();
-                fileItemCctDetailController.setCurrentFileItem(selected);
+                fileItemCctDetailController.setCurrentFileItem(getSelected());
                 fileItemCctDetailController.setComeFromSearch(Boolean.TRUE);
                 fileItemCctDetailController.init();
             } else {
                 setDetailPageUrl(ControllerConstants.Pages.FO.DETAILS_AP_INDEX_PAGE);
 
                 final FileItemApDetailController fileItemApDetailController = getInstanceOfPageFileItemApDetailController();
-                fileItemApDetailController.setCurrentFile(selected.getFile());
+                fileItemApDetailController.setCurrentFile(getSelected().getFile());
                 fileItemApDetailController.setComeFromSearch(Boolean.TRUE);
                 fileItemApDetailController.init();
             }
@@ -2216,6 +2216,11 @@ public class StatisticController extends AbstractController<FileItem> {
 
     public Map<String, String> getProductTypesMap() {
         return CctExportProductType.getProductTypesMap();
+    }
+
+    @Override
+    public FileItem getSelected() {
+        return super.getSelected();
     }
 
 }
