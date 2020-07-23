@@ -3,15 +3,12 @@ package org.guce.siat.web.ct.controller.util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Transformer;
 import org.guce.siat.common.model.Administration;
 import org.guce.siat.common.model.Bureau;
 import org.guce.siat.common.model.Entity;
@@ -88,18 +85,15 @@ public class Utils {
      * @param items the items
      * @return the sets the
      */
-    public static Set<File> extractFilesFormItems(final Collection<FileItem> items) {
-        @SuppressWarnings("unchecked")
-        final List<File> files = (List<File>) CollectionUtils.collect(items != null ? items : new HashSet<FileItem>(), new Transformer() {
-            @Override
-            public Object transform(final Object input) {
-                return ((FileItem) input).getFile();
-            }
-        });
-        if (!Objects.equals(files, null)) {
-            return new HashSet<>(files);
+    public static Set<File> extractFilesFormItems(Collection<FileItem> items) {
+
+        Set<File> files = new HashSet<>();
+
+        for (FileItem item : items) {
+            files.add(item.getFile());
         }
-        return Collections.emptySet();
+
+        return files;
     }
 
     private Utils() {
