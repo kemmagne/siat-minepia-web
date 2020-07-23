@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -33,6 +34,7 @@ import org.guce.siat.common.model.UserAuthorityFileType;
 import org.guce.siat.common.service.AuthorityService;
 import org.guce.siat.common.service.FileFieldValueService;
 import org.guce.siat.common.service.FileItemService;
+import org.guce.siat.common.service.FileService;
 import org.guce.siat.common.service.FileTypeStepService;
 import org.guce.siat.common.service.ItemFlowService;
 import org.guce.siat.common.service.UserAuthorityFileTypeService;
@@ -54,7 +56,7 @@ import org.slf4j.LoggerFactory;
  */
 @ManagedBean(name = "fileItemCctController")
 @ViewScoped
-public class FileItemCctController extends AbstractController<FileItem> {
+public class FileItemCctController extends AbstractController<File> {
 
     /**
      * The Constant serialVersionUID.
@@ -71,6 +73,12 @@ public class FileItemCctController extends AbstractController<FileItem> {
      */
     @ManagedProperty(value = "#{fileTypeStepService}")
     private FileTypeStepService fileTypeStepService;
+
+    /**
+     * The file item service.
+     */
+    @ManagedProperty(value = "#{fileService}")
+    private FileService fileService;
 
     /**
      * The file item service.
@@ -111,27 +119,27 @@ public class FileItemCctController extends AbstractController<FileItem> {
     /**
      * The unread file items list.
      */
-    private Set<FileItem> unreadFileItemsList;
+    private Set<File> unreadFileItemsList;
 
     /**
      * The draft file items list.
      */
-    private Set<FileItem> draftFileItemsList;
+    private Set<File> draftFileItemsList;
 
     /**
      * The received befor one day file items list.
      */
-    private Set<FileItem> receivedBeforOneDayFileItemsList;
+    private Set<File> receivedBeforOneDayFileItemsList;
 
     /**
      * The received more tow day file items list.
      */
-    private Set<FileItem> receivedMoreTowDayFileItemsList;
+    private Set<File> receivedMoreTowDayFileItemsList;
 
     /**
      * The received beatween tow day file items list.
      */
-    private Set<FileItem> receivedBeatweenTowDayFileItemsList;
+    private Set<File> receivedBeatweenTowDayFileItemsList;
 
     /**
      * The detail page url.
@@ -162,7 +170,7 @@ public class FileItemCctController extends AbstractController<FileItem> {
      * Instantiates a new file item cct controller.
      */
     public FileItemCctController() {
-        super(FileItem.class);
+        super(File.class);
     }
 
     /**
@@ -173,7 +181,7 @@ public class FileItemCctController extends AbstractController<FileItem> {
         if (LOG.isDebugEnabled()) {
             LOG.debug(Constants.INIT_LOG_INFO_MESSAGE, FileItemCctController.class.getName());
         }
-        super.setService(fileItemService);
+        super.setService(fileService);
         super.setPageUrl(ControllerConstants.Pages.FO.DASHBOARD_CCT_INDEX_PAGE);
         dashboardCalculate();
     }
@@ -183,7 +191,9 @@ public class FileItemCctController extends AbstractController<FileItem> {
      */
     public void goToDetailPage() {
 
-        for (final FileItem fileItem : selected.getFile().getFileItemsList()) {
+        List<FileItem> fileItems = getSelected().getFileItemsList();
+
+        for (final FileItem fileItem : fileItems) {
 
             for (final ItemFlow itemFlow : fileItem.getItemFlowsList()) {
                 if (itemFlow.getUnread() && fileItem.getStep().equals(itemFlow.getFlow().getToStep())) {
@@ -198,11 +208,10 @@ public class FileItemCctController extends AbstractController<FileItem> {
             final FacesContext context = FacesContext.getCurrentInstance();
             final ExternalContext extContext = context.getExternalContext();
             final FileItemCctDetailController fileItemCctDetailController = getInstanceOfPageFileItemCctDetailController();
-            fileItemCctDetailController.setCurrentFileItem(fileItemService.find(selected.getId()));
+            fileItemCctDetailController.setCurrentFileItem(fileItems.get(0));
             fileItemCctDetailController.init();
 
-            Set<File> files = extractFilesFormItems(getItems());
-            fileItemCctDetailController.setFilesList(files);
+            fileItemCctDetailController.setFilesList(new HashSet<>(getItems()));
 
             final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, detailPageUrl));
 
@@ -215,11 +224,11 @@ public class FileItemCctController extends AbstractController<FileItem> {
     /**
      * Extract files form items.
      *
-     * @param items the items
+     * @param fileItems the items
      * @return the sets the
      */
-    public static Set<File> extractFilesFormItems(final Collection<FileItem> items) {
-        return Utils.extractFilesFormItems(items);
+    public static Set<File> extractFilesFormItems(Collection<FileItem> fileItems) {
+        return Utils.extractFilesFormItems(fileItems);
     }
 
     /**
@@ -266,16 +275,18 @@ public class FileItemCctController extends AbstractController<FileItem> {
 	 * @see org.guce.siat.web.common.AbstractController#getItems()
      */
     @Override
-    public List<FileItem> getItems() {
+    public List<File> getItems() {
         try {
             if (items == null) {
-                items = Utils.getItems(userAuthorityFileTypeService, fileItemService, getLoggedUser(), listUserAuthorityFileTypes);
+                List<FileItem> fileItems = Utils.getItems(userAuthorityFileTypeService, fileItemService, getLoggedUser(), listUserAuthorityFileTypes);
+
+                items = new ArrayList(extractFilesFormItems(fileItems));
 
                 List<CctExportProductType> userProductTypes = commonService.findProductTypesByUser(getLoggedUser());
-                for (Iterator<FileItem> iterator = items.iterator(); iterator.hasNext();) {
+                for (Iterator<File> iterator = items.iterator(); iterator.hasNext();) {
 
-                    FileItem item = iterator.next();
-                    File file = item.getFile();
+                    File file = iterator.next();
+                    FileItem item = file.getFileItemsList().get(0);
 
                     if (!isPhyto(file) || getLoggedUser().equals(file.getAssignedUser()) || Arrays.asList(StepCode.ST_CT_57, StepCode.ST_CT_60, StepCode.ST_CT_03, StepCode.ST_CT_47, StepCode.ST_CT_53, StepCode.ST_CT_62).contains(item.getStep().getStepCode())) {
                         continue; // si on a assigné le dossier à un utilisateur qui est aussi signataire, il vera produit même s'il ne signe pas les dossiers dont le produit est de ce type
@@ -294,17 +305,13 @@ public class FileItemCctController extends AbstractController<FileItem> {
             }
         } catch (final Exception ex) {
             LOG.error(ex.getMessage(), ex);
-            JsfUtil.addErrorMessage(ex,
-                    ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(PERSISTENCE_ERROR_OCCURED));
+            JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(PERSISTENCE_ERROR_OCCURED));
         }
 
         if (items != null && firstCheck) {
-            Collections.sort(items, new Comparator<FileItem>() {
+            Collections.sort(items, new Comparator<File>() {
                 @Override
-                public int compare(final FileItem fileItem1, final FileItem fileItem2) {
-
-                    final File file1 = fileItem1.getFile();
-                    final File file2 = fileItem2.getFile();
+                public int compare(final File file1, final File file2) {
 
                     Date lastDecisionDate1 = file1.getLastDecisionDate();
                     if (lastDecisionDate1 == null) {
@@ -337,49 +344,49 @@ public class FileItemCctController extends AbstractController<FileItem> {
         items = null;
         getItems();
         final Date systemDate = Calendar.getInstance().getTime();
-        for (final FileItem fileItem : items != null ? items : new ArrayList<FileItem>()) {
+        for (Object obj : items) {
+            File file = (File) obj;
+            FileItem fileItem = file.getFileItemsList().get(0);
             for (final ItemFlow flow : fileItem.getItemFlowsList()) {
                 if (fileItem.getStep().equals(flow.getFlow().getToStep())) {
                     if (flow.getUnread()) {
-                        getUnreadFileItemsList().add(fileItem);
+                        getUnreadFileItemsList().add(file);
                         break;
                     } else {
                         final long diff = systemDate.getTime() - flow.getCreated().getTime();
                         final long diffDays = diff / (DateUtils.CONST_DURATION_OF_DAY);
                         if (diffDays <= Constants.ONE) {
-                            getReceivedBeforOneDayFileItemsList().add(fileItem);
+                            getReceivedBeforOneDayFileItemsList().add(file);
                         } else if (diffDays > Constants.THREE) {
-                            getReceivedMoreTowDayFileItemsList().add(fileItem);
+                            getReceivedMoreTowDayFileItemsList().add(file);
                         } else if (diffDays > Constants.ONE && diffDays <= Constants.THREE) {
-                            getReceivedBeatweenTowDayFileItemsList().add(fileItem);
+                            getReceivedBeatweenTowDayFileItemsList().add(file);
                         }
 
                     }
 
                 }
-                if (!getDraftFileItemsList().contains(fileItem)
+                if (!getDraftFileItemsList().contains(file)
                         && !flow.getSent()
-                        && (fileItem.getStep().equals(flow.getFlow().getToStep()) || fileItem.getStep().equals(
-                        flow.getFlow().getFromStep()))) {
-                    getReceivedBeforOneDayFileItemsList().remove(fileItem);
-                    getReceivedMoreTowDayFileItemsList().remove(fileItem);
-                    getReceivedBeatweenTowDayFileItemsList().remove(fileItem);
-                    getDraftFileItemsList().add(fileItem);
+                        && (fileItem.getStep().equals(flow.getFlow().getToStep()) || fileItem.getStep().equals(flow.getFlow().getFromStep()))) {
+                    getReceivedBeforOneDayFileItemsList().remove(file);
+                    getReceivedMoreTowDayFileItemsList().remove(file);
+                    getReceivedBeatweenTowDayFileItemsList().remove(file);
+                    getDraftFileItemsList().add(file);
                     break;
                 }
             }
         }
-
     }
 
     /**
      * Checks if is unread file item.
      *
-     * @param fileItem the file item
+     * @param file the file item
      * @return true, if is unread file item
      */
-    public boolean isUnreadFileItem(final FileItem fileItem) {
-        return getUnreadFileItemsList().contains(fileItem);
+    public boolean isUnreadFileItem(final File file) {
+        return getUnreadFileItemsList().contains(file);
     }
 
     /**
@@ -506,7 +513,7 @@ public class FileItemCctController extends AbstractController<FileItem> {
      *
      * @return the unreadFileItemsList
      */
-    public Set<FileItem> getUnreadFileItemsList() {
+    public Set<File> getUnreadFileItemsList() {
         if (Objects.equals(unreadFileItemsList, null)) {
             unreadFileItemsList = new HashSet<>();
         }
@@ -518,7 +525,7 @@ public class FileItemCctController extends AbstractController<FileItem> {
      *
      * @param unreadFileItemsList the unreadFileItemsList to set
      */
-    public void setUnreadFileItemsList(final Set<FileItem> unreadFileItemsList) {
+    public void setUnreadFileItemsList(final Set<File> unreadFileItemsList) {
         this.unreadFileItemsList = unreadFileItemsList;
     }
 
@@ -527,7 +534,7 @@ public class FileItemCctController extends AbstractController<FileItem> {
      *
      * @return the draftFileItemsList
      */
-    public Set<FileItem> getDraftFileItemsList() {
+    public Set<File> getDraftFileItemsList() {
         if (Objects.equals(draftFileItemsList, null)) {
             draftFileItemsList = new HashSet<>();
         }
@@ -539,7 +546,7 @@ public class FileItemCctController extends AbstractController<FileItem> {
      *
      * @param draftFileItemsList the draftFileItemsList to set
      */
-    public void setDraftFileItemsList(final Set<FileItem> draftFileItemsList) {
+    public void setDraftFileItemsList(final Set<File> draftFileItemsList) {
         this.draftFileItemsList = draftFileItemsList;
     }
 
@@ -548,7 +555,7 @@ public class FileItemCctController extends AbstractController<FileItem> {
      *
      * @return the receivedBeforOneDayFileItemsList
      */
-    public Set<FileItem> getReceivedBeforOneDayFileItemsList() {
+    public Set<File> getReceivedBeforOneDayFileItemsList() {
         if (Objects.equals(receivedBeforOneDayFileItemsList, null)) {
             receivedBeforOneDayFileItemsList = new HashSet<>();
         }
@@ -561,7 +568,7 @@ public class FileItemCctController extends AbstractController<FileItem> {
      * @param receivedBeforOneDayFileItemsList the
      * receivedBeforOneDayFileItemsList to set
      */
-    public void setReceivedBeforOneDayFileItemsList(final Set<FileItem> receivedBeforOneDayFileItemsList) {
+    public void setReceivedBeforOneDayFileItemsList(final Set<File> receivedBeforOneDayFileItemsList) {
         this.receivedBeforOneDayFileItemsList = receivedBeforOneDayFileItemsList;
     }
 
@@ -570,7 +577,7 @@ public class FileItemCctController extends AbstractController<FileItem> {
      *
      * @return the receivedMoreTowDayFileItemsList
      */
-    public Set<FileItem> getReceivedMoreTowDayFileItemsList() {
+    public Set<File> getReceivedMoreTowDayFileItemsList() {
         if (Objects.equals(receivedMoreTowDayFileItemsList, null)) {
             receivedMoreTowDayFileItemsList = new HashSet<>();
         }
@@ -583,7 +590,7 @@ public class FileItemCctController extends AbstractController<FileItem> {
      * @param receivedMoreTowDayFileItemsList the
      * receivedMoreTowDayFileItemsList to set
      */
-    public void setReceivedMoreTowDayFileItemsList(final Set<FileItem> receivedMoreTowDayFileItemsList) {
+    public void setReceivedMoreTowDayFileItemsList(final Set<File> receivedMoreTowDayFileItemsList) {
         this.receivedMoreTowDayFileItemsList = receivedMoreTowDayFileItemsList;
     }
 
@@ -592,7 +599,7 @@ public class FileItemCctController extends AbstractController<FileItem> {
      *
      * @return the receivedBeatweenTowDayFileItemsList
      */
-    public Set<FileItem> getReceivedBeatweenTowDayFileItemsList() {
+    public Set<File> getReceivedBeatweenTowDayFileItemsList() {
         if (Objects.equals(receivedBeatweenTowDayFileItemsList, null)) {
             receivedBeatweenTowDayFileItemsList = new HashSet<>();
         }
@@ -605,7 +612,7 @@ public class FileItemCctController extends AbstractController<FileItem> {
      * @param receivedBeatweenTowDayFileItemsList the
      * receivedBeatweenTowDayFileItemsList to set
      */
-    public void setReceivedBeatweenTowDayFileItemsList(final Set<FileItem> receivedBeatweenTowDayFileItemsList) {
+    public void setReceivedBeatweenTowDayFileItemsList(final Set<File> receivedBeatweenTowDayFileItemsList) {
 
         this.receivedBeatweenTowDayFileItemsList = receivedBeatweenTowDayFileItemsList;
     }
@@ -702,6 +709,28 @@ public class FileItemCctController extends AbstractController<FileItem> {
 
     public void setFileFieldValueService(FileFieldValueService fileFieldValueService) {
         this.fileFieldValueService = fileFieldValueService;
+    }
+
+    public FileService getFileService() {
+        return fileService;
+    }
+
+    public void setFileService(FileService fileService) {
+        this.fileService = fileService;
+    }
+
+    public String getStepLabel(File file) {
+        FileItem fileItem = file.getFileItemsList().get(0);
+        if (Locale.ENGLISH.getLanguage().equals(getCurrentLocaleCode())) {
+            return fileItem.getRedefinedLabelEn();
+        } else {
+            return fileItem.getRedefinedLabelFr();
+        }
+    }
+
+    @Override
+    public File getSelected() {
+        return super.getSelected();
     }
 
 }

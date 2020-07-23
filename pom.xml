@@ -11,7 +11,7 @@
 
     <artifactId>siat-ct-web</artifactId>
     <packaging>war</packaging>
-    <version>2.4.0-beta.5</version>
+    <version>2.4.0-beta.6</version>
 
     <name>siat-ct-web</name>
 
@@ -43,12 +43,10 @@
                 <db.username>SIAT_CT</db.username>
                 <db.password>siat</db.password>
                 <db.url>jdbc:oracle:thin:@htserver:1521:GUCE</db.url>
-                <!--d-->
                 <database.maxConnectionsPerPartition>10</database.maxConnectionsPerPartition>
                 <database.minConnectionsPerPartition>2</database.minConnectionsPerPartition>
                 <database.partitionCount>2</database.partitionCount>
                 <database.acquireIncrement>3</database.acquireIncrement>
-                <!--d-->
                 <ged.url>http://gedurl:8080</ged.url>
                 <jms.url>failover:(tcp://brokerurl:61616)</jms.url>
                 <version>${application.version}</version>
@@ -70,7 +68,7 @@
                 <mailSender.password>s1@t</mailSender.password>
                 <mailSender.from>siat@guce-lu-cameroun.org</mailSender.from>
                 <mailSender.replyTo></mailSender.replyTo>
-                <!--new-->
+                <mail.smtp.starttls.enable>false</mail.smtp.starttls.enable>
                 <webservice.url>http://thehost:9759/orchestra/privacy/siat/messageService/ebxml</webservice.url>
                 <messages.folder>/opt/glassfish/data/siat/eguce/messages/ct</messages.folder>
                 <mails.folder>/opt/glassfish/data/siat/eguce/mails/ct</mails.folder>
@@ -84,66 +82,16 @@
             </activation>
         </profile>
         <profile>
-            <id>profile-ue</id>
-            <properties>
-                <environment>ue</environment>
-                <db.username>siat_ct</db.username>
-                <db.password>siat</db.password>
-                <db.url>jdbc:oracle:thin:@test:1518:GUCETEST</db.url>
-                <!--d-->
-                <database.maxConnectionsPerPartition>10</database.maxConnectionsPerPartition>
-                <database.minConnectionsPerPartition>2</database.minConnectionsPerPartition>
-                <database.partitionCount>2</database.partitionCount>
-                <database.acquireIncrement>3</database.acquireIncrement>
-                <!--d-->
-                <ged.url>http://gedurl:17483</ged.url>
-                <jms.url>failover:(tcp://brokerurl:61616)</jms.url>
-                <version>${application.version}</version>
-                <ged.username>admin</ged.username>
-                <ged.password>admin</ged.password>
-                <uri.in>amq:CT</uri.in>
-                <uri.out>SIAT</uri.out>
-                <uri.dead.in>direct:dead</uri.dead.in>
-                <uri.dead.out>amq:deadQueue</uri.dead.out>
-                <ebxml.folder>C:/data/lerichjam/siat/ebxml</ebxml.folder>
-                <xml.folder>C:/data/lerichjam/siat/xml</xml.folder>
-                <attachement.folder>C:/data/lerichjam/siat/attachement</attachement.folder>
-                <hibernate.default_schema>SIAT_CT</hibernate.default_schema>
-                <jms.username>admin</jms.username>
-                <jms.password>admin</jms.password>
-                <mailSender.host>smtp.gmail.com</mailSender.host>
-                <mailSender.port>587</mailSender.port>
-                <mailSender.username>guce.technical.notifier</mailSender.username>
-                <mailSender.password>P@ssword2015</mailSender.password>
-                <mailSender.from>guce.technical.notifier@gmail.com</mailSender.from>
-                <mailSender.replyTo>lerichgames@gmail.com</mailSender.replyTo>
-                <webservice.url>http://sw0:9759/orchestra/privacy/siat/messageService/ebxml</webservice.url>
-                <messages.folder>C:/data/lerichjam/siat/eguce/messages/ct</messages.folder>
-                <mails.folder>C:/data/lerichjam/siat/eguce/mails/ct</mails.folder>
-            </properties>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-                <property>
-                    <name>environment</name>
-                    <value>ue</value>
-                </property>
-            </activation>
-        </profile>
-        <profile>
             <id>profile-development</id>
             <properties>
                 <environment>dev</environment>
                 <db.username>siat_ct</db.username>
                 <db.password>siat</db.password>
                 <db.url>jdbc:oracle:thin:@yserver:1521:XE</db.url>
-                <!--<db.url>jdbc:oracle:thin:@siat-prod-bd:1528:SIAT</db.url>-->
-                <!--<db.url>jdbc:oracle:thin:@guce.test:1518:GUCETEST</db.url>-->
-                <!--d-->
                 <database.maxConnectionsPerPartition>10</database.maxConnectionsPerPartition>
                 <database.minConnectionsPerPartition>2</database.minConnectionsPerPartition>
                 <database.partitionCount>2</database.partitionCount>
                 <database.acquireIncrement>3</database.acquireIncrement>
-                <!--d-->
                 <ged.url>http://yserver:8080</ged.url>
                 <jms.url>failover:(tcp://brokerurl:61616)</jms.url>
                 <version>${application.version}</version>
@@ -153,11 +101,8 @@
                 <uri.out>SIAT</uri.out>
                 <uri.dead.in>direct:dead</uri.dead.in>
                 <uri.dead.out>amq:deadQueue</uri.dead.out>
-                <!--<ebxml.folder>D:/lerichjam/siat/ebxml</ebxml.folder>-->
                 <ebxml.folder>/data/eGuce/ebxml</ebxml.folder>
-                <!--<xml.folder>D:/lerichjam/siat/xml</xml.folder>-->
                 <xml.folder>/data/eGuce/xml</xml.folder>
-                <!--<attachement.folder>D:/lerichjam/siat/attachement</attachement.folder>-->
                 <attachement.folder>/data/eGuce/attachement</attachement.folder>
                 <hibernate.default_schema>SIAT_CT</hibernate.default_schema>
                 <jms.username>admin</jms.username>
@@ -168,7 +113,7 @@
                 <mailSender.password>P@ssword2015</mailSender.password>
                 <mailSender.from>guce.technical.notifier@gmail.com</mailSender.from>
                 <mailSender.replyTo>lerichgames@gmail.com</mailSender.replyTo>
-                <!--new-->
+                <mail.smtp.starttls.enable>false</mail.smtp.starttls.enable>
                 <webservice.url>http://localhost:9759/orchestra/privacy/siat/messageService/ebxml</webservice.url>
                 <messages.folder>/data/glassfish/siat/eguce/messages/ct</messages.folder>
                 <mails.folder>/data/glassfish/siat/eguce/mails/ct</mails.folder>
@@ -181,115 +126,16 @@
             </activation>
         </profile>
         <profile>
-            <id>profile-lyd</id>
-            <properties>
-                <environment>lyd</environment>
-                <db.username>siat_ct</db.username>
-                <db.password>siat</db.password>
-                <!--d-->
-                <database.maxConnectionsPerPartition>10</database.maxConnectionsPerPartition>
-                <database.minConnectionsPerPartition>2</database.minConnectionsPerPartition>
-                <database.partitionCount>2</database.partitionCount>
-                <database.acquireIncrement>3</database.acquireIncrement>
-                <!--d-->
-                <!--<db.url>jdbc:oracle:thin:@test:1518:GUCETEST</db.url>-->
-                <db.url>jdbc:oracle:thin:@vm:1521:xe</db.url>
-                <ged.url>http://gedurl:17483</ged.url>
-                <jms.url>failover:(tcp://brokerurl:61616)</jms.url>
-                <version>${application.version}</version>
-                <ged.username>admin</ged.username>
-                <ged.password>admin</ged.password>
-                <uri.in>amq:CT</uri.in>
-                <uri.out>SIAT</uri.out>
-                <uri.dead.in>direct:dead</uri.dead.in>
-                <uri.dead.out>amq:deadQueue</uri.dead.out>
-                <ebxml.folder>d:/Development/GUCE/eGuce/ebxml</ebxml.folder>
-                <xml.folder>d:/Development/GUCE/eGuce/xml</xml.folder>
-                <attachement.folder>d:/Development/GUCE/eGuce/attachment</attachement.folder>
-                <hibernate.default_schema>SIAT_CT</hibernate.default_schema>
-                <jms.username>admin</jms.username>
-                <jms.password>admin</jms.password>
-                <mailSender.host>smtp.gmail.com</mailSender.host>
-                <mailSender.port>587</mailSender.port>
-                <mailSender.username>guce.technical.notifier</mailSender.username>
-                <mailSender.password>P@ssword2015</mailSender.password>
-                <mailSender.from>guce.technical.notifier@gmail.com</mailSender.from>
-                <mailSender.replyTo>lerichgames@gmail.com</mailSender.replyTo>
-                <!--new-->
-                <webservice.url>http://localhost:9759/orchestra/privacy/siat/messageService/ebxml</webservice.url>
-                <messages.folder>/data/glassfish/siat/eguce/messages/ct</messages.folder>
-                <mails.folder>/data/glassfish/siat/eguce/mails/ct</mails.folder>
-            </properties>
-            <activation>
-                <!--<activeByDefault>true</activeByDefault>-->
-                <property>
-                    <name>environment</name>
-                    <value>lyd</value>
-                </property>
-            </activation>
-        </profile>
-        <profile>
-            <id>profile-recette</id>
-            <properties>
-                <environment>recette</environment>
-                <db.username>SIAT_CT</db.username>
-                <db.password>siat</db.password>
-                <!-- <db.url>jdbc:oracle:thin:@172.24.3.23:1528:SIAT</db.url> -->
-                <db.url>jdbc:oracle:thin:@siat-db:1528:SIAT</db.url>
-                <!--d-->
-                <database.maxConnectionsPerPartition>10</database.maxConnectionsPerPartition>
-                <database.minConnectionsPerPartition>2</database.minConnectionsPerPartition>
-                <database.partitionCount>2</database.partitionCount>
-                <database.acquireIncrement>3</database.acquireIncrement>
-                <!--d-->
-                <!-- <ged.url>http://172.24.2.134:8080</ged.url> -->
-                <ged.url>http://siat-ged:8080</ged.url>
-                <!-- <jms.url>failover:(tcp://172.24.2.120:61618,tcp://172.24.2.121:61618)</jms.url> -->
-                <jms.url>failover:(tcp://siat-esb0:61618,tcp://siat-esb1:61618)</jms.url>
-                <version>${application.version}</version>
-                <ged.username>admin</ged.username>
-                <ged.password>admin</ged.password>
-                <uri.in>amq:CT</uri.in>
-                <uri.out>SIAT</uri.out>
-                <uri.dead.in>direct:dead</uri.dead.in>
-                <uri.dead.out>amq:deadQueue</uri.dead.out>
-                <ebxml.folder>/eGuce/ebxml</ebxml.folder>
-                <xml.folder>/eGuce/xml</xml.folder>
-                <attachement.folder>/eGuce/attachement</attachement.folder>
-                <hibernate.default_schema>SIAT_CT</hibernate.default_schema>
-                <jms.username>admin</jms.username>
-                <jms.password>admin</jms.password>
-                <mailSender.host>smtp.gmail.com</mailSender.host>
-                <mailSender.port>587</mailSender.port>
-                <mailSender.username>guce.technical.notifier</mailSender.username>
-                <mailSender.password>P@ssword2015</mailSender.password>
-                <mailSender.from>guce.technical.notifier@gmail.com</mailSender.from>
-                <mailSender.replyTo>amine.ayed@businessdecision.com;farouk.bensaria@businessdecision.com;</mailSender.replyTo>
-                <!--new-->
-                <webservice.url>http://thehost:9759/orchestra/privacy/siat/messageService/ebxml</webservice.url>
-                <messages.folder>/eGuce/messages/ct</messages.folder>
-                <mails.folder>/eGuce/mails/ct</mails.folder>
-            </properties>
-            <activation>
-                <property>
-                    <name>environment</name>
-                    <value>recette</value>
-                </property>
-            </activation>
-        </profile>
-        <profile>
             <id>profile-production</id>
             <properties>
                 <environment>production</environment>
                 <db.username>siat_ct</db.username>
                 <db.password>siat</db.password>
                 <db.url>jdbc:oracle:thin:@siat-db:1528:SIAT</db.url>
-                <!--d-->
                 <database.maxConnectionsPerPartition>50</database.maxConnectionsPerPartition>
                 <database.minConnectionsPerPartition>20</database.minConnectionsPerPartition>
                 <database.partitionCount>4</database.partitionCount>
                 <database.acquireIncrement>10</database.acquireIncrement>
-                <!--d-->
                 <ged.url>http://siat-ged:8080</ged.url>
                 <jms.url>failover:(tcp://siat-esb0:61618,tcp://siat-esb1:61618)</jms.url>
                 <version>${application.version}</version>
@@ -311,7 +157,7 @@
                 <mailSender.password>siat1234</mailSender.password>
                 <mailSender.from>siat@singlewindow.cm</mailSender.from>
                 <mailSender.replyTo>siat@singlewindow.cm</mailSender.replyTo>
-                <!--new-->
+                <mail.smtp.starttls.enable>false</mail.smtp.starttls.enable>
                 <webservice.url>http://sw0:9759/orchestra/privacy/siat/messageService/ebxml</webservice.url>
                 <messages.folder>/siat/eGuce/messages/ct</messages.folder>
                 <mails.folder>/siat/eGuce/mails/ct</mails.folder>
@@ -331,12 +177,10 @@
                 <db.username>SIAT_CT</db.username>
                 <db.password>siat</db.password>
                 <db.url>jdbc:oracle:thin:@siat-db:1518:GUCETEST</db.url>
-                <!--d-->
                 <database.maxConnectionsPerPartition>10</database.maxConnectionsPerPartition>
                 <database.minConnectionsPerPartition>2</database.minConnectionsPerPartition>
                 <database.partitionCount>2</database.partitionCount>
                 <database.acquireIncrement>3</database.acquireIncrement>
-                <!--d-->
                 <ged.url>http://siat-ged:18080</ged.url>
                 <jms.url>failover:(tcp://siat-esb0:61618)</jms.url>
                 <version>${application.version}</version>
@@ -358,7 +202,7 @@
                 <mailSender.password>siat1234</mailSender.password>
                 <mailSender.from>testsiat@singlewindow.cm</mailSender.from>
                 <mailSender.replyTo>testsiat@singlewindow.cm</mailSender.replyTo>
-                <!--new-->
+                <mail.smtp.starttls.enable>false</mail.smtp.starttls.enable>
                 <webservice.url>http://sw0:9759/orchestra/privacy/siat/messageService/ebxml</webservice.url>
                 <messages.folder>/siat/eGuce/messages/ct</messages.folder>
                 <mails.folder>/siat/eGuce/mails/ct</mails.folder>
@@ -456,7 +300,7 @@
         <dependency>
             <groupId>org.guce.siat</groupId>
             <artifactId>siat-ct-core</artifactId>
-            <version>2.2.25-beta.1</version>
+            <version>2.2.27-beta.1</version>
         </dependency>
 
         <dependency>

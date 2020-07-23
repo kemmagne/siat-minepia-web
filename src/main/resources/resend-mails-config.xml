@@ -27,8 +27,8 @@
 
     <bean id="ctEmailSenderCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="emailSenderJob"/>
-        <!-- every minute, at the first second -->
-        <property name="cronExpression" value="0 * * ? * *"/>
+        <!-- every 3 minutes, at the first second -->
+        <property name="cronExpression" value="0 0/3 * ? * *"/>
     </bean>
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="triggers">

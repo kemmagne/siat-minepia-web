@@ -9,13 +9,11 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.faces.component.UISelectOne;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.servlet.http.HttpSession;
-
 import org.guce.siat.common.mail.MailConstants;
 import org.guce.siat.common.model.Administration;
 import org.guce.siat.common.model.Entity;
@@ -348,9 +346,8 @@ public abstract class AbstractController<T extends Serializable> implements Seri
      * @param template the template
      * @return the map
      */
-    protected Map<String, String> prepareMap(final String subject, final String from, final User person, final String newPassword,
-            final String template) {
-        final Map<String, String> map = new HashMap<String, String>();
+    protected Map<String, String> prepareMap(final String subject, final String from, final User person, final String newPassword, final String template) {
+        final Map<String, String> map = new HashMap<>();
 
         map.put(MailConstants.SUBJECT, subject);
         map.put(MailConstants.FROM, from);
