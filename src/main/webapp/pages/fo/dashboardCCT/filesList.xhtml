@@ -1,0 +1,83 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+    <p:panel header="#{bundle['file_title']}">
+
+        <h:form id="fileItemListForm">
+
+            <h:commandLink action="#{exporter.exportPDF(table, 'FILES')}">
+                <h:outputText styleClass="sprite sprite-pdf" />
+            </h:commandLink>
+
+            <p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable" value="#{fileItemCctController.items}" filteredValue=""
+                         var="item" selectionMode="single" selection="#{fileItemCctController.selected}" rowKey="#{item.id}" rows="5" paginator="true"
+                         rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})"
+                         rowStyleClass="#{fileItemCctController.isUnreadFileItem(item)? 'unreadFiles' : null}">
+
+                <p:ajax event="rowDblselect" listener="#{fileItemCctController.goToDetailPage}" onstart="PF('statusDialog1').block()"
+                        onsuccess="PF('statusDialog1').unblock()"/>
+
+                <p:column sortBy="#{item.numeroDemande}" filterBy="#{item.numeroDemande}" filterMatchMode="contains">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['FileLabel_eforce_num']}" title="#{bundle['FileLabel_eforce_num']}" />
+                    </f:facet>
+                    <h:outputText value="#{item.numeroDemande}" />
+                </p:column>
+
+                <p:column sortBy="#{item.numeroDossier}" filterBy="#{item.numeroDossier}" filterMatchMode="contains">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['FileLabel_num_eguce']}" title="#{bundle['FileTitle_num_eguce']}" />
+                    </f:facet>
+                    <h:outputText value="#{item.numeroDossier}" />
+                </p:column>
+
+                <p:column sortBy="#{item.referenceSiat}" filterBy="#{item.referenceSiat}" filterMatchMode="contains">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['FileLabel_num_siat']}" title="#{bundle['FileTitle_num_siat']}" />
+                    </f:facet>
+                    <h:outputText value="#{item.referenceSiat}" />
+                </p:column>
+
+                <p:column sortBy="#{item.createdDate}" filterBy="#{item.createdDate}"
+                          filterMatchMode="contains">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['FileLabel_date_dossier']}" title="#{bundle['FileTitle_date_dossier']}" />
+                    </f:facet>
+                    <h:outputText value="#{item.createdDate}">
+                        <f:convertDateTime type="date" pattern="dd/MM/yyyy HH:mm" locale="fr"  />
+                    </h:outputText>
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['FileItemInformationLabel_step']}" title="#{bundle['FileItemInformationTitle_step']}" />
+                    </f:facet>
+                    <h:outputText value="#{fileItemCctController.getStepLabel(item)}" />
+                </p:column>
+
+                <p:column filterBy="#{item.client.companyName}" sortBy="#{item.client.companyName}"  filterMatchMode="contains">
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['GeneralInformationLabel_Client']}" title="#{bundle['GeneralInformationLabel_Client']}" />
+                    </f:facet>
+                    <h:outputText value="#{item.client.companyName}" />
+                </p:column>
+
+                <p:column style="width: 8%;">
+                    <p:commandLink title="#{bundle['Consulter']}" action="#{fileItemCctController.goToDetailPage()}" ajax="true">
+                        <f:setPropertyActionListener target="#{fileItemCctController.selected}" value="#{item}" />
+                        <p:graphicImage value="/images/dashboard/open-document.png" />
+                    </p:commandLink>
+                </p:column>
+            </p:dataTable>
+
+        </h:form>
+    </p:panel>
+
+</ui:composition>
+
+
+
+
+
