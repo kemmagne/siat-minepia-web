@@ -86,6 +86,7 @@ public class FileTrackingController extends AbstractController<File> {
     }
 
     public void initDefaultView() {
+        minaderFileTrackingFilter = new MinaderFileTrackingFilter();
         initFilter();
         doMinaderFilesTrackingFilter();
     }
@@ -121,9 +122,11 @@ public class FileTrackingController extends AbstractController<File> {
     }
 
     public List<FileType> getFileTypeList() {
+
         if (fileTypeList == null) {
             fileTypeList = fileTypeService.findDistinctFileTypesByUser(getLoggedUser());
         }
+
         return fileTypeList;
     }
 
@@ -236,7 +239,7 @@ public class FileTrackingController extends AbstractController<File> {
     public boolean isMinader() {
 
         Ministry ministry = getCurrentMinistry();
-        boolean ok = ministry != null && ministry.getCode().equals(Constants.MINADER_MINISTRY);
+        boolean ok = ministry != null && Constants.MINADER_MINISTRY.equals(ministry.getCode());
 
         return ok;
     }
@@ -264,6 +267,10 @@ public class FileTrackingController extends AbstractController<File> {
 
     public List<User> getPotentialUsersList() {
         return potentialUsersList;
+    }
+
+    public Map<String, String> getFileStates() {
+        return MinaderFileTrackingFilter.FileStateFilter.getMap();
     }
 
 }

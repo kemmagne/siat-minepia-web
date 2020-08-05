@@ -43,6 +43,7 @@ import org.guce.siat.common.utils.DateUtils;
 import org.guce.siat.common.utils.enums.FileTypeCode;
 import org.guce.siat.common.utils.enums.StepCode;
 import org.guce.siat.core.ct.service.CommonService;
+import org.guce.siat.core.ct.service.MinaderStatisticsService;
 import org.guce.siat.core.ct.util.enums.CctExportProductType;
 import org.guce.siat.web.common.AbstractController;
 import org.guce.siat.web.common.ControllerConstants;
@@ -286,10 +287,14 @@ public class FileItemCctController extends AbstractController<File> {
                 for (Iterator<File> iterator = items.iterator(); iterator.hasNext();) {
 
                     File file = iterator.next();
-                    FileItem item = file.getFileItemsList().get(0);
+                    FileItem fileItem = file.getFileItemsList().get(0);
 
-                    if (!isPhyto(file) || getLoggedUser().equals(file.getAssignedUser()) || Arrays.asList(StepCode.ST_CT_57, StepCode.ST_CT_60, StepCode.ST_CT_03, StepCode.ST_CT_47, StepCode.ST_CT_53, StepCode.ST_CT_62).contains(item.getStep().getStepCode())) {
+                    if (!isPhyto(file) || getLoggedUser().equals(file.getAssignedUser()) || Arrays.asList(StepCode.ST_CT_57, StepCode.ST_CT_60, StepCode.ST_CT_03, StepCode.ST_CT_47, StepCode.ST_CT_53, StepCode.ST_CT_62).contains(fileItem.getStep().getStepCode())) {
                         continue; // si on a assigné le dossier à un utilisateur qui est aussi signataire, il vera produit même s'il ne signe pas les dossiers dont le produit est de ce type
+                    }
+
+                    if (MinaderStatisticsService.TREATMENT_STEPS_CODES.contains(fileItem.getStep().getStepCode()) && !getLoggedUser().equals(file.getAssignedUser())) {
+                        iterator.remove();
                     }
 
                     FileFieldValue ffv = fileFieldValueService.findValueByFileFieldAndFile(CctExportProductType.getFileFieldCode(), file);
