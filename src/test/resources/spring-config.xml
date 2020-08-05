@@ -1,0 +1,158 @@
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa" xmlns:jms="http://www.springframework.org/schema/jms" xmlns:amq="http://activemq.apache.org/schema/core"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+    	http://www.springframework.org/schema/tx
+    	http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+    	http://www.springframework.org/schema/util
+    	http://www.springframework.org/schema/util/spring-util-3.0.xsd
+    	http://www.springframework.org/schema/jms
+      http://www.springframework.org/schema/jms/spring-jms.xsd
+      http://activemq.apache.org/schema/core
+      http://activemq.apache.org/schema/core/activemq-core.xsd">
+
+
+    <!-- For consider the using of annotations for defining Spring Bean -->
+    <context:annotation-config />
+    <aop:aspectj-autoproxy />
+    <!-- For defining Spring Bean -->
+    <context:component-scan base-package="org.guce.siat.*" />
+
+    <context:property-placeholder location="classpath:global-config.properties" />
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:global-config.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <!--<import resource="classpath:resend-mails-config.xml" />-->
+    <!-- DataSource -->
+    <!--    <bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
+        <property name="driverClass" value="oracle.jdbc.OracleDriver" />
+        <property name="jdbcUrl" value="${database.url}" />
+        <property name="user" value="${database.username}" />
+        <property name="password" value="${database.password}" />
+        <property name="idleConnectionTestPeriodInMinutes" value="${database.idleConnectionTestPeriodInMinutes}" />
+        <property name="idleMaxAgeInMinutes" value="${database.idleMaxAgeInMinutes}" />
+        <property name="maxConnectionsPerPartition" value="${database.maxConnectionsPerPartition}" />
+        <property name="minConnectionsPerPartition" value="${database.minConnectionsPerPartition}" />
+        <property name="poolAvailabilityThreshold" value="${database.poolAvailabilityThreshold}" />
+        <property name="partitionCount" value="${database.partitionCount}" />
+        <property name="acquireIncrement" value="${database.acquireIncrement}" />
+        <property name="statementsCacheSize" value="${database.statementsCacheSize}" />
+        <property name="connectionTestStatement" value="${database.connectionTestStatement}" />
+        <property name="lazyInit" value="${database.lazyInit}" />
+        <property name="logStatementsEnabled" value="${database.logStatementsEnabled}" />
+    </bean>-->
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+        <property name="poolName" value="org.guce.siat.ct.connectionPool" />
+        <property name="driverClassName" value="oracle.jdbc.OracleDriver" />
+        <property name="jdbcUrl" value="${database.url}" />
+        <property name="username" value="${database.username}" />
+        <property name="password" value="${database.password}" />
+        <property name="autoCommit" value="${database.autoCommit}" />
+        <property name="connectionTimeout" value="${database.connectionTimeout}" />
+        <property name="idleTimeout" value="${database.idleTimeout}" />
+        <property name="minimumIdle" value="${database.minimumIdle}" />
+        <property name="maximumPoolSize" value="${database.maximumPoolSize}" />
+        <property name="connectionTestQuery" value="${database.connectionTestStatement}" />
+    </bean>
+
+    <bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+        <property name="generateDdl" value="false" />
+        <!-- property name="database" value="ORACLE"/ -->
+        <property name="databasePlatform" value="${database.databasePlatform}" />
+    </bean>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
+        <!-- spring based scanning for entity classes -->
+        <property name="packagesToScan">
+            <list>
+                <value>org.guce.siat.common.model</value>
+                <value>org.guce.siat.core.ct.model</value>
+                <value>org.guce.siat.core.gr.model</value>
+            </list>
+        </property>
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.enable_lazy_load_no_trans">${database.hibernate.enable_lazy_load_no_trans}</prop>
+                <prop key="hibernate.id.new_generator_mappings">${database.hibernate.id.new_generator_mappings}</prop>
+                <prop key="hibernate.default_batch_fetch_size">${database.hibernate.default_batch_fetch_size}</prop>
+                <prop key="hibernate.default_schema">${database.hibernate.default_schema}</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <!-- <prop key="hibernate.format_sql">true</prop> <prop key="hibernate.use_sql_comments">true</prop> -->
+            </props>
+        </property>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager" />
+
+    <!-- MAIL SETTINGS -->
+    <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+        <property name="velocityProperties">
+            <value>
+                resource.loader=class
+                class.resource.loader.class=org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+            </value>
+        </property>
+    </bean>
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="defaultEncoding" value="UTF-8" />
+        <property name="host" value="${mailSender.host}" />
+        <property name="port" value="${mailSender.port}" />
+        <property name="username" value="${mailSender.username}" />
+        <property name="password" value="${mailSender.password}" />
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">${mail.smtp.starttls.enable}</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="templateMessage" class="org.springframework.mail.SimpleMailMessage">
+        <property name="from" value="${mailSender.from}" />
+        <property name="replyTo" value="${mailSender.replyTo}" />
+    </bean>
+
+    <!-- Counter for consumer to increment and test to verify count -->
+    <bean id="counter" class="java.util.concurrent.atomic.AtomicInteger" />
+
+    <bean id="emailSenderService" scope="prototype" class="org.guce.siat.common.mail.bo.VelocityEmailSenderServiceImpl">
+        <constructor-arg index="0">
+            <ref bean="velocityEngine"></ref>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <ref bean="mailSender"></ref>
+        </constructor-arg>
+
+        <constructor-arg index="2">
+            <ref bean="templateMessage"></ref>
+        </constructor-arg>
+    </bean>
+    <!-- MAIL SETTINGS -->
+
+</beans>
+
+
+
+
+
+
+

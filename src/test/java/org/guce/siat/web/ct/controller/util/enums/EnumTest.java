@@ -113,7 +113,7 @@ public class EnumTest {
                 "PERABI", "NZOKOA", "SENABIONO", "EMPOAGHAM", "KENFACKJP", "NIMAYA", "KAMDEM", "ZEBAZE",
                 "AKONO", "TONYE", "JAMMULUMI", "KONGUEP", "FOKOUEN", "IJANGFONGOH", "TOUANDOP", "TAZOJACOB", "MEBIAME");
 //        for (String login : logins) {
-        for (String login : Arrays.asList("PPPDLAP-CB")) {
+        for (String login : Arrays.asList("ALIHOU")) {
             generateUpdateDb(login, "root");
         }
     }
