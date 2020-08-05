@@ -60,7 +60,7 @@
             <appender-ref ref="hibernateDailyRollingFileAppender" />
             <appender-ref ref="consoleAppender" />
     </logger-->
-    <logger name="com.jolbox.bonecp" additivity="false">
+    <logger name="com.zaxxer.hikari" additivity="false">
         <level value="WARN" />
         <appender-ref ref="hibernateDailyRollingFileAppender" />
         <!-- appender-ref ref="consoleAppender" /-->

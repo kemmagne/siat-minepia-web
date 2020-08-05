@@ -3,4 +3,4 @@
 /.gitignore
 /.project
 /.settings/
-/catalina.base_IS_UNDEFINED/
+catalina.base_IS_UNDEFINED/logs/
