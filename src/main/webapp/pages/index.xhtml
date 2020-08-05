@@ -198,7 +198,27 @@
                     </p:submenu>
 
                     <p:submenu id="staticMenuItem" label="#{bundle['appmenu_statistic']}" styleClass="staticMenuItem"
-                               rendered="#{request.isUserInRole('SUPER') or request.isUserInRole('ADMIN_MIN')}">
+                               rendered="#{request.isUserInRole('SUPER') or request.isUserInRole('ADMIN_MIN') or request.isUserInRole('STAT')}">
+
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="activityReportMenuItem"
+                                    styleClass="pendingFiles" value="#{bundle['appmenu_statistic_activityReport']}"
+                                    actionListener="#{statisticController.goToActivityReportSearchPage()}" rendered="#{request.isUserInRole('SUPER') or request.isUserInRole('STAT')}" />
+
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="globalDelayListingMenuItem"
+                                    styleClass="pendingFiles" value="#{bundle['appmenu_statistic_globalDelayListing']}"
+                                    actionListener="#{statisticController.goToGlobalDelayListingSearchPage}" rendered="#{request.isUserInRole('SUPER') or request.isUserInRole('STAT')}" />
+
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="delayListingStakeholderMenuItem"
+                                    styleClass="pendingFiles" value="#{bundle['appmenu_statistic_DelayListingStakeholder']}"
+                                    actionListener="#{statisticController.goToDelayListingStakeholderSearchPage()}" rendered="#{request.isUserInRole('SUPER') or request.isUserInRole('STAT')}" />
+
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="exportNshDestinationMenuItem"
+                                    styleClass="pendingFiles" value="#{bundle['appmenu_statistic_exportNshDestination']}"
+                                    actionListener="#{statisticController.goToExportNshDestinationSearchPage()}" rendered="#{request.isUserInRole('SUPER') or request.isUserInRole('STAT')}" />
+
+                        <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="exportNshDestSenderMenuItem"
+                                    styleClass="pendingFiles" value="#{bundle['appmenu_statistic_exportNshDestinationSender']}"
+                                    actionListener="#{statisticController.goToExportNshDestinationSenderSearchPage()}" rendered="#{request.isUserInRole('SUPER') or request.isUserInRole('STAT')}" />
 
                         <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="pindingFilesMenuItem"
                                     styleClass="pendingFiles" value="#{bundle['appmenu_statistic_pindingFiles']}"

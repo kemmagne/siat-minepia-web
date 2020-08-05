@@ -36,7 +36,7 @@
 
     <import resource="classpath:resend-mails-config.xml" />
     <!-- DataSource -->
-    <bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
+    <!--    <bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
         <property name="driverClass" value="oracle.jdbc.OracleDriver" />
         <property name="jdbcUrl" value="${database.url}" />
         <property name="user" value="${database.username}" />
@@ -52,6 +52,19 @@
         <property name="connectionTestStatement" value="${database.connectionTestStatement}" />
         <property name="lazyInit" value="${database.lazyInit}" />
         <property name="logStatementsEnabled" value="${database.logStatementsEnabled}" />
+    </bean>-->
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+        <property name="poolName" value="org.guce.siat.ct.connectionPool" />
+        <property name="driverClassName" value="oracle.jdbc.OracleDriver" />
+        <property name="jdbcUrl" value="${database.url}" />
+        <property name="username" value="${database.username}" />
+        <property name="password" value="${database.password}" />
+        <property name="autoCommit" value="${database.autoCommit}" />
+        <property name="connectionTimeout" value="${database.connectionTimeout}" />
+        <property name="idleTimeout" value="${database.idleTimeout}" />
+        <property name="minimumIdle" value="${database.minimumIdle}" />
+        <property name="maximumPoolSize" value="${database.maximumPoolSize}" />
+        <property name="connectionTestQuery" value="${database.connectionTestStatement}" />
     </bean>
 
     <bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">

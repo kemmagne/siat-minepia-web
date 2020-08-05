@@ -29,9 +29,7 @@
                     <p:outputPanel rendered="true" styleClass="search-select">
                         <h:panelGrid columns="1">
                             <p:selectOneRadio value="#{fileTrackingController.minaderFileTrackingFilter.fileState}">
-                                <f:selectItem itemLabel="#{bundle['Tous']}" itemValue="ALL" />
-                                <f:selectItem itemLabel="#{bundle['IN_PROCESS']}" itemValue="IN_PROCESS" />
-                                <f:selectItem itemLabel="#{bundle['CLOSED']}" itemValue="CLOSED" />
+                                <f:selectItems value="#{fileTrackingController.fileStates.entrySet()}" var="fs" itemValue="#{fs.key}" itemLabel="#{bundle[fs.value]}" />
                             </p:selectOneRadio>
                         </h:panelGrid>
                     </p:outputPanel>
