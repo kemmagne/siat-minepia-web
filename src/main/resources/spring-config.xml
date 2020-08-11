@@ -18,42 +18,28 @@
       http://activemq.apache.org/schema/core
       http://activemq.apache.org/schema/core/activemq-core.xsd">
 
-
     <!-- For consider the using of annotations for defining Spring Bean -->
     <context:annotation-config />
+
+    <!-- Spring AOP -->
     <aop:aspectj-autoproxy />
+
     <!-- For defining Spring Bean -->
     <context:component-scan base-package="org.guce.siat.*" />
 
-    <context:property-placeholder location="classpath:global-config.properties" />
+    <context:property-placeholder location="file:${global-config.properties}" />
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
-                <value>classpath:global-config.properties</value>
+                <value>file:${global-config.properties}</value>
             </list>
         </property>
     </bean>
 
     <import resource="classpath:resend-mails-config.xml" />
-    <!-- DataSource -->
-    <!--    <bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
-        <property name="driverClass" value="oracle.jdbc.OracleDriver" />
-        <property name="jdbcUrl" value="${database.url}" />
-        <property name="user" value="${database.username}" />
-        <property name="password" value="${database.password}" />
-        <property name="idleConnectionTestPeriodInMinutes" value="${database.idleConnectionTestPeriodInMinutes}" />
-        <property name="idleMaxAgeInMinutes" value="${database.idleMaxAgeInMinutes}" />
-        <property name="maxConnectionsPerPartition" value="${database.maxConnectionsPerPartition}" />
-        <property name="minConnectionsPerPartition" value="${database.minConnectionsPerPartition}" />
-        <property name="poolAvailabilityThreshold" value="${database.poolAvailabilityThreshold}" />
-        <property name="partitionCount" value="${database.partitionCount}" />
-        <property name="acquireIncrement" value="${database.acquireIncrement}" />
-        <property name="statementsCacheSize" value="${database.statementsCacheSize}" />
-        <property name="connectionTestStatement" value="${database.connectionTestStatement}" />
-        <property name="lazyInit" value="${database.lazyInit}" />
-        <property name="logStatementsEnabled" value="${database.logStatementsEnabled}" />
-    </bean>-->
-    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+
+    <!-- Hikari DataSource -->
+    <!--    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
         <property name="poolName" value="org.guce.siat.ct.connectionPool" />
         <property name="driverClassName" value="oracle.jdbc.OracleDriver" />
         <property name="jdbcUrl" value="${database.url}" />
@@ -65,11 +51,14 @@
         <property name="minimumIdle" value="${database.minimumIdle}" />
         <property name="maximumPoolSize" value="${database.maximumPoolSize}" />
         <property name="connectionTestQuery" value="${database.connectionTestStatement}" />
+    </bean>-->
+
+    <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="${database.datasource.name}"/>
     </bean>
 
     <bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
         <property name="generateDdl" value="true" />
-        <!-- property name="database" value="ORACLE"/ -->
         <property name="databasePlatform" value="${database.databasePlatform}" />
     </bean>
 
@@ -136,14 +125,14 @@
 
     <bean id="emailSenderService" scope="prototype" class="org.guce.siat.common.mail.bo.VelocityEmailSenderServiceImpl">
         <constructor-arg index="0">
-            <ref bean="velocityEngine"></ref>
+            <ref bean="velocityEngine" />
         </constructor-arg>
         <constructor-arg index="1">
-            <ref bean="mailSender"></ref>
+            <ref bean="mailSender" />
         </constructor-arg>
 
         <constructor-arg index="2">
-            <ref bean="templateMessage"></ref>
+            <ref bean="templateMessage" />
         </constructor-arg>
     </bean>
     <!-- MAIL SETTINGS -->

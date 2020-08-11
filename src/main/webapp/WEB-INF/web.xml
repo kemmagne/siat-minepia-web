@@ -26,10 +26,7 @@
     <!-- 	Spring config location -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>
-            /WEB-INF/spring-config.xml,
-            /WEB-INF/security-context.xml
-        </param-value>
+        <param-value>classpath:spring-config.xml,classpath:security-context.xml</param-value>
     </context-param>
     <context-param>
         <param-name>com.sun.faces.enableRestoreView11Compatibility</param-name>
@@ -149,10 +146,7 @@
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>
-                /WEB-INF/spring-config.xml,
-                /WEB-INF/security-context.xml
-            </param-value>
+            <param-value>classpath:spring-config.xml,classpath:security-context.xml</param-value>
         </init-param>
         <load-on-startup>2</load-on-startup>
     </servlet>
