@@ -1,16 +1,13 @@
 package org.guce.siat.web.ct.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.guce.siat.common.model.Authority;
@@ -214,20 +211,20 @@ public class AdminController extends AbstractController<User> {
      */
     @Override
     public void create() {
-        selected.setAccountNonExpired(true);
-        selected.setDeleted(false);
-        selected.setAccountNonLocked(true);
-        selected.setCredentialsNonExpired(true);
-        selected.setFirstLogin(Boolean.TRUE);
-        selected.setAttempts(0);
-        selected.setPosition(PositionType.ADMINISTRATEUR);
-        selected.setTheme(Theme.BLUE);
+        getSelected().setAccountNonExpired(true);
+        getSelected().setDeleted(false);
+        getSelected().setAccountNonLocked(true);
+        getSelected().setCredentialsNonExpired(true);
+        getSelected().setFirstLogin(Boolean.TRUE);
+        getSelected().setAttempts(0);
+        getSelected().setPosition(PositionType.ADMINISTRATEUR);
+        getSelected().setTheme(Theme.BLUE);
         final String radomPassword = RandomStringUtils.randomAlphanumeric(Constants.SIX);
-        selected.setPassword(radomPassword);
+        getSelected().setPassword(radomPassword);
 
         //set the userAuthority
         final UserAuthority userAuthority = new UserAuthority();
-        userAuthority.setUser(selected);
+        userAuthority.setUser(getSelected());
         //find Authority by the connected user authority (ROOT --> AM), (AM --> AO)
         if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ROOT.getCode())) {
             userAuthority.setAuthorityGranted(authorityService.findAuthorityByCode(AuthorityConstants.ADMIN_MINISTERE.getCode()));
@@ -235,7 +232,7 @@ public class AdminController extends AbstractController<User> {
             userAuthority.setAuthorityGranted(authorityService.findAuthorityByCode(AuthorityConstants.ADMIN_ORGANISME.getCode()));
         }
         try {
-            userAuthorityService.createUserAndAuthorities(selected, userAuthority);
+            userAuthorityService.createUserAndAuthorities(getSelected(), userAuthority);
             final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
                     User.class.getSimpleName() + PersistenceActions.CREATE.getCode());
             JsfUtil.addSuccessMessage(msg);
@@ -244,8 +241,7 @@ public class AdminController extends AbstractController<User> {
                     CREATE_SIAT_ACCOUNT_MAIL_SUBJECT);
 
             final String templateFileName = localeFileTemplate(WELCOME_MAIL_BODY, getCurrentLocale().getLanguage());
-            Map<String, String> map = new HashMap<>();
-            map = prepareMap(subject, mailService.getFromValue(), selected, radomPassword, templateFileName);
+            Map<String, String> map = prepareMap(subject, mailService.getFromValue(), getSelected(), radomPassword, templateFileName);
             mailService.sendMail(map);
             reset();
 
@@ -267,7 +263,7 @@ public class AdminController extends AbstractController<User> {
      */
     @Override
     public void edit() {
-        userService.updateUser(selected);
+        userService.updateUser(getSelected());
 
         final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
                 User.class.getSimpleName() + PersistenceActions.UPDATE.getCode());
@@ -286,9 +282,9 @@ public class AdminController extends AbstractController<User> {
      */
     @Override
     public void delete() {
-        selected.setDeleted(true);
-        selected.setAdministration(null);
-        userService.update(selected);
+        getSelected().setDeleted(true);
+        getSelected().setAdministration(null);
+        userService.update(getSelected());
 
         final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
                 User.class.getSimpleName() + PersistenceActions.DELETE.getCode());

@@ -131,7 +131,7 @@ public class AgentsManagementController extends AbstractController<User> {
             }
         }
 
-        commonService.save(selected, list);
+        commonService.save(getSelected(), list);
 
         refreshItems();
         resetForm();
