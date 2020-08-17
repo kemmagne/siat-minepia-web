@@ -1,126 +1,126 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+      xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
 
-<ui:composition>
+    <ui:composition>
 
-	<p:panel id="bannerPnl" styleClass="panelBanner">
+        <p:panel id="bannerPnl" styleClass="panelBanner">
 
-		<p:panelGrid columns="5">
+            <p:panelGrid columns="5">
 
-			<h:form>
-				<h:panelGroup>
-					<h:commandLink styleClass="sprite sprite-logo" actionListener="#{globalBean.goToHomePage}" />
-					<h:outputText styleClass="siat-sce" value="#{bundle['systemName']}" />
-				</h:panelGroup>
-			</h:form>
+                <h:form>
+                    <h:panelGroup>
+                        <h:commandLink styleClass="sprite sprite-logo" actionListener="#{globalBean.goToHomePage}" />
+                        <h:outputText styleClass="siat-sce" value="#{bundle['systemName']}" />
+                    </h:panelGroup>
+                </h:form>
 
-			<h:panelGroup>
+                <h:panelGroup>
 
-				<div class="service-icons">
-					<ui:repeat value="#{globalBean.authorities}" var="authority">
-						<h:outputText styleClass="sprite sprite-#{authority.role}" />
-						
-					</ui:repeat>
-				</div>
+                    <div class="service-icons">
+                        <ui:repeat value="#{globalBean.authorities}" var="authority">
+                            <h:outputText styleClass="sprite sprite-#{authority.role}" />
 
-				<p:outputPanel styleClass="info clearfix">
-					<h:panelGroup styleClass="item-header" rendered="#{not empty globalBean.currentMinistry}">
-						<div class="headerLabel">
-							<h:outputText styleClass="sprite sprite-min" />
-							<p:outputLabel value="#{bundle['banner_ministry']}" />
-						</div>
-						<div class="contentLabel">
-							<p:outputLabel value="#{language.localeCode eq 'fr' ? globalBean.currentMinistry.labelFr : globalBean.currentMinistry.labelEn}" />
-						</div>
-					</h:panelGroup>
+                        </ui:repeat>
+                    </div>
 
-					<h:panelGroup styleClass="item-header" rendered="#{not empty globalBean.currentOrganism}">
-						<div class="headerLabel">
-							<h:outputText styleClass="sprite sprite-dir" />
-							<p:outputLabel value="#{bundle['banner_organisme']}" />
-						</div>
-						<div class="contentLabel">
-							<p:outputLabel value="#{language.localeCode eq 'fr' ? globalBean.currentOrganism.labelFr : globalBean.currentOrganism.labelEn}" />
-						</div>
-					</h:panelGroup>
+                    <p:outputPanel styleClass="info clearfix">
+                        <h:panelGroup styleClass="item-header" rendered="#{not empty globalBean.currentMinistry}">
+                            <div class="headerLabel">
+                                <h:outputText styleClass="sprite sprite-min" />
+                                <p:outputLabel value="#{bundle['banner_ministry']}" />
+                            </div>
+                            <div class="contentLabel">
+                                <p:outputLabel value="#{language.localeCode eq 'fr' ? globalBean.currentMinistry.labelFr : globalBean.currentMinistry.labelEn}" />
+                            </div>
+                        </h:panelGroup>
 
-					<h:panelGroup styleClass="item-header" rendered="#{not empty globalBean.currentSubDepartment}">
-						<div class="headerLabel">
-							<h:outputText styleClass="sprite sprite-sdir " />
-							<p:outputLabel value="#{bundle['banner_subDepartment']}" />
-						</div>
-						<div class="contentLabel">
-							<p:outputLabel
-								value="#{language.localeCode eq 'fr' ? globalBean.currentSubDepartment.labelFr : globalBean.currentSubDepartment.labelEn}" />
-						</div>
-					</h:panelGroup>
+                        <h:panelGroup styleClass="item-header" rendered="#{not empty globalBean.currentOrganism}">
+                            <div class="headerLabel">
+                                <h:outputText styleClass="sprite sprite-dir" />
+                                <p:outputLabel value="#{bundle['banner_organisme']}" />
+                            </div>
+                            <div class="contentLabel">
+                                <p:outputLabel value="#{language.localeCode eq 'fr' ? globalBean.currentOrganism.labelFr : globalBean.currentOrganism.labelEn}" />
+                            </div>
+                        </h:panelGroup>
 
-					<h:panelGroup styleClass="item-header" rendered="#{not empty globalBean.currentService}">
-						<div class="headerLabel">
-							<h:outputText styleClass="sprite sprite-sce" />
-							<p:outputLabel value="#{bundle['banner_service']}" />
-						</div>
-						<div class="contentLabel">
-							<p:outputLabel value="#{language.localeCode eq 'fr' ? globalBean.currentService.labelFr : globalBean.currentService.labelEn}" />
-						</div>
-					</h:panelGroup>
+                        <h:panelGroup styleClass="item-header" rendered="#{not empty globalBean.currentSubDepartment}">
+                            <div class="headerLabel">
+                                <h:outputText styleClass="sprite sprite-sdir " />
+                                <p:outputLabel value="#{bundle['banner_subDepartment']}" />
+                            </div>
+                            <div class="contentLabel">
+                                <p:outputLabel
+                                    value="#{language.localeCode eq 'fr' ? globalBean.currentSubDepartment.labelFr : globalBean.currentSubDepartment.labelEn}" />
+                            </div>
+                        </h:panelGroup>
 
-					<h:panelGroup styleClass="item-header" rendered="#{not empty globalBean.currentEntity}">
-						<div class="headerLabel">
-							<h:outputText styleClass="sprite sprite-bur" />
-							<p:outputLabel value="#{bundle['banner_entity']}" />
-						</div>
-						<div class="contentLabel">
-							<p:outputLabel value="#{language.localeCode eq 'fr' ? globalBean.currentEntity.labelFr : globalBean.currentEntity.labelEn}" />
-						</div>
-					</h:panelGroup>
-				</p:outputPanel>
+                        <h:panelGroup styleClass="item-header" rendered="#{not empty globalBean.currentService}">
+                            <div class="headerLabel">
+                                <h:outputText styleClass="sprite sprite-sce" />
+                                <p:outputLabel value="#{bundle['banner_service']}" />
+                            </div>
+                            <div class="contentLabel">
+                                <p:outputLabel value="#{language.localeCode eq 'fr' ? globalBean.currentService.labelFr : globalBean.currentService.labelEn}" />
+                            </div>
+                        </h:panelGroup>
+
+                        <h:panelGroup styleClass="item-header" rendered="#{not empty globalBean.currentEntity}">
+                            <div class="headerLabel">
+                                <h:outputText styleClass="sprite sprite-bur" />
+                                <p:outputLabel value="#{bundle['banner_entity']}" />
+                            </div>
+                            <div class="contentLabel">
+                                <p:outputLabel value="#{language.localeCode eq 'fr' ? globalBean.currentEntity.labelFr : globalBean.currentEntity.labelEn}" />
+                            </div>
+                        </h:panelGroup>
+                    </p:outputPanel>
 
 
-			</h:panelGroup>
-			
-			<h:panelGroup>
-				<div class="headerLabel">
-					<h:outputText styleClass="sprite sprite-profil" />
-					<p:outputLabel value="#{bundle['banner_connected_user']}" />
-				</div>
-				<div class="contentLabel">
-					<p:outputLabel value=" #{globalBean.loggedUser.lastName} #{globalBean.loggedUser.firstName}" />
-				</div>
-			</h:panelGroup>
-			<h:panelGroup>
-					<span class="sprite sprite-blazon" ></span>
-			</h:panelGroup>
-			<h:panelGroup>
-				<h:form id="bannerForm">
-					<p:link id="logoutLink" href="${request.contextPath}/j_spring_security_logout" class="logout-btn">
-						<h:outputText styleClass="sprite sprite-logout" />
-						<h:outputText value="#{bundle['banner_logout']}" />
-					</p:link>
-					<p class="language">
-						<p:inputText type="hidden" label="#{language.locale}" />
-						<h:commandLink styleClass="first" id="languageFr" actionListener="#{language.localeFRChanged}">
-							<h:outputText value="#{bundle['flag_fr_title_lang']}" />
-						</h:commandLink>
+                </h:panelGroup>
 
-						<h:commandLink id="languageUk" actionListener="#{language.localeUKChanged}">
-							<h:outputText value="#{bundle['flag_uk_title_lang']}" />
-						</h:commandLink>
-					</p>
-				</h:form>
-			</h:panelGroup>
+                <h:panelGroup>
+                    <div class="headerLabel">
+                        <h:outputText styleClass="sprite sprite-profil" />
+                        <p:outputLabel value="#{bundle['banner_connected_user']}" />
+                    </div>
+                    <div class="contentLabel">
+                        <p:outputLabel value=" #{globalBean.loggedUser.lastName} #{globalBean.loggedUser.firstName}" />
+                    </div>
+                </h:panelGroup>
+                <h:panelGroup>
+                    <span class="sprite sprite-blazon" ></span>
+                </h:panelGroup>
+                <h:panelGroup>
+                    <h:form id="bannerForm">
+                        <p:link id="logoutLink" href="#{request.contextPath}/j_spring_security_logout" class="logout-btn">
+                            <h:outputText styleClass="sprite sprite-logout" />
+                            <h:outputText value="#{bundle['banner_logout']}" />
+                        </p:link>
+                        <p class="language">
+                            <p:inputText type="hidden" label="#{language.locale}" />
+                            <h:commandLink styleClass="first" id="languageFr" actionListener="#{language.localeFRChanged}">
+                                <h:outputText value="#{bundle['flag_fr_title_lang']}" />
+                            </h:commandLink>
 
-		</p:panelGrid>
+                            <h:commandLink id="languageUk" actionListener="#{language.localeUKChanged}">
+                                <h:outputText value="#{bundle['flag_uk_title_lang']}" />
+                            </h:commandLink>
+                        </p>
+                    </h:form>
+                </h:panelGroup>
 
-	</p:panel>
-	<h:panelGroup styleClass="ajaxloader"> 
-		<p:ajaxStatus> 
-			<f:facet name="start"> 
-				<p:graphicImage value="/images/ajax-loader.gif" /> 
-			</f:facet> 
-		</p:ajaxStatus> 
- 	</h:panelGroup> 
-</ui:composition>
+            </p:panelGrid>
+
+        </p:panel>
+        <h:panelGroup styleClass="ajaxloader">
+            <p:ajaxStatus>
+                <f:facet name="start">
+                    <p:graphicImage value="/images/ajax-loader.gif" />
+                </f:facet>
+            </p:ajaxStatus>
+        </h:panelGroup>
+    </ui:composition>
 
 
 </html>

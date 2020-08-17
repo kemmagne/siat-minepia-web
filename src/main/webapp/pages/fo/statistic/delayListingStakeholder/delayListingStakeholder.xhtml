@@ -29,7 +29,6 @@
                             <p:outputLabel for="productType" value="#{bundle['simpleSearch_productTypeLabel']}" />
                         </h:panelGroup>
                         <p:selectCheckboxMenu id="productType" title="#{bundle['simpleSearch_productTypeTitle']}" label="#{bundle['simpleSearch_productTypeTitle']}" value="#{statisticController.cteFilter.productNatureList}" filter="true" filterMatchMode="contains">
-                            <!--<f:selectItem itemValue="#{null}" itemLabel="{bundle['simpleSearch_productTypeLabel']}" />-->
                             <f:selectItems value="#{statisticController.productTypesMap.entrySet()}" var="entry" itemValue="#{entry.key}" itemLabel="#{entry.value}" />
                         </p:selectCheckboxMenu>
                     </p:outputPanel>

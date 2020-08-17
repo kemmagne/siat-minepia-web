@@ -1,7 +1,6 @@
 package org.guce.siat.web.ct.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +47,7 @@ import org.guce.siat.web.common.ControllerConstants;
 import org.guce.siat.web.ct.controller.util.JsfUtil;
 import org.guce.siat.web.ct.controller.util.enums.PersistenceActions;
 import org.guce.siat.web.ct.data.FileTypeAutorityData;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -237,6 +237,11 @@ public class UserController extends AbstractController<User> {
     private List<SelectItem> entitiesItems;
 
     /**
+     * The new password after reset
+     */
+    private String newPassword;
+
+    /**
      * Instantiates a new user controller.
      */
     public UserController() {
@@ -272,36 +277,36 @@ public class UserController extends AbstractController<User> {
     private boolean hasUserAffected() {
         if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ADMIN_ORGANISME.getCode())) {
             // check if organism is affected to Director
-            if (PositionType.DIRECTEUR.equals(selected.getPosition())) {
+            if (PositionType.DIRECTEUR.equals(getSelected().getPosition())) {
                 if (organismService.hasDirectorAffected(getCurrentOrganism())) {
                     JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
                             ORGANISM_ALREADY_AFFECTED_DIRECTOR));
                     return true;
                 }
-                selected.setAdministration(getCurrentOrganism());
+                getSelected().setAdministration(getCurrentOrganism());
             } // check if organism is affected to Supervisor
-            else if (PositionType.SUPERVISEUR.equals(selected.getPosition())) {
+            else if (PositionType.SUPERVISEUR.equals(getSelected().getPosition())) {
                 if (organismService.hasSupervisorAffected(getCurrentOrganism())) {
                     JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
                             ORGANISM_ALREADY_AFFECTED_SUPERVISOR));
                     return true;
                 }
-                selected.setAdministration(getCurrentOrganism());
-            } else if (PositionType.SOUS_DIRECTEUR.equals(selected.getPosition())) {
-                selected.setAdministration(selectedsSubDepartment);
-            } else if (PositionType.CHEF_SERVICE.equals(selected.getPosition())) {
-                selected.setAdministration(selectedService);
+                getSelected().setAdministration(getCurrentOrganism());
+            } else if (PositionType.SOUS_DIRECTEUR.equals(getSelected().getPosition())) {
+                getSelected().setAdministration(selectedsSubDepartment);
+            } else if (PositionType.CHEF_SERVICE.equals(getSelected().getPosition())) {
+                getSelected().setAdministration(selectedService);
             } else if ((PositionType.CHEF_BUREAU.getCode() + "," + PositionType.AGENT.getCode() + "," + PositionType.OBSERVATEUR
-                    .getCode()).contains(selected.getPosition().getCode())) {
-                selected.setAdministration(selectedEntity);
+                    .getCode()).contains(getSelected().getPosition().getCode())) {
+                getSelected().setAdministration(selectedEntity);
             }
         } else if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ADMIN_MINISTERE.getCode())) {
-            if (PositionType.MINISTRE.equals(selected.getPosition()) && ministryService.hasMinisterAffected(getCurrentMinistry())) {
+            if (PositionType.MINISTRE.equals(getSelected().getPosition()) && ministryService.hasMinisterAffected(getCurrentMinistry())) {
                 // check if ministry is affected to a minister
                 JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
                         MINISTRY_ALREADY_AFFECTED_MINESTER));
                 return true;
-            } else if (PositionType.SECRETAIRE_GENERAL.equals(selected.getPosition())
+            } else if (PositionType.SECRETAIRE_GENERAL.equals(getSelected().getPosition())
                     && ministryService.hasSGAffected(getCurrentMinistry())) {
                 // check if ministry is affected to a general secretary
                 JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
@@ -309,7 +314,7 @@ public class UserController extends AbstractController<User> {
                 return true;
 
             }
-            selected.setAdministration(getCurrentMinistry());
+            getSelected().setAdministration(getCurrentMinistry());
         }
         return false;
     }
@@ -324,20 +329,20 @@ public class UserController extends AbstractController<User> {
      */
     @Override
     public void create() {
-        selected.setAccountNonExpired(Boolean.TRUE);
-        selected.setDeleted(Boolean.FALSE);
-        selected.setAccountNonLocked(Boolean.TRUE);
-        selected.setCredentialsNonExpired(Boolean.TRUE);
-        selected.setFirstLogin(Boolean.TRUE);
-        selected.setAttempts(Constants.ZERO);
-        selected.setTheme(Theme.BLUE);
-        final String radomPassword = RandomStringUtils.randomAlphanumeric(Constants.SIX);
-        selected.setPassword(radomPassword);
+        getSelected().setAccountNonExpired(Boolean.TRUE);
+        getSelected().setDeleted(Boolean.FALSE);
+        getSelected().setAccountNonLocked(Boolean.TRUE);
+        getSelected().setCredentialsNonExpired(Boolean.TRUE);
+        getSelected().setFirstLogin(Boolean.TRUE);
+        getSelected().setAttempts(Constants.ZERO);
+        getSelected().setTheme(Theme.BLUE);
+        final String radomPassword = RandomStringUtils.randomAlphanumeric(Constants.EIGHT);
+        getSelected().setPassword(radomPassword);
         fillUserAuthorityFileType();
         try {
             if (!hasUserAffected()) {
                 if (CollectionUtils.isNotEmpty(userAuthFileTypes)) {
-                    userAuthorityFileTypeService.saveListUserAuthorityFileType(userAuthFileTypes, selected);
+                    userAuthorityFileTypeService.saveListUserAuthorityFileType(userAuthFileTypes, getSelected());
                     final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
                             User.class.getSimpleName() + PersistenceActions.CREATE.getCode());
                     JsfUtil.addSuccessMessage(msg);
@@ -346,8 +351,7 @@ public class UserController extends AbstractController<User> {
                             CREATE_SIAT_ACCOUNT_MAIL_SUBJECT);
 
                     final String templateFileName = localeFileTemplate(WELCOME_MAIL_BODY, getCurrentLocale().getLanguage());
-                    Map<String, String> map = new HashMap<>();
-                    map = prepareMap(subject, mailService.getFromValue(), selected, radomPassword, templateFileName);
+                    Map<String, String> map = prepareMap(subject, mailService.getFromValue(), getSelected(), radomPassword, templateFileName);
                     mailService.sendMail(map);
                     resetAttributes();
                     if (!isValidationFailed()) {
@@ -396,27 +400,27 @@ public class UserController extends AbstractController<User> {
     public void prepareEdit() {
         userAdministrationHierarchy = new ArrayList<>();
         if (getSelected() != null) {
-            this.setSelected(userService.find(getSelected().getId()));
+            setSelected(userService.find(getSelected().getId()));
         }
         if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ADMIN_ORGANISME.getCode())) {
-            if (null != selected.getPosition()) {
-                switch (selected.getPosition()) {
+            if (null != getSelected().getPosition()) {
+                switch (getSelected().getPosition()) {
                     case SOUS_DIRECTEUR:
-                        selectedsSubDepartment = (SubDepartment) selected.getAdministration();
+                        selectedsSubDepartment = (SubDepartment) getSelected().getAdministration();
                         break;
                     case CHEF_SERVICE:
-                        selectedService = (Service) selected.getAdministration();
+                        selectedService = (Service) getSelected().getAdministration();
                         selectedsSubDepartment = selectedService.getSubDepartment();
                         break;
                     case AGENT:
                     case CHEF_BUREAU:
                     case OBSERVATEUR:
-                        selectedEntity = (Entity) selected.getAdministration();
+                        selectedEntity = (Entity) getSelected().getAdministration();
                         selectedService = selectedEntity.getService();
                         selectedsSubDepartment = selectedService.getSubDepartment();
-                        if (this.selected != null && (PositionType.AGENT.equals(selected.getPosition())
-                                || PositionType.OBSERVATEUR.equals(selected.getPosition()))) {
-                            userAdministrationHierarchy = this.getAdministrationHierarchy(selected.getAdministration());
+                        if (this.selected != null && (PositionType.AGENT.equals(getSelected().getPosition())
+                                || PositionType.OBSERVATEUR.equals(getSelected().getPosition()))) {
+                            userAdministrationHierarchy = this.getAdministrationHierarchy(getSelected().getAdministration());
                         }
                         break;
                     default:
@@ -425,9 +429,9 @@ public class UserController extends AbstractController<User> {
             }
         }
         fileTypeAutorityDatas = new ArrayList<>();
-        userAuthFileTypes = userAuthorityFileTypeService.getFileTypeAndAuthorityByUser(selected);
+        userAuthFileTypes = userAuthorityFileTypeService.getFileTypeAndAuthorityByUser(getSelected());
         fileTypeList = fileTypeService.findFileTypeByMinistry(getCurrentMinistry());
-        authoritiesList = authorityService.findDistinctAutoritiesByPosition(selected.getPosition());
+        authoritiesList = authorityService.findDistinctAutoritiesByPosition(getSelected().getPosition());
         for (final FileType fileType : fileTypeList) {
             final List<FileTypeAutorityData> innerList = new ArrayList<>();
             for (final Authority authority : authoritiesList) {
@@ -461,7 +465,7 @@ public class UserController extends AbstractController<User> {
                     final UserAuthorityFileType uaf = new UserAuthorityFileType();
                     final UserAuthorityFileTypeId uafId = new UserAuthorityFileTypeId();
                     userAuthority.setAuthorityGranted(fileTypeAutorityVo.getAuthority());
-                    userAuthority.setUser(selected);
+                    userAuthority.setUser(getSelected());
                     authorities.add(userAuthority);
                     uafId.setFileType(fileTypeAutorityVo.getFileType());
                     uafId.setUserAuthority(userAuthority);
@@ -472,20 +476,22 @@ public class UserController extends AbstractController<User> {
         }
         final List<UserAuthority> userAuthorities = new ArrayList<>();
         userAuthorities.addAll(authorities);
-        selected.setUserAuthorityList(userAuthorities);
+        getSelected().setUserAuthorityList(userAuthorities);
     }
 
     public void resetPassword() {
-        if (selected != null) {
-            try {
-                selected.setPassword(DEFAULT_STRING_PASSWORD);
-                userService.updateUser(selected);
-                userService.update(selected);
-            } catch (Exception e) {
-                LOG.error(null, e);
-                JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                        "ResetPasswordError"));
-            }
+
+        if (selected == null) {
+            return;
+        }
+
+        try {
+            newPassword = userService.resetUserPassword(getSelected());
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.execute("PF('PasswordResetViewDialog').show();");
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+            JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString("ResetPasswordError"));
         }
     }
 
@@ -499,22 +505,22 @@ public class UserController extends AbstractController<User> {
      */
     @Override
     public void edit() {
-        selected.setAccountNonExpired(Boolean.TRUE);
-        selected.setDeleted(Boolean.FALSE);
-        selected.setCredentialsNonExpired(Boolean.TRUE);
+        getSelected().setAccountNonExpired(Boolean.TRUE);
+        getSelected().setDeleted(Boolean.FALSE);
+        getSelected().setCredentialsNonExpired(Boolean.TRUE);
         fillUserAuthorityFileType();
         try {
             if (CollectionUtils.isNotEmpty(userAuthFileTypes)) {
                 //avoid password loss
-                String actualPassword = selected.getPassword();
-                userAuthorityFileTypeService.updateListUserAuthorityFileType(selected, userAuthFileTypes);
-                if (selected.getAccountNonLocked()) {
-                    selected.setAttempts(0);
-                    selected.setAccountNonLocked(Boolean.TRUE);
-                    selected.setLastAttemptsTime(null);
+                String actualPassword = getSelected().getPassword();
+                userAuthorityFileTypeService.updateListUserAuthorityFileType(getSelected(), userAuthFileTypes);
+                if (getSelected().getAccountNonLocked()) {
+                    getSelected().setAttempts(0);
+                    getSelected().setAccountNonLocked(Boolean.TRUE);
+                    getSelected().setLastAttemptsTime(null);
                 }
-                selected.setPassword(actualPassword);
-                userService.update(selected);
+                getSelected().setPassword(actualPassword);
+                userService.update(getSelected());
                 final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
                         User.class.getSimpleName() + PersistenceActions.UPDATE.getCode());
 
@@ -550,9 +556,9 @@ public class UserController extends AbstractController<User> {
      */
     @Override
     public void delete() {
-        selected.setDeleted(true);
-        selected.setAdministration(null);
-        userService.update(selected);
+        getSelected().setDeleted(true);
+        getSelected().setAdministration(null);
+        userService.update(getSelected());
         final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
                 User.class.getSimpleName() + PersistenceActions.DELETE.getCode());
         JsfUtil.addSuccessMessage(msg);
@@ -676,8 +682,8 @@ public class UserController extends AbstractController<User> {
      */
     private void initFileTypeAuthorityDatas() {
         fileTypeAutorityDatas = new ArrayList<>();
-        if (selected.getPosition() != null) {
-            authoritiesList = authorityService.findDistinctAutoritiesByPosition(selected.getPosition());
+        if (getSelected().getPosition() != null) {
+            authoritiesList = authorityService.findDistinctAutoritiesByPosition(getSelected().getPosition());
         }
         for (final FileType fileType : fileTypeList) {
             final List<FileTypeAutorityData> innerList = new ArrayList<>();
@@ -697,9 +703,9 @@ public class UserController extends AbstractController<User> {
         subDepartmentsItems = new ArrayList<>();
         userAdministrationHierarchy = new ArrayList<>();
 
-        if (this.selected != null && !PositionType.DIRECTEUR.equals(this.selected.getPosition())) {
+        if (this.selected != null && !PositionType.DIRECTEUR.equals(this.getSelected().getPosition())) {
             List<SubDepartment> subDepartments = subDepartmentService.findNonAffectedByOrganism(getCurrentOrganism());
-            if (PositionType.SOUS_DIRECTEUR.equals(this.selected.getPosition())) {
+            if (PositionType.SOUS_DIRECTEUR.equals(this.getSelected().getPosition())) {
                 subDepartments = subDepartmentService.findNonAffectedByOrganism(getCurrentOrganism());
             } else {
                 subDepartments = subDepartmentService.findSubDepartmentsByOrganism(getCurrentOrganism());
@@ -717,10 +723,10 @@ public class UserController extends AbstractController<User> {
     public void subDepartmentChangedHandler() {
         servicesItems = new ArrayList<>();
 
-        if (this.selectedsSubDepartment != null && !PositionType.DIRECTEUR.equals(this.selected.getPosition())
-                && !PositionType.SOUS_DIRECTEUR.equals(this.selected.getPosition())) {
+        if (this.selectedsSubDepartment != null && !PositionType.DIRECTEUR.equals(this.getSelected().getPosition())
+                && !PositionType.SOUS_DIRECTEUR.equals(this.getSelected().getPosition())) {
             List<Service> services;
-            if (PositionType.CHEF_SERVICE.equals(this.selected.getPosition())) {
+            if (PositionType.CHEF_SERVICE.equals(this.getSelected().getPosition())) {
                 services = serviceService.findNonAffectedServicesBySubDepartment(selectedsSubDepartment);
             } else {
                 services = selectedsSubDepartment.getServicesList();
@@ -739,10 +745,10 @@ public class UserController extends AbstractController<User> {
         entitiesItems = new ArrayList<>();
 
         if (selectedService != null
-                && (PositionType.CHEF_BUREAU.equals(selected.getPosition()) || PositionType.AGENT.equals(selected.getPosition()) || PositionType.OBSERVATEUR
-                .equals(selected.getPosition()))) {
+                && (PositionType.CHEF_BUREAU.equals(getSelected().getPosition()) || PositionType.AGENT.equals(getSelected().getPosition()) || PositionType.OBSERVATEUR
+                .equals(getSelected().getPosition()))) {
             final List<Entity> entities = entityService.findNonAffectedEntityByServiceAndPosition(selectedService,
-                    selected.getPosition());
+                    getSelected().getPosition());
             for (final Entity ent : entities) {
                 entitiesItems.add(new SelectItem(ent, ent.getCode()));
             }
@@ -754,8 +760,8 @@ public class UserController extends AbstractController<User> {
      */
     public void bureauChangedHandler() {
         userAdministrationHierarchy = new ArrayList<>();
-        if (this.selected != null && (PositionType.AGENT.equals(selected.getPosition())
-                || PositionType.OBSERVATEUR.equals(selected.getPosition()))) {
+        if (this.selected != null && (PositionType.AGENT.equals(getSelected().getPosition())
+                || PositionType.OBSERVATEUR.equals(getSelected().getPosition()))) {
             userAdministrationHierarchy = this.getAdministrationHierarchy(selectedEntity);
         }
     }
@@ -1165,6 +1171,10 @@ public class UserController extends AbstractController<User> {
 
     public void setUserAdministrationHierarchy(List<Administration> userAdministrationHierarchy) {
         this.userAdministrationHierarchy = userAdministrationHierarchy;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
     }
 
 }

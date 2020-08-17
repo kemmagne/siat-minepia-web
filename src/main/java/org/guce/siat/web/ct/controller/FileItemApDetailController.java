@@ -850,7 +850,7 @@ public class FileItemApDetailController implements Serializable {
     /**
      * The name of the field vaidity Date
      */
-    final static String validityDateFieldName = "DATE_VALIDITE";
+    final static String VALIDITY_DATE_FIELD_NAME = "DATE_VALIDITE";
 
     final static String SIGNATAIRE_DATE_FIELD_NAME = "SIGNATAIRE_DATE";
 
@@ -1288,7 +1288,6 @@ public class FileItemApDetailController implements Serializable {
                 System.out.println("handerFileUpload, file too large");
                 JsfUtil.addErrorMessage("La taille du fichier n'est pas supportée");
                 fileToSave = null;
-                name = "";
             } else {
                 System.out.println("handerFileUpload, good. Waiting to be saved");
                 fileToSave = new java.io.File(name.replaceAll("/[^A-Za-z0-9]/", ""));
@@ -1301,8 +1300,6 @@ public class FileItemApDetailController implements Serializable {
             }
         } else {
             JsfUtil.addErrorMessage("Le nom de la pièce renseignée est invalide");
-            file = null;
-            name = "";
         }
 
     }
@@ -1444,7 +1441,7 @@ public class FileItemApDetailController implements Serializable {
                         if (!flow.getFromStep().equals(apDecisionStep) && !returnAllowed
                                 && Arrays.asList(FlowCode.FL_AP_155.name(), FlowCode.FL_AP_156.name(), FlowCode.FL_AP_157.name(),
                                         FlowCode.FL_AP_158.name(), FlowCode.FL_AP_159.name()).contains(flow.getCode())) {
-//							destinationFlowsFromCurrentStep = Collections.singletonList(flow);
+//                            destinationFlowsFromCurrentStep = Collections.singletonList(flow);
                             destinationFlowsFromCurrentStep = new ArrayList<>();
                             if (fileTypeFlow != null || !bsbeMinfofFileType) {
                                 destinationFlowsFromCurrentStep.add(flow);
@@ -1452,7 +1449,7 @@ public class FileItemApDetailController implements Serializable {
                             cotationAllowed = true;
                             decisionAllowed = false;
                             returnAllowed = true;
-//							break;
+//                            break;
                         }
                         if (flow.getToStep() != null && apDecisionStepCode.contains(flow.getToStep().getStepCode()) && !returnAllowed
                                 && flow.getToStep().getId().equals(apDecisionStep.getId())
@@ -1491,8 +1488,7 @@ public class FileItemApDetailController implements Serializable {
                     }
                 }
                 if (hasPayment) {
-                    hist:
-                    for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
+hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                         if (hist.getItemFlow().getFlow().getCode().equals(FlowCode.FL_AP_166.name())) {
                             payed = true;
                             final Iterator<Flow> it = destinationFlowsFromCurrentStep.iterator();
@@ -1549,8 +1545,7 @@ public class FileItemApDetailController implements Serializable {
                     }
                 }
                 if (hasPayment) {
-                    hist:
-                    for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
+hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                         if (hist.getItemFlow().getFlow().getCode().equals(FlowCode.FL_AP_168.name())) {
                             payed = true;
                             final Iterator<Flow> it = destinationFlowsFromCurrentStep.iterator();
@@ -1841,7 +1836,7 @@ public class FileItemApDetailController implements Serializable {
             lastDecisionER = essayTestApService.findByItemFlow(lastDecisions);
         } else if (FlowCode.FL_AP_166.name().equals(lastDecisions.getFlow().getCode())) {
             specificDecisionsHistory.setLastPaymentData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
-            //	specificDecisionsHistory.setDecisionDetailsPayData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
+            //    specificDecisionsHistory.setDecisionDetailsPayData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
         }
     }
 
@@ -2043,7 +2038,7 @@ public class FileItemApDetailController implements Serializable {
                     flowDatas.add(itemFlowData);
                 }
             }
-            //		if there is an accepting step for EH_MINADER or CAT_MINADER
+            //        if there is an accepting step for EH_MINADER or CAT_MINADER
             if (ACCEPTATION_FLOWS.contains(selectedFlow.getCode())
                     && (FileTypeCode.EH_MINADER.equals(currentFile.getFileType().getCode()) || FileTypeCode.CAT_MINADER
                     .equals(currentFile.getFileType().getCode()))) {
@@ -2163,14 +2158,14 @@ public class FileItemApDetailController implements Serializable {
             itemFlowsToAdd.add(itemFlow);
 
         }
-        //		if (FlowCode.FL_AP_155.name().equals(selectedFlow.getCode()))
-        //		{
-        //			commonService.takeDacisionAndSavePayment(itemFlowsToAdd, paymentData);
-        //		}
-        //		else
-        //		{
+        //        if (FlowCode.FL_AP_155.name().equals(selectedFlow.getCode()))
+        //        {
+        //            commonService.takeDacisionAndSavePayment(itemFlowsToAdd, paymentData);
+        //        }
+        //        else
+        //        {
         itemFlowService.takeDecision(itemFlowsToAdd, flowDatas);
-        //		}
+        //        }
 
         if (assignedUserForCotation != null) {
             currentFile.setAssignedUser(assignedUserForCotation);
@@ -2312,7 +2307,7 @@ public class FileItemApDetailController implements Serializable {
         try {
             // Cotation case
             if (currentFile.getFileItemsList() != null && cotationAllowed != null && cotationAllowed && ((decisionAtCotationLevel != null && !decisionAtCotationLevel) || decisionAtCotationLevel == null)) {
-                System.out.println("Cotation case");
+
                 itemFlowService.sendDecisionsToDispatchFile(currentFile);
 
                 JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
@@ -2320,7 +2315,7 @@ public class FileItemApDetailController implements Serializable {
                 goToDetailPage();
             } // Decision case
             else if (decisionAllowed || (comeFromRetrieveAp != null && comeFromRetrieveAp) || (decisionAtCotationLevel != null && decisionAtCotationLevel)) {
-                System.out.println("Decision case");
+
                 if (currentFile.getFileItemsList() != null && !currentFile.getFileItemsList().isEmpty()) {
                     final Map<FileItem, Flow> map = itemFlowService.sendDecisions(currentFile.getFileItemsList().get(0).getFile(),
                             currentFile.getFileItemsList());
@@ -2392,7 +2387,7 @@ public class FileItemApDetailController implements Serializable {
                                     for (final ItemFlowData ifd : itemFlowDataList) {
                                         if (ifd.getDataType().getLabel().equalsIgnoreCase("Date validité")) {
                                             final FileField dateValidityField = fileFieldService.findFileFieldByCodeAndFileType(
-                                                    validityDateFieldName, currentFile.getFileType().getCode());
+                                                    VALIDITY_DATE_FIELD_NAME, currentFile.getFileType().getCode());
                                             if (dateValidityField != null) {
                                                 FileFieldValue dateValidityFieldValue = fileFieldValueService.findValueByFileFieldAndFile(dateValidityField.getCode(), currentFile);
                                                 if (dateValidityFieldValue != null) {
@@ -2521,7 +2516,7 @@ public class FileItemApDetailController implements Serializable {
                                     }
                                     final java.io.File targetAttachment = new java.io.File(folder, targetAttachmentName);
 
-                                    try (FileOutputStream fileOuputStream = new FileOutputStream(targetAttachment)) {
+                                    try ( FileOutputStream fileOuputStream = new FileOutputStream(targetAttachment)) {
                                         fileOuputStream.write(report);
                                     }
 

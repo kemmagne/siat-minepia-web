@@ -1,6 +1,5 @@
 package org.guce.siat.web.reports.exporter;
 
-import com.google.common.base.Objects;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,9 +57,7 @@ public class CtPviExporter extends AbstractReportInvoker {
 
     @Override
     protected JRBeanCollectionDataSource getReportDataSource() {
-        if (inspectionReport == null) {
-            return null;
-        }
+
         final CtCctDataVo entryInspectionFindingDataVo = new CtCctDataVo();
 
         try {
@@ -82,17 +80,22 @@ public class CtPviExporter extends AbstractReportInvoker {
             }
             //Controllers
             if (CollectionUtils.isNotEmpty(inspectionReport.getInspectionControllerList())) {
-                for (final InspectionController inspectionController : inspectionReport.getInspectionControllerList()) {
-                    final CtCctControllerDataVo controllerDataVo = new CtCctControllerDataVo();
+                for (InspectionController inspectionController : inspectionReport.getInspectionControllerList()) {
+
+                    CtCctControllerDataVo controllerDataVo = new CtCctControllerDataVo();
+
                     if (StringUtils.isNotBlank(inspectionController.getName())) {
                         controllerDataVo.setName(inspectionController.getName());
                     }
+
                     if (StringUtils.isNotBlank(inspectionController.getPosition())) {
                         controllerDataVo.setQuality(inspectionController.getPosition());
                     }
+
                     if (StringUtils.isNotBlank(inspectionController.getService())) {
                         controllerDataVo.setService(inspectionController.getService());
                     }
+
                     controllerDataVoList.add(controllerDataVo);
                 }
             }
@@ -164,7 +167,7 @@ public class CtPviExporter extends AbstractReportInvoker {
                         .getString(CONSTAT_BUNDLE_FALSE));
             }
 
-            if (!Objects.equal(inspectionReport.getOtherGoodness(), null)) {
+            if (!Objects.equals(inspectionReport.getOtherGoodness(), null)) {
                 entryInspectionFindingDataVo.setOtherQualityCertificate(inspectionReport.getOtherGoodness().getLabelFr());
             }
             //Decision

@@ -163,7 +163,7 @@
                             </h:panelGroup>
 
 
-                            <p:commandLink styleClass="resetPass" update=":loginPnl " actionListener="#{resetPasswordBean.changeLoginStatus(false)}">
+                            <p:commandLink immediate="true" styleClass="resetPass" update=":loginPnl " actionListener="#{resetPasswordBean.changeLoginStatus(false)}">
                                 <h:outputText value="#{bundle['reset_forgot_password']}" />
                             </p:commandLink>
 

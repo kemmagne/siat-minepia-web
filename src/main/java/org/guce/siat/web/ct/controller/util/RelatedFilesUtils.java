@@ -26,7 +26,7 @@ import org.guce.siat.web.ct.controller.FileItemCctDetailController;
  */
 public final class RelatedFilesUtils {
 
-    private static final List<StepCode> TREATMENT_STEPS_CODES = Arrays.asList(StepCode.ST_CT_04, StepCode.ST_CT_48, StepCode.ST_CT_63);
+    private static final List<StepCode> TREATMENT_STEPS_CODES = Arrays.asList(StepCode.ST_CT_04, StepCode.ST_CT_48, StepCode.ST_CT_63, StepCode.ST_CT_55);
 
     private static final String LABEL = "label";
     private static final String MAIN_REPORT = "mainReport";
@@ -87,6 +87,18 @@ public final class RelatedFilesUtils {
             if (next.getSignatureDate() == null) {
                 iterator.remove();
             }
+        }
+
+        if (files.isEmpty()) {
+
+            try {
+                String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, controller.getCurrentLocale()).getString("AucuneResultat");
+                line.put(LABEL, msg);
+            } catch (Exception ex) {
+                line.put(LABEL, "Aucun dossier");
+            }
+
+            return line;
         }
 
         File file = files.get(0);

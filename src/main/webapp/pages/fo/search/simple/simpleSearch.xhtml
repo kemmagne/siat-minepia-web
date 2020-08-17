@@ -1,74 +1,74 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
 
-	<br />
+    <br />
 
-	<h:form id="simpleSearchForm">
+    <h:form id="simpleSearchForm">
 
-		<p:accordionPanel styleClass="search">
+        <p:accordionPanel styleClass="search">
 
-			<p:tab title="#{bundle['simpleSearch_SearchCriteria']}" dynamic="true" cache="true">
+            <p:tab title="#{bundle['simpleSearch_SearchCriteria']}" dynamic="true" cache="true">
 
-				<h:panelGrid columns="10" cellpadding="10">
-					<h:panelGroup>
-						<p:outputLabel for="fileType" value="#{bundle['simpleSearch_fileTypeLabel']}" />
-					</h:panelGroup>
-					<p:selectOneMenu id="fileType" title="#{bundle['simpleSearch_fileTypeTitle']}" value="#{searchController.filter.fileType}"
-						filter="true" filterMatchMode="contains">
-						<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" itemValue="#{null}" />
-						<f:selectItems value="#{searchController.fileTypeItems}" />
-						<f:converter binding="#{fileTypeConverter}" />
-						<p:ajax event="change" listener="#{searchController.onFileTypeChanged}" />
-						<p:ajax event="select" listener="#{searchController.onFileTypeChanged}" />
-					</p:selectOneMenu>
+                <h:panelGrid columns="10" cellpadding="10">
+                    <h:panelGroup>
+                        <p:outputLabel for="fileType" value="#{bundle['simpleSearch_fileTypeLabel']}" />
+                    </h:panelGroup>
+                    <p:selectOneMenu id="fileType" title="#{bundle['simpleSearch_fileTypeTitle']}" value="#{searchController.filter.fileType}"
+                                     filter="true" filterMatchMode="contains">
+                        <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" itemValue="#{null}" />
+                        <f:selectItems value="#{searchController.fileTypeItems}" />
+                        <f:converter binding="#{fileTypeConverter}" />
+                        <p:ajax event="change" listener="#{searchController.onFileTypeChanged}" />
+                        <p:ajax event="select" listener="#{searchController.onFileTypeChanged}" />
+                    </p:selectOneMenu>
 
-					<p:outputPanel autoUpdate="true">
-						<p:outputLabel rendered="#{searchController.filter.fileType ne null}" for="step" value="#{bundle['SimpleSearch_step']}" />
-					</p:outputPanel>
+                    <p:outputPanel autoUpdate="true">
+                        <p:outputLabel rendered="#{searchController.filter.fileType ne null}" for="step" value="#{bundle['SimpleSearch_step']}" />
+                    </p:outputPanel>
 
-					<p:outputPanel autoUpdate="true">
-						<p:selectOneMenu rendered="#{searchController.filter.fileType ne null}" id="step" style="width: 133px"
-							value="#{searchController.selectedStepFilter}" filter="true" filterMatchMode="contains">
-							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-							<f:selectItems value="#{searchController.stepDtoList}" var="stepDto" itemValue="#{stepDto}"
-								itemLabel="#{facesContext.viewRoot.locale eq 'en' ? stepDto.redefinedLabelEn : stepDto.redefinedLabelFr}" />
-							<f:converter binding="#{stepDtoConverter}" />
-							 <f:attribute name="fileType" value="#{searchController.filter.fileType}"/>
-							 <f:attribute name="stepDtoList" value="#{searchController.stepDtoList}"/>
-						</p:selectOneMenu>
-					</p:outputPanel>
+                    <p:outputPanel autoUpdate="true">
+                        <p:selectOneMenu rendered="#{searchController.filter.fileType ne null}" id="step" style="width: 133px"
+                                         value="#{searchController.selectedStepFilter}" filter="true" filterMatchMode="contains">
+                            <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+                            <f:selectItems value="#{searchController.stepDtoList}" var="stepDto" itemValue="#{stepDto}"
+                                           itemLabel="#{facesContext.viewRoot.locale eq 'en' ? stepDto.redefinedLabelEn : stepDto.redefinedLabelFr}" />
+                            <f:converter binding="#{stepDtoConverter}" />
+                            <f:attribute name="fileType" value="#{searchController.filter.fileType}"/>
+                            <f:attribute name="stepDtoList" value="#{searchController.stepDtoList}"/>
+                        </p:selectOneMenu>
+                    </p:outputPanel>
 
-					<h:panelGroup>
-						<p:outputLabel for="fromDate" value="#{bundle['SimpleSearch_fromDate']}" />
-					</h:panelGroup>
-					<p:calendar navigator="true" id="fromDate" value="#{searchController.filter.fromDate}" title="#{bundle['SimpleSearch_fromDate']}"
-						showOn="button" pattern="dd/MM/yyyy" readonlyInput="true">
-						<p:ajax event="dateSelect" update="toDate" />
-					</p:calendar>
+                    <h:panelGroup>
+                        <p:outputLabel for="fromDate" value="#{bundle['SimpleSearch_fromDate']}" />
+                    </h:panelGroup>
+                    <p:calendar navigator="true" id="fromDate" value="#{searchController.filter.fromDate}" title="#{bundle['SimpleSearch_fromDate']}"
+                                showOn="button" pattern="dd/MM/yyyy" readonlyInput="true">
+                        <p:ajax event="dateSelect" update="toDate" />
+                    </p:calendar>
 
-					<h:panelGroup>
-						<p:outputLabel for="toDate" value="#{bundle['SimpleSearch_toDate']}" />
-					</h:panelGroup>
-					<p:calendar navigator="true" id="toDate" value="#{searchController.filter.toDate}" title="#{bundle['SimpleSearch_toDate']}"
-						showOn="button" pattern="dd/MM/yyyy" mindate="#{searchController.filter.fromDate}" readonlyInput="true">
-					</p:calendar>
+                    <h:panelGroup>
+                        <p:outputLabel for="toDate" value="#{bundle['SimpleSearch_toDate']}" />
+                    </h:panelGroup>
+                    <p:calendar navigator="true" id="toDate" value="#{searchController.filter.toDate}" title="#{bundle['SimpleSearch_toDate']}"
+                                showOn="button" pattern="dd/MM/yyyy" mindate="#{searchController.filter.fromDate}" readonlyInput="true">
+                    </p:calendar>
 
-					<h:panelGroup>
+                    <h:panelGroup>
 
-						<p:commandButton icon="ui-icon-search" title="#{bundle['ButtonSearch']}" action="#{searchController.doSearchByFilter}"
-							update=":filtredFileItemListForm:datalist :simpleSearchForm :growl" oncomplete="PF('datalistTable').filter();"
-							onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+                        <p:commandButton icon="ui-icon-search" title="#{bundle['ButtonSearch']}" action="#{searchController.doSearchByFilter}"
+                                         update=":filtredFileItemListForm:datalist :simpleSearchForm :growl" oncomplete="PF('datalistTable').filter();"
+                                         onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
 
-						<p:commandButton icon="ui-icon-refresh" title="#{bundle['ButtonReset']}" action="#{searchController.init}"
-							oncomplete="PF('datalistTable').filter();" update=":filtredFileItemListForm:datalist :simpleSearchForm"
-							onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+                        <p:commandButton icon="ui-icon-refresh" title="#{bundle['ButtonReset']}" action="#{searchController.init}"
+                                         oncomplete="PF('datalistTable').filter();" update=":filtredFileItemListForm:datalist :simpleSearchForm"
+                                         onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
 
-					</h:panelGroup>
-				</h:panelGrid>
+                    </h:panelGroup>
+                </h:panelGrid>
 
-			</p:tab>
+            </p:tab>
 
-		</p:accordionPanel>
+        </p:accordionPanel>
 
-	</h:form>
+    </h:form>
 </ui:composition>

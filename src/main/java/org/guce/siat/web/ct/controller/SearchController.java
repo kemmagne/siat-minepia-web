@@ -3,10 +3,8 @@ package org.guce.siat.web.ct.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
-
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -18,7 +16,6 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.guce.siat.common.model.AnalyseType;
@@ -44,10 +41,10 @@ import org.guce.siat.common.service.FileTypeStepService;
 import org.guce.siat.common.service.PortService;
 import org.guce.siat.common.service.ServicesItemService;
 import org.guce.siat.common.service.StepService;
+import org.guce.siat.common.service.TransferService;
 import org.guce.siat.common.service.TransportTypeService;
 import org.guce.siat.common.service.UserAuthorityFileTypeService;
 import org.guce.siat.common.service.UserService;
-import org.guce.siat.common.service.TransferService;
 import org.guce.siat.common.utils.Constants;
 import org.guce.siat.common.utils.enums.AuthorityConstants;
 import org.guce.siat.common.utils.enums.FileTypeCode;
@@ -84,11 +81,6 @@ public class SearchController extends AbstractController<FileItem> {
     private static final Logger LOG = LoggerFactory.getLogger(SearchController.class);
 
     /**
-     * The Constant LOCAL_BUNDLE_NAME.
-     */
-    private static final String LOCAL_BUNDLE_NAME = "org.guce.siat.messages.locale";
-
-    /**
      * The Constant DATE_VALIDATION_ERROR_MESSAGE.
      */
     private static final String DATE_VALIDATION_ERROR_MESSAGE = "DateValidationError";
@@ -97,7 +89,7 @@ public class SearchController extends AbstractController<FileItem> {
      * The Constant QUICK_SEARCH_VALIDATION_ERROR_MESSAGE.
      */
     private static final String QUICK_SEARCH_VALIDATION_ERROR_MESSAGE = "QuickSearchValidationError";
-    
+
     private static final String TRANSFER_DONE = "TransferDone";
 
     /**
@@ -175,8 +167,7 @@ public class SearchController extends AbstractController<FileItem> {
      */
     @ManagedProperty(value = "#{userService}")
     private UserService userService;
-    
-    
+
     @ManagedProperty(value = "#{transferService}")
     private TransferService transferService;
 
@@ -202,13 +193,12 @@ public class SearchController extends AbstractController<FileItem> {
      * The filter.
      */
     private FileItemFilter filter;
-    
+
     /**
      * AssignedFileItemFilter
      */
     private AssignedFileItemFilter assignedFilter;
-    
-    
+
     private List<User> inspectorList;
 
     /**
@@ -346,9 +336,9 @@ public class SearchController extends AbstractController<FileItem> {
      * The selected step filter.
      */
     private StepDto selectedStepFilter;
-    
+
     private Transfer transfer;
-    
+
     private User assignedUser;
 
     /**
@@ -378,8 +368,8 @@ public class SearchController extends AbstractController<FileItem> {
      */
     public void initSimpleSearch() {
 
-        simpleSearchItemList = new ArrayList<FileItem>();
-        fileTypeItems = new ArrayList<SelectItem>();
+        simpleSearchItemList = new ArrayList<>();
+        fileTypeItems = new ArrayList<>();
         final List<FileType> fileTypes = fileTypeService.findDistinctFileTypesByUser(getLoggedUser());
 
         for (final FileType fileType : fileTypes) {
@@ -388,16 +378,16 @@ public class SearchController extends AbstractController<FileItem> {
         }
 
     }
-    
-    public void initAssignedFileSearch(){
+
+    public void initAssignedFileSearch() {
         if (LOG.isDebugEnabled()) {
             LOG.debug(Constants.INIT_LOG_INFO_MESSAGE, SearchController.class.getName());
         }
         documentNumberFilter = null;
         selectedStepFilter = null;
         assignedFilter = new AssignedFileItemFilter();
-        simpleSearchItemList = new ArrayList<FileItem>();
-        fileTypeItems = new ArrayList<SelectItem>();
+        simpleSearchItemList = new ArrayList<>();
+        fileTypeItems = new ArrayList<>();
         final List<FileType> fileTypes = fileTypeService.findDistinctFileTypesByUser(getLoggedUser());
 
         for (final FileType fileType : fileTypes) {
@@ -432,19 +422,17 @@ public class SearchController extends AbstractController<FileItem> {
                 : getCurrentAdministration());
     }
 
-    public void goToAssignedFileSearch(){
-        try{
+    public void goToAssignedFileSearch() {
+        try {
             initAssignedFileSearch();
             final FacesContext context = FacesContext.getCurrentInstance();
             final ExternalContext extContext = context.getExternalContext();
-            final String url = extContext.encodeActionURL(context.getApplication().getViewHandler()
-                    .getActionURL(context, ControllerConstants.Pages.FO.ASSIGNED_FILE_ITEM_PAGE));
+            final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, ControllerConstants.Pages.FO.ASSIGNED_FILE_ITEM_PAGE));
             extContext.redirect(url);
-        } catch (Exception e){
-            
+        } catch (Exception e) {
         }
     }
-    
+
     /**
      * Go to simple search page.
      */
@@ -486,7 +474,7 @@ public class SearchController extends AbstractController<FileItem> {
             final FacesContext context = FacesContext.getCurrentInstance();
             final ExternalContext extContext = context.getExternalContext();
 
-            final FileItem fileItem = fileItemService.find(selected.getId());
+            final FileItem fileItem = fileItemService.find(getSelected().getId());
             final List<FileTypeCode> cctCodes = Arrays.asList(FileTypeCode.CCT_CT, FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI, FileTypeCode.CC_CT, FileTypeCode.CQ_CT);
 
             if (cctCodes.contains(fileItem.getFile().getFileType().getCode())) {
@@ -569,13 +557,21 @@ public class SearchController extends AbstractController<FileItem> {
      * Do simple search.
      */
     public void doSearchByFilter() {
+
         if (filter.getFromDate() != null && filter.getToDate() != null && filter.getFromDate().after(filter.getToDate())) {
-            JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                    DATE_VALIDATION_ERROR_MESSAGE));
+            JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(DATE_VALIDATION_ERROR_MESSAGE));
         } else if (selectedStepFilter != null) {
             filter.setStep(selectedStepFilter.getStep());
         }
-        setSimpleSearchItemList(commonService.findByFilter(filter, getLoggedUser(), getCurrentAdministration()));
+
+        List<FileItem> fileItems = commonService.findByFilter(filter, getLoggedUser(), getCurrentAdministration());
+
+//        Set<File> files = Utils.extractFilesFormItems(fileItems);
+//        fileItems = new ArrayList<>();
+//        for (File file : files) {
+//            fileItems.add(file.getFileItemsList().get(0));
+//        }
+        setSimpleSearchItemList(fileItems);
 
         if (CollectionUtils.isNotEmpty(simpleSearchItemList)) {
             for (final FileItem fileItem : simpleSearchItemList) {
@@ -589,8 +585,8 @@ public class SearchController extends AbstractController<FileItem> {
             }
         }
     }
-    
-    public void doAssignedSearch(){
+
+    public void doAssignedSearch() {
         if (assignedFilter.getFromDate() != null && assignedFilter.getToDate() != null && assignedFilter.getFromDate().after(assignedFilter.getToDate())) {
             JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
                     DATE_VALIDATION_ERROR_MESSAGE));
@@ -618,25 +614,22 @@ public class SearchController extends AbstractController<FileItem> {
     public void doQuickSearch() {
         try {
             if (StringUtils.isNoneBlank(documentNumberFilter)) {
-                List<FileItem> fileItems = Collections.emptyList();
+                List<FileItem> fileItems;
                 final File file = fileService.quickSearch(documentNumberFilter, getCurrentAdministration(), getLoggedUser());
 
                 if (file != null) {
-                    fileItems = fileService.quickSearch(documentNumberFilter, getCurrentAdministration(), getLoggedUser())
-                            .getFileItemsList();
+                    fileItems = fileService.quickSearch(documentNumberFilter, getCurrentAdministration(), getLoggedUser()).getFileItemsList();
                     if (CollectionUtils.isNotEmpty(fileItems)) {
                         selected = fileItems.get(0);
                         goToDetailPage();
                     }
                 } else {
-                    JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                            DOCUMENT_ACCESS_DENIED_ERROR));
+                    JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(DOCUMENT_ACCESS_DENIED_ERROR));
                 }
 
                 documentNumberFilter = null;
             } else {
-                JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                        QUICK_SEARCH_VALIDATION_ERROR_MESSAGE));
+                JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(QUICK_SEARCH_VALIDATION_ERROR_MESSAGE));
             }
         } catch (final NumberFormatException nfe) {
             documentNumberFilter = null;
@@ -847,8 +840,8 @@ public class SearchController extends AbstractController<FileItem> {
      */
     public List<String> fetchNSHList(final String query) {
 
-        List<ServicesItem> nativeItemsList = new ArrayList<ServicesItem>();
-        nshList = new ArrayList<String>();
+        List<ServicesItem> nativeItemsList;
+        nshList = new ArrayList<>();
 
         nativeItemsList = servicesItemService.findServicesItemByService(getCurrentService());
 
@@ -870,13 +863,13 @@ public class SearchController extends AbstractController<FileItem> {
         if (filter.getFileType() != null) {
             selectedStepFilter = null;
             final List<Step> stepList = filter.getFileType().getStepList();
-            stepDtoList = new ArrayList<StepDto>();
+            stepDtoList = new ArrayList<>();
             if (CollectionUtils.isNotEmpty(stepList)) {
                 for (final Step step : stepList) {
                     final StepDto stepDto = new StepDto();
                     stepDto.setStep(step);
 
-                    FileTypeStep fileTypeStep = null;
+                    FileTypeStep fileTypeStep;
                     fileTypeStep = fileTypeStepService.findFileTypeStepByFileTypeAndStep(filter.getFileType(), step);
                     if (fileTypeStep != null && fileTypeStep.getLabelFr() != null) {
                         stepDto.setRedefinedLabelEn((fileTypeStep.getLabelEn()));
@@ -931,7 +924,6 @@ public class SearchController extends AbstractController<FileItem> {
     public void setAssignedFilter(AssignedFileItemFilter assignedFilter) {
         this.assignedFilter = assignedFilter;
     }
-    
 
     /**
      * Gets the simple search item list.
@@ -1012,7 +1004,7 @@ public class SearchController extends AbstractController<FileItem> {
      * @return the searchCriteriaList
      */
     public List<String> getSearchCriteriaList() {
-        searchCriteriaList = new ArrayList<String>();
+        searchCriteriaList = new ArrayList<>();
         for (final SearchCriteria enumSearchCriteria : SearchCriteria.values()) {
             if (Constants.LOCALE_ENGLISH.equals(getCurrentLocaleCode())) {
                 searchCriteriaList.add(enumSearchCriteria.getCodeEn());
@@ -1544,34 +1536,32 @@ public class SearchController extends AbstractController<FileItem> {
     public void setAssignedUser(User assignedUser) {
         this.assignedUser = assignedUser;
     }
-    
-    
-    public void createTransfer(){
+
+    public void createTransfer() {
         transfer = new Transfer();
-        if (selected != null){
-            transfer.setFile(selected.getFile());
+        if (selected != null) {
+            transfer.setFile(getSelected().getFile());
             transfer.setCreatedDate(java.util.Calendar.getInstance().getTime());
             transfer.setUser(loggedUser);
         }
     }
-    
-    public void saveTransfer(){
+
+    public void saveTransfer() {
         try {
             RequestContext context = RequestContext.getCurrentInstance();
             createTransfer();
             transfer.setAssignedUser(assignedUser);
-            selected.getFile().setAssignedUser(assignedUser);
+            getSelected().getFile().setAssignedUser(assignedUser);
             transferService.save(transfer);
-            fileService.update(selected.getFile());
+            fileService.update(getSelected().getFile());
             JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                            TRANSFER_DONE));
+                    TRANSFER_DONE));
             context.execute("PF('DialogCotation').hide();");
-        } catch (Exception e){
+        } catch (Exception e) {
             LOG.error(e.getMessage(), e);
         }
-        
-    }
 
+    }
 
     /**
      * Gets the analyse type service.
@@ -1724,13 +1714,12 @@ public class SearchController extends AbstractController<FileItem> {
     public void setInspectorList(List<User> inspectorList) {
         this.inspectorList = inspectorList;
     }
-    
-    
+
     public synchronized void prepareDispatchFile() {
         RequestContext context = RequestContext.getCurrentInstance();
-        if (selected != null){
+        if (selected != null) {
             setAssignedUser(null);
-            File currentFile = selected.getFile();
+            File currentFile = getSelected().getFile();
             List<User> cotationActors;
             boolean checkMinepiaMinistry = currentFile.getDestinataire().equalsIgnoreCase("MINEPIA");
             if (checkMinepiaMinistry) {
@@ -1740,11 +1729,16 @@ public class SearchController extends AbstractController<FileItem> {
                 cotationActors = userService.findInspectorsByBureau(currentFile.getBureau());
             }
             setInspectorList(cotationActors);
-            
+
         }
         context.execute("PF('DialogCotation').show();");
         context.update(":filtredFileItemListForm:transferForm");
-        
+
+    }
+
+    @Override
+    public FileItem getSelected() {
+        return super.getSelected();
     }
 
 }

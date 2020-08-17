@@ -1,31 +1,27 @@
 package org.guce.siat.web.reports.exporter;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.ResourceBundle;
-
-import javax.faces.context.FacesContext;
-
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
-import org.guce.siat.core.ct.model.InspectionController;
-import org.guce.siat.core.ct.model.InspectionReport;
-import org.guce.siat.web.reports.vo.CtCctControllerDataVo;
-import org.guce.siat.web.reports.vo.CtCctDataVo;
-
-import com.google.common.base.Objects;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Map;
+import java.util.Objects;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.context.FacesContext;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.guce.siat.common.model.FileFieldValue;
 import org.guce.siat.common.model.FileItemFieldValue;
+import org.guce.siat.core.ct.model.InspectionController;
+import org.guce.siat.core.ct.model.InspectionReport;
 import static org.guce.siat.web.reports.exporter.ReportCommand.IMAGES_PATH;
+import org.guce.siat.web.reports.vo.CtCctControllerDataVo;
+import org.guce.siat.web.reports.vo.CtCctDataVo;
 
 /**
  * The Class CtCctExporter.
@@ -165,7 +161,7 @@ public class CtCctExporter extends AbstractReportInvoker {
                             .getString(CONSTAT_BUNDLE_FALSE));
                 }
 
-                if (!Objects.equal(inspectionReport.getOtherGoodness(), null)) {
+                if (!Objects.equals(inspectionReport.getOtherGoodness(), null)) {
                     entryInspectionFindingDataVo.setOtherQualityCertificate(inspectionReport.getOtherGoodness().getLabelFr());
                 }
                 //Decision
