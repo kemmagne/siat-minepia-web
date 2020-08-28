@@ -315,6 +315,8 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                             .findFileItemFieldValueByCodeAndFileItem("POIDS", fileItem);
                     if (pnf != null) {
                         netWeight = netWeight.add(new BigDecimal(pnf.getValue()));
+                    } else if (StringUtils.isNotBlank(fileItem.getQuantity())) {
+                        netWeight = netWeight.add(new BigDecimal(fileItem.getQuantity()));
                     }
                     unit = Utils.getProductTypePackaging().get(productType);
                 } else {
