@@ -1029,7 +1029,7 @@ public class FileItemApDetailController implements Serializable {
                 if (equalsSteps) {
                     //Pour la Retreive Seulement une seule decision
                     if (FileTypeCode.BSBE_MINFOF.equals(currentFile.getFileType().getCode())) {
-                        flows = flowService.findFlowsByFromStepAndFileType2(referenceFileItem.getStep(), referenceFileItem
+                        flows = flowService.findFlowsByFromStepAndFileType(referenceFileItem.getStep(), referenceFileItem
                                 .getFile().getFileType());
                         if (!CollectionUtils.isEmpty(flows)) {
                             for (Flow elt : flows) {

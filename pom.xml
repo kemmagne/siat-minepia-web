@@ -11,7 +11,7 @@
 
     <artifactId>siat-ct-web</artifactId>
     <packaging>war</packaging>
-    <version>2.3.14</version>
+    <version>2.3.15-beta.2</version>
 
     <name>siat-ct-web</name>
 
