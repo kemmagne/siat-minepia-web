@@ -11,7 +11,7 @@
 
     <artifactId>siat-ct-web</artifactId>
     <packaging>war</packaging>
-    <version>2.3.15-beta.2</version>
+    <version>2.3.15</version>
 
     <name>siat-ct-web</name>
 
@@ -40,7 +40,7 @@
             <id>profile-ht</id>
             <properties>
                 <environment>ht</environment>
-                <global-config.properties>${user.home}/siat/config/ct/global-config.properties</global-config.properties>
+                <global-config.properties>C:/siat/config/ct/global-config.properties</global-config.properties>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
