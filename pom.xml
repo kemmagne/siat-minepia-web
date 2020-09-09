@@ -11,7 +11,7 @@
 
     <artifactId>siat-ct-web</artifactId>
     <packaging>war</packaging>
-    <version>2.3.15</version>
+    <version>2.3.16</version>
 
     <name>siat-ct-web</name>
 
@@ -26,7 +26,6 @@
             <id>guce-repository</id>
             <name>Depot Maven du GUCE</name>
             <url>https://repo.guce.local/maven/repository/releases</url>
-            <!--<url>https://git.guichetunique.cm/maven/repository/releases/</url>-->
         </repository>
         <snapshotRepository>
             <id>guce-repository</id>
@@ -190,7 +189,7 @@
         <dependency>
             <groupId>org.guce.siat</groupId>
             <artifactId>siat-ct-core</artifactId>
-            <version>2.2.30</version>
+            <version>2.2.31</version>
         </dependency>
 
         <dependency>

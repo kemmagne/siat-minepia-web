@@ -1,7 +1,6 @@
 package org.guce.siat.web.ct.controller.util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -17,6 +16,7 @@ import org.guce.siat.common.model.ItemFlow;
 import org.guce.siat.common.model.Step;
 import org.guce.siat.common.utils.enums.CompanyType;
 import org.guce.siat.common.utils.enums.StepCode;
+import org.guce.siat.core.ct.service.MinaderStatisticsService;
 import org.guce.siat.web.common.ControllerConstants;
 import org.guce.siat.web.ct.controller.FileItemCctDetailController;
 
@@ -25,8 +25,6 @@ import org.guce.siat.web.ct.controller.FileItemCctDetailController;
  * @author ht
  */
 public final class RelatedFilesUtils {
-
-    private static final List<StepCode> TREATMENT_STEPS_CODES = Arrays.asList(StepCode.ST_CT_04, StepCode.ST_CT_48, StepCode.ST_CT_63, StepCode.ST_CT_55);
 
     private static final String LABEL = "label";
     private static final String MAIN_REPORT = "mainReport";
@@ -126,7 +124,7 @@ public final class RelatedFilesUtils {
             labels.add(CompanyType.DECLARANT.name());
         }
 
-        boolean treatment = TREATMENT_STEPS_CODES.contains(currentStep.getStepCode());
+        boolean treatment = MinaderStatisticsService.TREATMENT_STEPS_CODES.contains(currentStep.getStepCode());
         if (treatment && file.getAssignedUser() != null) {
             labels.add(String.format("%s", file.getAssignedUser().getLastName()));
         }
