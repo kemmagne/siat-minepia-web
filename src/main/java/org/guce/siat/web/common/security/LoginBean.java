@@ -4,12 +4,13 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
-
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -21,7 +22,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.apache.commons.lang.BooleanUtils;
 import org.guce.siat.common.mail.MailConstants;
 import org.guce.siat.common.model.Administration;
@@ -383,11 +383,15 @@ public class LoginBean implements Serializable {
 
             sendEmail(user);
 
+            Date lastAttemptsTime = user.getLastAttemptsTime();
+            if (lastAttemptsTime == null) {
+                lastAttemptsTime = Calendar.getInstance().getTime();
+            }
+
             final String message = MessageFormat.format(
                     ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                            "authentification_loginFailed_lockedUser"), ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale())
-                            .getString(SEND_MAIL_MESSAGE), user.getLogin(), DateUtils.formatSimpleDateForOracle(user
-                    .getLastAttemptsTime()));
+                    "authentification_loginFailed_lockedUser"), ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale())
+                    .getString(SEND_MAIL_MESSAGE), user.getLogin(), DateUtils.formatSimpleDateForOracle(lastAttemptsTime));
             JsfUtil.addErrorMessage(message);
         } catch (final SessionAuthenticationException sae) {
             //maximum of sessions exceeded
@@ -557,8 +561,7 @@ public class LoginBean implements Serializable {
      */
     public void sendEmail(final User user) {
         final String templateFileName = localeFileTemplate(EMAIL_BODY, getCurrentLocale().getLanguage());
-        Map<String, String> map = new HashMap<>();
-        map = prepareMap(user, templateFileName);
+        Map<String, String> map = prepareMap(user, templateFileName);
         mailService.sendMail(map);
     }
 
@@ -570,16 +573,23 @@ public class LoginBean implements Serializable {
      * @return the map
      */
     private Map<String, String> prepareMap(final User user, final String template) {
+
         final Map<String, String> map = new HashMap<>();
 
-        map.put(MailConstants.SUBJECT,
-                ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(EMAIL_SUBJECT_USER_LOCKED));
+        map.put(MailConstants.SUBJECT, ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(EMAIL_SUBJECT_USER_LOCKED));
         map.put(MailConstants.FROM, mailService.getFromValue());
         map.put(MailConstants.EMAIL, user.getEmail());
         map.put("firstName", user.getFirstName());
         map.put("login", user.getLogin());
-        map.put("dateTentative", user.getLastAttemptsTime() == null ? null : DateUtils.formatSimpleDateForOracle(user.getLastAttemptsTime()));
+
+        Date lastAttemptsTime = user.getLastAttemptsTime();
+        if (lastAttemptsTime == null) {
+            lastAttemptsTime = Calendar.getInstance().getTime();
+        }
+
+        map.put("dateTentative", DateUtils.formatSimpleDateForOracle(lastAttemptsTime));
         map.put(MailConstants.VMF, template);
+
         return map;
     }
 

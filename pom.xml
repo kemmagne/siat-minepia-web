@@ -6,41 +6,59 @@
     <parent>
         <groupId>org.guce.siat</groupId>
         <artifactId>siat</artifactId>
-        <version>1.2.0</version>
+        <version>1.2.1</version>
     </parent>
 
     <artifactId>siat-ct-web</artifactId>
     <packaging>war</packaging>
-    <version>2.3.20</version>
+    <version>2.3.21</version>
 
     <name>siat-ct-web</name>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <resource.dir>src/main/resources</resource.dir>
-        <java.version>1.7</java.version>
-    </properties>
-
-    <distributionManagement>
-        <repository>
-            <id>guce-repository</id>
-            <name>Depot Maven du GUCE</name>
-            <url>https://repo.guce.local/maven/repository/releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>guce-repository</id>
-            <name>Depot Maven du GUCE</name>
-            <url>https://repo.guce.local/maven/repository/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <profiles>
         <profile>
             <id>profile-ht</id>
             <properties>
                 <environment>ht</environment>
-                <global-config.properties>C:/siat/config/ct/global-config.properties</global-config.properties>
+                <global-config.properties>${user.home}/siat/config/ct/global-config.properties</global-config.properties>
             </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <inherited>true</inherited>
+                        <executions>
+                            <execution>
+                                <id>deploy</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>redeploy</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <container>
+                                <containerId>glassfish4x</containerId>
+                                <type>installed</type>
+                                <home>C:\app\glassfish4</home>
+                            </container>
+                            <configuration>
+                                <type>existing</type>
+                                <home>C:\app\glassfish4\glassfish\domains</home>
+                                <properties>
+                                    <cargo.glassfish.domain.name>siat</cargo.glassfish.domain.name>
+                                    <cargo.glassfish.admin.port>40048</cargo.glassfish.admin.port>
+                                    <cargo.remote.username>admin</cargo.remote.username>
+                                    <cargo.remote.password>admin</cargo.remote.password>
+                                    <cargo.glassfish.portbase>40000</cargo.glassfish.portbase>
+                                    <cargo.hostname>localhost</cargo.hostname>
+                                </properties>
+                            </configuration>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
             <activation>
                 <activeByDefault>true</activeByDefault>
                 <property>
@@ -106,6 +124,11 @@
     </profiles>
 
     <dependencies>
+        <dependency>
+            <groupId>org.guce.siat</groupId>
+            <artifactId>siat-ct-core</artifactId>
+            <version>2.2.33</version>
+        </dependency>
         <!-- Servlet -->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -186,11 +209,6 @@
             <artifactId>poi-ooxml</artifactId>
             <version>3.7</version>
         </dependency>
-        <dependency>
-            <groupId>org.guce.siat</groupId>
-            <artifactId>siat-ct-core</artifactId>
-            <version>2.2.32</version>
-        </dependency>
 
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -264,36 +282,6 @@
             <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>3.4.0</version>
-            <scope>test</scope>
-        </dependency>
-        <!--        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>htmlunit-driver</artifactId>
-            <version>2.6.0</version>
-            <scope>test</scope>
-        </dependency>-->
-        <!--        <dependency>
-            <groupId>org.fluentlenium</groupId>
-            <artifactId>fluentlenium-assertj</artifactId>
-            <version>0.10.3</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.detro</groupId>
-            <artifactId>phantomjsdriver</artifactId>
-            <version>1.2.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>xml-apis</groupId>
-            <artifactId>xml-apis</artifactId>
-            <version>1.4.01</version>
-            <scope>test</scope>
-        </dependency>-->
     </dependencies>
 
     <build>
@@ -310,65 +298,5 @@
                 <filtering>true</filtering>
             </testResource>
         </testResources>
-        <plugins>
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.1.0</version>
-                <configuration>
-                    <encoding>ISO-8859-1</encoding>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <testSource>${java.version}</testSource>
-                    <testTarget>${java.version}</testTarget>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>2.2</version>
-                <configuration>
-                    <path>/${project.build.finalName}</path>
-                    <update>true</update>
-                    <url>${web.url}</url>
-                    <username>${web.username}</username>
-                    <password>${web.password}</password>
-                </configuration>
-            </plugin>
-            <!--            <plugin>
-                <groupId>com.github.klieber</groupId>
-                <artifactId>phantomjs-maven-plugin</artifactId>
-                <version>0.4</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>install</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <version>1.9.8</version>
-                </configuration>
-            </plugin>-->
-        </plugins>
     </build>
 </project>
