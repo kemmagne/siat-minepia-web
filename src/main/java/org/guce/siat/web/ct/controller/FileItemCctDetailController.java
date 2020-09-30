@@ -250,6 +250,11 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 public class FileItemCctDetailController implements Serializable {
 
     /**
+     * The Constant serialVersionUID.
+     */
+    private static final long serialVersionUID = 5854830660037778807L;
+
+    /**
      * The file type step service.
      */
     @ManagedProperty(value = "#{fileTypeStepService}")
@@ -259,10 +264,6 @@ public class FileItemCctDetailController implements Serializable {
      * The detail.
      */
     private Boolean detail;
-    /**
-     * The Constant serialVersionUID.
-     */
-    private static final long serialVersionUID = 5854830660037778807L;
 
     /**
      * The Constant LOG.
@@ -3541,8 +3542,7 @@ public class FileItemCctDetailController implements Serializable {
             }
         } // Cas de La decision MIXTE
         else // Tous les FileItem sont en Draft Mode
-        {
-            if (allFileItemInListAreDraft(productInfoItemsEnabled)) {
+         if (allFileItemInListAreDraft(productInfoItemsEnabled)) {
                 rollBackDecisionsAllowed = true;
                 sendDecisionAllowed = true;
                 decisionButtonAllowed = false;
@@ -3561,7 +3561,6 @@ public class FileItemCctDetailController implements Serializable {
                 sendDecisionAllowed = false;
                 decisionButtonAllowed = true;
             }
-        }
     }
 
     /**
