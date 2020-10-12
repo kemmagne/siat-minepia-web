@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.lang.reflect.Constructor;
+import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -3246,12 +3247,10 @@ public class FileItemCctDetailController implements Serializable {
                 if (sameStep) {
                     for (final FileItem selected : currentFile.getFileItemsList()) {
                         if (BooleanUtils.isNotTrue(selected.getDraft())) {
-//                            allHasDecision = false;
                             break;
                         } else {
                             final ItemFlow draftItemFlow = itemFlowService.findDraftByFileItem(selected);
                             if (!draftItemFlow.getSender().getId().equals(getLoggedUser().getId())) {
-//                                allHasDecision = false;
                                 break;
                             }
                         }
@@ -3274,7 +3273,7 @@ public class FileItemCctDetailController implements Serializable {
                     return;
                 }
 
-                if (productInfoItemsEnabled != null && !productInfoItemsEnabled.isEmpty()) {
+                if (CollectionUtils.isNotEmpty(productInfoItemsEnabled)) {
 
                     final Flow flow = flowService.findFlowBySentFileItem(productInfoItemsEnabled.get(0));
                     if (!Objects.equals(flow, null) && AJOURNEMENT_FLOW_LIST.contains(flow.getCode())) {
@@ -3310,8 +3309,10 @@ public class FileItemCctDetailController implements Serializable {
                             //generate report
                             Map<String, byte[]> attachedByteFiles = null;
                             String reportNumber;
-                            if (Arrays.asList(FlowCode.FL_CT_89.name(), FlowCode.FL_CT_08.name(), FlowCode.FL_CT_114.name(), FlowCode.FL_CT_117.name(), FlowCode.FL_CT_140.name(), FlowCode.FL_CT_CVS_03.name(), FlowCode.FL_CT_CVS_07.name()).contains(flowToSend.getCode())) {
-
+                            if (Arrays.asList(FlowCode.FL_CT_89.name(), FlowCode.FL_CT_08.name(),
+                                    FlowCode.FL_CT_114.name(), FlowCode.FL_CT_117.name(), FlowCode.FL_CT_140.name(),
+                                    FlowCode.FL_CT_CVS_03.name(), FlowCode.FL_CT_CVS_07.name())
+                                    .contains(flowToSend.getCode())) {
                                 // edit signature elements
                                 Date now = java.util.Calendar.getInstance().getTime();
                                 currentFile.setSignatureDate(now);
@@ -3329,9 +3330,9 @@ public class FileItemCctDetailController implements Serializable {
                                             final ReportOrganism reportOrganism = reportOrganismService.findReportByFileTypeFlowReport(fileTypeFlowReport);
                                             final FileField reportField = fileFieldService.findFileFieldByCodeAndFileType(reportFieldCode, fileTypeFlowReport.getFileType().getCode());
                                             final String eforceRef = currentFile.getNumeroDemande();
-                                            reportNumber = eforceRef
-                                                    + "/" + java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)
-                                                    + ((reportOrganism != null && reportOrganism.getValue() != null) ? reportOrganism.getValue() : StringUtils.EMPTY);
+                                            reportNumber = MessageFormat.format("{0}/{1}{2}", eforceRef,
+                                                    java.util.Calendar.getInstance().get(java.util.Calendar.YEAR),
+                                                    ((reportOrganism != null && reportOrganism.getValue() != null) ? reportOrganism.getValue() : StringUtils.EMPTY));
                                             reportFieldValue = new FileFieldValue();
                                             reportFieldValue.setFile(currentFile);
                                             reportFieldValue.setFileField(reportField);
@@ -3375,50 +3376,10 @@ public class FileItemCctDetailController implements Serializable {
                                 final List<CopyRecipient> copyRecipients = flowToSend.getCopyRecipientsList();
                                 for (final CopyRecipient copyRecipient : copyRecipients) {
                                     LOG.info("SEND COPY RECIPIENT TO {}", copyRecipient.getToAuthority().getRole());
-                                    final Map<String, Object> data = new HashMap<>();
-                                    data.put(ESBConstants.FLOW, xmlBytes);
-                                    data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
-                                    data.put(ESBConstants.TYPE_DOCUMENT, documentType);
-                                    data.put(ESBConstants.SERVICE, service);
-                                    data.put(ESBConstants.MESSAGE, null);
-                                    data.put(ESBConstants.EBXML_TYPE, "STANDARD");
-                                    data.put(ESBConstants.TO_PARTY_ID, copyRecipient.getToAuthority().getRole());
-                                    data.put(ESBConstants.DEAD, "0");
-                                    //
-                                    data.put(ESBConstants.ITEM_FLOWS, itemFlowList);
-                                    if (!fileProducer.sendFile(data)) {
-                                        if (transactionStatus != null) {
-                                            transactionManager.rollback(transactionStatus);
-                                        }
-                                        showErrorFacesMessage(ControllerConstants.Bundle.Messages.SEND_ERROR, null);
-                                        return;
-                                    }
-                                    if (LOG.isDebugEnabled()) {
-                                        LOG.debug("Message sent to OUT queue");
-                                    }
+                                    send(transactionStatus, xmlBytes, attachedByteFiles, service, documentType, copyRecipient.getToAuthority().getRole(), itemFlowList);
                                 }
                             } else {
-                                final Map<String, Object> data = new HashMap<>();
-                                data.put(ESBConstants.FLOW, xmlBytes);
-                                data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
-                                data.put(ESBConstants.SERVICE, service);
-                                data.put(ESBConstants.TYPE_DOCUMENT, documentType);
-                                data.put(ESBConstants.MESSAGE, null);
-                                data.put(ESBConstants.EBXML_TYPE, "STANDARD");
-                                data.put(ESBConstants.TO_PARTY_ID, ebxmlPropertiesService.getToPartyId());
-                                data.put(ESBConstants.DEAD, "0");
-                                //
-                                data.put(ESBConstants.ITEM_FLOWS, itemFlowList);
-                                if (!fileProducer.sendFile(data)) {
-                                    if (transactionStatus != null) {
-                                        transactionManager.rollback(transactionStatus);
-                                    }
-                                    showErrorFacesMessage(ControllerConstants.Bundle.Messages.SEND_ERROR, null);
-                                    return;
-                                }
-                                if (LOG.isDebugEnabled()) {
-                                    LOG.debug("Message sent to SIAT queue");
-                                }
+                                send(transactionStatus, xmlBytes, attachedByteFiles, service, documentType, ebxmlPropertiesService.getToPartyId(), itemFlowList);
                             }
                         }
                     }
@@ -3437,7 +3398,6 @@ public class FileItemCctDetailController implements Serializable {
             TransactionStatus tsCommit = transactionStatus;
             transactionStatus = null;
             transactionManager.commit(tsCommit);
-//            transactionHelper.commit(vStatus);
             if (LOG.isDebugEnabled()) {
                 LOG.info("####SEND DECISION Transaction commited####");
             }
@@ -3455,7 +3415,31 @@ public class FileItemCctDetailController implements Serializable {
                 transactionManager.rollback(transactionStatus);
             }
         }
+    }
 
+    private void send(TransactionStatus transactionStatus, byte[] xmlBytes, Map<String, byte[]> attachedByteFiles,
+            String service, String documentType, String toPartyId, List<ItemFlow> itemFlowList) {
+        Map<String, Object> data = new HashMap<>();
+        data.put(ESBConstants.FLOW, xmlBytes);
+        data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
+        data.put(ESBConstants.SERVICE, service);
+        data.put(ESBConstants.TYPE_DOCUMENT, documentType);
+        data.put(ESBConstants.MESSAGE, null);
+        data.put(ESBConstants.EBXML_TYPE, "STANDARD");
+        data.put(ESBConstants.TO_PARTY_ID, toPartyId);
+        data.put(ESBConstants.DEAD, "0");
+        //
+        data.put(ESBConstants.ITEM_FLOWS, itemFlowList);
+        if (!fileProducer.sendFile(data)) {
+            if (transactionStatus != null) {
+                transactionManager.rollback(transactionStatus);
+            }
+            showErrorFacesMessage(ControllerConstants.Bundle.Messages.SEND_ERROR, null);
+            return;
+        }
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Message sent to OUT queue");
+        }
     }
 
     /**
@@ -3542,7 +3526,8 @@ public class FileItemCctDetailController implements Serializable {
             }
         } // Cas de La decision MIXTE
         else // Tous les FileItem sont en Draft Mode
-         if (allFileItemInListAreDraft(productInfoItemsEnabled)) {
+        {
+            if (allFileItemInListAreDraft(productInfoItemsEnabled)) {
                 rollBackDecisionsAllowed = true;
                 sendDecisionAllowed = true;
                 decisionButtonAllowed = false;
@@ -3561,6 +3546,7 @@ public class FileItemCctDetailController implements Serializable {
                 sendDecisionAllowed = false;
                 decisionButtonAllowed = true;
             }
+        }
     }
 
     /**
@@ -7171,7 +7157,6 @@ public class FileItemCctDetailController implements Serializable {
                 DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
                 transactionDefinition.setPropagationBehavior(GLOBAL_PROPAGATION_TRANSACTION_BEHAVIOUR);
                 TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
-//                MutableObject<TransactionStatus> vStatus = transactionHelper.beginTransaction();
                 try {
                     final Flow flowToSend = selectedItemFlowDto.getItemFlow().getFlow();
                     final File selectedFile = selectedItemFlowDto.getItemFlow().getFileItem().getFile();
@@ -7217,56 +7202,15 @@ public class FileItemCctDetailController implements Serializable {
                         final List<CopyRecipient> copyRecipients = flowToSend.getCopyRecipientsList();
                         for (final CopyRecipient copyRecipient : copyRecipients) {
                             LOG.info("SEND COPY RECIPIENT TO {}", copyRecipient.getToAuthority().getRole());
-                            final Map<String, Object> data = new HashMap<>();
-                            data.put(ESBConstants.FLOW, xmlBytes);
-                            data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
-                            data.put(ESBConstants.TYPE_DOCUMENT, documentType);
-                            data.put(ESBConstants.SERVICE, service);
-                            data.put(ESBConstants.MESSAGE, null);
-                            data.put(ESBConstants.EBXML_TYPE, "STANDARD");
-                            data.put(ESBConstants.TO_PARTY_ID, copyRecipient.getToAuthority().getRole());
-                            data.put(ESBConstants.DEAD, "0");
-                            //
-                            data.put(ESBConstants.ITEM_FLOWS, itemFlowList);
-                            if (!fileProducer.sendFile(data)) {
-                                if (transactionStatus != null) {
-                                    transactionManager.rollback(transactionStatus);
-                                }
-                                showErrorFacesMessage(ControllerConstants.Bundle.Messages.SEND_ERROR, null);
-                                return;
-                            }
-                            if (LOG.isDebugEnabled()) {
-                                LOG.debug("Message sent to OUT queue");
-                            }
+                            send(transactionStatus, xmlBytes, attachedByteFiles, service, documentType, copyRecipient.getToAuthority().getRole(), itemFlowList);
                         }
                     } else {
-                        final Map<String, Object> data = new HashMap<>();
-                        data.put(ESBConstants.FLOW, xmlBytes);
-                        data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
-                        data.put(ESBConstants.SERVICE, service);
-                        data.put(ESBConstants.TYPE_DOCUMENT, documentType);
-                        data.put(ESBConstants.MESSAGE, null);
-                        data.put(ESBConstants.EBXML_TYPE, "STANDARD");
-                        data.put(ESBConstants.TO_PARTY_ID, ebxmlPropertiesService.getToPartyId());
-                        data.put(ESBConstants.DEAD, "0");
-                        //
-                        data.put(ESBConstants.ITEM_FLOWS, itemFlowList);
-                        if (!fileProducer.sendFile(data)) {
-                            if (transactionStatus != null) {
-                                transactionManager.rollback(transactionStatus);
-                            }
-                            showErrorFacesMessage(ControllerConstants.Bundle.Messages.SEND_ERROR, null);
-                            return;
-                        }
-                        if (LOG.isDebugEnabled()) {
-                            LOG.debug("Message sent to SIAT queue");
-                        }
+                        send(transactionStatus, xmlBytes, attachedByteFiles, service, documentType, ebxmlPropertiesService.getToPartyId(), itemFlowList);
                     }
 
                     TransactionStatus tsCommit = transactionStatus;
                     transactionStatus = null;
                     transactionManager.commit(tsCommit);
-//                    transactionHelper.commit(vStatus);
                     if (LOG.isDebugEnabled()) {
                         LOG.info("####RESEND DECISION Transaction commited####");
                     }
@@ -7279,7 +7223,6 @@ public class FileItemCctDetailController implements Serializable {
                     if (transactionStatus != null) {
                         transactionManager.rollback(transactionStatus);
                     }
-//                    transactionHelper.rollback(vStatus);
                 }
             }
         } catch (Exception ex) {

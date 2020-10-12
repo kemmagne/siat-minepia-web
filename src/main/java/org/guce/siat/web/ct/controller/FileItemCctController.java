@@ -295,6 +295,7 @@ public class FileItemCctController extends AbstractController<File> {
 
                     if (MinaderStatisticsService.TREATMENT_STEPS_CODES.contains(fileItem.getStep().getStepCode()) && !getLoggedUser().equals(file.getAssignedUser())) {
                         iterator.remove();
+                        continue;
                     }
 
                     FileFieldValue ffv = fileFieldValueService.findValueByFileFieldAndFile(CctExportProductType.getFileFieldCode(), file);
