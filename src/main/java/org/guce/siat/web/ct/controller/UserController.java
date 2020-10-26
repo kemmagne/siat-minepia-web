@@ -296,7 +296,10 @@ public class UserController extends AbstractController<User> {
                 getSelected().setAdministration(selectedsSubDepartment);
             } else if (PositionType.CHEF_SERVICE.equals(getSelected().getPosition())) {
                 getSelected().setAdministration(selectedService);
-            } else if ((PositionType.CHEF_BUREAU.getCode() + "," + PositionType.AGENT.getCode() + "," + PositionType.OBSERVATEUR
+            } else if ((PositionType.CHEF_BUREAU.getCode()
+                    + "," + PositionType.CHEF_SECTEUR.getCode()
+                    + "," + PositionType.AGENT.getCode()
+                    + "," + PositionType.OBSERVATEUR
                     .getCode()).contains(getSelected().getPosition().getCode())) {
                 getSelected().setAdministration(selectedEntity);
             }
@@ -414,12 +417,14 @@ public class UserController extends AbstractController<User> {
                         break;
                     case AGENT:
                     case CHEF_BUREAU:
+                    case CHEF_SECTEUR:
                     case OBSERVATEUR:
                         selectedEntity = (Entity) getSelected().getAdministration();
                         selectedService = selectedEntity.getService();
                         selectedsSubDepartment = selectedService.getSubDepartment();
-                        if (this.selected != null && (PositionType.AGENT.equals(getSelected().getPosition())
-                                || PositionType.OBSERVATEUR.equals(getSelected().getPosition()))) {
+                        if (PositionType.CHEF_SECTEUR.equals(getSelected().getPosition())
+                                || PositionType.AGENT.equals(getSelected().getPosition())
+                                || PositionType.OBSERVATEUR.equals(getSelected().getPosition())) {
                             userAdministrationHierarchy = this.getAdministrationHierarchy(getSelected().getAdministration());
                         }
                         break;
@@ -596,7 +601,8 @@ public class UserController extends AbstractController<User> {
                         PositionType.MINISTRE);
             } else if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ADMIN_ORGANISME.getCode())) {
                 items = userService.findUsersByAdministrationAndPositions(getCurrentOrganism(), PositionType.DIRECTEUR,
-                        PositionType.SOUS_DIRECTEUR, PositionType.CHEF_SERVICE, PositionType.CHEF_BUREAU, PositionType.AGENT,
+                        PositionType.SOUS_DIRECTEUR, PositionType.CHEF_SERVICE, PositionType.CHEF_BUREAU, PositionType.CHEF_SECTEUR,
+                        PositionType.AGENT,
                         PositionType.SUPERVISEUR, PositionType.OBSERVATEUR);
             }
         }
@@ -704,8 +710,8 @@ public class UserController extends AbstractController<User> {
         userAdministrationHierarchy = new ArrayList<>();
 
         if (this.selected != null && !PositionType.DIRECTEUR.equals(this.getSelected().getPosition())) {
-            List<SubDepartment> subDepartments = subDepartmentService.findNonAffectedByOrganism(getCurrentOrganism());
-            if (PositionType.SOUS_DIRECTEUR.equals(this.getSelected().getPosition())) {
+            List<SubDepartment> subDepartments;
+            if (PositionType.SOUS_DIRECTEUR.equals(getSelected().getPosition())) {
                 subDepartments = subDepartmentService.findNonAffectedByOrganism(getCurrentOrganism());
             } else {
                 subDepartments = subDepartmentService.findSubDepartmentsByOrganism(getCurrentOrganism());
@@ -743,10 +749,14 @@ public class UserController extends AbstractController<User> {
      */
     public void serviceChangedHandler() {
         entitiesItems = new ArrayList<>();
+        if (selectedService == null) {
+            return;
+        }
 
-        if (selectedService != null
-                && (PositionType.CHEF_BUREAU.equals(getSelected().getPosition()) || PositionType.AGENT.equals(getSelected().getPosition()) || PositionType.OBSERVATEUR
-                .equals(getSelected().getPosition()))) {
+        if (PositionType.CHEF_BUREAU.equals(getSelected().getPosition())
+                || PositionType.CHEF_SECTEUR.equals(getSelected().getPosition())
+                || PositionType.AGENT.equals(getSelected().getPosition())
+                || PositionType.OBSERVATEUR.equals(getSelected().getPosition())) {
             final List<Entity> entities = entityService.findNonAffectedEntityByServiceAndPosition(selectedService,
                     getSelected().getPosition());
             for (final Entity ent : entities) {
@@ -783,6 +793,7 @@ public class UserController extends AbstractController<User> {
             positionsList.add(PositionType.SOUS_DIRECTEUR);
             positionsList.add(PositionType.CHEF_SERVICE);
             positionsList.add(PositionType.CHEF_BUREAU);
+            positionsList.add(PositionType.CHEF_SECTEUR);
             positionsList.add(PositionType.AGENT);
             positionsList.add(PositionType.OBSERVATEUR);
         }

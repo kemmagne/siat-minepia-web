@@ -51,7 +51,15 @@
                             <p:message id="telMsg" for="user_telephone" />
                         </h:panelGroup>
 
-                        <p:outputLabel value="#{bundle['EditUserLabel_position']}" for="user_position" />
+                        <p:outputLabel value="#{bundle['EditUserLabel_position']}" for="userPosition" />
+                        <!--                        <h:panelGroup>
+                                                    <p:selectOneMenu id="userPosition" style="width: 133px" value="#{userController.selected.position}" required="true"
+                                                                     requiredMessage="#{bundle['CreateUserRequiredMessage_position']}" title="#{bundle['CreateUserTitle_position']}">
+                                                        <f:selectItems value="#{userController.positionsOptions}" />
+                                                        <p:ajax event="change" update="userAuthorityFiletype" listener="#{userController.positionChangedHandler}" />
+                                                    </p:selectOneMenu>
+                                                    <p:message for="userPosition" />
+                                                </h:panelGroup>-->
                         <h:panelGroup>
                             <h:outputText id="user_position" readonly="true"
                                           value="#{facesContext.viewRoot.locale eq 'fr' ? userController.selected.position.labelFr : userController.selected.position.labelEn}" />
@@ -59,10 +67,10 @@
                         </h:panelGroup>
 
                         <p:outputLabel
-                            rendered="#{request.isUserInRole('ADMIN_ORG')  and userController.selected.position ne null and  userController.selected.position ne 'DIRECTEUR'}"
+                            rendered="#{request.isUserInRole('ADMIN_ORG') and userController.selected.position ne null and  userController.selected.position ne 'DIRECTEUR'}"
                             value="#{bundle['EditUser_sub_department']}" for="user_sub_direction" title="#{budle[EditUserTitle_position]}" />
                         <h:outputText id="user_sub_direction" value="#{userController.selectedsSubDepartment.abreviation}"
-                                      rendered="#{request.isUserInRole('ADMIN_ORG')  and userController.selected.position ne null and  userController.selected.position ne 'DIRECTEUR'}" />
+                                      rendered="#{request.isUserInRole('ADMIN_ORG') and userController.selected.position ne null and  userController.selected.position ne 'DIRECTEUR'}" />
 
                         <p:outputLabel
                             rendered="#{userController.selectedsSubDepartment ne null and userController.selected.position ne 'DIRECTEUR' and userController.selected.position ne 'SOUS_DIRECTEUR'}"
