@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -92,6 +93,7 @@ import org.guce.siat.common.model.RecommandationAuthorityId;
 import org.guce.siat.common.model.ReportOrganism;
 import org.guce.siat.common.model.Service;
 import org.guce.siat.common.model.Step;
+import org.guce.siat.common.model.Transfer;
 import org.guce.siat.common.model.User;
 import org.guce.siat.common.model.UserAuthority;
 import org.guce.siat.common.model.UserAuthorityFileType;
@@ -121,6 +123,7 @@ import org.guce.siat.common.service.RecommandationService;
 import org.guce.siat.common.service.ReportOrganismService;
 import org.guce.siat.common.service.ServiceService;
 import org.guce.siat.common.service.StepService;
+import org.guce.siat.common.service.TransferService;
 import org.guce.siat.common.service.UserAuthorityFileTypeService;
 import org.guce.siat.common.service.UserService;
 import org.guce.siat.common.service.XmlConverterService;
@@ -193,6 +196,7 @@ import org.guce.siat.web.common.ControllerConstants;
 import org.guce.siat.web.common.util.CctSpecificDecision;
 import org.guce.siat.web.common.util.CctSpecificDecisionHistory;
 import org.guce.siat.web.common.util.UploadFileManager;
+import org.guce.siat.web.ct.controller.helpers.CctDetailControllerHelper;
 import org.guce.siat.web.ct.controller.util.CustumMap;
 import org.guce.siat.web.ct.controller.util.FileItemCheck;
 import org.guce.siat.web.ct.controller.util.FileTypeDto;
@@ -624,6 +628,9 @@ public class FileItemCctDetailController implements Serializable {
 
     @ManagedProperty(value = "#{pottingReportService}")
     private PottingReportService pottingReportService;
+
+    @ManagedProperty(value = "#{transferService}")
+    private TransferService transferService;
 
     /**
      * The send decision allowed.
@@ -1159,6 +1166,8 @@ public class FileItemCctDetailController implements Serializable {
 
     private List<FileTypeDto> relatedFileTypesInfos;
 
+    private CctDetailControllerHelper helper = new CctDetailControllerHelper();
+
     /**
      * Inits the.
      */
@@ -1345,7 +1354,7 @@ public class FileItemCctDetailController implements Serializable {
                     }
 
                     if (equalsSteps) {
-                        if (isCheckMinaderMinistry() && (FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode()) || FileTypeCode.CCT_CT_E_PVE.equals(currentFile.getFileType().getCode()))) {
+                        if (isCheckMinaderMinistry() && Arrays.asList(FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVI).contains(currentFile.getFileType().getCode())) {
                             flows = flowService.findFlowsByFromStepAndFileType2(referenceFileItemCheck.getStep(), referenceFileItemCheck.getFile().getFileType());
                             List<String> flowsToRemove = new ArrayList<>();
                             for (Flow flx : flows) {
@@ -2305,8 +2314,6 @@ public class FileItemCctDetailController implements Serializable {
         if (CONSTAT_FLOW_LIST.contains(selectedItemFlowDto.getItemFlow().getFlow().getCode())) {
             specificDecisionsHistory.setDecisionDetailsIR(inspectionReportService.findLastInspectionReportsByFileItem(selectedItemFlowDto.getItemFlow().getFileItem()));
         } else if (APPOINTMENT_DECISIONS_LIST.contains(selectedItemFlowDto.getItemFlow().getFlow().getCode())) {
-            final List<ItemFlow> listItemFlow = new ArrayList<>();
-            listItemFlow.add(selectedItemFlowDto.getItemFlow());
             specificDecisionsHistory.setDecisionDetailsApp(appointmentService.findAppointmentsByItemFlow(selectedItemFlowDto.getItemFlow()));
         } else if (DCC_FLOW_CODES.contains(selectedItemFlowDto.getItemFlow().getFlow().getCode())) {
             specificDecisionsHistory.setApprovedDecision(approvedDecisionService.findApprovedDecisionByItemFlow(selectedItemFlowDto.getItemFlow()));
@@ -2355,15 +2362,15 @@ public class FileItemCctDetailController implements Serializable {
      */
     private void downloadAttachment(final List<? extends Object> partsList) {
         reportMap = new HashMap<>();
-        Session sessionCmisClient = null;
+        Session sessionCmisClient;
         try {
             sessionCmisClient = CmisSession.getInstance();
-        } catch (final CmisConnectionException ce) {
-            LOG.error(ce.getMessage(), ce);
+        } catch (CmisConnectionException ce) {
+            LOG.error(Objects.toString(ce), ce);
             try {
-                final String senderMail = mailService.getReplyToValue();
-                final String templateFileName = CMIS_CONNEXION_ERROR;
-                final Map<String, String> map = new HashMap<>();
+                String senderMail = mailService.getReplyToValue();
+                String templateFileName = CMIS_CONNEXION_ERROR;
+                Map<String, String> map = new HashMap<>();
                 map.put(MailConstants.SUBJECT, "[SIAT-CT] : Connexion Cmis échoué");
                 map.put(MailConstants.FROM, mailService.getFromValue());
                 map.put(MailConstants.EMAIL, senderMail);
@@ -2371,33 +2378,31 @@ public class FileItemCctDetailController implements Serializable {
                 map.put(MailConstants.VMF, templateFileName);
                 mailService.sendMail(map);
             } catch (Exception ex) {
-                LOG.error(ex.getMessage(), ex);
-            } finally {
-                //return;
+                LOG.error(Objects.toString(ex), ex);
             }
+            return;
         }
 
-        if (sessionCmisClient != null) {
-            for (final Object part : partsList) {
-                String fileName = null;
-                Long partId = null;
-                if (part instanceof AnalysePart) {
-                    fileName = ((AnalysePart) part).getAttachment();
-                    partId = ((AnalysePart) part).getId();
-                } else if (part instanceof TreatmentPart) {
-                    fileName = ((TreatmentPart) part).getAttachment();
-                    partId = ((TreatmentPart) part).getId();
-                }
+        for (Object part : partsList) {
+            String fileName = null;
+            Long partId = null;
+            if (part instanceof AnalysePart) {
+                fileName = ((AnalysePart) part).getAttachment();
+                partId = ((AnalysePart) part).getId();
+            } else if (part instanceof TreatmentPart) {
+                fileName = ((TreatmentPart) part).getAttachment();
+                partId = ((TreatmentPart) part).getId();
+            }
 
-                if (!Objects.equals(fileName, null)) {
-                    final ContentStream contentStream = CmisClient.getDocumentByName(sessionCmisClient, fileName).getContentStream();
-                    try (final InputStream inputStream = contentStream.getStream();) {
-                        final byte[] content = IOUtils.toByteArray(inputStream);
-                        reportMap.put(partId, new DefaultStreamedContent(new ByteArrayInputStream(content),
-                                contentStream.getMimeType(), fileName));
-                    } catch (final IOException e) {
-                        LOG.error(Objects.toString(e), e);
-                    }
+            if (!Objects.equals(fileName, null)) {
+                ContentStream contentStream = CmisClient.getDocumentByName(sessionCmisClient, fileName).getContentStream();
+                try (InputStream inputStream = contentStream.getStream();) {
+                    byte[] content = IOUtils.toByteArray(inputStream);
+                    reportMap.put(partId, new DefaultStreamedContent(new ByteArrayInputStream(content),
+                            contentStream.getMimeType(), fileName));
+                } catch (IOException e) {
+                    LOG.error("Cannot download {} from file {}", fileName, currentFile);
+                    LOG.error(fileName, e);
                 }
             }
         }
@@ -2431,6 +2436,7 @@ public class FileItemCctDetailController implements Serializable {
                     itemFlowHistoryDtoList.add(itemFlowDto);
                 }
             }
+
             for (final ItemFlowDto itemFlowDto : itemFlowHistoryDtoList) {
 
                 final FileTypeStep fileTypeStep = fileTypeStepService.findFileTypeStepByFileTypeAndStep(selectedFileItemCheck
@@ -2442,6 +2448,20 @@ public class FileItemCctDetailController implements Serializable {
                 }
 
             }
+
+            List<Transfer> transfers = transferService.findByFile(currentFile);
+            for (Transfer transfer : transfers) {
+                ItemFlowDto itemFlowDto = helper.transform(transfer);
+                if (itemFlowDto != null) {
+                    itemFlowHistoryDtoList.add(itemFlowDto);
+                }
+            }
+            Collections.sort(itemFlowHistoryDtoList, new Comparator<ItemFlowDto>() {
+                @Override
+                public int compare(ItemFlowDto o1, ItemFlowDto o2) {
+                    return o1.getItemFlow().getCreated().compareTo(o2.getItemFlow().getCreated());
+                }
+            });
         }
     }
 
@@ -2644,28 +2664,28 @@ public class FileItemCctDetailController implements Serializable {
                     return;
                 }
             } else if (isPviReadyForSignature(selectedFlow)) {
-                final List<InspectionReport> inspectionReports = inspectionReportData.transformToReportList(null);
+                List<InspectionReport> inspectionReports = inspectionReportData.transformToReportList(null);
                 commonService.takeDecisionAndSaveInspectionReport(inspectionReports.get(0), itemFlowsToAdd);
             } // Saisie Constat
             else if (CONSTAT_FLOW_LIST.contains(selectedFlow.getCode())) {
-                final Appointment appointment1 = appointmentService.findAppoitmentByFileItemAndController(productInfoItemsEnabled, loggedUser);
+                Appointment appointment1 = appointmentService.findAppoitmentByFileItemAndController(productInfoItemsEnabled, loggedUser);
                 inspectionReportData.setControllers(inspectionControllers);
                 if (infraction != null && StringUtils.isNotBlank(infraction.getinfractionCode())) {
                     inspectionReportData.setInfraction(infraction.getinfractionCode());
                 }
-                final List<InspectionReport> inspectionReports = inspectionReportData.transformToReportList(appointment1);
+                List<InspectionReport> inspectionReports = inspectionReportData.transformToReportList(appointment1);
                 commonService.takeDecisionAndSaveInspectionReports(inspectionReports, itemFlowsToAdd);
             } // Envoie Résultat d Analyse
             else if (FlowCode.FL_CT_31.name().equals(selectedFlow.getCode())) {
                 analyseResult.getAnalyseOrder().setAnalysePartsList(new ArrayList<AnalysePart>());
-                for (final UploadFileManager<AnalysePart> entry : analysesFileManagers) {
+                for (UploadFileManager<AnalysePart> entry : analysesFileManagers) {
                     analyseResult.getAnalyseOrder().getAnalysePartsList().add(entry.getPart());
                     if (!Objects.equals(entry.getFile(), null)) {
-                        final AnalysePart analysePart = entry.getPart();
+                        AnalysePart analysePart = entry.getPart();
                         analysePart.setAttachment(entry.getFile().getFileName());
-                        final java.io.File targetAttachment = new java.io.File(String.format(applicationPropretiesService.getAttachementFolder() + "%s%s", java.io.File.separator, entry.getFileName()));
+                        java.io.File targetAttachment = new java.io.File(String.format(applicationPropretiesService.getAttachementFolder() + "%s%s", java.io.File.separator, entry.getFileName()));
                         try (InputStream initialStream = new ByteArrayInputStream(entry.getFile().getContents()); OutputStream outStream = new FileOutputStream(targetAttachment);) {
-                            final byte[] buffer = new byte[initialStream.available()];
+                            byte[] buffer = new byte[initialStream.available()];
                             initialStream.read(buffer);
                             outStream.write(buffer);
                             commonService.sendAttachedReports(Collections.singletonList(targetAttachment));
@@ -2774,14 +2794,14 @@ public class FileItemCctDetailController implements Serializable {
                 LOG.debug("####SAVE DECISION Transaction commited####");
             }
         } catch (final Exception ex) {
-            LOG.error(null, ex);
+            LOG.error(currentFile.toString(), ex);
             showErrorFacesMessage(ControllerConstants.Bundle.Messages.SAVE_DECISION_FAILED, null);
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("####SAVE DECISION Transaction rollbacked####");
-            }
         } finally {
             if (transactionStatus != null) {
                 transactionManager.rollback(transactionStatus);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("####SAVE DECISION Transaction rollbacked####");
+                }
             }
         }
 
@@ -2857,7 +2877,7 @@ public class FileItemCctDetailController implements Serializable {
     /**
      * Annuler decisions.
      */
-    public void annulerDecisions() {
+    public synchronized void annulerDecisions() {
         DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
         transactionDefinition.setPropagationBehavior(GLOBAL_PROPAGATION_TRANSACTION_BEHAVIOUR);
         TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
@@ -2903,14 +2923,14 @@ public class FileItemCctDetailController implements Serializable {
                 LOG.debug("####ROLLBACK DECISION Transaction commited####");
             }
         } catch (final Exception ex) {
-            LOG.error(Objects.toString(ex), ex);
+            LOG.error(currentFile.toString(), ex);
             showErrorFacesMessage(ControllerConstants.Bundle.Messages.ROLL_BACK_FAIL, null);
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("####ROLLBACK DECISION Transaction rollbacked####");
-            }
         } finally {
             if (transactionStatus != null) {
                 transactionManager.rollback(transactionStatus);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("####ROLLBACK DECISION Transaction rollbacked####");
+                }
             }
         }
 
@@ -2918,7 +2938,6 @@ public class FileItemCctDetailController implements Serializable {
 
         resetDataGridInofrmationProducts();
         reloadPage();
-
     }
 
     /**
@@ -3001,13 +3020,13 @@ public class FileItemCctDetailController implements Serializable {
                 LOG.info("####DISPATCH DECISION Transaction commited####");
             }
         } catch (Exception ex) {
-            LOG.error(Objects.toString(ex), ex);
-            if (LOG.isDebugEnabled()) {
-                LOG.info("####DISPATCH DECISION Transaction rollbacked####");
-            }
+            LOG.error(currentFile.toString(), ex);
         } finally {
             if (transactionStatus != null) {
                 transactionManager.rollback(transactionStatus);
+                if (LOG.isDebugEnabled()) {
+                    LOG.info("####DISPATCH DECISION Transaction rollbacked####");
+                }
             }
         }
         resetDataGridInofrmationProducts();
@@ -3406,13 +3425,13 @@ public class FileItemCctDetailController implements Serializable {
             final Step currentStep = file.getFileItemsList().get(0).getStep();
             notificationEmail(currentFile, currentStep);
         } catch (final Exception e) {
-            LOG.error(Objects.toString(e), e);
-            if (LOG.isDebugEnabled()) {
-                LOG.info("####SEND DECISION Transaction rollbacked####");
-            }
+            LOG.error(currentFile.toString(), e);
         } finally {
             if (transactionStatus != null) {
                 transactionManager.rollback(transactionStatus);
+                if (LOG.isDebugEnabled()) {
+                    LOG.info("####SEND DECISION Transaction rollbacked####");
+                }
             }
         }
     }
@@ -3455,7 +3474,7 @@ public class FileItemCctDetailController implements Serializable {
             extContext.redirect(url);
 
         } catch (final IOException ex) {
-            LOG.error(ex.getMessage(), ex);
+            LOG.error(currentFile.toString(), ex);
         }
     }
 
@@ -4379,9 +4398,9 @@ public class FileItemCctDetailController implements Serializable {
                         return fileToDownload;
                     }
                 } catch (Exception e) {
+                    LOG.error(currentFile.toString(), e);
                     final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.GENERATE_REPORT_FAILED);
                     JsfUtil.addErrorMessage(msg);
-                    LOG.error(e.getMessage(), e);
                 }
             }
             currentFile.setSignatory(null);
@@ -4418,9 +4437,9 @@ public class FileItemCctDetailController implements Serializable {
                     return fileToDownload;
                 }
             } catch (Exception e) {
+                LOG.error(currentFile.toString(), e);
                 final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.GENERATE_REPORT_FAILED);
                 JsfUtil.addErrorMessage(msg);
-                LOG.error(e.getMessage(), e);
             }
 
         }
@@ -7232,7 +7251,7 @@ public class FileItemCctDetailController implements Serializable {
     }
 
     public boolean isPhytoReadyForSignature(Flow flow) {
-        boolean ok = flow != null && checkMinaderMinistry && FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode()) && (FlowCode.FL_CT_07.name().equals(flow.getCode()) || FlowCode.FL_CT_112.name().equals(flow.getCode()) || FlowCode.FL_CT_117.name().equals(flow.getCode()));
+        boolean ok = flow != null && checkMinaderMinistry && FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode()) && Arrays.asList(FlowCode.FL_CT_07.name(), FlowCode.FL_CT_112.name(), FlowCode.FL_CT_117.name(), FlowCode.FL_CT_151.name()).contains(flow.getCode());
         return ok;
     }
 
@@ -7330,7 +7349,10 @@ public class FileItemCctDetailController implements Serializable {
             if (BooleanUtils.toBoolean(flow.getToStep().getIsFinal())) {
                 switch (currentFile.getFileType().getCode()) {
                     case CCT_CT_E: {
-                        ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(currentFileItem, FlowCode.FL_CT_07);
+                        ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(currentFileItem, FlowCode.FL_CT_151);
+                        if (itemFlow == null) {
+                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(currentFileItem, FlowCode.FL_CT_07);
+                        }
                         if (itemFlow == null) {
                             itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(currentFileItem, FlowCode.FL_CT_112);
                         }
@@ -7487,7 +7509,10 @@ public class FileItemCctDetailController implements Serializable {
             if (BooleanUtils.toBoolean(flow.getToStep().getIsFinal())) {
                 switch (file.getFileType().getCode()) {
                     case CCT_CT_E: {
-                        ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(ffi, FlowCode.FL_CT_07);
+                        ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(ffi, FlowCode.FL_CT_151);
+                        if (itemFlow == null) {
+                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(currentFileItem, FlowCode.FL_CT_07);
+                        }
                         if (itemFlow == null) {
                             itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(ffi, FlowCode.FL_CT_112);
                         }
@@ -8058,6 +8083,14 @@ public class FileItemCctDetailController implements Serializable {
 
     public Appointment getAppointment() {
         return appointment;
+    }
+
+    public TransferService getTransferService() {
+        return transferService;
+    }
+
+    public void setTransferService(TransferService transferService) {
+        this.transferService = transferService;
     }
 
 }
