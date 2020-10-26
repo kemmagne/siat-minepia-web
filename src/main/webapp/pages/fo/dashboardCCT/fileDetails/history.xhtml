@@ -18,17 +18,15 @@
                         <p:ajax event="rowSelect" update="historyForm:lastDecision" listener="#{fileItemCctDetailController.decisionDetailsByItemFlow}"
                                 onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
 
-                        <p:column sortBy="#{item.itemFlow.flow.labelFr}" filterBy="#{item.itemFlow.flow.labelFr}" filterMatchMode="contains"
-                                  style="width:90px">
+                        <p:column sortBy="#{item.itemFlow.flow.labelFr}" filterBy="#{item.itemFlow.flow.labelFr}" filterMatchMode="contains" style="width:90px">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle['History_transaction']}" title="#{bundle['History_transaction']}" />
                             </f:facet>
-                            <h:outputText
-                                value="#{facesContext.viewRoot.locale eq 'en' ? item.itemFlow.flow.redefinedLabelEn :  item.itemFlow.flow.redefinedLabelFr}" />
+                            <h:outputText rendered="#{item.itemFlow.flow ne null}" value="#{facesContext.viewRoot.locale eq 'en' ? item.itemFlow.flow.redefinedLabelEn :  item.itemFlow.flow.redefinedLabelFr}" />
+                            <h:outputText rendered="#{item.itemFlow.flow eq null}" value="#{facesContext.viewRoot.locale eq 'en' ? 'Manual transfer' :  'Transfert manuel'}" />
                         </p:column>
 
-                        <p:column sortBy="#{item.itemFlow.sender.lastName}" filterBy="#{item.itemFlow.sender.lastName}" filterMatchMode="contains"
-                                  style="width:90px">
+                        <p:column sortBy="#{item.itemFlow.sender.lastName}" filterBy="#{item.itemFlow.sender.lastName}" filterMatchMode="contains" style="width:90px">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle['History_person']}" title="#{bundle['History_person']}" />
                             </f:facet>
@@ -39,13 +37,12 @@
                             <f:facet name="header">
                                 <h:outputText value="#{bundle['History_assignedUser']}" title="#{bundle['History_assignedUser']}" />
                             </f:facet>
-                            <h:panelGroup rendered="#{not empty item.itemFlow.fileItem.file.assignedUser}">
+                            <h:panelGroup rendered="#{item.itemFlow.assignedUser ne null}">
                                 <h:outputText value="#{item.itemFlow.fileItem.file.assignedUser.firstName} #{item.itemFlow.fileItem.file.assignedUser.lastName} (#{item.itemFlow.fileItem.file.assignedUser.telephone})" />
                             </h:panelGroup>
                         </p:column>
 
-                        <p:column sortBy="#{dateBean.formatSimpleDate(item.itemFlow.created)}" filterBy="#{dateBean.formatSimpleDate(item.itemFlow.created)}"
-                                  filterMatchMode="contains" style="width:90px">
+                        <p:column sortBy="#{dateBean.formatSimpleDate(item.itemFlow.created)}" filterBy="#{dateBean.formatSimpleDate(item.itemFlow.created)}" filterMatchMode="contains" style="width:90px">
                             <f:facet name="header">
                                 <h:outputText value="#{bundle['History_created']}" title="#{bundle['History_created']}" />
                             </f:facet>
@@ -67,7 +64,7 @@
 
                         <br />
 
-                        <p:panel rendered="#{not empty fileItemCctDetailController.selectedItemFlowDto.itemFlow}" header="#{bundle['RemindDecisionLabel']}">
+                        <p:panel rendered="#{not empty fileItemCctDetailController.selectedItemFlowDto.itemFlow and fileItemCctDetailController.selectedItemFlowDto.itemFlow.flow ne null}" header="#{bundle['RemindDecisionLabel']}">
                             <h:panelGroup>
                                 <h:panelGrid styleClass="remindDecision" columns="2" columnClasses="labelColumnLeft, labelColumnRight" cellspacing="4"
                                              rendered="#{not empty fileItemCctDetailController.selectedItemFlowDto.itemFlow}">
