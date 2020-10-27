@@ -78,8 +78,7 @@
                     <h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? item.position.labelEn : item.position.labelFr}" />
                 </p:column>
 
-                <p:column id="administrationNameColumn" sortBy="#{item.administration.labelFr}" filterBy="#{item.administration.labelFr}"
-                          filterMatchMode="contains">
+                <p:column id="administrationNameColumn" sortBy="#{item.administration.labelFr}" filterBy="#{item.administration.labelFr}" filterMatchMode="contains">
                     <f:facet name="header">
                         <h:outputText value="#{bundle['UserLabel_administration']}" title="#{bundle['UserTitle_administration']}" />
                     </f:facet>
@@ -109,8 +108,7 @@
 
         </h:form>
 
-        <p:confirmDialog closeOnEscape="true" id="diagSupp" message="#{bundle['popup_confirm_delete_message']}" header="#{bundle['popup_confirm_delete_header']}"
-                         widgetVar="confirmation" appendTo="@(body)">
+        <p:confirmDialog closeOnEscape="true" id="diagSupp" message="#{bundle['popup_confirm_delete_message']}" header="#{bundle['popup_confirm_delete_header']}" widgetVar="confirmation" appendTo="@(body)">
             <div align="right">
                 <h:form id="diagForm">
                     <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="confirm" value="#{bundle['popup_confirm_delete_message_oui']}"
