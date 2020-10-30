@@ -51,76 +51,30 @@
                             <p:message id="telMsg" for="user_telephone" />
                         </h:panelGroup>
 
-                        <p:outputLabel value="#{bundle['CreateUserLabel_position']} " for="userPosition" />
+                        <p:outputLabel value="#{bundle['EditUserLabel_position']}" for="user_position" />
                         <h:panelGroup>
-                            <p:selectOneMenu id="userPosition" style="width: 133px" value="#{userController.selected.position}" required="true"
-                                             requiredMessage="#{bundle['CreateUserRequiredMessage_position']}" title="#{bundle['CreateUserTitle_position']}">
-                                <f:selectItems value="#{userController.positionsOptions}" />
-                                <p:ajax event="select"
-                                        update="userSubDepLabel userSubDep userAuthorityFiletype userServiceLabel userServiceGrp userEntityLabel userEntityGrp"
-                                        listener="#{userController.positionChangedHandler}" />
-                                <p:ajax event="change"
-                                        update="userSubDepLabel userSubDep userAuthorityFiletype userServiceLabel userServiceGrp userEntityLabel userEntityGrp"
-                                        listener="#{userController.positionChangedHandler}" />
-                            </p:selectOneMenu>
-                            <p:message for="userPosition" />
+                            <h:outputText id="user_position"
+                                          value="#{facesContext.viewRoot.locale eq 'fr' ? userController.selected.position.labelFr : userController.selected.position.labelEn}" />
+                            <p:message for="user_position" />
                         </h:panelGroup>
 
-                        <h:panelGroup id="userSubDepLabel">
-                            <p:outputLabel
-                                rendered="#{request.isUserInRole('ADMIN_ORG')  and userController.selected.position ne null and  userController.selected.position ne 'DIRECTEUR' and userController.selected.position ne 'SUPERVISEUR'}"
-                                value="#{bundle['User_sub_department']}" for="user_sub_direction" />
-                        </h:panelGroup>
-                        <h:panelGroup id="userSubDep">
-                            <p:selectOneMenu id="user_sub_direction" tyle="width: 133px" requiredMessage="#{bundle['CreateUserRequiredMessage_subDepartment']}"
-                                             rendered="#{request.isUserInRole('ADMIN_ORG')  and userController.selected.position ne null and  userController.selected.position ne 'DIRECTEUR' and userController.selected.position ne 'SUPERVISEUR'}"
-                                             required="true" value="#{userController.selectedsSubDepartment}" title="#{bundle['CreateUserTitle_position']}">
-                                <f:converter binding="#{subDepartmentConverter}" />
-                                <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" itemValue="#{null}" />
-                                <f:selectItems value="#{userController.subDepartmentsItems}" />
-                                <p:ajax event="select" update="userServiceLabel userServiceGrp userEntityLabel userEntityGrp"
-                                        listener="#{userController.subDepartmentChangedHandler}" />
-                                <p:ajax event="change" update="userServiceLabel userServiceGrp userEntityLabel userEntityGrp"
-                                        listener="#{userController.subDepartmentChangedHandler}" />
-                            </p:selectOneMenu>
-                            <p:message for="user_sub_direction" />
-                        </h:panelGroup>
+                        <p:outputLabel
+                            rendered="#{request.isUserInRole('ADMIN_ORG') and userController.selected.position ne null and  userController.selected.position ne 'DIRECTEUR'}"
+                            value="#{bundle['EditUser_sub_department']}" for="user_sub_direction" title="#{budle[EditUserTitle_position]}" />
+                        <h:outputText id="user_sub_direction" value="#{userController.selectedsSubDepartment.abreviation}"
+                                      rendered="#{request.isUserInRole('ADMIN_ORG') and userController.selected.position ne null and  userController.selected.position ne 'DIRECTEUR'}" />
 
-                        <h:panelGroup id="userServiceLabel">
-                            <p:outputLabel
-                                rendered="#{userController.selectedsSubDepartment ne null and userController.selected.position ne 'DIRECTEUR' and userController.selected.position ne 'SUPERVISEUR' and userController.selected.position ne 'SOUS_DIRECTEUR'}"
-                                value="#{bundle['User_service']}" for="userService" />
-                        </h:panelGroup>
-                        <h:panelGroup id="userServiceGrp">
-                            <p:selectOneMenu required="true" id="userService" tyle="width: 133px" requiredMessage="#{bundle['CreateUserRequiredMessage_service']}"
-                                             rendered="#{userController.selectedsSubDepartment ne null and userController.selected.position ne 'DIRECTEUR' and userController.selected.position ne 'SUPERVISEUR' and userController.selected.position ne 'SOUS_DIRECTEUR'}"
-                                             value="#{userController.selectedService}">
-                                <f:converter binding="#{serviceConverter}" />
-                                <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" itemValue="#{null}" />
-                                <f:selectItems value="#{userController.servicesItems}" />
-                                <p:ajax event="select" update="userEntityLabel userEntityGrp" listener="#{userController.serviceChangedHandler}" />
-                                <p:ajax event="change" update="userEntityLabel userEntityGrp" listener="#{userController.serviceChangedHandler}" />
-                            </p:selectOneMenu>
-                            <p:message for="userService" />
-                        </h:panelGroup>
+                        <p:outputLabel
+                            rendered="#{userController.selectedsSubDepartment ne null and userController.selected.position ne 'DIRECTEUR' and userController.selected.position ne 'SOUS_DIRECTEUR'}"
+                            value="#{bundle['EditUser_service']}" for="user_service" />
+                        <h:outputText id="user_service"
+                                      rendered="#{userController.selectedsSubDepartment ne null and userController.selected.position ne 'DIRECTEUR' and userController.selected.position ne 'SOUS_DIRECTEUR'}"
+                                      value="#{userController.selectedService.abreviation}" />
 
-                        <h:panelGroup id="userEntityLabel">
-                            <p:outputLabel
-                                rendered="#{userController.selectedService ne null and (userController.selected.position eq 'CHEF_BUREAU' or userController.selected.position eq 'CHEF_SECTEUR' or userController.selected.position eq 'AGENT' or userController.selected.position eq 'OBSERVATEUR')}"
-                                value="#{bundle['User_buerau']}" for="userEntity" />
-                        </h:panelGroup>
-                        <h:panelGroup id="userEntityGrp">
-                            <p:selectOneMenu required="true" id="userEntity" tyle="width: 133px" requiredMessage="#{bundle['CreateUserRequiredMessage_bureau']}"
-                                             rendered="#{userController.selectedService ne null and (userController.selected.position eq 'CHEF_BUREAU' or userController.selected.position eq 'CHEF_SECTEUR' or userController.selected.position eq 'AGENT' or userController.selected.position eq 'OBSERVATEUR')}"
-                                             value="#{userController.selectedEntity}">
-                                <f:converter binding="#{entityConverter}" />
-                                <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" itemValue="#{null}" />
-                                <f:selectItems value="#{userController.entitiesItems}" />
-                                <p:ajax event="select" update="userRoleAdministrationExtendLabel userRoleAdministrationExtendGrp" listener="#{userController.bureauChangedHandler}" />
-                                <p:ajax event="change" update="userRoleAdministrationExtendLabel userRoleAdministrationExtendGrp" listener="#{userController.bureauChangedHandler}" />
-                            </p:selectOneMenu>
-                            <p:message for="userEntity" />
-                        </h:panelGroup>
+                        <p:outputLabel value="#{bundle['editUser_buerau']}" for="user_entity"
+                                       rendered="#{userController.selectedService ne null and (userController.selected.position eq 'AGENT' or userController.selected.position eq 'CHEF_BUREAU' or userController.selected.position eq 'OBSERVATEUR')}" />
+                        <h:outputText id="user_entity" value="#{userController.selectedEntity.code}"
+                                      rendered="#{userController.selectedService ne null and (userController.selected.position eq 'AGENT' or userController.selected.position eq 'CHEF_BUREAU' or userController.selected.position eq 'OBSERVATEUR')}" />
 
                         <h:panelGroup id="userRoleAdministrationExtendLabel">
                             <p:outputLabel

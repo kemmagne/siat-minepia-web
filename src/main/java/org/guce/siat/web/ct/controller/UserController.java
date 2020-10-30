@@ -1,6 +1,7 @@
 package org.guce.siat.web.ct.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -241,6 +242,8 @@ public class UserController extends AbstractController<User> {
      */
     private String newPassword;
 
+    private boolean edition;
+
     private PositionType historyPositionType;
     private List<List<FileTypeAutorityData>> historyfileTypeAutorityDatas;
 
@@ -404,11 +407,15 @@ public class UserController extends AbstractController<User> {
      * Prepare edit.
      */
     public void prepareEdit() {
+        edition = true;
         historyPositionType = getSelected().getPosition();
         userAdministrationHierarchy = new ArrayList<>();
         if (getSelected() != null) {
             setSelected(userService.find(getSelected().getId()));
         }
+        selectedsSubDepartment = null;
+        selectedService = null;
+        selectedEntity = null;
         if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ADMIN_ORGANISME.getCode())) {
             if (null != getSelected().getPosition()) {
                 switch (getSelected().getPosition()) {
@@ -437,6 +444,7 @@ public class UserController extends AbstractController<User> {
                 }
             }
         }
+
         historyfileTypeAutorityDatas = new ArrayList<>();
         fileTypeAutorityDatas = new ArrayList<>();
         userAuthFileTypes = userAuthorityFileTypeService.getFileTypeAndAuthorityByUser(getSelected());
@@ -461,6 +469,11 @@ public class UserController extends AbstractController<User> {
             historyfileTypeAutorityDatas.add(innerList);
             fileTypeAutorityDatas.add(innerList);
         }
+
+        positionChangedHandler();
+        subDepartmentChangedHandler();
+        serviceChangedHandler();
+        bureauChangedHandler();
     }
 
     /**
@@ -661,6 +674,7 @@ public class UserController extends AbstractController<User> {
      */
     @Override
     public void prepareCreate() {
+        edition = false;
         historyPositionType = null;
         historyfileTypeAutorityDatas = null;
         if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ADMIN_MINISTERE.getCode())
@@ -718,7 +732,11 @@ public class UserController extends AbstractController<User> {
         if (selected != null && !PositionType.DIRECTEUR.equals(getSelected().getPosition())) {
             List<SubDepartment> subDepartments;
             if (PositionType.SOUS_DIRECTEUR.equals(getSelected().getPosition())) {
-                subDepartments = subDepartmentService.findNonAffectedByOrganism(getCurrentOrganism());
+                if (!edition) {
+                    subDepartments = subDepartmentService.findNonAffectedByOrganism(getCurrentOrganism());
+                } else {
+                    subDepartments = Arrays.asList(selectedsSubDepartment);
+                }
             } else {
                 subDepartments = subDepartmentService.findSubDepartmentsByOrganism(getCurrentOrganism());
             }
@@ -742,7 +760,11 @@ public class UserController extends AbstractController<User> {
                 && !PositionType.SOUS_DIRECTEUR.equals(getSelected().getPosition())) {
             List<Service> services;
             if (PositionType.CHEF_SERVICE.equals(getSelected().getPosition())) {
-                services = serviceService.findNonAffectedServicesBySubDepartment(selectedsSubDepartment);
+                if (!edition) {
+                    services = serviceService.findNonAffectedServicesBySubDepartment(selectedsSubDepartment);
+                } else {
+                    services = Arrays.asList(selectedService);
+                }
             } else {
                 services = selectedsSubDepartment.getServicesList();
             }
@@ -766,9 +788,13 @@ public class UserController extends AbstractController<User> {
                 || PositionType.CHEF_SECTEUR.equals(getSelected().getPosition())
                 || PositionType.AGENT.equals(getSelected().getPosition())
                 || PositionType.OBSERVATEUR.equals(getSelected().getPosition())) {
-            final List<Entity> entities = entityService.findNonAffectedEntityByServiceAndPosition(selectedService,
-                    getSelected().getPosition());
-            for (final Entity ent : entities) {
+            List<Entity> entities;
+            if (!edition) {
+                entities = entityService.findNonAffectedEntityByServiceAndPosition(selectedService, getSelected().getPosition());
+            } else {
+                entities = Arrays.asList(selectedEntity);
+            }
+            for (Entity ent : entities) {
                 entitiesItems.add(new SelectItem(ent, ent.getCode()));
             }
         }
