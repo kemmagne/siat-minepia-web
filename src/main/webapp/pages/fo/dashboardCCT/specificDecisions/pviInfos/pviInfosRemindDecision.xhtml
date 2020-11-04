@@ -11,9 +11,15 @@
         <p:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.inspectionEndDate}">
             <!--<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />-->
         </p:outputLabel>
-        
+
         <p:outputLabel value="#{bundle['NomControleur']}" />
         <p:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.controllerName}" />
+
+        <p:outputLabel value="#{bundle['NatureArticle']}" />
+        <p:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.pviNatureArticleInspecte}" />
+
+        <p:outputLabel value="#{bundle['Quantity']}" />
+        <p:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.pviQuantite}" />
 
         <p:outputLabel value="#{bundle['articleReglemente']}" />
         <p:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.lastDecisionIR.articleReglemente}" />

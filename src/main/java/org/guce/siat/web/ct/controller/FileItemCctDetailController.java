@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.lang.reflect.Constructor;
+import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -260,6 +261,11 @@ public class FileItemCctDetailController implements Serializable {
     private static final long serialVersionUID = 5854830660037778807L;
 
     /**
+     * The Constant LOG.
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(FileItemCctDetailController.class);
+
+    /**
      * The file type step service.
      */
     @ManagedProperty(value = "#{fileTypeStepService}")
@@ -269,11 +275,6 @@ public class FileItemCctDetailController implements Serializable {
      * The detail.
      */
     private Boolean detail;
-
-    /**
-     * The Constant LOG.
-     */
-    private static final Logger LOG = LoggerFactory.getLogger(FileItemCctDetailController.class);
 
     /**
      * The Constant DECISION_DIALOG.
@@ -1166,7 +1167,7 @@ public class FileItemCctDetailController implements Serializable {
 
     private List<FileTypeDto> relatedFileTypesInfos;
 
-    private CctDetailControllerHelper helper = new CctDetailControllerHelper();
+    private final CctDetailControllerHelper helper = new CctDetailControllerHelper();
 
     /**
      * Inits the.
@@ -1915,6 +1916,12 @@ public class FileItemCctDetailController implements Serializable {
             if (ir != null) {
                 inspectionReportData.from(ir);
             }
+
+            BigDecimal qty = BigDecimal.ZERO;
+            for (FileItem fi : currentFile.getFileItemsList()) {
+                qty = qty.add(new BigDecimal(fi.getQuantity()));
+            }
+            inspectionReportData.setPviQuantite(qty.toString());
         } // Signature de DCC (Certificat de Contrôle Documentaire)
         else if (DCC_FLOW_CODES.contains(selectedFlow.getCode())) {
             lastDecisions = itemFlowService.findLastSentItemFlowByFileItem(selectedFileItemCheck.getFileItem());
@@ -3545,8 +3552,7 @@ public class FileItemCctDetailController implements Serializable {
             }
         } // Cas de La decision MIXTE
         else // Tous les FileItem sont en Draft Mode
-        {
-            if (allFileItemInListAreDraft(productInfoItemsEnabled)) {
+         if (allFileItemInListAreDraft(productInfoItemsEnabled)) {
                 rollBackDecisionsAllowed = true;
                 sendDecisionAllowed = true;
                 decisionButtonAllowed = false;
@@ -3565,7 +3571,6 @@ public class FileItemCctDetailController implements Serializable {
                 sendDecisionAllowed = false;
                 decisionButtonAllowed = true;
             }
-        }
     }
 
     /**

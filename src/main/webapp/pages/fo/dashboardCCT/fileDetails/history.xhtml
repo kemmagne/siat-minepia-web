@@ -38,7 +38,7 @@
                                 <h:outputText value="#{bundle['History_assignedUser']}" title="#{bundle['History_assignedUser']}" />
                             </f:facet>
                             <h:panelGroup rendered="#{item.itemFlow.assignedUser ne null}">
-                                <h:outputText value="#{item.itemFlow.fileItem.file.assignedUser.firstName} #{item.itemFlow.fileItem.file.assignedUser.lastName} (#{item.itemFlow.fileItem.file.assignedUser.telephone})" />
+                                <h:outputText value="#{item.itemFlow.assignedUser.firstName} #{item.itemFlow.assignedUser.lastName} (#{item.itemFlow.assignedUser.telephone})" />
                             </h:panelGroup>
                         </p:column>
 
