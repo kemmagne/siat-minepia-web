@@ -33,15 +33,14 @@
                     <h:outputText value="#{item.numeroDossier}" />
                 </p:column>
 
-                <p:column sortBy="#{item.referenceSiat}" filterBy="#{item.referenceSiat}" filterMatchMode="contains">
+                <p:column rendered="false" sortBy="#{item.referenceSiat}" filterBy="#{item.referenceSiat}" filterMatchMode="contains">
                     <f:facet name="header">
                         <h:outputText value="#{bundle['FileLabel_num_siat']}" title="#{bundle['FileTitle_num_siat']}" />
                     </f:facet>
                     <h:outputText value="#{item.referenceSiat}" />
                 </p:column>
 
-                <p:column sortBy="#{item.createdDate}" filterBy="#{item.createdDate}"
-                          filterMatchMode="contains">
+                <p:column sortBy="#{item.createdDate}" filterBy="#{item.createdDate}" filterMatchMode="contains">
                     <f:facet name="header">
                         <h:outputText value="#{bundle['FileLabel_date_dossier']}" title="#{bundle['FileTitle_date_dossier']}" />
                     </f:facet>
@@ -52,9 +51,16 @@
 
                 <p:column>
                     <f:facet name="header">
+                        <h:outputText value="#{bundle['processName']}" title="#{bundle['processName']}" />
+                    </f:facet>
+                    <h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? item.fileType.labelEn : item.fileType.labelFr}" />
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
                         <h:outputText value="#{bundle['FileItemInformationLabel_step']}" title="#{bundle['FileItemInformationTitle_step']}" />
                     </f:facet>
-                    <h:outputText value="#{fileItemCctController.getStepLabel(item)}" />
+                    <h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? item.redefinedLabelEn : item.redefinedLabelFr}" />
                 </p:column>
 
                 <p:column filterBy="#{item.client.companyName}" sortBy="#{item.client.companyName}"  filterMatchMode="contains">

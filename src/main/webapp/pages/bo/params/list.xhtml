@@ -1,40 +1,37 @@
 
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core">
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core">
 
-	<br />
+    <br />
 
-	<p:panel header="#{bundle['Configuration_title']}">
-		<h:form id="configurationForm">
+    <p:panel header="#{bundle['Configuration_title']}">
+        <h:form id="configurationForm">
 
-			<p:treeTable id="dataTree" widgetVar="datalistTree" binding="#{table}" var="item" value="#{settingsController.root}"
-				selectionMode="single" styleClass="newui-datatable fixeColumnWidth" resizableColumns="false">
+            <p:treeTable id="dataTree" widgetVar="datalistTree" binding="#{table}" var="item" value="#{settingsController.root}" selectionMode="single" styleClass="newui-datatable fixeColumnWidth" resizableColumns="false">
 
+                <f:facet name="header">
+                    <h:outputText  value="#{bundle['Parametre']}" />
+                </f:facet>
 
-				<f:facet name="header">
-					<h:outputText  value="#{bundle['Parametre']}" />
-				</f:facet>
+                <p:column headerText="#{bundle['Property']}">
+                    <span class="tree_text">
+                        <h:outputText value="#{settingsController.bundle(item)}" />
+                    </span>
+                </p:column>
 
-				<p:column headerText="#{bundle['Property']}">
-					<span class="tree_text">
-					<h:outputText value="#{bundle[item.name]}" />
-					</span>
-				</p:column>
+                <p:column style="text-align:center" headerText="#{bundle['Value']}">
+                    <h:outputText value="#{item.value}" />
+                </p:column>
 
-				<p:column style="text-align:center" headerText="#{bundle['Value']}">
-					<h:outputText value="#{item.value}" />
-				</p:column>
+                <p:column style="width:5%">
+                    <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editButton" update=":configurationEditForm" oncomplete="PF('configurationEditDialog').show()" title="edit" icon="ui-icon-pencil" rendered="#{item.type != 'category'}">
+                        <f:setPropertyActionListener value="#{item}" target="#{settingsController.selectedParam}" />
+                    </p:commandButton>
+                </p:column>
+            </p:treeTable>
 
-				<p:column style="width:5%">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editButton" update=":configurationEditForm" oncomplete="PF('configurationEditDialog').show()" title="edit" icon="ui-icon-pencil"
-						rendered="#{item.type != 'category'}">
-						<f:setPropertyActionListener value="#{item}" target="#{settingsController.selectedParam}" />
-					</p:commandButton>
-				</p:column>
-			</p:treeTable>
+        </h:form>
 
-		</h:form>
-
-	</p:panel>
+    </p:panel>
 
 </ui:composition>

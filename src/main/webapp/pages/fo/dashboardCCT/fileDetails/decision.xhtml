@@ -25,11 +25,9 @@
 
                         <h:outputLabel value="#{bundle['Flow_newDecision']} : " />
                         <h:panelGroup>
-                            <p:selectOneMenu id="flow" value="#{fileItemCctDetailController.selectedFlow}" required="true"
-                                             requiredMessage="#{bundle['FlowRequiredMessage_possibleDecision']}">
+                            <p:selectOneMenu id="flow" value="#{fileItemCctDetailController.selectedFlow}" required="true" requiredMessage="#{bundle['FlowRequiredMessage_possibleDecision']}">
                                 <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-                                <f:selectItems value="#{fileItemCctDetailController.flows}" var="flowItem" itemValue="#{flowItem}"
-                                               itemLabel="#{facesContext.viewRoot.locale eq 'en' ? flowItem.redefinedLabelEn : flowItem.redefinedLabelFr }" />
+                                <f:selectItems value="#{fileItemCctDetailController.flows}" var="flowItem" itemValue="#{flowItem}" itemLabel="#{facesContext.viewRoot.locale eq 'en' ? flowItem.redefinedLabelEn : flowItem.redefinedLabelFr}" />
                                 <f:converter binding="#{flowConverter}" />
                                 <p:ajax event="change" listener="#{fileItemCctDetailController.changeDecisionHandler}" update="dataTypeRepeater :decisionForm" />
                             </p:selectOneMenu>

@@ -75,7 +75,7 @@
                     <f:facet name="header">
                         <h:outputText value="#{bundle['currentStep']}" title="#{bundle['currentStep']}" />
                     </f:facet>
-                    <h:outputText value="#{facesContext.viewRoot.locale eq 'fr' ? fileTracking.currenStep.labelFr : fileTracking.currenStep.labelEn}" />
+                    <h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? fileTracking.file.redefinedLabelEn : fileTracking.file.redefinedLabelFr}" />
                 </p:column>
                 <p:column>
                     <f:facet name="header">

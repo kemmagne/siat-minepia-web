@@ -74,7 +74,7 @@
                                             value="#{facesContext.viewRoot.locale eq 'en' ? fileItemCctDetailController.selectedItemFlowDto.itemFlow.flow.redefinedLabelEn : fileItemCctDetailController.selectedItemFlowDto.itemFlow.flow.redefinedLabelFr}" />
 
                                         <p:commandLink title="#{bundle['ReSend']}" process="@this"
-                                                       rendered="#{(request.isUserInRole('ROOT') or request.isUserInRole('ADMIN_MIN') or request.isUserInRole('ADMIN_ORG') or request.isUserInRole('SUPER')) and fileItemCctDetailController.resendMessageAllowed()}"
+                                                       rendered="#{(request.isUserInRole('ROOT') or request.isUserInRole('ADMIN_MIN') or request.isUserInRole('ADMIN_ORG') or request.isUserInRole('SUPER')) and fileItemCctDetailController.selectedItemFlowDto.itemFlow.sent and fileItemCctDetailController.resendMessageAllowed()}"
                                                        action="#{fileItemCctDetailController.reSendDecision()}" ajax="false" >
                                             <p:graphicImage value="/images/send.png" width="20" height="20" />
                                         </p:commandLink>

@@ -1,43 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
 
-<ui:composition>
+    <ui:composition>
 
-	<p:dialog closeOnEscape="true" id="configurationEditDlg" widgetVar="configurationEditDialog" modal="true" resizable="false"
-		appendTo="@(body)" header="#{bundle['Configuration_title']}" width="600px">
+        <p:dialog closeOnEscape="true" id="configurationEditDlg" widgetVar="configurationEditDialog" modal="true" resizable="false"
+                  appendTo="@(body)" header="#{bundle['Configuration_title']}" width="600px">
 
-		<h:form id="configurationEditForm">
-			<h:panelGroup id="display">
+            <h:form id="configurationEditForm">
+                <h:panelGroup id="display">
 
-				<p:panelGrid columns="2">
+                    <p:panelGrid columns="2">
 
-					<p:outputLabel value="#{bundle[settingsController.selectedParam.name]}"
-						title="#{bundle[settingsController.selectedParam.name]}" for="value" />
-					<h:panelGroup>
-						<p:inputText id="value" value="#{settingsController.selectedParam.value}" title="#{bundle['Edit']}" required="true"
-							requiredMessage="#{bundle['EditParamsOrganismRequiredMessage']}" />
-						<p:message for="value" />
-					</h:panelGroup>
+                        <p:outputLabel value="#{settingsController.bundle(selectedParam)}" title="#{settingsController.bundle(selectedParam)}" for="value" />
+                        <h:panelGroup>
+                            <p:inputText id="value" value="#{settingsController.selectedParam.value}" title="#{bundle['Edit']}" required="true"
+                                         requiredMessage="#{bundle['EditParamsOrganismRequiredMessage']}" />
+                            <p:message for="value" />
+                        </h:panelGroup>
 
-				</p:panelGrid>
+                    </p:panelGrid>
 
-				<br />
+                    <br />
 
-				<div class="btn-bloc">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editBtn"
-						actionListener="#{settingsController.edit}" value="#{bundle['Edit']}" styleClass="ui-priority-primary"
-						update="display, :configurationForm, :growl" oncomplete="handleSubmitForTreeTable(xhr,status,args,configurationEditDlg);" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="cancelBtn"
-						value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('configurationEditDialog').hide();" immediate="true" />
-				</div>
-			</h:panelGroup>
+                    <div class="btn-bloc">
+                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editBtn"
+                                         actionListener="#{settingsController.edit}" value="#{bundle['Edit']}" styleClass="ui-priority-primary"
+                                         update="display, :configurationForm, :growl" oncomplete="handleSubmitForTreeTable(xhr,status,args,configurationEditDlg);" />
+                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="cancelBtn"
+                                         value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('configurationEditDialog').hide();" immediate="true" />
+                    </div>
+                </h:panelGroup>
 
-		</h:form>
+            </h:form>
 
-	</p:dialog>
+        </p:dialog>
 
-</ui:composition>
+    </ui:composition>
 
 </html>
