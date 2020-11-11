@@ -27,9 +27,7 @@
             <p:inputText id="NatureArticle" required="true" value="#{fileItemCctDetailController.inspectionReportData.pviNatureArticleInspecte}" />
 
             <p:outputLabel for="Quantity" value="#{bundle['Quantity']}" />
-            <p:inputText id="Quantity" required="true" value="#{fileItemCctDetailController.inspectionReportData.pviQuantite}">
-                <f:validateDoubleRange minimum="0" />
-            </p:inputText>
+            <p:inputText id="Quantity" required="true" value="#{fileItemCctDetailController.inspectionReportData.pviQuantite}" />
 
             <p:outputLabel for="articleReglemente" value="#{bundle['articleReglemente']}" />
             <p:inputText id="articleReglemente" required="true" value="#{fileItemCctDetailController.inspectionReportData.articleReglemente}" />
