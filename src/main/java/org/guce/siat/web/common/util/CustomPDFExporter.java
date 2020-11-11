@@ -1,26 +1,5 @@
 package org.guce.siat.web.common.util;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import javax.el.MethodExpression;
-import javax.faces.component.UIComponent;
-import javax.faces.component.html.HtmlGraphicImage;
-import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
-
-import org.apache.commons.lang3.StringUtils;
-import org.guce.siat.common.model.Authority;
-import org.guce.siat.common.utils.Constants;
-import org.guce.siat.web.ct.controller.util.JsfUtil;
-import org.primefaces.component.celleditor.CellEditor;
-import org.primefaces.component.datatable.DataTable;
-import org.primefaces.component.export.PDFExporter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.lowagie.text.BadElementException;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -33,7 +12,25 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.sun.faces.facelets.component.UIRepeat;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import javax.el.MethodExpression;
+import javax.faces.component.UIComponent;
+import javax.faces.component.html.HtmlGraphicImage;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
+import org.apache.commons.lang3.StringUtils;
+import org.guce.siat.common.model.Authority;
+import org.guce.siat.common.utils.Constants;
+import org.guce.siat.web.ct.controller.util.JsfUtil;
+import org.primefaces.component.celleditor.CellEditor;
+import org.primefaces.component.datatable.DataTable;
+import org.primefaces.component.export.PDFExporter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class CustomPDFExporter.
@@ -70,7 +67,7 @@ public class CustomPDFExporter extends PDFExporter {
             final List<Authority> authoritiesList = (List<Authority>) component.getAttributes().get("value");
 
             for (final Authority authority : authoritiesList) {
-                imageUrlList.append("/images/icons/icon-" + authority.getRole() + ".png");
+                imageUrlList.append("/images/icons/icon-").append(authority.getRole()).append(".png");
                 if (authoritiesList.size() > 1) {
                     imageUrlList.append("_");
                 }
@@ -91,7 +88,7 @@ public class CustomPDFExporter extends PDFExporter {
     @Override
     protected void addColumnValue(final PdfPTable pdfTable, final List<UIComponent> components, final Font font) {
         final StringBuilder builder = new StringBuilder();
-        List<String> imagesUrlList = new ArrayList<String>();
+        List<String> imagesUrlList = new ArrayList<>();
 
         final FacesContext context = FacesContext.getCurrentInstance();
 
@@ -184,8 +181,7 @@ public class CustomPDFExporter extends PDFExporter {
 
             if (!document.isOpen()) {
                 document.setPageSize(PageSize.A4.rotate());
-                document.setMargins(Constants.NEGATIVE_THIRTY_SIX, Constants.NEGATIVE_THIRTY_SIX, Constants.THIRTY_SIX,
-                        Constants.THIRTY_SIX);
+                document.setMargins(Constants.NEGATIVE_THIRTY_SIX, Constants.NEGATIVE_THIRTY_SIX, Constants.THIRTY_SIX, Constants.THIRTY_SIX);
                 document.open();
             }
 
@@ -205,4 +201,3 @@ public class CustomPDFExporter extends PDFExporter {
         }
     }
 }
-

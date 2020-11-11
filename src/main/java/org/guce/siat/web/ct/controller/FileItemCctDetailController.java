@@ -9,7 +9,6 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.lang.reflect.Constructor;
-import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -1173,8 +1172,6 @@ public class FileItemCctDetailController implements Serializable {
      * Inits the.
      */
     public void init() {
-
-        currentFile = currentFileItem.getFile();
         checkMinaderMinistry = currentFile.getDestinataire().equalsIgnoreCase(Constants.MINADER_MINISTRY);
         checkMinepiaMinistry = currentFile.getDestinataire().equalsIgnoreCase(MINEPIA_MINISTRY);
         loggedUser = getLoggedUser();
@@ -1916,12 +1913,6 @@ public class FileItemCctDetailController implements Serializable {
             if (ir != null) {
                 inspectionReportData.from(ir);
             }
-
-            BigDecimal qty = BigDecimal.ZERO;
-            for (FileItem fi : currentFile.getFileItemsList()) {
-                qty = qty.add(new BigDecimal(fi.getQuantity()));
-            }
-            inspectionReportData.setPviQuantite(qty.toString());
         } // Signature de DCC (Certificat de Contrôle Documentaire)
         else if (DCC_FLOW_CODES.contains(selectedFlow.getCode())) {
             lastDecisions = itemFlowService.findLastSentItemFlowByFileItem(selectedFileItemCheck.getFileItem());
@@ -2142,8 +2133,7 @@ public class FileItemCctDetailController implements Serializable {
                     inputText.setRequired(true);
                     inputText.setRequiredMessage(dataType.getLabel()
                             + Constants.SPACE
-                            + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                            "RequiredMessage_standard"));
+                            + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString("RequiredMessage_standard"));
                 }
                 inputText.setId(ID_DECISION_LABEL + stringId);
                 htmlPanelGroup.getChildren().add(inputText);
@@ -2420,7 +2410,7 @@ public class FileItemCctDetailController implements Serializable {
      */
     private void loadProductHistoryList() {
         itemFlowHistoryDtoList = new ArrayList<>();
-        final List<ItemFlow> itemFlowHistoryList = itemFlowService.findItemFlowByFileItem(selectedFileItemCheck.getFileItem());
+        List<ItemFlow> itemFlowHistoryList = selectedFileItemCheck.getFileItem().getItemFlowsList();
         if (CollectionUtils.isNotEmpty(itemFlowHistoryList)) {
             for (int i = 0; i < itemFlowHistoryList.size(); i++) {
                 final FileTypeFlow fileTypeFlow = fileTypeFlowService.findByFlowAndFileType(selectedFileItemCheck.getFileItem()
@@ -2466,7 +2456,7 @@ public class FileItemCctDetailController implements Serializable {
             Collections.sort(itemFlowHistoryDtoList, new Comparator<ItemFlowDto>() {
                 @Override
                 public int compare(ItemFlowDto o1, ItemFlowDto o2) {
-                    return o1.getItemFlow().getCreated().compareTo(o2.getItemFlow().getCreated());
+                    return o2.getItemFlow().getCreated().compareTo(o1.getItemFlow().getCreated());
                 }
             });
         }
@@ -4352,7 +4342,7 @@ public class FileItemCctDetailController implements Serializable {
         boolean okInvoice = StepCode.ST_CT_57.equals(currentFileItem.getStep().getStepCode()) || StepCode.ST_CT_60.equals(currentFileItem.getStep().getStepCode());
         ItemFlow draftItemFlow = itemFlowService.findDraftByFileItem(currentFileItem);
         okInvoice = okInvoice && draftItemFlow != null && Arrays.asList(FlowCode.FL_CT_121.name(), FlowCode.FL_CT_133.name()).contains(draftItemFlow.getFlow().getCode());
-        if (okInvoice) {
+        if (okInvoice && draftItemFlow != null) {
             reportingFlow = draftItemFlow.getFlow();
         }
 
@@ -4363,7 +4353,9 @@ public class FileItemCctDetailController implements Serializable {
 
         fileTypeFlowReportsDraft = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getFileType());
         generateDraftAllowed = sendDecisionAllowed && showDecisionButton && displayGenerateDraft
-                && ((Arrays.asList(StepCode.ST_CT_38, StepCode.ST_CT_31, StepCode.ST_CT_53, StepCode.ST_CT_55, StepCode.ST_CT_56, StepCode.ST_CT_64).contains(currentFileItem.getStep().getStepCode()) && reportingFlow.equals(currentDecision))
+                && ((Arrays.asList(StepCode.ST_CT_38, StepCode.ST_CT_31, StepCode.ST_CT_53, StepCode.ST_CT_55, StepCode.ST_CT_56, StepCode.ST_CT_64).contains(currentFileItem.getStep().getStepCode())
+                && reportingFlow.equals(currentDecision))
+                || (currentDecision != null && StepCode.ST_CT_65.equals(currentFileItem.getStep().getStepCode()) && FlowCode.FL_CT_153.name().equals(currentDecision.getCode()))
                 || okInvoice || isPveReadyForSignature(currentDecision))
                 && CollectionUtils.isNotEmpty(fileTypeFlowReportsDraft);
     }
@@ -7641,10 +7633,6 @@ public class FileItemCctDetailController implements Serializable {
         return generateDraftAllowed;
     }
 
-    public void setGenerateDraftAllowed(boolean generateDraftAllowed) {
-        this.generateDraftAllowed = generateDraftAllowed;
-    }
-
     public StreamedContent downloadAttachment() {
         if (selectedAttachment == null) {
             JsfUtil.addWarningMessage("Selectionnez la pièce à télécharger");
@@ -7982,7 +7970,6 @@ public class FileItemCctDetailController implements Serializable {
 
     public boolean canProcess() {
         return true;
-//        return filesList.contains(currentFile);
     }
 
     public List<Container> getContainers() {

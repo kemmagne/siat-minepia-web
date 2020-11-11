@@ -1,11 +1,9 @@
 package org.guce.siat.web.common.util;
 
 import java.io.IOException;
-
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
-
 import org.guce.siat.common.utils.Constants;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.export.Exporter;
@@ -31,5 +29,15 @@ public class CustomizedExporter {
         context.responseComplete();
     }
 
-}
+    /**
+     * Export pdf using guce-utils-exporter.
+     *
+     * @param table the table
+     * @param filename the filename
+     * @throws IOException Signals that an I/O exception has occurred.
+     */
+    public void exportPDF2(final DataTable table, final String filename) throws IOException {
 
+    }
+
+}
