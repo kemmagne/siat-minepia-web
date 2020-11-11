@@ -271,18 +271,17 @@ public class LoginBean implements Serializable {
         if (LOG.isDebugEnabled()) {
             LOG.debug(Constants.INIT_LOG_INFO_MESSAGE, LoginBean.class.getName());
         }
-        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth instanceof UsernamePasswordAuthenticationToken) {
-            final String username = ((org.springframework.security.core.userdetails.User) auth.getPrincipal()).getUsername();
-            final User user = userService.findByLogin(username);
+            String username = ((org.springframework.security.core.userdetails.User) auth.getPrincipal()).getUsername();
+            User user = userService.findByLogin(username);
             if (!user.getFirstLogin()) {
-                final FacesContext facesContext = FacesContext.getCurrentInstance();
-                final ExternalContext extContext = facesContext.getExternalContext();
-                final String url = extContext.encodeActionURL(facesContext.getApplication().getViewHandler()
-                        .getActionURL(facesContext, ControllerConstants.Pages.INDEX_PAGE));
+                FacesContext facesContext = FacesContext.getCurrentInstance();
+                ExternalContext extContext = facesContext.getExternalContext();
+                String url = extContext.encodeActionURL(facesContext.getApplication().getViewHandler().getActionURL(facesContext, ControllerConstants.Pages.INDEX_PAGE));
                 try {
                     extContext.redirect(url);
-                } catch (final IOException e) {
+                } catch (IOException e) {
                     LOG.error(e.getMessage(), e);
                     JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
                             AUTHENTIFICATION_PROBLEM));

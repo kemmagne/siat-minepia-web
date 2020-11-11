@@ -17,6 +17,7 @@ import org.guce.siat.common.model.FileItem;
 import org.guce.siat.common.model.User;
 import org.guce.siat.common.model.UserAuthorityFileType;
 import org.guce.siat.common.service.FileItemService;
+import org.guce.siat.common.service.FileTypeStepService;
 import org.guce.siat.common.service.UserAuthorityFileTypeService;
 import org.guce.siat.common.utils.SiatUtils;
 import org.guce.siat.common.utils.enums.InformationSystemCode;
@@ -82,10 +83,11 @@ public class Utils {
     /**
      * Extract files form items.
      *
+     * @param fileTypeStepService
      * @param items the items
      * @return the sets the
      */
-    public static Set<File> extractFilesFormItems(Collection<FileItem> items) {
+    public static Set<File> extractFilesFormItems(FileTypeStepService fileTypeStepService, Collection<FileItem> items) {
 
         Set<File> files = new HashSet<>();
 
