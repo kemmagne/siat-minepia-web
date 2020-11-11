@@ -471,37 +471,48 @@ public class SearchController extends AbstractController<FileItem> {
     public void goToDetailPage() {
         try {
 
-            final FacesContext context = FacesContext.getCurrentInstance();
-            final ExternalContext extContext = context.getExternalContext();
+            FacesContext context = FacesContext.getCurrentInstance();
+            ExternalContext extContext = context.getExternalContext();
 
-            final FileItem fileItem = fileItemService.find(getSelected().getId());
-            final List<FileTypeCode> cctCodes = Arrays.asList(FileTypeCode.CCT_CT, FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI, FileTypeCode.CC_CT, FileTypeCode.CQ_CT);
+            FileItem fileItem = fileItemService.find(getSelected().getId());
+            List<FileTypeCode> cctCodes = Arrays.asList(FileTypeCode.CCT_CT, FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI, FileTypeCode.CC_CT, FileTypeCode.CQ_CT);
 
             if (cctCodes.contains(fileItem.getFile().getFileType().getCode())) {
                 setDetailPageUrl(ControllerConstants.Pages.FO.DETAILS_CCT_INDEX_PAGE);
-
-                final FileItemCctDetailController fileItemCctDetailController = getInstanceOfPageFileItemCctDetailController();
+                FileItemCctDetailController fileItemCctDetailController = getInstanceOfPageFileItemCctDetailController();
                 fileItemCctDetailController.setCurrentFileItem(fileItem);
+                File file = fileItem.getFile();
+                Step step = fileItem.getStep();
+                if (step != null) {
+                    FileTypeStep fts = fileTypeStepService.findFileTypeStepByFileTypeAndStep(file.getFileType(), step);
+                    if (fts != null) {
+                        file.setRedefinedLabelEn(fts.getLabelEn());
+                        file.setRedefinedLabelFr(fts.getLabelFr());
+                    } else {
+                        file.setRedefinedLabelEn(step.getLabelEn());
+                        file.setRedefinedLabelFr(step.getLabelFr());
+                    }
+                } else {
+                    LOG.warn("The step for the file {} isn't supposed to be null", file);
+                }
+                fileItemCctDetailController.setCurrentFile(file);
                 fileItemCctDetailController.setComeFromSearch(Boolean.TRUE);
                 fileItemCctDetailController.init();
             } else if (FileTypeCode.FIMEX.equals(fileItem.getFile().getFileType().getCode())) {
                 setDetailPageUrl(ControllerConstants.Pages.FO.DETAILS_FIMEX_INDEX_PAGE);
-
-                final FimexDetailController fimexDetailController = getInstanceOfPageFimexDetailController();
+                FimexDetailController fimexDetailController = getInstanceOfPageFimexDetailController();
                 fimexDetailController.setCurrentFile(fileItem.getFile());
                 fimexDetailController.init();
             } else {
                 setDetailPageUrl(ControllerConstants.Pages.FO.DETAILS_AP_INDEX_PAGE);
-
-                final FileItemApDetailController fileItemApDetailController = getInstanceOfPageFileItemApDetailController();
+                FileItemApDetailController fileItemApDetailController = getInstanceOfPageFileItemApDetailController();
                 fileItemApDetailController.setCurrentFile(fileItem.getFile());
                 fileItemApDetailController.setComeFromSearch(Boolean.TRUE);
                 fileItemApDetailController.setComeFromRetrieveAp(Boolean.FALSE);
                 fileItemApDetailController.init();
             }
 
-            final String url = extContext.encodeActionURL(context.getApplication().getViewHandler()
-                    .getActionURL(context, detailPageUrl));
+            String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, detailPageUrl));
             extContext.redirect(url);
         } catch (final IOException ex) {
             LOG.error(ex.getMessage(), ex);

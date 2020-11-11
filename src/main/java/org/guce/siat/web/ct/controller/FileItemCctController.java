@@ -25,11 +25,13 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import org.apache.commons.lang3.BooleanUtils;
 import org.guce.siat.common.model.Authority;
 import org.guce.siat.common.model.File;
 import org.guce.siat.common.model.FileFieldValue;
 import org.guce.siat.common.model.FileItem;
 import org.guce.siat.common.model.ItemFlow;
+import org.guce.siat.common.model.Step;
 import org.guce.siat.common.model.UserAuthorityFileType;
 import org.guce.siat.common.service.AuthorityService;
 import org.guce.siat.common.service.FileFieldValueService;
@@ -197,22 +199,22 @@ public class FileItemCctController extends AbstractController<File> {
         for (final FileItem fileItem : fileItems) {
 
             for (final ItemFlow itemFlow : fileItem.getItemFlowsList()) {
-                if (itemFlow.getUnread() && fileItem.getStep().equals(itemFlow.getFlow().getToStep())) {
+                if (BooleanUtils.toBoolean(itemFlow.getUnread()) && fileItem.getStep().equals(itemFlow.getFlow().getToStep())) {
                     itemFlow.setUnread(Boolean.FALSE);
                     itemFlowService.update(itemFlow);
                 }
             }
         }
+
         try {
             setDetailPageUrl(ControllerConstants.Pages.FO.DETAILS_CCT_INDEX_PAGE);
             refreshItems();
             final FacesContext context = FacesContext.getCurrentInstance();
             final ExternalContext extContext = context.getExternalContext();
             final FileItemCctDetailController fileItemCctDetailController = getInstanceOfPageFileItemCctDetailController();
+            fileItemCctDetailController.setCurrentFile(getSelected());
             fileItemCctDetailController.setCurrentFileItem(fileItems.get(0));
             fileItemCctDetailController.init();
-
-            fileItemCctDetailController.setFilesList(new HashSet<>(getItems()));
 
             final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, detailPageUrl));
 
@@ -228,8 +230,8 @@ public class FileItemCctController extends AbstractController<File> {
      * @param fileItems the items
      * @return the sets the
      */
-    public static Set<File> extractFilesFormItems(Collection<FileItem> fileItems) {
-        return Utils.extractFilesFormItems(fileItems);
+    public Set<File> extractFilesFormItems(Collection<FileItem> fileItems) {
+        return Utils.extractFilesFormItems(fileTypeStepService, fileItems);
     }
 
     /**
@@ -242,8 +244,7 @@ public class FileItemCctController extends AbstractController<File> {
         final Application application = fctx.getApplication();
         final ELContext context = fctx.getELContext();
         final ExpressionFactory expressionFactory = application.getExpressionFactory();
-        final ValueExpression createValueExpression = expressionFactory.createValueExpression(context,
-                "#{fileItemCctDetailController}", FileItemCctDetailController.class);
+        final ValueExpression createValueExpression = expressionFactory.createValueExpression(context, "#{fileItemCctDetailController}", FileItemCctDetailController.class);
         return (FileItemCctDetailController) createValueExpression.getValue(context);
     }
 
@@ -288,9 +289,13 @@ public class FileItemCctController extends AbstractController<File> {
 
                     File file = iterator.next();
                     FileItem fileItem = file.getFileItemsList().get(0);
+                    file.setRedefinedLabelEn(fileItem.getRedefinedLabelEn());
+                    file.setRedefinedLabelFr(fileItem.getRedefinedLabelFr());
+                    Step step = fileItem.getStep();
+                    file.setStep(step);
 
-                    if (!isPhyto(file) || getLoggedUser().equals(file.getAssignedUser()) || Arrays.asList(StepCode.ST_CT_57, StepCode.ST_CT_60, StepCode.ST_CT_03, StepCode.ST_CT_47, StepCode.ST_CT_53, StepCode.ST_CT_62).contains(fileItem.getStep().getStepCode())) {
-                        continue; // si on a assigné le dossier à un utilisateur qui est aussi signataire, il vera produit même s'il ne signe pas les dossiers dont le produit est de ce type
+                    if (!isPhyto(file) || Arrays.asList(StepCode.ST_CT_57, StepCode.ST_CT_60, StepCode.ST_CT_03, StepCode.ST_CT_47, StepCode.ST_CT_53, StepCode.ST_CT_62).contains(fileItem.getStep().getStepCode())) {
+                        continue;
                     }
 
                     if (MinaderStatisticsService.TREATMENT_STEPS_CODES.contains(fileItem.getStep().getStepCode()) && !getLoggedUser().equals(file.getAssignedUser())) {
