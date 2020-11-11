@@ -19,6 +19,14 @@
             <p:message for="PveAuthorizationDate" />
         </h:panelGroup>
 
+        <h:outputLabel for="PvePottingStartDate" value="#{bundle['PvePottingStartDate']}" />
+        <h:panelGroup>
+            <p:calendar navigator="true" readonlyInput="true" pattern="dd/MM/yyyy HH:mm" maxdate="#{fileItemCctDetailController.pottingReport.pottingEndDate}"
+                        value="#{fileItemCctDetailController.pottingReport.appointmentDate}" showOn="button" id="PvePottingStartDate" required="true"
+                        requiredMessage="#{bundle['Field']} #{bundle['PvePottingStartDate']} #{bundle['RequiredMessage']}" />
+            <p:message for="PvePottingStartDate" />
+        </h:panelGroup>
+
         <h:outputLabel for="PvePottingEndDate" value="#{bundle['PottingEndDate']}" />
         <h:panelGroup>
             <p:calendar navigator="true" readonlyInput="true" pattern="dd/MM/yyyy HH:mm" mindate="#{fileItemCctDetailController.pottingReport.appointmentDate}"
