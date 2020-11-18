@@ -76,12 +76,6 @@ public class AttachmentController implements Serializable {
     private StreamedContent streamJpeg;
 
     /**
-     * Instantiates a new attachment controller.
-     */
-    public AttachmentController() {
-    }
-
-    /**
      * Inits the.
      */
     @PostConstruct
@@ -92,7 +86,6 @@ public class AttachmentController implements Serializable {
         showPanelViewPdf = false;
         showPanelViewJpeg = false;
         generateContentStream();
-
     }
 
     /**
@@ -118,7 +111,6 @@ public class AttachmentController implements Serializable {
                 getStreamJpeg();
             }
         }
-
     }
 
     /**
@@ -147,7 +139,7 @@ public class AttachmentController implements Serializable {
             final BufferedInputStream in = new BufferedInputStream(contentStream.getStream());
             final ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-            int val = -1;
+            int val;
             try {
                 while ((val = in.read()) != -1) {
                     out.write(val);
@@ -180,7 +172,7 @@ public class AttachmentController implements Serializable {
             final BufferedInputStream in = new BufferedInputStream(contentStream.getStream());
             final ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-            int val = -1;
+            int val;
             try {
                 while ((val = in.read()) != -1) {
                     out.write(val);
