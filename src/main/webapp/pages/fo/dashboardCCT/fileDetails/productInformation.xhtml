@@ -23,7 +23,7 @@
                                 update=":detail :remindDecisionForm :productDetailsForm :listRecommandationArticleForm :showAttachmentForm :ListAttachmentForm :productInformationForm" />
                         <p:column selectionMode="single" />
 
-                        <p:column sortBy="#{item.fileItem.id}" filterBy="#{item.fileItem.id}" filterMatchMode="contains">
+                        <p:column>
                             <f:facet name="header">
                                 <h:outputText value="#{bundle['FileItemInformationLabel_numero']}" title="#{bundle['FileItemInformationTitle_numero']}" />
                             </f:facet>
@@ -37,9 +37,14 @@
                             <h:outputText value="#{item.fileItem.nsh.goodsItemCode}" />
                         </p:column>
 
-                        <p:column sortBy="#{facesContext.viewRoot.locale eq 'en' ? fileItemCctDetailController.currentFile.redefinedLabelEn : fileItemCctDetailController.currentFile.redefinedLabelFr}"
-                                  filterBy="#{facesContext.viewRoot.locale eq 'en' ? fileItemCctDetailController.currentFile.redefinedLabelEn : fileItemCctDetailController.currentFile.redefinedLabelFr}"
-                                  filterMatchMode="contains">
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle['processName']}" title="#{bundle['processName']}" />
+                            </f:facet>
+                            <h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? item.fileItem.file.fileType.labelEn : item.fileItem.file.fileType.labelFr}" />
+                        </p:column>
+
+                        <p:column>
                             <f:facet name="header">
                                 <h:outputText value="#{bundle['FileItemInformationLabel_step']}" title="#{bundle['FileItemInformationTitle_step']}" />
                             </f:facet>
