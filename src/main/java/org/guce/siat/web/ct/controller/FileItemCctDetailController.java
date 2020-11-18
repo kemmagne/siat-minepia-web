@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.lang.reflect.Constructor;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -54,6 +55,7 @@ import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.exceptions.CmisConnectionException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.collections.Transformer;
 import org.apache.commons.io.IOUtils;
@@ -7631,6 +7633,16 @@ public class FileItemCctDetailController implements Serializable {
 
     public boolean isGenerateDraftAllowed() {
         return generateDraftAllowed;
+    }
+
+    public StreamedContent downloadAllAttachments() {
+        Map<String, byte[]> attachments = CmisClient.extractAttachments(currentFile);
+        if (MapUtils.isEmpty(attachments)) {
+            JsfUtil.addWarningMessage("Il n'y aucune pièce jointe à télécharger");
+            return null;
+        }
+        byte[] bytes = org.guce.siat.common.utils.io.IOUtils.attachmentsToZip(attachments);
+        return new DefaultStreamedContent(new java.io.ByteArrayInputStream(bytes), "application/zip", "ATTACHMENTS-".concat(currentFile.getNumeroDossier()).concat(".zip"), StandardCharsets.UTF_8.displayName());
     }
 
     public StreamedContent downloadAttachment() {
