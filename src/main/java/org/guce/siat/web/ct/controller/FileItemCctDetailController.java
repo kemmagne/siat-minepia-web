@@ -10,7 +10,6 @@ import java.io.Serializable;
 import java.io.StringReader;
 import java.lang.reflect.Constructor;
 import java.nio.charset.StandardCharsets;
-import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,8 +26,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.ResourceBundle;
-import java.util.Set;
 import java.util.logging.Level;
+import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
@@ -36,7 +35,7 @@ import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlInputTextarea;
 import javax.faces.component.html.HtmlOutputLabel;
@@ -46,7 +45,6 @@ import javax.faces.component.html.HtmlPanelGroup;
 import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.activemq.util.ByteArrayInputStream;
@@ -99,36 +97,6 @@ import org.guce.siat.common.model.Transfer;
 import org.guce.siat.common.model.User;
 import org.guce.siat.common.model.UserAuthority;
 import org.guce.siat.common.model.UserAuthorityFileType;
-import org.guce.siat.common.service.AdministrationService;
-import org.guce.siat.common.service.AlfrescoPropretiesService;
-import org.guce.siat.common.service.ApplicationPropretiesService;
-import org.guce.siat.common.service.AppointmentService;
-import org.guce.siat.common.service.AuthorityService;
-import org.guce.siat.common.service.CoreService;
-import org.guce.siat.common.service.EbxmlPropertiesService;
-import org.guce.siat.common.service.FieldGroupService;
-import org.guce.siat.common.service.FileFieldService;
-import org.guce.siat.common.service.FileFieldValueService;
-import org.guce.siat.common.service.FileItemService;
-import org.guce.siat.common.service.FileProducer;
-import org.guce.siat.common.service.FileService;
-import org.guce.siat.common.service.FileTypeFlowReportService;
-import org.guce.siat.common.service.FileTypeFlowService;
-import org.guce.siat.common.service.FileTypeService;
-import org.guce.siat.common.service.FileTypeStepService;
-import org.guce.siat.common.service.FlowService;
-import org.guce.siat.common.service.ItemFlowService;
-import org.guce.siat.common.service.MailService;
-import org.guce.siat.common.service.ParamsOrganismService;
-import org.guce.siat.common.service.RecommandationAuthorityService;
-import org.guce.siat.common.service.RecommandationService;
-import org.guce.siat.common.service.ReportOrganismService;
-import org.guce.siat.common.service.ServiceService;
-import org.guce.siat.common.service.StepService;
-import org.guce.siat.common.service.TransferService;
-import org.guce.siat.common.service.UserAuthorityFileTypeService;
-import org.guce.siat.common.service.UserService;
-import org.guce.siat.common.service.XmlConverterService;
 import org.guce.siat.common.utils.Constants;
 import org.guce.siat.common.utils.DateUtils;
 import org.guce.siat.common.utils.RepetableUtil;
@@ -167,30 +135,10 @@ import org.guce.siat.core.ct.model.TreatmentOrder;
 import org.guce.siat.core.ct.model.TreatmentPart;
 import org.guce.siat.core.ct.model.TreatmentResult;
 import org.guce.siat.core.ct.model.TreatmentType;
-import org.guce.siat.core.ct.service.AnalyseOrderService;
-import org.guce.siat.core.ct.service.AnalysePartService;
-import org.guce.siat.core.ct.service.AnalyseResultService;
-import org.guce.siat.core.ct.service.ApprovedDecisionService;
 import org.guce.siat.core.ct.service.CCTCPParamValueService;
-import org.guce.siat.core.ct.service.CommonService;
-import org.guce.siat.core.ct.service.CotationService;
-import org.guce.siat.core.ct.service.DecisionHistoryService;
-import org.guce.siat.core.ct.service.InspectionReportService;
-import org.guce.siat.core.ct.service.InterceptionNotificationService;
-import org.guce.siat.core.ct.service.LaboratoryService;
-import org.guce.siat.core.ct.service.MinaderStatisticsService;
 import org.guce.siat.core.ct.service.ParamCCTCPService;
-import org.guce.siat.core.ct.service.PaymentDataService;
-import org.guce.siat.core.ct.service.PottingReportService;
-import org.guce.siat.core.ct.service.TreatmentCompanyService;
-import org.guce.siat.core.ct.service.TreatmentInfosService;
-import org.guce.siat.core.ct.service.TreatmentOrderService;
-import org.guce.siat.core.ct.service.TreatmentResultService;
 import org.guce.siat.core.ct.util.enums.CctExportProductType;
 import org.guce.siat.core.gr.model.TrendPerformance;
-import org.guce.siat.core.gr.service.InfractionService;
-import org.guce.siat.core.gr.service.RiskService;
-import org.guce.siat.core.gr.service.TrendPerformanceService;
 import org.guce.siat.core.gr.utils.SynthesisConfig;
 import org.guce.siat.core.gr.utils.enums.CertficatGoodness;
 import org.guce.siat.core.utils.SendDocumentUtils;
@@ -242,9 +190,6 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.DualListModel;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.util.ComponentUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
@@ -253,24 +198,13 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
  * The Class FileItemCctDetailController.
  */
 @ManagedBean(name = "fileItemCctDetailController")
-@SessionScoped
-public class FileItemCctDetailController implements Serializable {
+@ViewScoped
+public class FileItemCctDetailController extends DefaultDetailController {
 
     /**
      * The Constant serialVersionUID.
      */
     private static final long serialVersionUID = 5854830660037778807L;
-
-    /**
-     * The Constant LOG.
-     */
-    private static final Logger LOG = LoggerFactory.getLogger(FileItemCctDetailController.class);
-
-    /**
-     * The file type step service.
-     */
-    @ManagedProperty(value = "#{fileTypeStepService}")
-    private FileTypeStepService fileTypeStepService;
 
     /**
      * The detail.
@@ -353,72 +287,6 @@ public class FileItemCctDetailController implements Serializable {
     private static final List<StepCode> COTATION_STEP_LIST_ALLOW_DECISION = Arrays.asList(StepCode.ST_CT_53);
 
     /**
-     * The administration service.
-     */
-    @ManagedProperty(value = "#{administrationService}")
-    private AdministrationService administrationService;
-
-    /**
-     * The user authority file type service.
-     */
-    @ManagedProperty(value = "#{userAuthorityFileTypeService}")
-    private UserAuthorityFileTypeService userAuthorityFileTypeService;
-
-    /**
-     * The flow service.
-     */
-    @ManagedProperty(value = "#{flowService}")
-    private FlowService flowService;
-
-    /**
-     * The file item service.
-     */
-    @ManagedProperty(value = "#{fileItemService}")
-    private FileItemService fileItemService;
-
-    /**
-     * The item flow service.
-     */
-    @ManagedProperty(value = "#{itemFlowService}")
-    private ItemFlowService itemFlowService;
-
-    /**
-     * The file service.
-     */
-    @ManagedProperty(value = "#{fileService}")
-    private FileService fileService;
-
-    /**
-     * The user service.
-     */
-    @ManagedProperty(value = "#{userService}")
-    private UserService userService;
-
-    /**
-     * The recommendation service.
-     */
-    @ManagedProperty(value = "#{recommandationService}")
-    private RecommandationService recommandationService;
-
-    /**
-     * The trend performance service.
-     */
-    @ManagedProperty(value = "#{trendPerformanceService}")
-    private TrendPerformanceService trendPerformanceService;
-
-    /**
-     * The appointment service.
-     */
-    @ManagedProperty(value = "#{appointmentService}")
-    private AppointmentService appointmentService;
-
-    /**
-     * The approved decision service.
-     */
-    @ManagedProperty(value = "#{approvedDecisionService}")
-    private ApprovedDecisionService approvedDecisionService;
-
-    /**
      * The CCT CP param value service.
      */
     @ManagedProperty(value = "#{cCTCPParamValueService}")
@@ -431,208 +299,10 @@ public class FileItemCctDetailController implements Serializable {
     private ParamCCTCPService paramCCTCPService;
 
     /**
-     * The field group service.
-     */
-    @ManagedProperty(value = "#{fieldGroupService}")
-    private FieldGroupService fieldGroupService;
-
-    /**
-     * The step service.
-     */
-    @ManagedProperty(value = "#{stepService}")
-    private StepService stepService;
-
-    /**
-     * The XML converter service.
-     */
-    @ManagedProperty(value = "#{xmlConverterService}")
-    private XmlConverterService xmlConverterService;
-
-    /**
      * The index page URL.
      */
     @ManagedProperty(value = "#{jmsPropretiesService}")
     private String indexPageUrl;
-
-    /**
-     * The application properties service.
-     */
-    @ManagedProperty(value = "#{applicationPropretiesService}")
-    private ApplicationPropretiesService applicationPropretiesService;
-
-    /**
-     * The inspection report service.
-     */
-    @ManagedProperty(value = "#{inspectionReportService}")
-    private InspectionReportService inspectionReportService;
-
-    /**
-     * The common service.
-     */
-    @ManagedProperty(value = "#{commonService}")
-    private CommonService commonService;
-
-    /**
-     * The service service.
-     */
-    @ManagedProperty(value = "#{serviceService}")
-    private ServiceService serviceService;
-
-    /**
-     * The analyze part service.
-     */
-    @ManagedProperty(value = "#{analysePartService}")
-    private AnalysePartService analysePartService;
-
-    /**
-     * The laboratory service.
-     */
-    @ManagedProperty(value = "#{laboratoryService}")
-    private LaboratoryService laboratoryService;
-
-    /**
-     * The analyze order service.
-     */
-    @ManagedProperty(value = "#{analyseOrderService}")
-    private AnalyseOrderService analyseOrderService;
-
-    /**
-     * The treatment order service.
-     */
-    @ManagedProperty(value = "#{treatmentOrderService}")
-    private TreatmentOrderService treatmentOrderService;
-
-    /**
-     * The treatment infos service.
-     */
-    @ManagedProperty(value = "#{treatmentInfosService}")
-    private TreatmentInfosService treatmentInfosService;
-
-    /**
-     * The EBXMl properties.
-     */
-    @ManagedProperty(value = "#{ebxmlPropertiesService}")
-    private EbxmlPropertiesService ebxmlPropertiesService;
-
-    /**
-     * The PARAMS organism service.
-     */
-    @ManagedProperty(value = "#{paramsOrganismService}")
-    private ParamsOrganismService paramsOrganismService;
-
-    /**
-     * The alfresco properties service.
-     */
-    @ManagedProperty(value = "#{alfrescoPropretiesService}")
-    private AlfrescoPropretiesService alfrescoPropretiesService;
-
-    /**
-     * The mail service.
-     */
-    @ManagedProperty(value = "#{mailService}")
-    private MailService mailService;
-
-    /**
-     * The treatment company service.
-     */
-    @ManagedProperty(value = "#{treatmentCompanyService}")
-    private TreatmentCompanyService treatmentCompanyService;
-
-    /**
-     * The analyse result service.
-     */
-    @ManagedProperty(value = "#{analyseResultService}")
-    private AnalyseResultService analyseResultService;
-
-    /**
-     * The treatment result service.
-     */
-    @ManagedProperty(value = "#{treatmentResultService}")
-    private TreatmentResultService treatmentResultService;
-
-    /**
-     * The risk service.
-     */
-    @ManagedProperty(value = "#{riskService}")
-    private RiskService riskService;
-
-    /**
-     * The file field service.
-     */
-    @ManagedProperty(value = "#{fileFieldService}")
-    private FileFieldService fileFieldService;
-
-    /**
-     * The file field value service.
-     */
-    @ManagedProperty(value = "#{fileFieldValueService}")
-    private FileFieldValueService fileFieldValueService;
-
-    /**
-     * The report organism service.
-     */
-    @ManagedProperty(value = "#{reportOrganismService}")
-    private ReportOrganismService reportOrganismService;
-
-    /**
-     * send file service.
-     */
-    @ManagedProperty(value = "#{fileProducer}")
-    private FileProducer fileProducer;
-
-    /**
-     * The treatment result service.
-     */
-    @ManagedProperty(value = "#{authorityService}")
-    private AuthorityService authorityService;
-
-    /**
-     * The file type service.
-     */
-    @ManagedProperty(value = "#{fileTypeService}")
-    private FileTypeService fileTypeService;
-
-    /**
-     * The file type flow report service.
-     */
-    @ManagedProperty(value = "#{fileTypeFlowReportService}")
-    private FileTypeFlowReportService fileTypeFlowReportService;
-
-    /**
-     * The user authority file type service.
-     */
-    @ManagedProperty(value = "#{recommandationAuthorityService}")
-    private RecommandationAuthorityService recommandationAuthorityService;
-
-    /**
-     * The file type flow service.
-     */
-    @ManagedProperty(value = "#{fileTypeFlowService}")
-    private FileTypeFlowService fileTypeFlowService;
-
-    /**
-     * The infraction service.
-     */
-    @ManagedProperty(value = "#{infractionService}")
-    private InfractionService infractionService;
-
-    /**
-     * The payment data service.
-     */
-    @ManagedProperty(value = "#{paymentDataService}")
-    private PaymentDataService paymentDataService;
-
-    @ManagedProperty(value = "#{interceptionNotificationService}")
-    private InterceptionNotificationService interceptionNotificationService;
-
-    @ManagedProperty(value = "#{coreService}")
-    private CoreService coreService;
-
-    @ManagedProperty(value = "#{pottingReportService}")
-    private PottingReportService pottingReportService;
-
-    @ManagedProperty(value = "#{transferService}")
-    private TransferService transferService;
 
     /**
      * The send decision allowed.
@@ -719,11 +389,6 @@ public class FileItemCctDetailController implements Serializable {
     private ItemFlow lastDecisions;
 
     /**
-     * The current file.
-     */
-    private File currentFile;
-
-    /**
      * The selected attachment.
      */
     private Attachment selectedAttachment;
@@ -779,11 +444,6 @@ public class FileItemCctDetailController implements Serializable {
     private Boolean selectAllRollBack;
 
     /**
-     * The current file item.
-     */
-    private FileItem currentFileItem;
-
-    /**
      * The generate report allowed.
      */
     private boolean generateDraftAllowed;
@@ -796,11 +456,6 @@ public class FileItemCctDetailController implements Serializable {
     private List<FileTypeFlowReport> fileTypeFlowReportsDraft;
 
     private List<FileTypeFlowReport> fileTypeFlowReports;
-
-    /**
-     * The logged user.
-     */
-    private User loggedUser;
 
     /**
      * The current organism.
@@ -880,11 +535,6 @@ public class FileItemCctDetailController implements Serializable {
      * The show product details form.
      */
     private Boolean showProductDetailsForm;
-
-    /**
-     * The come from search.
-     */
-    private boolean comeFromSearch;
 
     /**
      * The assigned user for cotation.
@@ -1065,12 +715,6 @@ public class FileItemCctDetailController implements Serializable {
     private List<Authority> authorityList;
 
     /**
-     * The transaction manager.
-     */
-    @ManagedProperty(value = "#{transactionManager}")
-    private PlatformTransactionManager transactionManager;
-
-    /**
      * the transaction helper
      */
 //    @ManagedProperty(value = "#{transactionHelper}")
@@ -1143,22 +787,10 @@ public class FileItemCctDetailController implements Serializable {
     private final String COUNT_CONTAINERS = "containers";
     private final String COUNT_PACKAGES = "packages";
 
-    /**
-     * The decision history service.
-     */
-    @ManagedProperty(value = "#{decisionHistoryService}")
-    private DecisionHistoryService decisionHistoryService;
-
-    @ManagedProperty(value = "#{cotationService}")
-    private CotationService cotationService;
-
     private List<DecisionHistory> decisionHistories;
     private boolean maskOfficialPosition;
 
-    private Set<File> filesList;
-
     private static final int GLOBAL_PROPAGATION_TRANSACTION_BEHAVIOUR = TransactionDefinition.PROPAGATION_REQUIRES_NEW;
-    private boolean decided;
 
     private Long counter;
 
@@ -1173,10 +805,15 @@ public class FileItemCctDetailController implements Serializable {
     /**
      * Inits the.
      */
+    @PostConstruct
     public void init() {
+        super.initFile();
+        if (currentFile == null) {
+            goToPreviousPage();
+            return;
+        }
         checkMinaderMinistry = currentFile.getDestinataire().equalsIgnoreCase(Constants.MINADER_MINISTRY);
         checkMinepiaMinistry = currentFile.getDestinataire().equalsIgnoreCase(MINEPIA_MINISTRY);
-        loggedUser = getLoggedUser();
         allowedRecommandation = checkIsAllowadRecommandation();
         listUserAuthorityFileTypes = userAuthorityFileTypeService.findUserAuthorityFileTypeByFileTypeAndUserList(currentFile.getFileType(), loggedUser.getMergedDelegatorList());
 
@@ -1243,18 +880,6 @@ public class FileItemCctDetailController implements Serializable {
 
         authoritiesList = new DualListModel<>(new ArrayList<Authority>(), new ArrayList<Authority>());
         selectedAttachment = null;
-    }
-
-    /**
-     * Reload page listener.
-     */
-    public void reloadPage() {
-        final FacesContext fc = FacesContext.getCurrentInstance();
-        final boolean isGETMethod = ((HttpServletRequest) fc.getExternalContext().getRequest()).getMethod().equals("GET");
-        // Skip ajax requests. and Http GET method
-        if (isGETMethod) {
-            init();
-        }
     }
 
     /**
@@ -1426,20 +1051,17 @@ public class FileItemCctDetailController implements Serializable {
                         }
 
                         boolean payed = false;
-                        hist:
-                        for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
-                            if (hist.getItemFlow().getFlow().getCode().equals(FlowCode.FL_CT_93.name())) {
+                        for (ItemFlowDto hist : itemFlowHistoryDtoList) {
+                            if (hist.getItemFlow() != null && hist.getItemFlow().getFlow() != null && FlowCode.FL_CT_93.name().equals(hist.getItemFlow().getFlow().getCode())) {
                                 payed = true;
-                                final Iterator<Flow> it = flows.iterator();
+                                Iterator<Flow> it = flows.iterator();
                                 while (it.hasNext()) {
-                                    final Flow flx = it.next();
+                                    Flow flx = it.next();
                                     if (Arrays.asList(FlowCode.FL_CT_92.name()).contains(flx.getCode())) {
                                         it.remove();
                                     }
                                 }
-//                                break hist;
                             }
-
                         }
                         if (!payed && !(FileTypeCode.CCT_CT_E_PVI.equals(currentFile.getFileType().getCode())
                                 || FileTypeCode.CCT_CT_E_ATP.equals(currentFile.getFileType().getCode())
@@ -1447,15 +1069,14 @@ public class FileItemCctDetailController implements Serializable {
                                 || FileTypeCode.CCT_CT_E_PVE.equals(currentFile.getFileType().getCode()))) {
                             final Iterator<Flow> it = flows.iterator();
                             while (it.hasNext()) {
-                                final Flow flx = it.next();
+                                Flow flx = it.next();
                                 if (!flx.getIsCota() && flx.getCode().equals(FlowCode.FL_CT_32.name())) {
                                     it.remove();
                                 }
                             }
                         } // En Cas de Réexamen: pour différencier les DSC et EA
                         else if (StepCode.ST_CT_22.equals(referenceFileItemCheck.getStep().getStepCode())) {
-                            final ItemFlow lastOutoingItemFlow = itemFlowService
-                                    .findLastOutgoingItemFlowByFileItem(referenceFileItemCheck);
+                            ItemFlow lastOutoingItemFlow = itemFlowService.findLastOutgoingItemFlowByFileItem(referenceFileItemCheck);
                             if (FlowCode.FL_CT_12.name().equals(lastOutoingItemFlow.getFlow().getCode())
                                     || FlowCode.FL_CT_50.name().equals(lastOutoingItemFlow.getFlow().getCode())) {
                                 flows = deleteFlowFromFlowList(flows, FlowCode.FL_CT_53.name());
@@ -1464,9 +1085,9 @@ public class FileItemCctDetailController implements Serializable {
                                 flows = deleteFlowFromFlowList(flows, FlowCode.FL_CT_52.name());
                             }
                         }
-                        for (final Flow flow : flows) {
+                        for (Flow flow : flows) {
                             //to redefine flows labelFr, and labelEn
-                            final FileTypeFlow fileTypeFlow = fileTypeFlowService.findByFlowAndFileType(currentFile.getFileType(), flow);
+                            FileTypeFlow fileTypeFlow = fileTypeFlowService.findByFlowAndFileType(currentFile.getFileType(), flow);
                             if (fileTypeFlow != null) {
                                 flow.setRedefinedLabelEn(fileTypeFlow.getLabelEn());
                                 flow.setRedefinedLabelFr(fileTypeFlow.getLabelFr());
@@ -1475,11 +1096,10 @@ public class FileItemCctDetailController implements Serializable {
                         selectedFlow = null;
                         decisionDiv.getChildren().clear();
 
-                        final RiskController riskController = getInstanceOfRiskController();
+                        RiskController riskController = getInstanceOfRiskController();
                         riskController.generateSystemDecisionAndSynthesisResults(referenceFileItemCheck);
-                        final RequestContext requestContext = RequestContext.getCurrentInstance();
+                        RequestContext requestContext = RequestContext.getCurrentInstance();
                         requestContext.execute("PF('" + DECISION_DIALOG + "').show();");
-
                     } else {
                         showErrorFacesMessage(ControllerConstants.Bundle.Messages.SAME_STEPS_ERROR, null);
                     }
@@ -2103,7 +1723,7 @@ public class FileItemCctDetailController implements Serializable {
                 try {
                     properties.load(new StringReader(dataTypeProps));
                 } catch (IOException ex) {
-                    LOG.debug("Problem occured when trying to load properties of data type : " + dataType, ex);
+                    logger.debug("Problem occured when trying to load properties of data type : " + dataType, ex);
                 }
             }
 
@@ -2365,7 +1985,7 @@ public class FileItemCctDetailController implements Serializable {
         try {
             sessionCmisClient = CmisSession.getInstance();
         } catch (CmisConnectionException ce) {
-            LOG.error(Objects.toString(ce), ce);
+            logger.error(Objects.toString(ce), ce);
             try {
                 String senderMail = mailService.getReplyToValue();
                 String templateFileName = CMIS_CONNEXION_ERROR;
@@ -2377,7 +1997,7 @@ public class FileItemCctDetailController implements Serializable {
                 map.put(MailConstants.VMF, templateFileName);
                 mailService.sendMail(map);
             } catch (Exception ex) {
-                LOG.error(Objects.toString(ex), ex);
+                logger.error(Objects.toString(ex), ex);
             }
             return;
         }
@@ -2400,8 +2020,8 @@ public class FileItemCctDetailController implements Serializable {
                     reportMap.put(partId, new DefaultStreamedContent(new ByteArrayInputStream(content),
                             contentStream.getMimeType(), fileName));
                 } catch (IOException e) {
-                    LOG.error("Cannot download {} from file {}", fileName, currentFile);
-                    LOG.error(fileName, e);
+                    logger.error("Cannot download {} from file {}", fileName, currentFile);
+                    logger.error(fileName, e);
                 }
             }
         }
@@ -2577,7 +2197,7 @@ public class FileItemCctDetailController implements Serializable {
             if (decisionByFileAllowed && fileItemService.verifyStepChangedWhileDecisionInProgress(productInfoItems)) {
                 final String summary = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.ERROR_DIALOG_TITLE);
                 final String detail1 = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.CANCEL_REQUEST_IN_PROGRESS);
-                LOG.error(detail1);
+                logger.error(detail1);
                 // the user must refresh the details page (return to the
                 // dashboard then open the file details page) to get the correct
                 // decision list in the decision popup
@@ -2591,7 +2211,7 @@ public class FileItemCctDetailController implements Serializable {
                     final String summary = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.ERROR_DIALOG_TITLE);
 
                     final String detail1 = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.CANCEL_REQUEST_IN_PROGRESS);
-                    LOG.error(detail1);
+                    logger.error(detail1);
                     // the user must refresh the details page (return to the
                     // dashboard then open the file details page) to get the
                     // correct decision list in the decision popup
@@ -2688,8 +2308,8 @@ public class FileItemCctDetailController implements Serializable {
                             initialStream.read(buffer);
                             outStream.write(buffer);
                             commonService.sendAttachedReports(Collections.singletonList(targetAttachment));
-                            if (LOG.isDebugEnabled()) {
-                                LOG.debug("//Attachment --> Alfresco {}", analysePart.getId());
+                            if (logger.isDebugEnabled()) {
+                                logger.debug("//Attachment --> Alfresco {}", analysePart.getId());
                             }
                         }
                     }
@@ -2713,8 +2333,8 @@ public class FileItemCctDetailController implements Serializable {
                                 initialStream.read(buffer);
                                 outStream.write(buffer);
                                 commonService.sendAttachedReports(Collections.singletonList(targetAttachment));
-                                if (LOG.isDebugEnabled()) {
-                                    LOG.debug("//Attachment --> Alfresco treatmentPart :{} ", treatmentPart.getId());
+                                if (logger.isDebugEnabled()) {
+                                    logger.debug("//Attachment --> Alfresco treatmentPart :{} ", treatmentPart.getId());
                                 }
                             }
                         }
@@ -2788,18 +2408,17 @@ public class FileItemCctDetailController implements Serializable {
             TransactionStatus tsCommit = transactionStatus;
             transactionStatus = null;
             transactionManager.commit(tsCommit);
-            decided = true;
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("####SAVE DECISION Transaction commited####");
+            if (logger.isDebugEnabled()) {
+                logger.debug("####SAVE DECISION Transaction commited####");
             }
         } catch (final Exception ex) {
-            LOG.error(currentFile.toString(), ex);
+            logger.error(currentFile.toString(), ex);
             showErrorFacesMessage(ControllerConstants.Bundle.Messages.SAVE_DECISION_FAILED, null);
         } finally {
             if (transactionStatus != null) {
                 transactionManager.rollback(transactionStatus);
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("####SAVE DECISION Transaction rollbacked####");
+                if (logger.isDebugEnabled()) {
+                    logger.debug("####SAVE DECISION Transaction rollbacked####");
                 }
             }
         }
@@ -2823,7 +2442,7 @@ public class FileItemCctDetailController implements Serializable {
                 try {
                     properties.load(new StringReader(dataTypeProps));
                 } catch (IOException ex) {
-                    LOG.debug("Problem occured when trying to load properties of data type : " + dataType, ex);
+                    logger.debug("Problem occured when trying to load properties of data type : " + dataType, ex);
                 }
             }
 
@@ -2890,12 +2509,6 @@ public class FileItemCctDetailController implements Serializable {
 
                 decisionDiv.getChildren().clear();
             } else {
-
-//                ItemFlow lastItemFlow = itemFlowService.findDraftByFileItem(currentFileItem);
-//                if (lastItemFlow != null && isPhytoAppointment(lastItemFlow.getFlow()) && FlowCode.FL_CT_104.name().equals(lastItemFlow.getFlow().getCode())) {
-////                    appointmentService.rollbackAppointmentDecision(currentFileItem);
-//                }
-//                itemFlowService.rollBackDecisionForDispatchFile(chckedProductInfoChecksList);
                 commonService.rollbackDecision(chckedProductInfoChecksList);
                 // If the las decision is a cotation flow then rollback the
                 // assigned user to the current user
@@ -2918,17 +2531,17 @@ public class FileItemCctDetailController implements Serializable {
             TransactionStatus tsCommit = transactionStatus;
             transactionStatus = null;
             transactionManager.commit(tsCommit);
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("####ROLLBACK DECISION Transaction commited####");
+            if (logger.isDebugEnabled()) {
+                logger.debug("####ROLLBACK DECISION Transaction commited####");
             }
         } catch (final Exception ex) {
-            LOG.error(currentFile.toString(), ex);
+            logger.error(currentFile.toString(), ex);
             showErrorFacesMessage(ControllerConstants.Bundle.Messages.ROLL_BACK_FAIL, null);
         } finally {
             if (transactionStatus != null) {
                 transactionManager.rollback(transactionStatus);
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("####ROLLBACK DECISION Transaction rollbacked####");
+                if (logger.isDebugEnabled()) {
+                    logger.debug("####ROLLBACK DECISION Transaction rollbacked####");
                 }
             }
         }
@@ -3014,17 +2627,16 @@ public class FileItemCctDetailController implements Serializable {
             TransactionStatus tsCommit = transactionStatus;
             transactionStatus = null;
             transactionManager.commit(tsCommit);
-            decided = true;
-            if (LOG.isDebugEnabled()) {
-                LOG.info("####DISPATCH DECISION Transaction commited####");
+            if (logger.isDebugEnabled()) {
+                logger.info("####DISPATCH DECISION Transaction commited####");
             }
         } catch (Exception ex) {
-            LOG.error(currentFile.toString(), ex);
+            logger.error(currentFile.toString(), ex);
         } finally {
             if (transactionStatus != null) {
                 transactionManager.rollback(transactionStatus);
-                if (LOG.isDebugEnabled()) {
-                    LOG.info("####DISPATCH DECISION Transaction rollbacked####");
+                if (logger.isDebugEnabled()) {
+                    logger.info("####DISPATCH DECISION Transaction rollbacked####");
                 }
             }
         }
@@ -3255,26 +2867,26 @@ public class FileItemCctDetailController implements Serializable {
             } else if (hasDraftAndEnabledForDecision()) {
                 boolean allHasDecision = true;
                 boolean sameStep = true;
-                final Step currentStep = currentFile.getFileItemsList().get(0).getStep();
-                for (final FileItem selected : currentFile.getFileItemsList()) {
+                Step currentStep = currentFile.getFileItemsList().get(0).getStep();
+                for (FileItem selected : currentFile.getFileItemsList()) {
                     if (!currentStep.getStepCode().equals(selected.getStep().getStepCode())) {
                         sameStep = false;
                         break;
                     }
                 }
                 if (sameStep) {
-                    for (final FileItem selected : currentFile.getFileItemsList()) {
+                    for (FileItem selected : currentFile.getFileItemsList()) {
                         if (BooleanUtils.isNotTrue(selected.getDraft())) {
                             break;
                         } else {
-                            final ItemFlow draftItemFlow = itemFlowService.findDraftByFileItem(selected);
+                            ItemFlow draftItemFlow = itemFlowService.findDraftByFileItem(selected);
                             if (!draftItemFlow.getSender().getId().equals(getLoggedUser().getId())) {
                                 break;
                             }
                         }
                     }
-                    for (final FileItem selected : currentFile.getFileItemsList()) {
-                        final ItemFlow draftItemFlow = itemFlowService.findDraftByFileItem(selected);
+                    for (FileItem selected : currentFile.getFileItemsList()) {
+                        ItemFlow draftItemFlow = itemFlowService.findDraftByFileItem(selected);
                         if (draftItemFlow != null
                                 && (Arrays.asList(FlowCode.FL_CT_29.name(), FlowCode.FL_CT_31.name(), FlowCode.FL_CT_64.name(),
                                         FlowCode.FL_CT_66.name()).contains(draftItemFlow.getFlow().getCode()) || isFstpReadyForSignature(selectedFlow) || isAtReadyForSignature(selectedFlow))) {
@@ -3293,9 +2905,9 @@ public class FileItemCctDetailController implements Serializable {
 
                 if (CollectionUtils.isNotEmpty(productInfoItemsEnabled)) {
 
-                    final Flow flow = flowService.findFlowBySentFileItem(productInfoItemsEnabled.get(0));
+                    Flow flow = flowService.findFlowBySentFileItem(productInfoItemsEnabled.get(0));
                     if (!Objects.equals(flow, null) && AJOURNEMENT_FLOW_LIST.contains(flow.getCode())) {
-                        final Appointment rdv = appointmentService.findAppoitmentByFileItemAndController(productInfoItemsEnabled,
+                        Appointment rdv = appointmentService.findAppoitmentByFileItemAndController(productInfoItemsEnabled,
                                 loggedUser);
                         if (rdv != null) {
                             rdv.setDeleted(Boolean.TRUE);
@@ -3303,24 +2915,24 @@ public class FileItemCctDetailController implements Serializable {
                         }
                     }
 
-                    for (final FileItem fileItem : productInfoItemsEnabled) {
+                    for (FileItem fileItem : productInfoItemsEnabled) {
                         if (fileItem.getDraft()) {
-                            final ItemFlow draftItemFlow = itemFlowService.findDraftByFileItem(fileItem);
-                            final FileItem fItem = fileItemService.find(fileItem.getId());
+                            ItemFlow draftItemFlow = itemFlowService.findDraftByFileItem(fileItem);
+                            FileItem fItem = fileItemService.find(fileItem.getId());
                             addTrendPerformance(fItem, draftItemFlow);
                         }
 
                     }
-                    final Map<FileItem, Flow> mapWithinAllFileItemAndFlowsToSend = itemFlowService.sendDecisions(currentFile, productInfoItemsEnabled);
+                    Map<FileItem, Flow> mapWithinAllFileItemAndFlowsToSend = itemFlowService.sendDecisions(currentFile, productInfoItemsEnabled);
 
                     if (!mapWithinAllFileItemAndFlowsToSend.isEmpty()) {
 
                         pottingReportService.updateAfterSignature(currentFile);
 
-                        final Map<Flow, List<FileItem>> groupedFlow = groupFileItemsToSendByFlow(mapWithinAllFileItemAndFlowsToSend);
-                        for (final Flow flowToSend : groupedFlow.keySet()) {
-                            final List<FileItem> fileItemList = groupedFlow.get(flowToSend);
-                            final List<ItemFlow> itemFlowList = itemFlowService.findLastItemFlowsByFileItemList(fileItemList);
+                        Map<Flow, List<FileItem>> groupedFlow = groupFileItemsToSendByFlow(mapWithinAllFileItemAndFlowsToSend);
+                        for (Flow flowToSend : groupedFlow.keySet()) {
+                            List<FileItem> fileItemList = groupedFlow.get(flowToSend);
+                            List<ItemFlow> itemFlowList = itemFlowService.findLastItemFlowsByFileItemList(fileItemList);
                             String service = StringUtils.EMPTY;
                             String documentType = StringUtils.EMPTY;
 
@@ -3338,17 +2950,17 @@ public class FileItemCctDetailController implements Serializable {
 
                                 attachedByteFiles = new HashMap<>();
 
-                                final List<FileTypeFlowReport> fileTypeFlowReportList = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(flowToSend, currentFile.getFileType());
+                                List<FileTypeFlowReport> fileTypeFlowReportList = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(flowToSend, currentFile.getFileType());
                                 for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportList) {
 
                                     if (!FileTypeCode.CCT_CT_E_PVE.equals(currentFile.getFileType().getCode())) {
                                         String reportFieldCode = fileTypeFlowReport.getFileFieldName();
                                         FileFieldValue reportFieldValue = fileFieldValueService.findValueByFileFieldAndFile(reportFieldCode, currentFile);
                                         if (reportFieldValue == null) {
-                                            final ReportOrganism reportOrganism = reportOrganismService.findReportByFileTypeFlowReport(fileTypeFlowReport);
-                                            final FileField reportField = fileFieldService.findFileFieldByCodeAndFileType(reportFieldCode, fileTypeFlowReport.getFileType().getCode());
-                                            final String eforceRef = currentFile.getNumeroDemande();
-                                            reportNumber = MessageFormat.format("{0}/{1}{2}", eforceRef,
+                                            ReportOrganism reportOrganism = reportOrganismService.findReportByFileTypeFlowReport(fileTypeFlowReport);
+                                            FileField reportField = fileFieldService.findFileFieldByCodeAndFileType(reportFieldCode, fileTypeFlowReport.getFileType().getCode());
+                                            String eforceRef = currentFile.getNumeroDemande();
+                                            reportNumber = String.format("%s/%s%s", eforceRef,
                                                     java.util.Calendar.getInstance().get(java.util.Calendar.YEAR),
                                                     ((reportOrganism != null && reportOrganism.getValue() != null) ? reportOrganism.getValue() : StringUtils.EMPTY));
                                             reportFieldValue = new FileFieldValue();
@@ -3360,7 +2972,7 @@ public class FileItemCctDetailController implements Serializable {
                                         }
                                     }
 
-                                    final byte[] report = getReportBytes(fileTypeFlowReport, false);
+                                    byte[] report = getReportBytes(fileTypeFlowReport, false);
 
                                     if (report != null) {
                                         attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
@@ -3374,7 +2986,7 @@ public class FileItemCctDetailController implements Serializable {
 
                                 List<FileTypeFlowReport> fileTypeFlowReportList = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(flowToSend, currentFile.getFileType());
                                 FileTypeFlowReport fileTypeFlowReport = fileTypeFlowReportList.get(0);
-                                final byte[] report = getReportBytes(fileTypeFlowReport, false);
+                                byte[] report = getReportBytes(fileTypeFlowReport, false);
 
                                 if (report != null) {
                                     attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
@@ -3382,18 +2994,18 @@ public class FileItemCctDetailController implements Serializable {
                             }
 
                             // convert file to document
-                            final Serializable documentSerializable = xmlConverterService.convertFileToDocument(currentFile, fileItemList, itemFlowList, flowToSend);
+                            Serializable documentSerializable = xmlConverterService.convertFileToDocument(currentFile, fileItemList, itemFlowList, flowToSend);
 
                             // prepare document to send
                             byte[] xmlBytes;
-                            try (final ByteArrayOutputStream output = SendDocumentUtils.prepareCctDocument(documentSerializable, service, documentType)) {
+                            try (ByteArrayOutputStream output = SendDocumentUtils.prepareCctDocument(documentSerializable, service, documentType)) {
                                 xmlBytes = output.toByteArray();
                             }
 
                             if (CollectionUtils.isNotEmpty(flowToSend.getCopyRecipientsList())) {
-                                final List<CopyRecipient> copyRecipients = flowToSend.getCopyRecipientsList();
-                                for (final CopyRecipient copyRecipient : copyRecipients) {
-                                    LOG.info("SEND COPY RECIPIENT TO {}", copyRecipient.getToAuthority().getRole());
+                                List<CopyRecipient> copyRecipients = flowToSend.getCopyRecipientsList();
+                                for (CopyRecipient copyRecipient : copyRecipients) {
+                                    logger.info("SEND COPY RECIPIENT TO {}", copyRecipient.getToAuthority().getRole());
                                     send(transactionStatus, xmlBytes, attachedByteFiles, service, documentType, copyRecipient.getToAuthority().getRole(), itemFlowList);
                                 }
                             } else {
@@ -3416,20 +3028,20 @@ public class FileItemCctDetailController implements Serializable {
             TransactionStatus tsCommit = transactionStatus;
             transactionStatus = null;
             transactionManager.commit(tsCommit);
-            if (LOG.isDebugEnabled()) {
-                LOG.info("####SEND DECISION Transaction commited####");
+            if (logger.isDebugEnabled()) {
+                logger.info("####SEND DECISION Transaction commited####");
             }
 
-            final File file = fileService.find(currentFile.getId());
-            final Step currentStep = file.getFileItemsList().get(0).getStep();
+            File file = fileService.find(currentFile.getId());
+            Step currentStep = file.getFileItemsList().get(0).getStep();
             notificationEmail(currentFile, currentStep);
-        } catch (final Exception e) {
-            LOG.error(currentFile.toString(), e);
+        } catch (Exception e) {
+            logger.error(currentFile.toString(), e);
         } finally {
             if (transactionStatus != null) {
                 transactionManager.rollback(transactionStatus);
-                if (LOG.isDebugEnabled()) {
-                    LOG.info("####SEND DECISION Transaction rollbacked####");
+                if (logger.isDebugEnabled()) {
+                    logger.info("####SEND DECISION Transaction rollbacked####");
                 }
             }
         }
@@ -3455,25 +3067,28 @@ public class FileItemCctDetailController implements Serializable {
             showErrorFacesMessage(ControllerConstants.Bundle.Messages.SEND_ERROR, null);
             return;
         }
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Message sent to OUT queue");
+        if (logger.isDebugEnabled()) {
+            logger.debug("Message sent to OUT queue");
         }
     }
 
     /**
      * Go to detail page.
      */
-    public void goToDetailPage() {
+    @Override
+    protected void goToDetailPage() {
         try {
             setIndexPageUrl(ControllerConstants.Pages.FO.DASHBOARD_CCT_INDEX_PAGE);
-            final FacesContext context = FacesContext.getCurrentInstance();
-            final ExternalContext extContext = context.getExternalContext();
-            final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, indexPageUrl));
-
+            FacesContext context = FacesContext.getCurrentInstance();
+            ExternalContext extContext = context.getExternalContext();
+            String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, indexPageUrl));
             extContext.redirect(url);
-
-        } catch (final IOException ex) {
-            LOG.error(currentFile.toString(), ex);
+        } catch (IOException ex) {
+            if (currentFile != null) {
+                logger.error(currentFile.toString(), ex);
+            } else {
+                logger.error(ex.getMessage(), ex);
+            }
         }
     }
 
@@ -3484,7 +3099,7 @@ public class FileItemCctDetailController implements Serializable {
      */
     public Boolean hasDraftAndEnabledForDecision() {
         if (productInfoChecks != null && !productInfoChecks.isEmpty()) {
-            for (final FileItemCheck fileItemCheck : productInfoChecks) {
+            for (FileItemCheck fileItemCheck : productInfoChecks) {
                 if (fileItemCheck.getFileItem().getDraft() && fileItemCheck.getEnabledCheck()) {
                     return true;
                 }
@@ -3544,7 +3159,8 @@ public class FileItemCctDetailController implements Serializable {
             }
         } // Cas de La decision MIXTE
         else // Tous les FileItem sont en Draft Mode
-         if (allFileItemInListAreDraft(productInfoItemsEnabled)) {
+        {
+            if (allFileItemInListAreDraft(productInfoItemsEnabled)) {
                 rollBackDecisionsAllowed = true;
                 sendDecisionAllowed = true;
                 decisionButtonAllowed = false;
@@ -3563,6 +3179,7 @@ public class FileItemCctDetailController implements Serializable {
                 sendDecisionAllowed = false;
                 decisionButtonAllowed = true;
             }
+        }
     }
 
     /**
@@ -3700,33 +3317,6 @@ public class FileItemCctDetailController implements Serializable {
             return ScenarioType.CCT.name();
         }
         return ScenarioType.AD.name();
-    }
-
-    /**
-     * Gets the current locale.
-     *
-     *
-     * @return the current locale
-     */
-    public Locale getCurrentLocale() {
-        return FacesContext.getCurrentInstance().getViewRoot().getLocale();
-
-    }
-
-    /**
-     * Gets the logged user.
-     *
-     * @return the logged user
-     */
-    public User getLoggedUser() {
-        if (loggedUser == null) {
-            final FacesContext context = FacesContext.getCurrentInstance();
-            if (context != null) {
-                final HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-                loggedUser = (User) session.getAttribute("loggedUser");
-            }
-        }
-        return loggedUser;
     }
 
     /**
@@ -3870,7 +3460,7 @@ public class FileItemCctDetailController implements Serializable {
                 JsfUtil.addErrorMessage(errorMsg);
             }
         } catch (final Exception e) {
-            LOG.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
             JsfUtil.addErrorMessage(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.PERSISTENCE_ERROR_OCCURED));
         }
     }
@@ -4269,14 +3859,14 @@ public class FileItemCctDetailController implements Serializable {
      * @param bundle the bundle
      * @param clientId the client id
      */
-    private static void showErrorFacesMessage(final String bundle, final String clientId) {
+    private void showErrorFacesMessage(final String bundle, final String clientId) {
         final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, FacesContext.getCurrentInstance().getViewRoot().getLocale()).getString(bundle);
         if (StringUtils.isEmpty(clientId)) {
             JsfUtil.addErrorMessage(msg);
         } else {
             JsfUtil.addErrorMessage(clientId, msg);
         }
-        LOG.warn(msg);
+        logger.warn(msg);
     }
 
     /**
@@ -4397,7 +3987,7 @@ public class FileItemCctDetailController implements Serializable {
                         return fileToDownload;
                     }
                 } catch (Exception e) {
-                    LOG.error(currentFile.toString(), e);
+                    logger.error(currentFile.toString(), e);
                     final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.GENERATE_REPORT_FAILED);
                     JsfUtil.addErrorMessage(msg);
                 }
@@ -4436,7 +4026,7 @@ public class FileItemCctDetailController implements Serializable {
                     return fileToDownload;
                 }
             } catch (Exception e) {
-                LOG.error(currentFile.toString(), e);
+                logger.error(currentFile.toString(), e);
                 final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.GENERATE_REPORT_FAILED);
                 JsfUtil.addErrorMessage(msg);
             }
@@ -4444,24 +4034,6 @@ public class FileItemCctDetailController implements Serializable {
         }
 
         return null;
-    }
-
-    /**
-     * Gets the flow service.
-     *
-     * @return the flow service
-     */
-    public FlowService getFlowService() {
-        return flowService;
-    }
-
-    /**
-     * Sets the flow service.
-     *
-     * @param flowService the new flow service
-     */
-    public void setFlowService(final FlowService flowService) {
-        this.flowService = flowService;
     }
 
     /**
@@ -4543,114 +4115,6 @@ public class FileItemCctDetailController implements Serializable {
      */
     public void setLastDecisions(final ItemFlow lastDecisions) {
         this.lastDecisions = lastDecisions;
-    }
-
-    /**
-     * Gets the file item service.
-     *
-     * @return the file item service
-     */
-    public FileItemService getFileItemService() {
-        return fileItemService;
-    }
-
-    /**
-     * Sets the file item service.
-     *
-     * @param fileItemService the new file item service
-     */
-    public void setFileItemService(final FileItemService fileItemService) {
-        this.fileItemService = fileItemService;
-    }
-
-    /**
-     * Get the file type flow report service
-     *
-     * @return the file type flow report service
-     */
-    public FileTypeFlowReportService getFileTypeFlowReportService() {
-        return fileTypeFlowReportService;
-    }
-
-    /**
-     * Set the file type flow report service
-     *
-     * @param fileTypeFlowReportService
-     */
-    public void setFileTypeFlowReportService(FileTypeFlowReportService fileTypeFlowReportService) {
-        this.fileTypeFlowReportService = fileTypeFlowReportService;
-    }
-
-    /**
-     * Gets the item flow service.
-     *
-     * @return the item flow service
-     */
-    public ItemFlowService getItemFlowService() {
-        return itemFlowService;
-    }
-
-    /**
-     * Sets the item flow service.
-     *
-     * @param itemFlowService the new item flow service
-     */
-    public void setItemFlowService(final ItemFlowService itemFlowService) {
-        this.itemFlowService = itemFlowService;
-    }
-
-    /**
-     * Gets the file service.
-     *
-     * @return the file service
-     */
-    public FileService getFileService() {
-        return fileService;
-    }
-
-    /**
-     * Sets the file service.
-     *
-     * @param fileService the new file service
-     */
-    public void setFileService(final FileService fileService) {
-        this.fileService = fileService;
-    }
-
-    /**
-     * Gets the user service.
-     *
-     * @return the userService
-     */
-    public UserService getUserService() {
-        return userService;
-    }
-
-    /**
-     * Sets the user service.
-     *
-     * @param userService the userService to set
-     */
-    public void setUserService(final UserService userService) {
-        this.userService = userService;
-    }
-
-    /**
-     * Gets the current file.
-     *
-     * @return the current file
-     */
-    public File getCurrentFile() {
-        return currentFile;
-    }
-
-    /**
-     * Sets the current file.
-     *
-     * @param currentFile the new current file
-     */
-    public void setCurrentFile(final File currentFile) {
-        this.currentFile = currentFile;
     }
 
     /**
@@ -4778,24 +4242,6 @@ public class FileItemCctDetailController implements Serializable {
     }
 
     /**
-     * Gets the current file item.
-     *
-     * @return the current file item
-     */
-    public FileItem getCurrentFileItem() {
-        return currentFileItem;
-    }
-
-    /**
-     * Sets the current file item.
-     *
-     * @param currentFileItem the new current file item
-     */
-    public void setCurrentFileItem(final FileItem currentFileItem) {
-        this.currentFileItem = currentFileItem;
-    }
-
-    /**
      * Sets the product info checks.
      *
      * @param productInfoChecks the new product info checks
@@ -4829,6 +4275,16 @@ public class FileItemCctDetailController implements Serializable {
      */
     public String getIndexPageUrl() {
         return indexPageUrl;
+    }
+
+    /**
+     * Gets the detail index page url.
+     *
+     * @return the detail index page url
+     */
+    @Override
+    public String getDetailIndexPageUrl() {
+        return ControllerConstants.Pages.FO.DETAILS_CCT_INDEX_PAGE;
     }
 
     /**
@@ -4874,24 +4330,6 @@ public class FileItemCctDetailController implements Serializable {
      */
     public void setDecisionAllowed(final Boolean decisionAllowed) {
         this.decisionAllowed = decisionAllowed;
-    }
-
-    /**
-     * Gets the recommandation service.
-     *
-     * @return the recommandation service
-     */
-    public RecommandationService getRecommandationService() {
-        return recommandationService;
-    }
-
-    /**
-     * Sets the recommandation service.
-     *
-     * @param recommandationService the new recommandation service
-     */
-    public void setRecommandationService(final RecommandationService recommandationService) {
-        this.recommandationService = recommandationService;
     }
 
     /**
@@ -4987,24 +4425,6 @@ public class FileItemCctDetailController implements Serializable {
     }
 
     /**
-     * Gets the step service.
-     *
-     * @return the stepService
-     */
-    public StepService getStepService() {
-        return stepService;
-    }
-
-    /**
-     * Sets the step service.
-     *
-     * @param stepService the stepService to set
-     */
-    public void setStepService(final StepService stepService) {
-        this.stepService = stepService;
-    }
-
-    /**
      * Gets the cotation allowed.
      *
      * @return the cotationAllowed
@@ -5077,49 +4497,12 @@ public class FileItemCctDetailController implements Serializable {
     }
 
     /**
-     * Gets the user authority file type service.
-     *
-     * @return the userAuthorityFileTypeService
-     */
-    public UserAuthorityFileTypeService getUserAuthorityFileTypeService() {
-        return userAuthorityFileTypeService;
-    }
-
-    /**
-     * Sets the user authority file type service.
-     *
-     * @param userAuthorityFileTypeService the userAuthorityFileTypeService to
-     * set
-     */
-    public void setUserAuthorityFileTypeService(final UserAuthorityFileTypeService userAuthorityFileTypeService) {
-        this.userAuthorityFileTypeService = userAuthorityFileTypeService;
-    }
-
-    /**
      * Gets the list user authority file types.
      *
      * @return the listUserAuthorityFileTypes
      */
     public List<UserAuthorityFileType> getListUserAuthorityFileTypes() {
         return listUserAuthorityFileTypes;
-    }
-
-    /**
-     * Gets the xml converter service.
-     *
-     * @return the xml converter service
-     */
-    public XmlConverterService getXmlConverterService() {
-        return xmlConverterService;
-    }
-
-    /**
-     * Sets the xml converter service.
-     *
-     * @param xmlConverterService the new xml converter service
-     */
-    public void setXmlConverterService(final XmlConverterService xmlConverterService) {
-        this.xmlConverterService = xmlConverterService;
     }
 
     /**
@@ -5257,24 +4640,6 @@ public class FileItemCctDetailController implements Serializable {
     }
 
     /**
-     * Gets the ebxml properties service.
-     *
-     * @return the ebxml properties service
-     */
-    public EbxmlPropertiesService getEbxmlPropertiesService() {
-        return ebxmlPropertiesService;
-    }
-
-    /**
-     * Sets the ebxml properties service.
-     *
-     * @param ebxmlPropertiesService the new ebxml properties service
-     */
-    public void setEbxmlPropertiesService(final EbxmlPropertiesService ebxmlPropertiesService) {
-        this.ebxmlPropertiesService = ebxmlPropertiesService;
-    }
-
-    /**
      * Gets the show remind decision form.
      *
      * @return the showRemindDecisionForm
@@ -5384,61 +4749,6 @@ public class FileItemCctDetailController implements Serializable {
     }
 
     /**
-     * Gets the application propreties service.
-     *
-     * @return the application propreties service
-     */
-    public ApplicationPropretiesService getApplicationPropretiesService() {
-        return applicationPropretiesService;
-    }
-
-    /**
-     * Sets the application propreties service.
-     *
-     * @param applicationPropretiesService the new application propreties
-     * service
-     */
-    public void setApplicationPropretiesService(final ApplicationPropretiesService applicationPropretiesService) {
-        this.applicationPropretiesService = applicationPropretiesService;
-    }
-
-    /**
-     * Gets the appointment service.
-     *
-     * @return the appointmentService
-     */
-    public AppointmentService getAppointmentService() {
-        return appointmentService;
-    }
-
-    /**
-     * Sets the appointment service.
-     *
-     * @param appointmentService the appointmentService to set
-     */
-    public void setAppointmentService(final AppointmentService appointmentService) {
-        this.appointmentService = appointmentService;
-    }
-
-    /**
-     * Gets the come from search.
-     *
-     * @return the come from search
-     */
-    public boolean getComeFromSearch() {
-        return comeFromSearch;
-    }
-
-    /**
-     * Sets the come from search.
-     *
-     * @param comeFromSearch the new come from search
-     */
-    public void setComeFromSearch(final boolean comeFromSearch) {
-        this.comeFromSearch = comeFromSearch;
-    }
-
-    /**
      * Gets the inspection report data.
      *
      * @return the inspectionReportData
@@ -5454,24 +4764,6 @@ public class FileItemCctDetailController implements Serializable {
      */
     public void setInspectionReportData(final InspectionReportData inspectionReportData) {
         this.inspectionReportData = inspectionReportData;
-    }
-
-    /**
-     * Gets the inspection report service.
-     *
-     * @return the inspectionReportService
-     */
-    public InspectionReportService getInspectionReportService() {
-        return inspectionReportService;
-    }
-
-    /**
-     * Sets the inspection report service.
-     *
-     * @param inspectionReportService the inspectionReportService to set
-     */
-    public void setInspectionReportService(final InspectionReportService inspectionReportService) {
-        this.inspectionReportService = inspectionReportService;
     }
 
     /**
@@ -5558,24 +4850,6 @@ public class FileItemCctDetailController implements Serializable {
     }
 
     /**
-     * Gets the field group service.
-     *
-     * @return the field group service
-     */
-    public FieldGroupService getFieldGroupService() {
-        return fieldGroupService;
-    }
-
-    /**
-     * Sets the field group service.
-     *
-     * @param fieldGroupService the new field group service
-     */
-    public void setFieldGroupService(final FieldGroupService fieldGroupService) {
-        this.fieldGroupService = fieldGroupService;
-    }
-
-    /**
      * Gets the selected item flow dto.
      *
      * @return the selected item flow dto
@@ -5627,60 +4901,6 @@ public class FileItemCctDetailController implements Serializable {
      */
     public void setProductsHaveSameRDDStatus(final Boolean productsHaveSameRDDStatus) {
         this.productsHaveSameRDDStatus = productsHaveSameRDDStatus;
-    }
-
-    /**
-     * Gets the service service.
-     *
-     * @return the service service
-     */
-    public ServiceService getServiceService() {
-        return serviceService;
-    }
-
-    /**
-     * Sets the service service.
-     *
-     * @param serviceService the new service service
-     */
-    public void setServiceService(final ServiceService serviceService) {
-        this.serviceService = serviceService;
-    }
-
-    /**
-     * Gets the analyse part service.
-     *
-     * @return the analyse part service
-     */
-    public AnalysePartService getAnalysePartService() {
-        return analysePartService;
-    }
-
-    /**
-     * Sets the analyse part service.
-     *
-     * @param analysePartService the new analyse part service
-     */
-    public void setAnalysePartService(final AnalysePartService analysePartService) {
-        this.analysePartService = analysePartService;
-    }
-
-    /**
-     * Gets the laboratory service.
-     *
-     * @return the laboratory service
-     */
-    public LaboratoryService getLaboratoryService() {
-        return laboratoryService;
-    }
-
-    /**
-     * Sets the laboratory service.
-     *
-     * @param laboratoryService the new laboratory service
-     */
-    public void setLaboratoryService(final LaboratoryService laboratoryService) {
-        this.laboratoryService = laboratoryService;
     }
 
     /**
@@ -5792,60 +5012,6 @@ public class FileItemCctDetailController implements Serializable {
     }
 
     /**
-     * Gets the common service.
-     *
-     * @return the common service
-     */
-    public CommonService getCommonService() {
-        return commonService;
-    }
-
-    /**
-     * Sets the common service.
-     *
-     * @param commonService the new common service
-     */
-    public void setCommonService(final CommonService commonService) {
-        this.commonService = commonService;
-    }
-
-    /**
-     * Gets the analyse order service.
-     *
-     * @return the analyse order service
-     */
-    public AnalyseOrderService getAnalyseOrderService() {
-        return analyseOrderService;
-    }
-
-    /**
-     * Sets the analyse order service.
-     *
-     * @param analyseOrderService the new analyse order service
-     */
-    public void setAnalyseOrderService(final AnalyseOrderService analyseOrderService) {
-        this.analyseOrderService = analyseOrderService;
-    }
-
-    /**
-     * Gets the params organism service.
-     *
-     * @return the paramsOrganismService
-     */
-    public ParamsOrganismService getParamsOrganismService() {
-        return paramsOrganismService;
-    }
-
-    /**
-     * Sets the params organism service.
-     *
-     * @param paramsOrganismService the paramsOrganismService to set
-     */
-    public void setParamsOrganismService(final ParamsOrganismService paramsOrganismService) {
-        this.paramsOrganismService = paramsOrganismService;
-    }
-
-    /**
      * Gets the analyse result.
      *
      * @return the analyse result
@@ -5861,42 +5027,6 @@ public class FileItemCctDetailController implements Serializable {
      */
     public void setAnalyseResult(final AnalyseResult analyseResult) {
         this.analyseResult = analyseResult;
-    }
-
-    /**
-     * Gets the alfresco propreties service.
-     *
-     * @return the alfresco propreties service
-     */
-    public AlfrescoPropretiesService getAlfrescoPropretiesService() {
-        return alfrescoPropretiesService;
-    }
-
-    /**
-     * Sets the alfresco propreties service.
-     *
-     * @param alfrescoPropretiesService the new alfresco propreties service
-     */
-    public void setAlfrescoPropretiesService(final AlfrescoPropretiesService alfrescoPropretiesService) {
-        this.alfrescoPropretiesService = alfrescoPropretiesService;
-    }
-
-    /**
-     * Gets the treatment company service.
-     *
-     * @return the treatment company service
-     */
-    public TreatmentCompanyService getTreatmentCompanyService() {
-        return treatmentCompanyService;
-    }
-
-    /**
-     * Sets the treatment company service.
-     *
-     * @param treatmentCompanyService the new treatment company service
-     */
-    public void setTreatmentCompanyService(final TreatmentCompanyService treatmentCompanyService) {
-        this.treatmentCompanyService = treatmentCompanyService;
     }
 
     /**
@@ -6007,58 +5137,6 @@ public class FileItemCctDetailController implements Serializable {
     }
 
     /**
-     * Gets the analyse result service.
-     *
-     * @return the analyse result service
-     */
-    public AnalyseResultService getAnalyseResultService() {
-        return analyseResultService;
-    }
-
-    /**
-     * Sets the analyse result service.
-     *
-     * @param analyseResultService the new analyse result service
-     */
-    public void setAnalyseResultService(final AnalyseResultService analyseResultService) {
-        this.analyseResultService = analyseResultService;
-    }
-
-    /**
-     * Gets the treatment order service.
-     *
-     * @return the treatmentOrderService
-     */
-    public TreatmentOrderService getTreatmentOrderService() {
-        return treatmentOrderService;
-    }
-
-    /**
-     * Sets the treatment order service.
-     *
-     * @param treatmentOrderService the treatmentOrderService to set
-     */
-    public void setTreatmentOrderService(final TreatmentOrderService treatmentOrderService) {
-        this.treatmentOrderService = treatmentOrderService;
-    }
-
-    public TreatmentInfosService getTreatmentInfosService() {
-        return treatmentInfosService;
-    }
-
-    public void setTreatmentInfosService(final TreatmentInfosService treatmentInfosService) {
-        this.treatmentInfosService = treatmentInfosService;
-    }
-
-    public ApprovedDecisionService getApprovedDecisionService() {
-        return approvedDecisionService;
-    }
-
-    public void setApprovedDecisionService(ApprovedDecisionService approvedDecisionService) {
-        this.approvedDecisionService = approvedDecisionService;
-    }
-
-    /**
      * Gets the analyses file managers.
      *
      * @return the analyses file managers
@@ -6128,24 +5206,6 @@ public class FileItemCctDetailController implements Serializable {
      */
     public void setReportMap(final Map<Long, StreamedContent> reportMap) {
         this.reportMap = reportMap;
-    }
-
-    /**
-     * Gets the treatment result service.
-     *
-     * @return the treatmentResultService
-     */
-    public TreatmentResultService getTreatmentResultService() {
-        return treatmentResultService;
-    }
-
-    /**
-     * Sets the treatment result service.
-     *
-     * @param treatmentResultService the treatmentResultService to set
-     */
-    public void setTreatmentResultService(final TreatmentResultService treatmentResultService) {
-        this.treatmentResultService = treatmentResultService;
     }
 
     /**
@@ -6266,60 +5326,6 @@ public class FileItemCctDetailController implements Serializable {
     }
 
     /**
-     * Gets the file producer.
-     *
-     * @return the file producer
-     */
-    public FileProducer getFileProducer() {
-        return fileProducer;
-    }
-
-    /**
-     * Sets the file producer.
-     *
-     * @param fileProducer the new file producer
-     */
-    public void setFileProducer(final FileProducer fileProducer) {
-        this.fileProducer = fileProducer;
-    }
-
-    /**
-     * Gets the trend performance service.
-     *
-     * @return the trend performance service
-     */
-    public TrendPerformanceService getTrendPerformanceService() {
-        return trendPerformanceService;
-    }
-
-    /**
-     * Sets the trend performance service.
-     *
-     * @param trendPerformanceService the new trend performance service
-     */
-    public void setTrendPerformanceService(final TrendPerformanceService trendPerformanceService) {
-        this.trendPerformanceService = trendPerformanceService;
-    }
-
-    /**
-     * Gets the risk service.
-     *
-     * @return the risk service
-     */
-    public RiskService getRiskService() {
-        return riskService;
-    }
-
-    /**
-     * Sets the risk service.
-     *
-     * @param riskService the new risk service
-     */
-    public void setRiskService(final RiskService riskService) {
-        this.riskService = riskService;
-    }
-
-    /**
      * Gets the synthesis config.
      *
      * @return the synthesis config
@@ -6392,24 +5398,6 @@ public class FileItemCctDetailController implements Serializable {
     }
 
     /**
-     * Gets the authority service.
-     *
-     * @return the authorityService
-     */
-    public AuthorityService getAuthorityService() {
-        return authorityService;
-    }
-
-    /**
-     * Sets the authority service.
-     *
-     * @param authorityService the authorityService to set
-     */
-    public void setAuthorityService(final AuthorityService authorityService) {
-        this.authorityService = authorityService;
-    }
-
-    /**
      * Gets the authority list.
      *
      * @return the authority list
@@ -6427,77 +5415,6 @@ public class FileItemCctDetailController implements Serializable {
         this.authorityList = authorityList;
     }
 
-    /**
-     * Gets the file type service.
-     *
-     * @return the fileTypeService
-     */
-    public FileTypeService getFileTypeService() {
-        return fileTypeService;
-    }
-
-    /**
-     * Sets the file type service.
-     *
-     * @param fileTypeService the fileTypeService to set
-     */
-    public void setFileTypeService(final FileTypeService fileTypeService) {
-        this.fileTypeService = fileTypeService;
-    }
-
-    /**
-     * Gets the Recommandation Authority service.
-     *
-     * @return recommandationAuthorityService
-     */
-    public RecommandationAuthorityService getRecommandationAuthorityService() {
-        return recommandationAuthorityService;
-    }
-
-    /**
-     * Sets the recommandation authority service.
-     *
-     * @param recommandationAuthorityService the recommandationAuthorityService
-     * to set
-     */
-    public void setRecommandationAuthorityService(final RecommandationAuthorityService recommandationAuthorityService) {
-        this.recommandationAuthorityService = recommandationAuthorityService;
-    }
-
-    /**
-     * Gets the transaction manager.
-     *
-     * @return the transaction manager
-     */
-    public PlatformTransactionManager getTransactionManager() {
-        return transactionManager;
-    }
-
-    /**
-     * Sets the transaction manager.
-     *
-     * @param transactionManager the new transaction manager
-     */
-    public void setTransactionManager(final PlatformTransactionManager transactionManager) {
-        this.transactionManager = transactionManager;
-    }
-
-    /**
-     * Gets the transaction helper
-     *
-     * @return the transaction helper
-     */
-//    public TransactionHelper getTransactionHelper() {
-//        return transactionHelper;
-//    }
-    /**
-     * Sets the transaction helper
-     *
-     * @param transactionHelper the new transaction helper
-     */
-//    public void setTransactionHelper(final TransactionHelper transactionHelper) {
-//        this.transactionHelper = transactionHelper;
-//    }
     /**
      * Gets the detail.
      *
@@ -6561,51 +5478,6 @@ public class FileItemCctDetailController implements Serializable {
         return itemFlowHistoryDtoListFiltred;
     }
 
-    /**
-     * Gets the mail service.
-     *
-     * @return the mailService
-     */
-    public MailService getMailService() {
-        return mailService;
-    }
-
-    /**
-     * Sets the mail service.
-     *
-     * @param mailService the mailService to set
-     */
-    public void setMailService(final MailService mailService) {
-        this.mailService = mailService;
-    }
-
-    /**
-     * Gets the file field value service.
-     *
-     * @return the file field value service
-     */
-    public FileFieldValueService getFileFieldValueService() {
-        return fileFieldValueService;
-    }
-
-    /**
-     * Sets the file field value service.
-     *
-     * @param fileFieldValueService the new file field value service
-     */
-    public void setFileFieldValueService(final FileFieldValueService fileFieldValueService) {
-        this.fileFieldValueService = fileFieldValueService;
-    }
-
-    /**
-     * Gets the report organism service.
-     *
-     * @return the report organism service
-     */
-    public ReportOrganismService getReportOrganismService() {
-        return reportOrganismService;
-    }
-
     public CCTCPParamValueService getcCTCPParamValueService() {
         return cCTCPParamValueService;
     }
@@ -6628,69 +5500,6 @@ public class FileItemCctDetailController implements Serializable {
 
     public void setPhytoEnd(boolean phytoEnd) {
         this.phytoEnd = phytoEnd;
-    }
-
-    /**
-     * Sets the report organism service.
-     *
-     * @param reportOrganismService the new report organism service
-     */
-    public void setReportOrganismService(final ReportOrganismService reportOrganismService) {
-        this.reportOrganismService = reportOrganismService;
-    }
-
-    /**
-     * Gets the file field service.
-     *
-     * @return the file field service
-     */
-    public FileFieldService getFileFieldService() {
-        return fileFieldService;
-    }
-
-    /**
-     * Sets the file field service.
-     *
-     * @param fileFieldService the new file field service
-     */
-    public void setFileFieldService(final FileFieldService fileFieldService) {
-        this.fileFieldService = fileFieldService;
-    }
-
-    /**
-     * Gets the file type flow service.
-     *
-     * @return the file type flow service
-     */
-    public FileTypeFlowService getFileTypeFlowService() {
-        return fileTypeFlowService;
-    }
-
-    /**
-     * Sets the file type flow service.
-     *
-     * @param fileTypeFlowService the new file type flow service
-     */
-    public void setFileTypeFlowService(final FileTypeFlowService fileTypeFlowService) {
-        this.fileTypeFlowService = fileTypeFlowService;
-    }
-
-    /**
-     * Gets the file type step service.
-     *
-     * @return the file type step service
-     */
-    public FileTypeStepService getFileTypeStepService() {
-        return fileTypeStepService;
-    }
-
-    /**
-     * Sets the file type step service.
-     *
-     * @param fileTypeStepService the new file type step service
-     */
-    public void setFileTypeStepService(final FileTypeStepService fileTypeStepService) {
-        this.fileTypeStepService = fileTypeStepService;
     }
 
     /**
@@ -6785,24 +5594,6 @@ public class FileItemCctDetailController implements Serializable {
     }
 
     /**
-     * Gets the administration service.
-     *
-     * @return the administration service
-     */
-    public AdministrationService getAdministrationService() {
-        return administrationService;
-    }
-
-    /**
-     * Sets the administration service.
-     *
-     * @param administrationService the new administration service
-     */
-    public void setAdministrationService(final AdministrationService administrationService) {
-        this.administrationService = administrationService;
-    }
-
-    /**
      * Gets the show decision button.
      *
      * @return the showDecisionButton
@@ -6854,24 +5645,6 @@ public class FileItemCctDetailController implements Serializable {
      */
     public void setInfraction(final Infraction infraction) {
         this.infraction = infraction;
-    }
-
-    /**
-     * Gets the infraction service.
-     *
-     * @return the infraction service
-     */
-    public InfractionService getInfractionService() {
-        return infractionService;
-    }
-
-    /**
-     * Sets the infraction service.
-     *
-     * @param infractionService the new infraction service
-     */
-    public void setInfractionService(final InfractionService infractionService) {
-        this.infractionService = infractionService;
     }
 
     /**
@@ -6955,24 +5728,6 @@ public class FileItemCctDetailController implements Serializable {
 
     public void setSelectedInvoiceLine(InvoiceLine selectedInvoiceLine) {
         this.selectedInvoiceLine = selectedInvoiceLine;
-    }
-
-    /**
-     * Gets the payment data service.
-     *
-     * @return the payment data service
-     */
-    public PaymentDataService getPaymentDataService() {
-        return paymentDataService;
-    }
-
-    /**
-     * Sets the payment data service.
-     *
-     * @param paymentDataService the new payment data service
-     */
-    public void setPaymentDataService(final PaymentDataService paymentDataService) {
-        this.paymentDataService = paymentDataService;
     }
 
     /**
@@ -7141,14 +5896,6 @@ public class FileItemCctDetailController implements Serializable {
         this.interceptionNotification = interceptionNotification;
     }
 
-    public InterceptionNotificationService getInterceptionNotificationService() {
-        return interceptionNotificationService;
-    }
-
-    public void setInterceptionNotificationService(final InterceptionNotificationService interceptionNotificationService) {
-        this.interceptionNotificationService = interceptionNotificationService;
-    }
-
     public boolean seizurePrintable() {
         if (selectedItemFlowDto == null || selectedItemFlowDto.getItemFlow() == null) {
             return false;
@@ -7219,7 +5966,7 @@ public class FileItemCctDetailController implements Serializable {
                     if (CollectionUtils.isNotEmpty(flowToSend.getCopyRecipientsList())) {
                         final List<CopyRecipient> copyRecipients = flowToSend.getCopyRecipientsList();
                         for (final CopyRecipient copyRecipient : copyRecipients) {
-                            LOG.info("SEND COPY RECIPIENT TO {}", copyRecipient.getToAuthority().getRole());
+                            logger.info("SEND COPY RECIPIENT TO {}", copyRecipient.getToAuthority().getRole());
                             send(transactionStatus, xmlBytes, attachedByteFiles, service, documentType, copyRecipient.getToAuthority().getRole(), itemFlowList);
                         }
                     } else {
@@ -7229,8 +5976,8 @@ public class FileItemCctDetailController implements Serializable {
                     TransactionStatus tsCommit = transactionStatus;
                     transactionStatus = null;
                     transactionManager.commit(tsCommit);
-                    if (LOG.isDebugEnabled()) {
-                        LOG.info("####RESEND DECISION Transaction commited####");
+                    if (logger.isDebugEnabled()) {
+                        logger.info("####RESEND DECISION Transaction commited####");
                     }
 
                     JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
@@ -7244,7 +5991,7 @@ public class FileItemCctDetailController implements Serializable {
                 }
             }
         } catch (Exception ex) {
-            LOG.error("cannot resend the decision", ex);
+            logger.error("cannot resend the decision", ex);
             showErrorFacesMessage(ControllerConstants.Bundle.Messages.RESEND_ERROR, null);
         }
     }
@@ -7305,26 +6052,20 @@ public class FileItemCctDetailController implements Serializable {
 
     public Map<FileType, List<DecisionHistory>> getRelatedDecisionHistories() {
 
-        final Map<FileType, List<DecisionHistory>> map = new HashMap<>();
+        Map<FileType, List<DecisionHistory>> map = new HashMap<>();
 
-        for (final DecisionHistory decisionHistory : decisionHistories) {
+        if (CollectionUtils.isNotEmpty(decisionHistories)) {
+            for (DecisionHistory decisionHistory : decisionHistories) {
 
-            if (map.get(decisionHistory.getFileType()) == null) {
-                map.put(decisionHistory.getFileType(), new ArrayList<DecisionHistory>());
+                if (map.get(decisionHistory.getFileType()) == null) {
+                    map.put(decisionHistory.getFileType(), new ArrayList<DecisionHistory>());
+                }
+
+                map.get(decisionHistory.getFileType()).add(decisionHistory);
             }
-
-            map.get(decisionHistory.getFileType()).add(decisionHistory);
         }
 
         return map;
-    }
-
-    public DecisionHistoryService getDecisionHistoryService() {
-        return decisionHistoryService;
-    }
-
-    public void setDecisionHistoryService(DecisionHistoryService decisionHistoryService) {
-        this.decisionHistoryService = decisionHistoryService;
     }
 
     private byte[] getReportBytes(final FileTypeFlowReport fileTypeFlowReport, final boolean draft) throws Exception {
@@ -7670,7 +6411,7 @@ public class FileItemCctDetailController implements Serializable {
                     out.write(val);
                 }
             } catch (final IOException e) {
-                LOG.error(e.getMessage(), e);
+                logger.error(e.getMessage(), e);
             }
 
             final byte[] bytes = out.toByteArray();
@@ -7678,7 +6419,7 @@ public class FileItemCctDetailController implements Serializable {
             return new DefaultStreamedContent(new java.io.ByteArrayInputStream(bytes), !org.apache.commons.lang.StringUtils.isEmpty(contentStream.getMimeType()) ? contentStream.getMimeType() : "application/msword", selectedAttachment.getDocumentName());
         } catch (Exception e) {
             JsfUtil.addErrorMessage("Impossible de télécharger la pièce jointe");
-            LOG.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
 
         return null;
@@ -7710,7 +6451,6 @@ public class FileItemCctDetailController implements Serializable {
                             approvedDecision.setDepartureDate(sdf.parse(fileFieldValue.getValue()));
                         } catch (ParseException e) {
                             java.util.logging.Logger.getLogger(FileItemCctDetailController.class.getName()).log(Level.SEVERE, null, e);
-
                         }
                         break;
                     }
@@ -7777,10 +6517,8 @@ public class FileItemCctDetailController implements Serializable {
                         }
                         break;
                     }
-
                 }
             }
-
         }
     }
 
@@ -7837,7 +6575,7 @@ public class FileItemCctDetailController implements Serializable {
             if (tmp != null) {
                 treatInfo = (TreatmentInfos) BeanUtils.cloneBean(tmp);
             }
-//            if (tmp == null){
+
             // Load TreatmentInfos from FileField
             final List<FileFieldValue> fileFieldValueList = tmpFile.getFileFieldValueList();
             if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
@@ -7881,9 +6619,8 @@ public class FileItemCctDetailController implements Serializable {
                     }
                 }
             }
-//            }
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
 
         return treatInfo;
@@ -7892,17 +6629,11 @@ public class FileItemCctDetailController implements Serializable {
     public TreatmentInfos createTreatmentInfos() {
         TreatmentInfos res;
         res = populateTreatmentInfos(currentFile);
-//        if (res.getId() == null) {
-//            if (currentFile.getParent() != null) {
-//                res = populateTreatmentInfos(currentFile.getParent());
-//            }
-//        }
         if (res.getId() != null) {
             res.setId(null);
             res.setItemFlow(null);
         }
         return res;
-
     }
 
     private Map<String, Integer> countFileContainerAndPackage(File file) {
@@ -7951,49 +6682,29 @@ public class FileItemCctDetailController implements Serializable {
             if (org.apache.commons.lang.StringUtils.isNotBlank(packageNumber)) {
                 String packagesNumbers[] = packageNumber.split(" ");
                 count.put(COUNT_PACKAGES, packagesNumbers.length);
-
             }
-
         }
         return count;
     }
 
-    public void setFilesList(Set<File> filesList) {
-        this.filesList = filesList;
-    }
-
+    @Override
     public boolean canDecide() {
-
-        if (!isPhyto()) {
-            return true;
-        }
-
-        Step currentStep = currentFileItem.getStep();
-        if (!MinaderStatisticsService.TREATMENT_STEPS_CODES.contains(currentStep.getStepCode())) {
-            return true;
-        }
-
-        return getLoggedUser().equals(currentFile.getAssignedUser());
+        return filesSet.contains(currentFile);
     }
 
+    @Override
+    public boolean canConfirm() {
+        ItemFlow itemFlow = currentFileItem.getItemFlowsList().get(0);
+        return getLoggedUser().equals(itemFlow.getSender());
+    }
+
+    @Override
     public boolean canRollback() {
-        return true;
-    }
-
-    public boolean canProcess() {
-        return true;
+        return canConfirm();
     }
 
     public List<Container> getContainers() {
         return currentFile.getContainers();
-    }
-
-    public CotationService getCotationService() {
-        return cotationService;
-    }
-
-    public void setCotationService(CotationService cotationService) {
-        this.cotationService = cotationService;
     }
 
     public boolean isPhyto() {
@@ -8027,28 +6738,12 @@ public class FileItemCctDetailController implements Serializable {
         fileFieldValues.add(ffv);
     }
 
-    public CoreService getCoreService() {
-        return coreService;
-    }
-
-    public void setCoreService(CoreService coreService) {
-        this.coreService = coreService;
-    }
-
     public PottingReport getPottingReport() {
         return pottingReport;
     }
 
     public void setPottingReport(PottingReport pottingReport) {
         this.pottingReport = pottingReport;
-    }
-
-    public PottingReportService getPottingReportService() {
-        return pottingReportService;
-    }
-
-    public void setPottingReportService(PottingReportService pottingReportService) {
-        this.pottingReportService = pottingReportService;
     }
 
     public CctExportProductType getProductType() {
@@ -8087,14 +6782,6 @@ public class FileItemCctDetailController implements Serializable {
 
     public Appointment getAppointment() {
         return appointment;
-    }
-
-    public TransferService getTransferService() {
-        return transferService;
-    }
-
-    public void setTransferService(TransferService transferService) {
-        this.transferService = transferService;
     }
 
 }

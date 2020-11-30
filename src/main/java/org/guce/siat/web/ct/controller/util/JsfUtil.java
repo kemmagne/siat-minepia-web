@@ -77,6 +77,12 @@ public final class JsfUtil {
         FacesContext.getCurrentInstance().validationFailed();
     }
 
+    public static void addErrorMessageOnPage(String msg, String id) {
+        FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg);
+        FacesContext.getCurrentInstance().addMessage(null, facesMsg);
+        FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add(id);
+    }
+
     /**
      * Show message in dialog.
      *
@@ -401,14 +407,14 @@ public final class JsfUtil {
      */
     public static List<Map<Integer, String>> generateTableContent(final String[] arrayValues, final String columnSeparator) {
 
-        List<Map<Integer, String>> list = new ArrayList<Map<Integer, String>>();
+        List<Map<Integer, String>> list = new ArrayList<>();
 
         if (arrayValues != null) {
             final String[] columns = arrayValues[0].split(columnSeparator);
             if (columns != null) {
                 final int colNumber = columns.length;
                 for (int i = 1; i < arrayValues.length; i++) {
-                    final Map<Integer, String> map = new HashMap<Integer, String>();
+                    final Map<Integer, String> map = new HashMap<>();
                     final String[] rows = arrayValues[i].split(columnSeparator);
                     if (rows != null && rows.length == colNumber) {
                         for (int j = 0; j < rows.length; j++) {

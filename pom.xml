@@ -13,7 +13,7 @@
     <!-- .STANDALONE -->
     <!-- .TEST -->
     <!-- .HT -->
-    <version>2.4.5</version>
+    <version>2.5.0</version>
     <packaging>war</packaging>
 
     <name>siat-ct-web</name>
@@ -23,9 +23,10 @@
             <id>profile-ht</id>
             <properties>
                 <environment>ht</environment>
-                <global-config.properties>${user.home}/siat/config/ct/global-config.properties</global-config.properties>
+                <!--<global-config.properties>${user.home}/siat/config/ct/global-config.properties</global-config.properties>-->
+                <global-config.properties>/home/htiomy/siat/config/ct/global-config.properties</global-config.properties>
             </properties>
-            <build>
+            <!--            <build>
                 <plugins>
                     <plugin>
                         <groupId>org.codehaus.cargo</groupId>
@@ -61,7 +62,7 @@
                         </configuration>
                     </plugin>
                 </plugins>
-            </build>
+            </build>-->
             <activation>
                 <activeByDefault>true</activeByDefault>
                 <property>
@@ -129,7 +130,7 @@
         <dependency>
             <groupId>org.guce.siat</groupId>
             <artifactId>siat-ct-core</artifactId>
-            <version>2.3.4</version>
+            <version>2.3.5</version>
         </dependency>
         <!-- Servlet -->
         <dependency>

@@ -1,37 +1,25 @@
 package org.guce.siat.web.ct.controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Set;
 import javax.annotation.PostConstruct;
-import javax.el.ELContext;
-import javax.el.ExpressionFactory;
-import javax.el.ValueExpression;
-import javax.faces.application.Application;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import org.apache.commons.lang3.BooleanUtils;
 import org.guce.siat.common.model.Authority;
 import org.guce.siat.common.model.File;
-import org.guce.siat.common.model.FileFieldValue;
 import org.guce.siat.common.model.FileItem;
 import org.guce.siat.common.model.ItemFlow;
-import org.guce.siat.common.model.Step;
 import org.guce.siat.common.model.UserAuthorityFileType;
 import org.guce.siat.common.service.AuthorityService;
 import org.guce.siat.common.service.FileFieldValueService;
@@ -43,10 +31,7 @@ import org.guce.siat.common.service.UserAuthorityFileTypeService;
 import org.guce.siat.common.utils.Constants;
 import org.guce.siat.common.utils.DateUtils;
 import org.guce.siat.common.utils.enums.FileTypeCode;
-import org.guce.siat.common.utils.enums.StepCode;
 import org.guce.siat.core.ct.service.CommonService;
-import org.guce.siat.core.ct.service.MinaderStatisticsService;
-import org.guce.siat.core.ct.util.enums.CctExportProductType;
 import org.guce.siat.web.common.AbstractController;
 import org.guce.siat.web.common.ControllerConstants;
 import org.guce.siat.web.ct.controller.util.JsfUtil;
@@ -191,61 +176,11 @@ public class FileItemCctController extends AbstractController<File> {
 
     /**
      * Go to detail page.
-     */
-    public void goToDetailPage() {
-
-        List<FileItem> fileItems = getSelected().getFileItemsList();
-
-        for (final FileItem fileItem : fileItems) {
-
-            for (final ItemFlow itemFlow : fileItem.getItemFlowsList()) {
-                if (BooleanUtils.toBoolean(itemFlow.getUnread()) && fileItem.getStep().equals(itemFlow.getFlow().getToStep())) {
-                    itemFlow.setUnread(Boolean.FALSE);
-                    itemFlowService.update(itemFlow);
-                }
-            }
-        }
-
-        try {
-            setDetailPageUrl(ControllerConstants.Pages.FO.DETAILS_CCT_INDEX_PAGE);
-            refreshItems();
-            final FacesContext context = FacesContext.getCurrentInstance();
-            final ExternalContext extContext = context.getExternalContext();
-            final FileItemCctDetailController fileItemCctDetailController = getInstanceOfPageFileItemCctDetailController();
-            fileItemCctDetailController.setCurrentFile(getSelected());
-            fileItemCctDetailController.setCurrentFileItem(fileItems.get(0));
-            fileItemCctDetailController.init();
-
-            final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, detailPageUrl));
-
-            extContext.redirect(url);
-        } catch (final IOException ex) {
-            LOG.error(ex.getMessage(), ex);
-        }
-    }
-
-    /**
-     * Extract files form items.
      *
-     * @param fileItems the items
-     * @return the sets the
+     * @return
      */
-    public Set<File> extractFilesFormItems(Collection<FileItem> fileItems) {
-        return Utils.extractFilesFormItems(fileTypeStepService, fileItems);
-    }
-
-    /**
-     * Gets the instance of page file item cct detail controller.
-     *
-     * @return the instance of page file item cct detail controller
-     */
-    public FileItemCctDetailController getInstanceOfPageFileItemCctDetailController() {
-        final FacesContext fctx = FacesContext.getCurrentInstance();
-        final Application application = fctx.getApplication();
-        final ELContext context = fctx.getELContext();
-        final ExpressionFactory expressionFactory = application.getExpressionFactory();
-        final ValueExpression createValueExpression = expressionFactory.createValueExpression(context, "#{fileItemCctDetailController}", FileItemCctDetailController.class);
-        return (FileItemCctDetailController) createValueExpression.getValue(context);
+    public String goToDetailPage() {
+        return Utils.getFinalDetailPageUrl(getSelected(), ControllerConstants.Pages.FO.DETAILS_CCT_INDEX_PAGE, true, false);
     }
 
     /**
@@ -280,39 +215,7 @@ public class FileItemCctController extends AbstractController<File> {
     public List<File> getItems() {
         try {
             if (items == null) {
-                List<FileItem> fileItems = Utils.getItems(userAuthorityFileTypeService, fileItemService, getLoggedUser(), listUserAuthorityFileTypes);
-
-                items = new ArrayList(extractFilesFormItems(fileItems));
-
-                List<CctExportProductType> userProductTypes = commonService.findProductTypesByUser(getLoggedUser());
-                for (Iterator<File> iterator = items.iterator(); iterator.hasNext();) {
-
-                    File file = iterator.next();
-                    FileItem fileItem = file.getFileItemsList().get(0);
-                    file.setRedefinedLabelEn(fileItem.getRedefinedLabelEn());
-                    file.setRedefinedLabelFr(fileItem.getRedefinedLabelFr());
-                    Step step = fileItem.getStep();
-                    file.setStep(step);
-
-                    if (!isPhyto(file) || Arrays.asList(StepCode.ST_CT_57, StepCode.ST_CT_60, StepCode.ST_CT_03, StepCode.ST_CT_47, StepCode.ST_CT_53, StepCode.ST_CT_62).contains(fileItem.getStep().getStepCode())) {
-                        continue;
-                    }
-
-                    if (MinaderStatisticsService.TREATMENT_STEPS_CODES.contains(fileItem.getStep().getStepCode()) && !getLoggedUser().equals(file.getAssignedUser())) {
-                        iterator.remove();
-                        continue;
-                    }
-
-                    FileFieldValue ffv = fileFieldValueService.findValueByFileFieldAndFile(CctExportProductType.getFileFieldCode(), file);
-                    if (ffv == null) {
-                        continue;
-                    }
-
-                    CctExportProductType productType = CctExportProductType.valueOf(ffv.getValue());
-                    if (!userProductTypes.contains(productType)) {
-                        iterator.remove();
-                    }
-                }
+                items = new ArrayList(Utils.getFilesSet(fileTypeStepService, userAuthorityFileTypeService, fileItemService, commonService, fileFieldValueService, getLoggedUser()));
             }
         } catch (final Exception ex) {
             LOG.error(ex.getMessage(), ex);
