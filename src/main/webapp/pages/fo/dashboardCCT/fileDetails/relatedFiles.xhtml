@@ -11,7 +11,10 @@
                 <ui:repeat value="#{fileItemCctDetailController.relatedFileTypesInfos}" var="ftDto">
 
                     <h:panelGrid columns="1" cellspacing="3">
-                        <h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? ftDto.fileType.labelEn : ftDto.fileType.labelFr}" />
+                        <h:outputText rendered="#{true or ftDto.infos.file eq null}" value="#{facesContext.viewRoot.locale eq 'en' ? ftDto.fileType.labelEn : ftDto.fileType.labelFr}" />
+                        <h:outputLink rendered="#{false and ftDto.infos.file ne null}" title="#{bundle['ClickToOpenForNewTab']}" value="#{fileItemCctDetailController.getFinalDetailPageUrl(ftDto.infos.file)}" target="_blank">
+                            #{facesContext.viewRoot.locale eq 'en' ? ftDto.fileType.labelEn : ftDto.fileType.labelFr}
+                        </h:outputLink>
                         <h:panelGroup>
                             <p:inputText rendered="#{ftDto.infos.mainReport eq null or ftDto.infos.mainReport eq false}" readonly="true" value="#{ftDto.infos.label}" size="#{ftDto.infos.label.length()}" />
                             <p:commandButton rendered="#{ftDto.infos.mainReport eq true}" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" value="#{bundle['BouttonGenerateReport']}" >
