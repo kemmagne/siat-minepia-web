@@ -1964,49 +1964,29 @@ public class StatisticController extends AbstractController<FileItem> {
     public void goToDetailPage() {
         try {
 
-            final FacesContext context = FacesContext.getCurrentInstance();
-            final ExternalContext extContext = context.getExternalContext();
+            FacesContext context = FacesContext.getCurrentInstance();
+            ExternalContext extContext = context.getExternalContext();
 
-            //	final FileItem fileItem = fileItemService.find(selected.getId());
-            final List<FileTypeCode> cctCodes = Arrays.asList(FileTypeCode.CCT_CT, FileTypeCode.CC_CT, FileTypeCode.CQ_CT);
+            List<FileTypeCode> cctCodes = Arrays.asList(FileTypeCode.CCT_CT, FileTypeCode.CC_CT, FileTypeCode.CQ_CT);
 
             if (cctCodes.contains(getSelected().getFile().getFileType().getCode())) {
-                setDetailPageUrl(ControllerConstants.Pages.FO.DETAILS_CCT_INDEX_PAGE);
-
-                final FileItemCctDetailController fileItemCctDetailController = getInstanceOfPageFileItemCctDetailController();
-                fileItemCctDetailController.setCurrentFileItem(getSelected());
-                fileItemCctDetailController.setComeFromSearch(Boolean.TRUE);
-                fileItemCctDetailController.init();
+                // no thing we be done here because the cct detail controller is not session scoped but view scoped
             } else {
                 setDetailPageUrl(ControllerConstants.Pages.FO.DETAILS_AP_INDEX_PAGE);
 
-                final FileItemApDetailController fileItemApDetailController = getInstanceOfPageFileItemApDetailController();
+                FileItemApDetailController fileItemApDetailController = getInstanceOfPageFileItemApDetailController();
                 fileItemApDetailController.setCurrentFile(getSelected().getFile());
                 fileItemApDetailController.setComeFromSearch(Boolean.TRUE);
                 fileItemApDetailController.init();
             }
 
-            final String url = extContext.encodeActionURL(context.getApplication().getViewHandler()
-                    .getActionURL(context, detailPageUrl));
-            extContext.redirect(url);
-        } catch (final IOException ex) {
+            if (!cctCodes.contains(getSelected().getFile().getFileType().getCode())) {
+                String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, detailPageUrl));
+                extContext.redirect(url);
+            }
+        } catch (IOException ex) {
             LOG.error(ex.getMessage(), ex);
         }
-    }
-
-    /**
-     * Gets the instance of page file item detail controller.
-     *
-     * @return the instance of page file item detail controller
-     */
-    public FileItemCctDetailController getInstanceOfPageFileItemCctDetailController() {
-        final FacesContext fctx = FacesContext.getCurrentInstance();
-        final Application application = fctx.getApplication();
-        final ELContext context = fctx.getELContext();
-        final ExpressionFactory expressionFactory = application.getExpressionFactory();
-        final ValueExpression createValueExpression = expressionFactory.createValueExpression(context,
-                "#{fileItemCctDetailController}", FileItemCctDetailController.class);
-        return (FileItemCctDetailController) createValueExpression.getValue(context);
     }
 
     /**
@@ -2019,8 +1999,7 @@ public class StatisticController extends AbstractController<FileItem> {
         final Application application = fctx.getApplication();
         final ELContext context = fctx.getELContext();
         final ExpressionFactory expressionFactory = application.getExpressionFactory();
-        final ValueExpression createValueExpression = expressionFactory.createValueExpression(context,
-                "#{fileItemApDetailController}", FileItemApDetailController.class);
+        final ValueExpression createValueExpression = expressionFactory.createValueExpression(context, "#{fileItemApDetailController}", FileItemApDetailController.class);
         return (FileItemApDetailController) createValueExpression.getValue(context);
     }
 

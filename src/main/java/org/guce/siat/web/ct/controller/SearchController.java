@@ -478,26 +478,7 @@ public class SearchController extends AbstractController<FileItem> {
             List<FileTypeCode> cctCodes = Arrays.asList(FileTypeCode.CCT_CT, FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI, FileTypeCode.CC_CT, FileTypeCode.CQ_CT);
 
             if (cctCodes.contains(fileItem.getFile().getFileType().getCode())) {
-                setDetailPageUrl(ControllerConstants.Pages.FO.DETAILS_CCT_INDEX_PAGE);
-                FileItemCctDetailController fileItemCctDetailController = getInstanceOfPageFileItemCctDetailController();
-                fileItemCctDetailController.setCurrentFileItem(fileItem);
-                File file = fileItem.getFile();
-                Step step = fileItem.getStep();
-                if (step != null) {
-                    FileTypeStep fts = fileTypeStepService.findFileTypeStepByFileTypeAndStep(file.getFileType(), step);
-                    if (fts != null) {
-                        file.setRedefinedLabelEn(fts.getLabelEn());
-                        file.setRedefinedLabelFr(fts.getLabelFr());
-                    } else {
-                        file.setRedefinedLabelEn(step.getLabelEn());
-                        file.setRedefinedLabelFr(step.getLabelFr());
-                    }
-                } else {
-                    LOG.warn("The step for the file {} isn't supposed to be null", file);
-                }
-                fileItemCctDetailController.setCurrentFile(file);
-                fileItemCctDetailController.setComeFromSearch(Boolean.TRUE);
-                fileItemCctDetailController.init();
+                // no thing we be done here because the cct detail controller is not session scoped but view scoped
             } else if (FileTypeCode.FIMEX.equals(fileItem.getFile().getFileType().getCode())) {
                 setDetailPageUrl(ControllerConstants.Pages.FO.DETAILS_FIMEX_INDEX_PAGE);
                 FimexDetailController fimexDetailController = getInstanceOfPageFimexDetailController();
@@ -512,8 +493,10 @@ public class SearchController extends AbstractController<FileItem> {
                 fileItemApDetailController.init();
             }
 
-            String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, detailPageUrl));
-            extContext.redirect(url);
+            if (!cctCodes.contains(fileItem.getFile().getFileType().getCode())) {
+                String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, detailPageUrl));
+                extContext.redirect(url);
+            }
         } catch (final IOException ex) {
             LOG.error(ex.getMessage(), ex);
         }
