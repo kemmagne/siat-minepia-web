@@ -6,6 +6,10 @@ package org.guce.siat.web.common.util;
  */
 public final class WebConstants {
 
+    public static final String AP_RENDERED_SESSION_PARAM = "apRendred";
+
+    public static final String CCT_RENDERED_SESSION_PARAM = "cctRendred";
+
     /**
      * key of guce file number in the JSF request params
      */

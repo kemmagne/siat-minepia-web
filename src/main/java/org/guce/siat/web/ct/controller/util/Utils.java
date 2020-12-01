@@ -184,7 +184,7 @@ public class Utils {
                 file.getNumeroDossier())
         );
         if (search) {
-            finalPageUrl = finalPageUrl.concat(String.format("%s=%s", WebConstants.SEARCH_BOOLEAN_REQUEST_PARAM_KEY, true));
+            finalPageUrl = finalPageUrl.concat(String.format("&%s=%s", WebConstants.SEARCH_BOOLEAN_REQUEST_PARAM_KEY, true));
         }
         return finalPageUrl;
     }

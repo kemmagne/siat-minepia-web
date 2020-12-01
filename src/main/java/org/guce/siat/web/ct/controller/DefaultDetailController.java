@@ -418,7 +418,7 @@ public abstract class DefaultDetailController implements Serializable {
             return;
         }
         comeFromSearch = BooleanUtils.toBoolean(requestParameterMap.get(WebConstants.SEARCH_BOOLEAN_REQUEST_PARAM_KEY));
-        // security
+        // file exists ?
         File file = fileService.findByNumDossierGuce(fileNumer);
         if (file == null) {
             file = fileService.findByRefSiat(fileNumer);
@@ -428,8 +428,9 @@ public abstract class DefaultDetailController implements Serializable {
                 return;
             }
         }
+        // security
         filesSet = Utils.getFilesSet(fileTypeStepService, userAuthorityFileTypeService, fileItemService, commonService, fileFieldValueService, loggedUser);
-        viewAnyFile = Utils.canViewAnyFile(paramsService, loggedUser);
+        viewAnyFile = Utils.canViewAnyFile(paramsService, loggedUser) || comeFromSearch;
         if (!((CollectionUtils.isNotEmpty(filesSet) && filesSet.contains(file)) || viewAnyFile)) {
             addErrorMessage("DetailDontHaveAccessToFile");
             goToPreviousPage();
@@ -464,9 +465,9 @@ public abstract class DefaultDetailController implements Serializable {
     public String getFinalDetailPageUrl(File file) {
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext extContext = context.getExternalContext();
-        String detailPageUrl = Utils.getFinalDetailPageUrl(file, getDetailIndexPageUrl(), true, false);
+        String detailPageUrl = getDetailIndexPageUrl();
         String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, detailPageUrl));
-        return url;
+        return Utils.getFinalDetailPageUrl(file, url, false, true);
     }
 
     protected void goToPreviousPage() {
@@ -514,7 +515,7 @@ public abstract class DefaultDetailController implements Serializable {
 
     private void addErrorMessage(String bundle) {
         String errorMsg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(bundle);
-        JsfUtil.addErrorMessageOnPage(errorMsg, "detailIndexMsg");
+        JsfUtil.addErrorMessage("detailIndexMsg", errorMsg);
     }
 
     public abstract String getDetailIndexPageUrl();

@@ -5,15 +5,19 @@
 
         <h:form id="menuForm">
 
-            <h:panelGroup styleClass="menuSearch">
-
+            <h:panelGrid styleClass="menuSearch" columns="2">
                 <p:inputText id="quickSearchInput" placeholder="#{bundle['QuickSearch_label']}" title="#{bundle['QuickSearch_label']}"
                              value="#{searchController.documentNumberFilter}"
                              rendered="#{!request.isUserInRole('ROOT') and !request.isUserInRole('ADMIN_MIN') and !request.isUserInRole('ADMIN_ORG')}" />
-                <p:commandButton id="quickSearchButton" icon="ui-icon-search" title="#{bundle['ButtonSearch']}" onstart="PF('statusDialog1').block()"
+                <p:commandButton id="quickSearchButtonAjax" icon="ui-icon-search" title="#{bundle['ButtonSearch']}" onstart="PF('statusDialog1').block()"
                                  onsuccess="PF('statusDialog1').unblock()" action="#{searchController.doQuickSearch}" update="growl quickSearchInput"
-                                 rendered="#{!request.isUserInRole('ROOT') and !request.isUserInRole('ADMIN_MIN') and !request.isUserInRole('ADMIN_ORG')}" />
-            </h:panelGroup>
+                                 rendered="#{!request.isUserInRole('ROOT') and !request.isUserInRole('ADMIN_MIN') and !request.isUserInRole('ADMIN_ORG') and !searchController.noAjax}" />
+                <p:commandLink id="quickSearchButtonNonAjax" title="#{bundle['ButtonSearch']}" ajax="false"
+                               action="#{searchController.doQuickSearchNoAjax()}" update="quickSearchInput"
+                               rendered="#{!request.isUserInRole('ROOT') and !request.isUserInRole('ADMIN_MIN') and !request.isUserInRole('ADMIN_ORG') and searchController.noAjax}">
+                    <span><i class="ui-icon ui-icon-search"></i></span>
+                </p:commandLink>
+            </h:panelGrid>
 
             <p:panelMenu>
 

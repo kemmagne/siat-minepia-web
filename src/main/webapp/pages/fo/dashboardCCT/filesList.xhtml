@@ -5,11 +5,11 @@
 
         <h:form id="fileItemListForm">
 
+            <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />
+
             <h:commandLink action="#{exporter.exportFiles(table)}">
                 <h:outputText styleClass="sprite sprite-pdf" />
             </h:commandLink>
-
-            <p:messages id="messages" />
 
             <p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable" value="#{fileItemCctController.items}" filteredValue=""
                          var="item" selectionMode="single" selection="#{fileItemCctController.selected}" rowKey="#{item.id}" rows="5" paginator="true"

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
@@ -17,6 +18,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.guce.siat.common.model.AnalyseType;
 import org.guce.siat.common.model.Company;
@@ -55,7 +57,9 @@ import org.guce.siat.core.ct.service.CommonService;
 import org.guce.siat.core.ct.service.LaboratoryService;
 import org.guce.siat.web.common.AbstractController;
 import org.guce.siat.web.common.ControllerConstants;
+import org.guce.siat.web.common.util.WebConstants;
 import org.guce.siat.web.ct.controller.util.JsfUtil;
+import org.guce.siat.web.ct.controller.util.Utils;
 import org.guce.siat.web.ct.controller.util.enums.SearchCriteria;
 import org.guce.siat.web.ct.controller.util.enums.ServiceItemType;
 import org.guce.siat.web.ct.data.StepDto;
@@ -503,21 +507,6 @@ public class SearchController extends AbstractController<FileItem> {
     }
 
     /**
-     * Gets the instance of page file item detail controller.
-     *
-     * @return the instance of page file item detail controller
-     */
-    public FileItemCctDetailController getInstanceOfPageFileItemCctDetailController() {
-        final FacesContext fctx = FacesContext.getCurrentInstance();
-        final Application application = fctx.getApplication();
-        final ELContext context = fctx.getELContext();
-        final ExpressionFactory expressionFactory = application.getExpressionFactory();
-        final ValueExpression createValueExpression = expressionFactory.createValueExpression(context,
-                "#{fileItemCctDetailController}", FileItemCctDetailController.class);
-        return (FileItemCctDetailController) createValueExpression.getValue(context);
-    }
-
-    /**
      * Gets the instance of page file item ap detail controller.
      *
      * @return the instance of page file item ap detail controller
@@ -602,6 +591,43 @@ public class SearchController extends AbstractController<FileItem> {
         }
     }
 
+    public boolean isNoAjax() {
+        Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+        boolean noAjax = BooleanUtils.toBoolean((Boolean) sessionMap.get(WebConstants.CCT_RENDERED_SESSION_PARAM));
+        return noAjax;
+    }
+
+    public String doQuickSearchNoAjax() {
+        try {
+            if (StringUtils.isNoneBlank(documentNumberFilter)) {
+                List<FileItem> fileItems;
+                File file = fileService.quickSearch(documentNumberFilter, getCurrentAdministration(), getLoggedUser());
+
+                if (file != null) {
+                    fileItems = fileService.quickSearch(documentNumberFilter, getCurrentAdministration(), getLoggedUser()).getFileItemsList();
+                    if (CollectionUtils.isNotEmpty(fileItems)) {
+                        selected = fileItems.get(0);
+                        return Utils.getFinalDetailPageUrl(selected.getFile(), ControllerConstants.Pages.FO.DETAILS_CCT_INDEX_PAGE, true, true);
+                    }
+                } else {
+                    JsfUtil.addErrorMessage("messagesQuickSearch",
+                            ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(DOCUMENT_ACCESS_DENIED_ERROR));
+                }
+
+                documentNumberFilter = null;
+            } else {
+                JsfUtil.addErrorMessage("messagesQuickSearch",
+                        ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(QUICK_SEARCH_VALIDATION_ERROR_MESSAGE));
+            }
+        } catch (NumberFormatException nfe) {
+            documentNumberFilter = null;
+            LOG.error("number format exeception", nfe);
+            JsfUtil.addErrorMessage("messagesQuickSearch",
+                    ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(INVALID_DOC_NUMBER_ERROR_MESSAGE));
+        }
+        return null;
+    }
+
     /**
      * Do quick search.
      */
@@ -628,10 +654,8 @@ public class SearchController extends AbstractController<FileItem> {
         } catch (final NumberFormatException nfe) {
             documentNumberFilter = null;
             LOG.error("number format exeception", nfe);
-            JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                    INVALID_DOC_NUMBER_ERROR_MESSAGE));
+            JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(INVALID_DOC_NUMBER_ERROR_MESSAGE));
         }
-
     }
 
     /**

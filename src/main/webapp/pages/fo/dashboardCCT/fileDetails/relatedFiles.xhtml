@@ -11,8 +11,8 @@
                 <ui:repeat value="#{fileItemCctDetailController.relatedFileTypesInfos}" var="ftDto">
 
                     <h:panelGrid columns="1" cellspacing="3">
-                        <h:outputText rendered="#{true or ftDto.infos.file eq null}" value="#{facesContext.viewRoot.locale eq 'en' ? ftDto.fileType.labelEn : ftDto.fileType.labelFr}" />
-                        <h:outputLink rendered="#{false and ftDto.infos.file ne null}" title="#{bundle['ClickToOpenForNewTab']}" value="#{fileItemCctDetailController.getFinalDetailPageUrl(ftDto.infos.file)}" target="_blank">
+                        <h:outputText rendered="#{ftDto.infos.file eq null}" value="#{facesContext.viewRoot.locale eq 'en' ? ftDto.fileType.labelEn : ftDto.fileType.labelFr}" />
+                        <h:outputLink rendered="#{ftDto.infos.file ne null}" title="#{bundle['ClickToOpenForNewTab']}" value="#{fileItemCctDetailController.getFinalDetailPageUrl(ftDto.infos.file)}" target="_blank">
                             #{facesContext.viewRoot.locale eq 'en' ? ftDto.fileType.labelEn : ftDto.fileType.labelFr}
                         </h:outputLink>
                         <h:panelGroup>
