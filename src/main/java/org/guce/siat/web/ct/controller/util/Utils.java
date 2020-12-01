@@ -166,7 +166,7 @@ public class Utils {
         if (params == null) {
             return false;
         }
-        String logins = params.getName();
+        String logins = params.getValue();
         if (StringUtils.isBlank(logins)) {
             return false;
         }
