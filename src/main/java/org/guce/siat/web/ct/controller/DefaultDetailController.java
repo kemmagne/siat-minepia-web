@@ -11,7 +11,6 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.guce.siat.common.model.File;
@@ -429,13 +428,13 @@ public abstract class DefaultDetailController implements Serializable {
             }
         }
         // security
-        filesSet = Utils.getFilesSet(fileTypeStepService, userAuthorityFileTypeService, fileItemService, commonService, fileFieldValueService, loggedUser);
-        viewAnyFile = Utils.canViewAnyFile(paramsService, loggedUser) || comeFromSearch;
-        if (!((CollectionUtils.isNotEmpty(filesSet) && filesSet.contains(file)) || viewAnyFile)) {
-            addErrorMessage("DetailDontHaveAccessToFile");
-            goToPreviousPage();
-            return;
-        }
+//        filesSet = Utils.getFilesSet(fileTypeStepService, userAuthorityFileTypeService, fileItemService, commonService, fileFieldValueService, loggedUser);
+//        viewAnyFile = comeFromSearch || Utils.canViewAnyFile(paramsService, loggedUser);
+//        if (!(viewAnyFile || (CollectionUtils.isNotEmpty(filesSet) && filesSet.contains(file)))) {
+//            addErrorMessage("DetailDontHaveAccessToFile");
+//            goToPreviousPage();
+//            return;
+//        }
         // all is ok : set current file and current file item
         setCurrentFile(file);
         setCurrentFileItem(getCurrentFile().getFileItemsList().get(0));

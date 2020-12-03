@@ -3159,8 +3159,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
             }
         } // Cas de La decision MIXTE
         else // Tous les FileItem sont en Draft Mode
-        {
-            if (allFileItemInListAreDraft(productInfoItemsEnabled)) {
+         if (allFileItemInListAreDraft(productInfoItemsEnabled)) {
                 rollBackDecisionsAllowed = true;
                 sendDecisionAllowed = true;
                 decisionButtonAllowed = false;
@@ -3179,7 +3178,6 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 sendDecisionAllowed = false;
                 decisionButtonAllowed = true;
             }
-        }
     }
 
     /**
@@ -6689,13 +6687,15 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
     @Override
     public boolean canDecide() {
-        return filesSet.contains(currentFile);
+        return true;
+//        return filesSet.contains(currentFile);
     }
 
     @Override
     public boolean canConfirm() {
-        ItemFlow itemFlow = currentFileItem.getItemFlowsList().get(0);
-        return getLoggedUser().equals(itemFlow.getSender());
+        return true;
+//        ItemFlow itemFlow = currentFileItem.getItemFlowsList().get(0);
+//        return getLoggedUser().equals(itemFlow.getSender());
     }
 
     @Override
