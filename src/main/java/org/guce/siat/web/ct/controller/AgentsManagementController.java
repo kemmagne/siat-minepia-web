@@ -40,6 +40,8 @@ import org.slf4j.LoggerFactory;
 @SessionScoped
 public class AgentsManagementController extends AbstractController<User> {
 
+    private static final long serialVersionUID = -2422142068329086826L;
+
     /**
      * The Constant LOG.
      */
@@ -156,7 +158,11 @@ public class AgentsManagementController extends AbstractController<User> {
         }
 
         Bureau bureau = (Bureau) admin;
-        items = userService.findUsersByAdministrationAndAuthorities(bureau, AuthorityConstants.AGENT_RECEVABILITE.getCode(), AuthorityConstants.INSPECTEUR.getCode(), AuthorityConstants.SIGNATAIRE.getCode());
+        items = userService.findUsersByAdministrationAndAuthorities(bureau,
+                AuthorityConstants.AGENT_RECEVABILITE.getCode(),
+                AuthorityConstants.INSPECTEUR.getCode(),
+                AuthorityConstants.VALIDATION_SIGNATURE.getCode(),
+                AuthorityConstants.SIGNATAIRE.getCode());
 
         return items;
     }
@@ -258,6 +264,7 @@ public class AgentsManagementController extends AbstractController<User> {
 
         authoritiesListForFilter.add(AuthorityConstants.AGENT_RECEVABILITE);
         authoritiesListForFilter.add(AuthorityConstants.INSPECTEUR);
+        authoritiesListForFilter.add(AuthorityConstants.VALIDATION_SIGNATURE);
         authoritiesListForFilter.add(AuthorityConstants.SIGNATAIRE);
 
         return authoritiesListForFilter;

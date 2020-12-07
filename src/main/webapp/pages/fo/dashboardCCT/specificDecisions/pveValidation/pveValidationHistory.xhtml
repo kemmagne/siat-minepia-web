@@ -9,6 +9,11 @@
             <f:convertDateTime pattern="dd/MM/yyyy" />
         </h:outputText>
 
+        <h:outputLabel value="#{bundle['PvePottingStartDate']}" />
+        <h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPR.appointmentDate}">
+            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+        </h:outputText>
+
         <h:outputLabel value="#{bundle['PottingEndDate']}" />
         <h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsPR.pottingEndDate}">
             <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />

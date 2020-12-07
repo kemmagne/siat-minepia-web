@@ -19,12 +19,19 @@ import org.guce.siat.common.utils.enums.StepCode;
 import org.guce.siat.core.ct.service.MinaderStatisticsService;
 import org.guce.siat.web.common.ControllerConstants;
 import org.guce.siat.web.ct.controller.FileItemCctDetailController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author ht
  */
 public final class RelatedFilesUtils {
+
+    /**
+     * The Constant LOG.
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(RelatedFilesUtils.class);
 
     private static final String LABEL = "label";
     private static final String MAIN_REPORT = "mainReport";
@@ -40,7 +47,11 @@ public final class RelatedFilesUtils {
             FileTypeDto fileTypeDto = new FileTypeDto();
 
             fileTypeDto.setFileType(fileType);
-            fileTypeDto.setInfos(getLineMap(controller, fileType));
+            try {
+                fileTypeDto.setInfos(getLineMap(controller, fileType));
+            } catch (Exception ex) {
+                LOG.error(controller.getCurrentFile().toString(), ex);
+            }
 
             fileTypeDtos.add(fileTypeDto);
         }

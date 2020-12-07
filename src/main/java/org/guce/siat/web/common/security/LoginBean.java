@@ -4,12 +4,13 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
-
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -21,7 +22,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.apache.commons.lang.BooleanUtils;
 import org.guce.siat.common.mail.MailConstants;
 import org.guce.siat.common.model.Administration;
@@ -51,6 +51,7 @@ import org.guce.siat.common.utils.enums.FileTypeCode;
 import org.guce.siat.common.utils.enums.ParamsCategory;
 import org.guce.siat.web.common.ControllerConstants;
 import org.guce.siat.web.common.util.ServletUtils;
+import org.guce.siat.web.common.util.WebConstants;
 import org.guce.siat.web.ct.controller.util.JsfUtil;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -271,18 +272,17 @@ public class LoginBean implements Serializable {
         if (LOG.isDebugEnabled()) {
             LOG.debug(Constants.INIT_LOG_INFO_MESSAGE, LoginBean.class.getName());
         }
-        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth instanceof UsernamePasswordAuthenticationToken) {
-            final String username = ((org.springframework.security.core.userdetails.User) auth.getPrincipal()).getUsername();
-            final User user = userService.findByLogin(username);
+            String username = ((org.springframework.security.core.userdetails.User) auth.getPrincipal()).getUsername();
+            User user = userService.findByLogin(username);
             if (!user.getFirstLogin()) {
-                final FacesContext facesContext = FacesContext.getCurrentInstance();
-                final ExternalContext extContext = facesContext.getExternalContext();
-                final String url = extContext.encodeActionURL(facesContext.getApplication().getViewHandler()
-                        .getActionURL(facesContext, ControllerConstants.Pages.INDEX_PAGE));
+                FacesContext facesContext = FacesContext.getCurrentInstance();
+                ExternalContext extContext = facesContext.getExternalContext();
+                String url = extContext.encodeActionURL(facesContext.getApplication().getViewHandler().getActionURL(facesContext, ControllerConstants.Pages.INDEX_PAGE));
                 try {
                     extContext.redirect(url);
-                } catch (final IOException e) {
+                } catch (IOException e) {
                     LOG.error(e.getMessage(), e);
                     JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
                             AUTHENTIFICATION_PROBLEM));
@@ -300,23 +300,23 @@ public class LoginBean implements Serializable {
     public String login() throws ServletException {
         try {
             ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false)).invalidate();
-            final Authentication request = new UsernamePasswordAuthenticationToken(this.getUserName(), this.getPassword());
-            final Authentication result = authenticationManager.authenticate(request);
-            final HttpServletRequest httpReq = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
+            Authentication request = new UsernamePasswordAuthenticationToken(this.getUserName(), this.getPassword());
+            Authentication result = authenticationManager.authenticate(request);
+            HttpServletRequest httpReq = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
                     .getRequest();
-            final HttpServletResponse httpResp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext()
+            HttpServletResponse httpResp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext()
                     .getResponse();
 
             sessionAuthenticationStrategy.onAuthentication(result, httpReq, httpResp);
 
             SecurityContextHolder.getContext().setAuthentication(result);
 
-            final User user = userService.findByLogin(userName);
+            User user = userService.findByLogin(userName);
 
             ServletUtils.setCookies("theme", user.getTheme().getCode());
 
-            this.setLoggedUser(user);
-            final HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
+            setLoggedUser(user);
+            HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
 
             //reset fail attempts connection of the user and unlock the user
             user.setAttempts(0);
@@ -324,12 +324,12 @@ public class LoginBean implements Serializable {
             user.setLastAttemptsTime(null);
             userService.update(user);
 
-            final Administration currentAdministration = user.getAdministration();
-            final Ministry currentMinistry = ministryService.findMinistryByUser(user);
-            final Organism currentOrganism = organismService.findOrganismByUser(user);
-            final SubDepartment currentSubDepartment = subDepartmentService.findSubDepartmentByUser(user);
-            final Service currentService = serviceService.findServiceByUser(user);
-            final Entity currentEntity = entityService.findEntityByUser(user);
+            Administration currentAdministration = user.getAdministration();
+            Ministry currentMinistry = ministryService.findMinistryByUser(user);
+            Organism currentOrganism = organismService.findOrganismByUser(user);
+            SubDepartment currentSubDepartment = subDepartmentService.findSubDepartmentByUser(user);
+            Service currentService = serviceService.findServiceByUser(user);
+            Entity currentEntity = entityService.findEntityByUser(user);
 
             session.setAttribute("locale", FacesContext.getCurrentInstance().getViewRoot().getLocale());
             session.setAttribute("loggedUser", loggedUser);
@@ -366,30 +366,34 @@ public class LoginBean implements Serializable {
                 return ControllerConstants.Pages.INDEX_PAGE;
             }
 
-        } catch (final BadCredentialsException bce) {
+        } catch (BadCredentialsException bce) {
             LOG.error("######  An attempt to connect with bad credentials " + userName, bce);
 
-            final User user = userService.findByLogin(userName);
+            User user = userService.findByLogin(userName);
 
             // increments the attempts column if the attempts number < maxAttemptsNumber -1 else lock the user
             userService.updateFailAttempts(user);
 
             JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
                     "authentification_loginFailed_badCredentials"));
-        } catch (final LockedException le) {
+        } catch (LockedException le) {
             LOG.error("######  An attempt to connect with Locked account " + userName, le);
 
-            final User user = userService.findByLogin(userName);
+            User user = userService.findByLogin(userName);
 
             sendEmail(user);
 
-            final String message = MessageFormat.format(
+            Date lastAttemptsTime = user.getLastAttemptsTime();
+            if (lastAttemptsTime == null) {
+                lastAttemptsTime = Calendar.getInstance().getTime();
+            }
+
+            String message = MessageFormat.format(
                     ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                            "authentification_loginFailed_lockedUser"), ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale())
-                            .getString(SEND_MAIL_MESSAGE), user.getLogin(), DateUtils.formatSimpleDateForOracle(user
-                    .getLastAttemptsTime()));
+                    "authentification_loginFailed_lockedUser"), ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale())
+                    .getString(SEND_MAIL_MESSAGE), user.getLogin(), DateUtils.formatSimpleDateForOracle(lastAttemptsTime));
             JsfUtil.addErrorMessage(message);
-        } catch (final SessionAuthenticationException sae) {
+        } catch (SessionAuthenticationException sae) {
             //maximum of sessions exceeded
             LOG.error("######  An attempt to connect ( maximum of sessions exceeded ) " + userName, sae);
 
@@ -397,7 +401,7 @@ public class LoginBean implements Serializable {
                     "logPage_maximumSessionsexceeded"));
 
             RequestContext.getCurrentInstance().execute("PF('logoutAthorSession').show();");
-        } catch (final AuthenticationException ae) {
+        } catch (AuthenticationException ae) {
             LOG.error("######  An attempt to connect ( AuthenticationException ) " + userName, ae);
 
             if (userName.isEmpty() && password.isEmpty()) {
@@ -424,7 +428,7 @@ public class LoginBean implements Serializable {
      */
     private void userDashboardsRender() {
 
-        final List<FileTypeCode> apCodes = Arrays.asList(FileTypeCode.AIE_MINADER, FileTypeCode.EH_MINADER,
+        List<FileTypeCode> apCodes = Arrays.asList(FileTypeCode.AIE_MINADER, FileTypeCode.EH_MINADER,
                 FileTypeCode.AS_MINADER, FileTypeCode.CAT_MINADER, FileTypeCode.PIVPSRP_MINADER, FileTypeCode.DI_MINADER,
                 FileTypeCode.AT_MINSANTE, FileTypeCode.VTP_MINSANTE, FileTypeCode.VTD_MINSANTE, FileTypeCode.AI_MINSANTE,
                 FileTypeCode.AI_MINMIDT, FileTypeCode.AE_MINMIDT, FileTypeCode.CEA_MINMIDT, FileTypeCode.AT_MINEPIA,
@@ -435,18 +439,18 @@ public class LoginBean implements Serializable {
 
         cctRendred = Boolean.FALSE;
 
-        final List<FileTypeCode> cctCodes = Arrays.asList(FileTypeCode.CCT_CT, FileTypeCode.CC_CT, FileTypeCode.CQ_CT,
+        List<FileTypeCode> cctCodes = Arrays.asList(FileTypeCode.CCT_CT, FileTypeCode.CC_CT, FileTypeCode.CQ_CT,
                 FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI);
 
-        final List<FileType> fileTypes = fileTypeService.findDistinctFileTypesByUser(getLoggedUser());
-        final Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+        List<FileType> fileTypes = fileTypeService.findDistinctFileTypesByUser(getLoggedUser());
+        Map<String, Object> sessionMap = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
 
-        for (final FileType fileType : fileTypes) {
+        for (FileType fileType : fileTypes) {
             if (apCodes.contains(fileType.getCode())) {
-                sessionMap.put("apRendred", true);
+                sessionMap.put(WebConstants.AP_RENDERED_SESSION_PARAM, true);
                 apRendred = Boolean.TRUE;
             } else if (cctCodes.contains(fileType.getCode())) {
-                sessionMap.put("cctRendred", true);
+                sessionMap.put(WebConstants.CCT_RENDERED_SESSION_PARAM, true);
                 cctRendred = Boolean.TRUE;
             }
         }
@@ -557,8 +561,7 @@ public class LoginBean implements Serializable {
      */
     public void sendEmail(final User user) {
         final String templateFileName = localeFileTemplate(EMAIL_BODY, getCurrentLocale().getLanguage());
-        Map<String, String> map = new HashMap<>();
-        map = prepareMap(user, templateFileName);
+        Map<String, String> map = prepareMap(user, templateFileName);
         mailService.sendMail(map);
     }
 
@@ -570,16 +573,23 @@ public class LoginBean implements Serializable {
      * @return the map
      */
     private Map<String, String> prepareMap(final User user, final String template) {
+
         final Map<String, String> map = new HashMap<>();
 
-        map.put(MailConstants.SUBJECT,
-                ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(EMAIL_SUBJECT_USER_LOCKED));
+        map.put(MailConstants.SUBJECT, ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(EMAIL_SUBJECT_USER_LOCKED));
         map.put(MailConstants.FROM, mailService.getFromValue());
         map.put(MailConstants.EMAIL, user.getEmail());
         map.put("firstName", user.getFirstName());
         map.put("login", user.getLogin());
-        map.put("dateTentative", user.getLastAttemptsTime() == null ? null : DateUtils.formatSimpleDateForOracle(user.getLastAttemptsTime()));
+
+        Date lastAttemptsTime = user.getLastAttemptsTime();
+        if (lastAttemptsTime == null) {
+            lastAttemptsTime = Calendar.getInstance().getTime();
+        }
+
+        map.put("dateTentative", DateUtils.formatSimpleDateForOracle(lastAttemptsTime));
         map.put(MailConstants.VMF, template);
+
         return map;
     }
 

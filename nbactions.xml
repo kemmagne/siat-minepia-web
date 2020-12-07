@@ -22,4 +22,15 @@
                 <activatedProfile>profile-test</activatedProfile>
             </activatedProfiles>
         </action>
+        <action>
+            <actionName>CUSTOM-deploy-standalone</actionName>
+            <displayName>deploy-standalone</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>deploy</goal>
+            </goals>
+            <activatedProfiles>
+                <activatedProfile>profile-standalone</activatedProfile>
+            </activatedProfiles>
+        </action>
     </actions>

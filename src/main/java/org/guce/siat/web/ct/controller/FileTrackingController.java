@@ -44,6 +44,8 @@ import org.slf4j.LoggerFactory;
 @SessionScoped
 public class FileTrackingController extends AbstractController<File> {
 
+    private static final long serialVersionUID = -4205559173927600324L;
+
     private static final Logger LOG = LoggerFactory.getLogger(FileTrackingController.class);
 
     /**

@@ -1,5 +1,6 @@
 package org.guce.siat.web.reports.exporter;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -107,6 +108,10 @@ public class CtCctPveExporter extends AbstractReportInvoker {
                     fileVo.setDestinationPlace(fileFieldValue1.getValue());
                     break;
             }
+        }
+
+        if (pottingReport.getAppointmentDate() != null) {
+            fileVo.setAppointmentDate(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(pottingReport.getAppointmentDate()));
         }
 
         return new JRBeanCollectionDataSource(Collections.singleton(fileVo));

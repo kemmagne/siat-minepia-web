@@ -230,13 +230,19 @@ public abstract class AbstractController<T extends Serializable> implements Seri
     protected void persist(final PersistenceActions persistAction, final String successMessage) {
         if (selected != null) {
             try {
-                if (persistAction == PersistenceActions.UPDATE) {
-                    this.service.update(selected);
-                    setSelected(null);
-                } else if (persistAction == PersistenceActions.CREATE) {
-                    this.service.save(selected);
-                } else {
-                    this.service.delete(selected);
+                if (null != persistAction) {
+                    switch (persistAction) {
+                        case UPDATE:
+                            this.service.update(selected);
+                            setSelected(null);
+                            break;
+                        case CREATE:
+                            this.service.save(selected);
+                            break;
+                        default:
+                            this.service.delete(selected);
+                            break;
+                    }
                 }
 
                 JsfUtil.addSuccessMessage(successMessage);
@@ -260,14 +266,9 @@ public abstract class AbstractController<T extends Serializable> implements Seri
         try {
             newItem = itemClass.newInstance();
             this.selected = newItem;
-        } catch (final InstantiationException ie) {
+        } catch (final InstantiationException | IllegalAccessException ie) {
             Logger.getLogger(this.getClass().getName()).logp(Level.SEVERE, this.getClass().getName(),
                     Thread.currentThread().getStackTrace()[Constants.ONE].getMethodName(), ie.getClass().getName() + ie.getMessage());
-        } catch (final IllegalAccessException iae) {
-            Logger.getLogger(this.getClass().getName())
-                    .logp(Level.SEVERE, this.getClass().getName(),
-                            Thread.currentThread().getStackTrace()[Constants.ONE].getMethodName(),
-                            iae.getClass().getName() + iae.getMessage());
         }
     }
 
@@ -305,16 +306,16 @@ public abstract class AbstractController<T extends Serializable> implements Seri
     protected boolean hasDeletedAttribute() {
         try {
             itemClass.getDeclaredField(DELETED_ATTRIBUTE_NAME);
-        } catch (final SecurityException se) {
+        } catch (SecurityException se) {
             Logger.getLogger(this.getClass().getName()).logp(Level.SEVERE, this.getClass().getName(),
                     Thread.currentThread().getStackTrace()[Constants.ONE].getMethodName(), se.getClass().getName() + se.getMessage());
             return false;
-        } catch (final NoSuchFieldException nsfe) {
+        } catch (NoSuchFieldException nsfe) {
             Logger.getLogger(this.getClass().getName()).logp(Level.WARNING, this.getClass().getName(),
                     Thread.currentThread().getStackTrace()[Constants.ONE].getMethodName(),
                     nsfe.getClass().getName() + nsfe.getMessage());
             return false;
-        } catch (final Exception ex) {
+        } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).logp(Level.SEVERE, this.getClass().getName(),
                     Thread.currentThread().getStackTrace()[Constants.ONE].getMethodName(), ex.getClass().getName() + ex.getMessage());
             return false;

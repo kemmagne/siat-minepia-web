@@ -1488,7 +1488,7 @@ public class FileItemApDetailController implements Serializable {
                     }
                 }
                 if (hasPayment) {
-hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
+                    for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                         if (hist.getItemFlow().getFlow().getCode().equals(FlowCode.FL_AP_166.name())) {
                             payed = true;
                             final Iterator<Flow> it = destinationFlowsFromCurrentStep.iterator();
@@ -1497,7 +1497,7 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                                 if (Arrays.asList(FlowCode.FL_AP_160.name(), FlowCode.FL_AP_161.name(), FlowCode.FL_AP_162.name(),
                                         FlowCode.FL_AP_163.name(), FlowCode.FL_AP_164.name(), FlowCode.FL_AP_165.name(),
                                         FlowCode.FL_AP_193.name(), FlowCode.FL_AP_194.name()).contains(
-                                        flx.getCode())) {
+                                                flx.getCode())) {
                                     it.remove();
                                 }
                             }
@@ -1507,11 +1507,10 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                                 if (Arrays.asList(FlowCode.FL_AP_160.name(), FlowCode.FL_AP_161.name(), FlowCode.FL_AP_162.name(),
                                         FlowCode.FL_AP_163.name(), FlowCode.FL_AP_164.name(), FlowCode.FL_AP_165.name(),
                                         FlowCode.FL_AP_193.name(), FlowCode.FL_AP_194.name()).contains(
-                                        flx.getCode())) {
+                                                flx.getCode())) {
                                     it1.remove();
                                 }
                             }
-                            break hist;
                         }
 
                     }
@@ -1545,7 +1544,8 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                     }
                 }
                 if (hasPayment) {
-hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
+                    hist:
+                    for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                         if (hist.getItemFlow().getFlow().getCode().equals(FlowCode.FL_AP_168.name())) {
                             payed = true;
                             final Iterator<Flow> it = destinationFlowsFromCurrentStep.iterator();
@@ -1633,7 +1633,7 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
         if (Arrays.asList(FlowCode.FL_AP_160.name(), FlowCode.FL_AP_161.name(), FlowCode.FL_AP_162.name(),
                 FlowCode.FL_AP_163.name(), FlowCode.FL_AP_164.name(), FlowCode.FL_AP_165.name(), FlowCode.FL_AP_167.name(),
                 FlowCode.FL_AP_193.name(), FlowCode.FL_AP_194.name()).contains(
-                selectedFlow.getCode())) {
+                        selectedFlow.getCode())) {
             isPayment = Boolean.TRUE;
             paymentData = new PaymentData();
 
@@ -1676,7 +1676,7 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                     inputText.setRequiredMessage(dataType.getLabel()
                             + Constants.SPACE
                             + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                                    "RequiredMessage_standard"));
+                            "RequiredMessage_standard"));
                 }
                 inputText.setId(ID_DECISION_LABEL + stringId);
                 htmlPanelGroup.getChildren().add(inputText);
@@ -1688,7 +1688,7 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                     booleanCheckbox.setRequiredMessage(dataType.getLabel()
                             + Constants.SPACE
                             + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                                    "RequiredMessage_standard"));
+                            "RequiredMessage_standard"));
                 }
                 booleanCheckbox.setId(ID_DECISION_LABEL + stringId);
                 htmlPanelGroup.getChildren().add(booleanCheckbox);
@@ -1700,7 +1700,7 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                     calendar.setRequiredMessage(dataType.getLabel()
                             + Constants.SPACE
                             + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                                    "RequiredMessage_standard"));
+                            "RequiredMessage_standard"));
                 }
                 calendar.setId(ID_DECISION_LABEL + stringId);
                 calendar.setPattern("dd-MM-yyyy");
@@ -1722,7 +1722,7 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                     inputTextarea.setRequiredMessage(dataType.getLabel()
                             + Constants.SPACE
                             + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                                    "RequiredMessage_standard"));
+                            "RequiredMessage_standard"));
                 }
                 inputTextarea.setRows(10);
                 inputTextarea.setId(ID_DECISION_LABEL + stringId);
@@ -2516,7 +2516,7 @@ hist:               for (final ItemFlowDto hist : itemFlowHistoryDtoList) {
                                     }
                                     final java.io.File targetAttachment = new java.io.File(folder, targetAttachmentName);
 
-                                    try ( FileOutputStream fileOuputStream = new FileOutputStream(targetAttachment)) {
+                                    try (FileOutputStream fileOuputStream = new FileOutputStream(targetAttachment)) {
                                         fileOuputStream.write(report);
                                     }
 
