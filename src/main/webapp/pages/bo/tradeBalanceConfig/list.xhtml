@@ -15,7 +15,7 @@
 
 			<p:ajax event="rowSelect" update="editButton datalist" />
 			<p:ajax event="rowUnselect" update="editButton datalist" />
-			<p:ajax event="rowDblselect" oncomplete="PF('tradeEditDialog').show();" update=":tradeEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+			<p:ajax event="rowDblselect" oncomplete="PF('tradeEditDialog').show();" update=":tradeEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" />
 
 			<p:column headerText="#{item.code}" id="codeColumn" sortBy="#{item.code}" filterBy="#{item.code}" filterMatchMode="contains">
 				<f:facet name="header">
@@ -51,9 +51,9 @@
 			<f:facet name="footer">
 				<p:commandButton id="createButton" styleClass="btn" icon="sprite sprite-plus" value="#{bundle['Create']}"
 					actionListener="#{tradeBalanceConfigController.prepareCreate}" update=":growl :tradeCreateForm"
-					oncomplete="PF('tradeCreateDialog').show();" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"/>
+					oncomplete="PF('tradeCreateDialog').show();" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"/>
 				<p:commandButton id="editButton" styleClass="btn" icon="sprite sprite-edit" value="#{bundle['Edit']}"
-					onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"
+					onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"
 					rendered="#{tradeBalanceConfigController.tradeBalanceConfig!=null and tradeBalanceConfigController.tradeBalanceConfig.id!=null}"
 					oncomplete="PF('tradeEditDialog').show();" update=":tradeEditForm" />
 				<p:commandButton id="deleteButton" styleClass="btn" icon="sprite sprite-delete" value="#{bundle['Delete']}"

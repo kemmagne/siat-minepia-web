@@ -171,7 +171,7 @@
 
                         <p:panelGrid columns="2" styleClass="btn" columnClasses="labelColumn4, labelColumn5">
 
-                            <p:commandButton onclick="do_login();" id="loginBtn" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"
+                            <p:commandButton onclick="do_login();" id="loginBtn" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"
                                              update="loginForm" value="#{bundle['login_submit']}" action="#{loginMgmtBean.login}" styleClass="ui-priority-primary" />
 
                             <h:panelGroup>

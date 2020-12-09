@@ -22,14 +22,14 @@
 		 </p:blockUI>
 		 
 		<div class="bloc-btn">
-			<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editButton" actionListener="#{positionAuthorityController.edit}" value="#{bundle['Save']}" update=" :positionAuthorityEditForm :growl" oncomplete="PF('confirmationDialog').show()"/>
+			<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="editButton" actionListener="#{positionAuthorityController.edit}" value="#{bundle['Save']}" update=" :positionAuthorityEditForm :growl" oncomplete="PF('confirmationDialog').show()"/>
 		</div>
 	</h:form>
 	<p:confirmDialog closeOnEscape="true" id="confirmationDlg" widgetVar="confirmationDialog" message="#{bundle['EditPositionAuthority_Confirmation_Message']}"
 			header="#{bundle['EditPositionAuthority_Confirmation_Header']}" appendTo="@(body)">
 			<div align="center">
 				<h:form id="confirmationDlgForm">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="decline" value="#{bundle['OK']}" onclick="PF('confirmationDialog').hide()" style="width:80px;" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="decline" value="#{bundle['OK']}" onclick="PF('confirmationDialog').hide()" style="width:80px;" />
 				</h:form>
 			</div>
 	</p:confirmDialog>

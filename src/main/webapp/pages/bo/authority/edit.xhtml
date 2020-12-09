@@ -15,7 +15,7 @@
 			</p:columns>
 		</p:dataTable>
 		<div class="btn-bloc" >
-			<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editBtn" actionListener="#{authorityController.edit}" value="#{bundle['Save']}" update=" :authorityEditForm,:growl " />
+			<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="editBtn" actionListener="#{authorityController.edit}" value="#{bundle['Save']}" update=" :authorityEditForm,:growl " />
 		</div>
 	</h:form>
 </ui:composition>

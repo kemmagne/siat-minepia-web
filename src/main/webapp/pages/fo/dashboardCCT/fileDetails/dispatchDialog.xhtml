@@ -31,10 +31,10 @@
 				</h:panelGroup>
 
 				<div class="btn-bloc">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  value="#{bundle['FileItemInformationTitle_dispatch']}" actionListener="#{fileItemCctDetailController.dispatchFile}"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  value="#{bundle['FileItemInformationTitle_dispatch']}" actionListener="#{fileItemCctDetailController.dispatchFile}"
 						styleClass="ui-priority-primary" update=":productInformationForm typeRepeaterGroup @form" ajax="true"
 						oncomplete="handleSubmit(xhr,status,args,dispatchDlg,'datalistTable');PF('datalistTable').filter();"  />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('dispatchDialog').hide();" immediate="true" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('dispatchDialog').hide();" immediate="true" />
 				</div>
 			</h:panelGroup>
 

@@ -21,7 +21,7 @@
 				<p:ajax event="rowSelect" update="createButton editButton deleteButton datalist" />
 				<p:ajax event="rowUnselect" update="createButton editButton deleteButton datalist" />
 				<p:ajax event="rowDblselect" listener="#{delegationController.prepareEdit}" onstart="PF('statusDialog1').block()"
-					onsuccess="PF('statusDialog1').unblock()" oncomplete="PF('delegationEditDialog').show();PF('datalistTable').filter()"
+					onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" oncomplete="PF('delegationEditDialog').show();PF('datalistTable').filter()"
 					update=":delegationEditForm" />
 
 				<p:column id="fromUserColumn" sortBy="#{item.fromUser.firstName} #{item.fromUser.lastName}"
@@ -74,14 +74,14 @@
 
 
 				<f:facet name="footer">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="createButton" styleClass="btn"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="createButton" styleClass="btn"
 						icon="sprite sprite-plus" value="#{bundle['Create']}" actionListener="#{delegationController.prepareCreate}"
 						oncomplete="PF('delegationCreateDialog').show();" update=":delegationCreateForm" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editButton" styleClass="btn"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="editButton" styleClass="btn"
 						icon="sprite sprite-edit" value="#{bundle['Edit']}" actionListener="#{delegationController.prepareEdit}"
 						rendered="#{delegationController.selected != null and delegationController.selected.id != null}"
 						oncomplete="PF('delegationEditDialog').show();" update=":delegationEditForm :delegationEditForm:display" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="deleteButton" styleClass="btn"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="deleteButton" styleClass="btn"
 						icon="sprite sprite-delete" value="#{bundle['Delete']}"
 						rendered="#{delegationController.selected != null and delegationController.selected.id != null}"
 						oncomplete="PF('confirmation').show()" />
@@ -95,12 +95,12 @@
 			header="#{bundle['popup_confirm_delete_header']}" widgetVar="confirmation" appendTo="@(body)">
 			<div align="right">
 				<h:form id="diagForm">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="confirm"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="confirm"
 						value="#{bundle['popup_confirm_delete_message_oui']}" update=":growl :delegationListForm:datalist"
 						oncomplete="PF('confirmation').hide();document.getElementById('diagForm:confirm').disabled=false;PF('datalistTable').filter();"
 						onclick="document.getElementById('diagForm:confirm').disabled=true;" actionListener="#{delegationController.delete}"
 						styleClass="ui-priority-primary" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="decline"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="decline"
 						value="#{bundle['popup_confirm_delete_message_pas_maintenant']}" onclick="PF('confirmation').hide()" update=":delegationListForm"
 						styleClass="ui-priority-primary" />
 				</h:form>

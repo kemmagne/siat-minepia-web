@@ -81,11 +81,11 @@
 
 				</h:panelGrid>
 				<div align="right">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" value="#{bundle['Save']}"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" value="#{bundle['Save']}"
 						actionListener="#{scheduleController.createNewEvent}" styleClass="ui-priority-primary" update=":decisionForm:schedule"
 						rendered="#{scheduleController.event.editable  eq true}"
 						oncomplete="handleSubmitWithoutDataTable(xhr,status,args,eventDialogId);PF('myschedule').update();" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" value="#{bundle['Cancel']}"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" value="#{bundle['Cancel']}"
 						styleClass="ui-priority-primary" onclick="PF('eventDialog').hide();" immediate="true" />
 				</div>
 			</h:panelGroup>

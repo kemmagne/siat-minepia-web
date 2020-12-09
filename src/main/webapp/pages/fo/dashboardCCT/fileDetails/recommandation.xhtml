@@ -21,7 +21,7 @@
 						<p:ajax event="rowDblselect" listener="#{fileItemCctDetailController.prepareEditRecommandation}"
 							oncomplete="PF('recommandationEditDialog').show();" update=":recommandationEditForm"
 							disabled="#{not fileItemCctDetailController.allowedRecommandation}" onstart="PF('statusDialog1').block()"
-							onsuccess="PF('statusDialog1').unblock()" />
+							onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" />
 
 						<p:column sortBy="#{item.value}" filterBy="#{item.value}" filterMatchMode="contains" style="width:90px">
 							<f:facet name="header">
@@ -48,14 +48,14 @@
 						</p:column>
 
 						<f:facet name="footer">
-							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="createButton" styleClass="btn" icon="sprite sprite-plus" value="#{bundle['Create']}"
+							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="createButton" styleClass="btn" icon="sprite sprite-plus" value="#{bundle['Create']}"
 								actionListener="#{fileItemCctDetailController.prepareCreateRecommandation}" oncomplete="PF('recommandationCreateDialog').show();"
 								update=":recommandationCreateForm" rendered="#{fileItemCctDetailController.allowedRecommandation}" />
-							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editButton" styleClass="btn" icon="sprite sprite-edit" value="#{bundle['Edit']}"
+							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="editButton" styleClass="btn" icon="sprite sprite-edit" value="#{bundle['Edit']}"
 								actionListener="#{fileItemCctDetailController.prepareEditRecommandation}"
 								rendered="#{fileItemCctDetailController.selectedRecommandation != null and fileItemCctDetailController.allowedRecommandation  and fileItemCctDetailController.selectedRecommandation.supervisor.id == globalBean.loggedUser.id}"
 								oncomplete="PF('recommandationEditDialog').show()" update=":recommandationEditForm" />
-							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="deleteButton" styleClass="btn" icon="sprite sprite-delete" value="#{bundle['Delete']}"
+							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="deleteButton" styleClass="btn" icon="sprite sprite-delete" value="#{bundle['Delete']}"
 								oncomplete="PF('confirmationRec').show()"
 								rendered="#{fileItemCctDetailController.selectedRecommandation != null and  fileItemCctDetailController.allowedRecommandation and fileItemCctDetailController.selectedRecommandation.supervisor.id == globalBean.loggedUser.id}" />
 						</f:facet>
@@ -74,13 +74,13 @@
 		header="#{bundle['popup_confirm_delete_header']}" widgetVar="confirmationRec" appendTo="@(body)" global="true">
 		<div align="right">
 			<h:form id="diagFormRec">
-				<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="confirmRec" value="#{bundle['popup_confirm_delete_message_oui']}"
+				<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="confirmRec" value="#{bundle['popup_confirm_delete_message_oui']}"
 					update=":growl :listRecommandationForm:accRec:datalist"
 					oncomplete="PF('confirmationRec').hide();document.getElementById('diagFormRec:confirmRec').disabled=false;PF('datalistTableRecommandation').filter();"
 					onclick="document.getElementById('diagFormRec:confirmRec').disabled=true;"
 					actionListener="#{fileItemCctDetailController.deleteRecommandation}" styleClass="ui-priority-primary"
 					 />
-				<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="decline" value="#{bundle['popup_confirm_delete_message_pas_maintenant']}" onclick="PF('confirmationRec').hide()"
+				<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="decline" value="#{bundle['popup_confirm_delete_message_pas_maintenant']}" onclick="PF('confirmationRec').hide()"
 					update=":listRecommandationForm" styleClass="ui-priority-primary" />
 			</h:form>
 		</div>

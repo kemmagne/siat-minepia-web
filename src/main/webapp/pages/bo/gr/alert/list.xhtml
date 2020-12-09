@@ -22,7 +22,7 @@
 				<p:ajax event="rowSelect" update="createButton editButton deleteButton datalist" />
 				<p:ajax event="rowUnselect" update="createButton editButton deleteButton datalist" />
 				<p:ajax event="rowDblselect" listener="#{alertController.prepareEdit}" oncomplete="PF('alertEditDialog').show();"
-					update=":alertEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+					update=":alertEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" />
 				<p:column>
 
 					<p:selectBooleanCheckbox value="#{item.cheked}" rendered="#{!item.alert.send}">
@@ -93,22 +93,22 @@
 				</p:column>
 
 				<f:facet name="footer">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="createButton" styleClass="btn"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="createButton" styleClass="btn"
 						icon="sprite sprite-plus" value="#{bundle['Create']}" actionListener="#{alertController.prepareCreate}"
 						oncomplete="PF('alertCreateDialog').show();" update=":alertCreateForm" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editButton" styleClass="btn"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="editButton" styleClass="btn"
 						icon="sprite sprite-edit" value="#{bundle['Edit']}" actionListener="#{alertController.prepareEdit}"
 						rendered="#{alertController.selectedAlert != null and alertController.selectedAlert.alert.id != null }"
 						oncomplete="PF('alertEditDialog').show();" update=":alertEditForm">
 
 					</p:commandButton>
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="deleteButton" styleClass="btn"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="deleteButton" styleClass="btn"
 						icon="sprite sprite-delete" value="#{bundle['Delete']}"
 						rendered="#{alertController.selectedAlert != null and alertController.selectedAlert.alert.id != null }"
 						oncomplete="PF('confirmation').show()">
 
 					</p:commandButton>
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="send" styleClass="btn"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="send" styleClass="btn"
 						value="#{bundle['repport_send']}" actionListener="#{alertController.sendAlert}" update=":alertListForm:datalist :growl"
 						rendered="#{alertController.alertSelected}" />
 
@@ -123,12 +123,12 @@
 			header="#{bundle['popup_confirm_delete_header']}" widgetVar="confirmation" appendTo="@(body)">
 			<div align="right">
 				<h:form id="diagForm">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="confirm"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="confirm"
 						value="#{bundle['popup_confirm_delete_message_oui']}" update=":growl :alertListForm:datalist"
 						oncomplete="PF('confirmation').hide();document.getElementById('diagForm:confirm').disabled=false;PF('datalistTable').filter();"
 						onclick="document.getElementById('diagForm:confirm').disabled=true;" actionListener="#{alertController.delete}"
 						styleClass="ui-priority-primary" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="decline"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="decline"
 						value="#{bundle['popup_confirm_delete_message_pas_maintenant']}" onclick="PF('confirmation').hide()" update=":alertListForm"
 						styleClass="ui-priority-primary" />
 				</h:form>

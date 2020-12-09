@@ -46,7 +46,7 @@
 
 
 											<p:commandButton value="#{bundle['BouttonDetail']}" icon="ui-icon-search" rendered="#{tabContentVar.tableColHeader.size()>3}"
-												update="@form" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()">
+												update="@form" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()">
 												<f:setPropertyActionListener target="#{tabContentVar.details}" value="true"></f:setPropertyActionListener>
 												<f:setPropertyActionListener target="#{tabContentVar.detail}" value="#{tableContentVar}"></f:setPropertyActionListener>
 											</p:commandButton>

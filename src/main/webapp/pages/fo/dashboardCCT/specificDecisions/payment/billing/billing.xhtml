@@ -4,8 +4,8 @@
     <p:dataTable widgetVar="PaymentDataTableWdg" id="PaymentDataTable" var="invoiceLine" value="#{fileItemCctDetailController.paymentData.invoiceLines}"
                  rowKey="#{invoiceLine.id}" rowIndexVar="rowIdx" selectionMode="single" selection="#{fileItemCctDetailController.selectedInvoiceLine}">
 
-        <p:ajax event="rowSelect" resetValues="true" oncomplete="clickedItem()" onsuccess="PF('statusDialog1').unblock()" />
-        <p:ajax event="rowUnselect" resetValues="true" oncomplete="clickedItem()" onsuccess="PF('statusDialog1').unblock()" />
+        <p:ajax event="rowSelect" resetValues="true" oncomplete="clickedItem()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" />
+        <p:ajax event="rowUnselect" resetValues="true" oncomplete="clickedItem()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" />
 
         <p:column headerText="#">
             <h:outputText value="#{rowIdx + 1}" />

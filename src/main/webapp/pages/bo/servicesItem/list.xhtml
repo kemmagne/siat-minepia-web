@@ -21,7 +21,7 @@
 				<p:ajax event="rowSelect" update="createButton  editButton deleteButton datalist" />
 				<p:ajax event="rowUnselect" update="createButton editButton deleteButton datalist" />
 				<p:ajax event="rowDblselect" listener="#{servicesItemController.prepareEdit}" oncomplete="PF('servicesItemEditDialog').show();"
-					update=":servicesItemEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+					update=":servicesItemEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" />
 
 				<p:column id="nshGoodsItemCodeColumn" sortBy="#{item1.nsh.goodsItemCode}" filterBy="#{item1.nsh.goodsItemCode}"
 					filterMatchMode="contains">
@@ -54,14 +54,14 @@
 				</p:column>
 
 				<f:facet name="footer">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="createButton" styleClass="btn"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="createButton" styleClass="btn"
 						icon="sprite sprite-plus" value="#{bundle['Create']}" actionListener="#{servicesItemController.prepareCreate}"
 						oncomplete="PF('servicesItemCreateDialog').show();" update=":servicesItemCreateForm" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editButton" styleClass="btn"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="editButton" styleClass="btn"
 						icon="sprite sprite-edit" value="#{bundle['Edit']}" actionListener="#{servicesItemController.prepareEdit}"
 						rendered="#{servicesItemController.selected != null and servicesItemController.selected.id != null}"
 						oncomplete="PF('servicesItemEditDialog').show();" update=":servicesItemEditForm" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="deleteButton" styleClass="btn"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="deleteButton" styleClass="btn"
 						icon="sprite sprite-delete" value="#{bundle['Delete']}"
 						rendered="#{servicesItemController.selected != null and servicesItemController.selected.id != null}"
 						oncomplete="PF('confirmation').show()" />
@@ -75,12 +75,12 @@
 			header="#{bundle['popup_confirm_delete_header']}" widgetVar="confirmation" appendTo="@(body)">
 			<div align="right">
 				<h:form id="diagForm">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="confirm"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="confirm"
 						value="#{bundle['popup_confirm_delete_message_oui']}" update=":growl :servicesItemListForm:datalist"
 						oncomplete="PF('confirmation').hide();document.getElementById('diagForm:confirm').disabled=false;PF('datalistTable').filter();"
 						onclick="document.getElementById('diagForm:confirm').disabled=true;" actionListener="#{servicesItemController.desactivateItem}"
 						styleClass="ui-priority-primary" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="decline"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="decline"
 						value="#{bundle['popup_confirm_delete_message_pas_maintenant']}" onclick="PF('confirmation').hide()" update=":servicesItemListForm"
 						styleClass="ui-priority-primary" />
 				</h:form>

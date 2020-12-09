@@ -19,7 +19,7 @@
 
 						<p:ajax event="rowSelectRadio" listener="#{fimexDetailController.showAttachment}"
 							 onstart="PF('statusDialog1').block()"
-							onsuccess="PF('statusDialog1').unblock()" update=" showAttachmentForm  showAttachmentForm:accordAttachment @form" process="@form" />
+							onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" update=" showAttachmentForm  showAttachmentForm:accordAttachment @form" process="@form" />
 
 						<p:column selectionMode="single" style="width:30px" />
 

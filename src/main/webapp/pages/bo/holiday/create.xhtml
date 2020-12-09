@@ -32,10 +32,10 @@
 				<br />
 
 				<div class="btn-bloc">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="createBtn"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="createBtn"
 						actionListener="#{holidayController.create}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
 						update="display,:holidayListForm,:growl" oncomplete="handleSubmit(xhr,status,args,holidayCreateDlg,'datalistTable');" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="cancelBtn"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="cancelBtn"
 						value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('holidayCreateDialog').hide();" immediate="true" />
 				</div>
 			</h:panelGroup>

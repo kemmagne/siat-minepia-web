@@ -23,11 +23,11 @@
 
 
 
-						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="searchBtn" icon="ui-icon-search"
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="searchBtn" icon="ui-icon-search"
 							action="#{historyAlertController.doSearch}" update=":alertListForm:datalist :searchForm :growl"
 							oncomplete="PF('datalistTable').filter();" title="#{bundle['ButtonSearch']}" />
 
-						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="searchAllBtn"
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="searchAllBtn"
 							icon="ui-icon-refresh" action="#{historyAlertController.initSearch}" update=":alertListForm:datalist :searchForm"
 							oncomplete="PF('datalistTable').filter();" title="#{bundle['ButtonReset']}" />
 					</h:panelGroup>

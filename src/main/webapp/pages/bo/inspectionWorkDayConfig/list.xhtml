@@ -53,7 +53,7 @@
 				<p:ajax event="rowUnselect" update="createButton editButton deleteButton datalist" />
 				<p:ajax event="rowDblselect" listener="#{inspectionWorkDayConfigController.prepareEdit}"
 					oncomplete="PF('inspectionWorkDayConfigEditDialog').show();" update=":inspectionWorkDayConfigEditForm"
-					onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+					onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" />
 
 				<p:column id="hourColumn" sortBy="#{item.hour}" filterBy="#{item.hour}" filterMatchMode="contains">
 					<f:facet name="header">
@@ -63,15 +63,15 @@
 				</p:column>
 
 				<f:facet name="footer">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="createButton"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="createButton"
 						rendered="#{inspectionWorkDayConfigController.selectedHourlyType ne null}" styleClass="btn" icon="sprite sprite-plus"
 						value="#{bundle['Create']}" actionListener="#{inspectionWorkDayConfigController.prepareCreate}"
 						oncomplete="PF('inspectionWorkDayConfigCreateDialog').show();" update=":inspectionWorkDayConfigCreateForm" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editButton" styleClass="btn"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="editButton" styleClass="btn"
 						icon="sprite sprite-edit" value="#{bundle['Edit']}" actionListener="#{inspectionWorkDayConfigController.prepareEdit}"
 						rendered="#{inspectionWorkDayConfigController.selected != null and inspectionWorkDayConfigController.selected.id != null}"
 						oncomplete="PF('inspectionWorkDayConfigEditDialog').show();" update=":inspectionWorkDayConfigEditForm" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="deleteButton" styleClass="btn"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="deleteButton" styleClass="btn"
 						icon="sprite sprite-delete" value="#{bundle['Delete']}"
 						rendered="#{inspectionWorkDayConfigController.selected != null and inspectionWorkDayConfigController.selected.id != null}"
 						oncomplete="PF('confirmation').show()" />
@@ -91,7 +91,7 @@
 						onclick="document.getElementById('diagForm:confirm').disabled=true;" actionListener="#{inspectionWorkDayConfigController.delete}"
 						styleClass="ui-priority-primary" />
 
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="decline"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="decline"
 						value="#{bundle['popup_confirm_delete_message_pas_maintenant']}" onclick="PF('confirmation').hide()"
 						update=":inspectionWorkDayConfigListForm" styleClass="ui-priority-primary" />
 				</h:form>

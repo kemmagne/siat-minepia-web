@@ -19,7 +19,7 @@
                                  rowStyleClass="#{fileItemCctDetailController.getDisabledRow(item.fileItem) ? 'disabled-row' : null}">
 
                         <p:ajax event="rowSelectRadio" listener="#{fileItemCctDetailController.changeProductSelection}" onstart="PF('statusDialog1').block()"
-                                onsuccess="PF('statusDialog1').unblock()"
+                                onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"
                                 update=":detail :remindDecisionForm :productDetailsForm :listRecommandationArticleForm :showAttachmentForm :ListAttachmentForm :productInformationForm" />
                         <p:column selectionMode="single" />
 
@@ -91,22 +91,22 @@
                         <f:facet name="footer">
                             <p:commandButton id="rollBackButton" value="#{bundle['FileItemInformationTitle_annuler']}"
                                              rendered="#{fileItemCctDetailController.showDecisionButton == 'true' and fileItemCctDetailController.rollBackDecisionsAllowed  == 'true' and fileItemCctDetailController.canRollback()}" onstart="PF('statusDialog1').block()"
-                                             onsuccess="PF('statusDialog1').unblock()" actionListener="#{fileItemCctDetailController.prepareRollBackDecisions}"
+                                             onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" actionListener="#{fileItemCctDetailController.prepareRollBackDecisions}"
                                              update=":growl datalist" />
 
                             <p:commandButton id="decideButton" value="#{bundle['FileItemInformationTitle_decider']}"
                                              rendered="#{fileItemCctDetailController.showDecisionButton == 'true' and fileItemCctDetailController.decisionButtonAllowed == 'true' and fileItemCctDetailController.canDecide()}" onstart="PF('statusDialog1').block(); disableBtn()"
-                                             onsuccess="PF('statusDialog1').unblock(); enableBtn()" actionListener="#{fileItemCctDetailController.prepareDecisions}"
+                                             onsuccess="PF('statusDialog1').unblock(); enableBtn()" onerror="PF('statusDialog1').unblock(); enableBtn()" actionListener="#{fileItemCctDetailController.prepareDecisions}"
                                              update=":growl :decisionForm :systemDecisionForm" resetValues="true" styleClass="disBtn"/>
 
                             <p:commandButton id="decideCotationButton" value="#{bundle['FileItemInformationTitle_decider']}"
                                              rendered="#{fileItemCctDetailController.decisionButtonAllowedAtCotationLevel == 'true' and fileItemCctDetailController.showDecisionButton == 'true'}" onstart="PF('statusDialog1').block(); disableBtn()"
-                                             onsuccess="PF('statusDialog1').unblock(); enableBtn()" actionListener="#{fileItemCctDetailController.prepareDecisions}"
+                                             onsuccess="PF('statusDialog1').unblock(); enableBtn()" onerror="PF('statusDialog1').unblock(); enableBtn()" actionListener="#{fileItemCctDetailController.prepareDecisions}"
                                              update=":growl :decisionForm :systemDecisionForm" resetValues="true" styleClass="disBtn"/>
 
                             <p:commandButton id="markButton" value="#{bundle['FileItemInformationTitle_dispatch']}"
                                              rendered="#{fileItemCctDetailController.showDecisionButton == 'true' and fileItemCctDetailController.cotationButtonAllowed == 'true'}" onstart="PF('statusDialog1').block()"
-                                             onsuccess="PF('statusDialog1').unblock()" actionListener="#{fileItemCctDetailController.prepareDispatchFile}"
+                                             onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" actionListener="#{fileItemCctDetailController.prepareDispatchFile}"
                                              update=":growl :decisionForm :dispatchForm" oncomplete="PF('dispatchDialog').show();" />
 
                             <p:commandButton id="sendButton" value="#{bundle['FileItemInformationTitle_send']}" onstart="disableBtn()" styleClass="disBtn"

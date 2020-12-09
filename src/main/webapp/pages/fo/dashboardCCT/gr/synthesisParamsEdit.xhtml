@@ -23,9 +23,9 @@
 				<br />
 
 				<div align="right">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  actionListener="#{synthesisParamsController.edit}" value="#{bundle['Edit']}" styleClass="ui-priority-primary"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  actionListener="#{synthesisParamsController.edit}" value="#{bundle['Edit']}" styleClass="ui-priority-primary"
 						update="display,:systemDecisionDashboardForm,  :growl" oncomplete="handleSubmitForTreeTable(xhr,status,args,configurationEditDlg);" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('configurationEditDialog').hide();"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('configurationEditDialog').hide();"
 						immediate="true" />
 				</div>
 			</h:panelGroup>

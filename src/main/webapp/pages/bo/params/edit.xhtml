@@ -24,10 +24,10 @@
                     <br />
 
                     <div class="btn-bloc">
-                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editBtn"
+                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="editBtn"
                                          actionListener="#{settingsController.edit}" value="#{bundle['Edit']}" styleClass="ui-priority-primary"
                                          update="display, :configurationForm, :growl" oncomplete="handleSubmitForTreeTable(xhr,status,args,configurationEditDlg);" />
-                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="cancelBtn"
+                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="cancelBtn"
                                          value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('configurationEditDialog').hide();" immediate="true" />
                     </div>
                 </h:panelGroup>

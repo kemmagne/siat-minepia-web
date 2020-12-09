@@ -35,10 +35,10 @@
 				<br />
 
 				<div class="btn-bloc">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  actionListener="#{fileItemApDetailController.saveRecommandation}" value="#{bundle['Save']}"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  actionListener="#{fileItemApDetailController.saveRecommandation}" value="#{bundle['Save']}"
 						styleClass="ui-priority-primary" update="display, :listRecommandationForm , :growl"
 						oncomplete="handleSubmit(xhr,status,args,recommandationCreateDlg,'datalistTableRecommandation');" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('recommandationCreateDialog').hide();"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('recommandationCreateDialog').hide();"
 						immediate="true" />
 				</div>
 			</h:panelGroup>

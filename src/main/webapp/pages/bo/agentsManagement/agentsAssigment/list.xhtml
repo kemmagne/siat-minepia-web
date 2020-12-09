@@ -15,9 +15,9 @@
                          currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
 
                 <p:ajax event="rowSelect" resetValues="true" oncomplete="clickedItem()" listener="#{agentsManagementController.prepareEdit}"
-                        update="datalist :userEditForm :userEditForm:display"  onsuccess="PF('statusDialog1').unblock()" />
+                        update="datalist :userEditForm :userEditForm:display"  onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" />
                 <p:ajax resetValues="true" event="rowUnselect" oncomplete="clickedItem()" listener="#{agentsManagementController.prepareEdit}"
-                        update="datalist :userEditForm" onsuccess="PF('statusDialog1').unblock()" />
+                        update="datalist :userEditForm" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" />
 
                 <p:column id="loginColumn" sortBy="#{item.login}" filterBy="#{item.login}" filterMatchMode="contains">
                     <f:facet name="header">

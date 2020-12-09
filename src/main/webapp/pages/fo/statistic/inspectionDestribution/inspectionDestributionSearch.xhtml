@@ -28,10 +28,10 @@
 
 					<h:panelGroup>
 
-						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  icon="ui-icon-search" title="#{bundle['ButtonSearch']}" action="#{statisticController.doFileItemInspectionDestribByFilter}"
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  icon="ui-icon-search" title="#{bundle['ButtonSearch']}" action="#{statisticController.doFileItemInspectionDestribByFilter}"
 							update=":filtredFileItemListForm:datalist fileItemDesicionSearchForm :growl" oncomplete="PF('datalistTable').filter();" />
 
-						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  icon="ui-icon-refresh" title="#{bundle['ButtonReset']}" action="#{statisticController.initFileItemByInsptionDestribSearch}"
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  icon="ui-icon-refresh" title="#{bundle['ButtonReset']}" action="#{statisticController.initFileItemByInsptionDestribSearch}"
 							oncomplete="PF('datalistTable').filter();" update=":filtredFileItemListForm:datalist fileItemDesicionSearchForm" />
 
 					</h:panelGroup>

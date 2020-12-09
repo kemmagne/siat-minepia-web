@@ -22,7 +22,7 @@
 				<p:ajax event="rowSelect" update="editButton datalist" />
 				<p:ajax event="rowUnselect" update="editButton datalist" />
 				<p:ajax event="rowDblselect" listener="#{ministryController.prepareEdit}" oncomplete="PF('ministryEditDialog').show();"
-					update=":ministryEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+					update=":ministryEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" />
 
 				<p:column id="labelFrColumn" sortBy="#{item.labelFr}" filterBy="#{item.labelFr}" filterMatchMode="contains">
 					<f:facet name="header">
@@ -63,7 +63,7 @@
 				</p:column>
 
 				<f:facet name="footer">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editButton" styleClass="btn" icon="sprite sprite-edit" value="#{bundle['Edit']}"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="editButton" styleClass="btn" icon="sprite sprite-edit" value="#{bundle['Edit']}"
 						actionListener="#{ministryController.prepareEdit}"
 						rendered="#{ministryController.selected != null and ministryController.selected.id != null}"
 						oncomplete="PF('ministryEditDialog').show();" update=":ministryEditForm" />

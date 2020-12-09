@@ -31,11 +31,11 @@
 			</p:panelGrid>
 
 			<div class="btn-bloc">
-				<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="createBtn" actionListener="#{fileItemCctDetailController.addControllerInspectionReport}" value="#{bundle['Save']}"
+				<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="createBtn" actionListener="#{fileItemCctDetailController.addControllerInspectionReport}" value="#{bundle['Save']}"
 					styleClass="ui-priority-primary" update="addRowPg :decisionForm:tabViewConstat:controllersGroup"
 					oncomplete="handleSubmit(xhr,status,args,controllerDlg,'controllersDTWdg');" />
 
-				<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('controllerDialog').hide();"
+				<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('controllerDialog').hide();"
 					process="@none" immediate="true" />
 			</div>
 		</h:form>

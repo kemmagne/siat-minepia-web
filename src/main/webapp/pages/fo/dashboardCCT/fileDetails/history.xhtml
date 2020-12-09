@@ -16,7 +16,7 @@
                                  selection="#{fileItemCctDetailController.selectedItemFlowDto}">
 
                         <p:ajax event="rowSelect" update="historyForm:lastDecision" listener="#{fileItemCctDetailController.decisionDetailsByItemFlow}"
-                                onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+                                onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" />
 
                         <p:column sortBy="#{item.itemFlow.flow.labelFr}" filterBy="#{item.itemFlow.flow.labelFr}" filterMatchMode="contains" style="width:90px">
                             <f:facet name="header">

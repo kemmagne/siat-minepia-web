@@ -30,7 +30,7 @@
                 <p:ajax event="rowSelect" />
                 <p:ajax event="rowUnselect" />
                 <p:ajax event="rowDblselect" listener="#{searchController.goToDetailPage}" onstart="PF('statusDialog1').block()"
-                        onsuccess="PF('statusDialog1').unblock()" />
+                        onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" />
 
                 <p:column sortBy="#{item.file.numeroDemande}" filterBy="#{item.file.numeroDemande}" filterMatchMode="contains">
                     <f:facet name="header">

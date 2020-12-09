@@ -31,7 +31,7 @@
 
 						<p:commandButton icon="ui-icon-search" title="#{bundle['ButtonSearch']}"
 							action="#{statisticController.doFileItemDesicionDelivreeByFilter}" onstart="PF('statusDialog1').block()"
-							onsuccess="PF('statusDialog1').unblock()"
+							onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"
 							update=":filtredFileItemListForm :filtredFileItemListForm:datalist fileItemDesicionSearchForm :growl"
 							oncomplete="PF('datalistTable').filter();" />
 

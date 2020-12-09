@@ -56,11 +56,11 @@
                 </p:scrollPanel>
 
                 <div class="btn-bloc">
-                    <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"
+                    <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" on
                                      actionListener="#{fileItemApDetailController.saveDecision}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
                                      update=":productInformationForm dataTypeRepeaterGroup acc :decisionForm" ajax="true"
                                      oncomplete="handleSubmit(xhr,status,args,decisionDlg,'datalistTable');" />
-                    <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" value="#{bundle['Cancel']}"
+                    <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" value="#{bundle['Cancel']}"
                                      styleClass="ui-priority-primary" onclick="PF('decisionDialog').hide();" immediate="true" />
                 </div>
 

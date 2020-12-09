@@ -35,10 +35,10 @@
 					</p:calendar>
 
 					<h:panelGroup>
-						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  icon="ui-icon-search" title="#{bundle['ButtonSearch']}" action="#{statisticController.doSampleLabSearchByFilter}"
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  icon="ui-icon-search" title="#{bundle['ButtonSearch']}" action="#{statisticController.doSampleLabSearchByFilter}"
 							update=":filtredSampleLabListForm:datalist :sampleLabSearchForm :growl" oncomplete="PF('datalistTable').filter();" />
 
-						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  icon="ui-icon-refresh" title="#{bundle['ButtonReset']}" action="#{statisticController.initSampleByLabSearch}"
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  icon="ui-icon-refresh" title="#{bundle['ButtonReset']}" action="#{statisticController.initSampleByLabSearch}"
 							oncomplete="PF('datalistTable').filter();" update=":filtredSampleLabListForm:datalist :sampleLabSearchForm" />
 					</h:panelGroup>
 

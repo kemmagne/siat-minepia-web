@@ -26,9 +26,9 @@
 					</p:calendar>
 
 					<h:panelGroup>
-						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  icon="ui-icon-search" title="#{bundle['ButtonSearch']}" action="#{trendPerformanceController.doSearchByFilter}"
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  icon="ui-icon-search" title="#{bundle['ButtonSearch']}" action="#{trendPerformanceController.doSearchByFilter}"
 							update=":trendPerformanceBarChart:datachart :simpleSearchForm :trendPerformanceSystemAccuracy" />
-						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  icon="ui-icon-refresh" title="#{bundle['ButtonReset']}" action="#{trendPerformanceController.init}"
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  icon="ui-icon-refresh" title="#{bundle['ButtonReset']}" action="#{trendPerformanceController.init}"
 							update=":trendPerformanceBarChart:datachart :simpleSearchForm :trendPerformanceSystemAccuracy" />
 					</h:panelGroup>
 				</h:panelGrid>

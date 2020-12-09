@@ -22,7 +22,7 @@
 				<p:ajax event="rowSelect" update="createButton editButton deleteButton datalist" />
 				<p:ajax event="rowUnselect" update="createButton editButton deleteButton datalist" />
 				<p:ajax event="rowDblselect" listener="#{ciblageController.prepareEdit}" oncomplete="PF('ciblageEditDialog').show();"
-					update=":editCiblageTabView" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  />
+					update=":editCiblageTabView" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  />
 
 				<p:column id="snshColumn" sortBy="#{item.servicesItem.snsh}" filterBy="#{item.servicesItem.snsh}" filterMatchMode="contains">
 					<f:facet name="header">
@@ -103,14 +103,14 @@
 				</p:column>
 
 				<f:facet name="footer">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="createButton" styleClass="btn" icon="sprite sprite-plus" value="#{bundle['Create']}"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="createButton" styleClass="btn" icon="sprite sprite-plus" value="#{bundle['Create']}"
 						actionListener="#{ciblageController.prepareCreate}" oncomplete="PF('ciblageCreateDialog').show();"
 						update=":createCiblageTabView, :growl" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editButton" styleClass="btn" icon="sprite sprite-edit" value="#{bundle['Edit']}"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="editButton" styleClass="btn" icon="sprite sprite-edit" value="#{bundle['Edit']}"
 						actionListener="#{ciblageController.prepareEdit}"
 						rendered="#{ciblageController.selected != null and ciblageController.selected.id != null}"
 						oncomplete="PF('ciblageEditDialog').show();" update=":editCiblageTabView" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="deleteButton" styleClass="btn" icon="sprite sprite-delete" value="#{bundle['Delete']}"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="deleteButton" styleClass="btn" icon="sprite sprite-delete" value="#{bundle['Delete']}"
 						rendered="#{ciblageController.selected != null and ciblageController.selected.id != null}" oncomplete="PF('confirmation').show()" />
 				</f:facet>
 
@@ -122,11 +122,11 @@
 			widgetVar="confirmation" appendTo="@(body)">
 			<div align="right">
 				<h:form id="diagForm">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="confirm" value="#{bundle['popup_confirm_delete_message_oui']}" update=":growl :ciblageListForm:datalist"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="confirm" value="#{bundle['popup_confirm_delete_message_oui']}" update=":growl :ciblageListForm:datalist"
 						oncomplete="PF('confirmation').hide();document.getElementById('diagForm:confirm').disabled=false;"
 						onclick="document.getElementById('diagForm:confirm').disabled=true;" actionListener="#{ciblageController.delete}"
 						styleClass="ui-priority-primary"  />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="decline" value="#{bundle['popup_confirm_delete_message_pas_maintenant']}" onclick="PF('confirmation').hide()"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="decline" value="#{bundle['popup_confirm_delete_message_pas_maintenant']}" onclick="PF('confirmation').hide()"
 						update=":ciblageListForm" styleClass="ui-priority-primary" />
 				</h:form>
 			</div>

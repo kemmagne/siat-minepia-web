@@ -81,10 +81,10 @@
 				<br />
 
 				<div class="btn-bloc">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"
 						actionListener="#{flowController.edit}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
 						update="display,:flowListForm,:growl" oncomplete="handleSubmit(xhr,status,args,flowEditDlg,'datalistTable');" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" value="#{bundle['Cancel']}"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" value="#{bundle['Cancel']}"
 						styleClass="ui-priority-primary" onclick="PF('flowEditDialog').hide();" immediate="true" />
 				</div>
 			</h:panelGroup>

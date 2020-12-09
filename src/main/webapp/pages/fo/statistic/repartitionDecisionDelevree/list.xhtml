@@ -17,7 +17,7 @@
 				paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
 				currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
 				<p:ajax event="rowSelectRadio" listener="#{statisticController.goToDetailPage}" onstart="PF('statusDialog1').block()"
-					onsuccess="PF('statusDialog1').unblock()" />
+					onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" />
 				<p:column selectionMode="single" />
 
 
@@ -101,7 +101,7 @@
 			<h:inputHidden id="type" value="#{statisticController.type}">
 
 			</h:inputHidden>
-			<p:remoteCommand name="rc" action="#{statisticController.execute}" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"
+			<p:remoteCommand name="rc" action="#{statisticController.execute}" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"
 				update=":filtredFileItemListForm:datalist" oncomplete="PF('datalistTable').filter()" ></p:remoteCommand>
 
 		</h:form>

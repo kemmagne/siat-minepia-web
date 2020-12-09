@@ -47,10 +47,10 @@
 				<br />
 
 				<div class="btn-bloc">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editBtn"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="editBtn"
 						actionListener="#{workYearConfigController.editTemporary}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
 						update="display,:workYearConfigListForm,:growl" oncomplete="handleSubmit(xhr,status,args,workYearConfigEditDlg,'datalistTable');" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="cancelBtn"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="cancelBtn"
 						value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('workYearConfigEditDialog').hide();" immediate="true" />
 				</div>
 			</h:panelGroup>
