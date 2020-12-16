@@ -56,7 +56,7 @@
                 </p:scrollPanel>
 
                 <div class="btn-bloc">
-                    <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" on
+                    <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"
                                      actionListener="#{fileItemApDetailController.saveDecision}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
                                      update=":productInformationForm dataTypeRepeaterGroup acc :decisionForm" ajax="true"
                                      oncomplete="handleSubmit(xhr,status,args,decisionDlg,'datalistTable');" />
