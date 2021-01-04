@@ -241,7 +241,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					<textFieldExpression><![CDATA[$F{exporter} != null ? $F{exporter} : ($F{exporterName} + ", " + $F{exporterAddress})]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement stretchType="RelativeToBandHeight" x="4" y="151" width="240" height="42" uuid="2e3feed9-6f97-4541-9742-8aa7de3939e2"/>
+					<reportElement stretchType="RelativeToBandHeight" x="4" y="150" width="240" height="46" uuid="2e3feed9-6f97-4541-9742-8aa7de3939e2"/>
 					<textElement>
 						<font size="7" isBold="true"/>
 					</textElement>

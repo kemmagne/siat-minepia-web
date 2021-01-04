@@ -102,7 +102,7 @@ MINISTRY OF AGRICULTURE AND RURAL DEVELOPMENT
 DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS]]></text>
 				</staticText>
 				<textField isBlankWhenNull="true">
-					<reportElement x="4" y="98" width="181" height="31" uuid="031ac96f-ec74-4c38-9abd-7a55f1fc3761"/>
+					<reportElement x="4" y="96" width="181" height="36" uuid="031ac96f-ec74-4c38-9abd-7a55f1fc3761"/>
 					<textElement textAlignment="Left">
 						<font size="7" isBold="true"/>
 					</textElement>
