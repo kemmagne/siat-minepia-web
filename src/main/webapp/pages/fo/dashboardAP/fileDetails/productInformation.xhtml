@@ -17,7 +17,7 @@
 						currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
 
 						<p:ajax event="rowSelectRadio" listener="#{fileItemApDetailController.changeProductSelection}" onstart="PF('statusDialog1').block()"
-							onsuccess="PF('statusDialog1').unblock()"
+							onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"
 							update=":detail :remindDecisionForm :productDetailsForm :listRecommandationArticleForm :showAttachmentForm :ListAttachmentForm :productInformationForm" />
 						<p:column selectionMode="single" />
 
@@ -56,21 +56,21 @@
 						</p:column>
 
 						<f:facet styleClass="btn-bloc" name="footer">
-							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="rollBackButton"
+							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="rollBackButton"
 								value="#{bundle['FileItemInformationTitle_annuler']}" rendered="#{fileItemApDetailController.rollBackDecisionsAllowed  == 'true' and fileItemApDetailController.showDecisionButton == 'true'}"
 								actionListener="#{fileItemApDetailController.prepareRollBackDecisions}" update=":growl datalist decideButton" />
 							
-							<p:commandButton onstart="PF('statusDialog1').block(); disableBtn()" onsuccess="PF('statusDialog1').unblock(); enableBtn()"
+							<p:commandButton onstart="PF('statusDialog1').block(); disableBtn()" onsuccess="PF('statusDialog1').unblock(); enableBtn()" onerror="PF('statusDialog1').unblock(); enableBtn()"
 								id="decideCotationButton" value="#{bundle['FileItemInformationTitle_decider']}" styleClass="disBtn"
 								rendered="#{fileItemApDetailController.decisionAllowedAtCotationLevel == 'true' and fileItemApDetailController.fileItemHasDraft  == 'false' and fileItemApDetailController.destinationFlowsFromCurrentCotationStep.size() > 0 and fileItemApDetailController.decisionAllowed == 'false'}"
 								actionListener="#{fileItemApDetailController.prepareDecisionsAtCotation}" update=":growl :decisionForm " resetValues="true" />
 							
-							<p:commandButton onstart="PF('statusDialog1').block(); disableBtn()" onsuccess="PF('statusDialog1').unblock(); enableBtn()"
+							<p:commandButton onstart="PF('statusDialog1').block(); disableBtn()" onsuccess="PF('statusDialog1').unblock(); enableBtn()" onerror="PF('statusDialog1').unblock(); enableBtn()"
 								id="decideButton" value="#{fileItemApDetailController.rejctDispatchAllowed=='true'?bundle['FileItemInformationTitle_rejeter']:bundle['FileItemInformationTitle_decider']}" styleClass="disBtn"
 								rendered="#{(fileItemApDetailController.decisionAllowed == 'true' and fileItemApDetailController.fileItemHasDraft  == 'false'  and fileItemApDetailController.showDecisionButton == 'true') or (fileItemApDetailController.rejctDispatchAllowed and fileItemApDetailController.fileItemHasDraft  == 'false' )}"
 								actionListener="#{fileItemApDetailController.prepareDecisions}" update=":growl :decisionForm " resetValues="true" />
 
-							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="retrieveButton"
+							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="retrieveButton"
 								value="#{bundle['FileItemInformationTitle_retrieve']}"
 								rendered="#{fileItemApDetailController.comeFromRetrieveAp == 'true' and fileItemApDetailController.fileItemHasDraft  == 'false'  and fileItemApDetailController.showDecisionButton == 'true'}"
 								actionListener="#{fileItemApDetailController.prepareDecisions}" update=":growl :decisionForm" />
@@ -78,14 +78,14 @@
 							<p:commandButton id="fimex" value="#{bundle['FileItemInformationTitle_fimex']}" rendered="#{fileItemApDetailController.checkedFimexFileType}"
 								actionListener="#{fileItemApDetailController.goToFimexDetailsPage}" update=":growl :decisionForm " />
 
-							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="cotationButton"
+							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="cotationButton"
 								value="#{bundle['FileItemInformationTitle_dispatch']}"
 								rendered="#{fileItemApDetailController.cotationAllowed == 'true' and fileItemApDetailController.fileItemHasDraft == 'false'  and fileItemApDetailController.showDecisionButton == 'true'}"
 								actionListener="#{fileItemApDetailController.prepareDispatchFile}"
 								update=":growl :dispatchForm :dispatchForm:dispatch_affected_user :dispatchForm:typeRepeater"
 								oncomplete="PF('dispatchDialog').show();" />
 
-							<p:commandButton onstart="PF('statusDialog1').block();disableBtn()" onsuccess="PF('statusDialog1').unblock(); enableBtn()"
+							<p:commandButton onstart="PF('statusDialog1').block();disableBtn()" onsuccess="PF('statusDialog1').unblock(); enableBtn()" onerror="PF('statusDialog1').unblock(); enableBtn()"
 								id="sendButton" styleClass="disBtn" value="#{bundle['FileItemInformationTitle_send']}"
 								rendered="#{fileItemApDetailController.sendDecisionAllowed == 'true'  and fileItemApDetailController.showDecisionButton == 'true'}" actionListener="#{fileItemApDetailController.sendDecisions}"
 								update=":growl :decisionForm " oncomplete="PF('datalistTable').filter();disableBtn()" ajax="false" />
@@ -106,12 +106,12 @@
 		header="#{bundle['popup_confirm_delete_header']}" widgetVar="confirmation" appendTo="@(body)" global="true">
 		<div align="right">
 			<h:form id="diagForm">
-				<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="confirm"
+				<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="confirm"
 					value="#{bundle['popup_confirm_delete_message_oui']}" update=":growl :productInformationForm"
 					oncomplete="PF('confirmation').hide();document.getElementById('diagForm:confirm').disabled=false;PF('datalistTable').filter();"
 					onclick="document.getElementById('diagForm:confirm').disabled=true;" actionListener="#{fileItemApDetailController.annulerDecisions}"
 					styleClass="ui-priority-primary" />
-				<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="decline"
+				<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="decline"
 					value="#{bundle['popup_confirm_delete_message_pas_maintenant']}" onclick="PF('confirmation').hide()" update=" :productInformationForm"
 					styleClass="ui-priority-primary" />
 			</h:form>

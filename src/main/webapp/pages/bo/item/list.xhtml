@@ -61,9 +61,9 @@
 				</p:column>
 
 				<f:facet name="footer">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="createButton" styleClass="btn" icon="sprite sprite-plus" value="#{bundle['Create']}"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="createButton" styleClass="btn" icon="sprite sprite-plus" value="#{bundle['Create']}"
 						actionListener="#{itemController.prepareCreate}" oncomplete="PF('itemCreateDialog').show();" update=":itemCreateForm" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="deleteButton" styleClass="btn" icon="sprite sprite-delete" value="#{bundle['Delete']}"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="deleteButton" styleClass="btn" icon="sprite sprite-delete" value="#{bundle['Delete']}"
 						rendered="#{itemController.selected != null and itemController.selected.id != null}" oncomplete="PF('confirmation').show()" />
 				</f:facet>
 
@@ -75,11 +75,11 @@
 			widgetVar="confirmation" appendTo="@(body)">
 			<div align="right">
 				<h:form id="diagForm">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="confirm" value="#{bundle['popup_confirm_delete_message_oui']}" update=":growl :itemListForm:datalist"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="confirm" value="#{bundle['popup_confirm_delete_message_oui']}" update=":growl :itemListForm:datalist"
 						oncomplete="PF('confirmation').hide();document.getElementById('diagForm:confirm').disabled=false;PF('datalistTable').filter();"
 						onclick="document.getElementById('diagForm:confirm').disabled=true;" actionListener="#{itemController.desactivateItem}"
 						styleClass="ui-priority-primary"  />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="decline" value="#{bundle['popup_confirm_delete_message_pas_maintenant']}" onclick="PF('confirmation').hide()"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="decline" value="#{bundle['popup_confirm_delete_message_pas_maintenant']}" onclick="PF('confirmation').hide()"
 						update=":itemListForm" styleClass="ui-priority-primary" />
 				</h:form>
 			</div>

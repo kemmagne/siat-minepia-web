@@ -84,11 +84,11 @@
                     </h:panelGroup>
 
                     <h:panelGroup>
-                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" icon="ui-icon-search"
+                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" icon="ui-icon-search"
                                          title="#{bundle['ButtonSearch']}" action="#{statisticController.doGlobalDelayListingFilter()}"
                                          update=":filtredFileItemListForm:datalist globalDelaiListingSearchForm :growl" oncomplete="PF('datalistTable').filter();" />
 
-                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" icon="ui-icon-refresh"
+                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" icon="ui-icon-refresh"
                                          title="#{bundle['ButtonReset']}" action="#{statisticController.initGlobalDelayListingSearch()}"
                                          oncomplete="PF('datalistTable').filter();" update=":filtredFileItemListForm:datalist globalDelaiListingSearchForm" />
 

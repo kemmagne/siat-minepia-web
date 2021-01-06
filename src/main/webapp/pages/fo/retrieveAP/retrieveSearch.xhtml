@@ -37,10 +37,10 @@
 					<h:panelGroup>
 						<p:commandButton icon="ui-icon-search" title="#{bundle['ButtonSearch']}" action="#{retrieveApController.doSearchByFilter}"
 							update=":fileItemListForm:datalist :retrieveSearchForm :growl" oncomplete="PF('datalistTable').filter();"
-							onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+							onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" />
 						<p:commandButton icon="ui-icon-refresh" title="#{bundle['ButtonReset']}" action="#{retrieveApController.initRetrieveSearch}"
 							oncomplete="PF('datalistTable').filter();" update=":fileItemListForm:datalist :retrieveSearchForm"
-							onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+							onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" />
 					</h:panelGroup>
 				</h:panelGrid>
 

@@ -18,7 +18,7 @@
                                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                                  currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})" widgetVar="attachmentDatalistTable">
                         <p:ajax event="rowSelectRadio" listener="#{fileItemApDetailController.showAttachment}" onstart="PF('statusDialog1').block()"
-                                onsuccess="PF('statusDialog1').unblock()"
+                                onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"
                                 update=":showAttachmentForm :showAttachmentForm:accordAttachment :productDetailsForm :listRecommandationArticleForm :remindDecisionForm
                                 :productInformationForm" />
 

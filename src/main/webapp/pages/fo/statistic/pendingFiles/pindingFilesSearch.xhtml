@@ -23,11 +23,11 @@
 					</p:calendar>
 
 					<h:panelGroup>
-						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" icon="ui-icon-search"
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" icon="ui-icon-search"
 							title="#{bundle['ButtonSearch']}" action="#{statisticController.findPindingFiles}"
 							update=":filtredPindingFilesListForm:datalist :pindingSearchForm :growl" oncomplete="PF('datalistTable').filter();" />
 
-						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" icon="ui-icon-refresh"
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" icon="ui-icon-refresh"
 							title="#{bundle['ButtonReset']}" action="#{statisticController.initPindingFilesSearch}" oncomplete="PF('datalistTable').filter();"
 							update=":filtredPindingFilesListForm:datalist :pindingSearchForm" />
 					</h:panelGroup>

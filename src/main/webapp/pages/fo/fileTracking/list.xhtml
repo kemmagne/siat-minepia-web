@@ -84,7 +84,7 @@
                     <h:outputText rendered="#{fileTracking.currenStepUser ne null}" value="#{fileTracking.currenStepUser.firstName} #{fileTracking.currenStepUser.lastName}"/>
                     <p:commandButton id="viewUsersButton" value="#{bundle['viewUsersButton_value']}" title="#{bundle['viewUsersButton_title']}"
                                      rendered="#{fileTracking.userDeadline ne null and fileTracking.currenStepUser eq null and fileTrackingController.isNotRejected(fileTracking)}" onstart="PF('statusDialog1').block();"
-                                     onsuccess="PF('statusDialog1').unblock();" actionListener="#{fileTrackingController.retrievePotentialAgents(fileTracking)}"
+                                     onsuccess="PF('statusDialog1').unblock();" onerror="PF('statusDialog1').unblock();" actionListener="#{fileTrackingController.retrievePotentialAgents(fileTracking)}"
                                      update=":potentialUsersListForm" resetValues="true" styleClass="" />
                 </p:column>
                 <p:column>

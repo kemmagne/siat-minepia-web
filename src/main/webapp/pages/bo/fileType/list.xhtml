@@ -21,7 +21,7 @@
 				<p:ajax event="rowSelect" update=" editButton  datalist" />
 				<p:ajax event="rowUnselect" update="editButton datalist" />
 				<p:ajax event="rowDblselect" listener="#{fileTypeController.prepareEdit}" oncomplete="PF('fileTypeEditDialog').show();"
-					update=":fileTypeEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+					update=":fileTypeEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" />
 
 
 				<p:column id="nameColumn" sortBy="#{item.code}" filterBy="#{item.code}" filterMatchMode="contains">
@@ -47,7 +47,7 @@
 
 
 				<f:facet name="footer">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editButton" styleClass="btn"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="editButton" styleClass="btn"
 						icon="sprite sprite-edit" value="#{bundle['Edit']}" actionListener="#{fileTypeController.prepareEdit}"
 						rendered="#{fileTypeController.selected != null}" oncomplete="PF('fileTypeEditDialog').show();" update=":fileTypeEditForm" />
 				</f:facet>

@@ -32,9 +32,9 @@
 					<p:inputText id="numCont" value="#{quotaController.searchFilter.numContribuable}" title="#{bundle['quota_SearchContribuable']}" />
 
 					<h:panelGroup>
-						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  icon="ui-icon-search" title="#{bundle['ButtonSearch']}" action="#{quotaController.search}"
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  icon="ui-icon-search" title="#{bundle['ButtonSearch']}" action="#{quotaController.search}"
 							update=":filtredQuotaList:datalist :simpleSearchQuotaForm :growl" oncomplete="PF('datalistTable').filter();" />
-						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  icon="ui-icon-refresh" title="#{bundle['ButtonReset']}" action="#{quotaController.init}"
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  icon="ui-icon-refresh" title="#{bundle['ButtonReset']}" action="#{quotaController.init}"
 							oncomplete="PF('datalistTable').filter();" update=":filtredQuotaList:datalist :simpleSearchQuotaForm" />
 					</h:panelGroup>
 

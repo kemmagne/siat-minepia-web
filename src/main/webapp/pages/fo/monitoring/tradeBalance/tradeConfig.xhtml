@@ -54,7 +54,7 @@
 					<h:panelGroup>
 
 						<p:commandButton icon="ui-icon-search" title="#{bundle['ButtonBalance']}" action="#{tradeBalanceController.validate}"
-							onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" update="@form :filtredFileItemListForm" />
+							onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" update="@form :filtredFileItemListForm" />
 
 
 

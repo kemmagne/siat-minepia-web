@@ -92,10 +92,10 @@
 					</p:tabView>
 
 					<div class="btn-bloc">
-						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editBtn"
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="editBtn"
 										 actionListener="#{fileTypeController.edit}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
 										 update="display,:fileTypeListForm,:growl" oncomplete="handleSubmit(xhr,status,args,fileTypeEditDlg,'datalistTable');" />
-						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="cancelBtn"
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="cancelBtn"
 										 value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('fileTypeEditDialog').hide();" immediate="true" />
 					</div>
 				</p:outputPanel>

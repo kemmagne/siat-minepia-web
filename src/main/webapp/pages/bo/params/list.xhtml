@@ -24,7 +24,7 @@
                 </p:column>
 
                 <p:column style="width:5%">
-                    <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editButton" update=":configurationEditForm" oncomplete="PF('configurationEditDialog').show()" title="edit" icon="ui-icon-pencil" rendered="#{item.type != 'category'}">
+                    <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="editButton" update=":configurationEditForm" oncomplete="PF('configurationEditDialog').show()" title="edit" icon="ui-icon-pencil" rendered="#{item.type != 'category'}">
                         <f:setPropertyActionListener value="#{item}" target="#{settingsController.selectedParam}" />
                     </p:commandButton>
                 </p:column>

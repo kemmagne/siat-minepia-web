@@ -186,12 +186,12 @@
 
                     <div class="btn-bloc">
 
-                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="createBtn"
+                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="createBtn"
                                          actionListener="#{userController.create}" process="@form" value="#{bundle['Save']}"
                                          update=":userListForm:datalist :userCreateForm :userEditForm display :growl">
 
                         </p:commandButton>
-                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="cancelBtn"
+                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="cancelBtn"
                                          value="#{bundle['Cancel']}" immediate="true" process="@this" update="@form" actionListener="#{userController.resetForm}">
                             <p:resetInput target="userCreateForm" />
                         </p:commandButton>

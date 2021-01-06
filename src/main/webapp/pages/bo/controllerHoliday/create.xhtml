@@ -84,10 +84,10 @@
 				<br />
 
 				<div class="btn-bloc">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="createHolidayButton" actionListener="#{controllerHolidayController.create}" value="#{bundle['Save']}"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="createHolidayButton" actionListener="#{controllerHolidayController.create}" value="#{bundle['Save']}"
 						styleClass="ui-priority-primary" update="display,:controllerHolidayListForm,:growl"
 						oncomplete="handleSubmit(xhr,status,args,controllerHolidayCreateDlg,'datalistTable');" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelCreateHolidayButton" value="#{bundle['Cancel']}" styleClass="ui-priority-primary"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="cancelCreateHolidayButton" value="#{bundle['Cancel']}" styleClass="ui-priority-primary"
 						onclick="PF('controllerHolidayCreateDialog').hide();" immediate="true" />
 				</div>
 			</h:panelGroup>

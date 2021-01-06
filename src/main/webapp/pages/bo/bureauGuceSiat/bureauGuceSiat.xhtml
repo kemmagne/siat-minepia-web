@@ -80,7 +80,7 @@
 						<p:ajax event="rowSelect" update="editButton dataList" />
 						<p:ajax event="rowUnselect" update="editButton dataList" />
 						<p:ajax event="rowDblselect" listener="#{guceSiatBureauController.prepareEdit}" oncomplete="PF('guceSiatBureauEditDialog').show();"
-								  update=":guceSiatBureauEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+								  update=":guceSiatBureauEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" />
 									 
 						<p:column id="bureauSiatColumn" sortBy="#{item.siatBureau}" filterBy="#{item.siatBureau}" filterMatchMode="contains" style="width:90px" >
 							<f:facet name="header">
@@ -136,11 +136,11 @@
 						<br />
 
 						<div class="btn-bloc">
-							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editBtn" 
+							<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="editBtn" 
 												  actionListener="#{guceSiatBureauController.edit}" value="#{bundle['Save']}"
 								              styleClass="ui-priority-primary" update="display,:bureauGuceSiatListForm,:growl"
 						                    oncomplete="handleSubmit(xhr,status,args,guceSiatBureauEditDlg,'datalistTable');" />
-					      <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary"
+					      <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary"
 						                    onclick="PF('guceSiatBureauEditDialog').hide();" immediate="true" />
 						</div>
 					</h:panelGroup>

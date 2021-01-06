@@ -54,9 +54,9 @@
 				</h:panelGroup>
 				<br />
 				<div class="btn-bloc">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  actionListener="#{stepController.create}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  actionListener="#{stepController.create}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
 						update="display,:stepListForm,:growl" oncomplete="handleSubmit(xhr,status,args,stepCreateDlg,'datalistTable');" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('stepCreateDialog').hide();" immediate="true" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('stepCreateDialog').hide();" immediate="true" />
 				</div>
 
 			</h:panelGroup>

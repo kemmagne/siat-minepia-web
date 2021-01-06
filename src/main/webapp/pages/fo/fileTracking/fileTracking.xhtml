@@ -69,12 +69,12 @@
                     </h:panelGroup>
 
                     <h:panelGroup>
-                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" icon="ui-icon-search"
+                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" icon="ui-icon-search"
                                          title="#{bundle['ButtonSearch']}" action="#{fileTrackingController.doMinaderFilesTrackingFilter()}"
                                          oncomplete="PF('datalistTable').filter();"
                                          update=":fileTrackingListForm:datalist doMinaderFilesTrackingSearchForm :growl" />
 
-                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" icon="ui-icon-refresh"
+                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" icon="ui-icon-refresh"
                                          title="#{bundle['ButtonReset']}" action="#{fileTrackingController.initDefaultView()}"
                                          oncomplete="PF('datalistTable').filter();"
                                          update=":fileTrackingListForm:datalist doMinaderFilesTrackingSearchForm" />

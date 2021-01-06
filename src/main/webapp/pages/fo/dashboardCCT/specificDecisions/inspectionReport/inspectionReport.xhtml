@@ -91,7 +91,7 @@
                         </p:column>
 
                         <p:column headerText="" width="6%">
-                            <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" styleClass="controll-box"
+                            <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" styleClass="controll-box"
                                              actionListener="#{fileItemCctDetailController.removeControllerInspectionReport(item)}" oncomplete="PF('controllersDTWdg').filter();"
                                              immediate="true" icon="ui-icon-close" iconPos="notext" update="controllersGroup" />
                         </p:column>
@@ -99,7 +99,7 @@
                 </h:panelGroup>
 
                 <div class="btn-bloc">
-                    <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" immediate="true"
+                    <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" immediate="true"
                                      value="#{bundle['ConstatControllersSaveBtn']}" actionListener="#{fileItemCctDetailController.prepareAdd}"
                                      update=":addController:addRowPg controllersDT" oncomplete="PF('controllerDialog').show()" />
                 </div>

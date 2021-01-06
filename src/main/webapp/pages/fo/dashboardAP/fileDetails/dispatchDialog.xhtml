@@ -29,10 +29,10 @@
                     </h:panelGrid>
                     <h:panelGrid columns="2" id="typeRepeater" binding="#{fileItemApDetailController.dipatchDiv}" />
                     <div class="btn-bloc">
-                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  value="#{bundle['FileItemInformationTitle_dispatch']}" actionListener="#{fileItemApDetailController.dispatchFile}"
+                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  value="#{bundle['FileItemInformationTitle_dispatch']}" actionListener="#{fileItemApDetailController.dispatchFile}"
                                          styleClass="ui-priority-primary" update=":productInformationForm typeRepeater @form" ajax="true"
                                          oncomplete="handleSubmit(xhr,status,args,dispatchDlg,'datalistTable');PF('datalistTable').filter();"/>
-                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('dispatchDialog').hide();" immediate="true" />
+                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('dispatchDialog').hide();" immediate="true" />
                     </div>
                 </h:panelGroup>
 

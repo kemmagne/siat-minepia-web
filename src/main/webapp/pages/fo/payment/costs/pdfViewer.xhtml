@@ -6,7 +6,7 @@
     <h:form id="showAttachmentForm">
         <h:panelGroup id="accordAttachment">
 
-            <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  rendered="#{attachmentController.showPanelViewJpeg or attachmentController.showPanelViewPdf}"
+            <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  rendered="#{attachmentController.showPanelViewJpeg or attachmentController.showPanelViewPdf}"
                              value="#{bundle['ButtonDetachment']}" icon="ui-icon-extlink" update="attachmentShowDialog"
                              actionListener="#{attachmentController.detachAttachment}" process="@this" />
 

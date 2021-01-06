@@ -49,7 +49,7 @@
 				<p:ajax event="rowSelect" update="createButton editButton deleteButton datalist" />
 				<p:ajax event="rowUnselect" update="createButton editButton deleteButton datalist" />
 				<p:ajax event="rowDblselect" listener="#{workYearConfigController.prepareEdit}" oncomplete="PF('workYearConfigEditDialog').show();"
-					update=":workYearConfigEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+					update=":workYearConfigEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" />
 
 				<p:column sortBy="#{item.hourlyType.labelFr}" filterBy="#{item.hourlyType.labelFr}" filterMatchMode="contains">
 					<f:facet name="header">
@@ -78,17 +78,17 @@
 				</p:column>
 
 				<f:facet name="footer">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="createButton" styleClass="btn" icon="sprite sprite-plus" value="#{bundle['Create']}"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="createButton" styleClass="btn" icon="sprite sprite-plus" value="#{bundle['Create']}"
 						actionListener="#{workYearConfigController.prepareCreate}" oncomplete="PF('workYearConfigCreateDialog').show();"
 						update=":workYearConfigCreateForm" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editButton" styleClass="btn" icon="sprite sprite-edit" value="#{bundle['Edit']}"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="editButton" styleClass="btn" icon="sprite sprite-edit" value="#{bundle['Edit']}"
 						actionListener="#{workYearConfigController.prepareEdit}"
 						rendered="#{workYearConfigController.selectedBean != null and workYearConfigController.selectedBean.id != null}"
 						oncomplete="PF('workYearConfigEditDialog').show();" update=":workYearConfigEditForm" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="deleteButton" styleClass="btn" icon="sprite sprite-delete" value="#{bundle['Delete']}"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="deleteButton" styleClass="btn" icon="sprite sprite-delete" value="#{bundle['Delete']}"
 						rendered="#{workYearConfigController.selectedBean != null and workYearConfigController.selectedBean.id != null}"
 						oncomplete="PF('confirmation').show()" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="saveButton" actionListener="#{workYearConfigController.save}" value="#{bundle['Save']}"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="saveButton" actionListener="#{workYearConfigController.save}" value="#{bundle['Save']}"
 						styleClass="ui-priority-primary" update=":growl" />
 				</f:facet>
 
@@ -99,11 +99,11 @@
 			header="#{bundle['popup_confirm_delete_header']}" widgetVar="confirmation" appendTo="@(body)">
 			<div align="right">
 				<h:form id="diagForm">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="confirm" value="#{bundle['popup_confirm_delete_message_oui']}" update=":growl :workYearConfigListForm:datalist"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="confirm" value="#{bundle['popup_confirm_delete_message_oui']}" update=":growl :workYearConfigListForm:datalist"
 						oncomplete="PF('datalistTable').filter();PF('confirmation').hide();document.getElementById('diagForm:confirm').disabled=false;"
 						onclick="document.getElementById('diagForm:confirm').disabled=true;" actionListener="#{workYearConfigController.deleteTemporary}"
 						styleClass="ui-priority-primary" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="decline" value="#{bundle['popup_confirm_delete_message_pas_maintenant']}" onclick="PF('confirmation').hide()"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="decline" value="#{bundle['popup_confirm_delete_message_pas_maintenant']}" onclick="PF('confirmation').hide()"
 						update=":workYearConfigListForm" styleClass="ui-priority-primary" />
 				</h:form>
 			</div>

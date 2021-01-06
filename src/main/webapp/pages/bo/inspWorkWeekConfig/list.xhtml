@@ -74,7 +74,7 @@
 				</p:column>
 
 				<f:facet name="footer">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="validateButton" icon=""
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="validateButton" icon=""
 						value="#{bundle['Validate']}" actionListener="#{inspectionWorkWeekConfigController.validateIWWCList}" update=":growl" />
 				</f:facet>
 			</p:dataTable>

@@ -31,7 +31,7 @@
 
 						<p:commandButton icon="ui-icon-search" title="#{bundle['ButtonSearch']}" action="#{fimexController.filterDashboard}"
 							update=":filtredFileItemListForm:datalist :simpleSearchForm :growl" oncomplete="PF('datalistTable').filter();"
-							onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+							onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" />
 
 						<p:commandButton icon="ui-icon-refresh" title="#{bundle['ButtonReset']}" action="#{fimexController.init}"
 							onsuccess="PF('datalistTable').filter();" update=":filtredFileItemListForm:datalist" onstart="PF('statusDialog1').block()"

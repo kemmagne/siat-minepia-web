@@ -34,11 +34,11 @@
 				<br />
 
 				<div class="btn-bloc">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"
 						actionListener="#{fileItemApDetailController.editRecommandationArticle}" value="#{bundle['Edit']}" styleClass="ui-priority-primary"
 						update="display, :listRecommandationArticleForm , :growl"
 						oncomplete="handleSubmit(xhr,status,args,recommandationArticleEditDlg,'datalistTableRecommandationArticle');" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" value="#{bundle['Cancel']}"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" value="#{bundle['Cancel']}"
 						styleClass="ui-priority-primary" onclick="PF('recommandationArticleEditDialog').hide();" immediate="true" />
 				</div>
 

@@ -17,7 +17,7 @@
                          rowStyleClass="#{fileItemCctController.isUnreadFileItem(item)? 'unreadFiles' : null}">
 
                 <p:ajax event="rowDblselect" listener="#{fileItemCctController.goToDetailPage}" onstart="PF('statusDialog1').block()"
-                        onsuccess="PF('statusDialog1').unblock()"/>
+                        onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"/>
 
                 <p:column sortBy="#{item.file.numeroDossier}" filterBy="#{item.file.numeroDossier}" filterMatchMode="contains">
                     <f:facet name="header">

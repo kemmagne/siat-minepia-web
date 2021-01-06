@@ -21,7 +21,7 @@
                 <p:ajax event="rowSelect" update="createButton editButton deleteButton datalist" />
                 <p:ajax event="rowUnselect" update="createButton editButton deleteButton datalist" />
                 <p:ajax event="rowDblselect" listener="#{treatmentCompanyController.prepareEdit}" oncomplete="PF('treatmentCompanyEditDialog').show();"
-                        update=":treatmentCompanyEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+                        update=":treatmentCompanyEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" />
 
 
                 <p:column id="labelColumn" sortBy="#{facesContext.viewRoot.locale eq 'fr' ? item.labelFr : item.labelEn}"
@@ -84,14 +84,14 @@
 
 
                 <f:facet name="footer">
-                    <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="createButton" styleClass="btn" icon="sprite sprite-plus" value="#{bundle['Create']}"
+                    <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="createButton" styleClass="btn" icon="sprite sprite-plus" value="#{bundle['Create']}"
                                      actionListener="#{treatmentCompanyController.prepareCreate}" oncomplete="PF('treatmentCompanyCreateDialog').show();"
                                      update=":treatmentCompanyCreateForm" />
-                    <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editButton" styleClass="btn" icon="sprite sprite-edit" value="#{bundle['Edit']}"
+                    <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="editButton" styleClass="btn" icon="sprite sprite-edit" value="#{bundle['Edit']}"
                                      actionListener="#{treatmentCompanyController.prepareEdit}"
                                      rendered="#{treatmentCompanyController.selected != null and treatmentCompanyController.selected.id != null}"
                                      oncomplete="PF('treatmentCompanyEditDialog').show();" update=":treatmentCompanyEditForm" />
-                    <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="deleteButton" styleClass="btn" icon="sprite sprite-delete" value="#{bundle['Delete']}"
+                    <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="deleteButton" styleClass="btn" icon="sprite sprite-delete" value="#{bundle['Delete']}"
                                      rendered="#{treatmentCompanyController.selected != null and treatmentCompanyController.selected.id != null }"
                                      oncomplete="PF('confirmation').show()" />
                 </f:facet>
@@ -104,11 +104,11 @@
                          header="#{bundle['popup_confirm_delete_header']}" widgetVar="confirmation" appendTo="@(body)">
             <div align="right">
                 <h:form id="diagForm">
-                    <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="confirm" value="#{bundle['popup_confirm_delete_message_oui']}" update=":growl :treatmentCompanyListForm:datalist"
+                    <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="confirm" value="#{bundle['popup_confirm_delete_message_oui']}" update=":growl :treatmentCompanyListForm:datalist"
                                      oncomplete="PF('datalistTable').filter();PF('confirmation').hide();document.getElementById('diagForm:confirm').disabled=false;"
                                      onclick="document.getElementById('diagForm:confirm').disabled = true;" actionListener="#{treatmentCompanyController.delete}"
                                      styleClass="ui-priority-primary" />
-                    <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="decline" value="#{bundle['popup_confirm_delete_message_pas_maintenant']}" onclick="PF('confirmation').hide()"
+                    <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="decline" value="#{bundle['popup_confirm_delete_message_pas_maintenant']}" onclick="PF('confirmation').hide()"
                                      update=":treatmentCompanyListForm" styleClass="ui-priority-primary" />
                 </h:form>
             </div>

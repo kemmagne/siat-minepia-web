@@ -39,18 +39,18 @@
 					</p:column>
 
 					<f:facet name="footer">
-						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="createButton" styleClass="btn"
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="createButton" styleClass="btn"
 							icon="sprite sprite-plus" value="#{bundle['Create']}"
 							actionListener="#{fileItemApDetailController.prepareCreateRecommandationArticle}"
 							oncomplete="PF('recommandationArticleCreateDialog').show();" update=":growl :recommandationArticleCreateForm"
 							rendered="#{fileItemApDetailController.allowedUser}" />
 
-						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editButton" styleClass="btn"
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="editButton" styleClass="btn"
 							icon="sprite sprite-edit" value="#{bundle['Edit']}" actionListener="#{fileItemApDetailController.prepareEditRecommandationArticle}"
 							rendered="#{fileItemApDetailController.selectedRecommandationArticle != null and fileItemApDetailController.allowedUser and fileItemApDetailController.selectedRecommandationArticle.supervisor.id == globalBean.loggedUser.id}"
 							oncomplete="PF('recommandationArticleEditDialog').show()" update=":recommandationArticleEditForm" />
 
-						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="deleteButtonArticle"
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="deleteButtonArticle"
 							styleClass="btn" icon="sprite sprite-delete" value="#{bundle['Delete']}" oncomplete="PF('recArticleConfirm').show();" ajax="true"
 							rendered="#{fileItemApDetailController.selectedRecommandationArticle != null and fileItemApDetailController.allowedUser and fileItemApDetailController.selectedRecommandationArticle.supervisor.id == globalBean.loggedUser.id}" />
 					</f:facet>
@@ -65,13 +65,13 @@
 		header="#{bundle['popup_confirm_delete_header']}" widgetVar="recArticleConfirm" appendTo="@(body)" global="true">
 		<div align="right">
 			<h:form id="diagFormRecArticle">
-				<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="confirmRecArticle"
+				<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="confirmRecArticle"
 					value="#{bundle['popup_confirm_delete_message_oui']}"
 					update=":growl :listRecommandationArticleForm:accArticle:datalistRecommandationArticle"
 					oncomplete="PF('recArticleConfirm').hide();document.getElementById('diagFormRecArticle:confirmRecArticle').disabled=false;PF('datalistTableRecommandationArticle').filter();"
 					onclick="document.getElementById('diagFormRecArticle:confirmRecArticle').disabled=true;"
 					actionListener="#{fileItemApDetailController.deleteRecommandationArticle}" styleClass="ui-priority-primary" />
-				<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="decline"
+				<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="decline"
 					value="#{bundle['popup_confirm_delete_message_pas_maintenant']}" onclick="PF('recArticleConfirm').hide()"
 					update=":listRecommandationArticleForm" styleClass="ui-priority-primary" />
 			</h:form>

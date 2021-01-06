@@ -114,7 +114,7 @@
 					</p:column>
 
 					<p:column style="width:5%">
-						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  update=":systemDecisionSynthesisParamsEditForm" oncomplete="PF('configurationEditDialog').show()" title="edit"
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  update=":systemDecisionSynthesisParamsEditForm" oncomplete="PF('configurationEditDialog').show()" title="edit"
 							icon="ui-icon-pencil" rendered="#{item.type != 'category'}" process="@this">
 							<f:setPropertyActionListener value="#{item}" target="#{synthesisParamsController.selectedParam}" />
 						</p:commandButton>

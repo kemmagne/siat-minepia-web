@@ -55,9 +55,9 @@
 				<br />
 
 				<div class="btn-bloc">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  actionListener="#{stepController.edit}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  actionListener="#{stepController.edit}" value="#{bundle['Save']}" styleClass="ui-priority-primary"
 						update=":stepListForm,display,:growl" oncomplete="handleSubmit(xhr,status,args,stepEditDlg,'datalistTable');" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('stepEditDialog').hide();" immediate="true" />
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('stepEditDialog').hide();" immediate="true" />
 				</div>
 			</h:panelGroup>
 

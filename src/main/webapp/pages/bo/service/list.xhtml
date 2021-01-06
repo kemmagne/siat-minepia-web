@@ -21,7 +21,7 @@
 				<p:ajax event="rowSelect" update="editButton datalist" />
 				<p:ajax event="rowUnselect" update="editButton datalist" />
 				<p:ajax event="rowDblselect" listener="#{serviceController.prepareEdit}" oncomplete="PF('serviceEditDialog').show();"
-					update=":serviceEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+					update=":serviceEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" />
 
 				<p:column id="labelFrColumn" sortBy="#{item.labelFr}" filterBy="#{item.labelFr}" filterMatchMode="contains" style="width:90px">
 					<f:facet name="header">
@@ -89,7 +89,7 @@
 
 
 				<f:facet name="footer">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editButton" styleClass="btn" icon="sprite sprite-edit" value="#{bundle['Edit']}" actionListener="#{serviceController.prepareEdit}"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="editButton" styleClass="btn" icon="sprite sprite-edit" value="#{bundle['Edit']}" actionListener="#{serviceController.prepareEdit}"
 						rendered="#{serviceController.selected != null and serviceController.selected.id != null}" oncomplete="PF('serviceEditDialog').show();" update=":serviceEditForm, :growl" />
 				</f:facet>
 

@@ -18,13 +18,15 @@ function handleSubmit(xhr, status, args, dialog, datalistTable) {
             times: 3
         }, 100);
     } else {
-        jQuery(document).ready(function () {
-            PF(datalistTable).filter();
-        });
-        PF(getWidgetVarById(dialog.id).widgetVar).hide();
-        setTimeout(function () {
-            $('[id$=growl]').hide(1000);
-        }, 3000);
+        if (status === "success") {
+            jQuery(document).ready(function () {
+                PF(datalistTable).filter();
+            });
+            PF(getWidgetVarById(dialog.id).widgetVar).hide();
+            setTimeout(function () {
+                $('[id$=growl]').hide(1000);
+            }, 3000);
+        }
     }
 }
 

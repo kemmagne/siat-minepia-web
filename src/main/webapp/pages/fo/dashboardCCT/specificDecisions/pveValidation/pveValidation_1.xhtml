@@ -74,8 +74,8 @@
         <p:dataTable widgetVar="PottingPresentsTableWdg" id="PottingPresentsTable" var="pp" value="#{fileItemCctDetailController.pottingPresents}"
                      rowKey="#{pp.hashCode()}" rowIndexVar="rowIdx" selectionMode="single" selection="#{fileItemCctDetailController.selectedPottingPresent}">
 
-            <p:ajax event="rowSelect" resetValues="true" oncomplete="clickedItem()" onsuccess="PF('statusDialog1').unblock()" />
-            <p:ajax event="rowUnselect" resetValues="true" oncomplete="clickedItem()" onsuccess="PF('statusDialog1').unblock()" />
+            <p:ajax event="rowSelect" resetValues="true" oncomplete="clickedItem()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" />
+            <p:ajax event="rowUnselect" resetValues="true" oncomplete="clickedItem()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" />
 
             <f:facet name="header">
                 <h:outputText value="#{bundle['PottingPresentsList']}" />

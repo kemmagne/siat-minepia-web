@@ -21,7 +21,7 @@
 				<p:ajax event="rowSelect" update="createButton editButton deleteButton datalist" />
 				<p:ajax event="rowUnselect" update="createButton editButton deleteButton datalist" />
 				<p:ajax event="rowDblselect" listener="#{bureauRegionalController.prepareEdit}" oncomplete="PF('bureauRegionalEditDialog').show();"
-					update=":bureauRegionalEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+					update=":bureauRegionalEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" />
 
 
 				<p:column id="labelColumn" sortBy="#{facesContext.viewRoot.locale eq 'en' ? item.labelEn : item.labelFr}"

@@ -120,10 +120,10 @@
                     <br />
 
                     <div class="btn-bloc">
-                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="editBtn" actionListener="#{treatmentCompanyController.edit}" value="#{bundle['Save']}"
+                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="editBtn" actionListener="#{treatmentCompanyController.edit}" value="#{bundle['Save']}"
                                          styleClass="ui-priority-primary" update="display,:treatmentCompanyListForm,:growl"
                                          oncomplete="handleSubmit(xhr,status,args,treatmentCompanyEditDlg,'datalistTable');" />
-                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary"
+                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary"
                                          onclick="PF('treatmentCompanyEditDialog').hide();" immediate="true" />
                     </div>
                 </h:panelGroup>

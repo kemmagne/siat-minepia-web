@@ -57,10 +57,10 @@
 
 
 				<div class="btn-bloc">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="createBtn" actionListener="#{servicesItemController.create}" value="#{bundle['Save']}"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="createBtn" actionListener="#{servicesItemController.create}" value="#{bundle['Save']}"
 						styleClass="ui-priority-primary" update="display,:servicesItemListForm,:growl"
 						oncomplete="handleSubmit(xhr,status,args,servicesItemCreateDlg,'datalistTable');" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary"
 						onclick="PF('servicesItemCreateDialog').hide();" immediate="true" />
 
 				</div>

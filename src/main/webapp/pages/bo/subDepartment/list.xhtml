@@ -21,7 +21,7 @@
 				<p:ajax event="rowSelect" update=" editButton  datalist" />
 				<p:ajax event="rowUnselect" update="editButton datalist" />
 				<p:ajax event="rowDblselect" listener="#{subDepartmentController.prepareEdit}" oncomplete="PF('subDepartmentEditDialog').show();"
-					update=":subDepartmentEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" />
+					update=":subDepartmentEditForm" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" />
 
 				<p:column id="labelColumn" sortBy="#{facesContext.viewRoot.locale eq 'en' ? item.labelEn : item.labelFr}"
 					filterBy="#{facesContext.viewRoot.locale eq 'en' ? item.labelEn : item.labelFr}" filterMatchMode="contains" style="width:90px">
@@ -60,7 +60,7 @@
 					<h:outputText value="#{(item.assistantDirector.firstName).concat(' ').concat(item.assistantDirector.lastName)}" />
 				</p:column>
 				<f:facet name="footer">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" id="editButton" styleClass="btn"
+					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="editButton" styleClass="btn"
 						icon="sprite sprite-edit" value="#{bundle['Edit']}" actionListener="#{subDepartmentController.prepareEdit}"
 						rendered="#{subDepartmentController.selected != null and subDepartmentController.selected.id != null}"
 						oncomplete="PF('subDepartmentEditDialog').show();" update=":subDepartmentEditForm" />

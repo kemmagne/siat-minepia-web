@@ -22,10 +22,10 @@
 							showOn="button" pattern="dd/MM/yyyy" mindate="#{auditEntityController.auditFilter.beginDate}" readonlyInput="true">
 						</p:calendar>
 					<h:panelGroup>
-						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="launchSearch" icon="ui-icon-search" action="#{auditEntityController.doSearch}"
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="launchSearch" icon="ui-icon-search" action="#{auditEntityController.doSearch}"
 							update=":auditEntityListForm:datalist :searchForm" oncomplete="PF('datalistTable').filter();" title="#{bundle['ButtonSearch']}" />
 						
-						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()"  id="resetSearch" icon="ui-icon-refresh" action="#{auditEntityController.initSearch}"
+						<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="resetSearch" icon="ui-icon-refresh" action="#{auditEntityController.initSearch}"
 							update=":auditEntityListForm:datalist :searchForm" oncomplete="PF('datalistTable').filter();" title="#{bundle['ButtonReset']}" />
 					
 						

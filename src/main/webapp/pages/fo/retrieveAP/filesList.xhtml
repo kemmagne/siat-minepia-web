@@ -18,7 +18,7 @@
 				<p:ajax event="rowSelect" />
 				<p:ajax event="rowUnselect" />
 				<p:ajax event="rowDblselect" listener="#{retrieveApController.goToDetailPage}" onstart="PF('statusDialog1').block()"
-					onsuccess="PF('statusDialog1').unblock()" />
+					onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" />
 
 				<p:column sortBy="#{file.referenceSiat}" filterBy="#{file.referenceSiat}" filterMatchMode="contains">
 					<f:facet name="header">

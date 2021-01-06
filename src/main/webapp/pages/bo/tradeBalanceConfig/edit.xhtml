@@ -55,7 +55,7 @@
 				<div class="btn-bloc">
 					<p:commandButton id="editBtn" actionListener="#{tradeBalanceConfigController.doEdit}" value="#{bundle['Save']}"
 						styleClass="ui-priority-primary" update="display,:tradeListForm,:growl" onstart="PF('statusDialog1').block()"
-						onsuccess="PF('statusDialog1').unblock()" oncomplete="handleSubmit(xhr,status,args,tradeEditDlg,'datalistTable');" />
+						onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" oncomplete="handleSubmit(xhr,status,args,tradeEditDlg,'datalistTable');" />
 					<p:commandButton id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary" onclick="PF('tradeEditDialog').hide();"
 						immediate="true" />
 				</div>
