@@ -1329,9 +1329,10 @@ public class FileItemCctDetailController extends DefaultDetailController {
                     fileItem.setRedefinedLabelFr((fileTypeStep.getLabelFr()));
                 }
             }
+
             // allowed products
-            productInfoItemsEnabled = fileItemService.filterFileItemsByUserAuthorityFileTypes(productInfoItems,
-                    listUserAuthorityFileTypes, loggedUser);
+//            productInfoItemsEnabled = fileItemService.filterFileItemsByUserAuthorityFileTypes(productInfoItems, listUserAuthorityFileTypes, loggedUser);
+            productInfoItemsEnabled = new ArrayList<>(productInfoItems);
 
             final Iterator<FileItem> iter = productInfoItemsEnabled.iterator();
             while (iter.hasNext()) {
@@ -1766,7 +1767,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                     booleanCheckbox.setRequiredMessage(dataType.getLabel()
                             + Constants.SPACE
                             + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                            "RequiredMessage_standard"));
+                                    "RequiredMessage_standard"));
                 }
                 booleanCheckbox.setId(ID_DECISION_LABEL + stringId);
                 htmlPanelGroup.getChildren().add(booleanCheckbox);
@@ -1778,7 +1779,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                     calendar.setRequiredMessage(dataType.getLabel()
                             + Constants.SPACE
                             + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                            "RequiredMessage_standard"));
+                                    "RequiredMessage_standard"));
                 }
                 calendar.setId(ID_DECISION_LABEL + stringId);
                 String pattern = DateUtils.FRENCH_DATE;
@@ -1795,7 +1796,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                     inputTextarea.setRequiredMessage(dataType.getLabel()
                             + Constants.SPACE
                             + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                            "RequiredMessage_standard"));
+                                    "RequiredMessage_standard"));
                 }
                 inputTextarea.setRows(10);
                 inputTextarea.setId(ID_DECISION_LABEL + stringId);
@@ -3159,25 +3160,25 @@ public class FileItemCctDetailController extends DefaultDetailController {
             }
         } // Cas de La decision MIXTE
         else // Tous les FileItem sont en Draft Mode
-         if (allFileItemInListAreDraft(productInfoItemsEnabled)) {
-                rollBackDecisionsAllowed = true;
-                sendDecisionAllowed = true;
-                decisionButtonAllowed = false;
-            } // Les FileItem appartenant à ce dossier contienne un ou plus en
-            // mode DRAFT
-            else if (oneFileItemInListIsDraft(productInfoItemsEnabled)) {
-                rollBackDecisionsAllowed = true;
-                sendDecisionAllowed = true;
-                decisionButtonAllowed = true;
-            } // Les FileItem n'ont pas de DRAFT
-            else if (CollectionUtils.isNotEmpty(productInfoItemsEnabled)) {
-                // Dans l'affichage du button Decider : pas de controle sur la
-                // selection des cases à cocher car il n'y a pas de handler
-                // l'ors de l'unchek des checkbox pour detecter l'action
-                rollBackDecisionsAllowed = false;
-                sendDecisionAllowed = false;
-                decisionButtonAllowed = true;
-            }
+        if (allFileItemInListAreDraft(productInfoItemsEnabled)) {
+            rollBackDecisionsAllowed = true;
+            sendDecisionAllowed = true;
+            decisionButtonAllowed = false;
+        } // Les FileItem appartenant à ce dossier contienne un ou plus en
+        // mode DRAFT
+        else if (oneFileItemInListIsDraft(productInfoItemsEnabled)) {
+            rollBackDecisionsAllowed = true;
+            sendDecisionAllowed = true;
+            decisionButtonAllowed = true;
+        } // Les FileItem n'ont pas de DRAFT
+        else if (CollectionUtils.isNotEmpty(productInfoItemsEnabled)) {
+            // Dans l'affichage du button Decider : pas de controle sur la
+            // selection des cases à cocher car il n'y a pas de handler
+            // l'ors de l'unchek des checkbox pour detecter l'action
+            rollBackDecisionsAllowed = false;
+            sendDecisionAllowed = false;
+            decisionButtonAllowed = true;
+        }
     }
 
     /**
