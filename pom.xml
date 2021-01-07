@@ -13,7 +13,7 @@
     <!-- .STANDALONE -->
     <!-- .TEST -->
     <!-- .HT -->
-    <version>2.5.9</version>
+    <version>2.5.10</version>
     <packaging>war</packaging>
 
     <name>siat-ct-web</name>
@@ -24,7 +24,8 @@
             <properties>
                 <environment>ht</environment>
                 <!--<global-config.properties>${user.home}/siat/config/ct/global-config.properties</global-config.properties>-->
-                <global-config.properties>/root/siat/config/ct/global-config.properties</global-config.properties>
+                <global-config.properties>/home/htiomy/siat/config/ct/global-config.properties</global-config.properties>
+                <!--<global-config.properties>/root/siat/config/ct/global-config.properties</global-config.properties>-->
             </properties>
             <!--            <build>
                 <plugins>
