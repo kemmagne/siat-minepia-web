@@ -67,6 +67,7 @@ import org.guce.siat.web.ct.data.ActivityReportData;
 import org.guce.siat.web.ct.data.DelayListingStakeholderData;
 import org.guce.siat.web.ct.data.ExportNshDestinationData;
 import org.guce.siat.web.ct.data.GlobalDelayListingData;
+import org.guce.siat.web.ct.data.GlobalQuantityListingData;
 import org.guce.siat.web.ct.data.ServiceItemDto;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -87,7 +88,7 @@ public class StatisticController extends AbstractController<FileItem> {
     /**
      * The Constant LOG.
      */
-    private static final Logger LOG = LoggerFactory.getLogger(StatisticController.class);
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * The Constant DATE_VALIDATION_ERROR_MESSAGE.
@@ -306,6 +307,8 @@ public class StatisticController extends AbstractController<FileItem> {
 
     private List<GlobalDelayListingData> globalDelayListingDataList;
 
+    private List<GlobalQuantityListingData> globalQuantityListingDataList;
+
     private List<DelayListingStakeholderData> delayListingStakeholderDataList;
 
     private List<ExportNshDestinationData> exportNshDestinationDataList;
@@ -320,8 +323,8 @@ public class StatisticController extends AbstractController<FileItem> {
      */
     @PostConstruct
     public void init() {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug(Constants.INIT_LOG_INFO_MESSAGE, getClass().getName());
+        if (logger.isDebugEnabled()) {
+            logger.debug(Constants.INIT_LOG_INFO_MESSAGE, getClass().getName());
         }
         decisionType.add(FinalDecisionType.CCT.getType());
         decisionType.add(FinalDecisionType.AP.getType());
@@ -427,7 +430,7 @@ public class StatisticController extends AbstractController<FileItem> {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.DAY_OF_MONTH, 1);
         cteFilter.setCreationFromDate(c.getTime());
-        cteFilter.setCreationToDate(new Date());
+        cteFilter.setCreationToDate(Calendar.getInstance().getTime());
 //            doActivityReportFilter();
     }
 
@@ -437,8 +440,17 @@ public class StatisticController extends AbstractController<FileItem> {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.DAY_OF_MONTH, 1);
         cteFilter.setCreationFromDate(c.getTime());
-        cteFilter.setCreationToDate(new Date());
+        cteFilter.setCreationToDate(Calendar.getInstance().getTime());
         globalDelayListingDataList = new ArrayList<>();
+    }
+
+    public synchronized void initGlobalQuantityListingSearch() {
+        cteFilter = new CteFilter();
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.DAY_OF_MONTH, 1);
+        cteFilter.setCreationFromDate(c.getTime());
+        cteFilter.setCreationToDate(Calendar.getInstance().getTime());
+        globalQuantityListingDataList = new ArrayList<>();
     }
 
     public void initDelayListingStakeholderSearch() {
@@ -447,7 +459,7 @@ public class StatisticController extends AbstractController<FileItem> {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.DAY_OF_MONTH, 1);
         cteFilter.setCreationFromDate(c.getTime());
-        cteFilter.setCreationToDate(new Date());
+        cteFilter.setCreationToDate(Calendar.getInstance().getTime());
         delayListingStakeholderDataList = new ArrayList<>();
     }
 
@@ -457,7 +469,7 @@ public class StatisticController extends AbstractController<FileItem> {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.DAY_OF_MONTH, 1);
         cteFilter.setValidationFromDate(c.getTime());
-        cteFilter.setValidationToDate(new Date());
+        cteFilter.setValidationToDate(Calendar.getInstance().getTime());
         exportNshDestinationDataList = new ArrayList<>();
     }
 
@@ -487,7 +499,7 @@ public class StatisticController extends AbstractController<FileItem> {
             final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, ControllerConstants.Pages.FO.SEARCH_SAMPLE_BY_LABORATORY));
             extContext.redirect(url);
         } catch (final IOException ioe) {
-            LOG.error(ioe.getMessage(), ioe);
+            logger.error(ioe.getMessage(), ioe);
         }
     }
 
@@ -502,7 +514,7 @@ public class StatisticController extends AbstractController<FileItem> {
             final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, ControllerConstants.Pages.FO.SEARCH_FILE_ITEM_BY_DESICION));
             extContext.redirect(url);
         } catch (final IOException ioe) {
-            LOG.error(ioe.getMessage(), ioe);
+            logger.error(ioe.getMessage(), ioe);
         }
     }
 
@@ -519,7 +531,7 @@ public class StatisticController extends AbstractController<FileItem> {
             final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, ControllerConstants.Pages.FO.SEARCH_ANALYSE_BY_lABORATORY));
             extContext.redirect(url);
         } catch (final IOException ioe) {
-            LOG.error(ioe.getMessage(), ioe);
+            logger.error(ioe.getMessage(), ioe);
         }
     }
 
@@ -534,7 +546,7 @@ public class StatisticController extends AbstractController<FileItem> {
             final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, ControllerConstants.Pages.FO.SEARCH_HISTORIC_CLIENT_BY_DECISION));
             extContext.redirect(url);
         } catch (final IOException ioe) {
-            LOG.error(ioe.getMessage(), ioe);
+            logger.error(ioe.getMessage(), ioe);
         }
     }
 
@@ -549,7 +561,7 @@ public class StatisticController extends AbstractController<FileItem> {
             final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, ControllerConstants.Pages.FO.SEARCH_HISTORIC_CLIENT_BY_PRODUCT));
             extContext.redirect(url);
         } catch (final IOException ioe) {
-            LOG.error(ioe.getMessage(), ioe);
+            logger.error(ioe.getMessage(), ioe);
         }
     }
 
@@ -564,7 +576,7 @@ public class StatisticController extends AbstractController<FileItem> {
             final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, ControllerConstants.Pages.FO.SEARCH_INSPECTION_DESTRIBUTION));
             extContext.redirect(url);
         } catch (final IOException ioe) {
-            LOG.error(ioe.getMessage(), ioe);
+            logger.error(ioe.getMessage(), ioe);
         }
     }
 
@@ -579,7 +591,7 @@ public class StatisticController extends AbstractController<FileItem> {
             final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, ControllerConstants.Pages.FO.SEARCH_DESICIONS_DELIVREES));
             extContext.redirect(url);
         } catch (final IOException ioe) {
-            LOG.error(ioe.getMessage(), ioe);
+            logger.error(ioe.getMessage(), ioe);
         }
 
     }
@@ -595,7 +607,7 @@ public class StatisticController extends AbstractController<FileItem> {
             final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, ControllerConstants.Pages.FO.SEARCH_PRODUCTS_QUANTITY));
             extContext.redirect(url);
         } catch (final IOException ioe) {
-            LOG.error(ioe.getMessage(), ioe);
+            logger.error(ioe.getMessage(), ioe);
         }
     }
 
@@ -607,7 +619,7 @@ public class StatisticController extends AbstractController<FileItem> {
             final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, ControllerConstants.Pages.FO.STATISTIC_EXPORT_NSH_DESTINIATION));
             extContext.redirect(url);
         } catch (final IOException ioe) {
-            LOG.error(ioe.getMessage(), ioe);
+            logger.error(ioe.getMessage(), ioe);
         }
     }
 
@@ -619,7 +631,7 @@ public class StatisticController extends AbstractController<FileItem> {
             final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, ControllerConstants.Pages.FO.STATISTIC_EXPORT_NSH_DESTINIATION_SENDER));
             extContext.redirect(url);
         } catch (final IOException ioe) {
-            LOG.error(ioe.getMessage(), ioe);
+            logger.error(ioe.getMessage(), ioe);
         }
     }
 
@@ -631,7 +643,7 @@ public class StatisticController extends AbstractController<FileItem> {
             final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, ControllerConstants.Pages.FO.STATISTIC_DELAY_LISTING_STAKEHOLDER));
             extContext.redirect(url);
         } catch (final IOException ioe) {
-            LOG.error(ioe.getMessage(), ioe);
+            logger.error(ioe.getMessage(), ioe);
         }
     }
 
@@ -643,7 +655,19 @@ public class StatisticController extends AbstractController<FileItem> {
             final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, ControllerConstants.Pages.FO.STATISTIC_GLOBAL_DELAY_LISTING));
             extContext.redirect(url);
         } catch (final IOException ioe) {
-            LOG.error(ioe.getMessage(), ioe);
+            logger.error(ioe.getMessage(), ioe);
+        }
+    }
+
+    public void goToGlobalQuantityListingSearchPage() {
+        try {
+            initGlobalQuantityListingSearch();
+            final FacesContext context = FacesContext.getCurrentInstance();
+            final ExternalContext extContext = context.getExternalContext();
+            final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, ControllerConstants.Pages.FO.STATISTIC_GLOBAL_QUANTITY_LISTING));
+            extContext.redirect(url);
+        } catch (final IOException ioe) {
+            logger.error(ioe.getMessage(), ioe);
         }
     }
 
@@ -656,7 +680,7 @@ public class StatisticController extends AbstractController<FileItem> {
             final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, ControllerConstants.Pages.FO.STATISTIC_ACTIVITY_REPORT));
             extContext.redirect(url);
         } catch (final IOException ioe) {
-            LOG.error(ioe.getMessage(), ioe);
+            logger.error(ioe.getMessage(), ioe);
         }
 
     }
@@ -673,7 +697,7 @@ public class StatisticController extends AbstractController<FileItem> {
             final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, ControllerConstants.Pages.FO.STATISTIC_PINDING_FILES));
             extContext.redirect(url);
         } catch (final IOException ioe) {
-            LOG.error(ioe.getMessage(), ioe);
+            logger.error(ioe.getMessage(), ioe);
         }
 
     }
@@ -689,7 +713,7 @@ public class StatisticController extends AbstractController<FileItem> {
             final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, ControllerConstants.Pages.FO.SEARCH_PRODUCTS_QUANTITY_BY_DRD));
             extContext.redirect(url);
         } catch (final IOException ioe) {
-            LOG.error(ioe.getMessage(), ioe);
+            logger.error(ioe.getMessage(), ioe);
         }
     }
 
@@ -704,7 +728,7 @@ public class StatisticController extends AbstractController<FileItem> {
             final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, ControllerConstants.Pages.FO.SEARCH_STATISTICS_ON_BUSINESS));
             extContext.redirect(url);
         } catch (final IOException ioe) {
-            LOG.error(ioe.getMessage(), ioe);
+            logger.error(ioe.getMessage(), ioe);
         }
     }
 
@@ -854,8 +878,7 @@ public class StatisticController extends AbstractController<FileItem> {
             return;
         }
 
-        fileItemByClientDesicionList = commonService.fileItemByCompanyAndDecicionByFilter(historicClientFilter, getLoggedUser(),
-                getCurrentAdministration());
+        fileItemByClientDesicionList = commonService.fileItemByCompanyAndDecicionByFilter(historicClientFilter, getLoggedUser(), getCurrentAdministration());
     }
 
     /**
@@ -1101,15 +1124,9 @@ public class StatisticController extends AbstractController<FileItem> {
         }
     }
 
-    public void doGlobalDelayListingFilter() {
+    public synchronized void doGlobalQuantityListingFilter() {
 
-        if (cteFilter.getCreationFromDate() != null && cteFilter.getCreationToDate() != null && cteFilter.getCreationFromDate().after(cteFilter.getCreationToDate())) {
-            JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(DATE_VALIDATION_ERROR_MESSAGE));
-            return;
-        }
-
-        if ((cteFilter.getValidationFromDate() == null && cteFilter.getValidationToDate() != null) || (cteFilter.getValidationFromDate() != null && cteFilter.getValidationToDate() == null)) {
-            JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString("DateValidationErrorMessage"));
+        if (!validate()) {
             return;
         }
 
@@ -1120,6 +1137,64 @@ public class StatisticController extends AbstractController<FileItem> {
         if (cteFilter.getValidationToDate() != null) {
             cteFilter.setValidationToDate(toLastTimeOfDay(cteFilter.getValidationToDate()));
         }
+
+        List<Object[]> objectList = commonService.getGlobalQuantityListing(cteFilter, loggedUser);
+        globalQuantityListingDataList = new ArrayList<>();
+        for (Object[] object : objectList) {
+            try {
+                GlobalQuantityListingData globalQuantity = new GlobalQuantityListingData();
+                if (object[0] != null) {
+                    globalQuantity.setExpecNumber(object[0].toString());
+                }
+                if (object[1] != null) {
+                    globalQuantity.setSubfileNumber(object[1].toString());
+                }
+                if (object[2] != null) {
+                    globalQuantity.setProcessName(object[2].toString());
+                }
+                if (object[3] != null) {
+                    globalQuantity.setExporterNiu(object[3].toString());
+                }
+                if (object[4] != null) {
+                    globalQuantity.setExporterName(object[4].toString());
+                }
+                if (object[5] != null) {
+                    globalQuantity.setProductType(object[5].toString());
+                }
+                if (object[6] != null) {
+                    globalQuantity.setEntryDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").parse(object[6].toString()));
+                }
+                if (object[7] != null) {
+                    globalQuantity.setReleaseDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").parse(object[7].toString()));
+                }
+                if (object[8] != null) {
+                    globalQuantity.setQuantity(object[8].toString());
+                }
+                if (object[9] != null) {
+                    globalQuantity.setVolume(object[9].toString());
+                }
+
+                globalQuantityListingDataList.add(globalQuantity);
+            } catch (Exception ex) {
+                logger.error(ex.getMessage(), ex);
+            }
+        }
+    }
+
+    public void doGlobalDelayListingFilter() {
+
+        if (!validate()) {
+            return;
+        }
+
+        //Adjust the end-date to 23:59:59
+        if (cteFilter.getCreationToDate() != null) {
+            cteFilter.setCreationToDate(toLastTimeOfDay(cteFilter.getCreationToDate()));
+        }
+        if (cteFilter.getValidationToDate() != null) {
+            cteFilter.setValidationToDate(toLastTimeOfDay(cteFilter.getValidationToDate()));
+        }
+
         final List<Object[]> objectList = commonService.getGlobalDelayListing(cteFilter, loggedUser);
         globalDelayListingDataList = new ArrayList<>();
         for (Object[] object : objectList) {
@@ -1167,24 +1242,23 @@ public class StatisticController extends AbstractController<FileItem> {
                 }
                 globalDelayListingDataList.add(globalDelay);
             } catch (ParseException ex) {
-                java.util.logging.Logger.getLogger(StatisticController.class.getName()).log(Level.SEVERE, null, ex);
+                logger.error(ex.getMessage(), ex);
             }
         }
     }
 
-    public static void main(String[] args) {
-        Date dateFrom;
-        try {
-//                dateFrom = new SimpleDateFormat("dd/MM/yy HH:mm:ss.S").parse("05/07/18 15:12:34.276000000");
-//                System.out.println(diffDate(dateFrom, null));
-//                String diff = "14201,700844";
-            String diff2 = "14201.700844";
-//                System.out.println(formatDelaySecond(diff));
-            System.out.println(formatDelaySecond(diff2));
-        } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(StatisticController.class.getName()).log(Level.SEVERE, null, ex);
+    private boolean validate() {
+        if (cteFilter.getCreationFromDate() != null && cteFilter.getCreationToDate() != null && cteFilter.getCreationFromDate().after(cteFilter.getCreationToDate())) {
+            JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(DATE_VALIDATION_ERROR_MESSAGE));
+            return false;
         }
 
+        if ((cteFilter.getValidationFromDate() == null && cteFilter.getValidationToDate() != null) || (cteFilter.getValidationFromDate() != null && cteFilter.getValidationToDate() == null)) {
+            JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString("DateValidationErrorMessage"));
+            return false;
+        }
+
+        return true;
     }
 
     public static String formatDelaySecond(String second) {
@@ -1208,15 +1282,15 @@ public class StatisticController extends AbstractController<FileItem> {
         return res.toString();
     }
 
-    public static String diffDate(Date dateFrom, Date dateTo) {
+    public String diffDate(Date dateFrom, Date dateTo) {
         try {
             if (dateTo == null) {
-                dateTo = new Date();
+                dateTo = Calendar.getInstance().getTime();
             }
             long diff = dateTo.getTime() - dateFrom.getTime();
             return displayDateDifference(diff);
         } catch (Exception e) {
-            java.util.logging.Logger.getLogger(StatisticController.class.getName()).log(Level.SEVERE, e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
         return null;
     }
@@ -1447,6 +1521,14 @@ public class StatisticController extends AbstractController<FileItem> {
 
     public void setGlobalDelayListingDataList(List<GlobalDelayListingData> globalDelayListingDataList) {
         this.globalDelayListingDataList = globalDelayListingDataList;
+    }
+
+    public List<GlobalQuantityListingData> getGlobalQuantityListingDataList() {
+        return globalQuantityListingDataList;
+    }
+
+    public void setGlobalQuantityListingDataList(List<GlobalQuantityListingData> globalQuantityListingDataList) {
+        this.globalQuantityListingDataList = globalQuantityListingDataList;
     }
 
     public List<ActivityReportData> getActivityReportDataList() {
@@ -1985,7 +2067,7 @@ public class StatisticController extends AbstractController<FileItem> {
                 extContext.redirect(url);
             }
         } catch (IOException ex) {
-            LOG.error(ex.getMessage(), ex);
+            logger.error(ex.getMessage(), ex);
         }
     }
 

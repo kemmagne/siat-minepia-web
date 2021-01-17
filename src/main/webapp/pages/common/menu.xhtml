@@ -210,6 +210,10 @@
                                 styleClass="pendingFiles" value="#{bundle['appmenu_statistic_globalDelayListing']}"
                                 actionListener="#{statisticController.goToGlobalDelayListingSearchPage}" rendered="#{request.isUserInRole('SUPER') or request.isUserInRole('STAT')}" />
 
+                    <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="globalQuantityListingMenuItem"
+                                styleClass="pendingFiles" value="#{bundle['appmenu_statistic_globalQuantityListing']}"
+                                actionListener="#{statisticController.goToGlobalQuantityListingSearchPage}" rendered="#{request.isUserInRole('SUPER') or request.isUserInRole('STAT')}" />
+
                     <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="delayListingStakeholderMenuItem"
                                 styleClass="pendingFiles" value="#{bundle['appmenu_statistic_DelayListingStakeholder']}"
                                 actionListener="#{statisticController.goToDelayListingStakeholderSearchPage()}" rendered="#{request.isUserInRole('SUPER') or request.isUserInRole('STAT')}" />

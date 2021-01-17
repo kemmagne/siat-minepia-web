@@ -19,6 +19,7 @@
 	<field name="transit" class="java.lang.Boolean"/>
 	<field name="deliveryPlace" class="java.lang.String"/>
 	<field name="exporter" class="java.lang.String"/>
+	<field name="userAddInfos" class="java.lang.String"/>
 	<background>
 		<band height="802">
 			<printWhenExpression><![CDATA[$P{DRAFT}]]></printWhenExpression>

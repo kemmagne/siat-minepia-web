@@ -87,6 +87,11 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
         if (file.getClient() != null) {
             ctCctCpEFileVo.setExporterName(file.getClient().getCompanyName());
             ctCctCpEFileVo.setExporterAddress(file.getClient().getFirstAddress());
+            if (file.getClient().getCountry() != null) {
+                ctCctCpEFileVo.setExporterCountry(file.getClient().getCountry().getCountryName());
+            }
+            ctCctCpEFileVo.setExporterTown(file.getClient().getCity());
+            ctCctCpEFileVo.setExporterPoBox(file.getClient().getPostalCode());
         }
         ctCctCpEFileVo.setOrigin(file.getCountryOfOrigin() != null ? (file.getCountryOfOrigin().getCountryNameFr() != null ? file.getCountryOfOrigin().getCountryNameFr() : file.getCountryOfOrigin().getCountryName()) : null);
         ctCctCpEFileVo.setDestination(file.getCountryOfDestination() != null ? (file.getCountryOfDestination().getCountryNameFr() != null ? file.getCountryOfDestination().getCountryNameFr() : file.getCountryOfDestination().getCountryName()) : null);
@@ -144,6 +149,15 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                     case "DESTINATAIRE_AUTRE_CONTACT":
                         ctCctCpEFileVo.setConsignee(fileFieldValue1.getValue());
                         break;
+                    case "DESTINATAIRE_ADRESSE_PAYSADDRESS_NOMPAYS":
+                        ctCctCpEFileVo.setConsigneeCountry(fileFieldValue1.getValue());
+                        break;
+                    case "DESTINATAIRE_ADRESSE_VILLE":
+                        ctCctCpEFileVo.setConsigneeTown(fileFieldValue1.getValue());
+                        break;
+                    case "DESTINATAIRE_ADRESSE_BP":
+                        ctCctCpEFileVo.setConsigneePoBox(fileFieldValue1.getValue());
+                        break;
                     case "CLIENT_AUTRE_CONTACT":
                         ctCctCpEFileVo.setExporter(fileFieldValue1.getValue());
                         break;
@@ -152,6 +166,9 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                         break;
                     case "NUMEROS_LOTS":
                         packageNumber = fileFieldValue1.getValue();
+                        break;
+                    case "AUTRE_INFORMATION_RENSEIGNEMENT_COMPLEMENTAIRE":
+                        ctCctCpEFileVo.setUserAddInfos(fileFieldValue1.getValue());
                         break;
                     case "TYPE_DOSSIER_EGUCE":
                         ctCctCpEFileVo.setTransit("2".equals(fileFieldValue1.getValue()));

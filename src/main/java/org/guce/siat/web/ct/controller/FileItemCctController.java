@@ -237,7 +237,7 @@ public class FileItemCctController extends AbstractController<File> {
                         lastDecisionDate2 = file2.getCreatedDate();
                     }
 
-                    return lastDecisionDate2.compareTo(lastDecisionDate1);
+                    return lastDecisionDate1.compareTo(lastDecisionDate2);
                 }
             });
             setFirstCheck(false);
