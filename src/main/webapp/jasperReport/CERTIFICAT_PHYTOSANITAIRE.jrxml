@@ -245,14 +245,14 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					<textElement textAlignment="Left">
 						<font size="6" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{exporter} != null ? $F{exporter} : ($F{exporterName} + ($F{exporterCountry} != null ? (" ; " + $F{exporterCountry}) : "") + ($F{exporterTown} != null ? (" ; " + $F{exporterTown}) : "") + ($F{exporterAddress} != null ? (" ; " + $F{exporterAddress}) : "") + ($F{exporterPoBox} != null ? (" ; " + $F{exporterPoBox}) : ""))]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{exporter} != null ? $F{exporter} : ($F{exporterName} + "\n" + ($F{exporterCountry} != null ? (" | " + $F{exporterCountry}) : "") + ($F{exporterTown} != null ? (" | " + $F{exporterTown}) : "") + ($F{exporterAddress} != null ? (" | " + $F{exporterAddress}) : "") + ($F{exporterPoBox} != null ? (" | " + $F{exporterPoBox}) : ""))]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
 					<reportElement stretchType="RelativeToBandHeight" x="4" y="150" width="240" height="46" uuid="2e3feed9-6f97-4541-9742-8aa7de3939e2"/>
 					<textElement>
 						<font size="6" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{consignee} != null ? $F{consignee} : ($F{consigneeName} + ($F{consigneeCountry} != null ? (" ; " + $F{consigneeCountry}) : "") + ($F{consigneeTown} != null ? (" ; " + $F{consigneeTown}) : "") + ($F{consigneeAddress1} != null ? (" ; " + $F{consigneeAddress1}) : "") + ($F{consigneePoBox} != null ? (" ; " + $F{consigneePoBox}) : ""))]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{consignee} != null ? $F{consignee} : ($F{consigneeName} + "\n" + ($F{consigneeCountry} != null ? (" | " + $F{consigneeCountry}) : "") + ($F{consigneeTown} != null ? (" | " + $F{consigneeTown}) : "") + ($F{consigneeAddress1} != null ? (" | " + $F{consigneeAddress1}) : "") + ($F{consigneePoBox} != null ? (" | " + $F{consigneePoBox}) : ""))]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
 					<reportElement x="354" y="201" width="198" height="27" uuid="bedfdf25-bb44-4c25-a5e4-b9347ee85d96"/>

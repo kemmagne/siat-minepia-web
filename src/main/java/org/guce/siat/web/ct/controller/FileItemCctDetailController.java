@@ -39,7 +39,6 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlInputTextarea;
 import javax.faces.component.html.HtmlOutputLabel;
-import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.component.html.HtmlPanelGroup;
 import javax.faces.component.html.HtmlSelectBooleanCheckbox;
@@ -801,6 +800,11 @@ public class FileItemCctDetailController extends DefaultDetailController {
     private List<FileTypeDto> relatedFileTypesInfos;
 
     private final CctDetailControllerHelper helper = new CctDetailControllerHelper();
+
+    private static final String COMMON_OBSERVATION_LABEL = "observation";
+    private String commonObservation;
+    private boolean commonObservationPrintable;
+    private boolean commonObservationRequired;
 
     /**
      * Inits the.
@@ -1604,8 +1608,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
                 analyseLaboratories = laboratoryService.findByAdministration(getLoggedUser().getAdministration());
             } else {
-                showErrorFacesMessage(ControllerConstants.Bundle.Messages.CHECK_ANALYSE_DECISION_ERROR,
-                        ControllerConstants.Bundle.Messages.CHECK_PRODUCTS_DECISION_MSG);
+                showErrorFacesMessage(ControllerConstants.Bundle.Messages.CHECK_ANALYSE_DECISION_ERROR, ControllerConstants.Bundle.Messages.CHECK_PRODUCTS_DECISION_MSG);
 
             }
         } // fourniture des informations relatives au traitement
@@ -1710,8 +1713,6 @@ public class FileItemCctDetailController extends DefaultDetailController {
     }
 
     private void buildGenericFormFromDataType(List<DataType> dataTypes) {
-        String stringId = null;
-
         for (final DataType dataType : dataTypes) {
 
             if (BooleanUtils.toBoolean(dataType.getDisabled())) {
@@ -1735,18 +1736,21 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
             final FacesContext context = FacesContext.getCurrentInstance();
 
-            if (dataType.getId() != null) {
-                stringId = String.valueOf(dataType.getId());
-            }
+            String stringId = dataType.getId().toString();
+
             // Label for the component
-            final HtmlOutputLabel htmlOutputLabel = (HtmlOutputLabel) context.getApplication().createComponent(HtmlOutputLabel.COMPONENT_TYPE);
-            htmlOutputLabel.setFor(ID_DECISION_LABEL + stringId);
-            if (FacesContext.getCurrentInstance().getViewRoot().getLocale().equals(Locale.FRENCH)) {
-                htmlOutputLabel.setValue(dataType.getLabel());
-            } else {
-                htmlOutputLabel.setValue(dataType.getLabelEn());
+            String label = dataType.getLabel().toLowerCase();
+            commonObservationPrintable = dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode()) && (label.equalsIgnoreCase(COMMON_OBSERVATION_LABEL) || label.startsWith(COMMON_OBSERVATION_LABEL));
+            if (!commonObservationPrintable) {
+                final HtmlOutputLabel htmlOutputLabel = (HtmlOutputLabel) context.getApplication().createComponent(HtmlOutputLabel.COMPONENT_TYPE);
+                htmlOutputLabel.setFor(ID_DECISION_LABEL + stringId);
+                if (FacesContext.getCurrentInstance().getViewRoot().getLocale().equals(Locale.FRENCH)) {
+                    htmlOutputLabel.setValue(label);
+                } else {
+                    htmlOutputLabel.setValue(dataType.getLabelEn());
+                }
+                decisionDiv.getChildren().add(htmlOutputLabel);
             }
-            decisionDiv.getChildren().add(htmlOutputLabel);
 
             final HtmlPanelGroup htmlPanelGroup = (HtmlPanelGroup) context.getApplication().createComponent(HtmlPanelGroup.COMPONENT_TYPE);
 
@@ -1766,8 +1770,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                     booleanCheckbox.setRequired(true);
                     booleanCheckbox.setRequiredMessage(dataType.getLabel()
                             + Constants.SPACE
-                            + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                                    "RequiredMessage_standard"));
+                            + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString("RequiredMessage_standard"));
                 }
                 booleanCheckbox.setId(ID_DECISION_LABEL + stringId);
                 htmlPanelGroup.getChildren().add(booleanCheckbox);
@@ -1778,8 +1781,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                     calendar.setRequired(true);
                     calendar.setRequiredMessage(dataType.getLabel()
                             + Constants.SPACE
-                            + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                                    "RequiredMessage_standard"));
+                            + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString("RequiredMessage_standard"));
                 }
                 calendar.setId(ID_DECISION_LABEL + stringId);
                 String pattern = DateUtils.FRENCH_DATE;
@@ -1789,23 +1791,26 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 calendar.setNavigator(true);
                 htmlPanelGroup.getChildren().add(calendar);
 
-            } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode())) {
+            } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode()) && !commonObservationPrintable) {
                 final HtmlInputTextarea inputTextarea = (HtmlInputTextarea) context.getApplication().createComponent(HtmlInputTextarea.COMPONENT_TYPE);
                 if (dataType.getRequired()) {
                     inputTextarea.setRequired(true);
-                    inputTextarea.setRequiredMessage(dataType.getLabel()
+                    inputTextarea.setRequiredMessage(label
                             + Constants.SPACE
-                            + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                                    "RequiredMessage_standard"));
+                            + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString("RequiredMessage_standard"));
                 }
                 inputTextarea.setRows(10);
                 inputTextarea.setId(ID_DECISION_LABEL + stringId);
                 htmlPanelGroup.getChildren().add(inputTextarea);
+            } else if (commonObservationPrintable) {
+                commonObservationRequired = BooleanUtils.toBoolean(dataType.getRequired());
             }
 
-            final Message message = (Message) context.getApplication().createComponent(Message.COMPONENT_TYPE);
-            message.setFor(ID_DECISION_LABEL + stringId);
-            htmlPanelGroup.getChildren().add(message);
+            if (!commonObservationPrintable) {
+                final Message message = (Message) context.getApplication().createComponent(Message.COMPONENT_TYPE);
+                message.setFor(ID_DECISION_LABEL + stringId);
+                htmlPanelGroup.getChildren().add(message);
+            }
 
             decisionDiv.getChildren().add(htmlPanelGroup);
         }
@@ -2470,8 +2475,12 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 itemFlowData.setValue(itemFlowDataTypeValue);
 
             } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode())) {
-                final HtmlInputTextarea valueDataType = (HtmlInputTextarea) decisionDiv.findComponent(ID_DECISION_LABEL + dataType.getId());
-                itemFlowData.setValue(valueDataType.getValue().toString());
+                if (!commonObservationPrintable) {
+                    final HtmlInputTextarea valueDataType = (HtmlInputTextarea) decisionDiv.findComponent(ID_DECISION_LABEL + dataType.getId());
+                    itemFlowData.setValue(valueDataType.getValue().toString());
+                } else {
+                    itemFlowData.setValue(commonObservation);
+                }
             }
 
             flowDatas.add(itemFlowData);
@@ -2595,8 +2604,12 @@ public class FileItemCctDetailController extends DefaultDetailController {
                     itemFlowData.setValue(DateUtils.formatSimpleDateFromObject(DateUtils.FRENCH_DATE, valueDataType.getValue()));
 
                 } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode())) {
-                    final HtmlInputTextarea valueDataType = (HtmlInputTextarea) dipatchDiv.findComponent(ID_DISPATCH_LABEL + dataType.getId());
-                    itemFlowData.setValue(valueDataType.getValue().toString());
+                    if (!commonObservationPrintable) {
+                        final HtmlInputTextarea valueDataType = (HtmlInputTextarea) dipatchDiv.findComponent(ID_DISPATCH_LABEL + dataType.getId());
+                        itemFlowData.setValue(valueDataType.getValue().toString());
+                    } else {
+                        itemFlowData.setValue(commonObservation);
+                    }
                 }
                 flowDatas.add(itemFlowData);
             }
@@ -2698,31 +2711,32 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 stringId = String.valueOf(dataType.getId());
             }
 
-            final HtmlPanelGroup htmlPanelGroup = (HtmlPanelGroup) context.getApplication().createComponent(
-                    HtmlPanelGroup.COMPONENT_TYPE);
+            String label = dataType.getLabel().toLowerCase();
+            commonObservationPrintable = dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode()) && (label.equalsIgnoreCase(COMMON_OBSERVATION_LABEL) || label.startsWith(COMMON_OBSERVATION_LABEL));
 
-            final HtmlOutputText labelOutput = (HtmlOutputText) context.getApplication().createComponent(
-                    HtmlOutputText.COMPONENT_TYPE);
-            if (FacesContext.getCurrentInstance().getViewRoot().getLocale().equals(Locale.FRENCH)) {
-                labelOutput.setValue(dataType.getLabel());
-            } else {
-                labelOutput.setValue(dataType.getLabelEn());
+            if (!commonObservationPrintable) {
+                final HtmlPanelGroup htmlPanelGroup = (HtmlPanelGroup) context.getApplication().createComponent(HtmlPanelGroup.COMPONENT_TYPE);
+
+                final HtmlOutputLabel labelOutput = (HtmlOutputLabel) context.getApplication().createComponent(HtmlOutputLabel.COMPONENT_TYPE);
+                if (FacesContext.getCurrentInstance().getViewRoot().getLocale().equals(Locale.FRENCH)) {
+                    labelOutput.setValue(dataType.getLabel());
+                } else {
+                    labelOutput.setValue(dataType.getLabelEn());
+                }
+                htmlPanelGroup.getChildren().add(labelOutput);
+
+                if (dataType.getRequired()) {
+                    final HtmlOutputLabel labelOutputRequired = (HtmlOutputLabel) context.getApplication().createComponent(HtmlOutputLabel.COMPONENT_TYPE);
+                    labelOutputRequired.setValue("*");
+                    labelOutputRequired.setStyleClass(STYLE_CLASS);
+                    htmlPanelGroup.getChildren().add(labelOutputRequired);
+                }
+
+                dipatchDiv.getChildren().add(htmlPanelGroup);
             }
-            htmlPanelGroup.getChildren().add(labelOutput);
-
-            if (dataType.getRequired()) {
-                final HtmlOutputText labelOutputRequired = (HtmlOutputText) context.getApplication().createComponent(
-                        HtmlOutputText.COMPONENT_TYPE);
-                labelOutputRequired.setValue("*");
-                labelOutputRequired.setStyleClass(STYLE_CLASS);
-                htmlPanelGroup.getChildren().add(labelOutputRequired);
-            }
-
-            dipatchDiv.getChildren().add(htmlPanelGroup);
 
             if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode())) {
-                final HtmlInputText inputText = (HtmlInputText) context.getApplication()
-                        .createComponent(HtmlInputText.COMPONENT_TYPE);
+                final HtmlInputText inputText = (HtmlInputText) context.getApplication().createComponent(HtmlInputText.COMPONENT_TYPE);
                 if (dataType.getRequired()) {
                     inputText.setRequired(true);
                 }
@@ -2734,8 +2748,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 }
                 dipatchDiv.getChildren().add(inputText);
             } else if (dataType.getType().equals(DataTypeEnnumeration.CHEKBOX.getCode())) {
-                final HtmlSelectBooleanCheckbox booleanCheckbox = (HtmlSelectBooleanCheckbox) context.getApplication()
-                        .createComponent(HtmlSelectBooleanCheckbox.COMPONENT_TYPE);
+                final HtmlSelectBooleanCheckbox booleanCheckbox = (HtmlSelectBooleanCheckbox) context.getApplication().createComponent(HtmlSelectBooleanCheckbox.COMPONENT_TYPE);
                 if (dataType.getRequired()) {
                     booleanCheckbox.setRequired(true);
                 }
@@ -2764,9 +2777,8 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 }
                 dipatchDiv.getChildren().add(calendar);
 
-            } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode())) {
-                final HtmlInputTextarea inputTextarea = (HtmlInputTextarea) context.getApplication().createComponent(
-                        HtmlInputTextarea.COMPONENT_TYPE);
+            } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode()) && !commonObservationPrintable) {
+                final HtmlInputTextarea inputTextarea = (HtmlInputTextarea) context.getApplication().createComponent(HtmlInputTextarea.COMPONENT_TYPE);
                 if (dataType.getRequired()) {
                     inputTextarea.setRequired(true);
                 }
@@ -2778,6 +2790,8 @@ public class FileItemCctDetailController extends DefaultDetailController {
                     inputTextarea.setLabel(dataType.getLabelEn());
                 }
                 dipatchDiv.getChildren().add(inputTextarea);
+            } else if (commonObservationPrintable) {
+                commonObservationRequired = BooleanUtils.toBoolean(dataType.getRequired());
             }
         }
     }
@@ -3967,32 +3981,40 @@ public class FileItemCctDetailController extends DefaultDetailController {
      * @return the streamed content
      */
     public synchronized StreamedContent downloadReport(boolean draft) {
-        final List<FileTypeFlowReport> fileTypeFlowReportsList = draft ? new ArrayList<>(fileTypeFlowReportsDraft) : new ArrayList<>(fileTypeFlowReports);
-        if (CollectionUtils.isNotEmpty(fileTypeFlowReportsList)) {
-            currentFile.setSignatory(getLoggedUser());
-            for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
-                //Begin Add new field value with report Number
-                try {
-                    final byte[] report = getReportBytes(fileTypeFlowReport, draft);
-                    if (report != null) {
-                        final InputStream is = new ByteArrayInputStream(report);
-                        String name = currentFile.getReferenceSiat() + '_' + fileTypeFlowReport.getReportName();
-                        if (draft) {
-                            name = "PREVIEW_".concat(name);
-                        }
-
-                        final StreamedContent fileToDownload = new DefaultStreamedContent(is, "application/pdf", name);
-
-                        return fileToDownload;
-                    }
-                } catch (Exception e) {
-                    logger.error(currentFile.toString(), e);
-                    final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.GENERATE_REPORT_FAILED);
-                    JsfUtil.addErrorMessage(msg);
-                }
-            }
-            currentFile.setSignatory(null);
+        List<FileTypeFlowReport> fileTypeFlowReportsList = draft ? new ArrayList<>(fileTypeFlowReportsDraft) : new ArrayList<>(fileTypeFlowReports);
+        if (CollectionUtils.isEmpty(fileTypeFlowReportsList)) {
+            return null;
         }
+
+        if (currentFile.getSignatory() == null) {
+            currentFile.setSignatory(getLoggedUser());
+        }
+        if (currentFile.getSignatureDate() == null) {
+            currentFile.setSignatureDate(java.util.Calendar.getInstance().getTime());
+        }
+
+        for (FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
+            //Begin Add new field value with report Number
+            try {
+                byte[] report = getReportBytes(fileTypeFlowReport, draft);
+                if (report != null) {
+                    InputStream is = new ByteArrayInputStream(report);
+                    String name = currentFile.getReferenceSiat() + '_' + fileTypeFlowReport.getReportName();
+                    if (draft) {
+                        name = "PREVIEW_".concat(name);
+                    }
+
+                    StreamedContent fileToDownload = new DefaultStreamedContent(is, "application/pdf", name);
+
+                    return fileToDownload;
+                }
+            } catch (Exception e) {
+                logger.error(currentFile.toString(), e);
+                final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.GENERATE_REPORT_FAILED);
+                JsfUtil.addErrorMessage(msg);
+            }
+        }
+
         return null;
     }
 
@@ -6783,6 +6805,26 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
     public Appointment getAppointment() {
         return appointment;
+    }
+
+    public String getCommonObservation() {
+        return commonObservation;
+    }
+
+    public void setCommonObservation(String commonObservation) {
+        this.commonObservation = commonObservation;
+    }
+
+    public boolean isCommonObservationPrintable() {
+        return commonObservationPrintable;
+    }
+
+    public void setCommonObservationPrintable(boolean commonObservationPrintable) {
+        this.commonObservationPrintable = commonObservationPrintable;
+    }
+
+    public boolean isCommonObservationRequired() {
+        return commonObservationRequired;
     }
 
 }

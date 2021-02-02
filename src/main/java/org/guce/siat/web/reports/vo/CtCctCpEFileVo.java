@@ -1,6 +1,7 @@
 package org.guce.siat.web.reports.vo;
 
 import java.util.Date;
+import org.guce.siat.common.model.User;
 
 /**
  * The Class CtCctCpEFileVo.
@@ -140,6 +141,8 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
      * The additional information.
      */
     private String additionalInformation;
+
+    private User signatoryUser;
 
     /**
      * The signatory name.
@@ -591,6 +594,14 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
      */
     public void setAdditionalInformation(final String additionalInformation) {
         this.additionalInformation = additionalInformation;
+    }
+
+    public User getSignatoryUser() {
+        return signatoryUser;
+    }
+
+    public void setSignatoryUser(User signatoryUser) {
+        this.signatoryUser = signatoryUser;
     }
 
     /**

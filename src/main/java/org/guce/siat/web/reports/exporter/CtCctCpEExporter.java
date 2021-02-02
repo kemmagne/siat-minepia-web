@@ -81,6 +81,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
 
         ctCctCpEFileVo.setDecisionPlace(file.getBureau().getLabelFr());
         ctCctCpEFileVo.setDecisionDate(file.getSignatureDate());
+        ctCctCpEFileVo.setSignatoryUser(file.getSignatory());
         if (file.getSignatory() != null) {
             ctCctCpEFileVo.setSignatoryName(file.getSignatory().getLastName() + " " + file.getSignatory().getFirstName());
         }
@@ -283,15 +284,13 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
             final List<String> commoditiesListAttachment = new ArrayList<>();
             int commoditiesCount = 0;
 
-            String unit = getFileFieldValueService()
-                    .findFileItemFieldValueByCodeAndFileItem("UNITE", fileItemList.get(0)).getValue();
+            String unit = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("UNITE", fileItemList.get(0)).getValue();
 
             FileItemFieldValue fileItemFieldValue;
             for (final FileItem fileItem : fileItemList) {
 
                 String comName = "";
-                fileItemFieldValue = getFileFieldValueService()
-                        .findFileItemFieldValueByCodeAndFileItem("NOM_COMMERCIAL", fileItem);
+                fileItemFieldValue = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("NOM_COMMERCIAL", fileItem);
                 if (fileItemFieldValue != null) {
                     comName = fileItemFieldValue.getValue();
                 }
@@ -301,35 +300,30 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                 }
                 String nb = "";
                 if (Utils.getCacaProductsTypes().contains(productType)) {
-                    FileItemFieldValue nsf = getFileFieldValueService()
-                            .findFileItemFieldValueByCodeAndFileItem("NOMBRE_SACS", fileItem);
+                    FileItemFieldValue nsf = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("NOMBRE_SACS", fileItem);
                     if (nsf != null) {
                         nb = nsf.getValue();
                     }
 
                     netWeight = netWeight.add(new BigDecimal(fileItem.getQuantity()));
                 } else if (Utils.getWoodProductsTypes().contains(productType)) {
-                    FileItemFieldValue ngf = getFileFieldValueService()
-                            .findFileItemFieldValueByCodeAndFileItem("NOMBRE_GRUMES", fileItem);
+                    FileItemFieldValue ngf = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("NOMBRE_GRUMES", fileItem);
                     if (ngf != null) {
                         nb = ngf.getValue();
                     } else {
                         nb = fileItem.getQuantity();
                     }
 
-                    final String volumeStr = getFileFieldValueService()
-                            .findFileItemFieldValueByCodeAndFileItem("VOLUME", fileItem).getValue();
+                    final String volumeStr = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("VOLUME", fileItem).getValue();
                     netWeight = netWeight.add(new BigDecimal(volumeStr));
                 } else if (Utils.COTONPRODUCTTYPE.equalsIgnoreCase(productType)) {
-                    FileItemFieldValue ngf = getFileFieldValueService()
-                            .findFileItemFieldValueByCodeAndFileItem("NOMBRE_GRUMES", fileItem);
+                    FileItemFieldValue ngf = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("NOMBRE_GRUMES", fileItem);
                     if (ngf != null) {
                         nb = ngf.getValue();
                     } else {
                         nb = fileItem.getQuantity();
                     }
-                    FileItemFieldValue pnf = getFileFieldValueService()
-                            .findFileItemFieldValueByCodeAndFileItem("POIDS", fileItem);
+                    FileItemFieldValue pnf = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("POIDS", fileItem);
                     if (pnf != null) {
                         netWeight = netWeight.add(new BigDecimal(pnf.getValue()));
                     } else if (StringUtils.isNotBlank(fileItem.getQuantity())) {
@@ -337,8 +331,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                     }
                     unit = Utils.getProductTypePackaging().get(productType);
                 } else {
-                    FileItemFieldValue nsf = getFileFieldValueService()
-                            .findFileItemFieldValueByCodeAndFileItem("NOMBRE_SACS", fileItem);
+                    FileItemFieldValue nsf = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("NOMBRE_SACS", fileItem);
                     if (nsf != null) {
                         nb = nsf.getValue();
                     }
@@ -352,8 +345,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                     commoditiesListAttachment.add(String.format("%s %s %s", nb, emballage, comName));
                 }
 
-                fileItemFieldValue = getFileFieldValueService()
-                        .findFileItemFieldValueByCodeAndFileItem("POIDS_BRUT", fileItem);
+                fileItemFieldValue = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("POIDS_BRUT", fileItem);
                 if (fileItemFieldValue != null) {
                     grossWeight = grossWeight.add(new BigDecimal(fileItemFieldValue.getValue()));
                 }

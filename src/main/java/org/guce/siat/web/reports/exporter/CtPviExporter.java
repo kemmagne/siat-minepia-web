@@ -318,6 +318,11 @@ public class CtPviExporter extends AbstractReportInvoker {
                     if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("NUMERO_CCT_CT_E_PVI")) {
                         entryInspectionFindingDataVo.setNumeroDecisionPVI(fileFieldValue.getValue());
                     }
+                    if (fileFieldValue.getFileField().getCode().equalsIgnoreCase("DESTINATAIRE_ADRESSE_PAYSADDRESS_NOMPAYS")) {
+                        if (StringUtils.isBlank(entryInspectionFindingDataVo.getPviDestination())) {
+                            entryInspectionFindingDataVo.setPviDestination(fileFieldValue.getValue());
+                        }
+                    }
                 }
 
                 if (this.referenceNumber != null) {

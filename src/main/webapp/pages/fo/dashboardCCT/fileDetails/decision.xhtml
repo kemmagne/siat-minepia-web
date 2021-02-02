@@ -39,6 +39,8 @@
 
                     <h:panelGrid id="dataTypeRepeater" binding="#{fileItemCctDetailController.decisionDiv}" columns="2" />
 
+                    <ui:include src="common/observation.xhtml" />
+
                     <p:panel rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'APP'}">
                         <ui:include src="../specificDecisions/appointment/calendar.xhtml" />
                     </p:panel>
