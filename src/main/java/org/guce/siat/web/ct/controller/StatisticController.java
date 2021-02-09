@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -1172,6 +1171,7 @@ public class StatisticController extends AbstractController<FileItem> {
                 }
                 if (object[9] != null) {
                     globalQuantity.setVolume(object[9].toString());
+                    globalQuantity.setVolume(globalQuantity.getVolume().replace('.', ','));
                 }
 
                 globalQuantityListingDataList.add(globalQuantity);
