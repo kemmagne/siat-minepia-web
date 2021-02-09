@@ -3052,6 +3052,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
             notificationEmail(currentFile, currentStep);
         } catch (Exception e) {
             logger.error(currentFile.toString(), e);
+            showErrorFacesMessage(ControllerConstants.Bundle.Messages.SEND_ERROR, null);
         } finally {
             if (transactionStatus != null) {
                 transactionManager.rollback(transactionStatus);
@@ -6626,16 +6627,14 @@ public class FileItemCctDetailController extends DefaultDetailController {
                         case "AUTRE_INFORMATION_CONCENTRATION":
                             treatInfo.setConcentration(fileFieldValue1.getValue());
                             break;
-                        case "AUTRE_INFORMATION_RENSEIGNEMENT_COMPLEMENTAIRE":
-                            treatInfo.setAdditionalInfos(fileFieldValue1.getValue());
-                            break;
+//                        case "AUTRE_INFORMATION_RENSEIGNEMENT_COMPLEMENTAIRE":
+//                            treatInfo.setAdditionalInfos(fileFieldValue1.getValue());
+//                            break;
                         case "AUTRE_INFORMATION_FUMIGATION":
                             treatInfo.setFumigation(Boolean.parseBoolean(fileFieldValue1.getValue()));
                             break;
                         case "AUTRE_INFORMATION_DESINFECTION":
                             treatInfo.setDisinfection(Boolean.parseBoolean(fileFieldValue1.getValue()));
-                            break;
-                        default:
                             break;
                     }
                 }
