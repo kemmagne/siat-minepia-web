@@ -63,12 +63,12 @@
         <p:panel header="#{bundle['TreatmentInfos']}" rendered="#{fileItemCctDetailController.treatmentInfos.delivrableType eq 'CCT_CT_E' or fileItemCctDetailController.phytoTransitFile}">
             <h:panelGrid columns="2">
                 <h:outputLabel value="#{bundle['TreatmentDate']}" for="TreatmentDate" />
-                    <h:panelGroup>
-                        <p:calendar navigator="true" readonlyInput="true" pattern="dd/MM/yyyy"
-                                    value="#{fileItemCctDetailController.treatmentInfos.treatmentDate}" showOn="button" id="TreatmentDate" required="true"
-                                    requiredMessage="#{bundle['TreatmentDate']} #{bundle['required']}" />
-                        <p:message for="TreatmentDate" />
-                    </h:panelGroup>
+                <h:panelGroup>
+                    <p:calendar navigator="true" readonlyInput="true" pattern="dd/MM/yyyy"
+                                value="#{fileItemCctDetailController.treatmentInfos.treatmentDate}" showOn="button" id="TreatmentDate" required="false"
+                                requiredMessage="#{bundle['TreatmentDate']} #{bundle['required']}" />
+                    <p:message for="TreatmentDate" />
+                </h:panelGroup>
                 <h:outputLabel for="TOTypeOfTreatment" value="#{bundle['TypeOfTreatment']}" />
                 <p:inputText id="TOTypeOfTreatment" title="#{bundle['TypeOfTreatment']}"
                              value="#{fileItemCctDetailController.treatmentInfos.typeOfTreatment}"
