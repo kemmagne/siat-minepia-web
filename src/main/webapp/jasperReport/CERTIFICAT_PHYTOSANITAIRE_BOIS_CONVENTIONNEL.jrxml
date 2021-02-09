@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CERTIFICAT_PHYTOSANITAIRE" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6f5c0835-9f5c-4b28-b5db-296746e60a32">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="587"/>
+	<property name="ireport.y" value="576"/>
 	<parameter name="MINADER_LOGO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -373,14 +373,14 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					<reportElement mode="Transparent" x="0" y="253" width="555" height="26" uuid="6949a6cc-9079-4663-8ef9-fb9e33558b1d"/>
 				</rectangle>
 				<staticText>
-					<reportElement x="5" y="253" width="126" height="13" uuid="bca2c8f8-0e3b-475b-9ac2-facd5917430b"/>
+					<reportElement x="3" y="253" width="126" height="13" uuid="bca2c8f8-0e3b-475b-9ac2-facd5917430b"/>
 					<textElement>
 						<font size="8"/>
 					</textElement>
 					<text><![CDATA[Déclaration additionnelle]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="5" y="265" width="126" height="13" uuid="a85cea86-b0e2-4be2-a97f-b43ddcf92bb5"/>
+					<reportElement x="3" y="265" width="126" height="13" uuid="a85cea86-b0e2-4be2-a97f-b43ddcf92bb5"/>
 					<textElement>
 						<font size="8" isItalic="true"/>
 					</textElement>
@@ -537,7 +537,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					<textFieldExpression><![CDATA[$F{decisionDate} != null ? ("Date de validation : " + new java.text.SimpleDateFormat("dd/MM/YYYY").format($F{decisionDate})) : ""]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement isPrintRepeatedValues="false" x="135" y="515" width="220" height="15" uuid="abcfac41-b434-4876-b606-aeb1c652e1ce"/>
+					<reportElement isPrintRepeatedValues="false" x="135" y="515" width="218" height="15" uuid="abcfac41-b434-4876-b606-aeb1c652e1ce"/>
 					<textElement textAlignment="Right">
 						<font size="7" isBold="true"/>
 					</textElement>
@@ -550,10 +550,10 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					</textElement>
 					<textFieldExpression><![CDATA[$F{typeOfTreatment}]]></textFieldExpression>
 				</textField>
-				<textField isBlankWhenNull="true">
-					<reportElement x="145" y="253" width="410" height="26" uuid="7572fb36-a60d-4355-83bf-e8f36339a070"/>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="135" y="253" width="420" height="26" uuid="7572fb36-a60d-4355-83bf-e8f36339a070"/>
 					<textElement>
-						<font size="8" isBold="true"/>
+						<font size="6" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{additionalDeclaration}]]></textFieldExpression>
 				</textField>
@@ -603,7 +603,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					<textFieldExpression><![CDATA[$F{concentration}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement x="3" y="460" width="175" height="55" uuid="bc0fa161-9a51-47fc-88a9-023a4eea146d"/>
+					<reportElement x="3" y="460" width="348" height="55" uuid="bc0fa161-9a51-47fc-88a9-023a4eea146d"/>
 					<textElement>
 						<font size="8" isBold="true"/>
 					</textElement>
@@ -664,16 +664,6 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 						<font size="7" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{treatmentDate} != null ? ("Date de traitement : " + new java.text.SimpleDateFormat("dd/MM/YYYY").format($F{treatmentDate})) : ""]]></textFieldExpression>
-				</textField>
-				<line>
-					<reportElement x="178" y="460" width="1" height="55" uuid="d2805ee8-a0ab-476c-901f-ae409631b926"/>
-				</line>
-				<textField isBlankWhenNull="true">
-					<reportElement x="179" y="460" width="172" height="55" uuid="0e057a99-2214-4890-81de-4e5482a0e926"/>
-					<textElement>
-						<font size="8" isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{userAddInfos}]]></textFieldExpression>
 				</textField>
 				<line>
 					<reportElement x="0" y="514" width="355" height="1" uuid="3592326e-21f7-4e2e-bb30-6037a6fa3b60"/>

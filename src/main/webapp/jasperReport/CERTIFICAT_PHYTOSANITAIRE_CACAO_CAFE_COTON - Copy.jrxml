@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CERTIFICAT_PHYTOSANITAIRE" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6f5c0835-9f5c-4b28-b5db-296746e60a32">
 	<property name="ireport.zoom" value="1.3310000000000013"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="384"/>
+	<property name="ireport.y" value="144"/>
 	<parameter name="MINADER_LOGO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -360,7 +360,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					<text><![CDATA[Il est certifié que les végétaux ou autres articles régelmentés décrits ci-desous ont été inspectés et/ou testés suivant les procédures officielles appropriées et estimés et exempt d'organismes de quarantaine comme spécifié par la partie contractante importatrice et qu'ils sont jugés conformes aux exigences phytosanitaires en vigueur de la partie contractante importatrice, y compris à celle concernant les organismes règlementés non de quarantaire. Les végétaux sont réputés pratiquement exempts d'autres organismes nuisibles]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="7" y="215" width="548" height="45" uuid="c1929352-64a1-4cb0-a090-b5bf490d0ec0"/>
+					<reportElement x="7" y="215" width="548" height="46" uuid="c1929352-64a1-4cb0-a090-b5bf490d0ec0"/>
 					<textElement>
 						<font size="8" isItalic="true"/>
 					</textElement>
@@ -370,14 +370,14 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					<reportElement mode="Transparent" x="0" y="253" width="555" height="26" uuid="6949a6cc-9079-4663-8ef9-fb9e33558b1d"/>
 				</rectangle>
 				<staticText>
-					<reportElement x="3" y="253" width="88" height="13" uuid="bca2c8f8-0e3b-475b-9ac2-facd5917430b"/>
+					<reportElement x="5" y="253" width="88" height="13" uuid="bca2c8f8-0e3b-475b-9ac2-facd5917430b"/>
 					<textElement>
 						<font size="8"/>
 					</textElement>
 					<text><![CDATA[Déclaration additionnelle]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="3" y="265" width="88" height="13" uuid="a85cea86-b0e2-4be2-a97f-b43ddcf92bb5"/>
+					<reportElement x="5" y="265" width="88" height="13" uuid="a85cea86-b0e2-4be2-a97f-b43ddcf92bb5"/>
 					<textElement>
 						<font size="8" isItalic="true"/>
 					</textElement>
@@ -548,11 +548,11 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					<textFieldExpression><![CDATA[$F{typeOfTreatment}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement x="95" y="253" width="457" height="26" uuid="7572fb36-a60d-4355-83bf-e8f36339a070"/>
+					<reportElement x="103" y="253" width="452" height="26" uuid="7572fb36-a60d-4355-83bf-e8f36339a070"/>
 					<textElement>
 						<font size="6" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{additionalDeclaration}]]></textFieldExpression>
+					<textFieldExpression><![CDATA["BONJOUR DEQNDQDMK KDMQSKJJKDMKQEMKMKMKJKM DMLQKMKMLKMKMQDIEEIOD BONJOUR DEQNDQDMK KDMQSKJJKDMKQEMKMKMKJKM DMLQKMKMLKMKMQDIEEIOD BONJOUR DEQNDQDMK KDMQSKJJKDMKQEMKMKMKJKM DMLQKMKMLKMKMQDIEEIOD BONJOUR DEQNDQDMK KDMQSKJJKDMKQEMKMKMKJKM DMLQKMKMLKMKMQDIEEIOD BONJOUR DEQNDQDMK KDMQSKJJKDMKQEMKMKMKJKM DMLQKMKMLKMKMQDIEEIOD"]]></textFieldExpression>
 				</textField>
 				<rectangle>
 					<reportElement mode="Transparent" x="298" y="316" width="15" height="15" uuid="1e96638b-f743-4566-87ad-5fb5a93d4964"/>
@@ -600,7 +600,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					<textFieldExpression><![CDATA[$F{concentration}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="3" y="460" width="346" height="55" uuid="bc0fa161-9a51-47fc-88a9-023a4eea146d"/>
+					<reportElement x="3" y="460" width="175" height="55" uuid="bc0fa161-9a51-47fc-88a9-023a4eea146d"/>
 					<textElement>
 						<font size="8" isBold="true"/>
 					</textElement>
@@ -681,6 +681,16 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 						<font size="7" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{treatmentDate} != null ? ("Date de traitement : " + new java.text.SimpleDateFormat("dd/MM/YYYY").format($F{treatmentDate})) : ""]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="178" y="460" width="1" height="55" uuid="4e715410-0d9d-4794-b0c5-7fab306775af"/>
+				</line>
+				<textField isBlankWhenNull="true">
+					<reportElement x="179" y="460" width="172" height="55" uuid="c2f6602d-0fa8-43a5-9264-7f80cfde592d"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{userAddInfos}]]></textFieldExpression>
 				</textField>
 				<line>
 					<reportElement x="0" y="514" width="355" height="1" uuid="797f9f26-0fbe-4cba-9ecc-656f9260ca38"/>
