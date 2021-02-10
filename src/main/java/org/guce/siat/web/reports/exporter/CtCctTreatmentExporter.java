@@ -79,6 +79,11 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
                         treatmentVo.setConsigneeCountry(fileFieldValue.getValue());
                     }
                     break;
+                case "INFORMATIONS_GENERALES_PAYS_DESTINATION_NOMPAYS":
+                    if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
+                        treatmentVo.setDestinationCountry(fileFieldValue.getValue());
+                    }
+                    break;
                 case "TRAITEMENT_SOCIETE_TRAITEMENT_NOM":
                     if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
                         treatmentVo.setTreatmentCompanyName(fileFieldValue.getValue());
