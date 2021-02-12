@@ -54,6 +54,7 @@ import org.guce.siat.core.ct.filter.AssignedFileItemFilter;
 import org.guce.siat.core.ct.filter.FileItemFilter;
 import org.guce.siat.core.ct.model.Laboratory;
 import org.guce.siat.core.ct.service.CommonService;
+import org.guce.siat.core.ct.service.CotationService;
 import org.guce.siat.core.ct.service.LaboratoryService;
 import org.guce.siat.web.common.AbstractController;
 import org.guce.siat.web.common.ControllerConstants;
@@ -192,6 +193,9 @@ public class SearchController extends AbstractController<FileItem> {
      */
     @ManagedProperty(value = "#{fileTypeStepService}")
     private FileTypeStepService fileTypeStepService;
+
+    @ManagedProperty(value = "#{cotationService}")
+    protected CotationService cotationService;
 
     /**
      * The filter.
@@ -434,6 +438,7 @@ public class SearchController extends AbstractController<FileItem> {
             final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, ControllerConstants.Pages.FO.ASSIGNED_FILE_ITEM_PAGE));
             extContext.redirect(url);
         } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
         }
     }
 
@@ -1741,8 +1746,9 @@ public class SearchController extends AbstractController<FileItem> {
             List<User> cotationActors;
             boolean checkMinepiaMinistry = currentFile.getDestinataire().equalsIgnoreCase("MINEPIA");
             if (checkMinepiaMinistry) {
-                cotationActors = userService.findCotationsAgentByBureauAndRole(currentFile.getBureau(),
-                        AuthorityConstants.SOCIETE_TRAITEMENT.getCode());
+                cotationActors = userService.findCotationsAgentByBureauAndRole(currentFile.getBureau(), AuthorityConstants.SOCIETE_TRAITEMENT.getCode());
+            } else if (Utils.isPhyto(currentFile)) {
+                cotationActors = cotationService.findCotationAgentsByBureauAndRoleAndProductType(currentFile);
             } else {
                 cotationActors = userService.findInspectorsByBureau(currentFile.getBureau());
             }
@@ -1757,6 +1763,14 @@ public class SearchController extends AbstractController<FileItem> {
     @Override
     public FileItem getSelected() {
         return super.getSelected();
+    }
+
+    public CotationService getCotationService() {
+        return cotationService;
+    }
+
+    public void setCotationService(CotationService cotationService) {
+        this.cotationService = cotationService;
     }
 
 }
