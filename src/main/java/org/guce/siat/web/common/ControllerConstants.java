@@ -649,6 +649,8 @@ public interface ControllerConstants {
              * The no fimex message.
              */
             String NO_FIMEX_MESSAGE = "noFimexMessage";
+
+            String ALREADY_DECIDED = "alreadyDecided";
         }
     }
 }

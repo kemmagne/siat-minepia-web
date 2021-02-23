@@ -807,6 +807,8 @@ public class FileItemCctDetailController extends DefaultDetailController {
     private boolean commonObservationPrintable;
     private boolean commonObservationRequired;
 
+    private Step currentStep;
+
     /**
      * Inits the.
      */
@@ -817,6 +819,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
             goToPreviousPage();
             return;
         }
+        currentStep = currentFileItem.getStep();
         checkMinaderMinistry = currentFile.getDestinataire().equalsIgnoreCase(Constants.MINADER_MINISTRY);
         checkMinepiaMinistry = currentFile.getDestinataire().equalsIgnoreCase(MINEPIA_MINISTRY);
         allowedRecommandation = checkIsAllowadRecommandation();
@@ -2883,7 +2886,6 @@ public class FileItemCctDetailController extends DefaultDetailController {
             } else if (hasDraftAndEnabledForDecision()) {
                 boolean allHasDecision = true;
                 boolean sameStep = true;
-                Step currentStep = currentFile.getFileItemsList().get(0).getStep();
                 for (FileItem selected : currentFile.getFileItemsList()) {
                     if (!currentStep.getStepCode().equals(selected.getStep().getStepCode())) {
                         sameStep = false;
@@ -3048,8 +3050,6 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 logger.info("####SEND DECISION Transaction commited####");
             }
 
-            File file = fileService.find(currentFile.getId());
-            Step currentStep = file.getFileItemsList().get(0).getStep();
             notificationEmail(currentFile, currentStep);
         } catch (Exception e) {
             logger.error(currentFile.toString(), e);
