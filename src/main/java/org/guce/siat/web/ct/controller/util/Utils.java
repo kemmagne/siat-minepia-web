@@ -117,7 +117,7 @@ public class Utils {
             FileItemService fileItemService,
             CommonService commonService,
             FileFieldValueService fileFieldValueService,
-            User loggedUser) {
+            User loggedUser, Map<File, CctExportProductType> productTypes) {
         List<UserAuthorityFileType> listUserAuthorityFileTypes = userAuthorityFileTypeService.findUserAuthorityFileTypeByUserList(loggedUser.getMergedDelegatorList());
         List<FileItem> fileItems = getItems(userAuthorityFileTypeService, fileItemService, loggedUser, listUserAuthorityFileTypes);
 
@@ -147,9 +147,17 @@ public class Utils {
                 continue;
             }
 
-            CctExportProductType productType = CctExportProductType.valueOf(ffv.getValue());
-            if (!userProductTypes.contains(productType)) {
-                iterator.remove();
+            CctExportProductType productType = null;
+            try {
+                productType = CctExportProductType.valueOf(ffv.getValue());
+            } catch (Exception ex) {
+            }
+            if (productType != null) {
+                if (!userProductTypes.contains(productType)) {
+                    iterator.remove();
+                } else {
+                    productTypes.put(file, productType);
+                }
             }
         }
 

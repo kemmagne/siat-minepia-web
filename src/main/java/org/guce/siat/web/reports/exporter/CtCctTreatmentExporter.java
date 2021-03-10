@@ -8,10 +8,13 @@ import java.util.Map;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.guce.siat.common.lookup.ServiceUtility;
 import org.guce.siat.common.model.File;
 import org.guce.siat.common.model.FileFieldValue;
 import org.guce.siat.common.model.FileItem;
 import org.guce.siat.common.model.FileItemFieldValue;
+import org.guce.siat.common.service.FileService;
+import org.guce.siat.common.utils.enums.FileTypeCode;
 import org.guce.siat.core.ct.model.TreatmentResult;
 import org.guce.siat.web.ct.controller.util.Utils;
 import static org.guce.siat.web.reports.exporter.ReportCommand.IMAGES_PATH;
@@ -53,6 +56,16 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
             treatmentVo.setExporterFax(file.getClient().getFax());
             treatmentVo.setExporterTel(file.getClient().getPhone());
             treatmentVo.setExporterAddress(file.getClient().getFullAddress());
+        }
+
+        // find DT file number
+        FileService fileService = ServiceUtility.getBean(FileService.class);
+        List<File> files = fileService.findByNumeroDemandeAndFileType(file.getNumeroDemande(), FileTypeCode.CCT_CT_E_FSTP);
+        for (File file1 : files) {
+            if (file1.getNumeroDossier().endsWith("DT")) {
+                treatmentVo.setDtFileNumber(file1.getNumeroDossier());
+                break;
+            }
         }
 
         List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();

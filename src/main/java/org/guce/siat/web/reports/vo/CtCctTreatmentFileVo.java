@@ -83,6 +83,8 @@ public class CtCctTreatmentFileVo {
 
     private String destinationCountry;
 
+    private String dtFileNumber;
+
     public String getDecisionNumber() {
         return decisionNumber;
     }
@@ -593,6 +595,14 @@ public class CtCctTreatmentFileVo {
 
     public void setDestinationCountry(String destinationCountry) {
         this.destinationCountry = destinationCountry;
+    }
+
+    public String getDtFileNumber() {
+        return dtFileNumber;
+    }
+
+    public void setDtFileNumber(String dtFileNumber) {
+        this.dtFileNumber = dtFileNumber;
     }
 
 }

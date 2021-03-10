@@ -69,6 +69,13 @@
                     <h:outputText value="#{item.client.companyName}" />
                 </p:column>
 
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['productType']}" title="#{bundle['productType']}" />
+                    </f:facet>
+                    <h:outputText value="#{fileItemCctController.getProductType(item)}" />
+                </p:column>
+
                 <p:column style="width: 8%;">
                     <p:commandLink title="#{bundle['Consulter']}" action="#{fileItemCctController.goToDetailPage()}" ajax="false">
                         <f:setPropertyActionListener target="#{fileItemCctController.selected}" value="#{item}" />

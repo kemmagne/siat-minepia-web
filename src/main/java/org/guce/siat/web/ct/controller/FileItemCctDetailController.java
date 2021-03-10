@@ -173,6 +173,7 @@ import org.guce.siat.web.ct.controller.util.enums.TRStoragePlace;
 import org.guce.siat.web.ct.controller.util.enums.TRTreatmentEnvironment;
 import org.guce.siat.web.ct.controller.util.enums.TRWeatherCondition;
 import org.guce.siat.web.ct.data.AnalyseTypeDto;
+import org.guce.siat.web.ct.data.FileItemDto;
 import org.guce.siat.web.ct.data.TreatmentTypeDto;
 import org.guce.siat.web.gr.controller.RiskController;
 import org.guce.siat.web.gr.util.GrUtilsWeb;
@@ -486,6 +487,9 @@ public class FileItemCctDetailController extends DefaultDetailController {
      * The decision button allowed.
      */
     private Boolean decisionButtonAllowed;
+
+    private boolean userDecisionAllowed;
+    private boolean userConfirmationAllowed;
 
     private Boolean decisionButtonAllowedAtCotationLevel;
 
@@ -809,6 +813,8 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
     private Step currentStep;
 
+    private List<FileItemDto> fileItemDtos;
+
     /**
      * Inits the.
      */
@@ -950,6 +956,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
         selectedTreatmentCompany = null;
 
         selectedFlow = null;
+        itemFlowService.findLastItemFlowByFileItem(currentFileItem);
 
         List<FileItemCheck> chckedProductInfoChecksList = new ArrayList<>();
 
@@ -1618,6 +1625,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
         } // fourniture des informations relatives au traitement
         else if (isPhytoReadyForSignature(selectedFlow)) {
             treatmentInfos = createTreatmentInfos();
+            prepareGoodsForModif();
         } // Signature effective du certificat phytosanitaire
         else if (isPhytoReadyForSignatureEnd(selectedFlow)) {
             buildGenericFormFromDataType(selectedFlow.getDataTypeList());
@@ -2151,6 +2159,11 @@ public class FileItemCctDetailController extends DefaultDetailController {
      * @throws ParseException the parse exception
      */
     public synchronized void saveDecision() throws ParseException {
+
+        if (!userDecisionAllowed) {
+            return;
+        }
+
         DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
         transactionDefinition.setPropagationBehavior(GLOBAL_PROPAGATION_TRANSACTION_BEHAVIOUR);
         TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
@@ -2272,6 +2285,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 }
             } else if (isPhytoReadyForSignature(selectedFlow)) {
                 commonService.takeDecisionAndSaveTreatmentInfos(treatmentInfos, itemFlowsToAdd);
+                saveModifiedGoods();
 //                commonService.takeDecisionAndSaveCCTCPParamValue(cCTCPParamValue, itemFlowsToAdd);
             } // Demande de Traitement
             else if ((FlowCode.FL_CT_64.name().equals(selectedFlow.getCode()) && chckedListSize == Constants.ONE)) {
@@ -2865,10 +2879,16 @@ public class FileItemCctDetailController extends DefaultDetailController {
      * Send decisions.
      */
     public synchronized void sendDecisions() {
+
+        if (!userConfirmationAllowed) {
+            return;
+        }
+
         DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
         transactionDefinition.setPropagationBehavior(GLOBAL_PROPAGATION_TRANSACTION_BEHAVIOUR);
         TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
         try {
+
             List<ItemFlow> lastItemFlowList = null;
             ItemFlow lastItemFlow = null;
             if (currentFile.getFileItemsList() != null) {
@@ -6091,6 +6111,43 @@ public class FileItemCctDetailController extends DefaultDetailController {
         return map;
     }
 
+    private void prepareGoodsForModif() {
+
+        fileItemDtos = new ArrayList<>();
+
+        List<FileItem> fileItems = currentFile.getFileItemsList();
+        for (FileItem fileItem : fileItems) {
+
+            FileItemDto fileItemDto = new FileItemDto();
+
+            fileItemDto.setFileItem(fileItem);
+
+            FileItemFieldValue tradeName = fileItemFieldValueService.findValueByFileItemFieldAndFileItem(FileItemDto.NOM_COMMERCIAL, fileItem);
+            fileItemDto.setTradeName(tradeName);
+
+            FileItemFieldValue botanicalName = fileItemFieldValueService.findValueByFileItemFieldAndFileItem(FileItemDto.NOM_BOTANIQUE, fileItem);
+            fileItemDto.setBotanicalName(botanicalName);
+
+            fileItemDtos.add(fileItemDto);
+        }
+    }
+
+    private void saveModifiedGoods() {
+        List<FileItem> fileItems = new ArrayList<>();
+        List<FileItemFieldValue> fileItemFieldValues1 = new ArrayList<>();
+        for (FileItemDto fileItemDto : fileItemDtos) {
+            fileItems.add(fileItemDto.getFileItem());
+            fileItemFieldValues1.add(fileItemDto.getTradeName());
+            fileItemFieldValues1.add(fileItemDto.getBotanicalName());
+        }
+        fileItemService.saveList(fileItems);
+        fileItemFieldValueService.saveList(fileItemFieldValues1);
+    }
+
+    public List<FileItemDto> getFileItemDtos() {
+        return fileItemDtos;
+    }
+
     private byte[] getReportBytes(final FileTypeFlowReport fileTypeFlowReport, final boolean draft) throws Exception {
         final String nomClasse = fileTypeFlowReport.getReportClassName();
         @SuppressWarnings("rawtypes")
@@ -6103,7 +6160,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
             String reportNumber = null;
             if (draft && !FileTypeCode.CCT_CT_E_PVE.equals(currentFile.getFileType().getCode())) {
                 final ReportOrganism reportOrganism = reportOrganismService.findReportByFileTypeFlowReport(fileTypeFlowReport);
-                reportNumber = currentFile.getNumeroDemande()
+                reportNumber = currentFile.getNumeroDemande() + "/" + currentFile.getNumeroDossier()
                         + "/" + java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)
                         + ((reportOrganism != null && reportOrganism.getValue() != null) ? reportOrganism.getValue() : StringUtils.EMPTY);
 
@@ -6125,8 +6182,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
                         final TreatmentInfos ti = treatmentInfosService.findTreatmentInfosByItemFlow(itemFlow);
                         if (ti == null || ti.getId() == null) {
-                            final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
-                                    .getString("draftNotAllowedForReject");
+                            final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString("draftNotAllowedForReject");
                             JsfUtil.addErrorMessage(msg);
                             return null;
                         }
@@ -6586,6 +6642,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
     public TreatmentInfos populateTreatmentInfos(File tmpFile) {
         TreatmentInfos treatInfo = new TreatmentInfos();
+        treatInfo.setDelivrableType(FileTypeCode.CCT_CT_E.name());
         try {
             ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(tmpFile.getFileItemsList().get(0), FlowCode.FL_CT_07);
             if (itemFlow == null) {
@@ -6710,15 +6767,16 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
     @Override
     public boolean canDecide() {
-        return true;
-//        return filesSet.contains(currentFile);
+        UserAuthorityFileType uaft = userAuthorityFileTypeService.findByCurrentStepFileAndLoggedUser(currentStep, currentFile, getLoggedUser());
+        userDecisionAllowed = uaft != null;
+        return userDecisionAllowed;
     }
 
     @Override
     public boolean canConfirm() {
-        return true;
-//        ItemFlow itemFlow = currentFileItem.getItemFlowsList().get(0);
-//        return getLoggedUser().equals(itemFlow.getSender());
+        ItemFlow itemFlow = currentFileItem.getItemFlowsList().get(0);
+        userConfirmationAllowed = getLoggedUser().equals(itemFlow.getSender());
+        return userConfirmationAllowed;
     }
 
     @Override
