@@ -6123,9 +6123,15 @@ public class FileItemCctDetailController extends DefaultDetailController {
             fileItemDto.setFileItem(fileItem);
 
             FileItemFieldValue tradeName = fileItemFieldValueService.findValueByFileItemFieldAndFileItem(FileItemDto.NOM_COMMERCIAL, fileItem);
+            if (tradeName == null) {
+                tradeName = new FileItemFieldValue();
+            }
             fileItemDto.setTradeName(tradeName);
 
             FileItemFieldValue botanicalName = fileItemFieldValueService.findValueByFileItemFieldAndFileItem(FileItemDto.NOM_BOTANIQUE, fileItem);
+            if (botanicalName == null) {
+                botanicalName = new FileItemFieldValue();
+            }
             fileItemDto.setBotanicalName(botanicalName);
 
             fileItemDtos.add(fileItemDto);
@@ -6133,15 +6139,42 @@ public class FileItemCctDetailController extends DefaultDetailController {
     }
 
     private void saveModifiedGoods() {
-        List<FileItem> fileItems = new ArrayList<>();
-        List<FileItemFieldValue> fileItemFieldValues1 = new ArrayList<>();
+
+        List<FileItemFieldValue> fifvsToUpdate = new ArrayList<>();
+        List<FileItemFieldValue> fifvsToSave = new ArrayList<>();
+
+        FileItemField tradeNamefif = fileItemFieldValueService.findByFileTypeAndCode(currentFile.getFileType().getCode(), FileItemDto.NOM_COMMERCIAL);
+        FileItemField botanicalNamefif = fileItemFieldValueService.findByFileTypeAndCode(currentFile.getFileType().getCode(), FileItemDto.NOM_BOTANIQUE);
+
         for (FileItemDto fileItemDto : fileItemDtos) {
-            fileItems.add(fileItemDto.getFileItem());
-            fileItemFieldValues1.add(fileItemDto.getTradeName());
-            fileItemFieldValues1.add(fileItemDto.getBotanicalName());
+
+            FileItem fileItem = fileItemService.find(fileItemDto.getFileItem().getId());
+
+            FileItemFieldValue tradeName = fileItemDto.getTradeName();
+            if (StringUtils.isNotBlank(tradeName.getValue()) && tradeName.getFileItemField() != null) {
+                fifvsToUpdate.add(tradeName);
+            } else if (StringUtils.isNotBlank(tradeName.getValue()) && tradeName.getFileItemField() == null) {
+                tradeName.setFileItemField(tradeNamefif);
+                tradeName.setFileItem(fileItem);
+                fifvsToSave.add(tradeName);
+            }
+
+            FileItemFieldValue botanicalName = fileItemDto.getBotanicalName();
+            if (StringUtils.isNotBlank(botanicalName.getValue()) && botanicalName.getFileItemField() != null) {
+                fifvsToUpdate.add(botanicalName);
+            } else if (StringUtils.isNotBlank(botanicalName.getValue()) && botanicalName.getFileItemField() == null) {
+                botanicalName.setFileItemField(botanicalNamefif);
+                botanicalName.setFileItem(fileItem);
+                fifvsToSave.add(botanicalName);
+            }
         }
-        fileItemService.saveList(fileItems);
-        fileItemFieldValueService.saveList(fileItemFieldValues1);
+
+        if (!fifvsToUpdate.isEmpty()) {
+            fileItemFieldValueService.saveOrUpdateList(fifvsToUpdate);
+        }
+        if (!fifvsToSave.isEmpty()) {
+            fileItemFieldValueService.saveList(fifvsToSave);
+        }
     }
 
     public List<FileItemDto> getFileItemDtos() {

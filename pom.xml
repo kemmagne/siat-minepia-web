@@ -13,7 +13,7 @@
     <!-- .STANDALONE -->
     <!-- .TEST -->
     <!-- .HT -->
-    <version>2.5.22</version>
+    <version>2.5.24</version>
     <packaging>war</packaging>
 
     <name>siat-ct-web</name>
@@ -23,47 +23,8 @@
             <id>profile-ht</id>
             <properties>
                 <environment>ht</environment>
-                <!--<global-config.properties>${user.home}/siat/config/ct/global-config.properties</global-config.properties>-->
-                <!--<global-config.properties>/home/htiomy/siat/config/ct/global-config.properties</global-config.properties>-->
                 <global-config.properties>/root/siat/config/ct/global-config.properties</global-config.properties>
             </properties>
-            <!--            <build>
-                    <plugins>
-                            <plugin>
-                                    <groupId>org.codehaus.cargo</groupId>
-                                    <artifactId>cargo-maven2-plugin</artifactId>
-                                    <inherited>true</inherited>
-                                    <executions>
-                                            <execution>
-                                                    <id>deploy</id>
-                                                    <phase>integration-test</phase>
-                                                    <goals>
-                                                            <goal>redeploy</goal>
-                                                    </goals>
-                                            </execution>
-                                    </executions>
-                                    <configuration>
-                                            <container>
-                                                    <containerId>glassfish4x</containerId>
-                                                    <type>installed</type>
-                                                    <home>C:\app\glassfish4</home>
-                                            </container>
-                                            <configuration>
-                                                    <type>existing</type>
-                                                    <home>C:\app\glassfish4\glassfish\domains</home>
-                                                    <properties>
-                                                            <cargo.glassfish.domain.name>siat</cargo.glassfish.domain.name>
-                                                            <cargo.glassfish.admin.port>40048</cargo.glassfish.admin.port>
-                                                            <cargo.remote.username>admin</cargo.remote.username>
-                                                            <cargo.remote.password>admin</cargo.remote.password>
-                                                            <cargo.glassfish.portbase>40000</cargo.glassfish.portbase>
-                                                            <cargo.hostname>localhost</cargo.hostname>
-                                                    </properties>
-                                            </configuration>
-                                    </configuration>
-                            </plugin>
-                    </plugins>
-            </build>-->
             <activation>
                 <activeByDefault>true</activeByDefault>
                 <property>
@@ -131,7 +92,7 @@
         <dependency>
             <groupId>org.guce.siat</groupId>
             <artifactId>siat-ct-core</artifactId>
-            <version>2.3.14</version>
+            <version>2.3.15</version>
         </dependency>
         <!-- Servlet -->
         <dependency>

@@ -69,8 +69,8 @@
                                 requiredMessage="#{bundle['TreatmentStartDate']} #{bundle['required']}" />
                     <p:message for="TreatmentStartDate" />
                 </h:panelGroup>
-                <h:outputLabel value="#{bundle['TreatmentEndDate']}" for="TreatmentEndDate" />
-                <h:panelGroup>
+                <h:outputLabel rendered="false" value="#{bundle['TreatmentEndDate']}" for="TreatmentEndDate" />
+                <h:panelGroup rendered="false">
                     <p:calendar navigator="true" readonlyInput="true" pattern="dd/MM/yyyy"
                                 value="#{fileItemCctDetailController.treatmentInfos.treatmentEndDate}" showOn="button" id="TreatmentEndDate" required="false"
                                 requiredMessage="#{bundle['TreatmentEndDate']} #{bundle['required']}" />
@@ -128,7 +128,7 @@
             </h:panelGrid>
         </p:panel>
 
-        <p:panel rendered="false">
+        <p:panel rendered="true">
             <ui:include src="fileItemDtos.xhtml" />
         </p:panel>
 
