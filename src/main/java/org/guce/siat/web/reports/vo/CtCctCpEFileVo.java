@@ -193,6 +193,7 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
     private String lotsNumbers;
 
     private Date treatmentDate;
+    private Date treatmentEndDate;
 
     private String namesAnnex;
     private String lotsNumbersAnnex;
@@ -919,6 +920,14 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
 
     public void setTreatmentDate(Date treatmentDate) {
         this.treatmentDate = treatmentDate;
+    }
+
+    public Date getTreatmentEndDate() {
+        return treatmentEndDate;
+    }
+
+    public void setTreatmentEndDate(Date treatmentEndDate) {
+        this.treatmentEndDate = treatmentEndDate;
     }
 
     public String getNamesAnnex() {

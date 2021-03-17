@@ -60,6 +60,7 @@
 	<field name="consigneePoBox" class="java.lang.String"/>
 	<field name="consigneeCountry" class="java.lang.String"/>
 	<field name="signatoryUser" class="java.lang.Object"/>
+	<field name="treatmentEndDate" class="java.util.Date"/>
 	<background>
 		<band height="802">
 			<printWhenExpression><![CDATA[$P{DRAFT}]]></printWhenExpression>
@@ -528,14 +529,14 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 					<reportElement x="2" y="515" width="135" height="15" uuid="f5358dac-70ff-4d2d-b4c8-b04409466297"/>
-					<textElement verticalAlignment="Top">
+					<textElement verticalAlignment="Middle">
 						<font size="7" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{decisionDate} != null ? ("Date de validation : " + new java.text.SimpleDateFormat("dd/MM/YYYY").format($F{decisionDate})) : ""]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement x="135" y="515" width="218" height="15" uuid="abcfac41-b434-4876-b606-aeb1c652e1ce"/>
-					<textElement textAlignment="Right">
+					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font size="7" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{signatoryName} !=  null ? "Validé par : " + $F{signatoryName} : ""]]></textFieldExpression>
@@ -586,9 +587,9 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					<textFieldExpression><![CDATA[$F{chemicalProduct}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="115" y="407" width="155" height="20" uuid="fd7a9902-45cf-4160-9a0b-0c1679be78d5"/>
+					<reportElement x="115" y="406" width="155" height="10" uuid="fd7a9902-45cf-4160-9a0b-0c1679be78d5"/>
 					<textElement>
-						<font size="8" isBold="true"/>
+						<font size="7" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{duration} + ", " + $F{temperature}]]></textFieldExpression>
 				</textField>
@@ -675,16 +676,16 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 				<line>
 					<reportElement x="0" y="105" width="474" height="1" uuid="795ce32b-1750-459c-98ff-0a0e397eee5c"/>
 				</line>
-				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-					<reportElement x="270" y="406" width="81" height="21" uuid="81486c17-ec8d-47a3-8a39-a9101a344285"/>
-					<textElement>
-						<font size="7" isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{treatmentDate} != null ? ("Date de traitement : " + new java.text.SimpleDateFormat("dd/MM/YYYY").format($F{treatmentDate})) : ""]]></textFieldExpression>
-				</textField>
 				<line>
 					<reportElement x="0" y="514" width="355" height="1" uuid="797f9f26-0fbe-4cba-9ecc-656f9260ca38"/>
 				</line>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+					<reportElement x="105" y="417" width="250" height="10" uuid="a14fca75-c66e-40bc-8b04-c448f5dd347d"/>
+					<textElement>
+						<font size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{treatmentDate} != null ? (($F{treatmentEndDate} == null ? "Date de traitement : " : "Période de traitement : ") + new java.text.SimpleDateFormat("dd/MM/YYYY").format($F{treatmentDate}) + ($F{treatmentEndDate} != null ? " - " + new java.text.SimpleDateFormat("dd/MM/YYYY").format($F{treatmentEndDate}) : "")) : ""]]></textFieldExpression>
+				</textField>
 			</frame>
 		</band>
 	</detail>

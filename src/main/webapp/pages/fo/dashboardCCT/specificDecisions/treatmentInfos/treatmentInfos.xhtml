@@ -1,12 +1,10 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
 
     <p:messages autoUpdate="true" />
 
     <h:panelGrid columns="2" rendered="#{false and !fileItemCctDetailController.phytoTransitFile}">
         <p:outputLabel for="delivrableType" value="#{bundle['delivrableType']}" />
-        <p:selectOneMenu id="delivrableType" value="#{fileItemCctDetailController.treatmentInfos.delivrableType}"
-                         required="true" requiredMessage="#{bundle['delivrableType']} #{bundle['required']}">
+        <p:selectOneMenu id="delivrableType" value="#{fileItemCctDetailController.treatmentInfos.delivrableType}" required="true" requiredMessage="#{bundle['delivrableType']} #{bundle['required']}">
             <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
             <f:selectItem itemValue="CCT_CT_E" itemLabel="Certificat Phytosanitaire" />
             <f:selectItem itemValue="CQ_CT" itemLabel="Certificat de qualité" />
@@ -29,8 +27,7 @@
         <p:panel rendered="#{fileItemCctDetailController.treatmentInfos.delivrableType eq 'CQ_CT'}">
             <h:panelGrid columns="2">
                 <p:outputLabel for="commodityCaterory" value="#{bundle['commodityCaterory']}" />
-                <p:selectOneMenu id="commodityCaterory" value="#{fileItemCctDetailController.treatmentInfos.commodityCaterory}"
-                                 required="true"
+                <p:selectOneMenu id="commodityCaterory" value="#{fileItemCctDetailController.treatmentInfos.commodityCaterory}" required="true"
                                  requiredMessage="#{bundle['commodityCaterory']} #{bundle['required']}">
                     <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
                     <f:selectItem itemValue="I" itemLabel="I" />
@@ -69,8 +66,8 @@
                                 requiredMessage="#{bundle['TreatmentStartDate']} #{bundle['required']}" />
                     <p:message for="TreatmentStartDate" />
                 </h:panelGroup>
-                <h:outputLabel rendered="false" value="#{bundle['TreatmentEndDate']}" for="TreatmentEndDate" />
-                <h:panelGroup rendered="false">
+                <h:outputLabel rendered="true" value="#{bundle['TreatmentEndDate']}" for="TreatmentEndDate" />
+                <h:panelGroup rendered="true">
                     <p:calendar navigator="true" readonlyInput="true" pattern="dd/MM/yyyy"
                                 value="#{fileItemCctDetailController.treatmentInfos.treatmentEndDate}" showOn="button" id="TreatmentEndDate" required="false"
                                 requiredMessage="#{bundle['TreatmentEndDate']} #{bundle['required']}" />

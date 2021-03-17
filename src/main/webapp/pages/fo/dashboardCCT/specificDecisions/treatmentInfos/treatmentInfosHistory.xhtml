@@ -3,8 +3,7 @@
 
     <h:panelGrid columns="2" rendered="#{!fileItemCctDetailController.phytoTransitFile}">
         <p:outputLabel value="#{bundle['delivrableType']}" />
-        <p:selectOneMenu value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTI.delivrableType}"
-                         disabled="true">
+        <p:selectOneMenu value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTI.delivrableType}" disabled="true">
             <f:selectItem itemValue="CCT_CT_E" itemLabel="Certificat Phytosanitaire" />
             <f:selectItem itemValue="CQ_CT" itemLabel="Certificat de qualité" />
         </p:selectOneMenu>
@@ -41,11 +40,15 @@
     <!-- TreatmentInfos -->
     <p:panel header="#{bundle['TreatmentInfos']}" rendered="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTI.delivrableType eq 'CCT_CT_E' or fileItemCctDetailController.phytoTransitFile}">
         <h:panelGrid columns="2">
-            <h:outputLabel value="#{bundle['TreatmentDate']}" />
+            <h:outputLabel value="#{bundle['TreatmentStartDate']}" />
             <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTI.treatmentDate}">
                 <f:convertDateTime pattern="dd/MM/yyyy" />
             </h:outputLabel>
-            
+            <h:outputLabel value="#{bundle['TreatmentEndDate']}" />
+            <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTI.treatmentEndDate}">
+                <f:convertDateTime pattern="dd/MM/yyyy" />
+            </h:outputLabel>
+
             <h:outputLabel value="#{bundle['TypeOfTreatment']}" />
             <h:outputLabel value="#{fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTI.typeOfTreatment}" />
 
