@@ -440,6 +440,8 @@ public interface ControllerConstants {
          */
         interface Messages {
 
+            String PRODUCT_TYPE_MISSED = "ProductTypeMissed";
+
             /**
              * The Constant CHOOSE_DECISION_ERROR.
              */

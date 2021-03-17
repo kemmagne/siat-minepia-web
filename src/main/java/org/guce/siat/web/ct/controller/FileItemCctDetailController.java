@@ -198,8 +198,8 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 /**
  * The Class FileItemCctDetailController.
  */
-@ManagedBean(name = "fileItemCctDetailController")
 @ViewScoped
+@ManagedBean(name = "fileItemCctDetailController")
 public class FileItemCctDetailController extends DefaultDetailController {
 
     /**
@@ -840,8 +840,15 @@ public class FileItemCctDetailController extends DefaultDetailController {
             try {
                 productType = CctExportProductType.valueOf(ptFieldValue.getValue());
             } catch (Exception ex) {
+                logger.error(currentFile.toString(), ex);
             }
         }
+//        else if (ptFieldValue == null && isPhyto()) {
+//            showErrorFacesMessage(ControllerConstants.Bundle.Messages.PRODUCT_TYPE_MISSED, null);
+//            logger.warn("Cannot find the product type for the phyto file " + currentFile.getNumeroDossier());
+//            goToPreviousPage();
+//            return;
+//        }
 
         final FileTypeStep fileTypeStep = fileTypeStepService.findFileTypeStepByFileTypeAndStep(selectedFileItemCheck.getFileItem().getFile().getFileType(), selectedFileItemCheck.getFileItem().getStep());
         if (fileTypeStep != null && fileTypeStep.getLabelFr() != null) {
@@ -2251,7 +2258,6 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 for (final FileItem fileItem : productInfoItemsEnabled) {
                     final ItemFlow itemFlow = new ItemFlow();
 
-                    itemFlow.setCreated(null);
                     itemFlow.setFileItem(fileItem);
                     itemFlow.setFlow(selectedFlow);
                     itemFlow.setSender(loggedUser);
@@ -2267,7 +2273,6 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 for (final FileItemCheck fileItemCheck : chckedProductInfoChecksList) {
                     final ItemFlow itemFlow = new ItemFlow();
 
-                    itemFlow.setCreated(java.util.Calendar.getInstance().getTime());
                     itemFlow.setFileItem(fileItemCheck.getFileItem());
                     itemFlow.setFlow(selectedFlow);
                     itemFlow.setSender(loggedUser);
@@ -3060,6 +3065,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                     goToDetailPage();
                 }
             } else {
+                logger.warn("cannot send the décision : " + currentFile.getNumeroDossier());
                 showErrorFacesMessage(ControllerConstants.Bundle.Messages.SEND_ERROR, null);
             }
 
@@ -3084,8 +3090,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
         }
     }
 
-    private void send(TransactionStatus transactionStatus, byte[] xmlBytes, Map<String, byte[]> attachedByteFiles,
-            String service, String documentType, String toPartyId, List<ItemFlow> itemFlowList) {
+    private void send(TransactionStatus transactionStatus, byte[] xmlBytes, Map<String, byte[]> attachedByteFiles, String service, String documentType, String toPartyId, List<ItemFlow> itemFlowList) {
         Map<String, Object> data = new HashMap<>();
         data.put(ESBConstants.FLOW, xmlBytes);
         data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
@@ -3101,6 +3106,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
             if (transactionStatus != null) {
                 transactionManager.rollback(transactionStatus);
             }
+            logger.warn("cannot send the décision : " + currentFile.getNumeroDossier());
             showErrorFacesMessage(ControllerConstants.Bundle.Messages.SEND_ERROR, null);
             return;
         }
@@ -3901,7 +3907,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
         } else {
             JsfUtil.addErrorMessage(clientId, msg);
         }
-        logger.warn(msg);
+        logger.error(msg);
     }
 
     /**
@@ -6034,7 +6040,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 }
             }
         } catch (Exception ex) {
-            logger.error("cannot resend the decision", ex);
+            logger.error("cannot resend the decision : " + currentFile, ex);
             showErrorFacesMessage(ControllerConstants.Bundle.Messages.RESEND_ERROR, null);
         }
     }
@@ -6424,10 +6430,12 @@ public class FileItemCctDetailController extends DefaultDetailController {
                             } else {
                                 reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_ATP", tr);
                             }
-                        } else if (draft) {
-                            reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_FSTP", tr, reportNumber);
                         } else {
-                            reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_FSTP", tr);
+                            if (draft) {
+                                reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_FSTP", tr, reportNumber);
+                            } else {
+                                reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_FSTP", tr);
+                            }
                         }
                         break;
                     }
