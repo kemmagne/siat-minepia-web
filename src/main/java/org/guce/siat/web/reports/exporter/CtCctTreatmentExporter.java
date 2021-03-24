@@ -1,17 +1,23 @@
 package org.guce.siat.web.reports.exporter;
 
 import java.math.BigDecimal;
+import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.guce.siat.common.lookup.ServiceUtility;
 import org.guce.siat.common.model.File;
 import org.guce.siat.common.model.FileFieldValue;
 import org.guce.siat.common.model.FileItem;
 import org.guce.siat.common.model.FileItemFieldValue;
+import org.guce.siat.common.service.FileService;
+import org.guce.siat.common.utils.enums.FileTypeCode;
 import org.guce.siat.core.ct.model.TreatmentResult;
 import org.guce.siat.web.ct.controller.util.Utils;
 import static org.guce.siat.web.reports.exporter.ReportCommand.IMAGES_PATH;
@@ -55,15 +61,25 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
             treatmentVo.setExporterAddress(file.getClient().getFullAddress());
         }
 
+        // find DT file number
+        FileService fileService = ServiceUtility.getBean(FileService.class);
+        List<File> files = fileService.findByNumeroDemandeAndFileType(file.getNumeroDemande(), FileTypeCode.CCT_CT_E_FSTP);
+        for (File file1 : files) {
+            if (file1.getNumeroDossier().endsWith("DT")) {
+                treatmentVo.setDtFileNumber(file1.getNumeroDossier());
+                break;
+            }
+        }
+
         List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
         String lotNumber = "";
         for (FileFieldValue fileFieldValue : fileFieldValueList) {
             switch (fileFieldValue.getFileField().getCode()) {
-                case "NUMERO_CCT_CT_E_AT":
-                    if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
-                        treatmentVo.setDecisionNumber(fileFieldValue.getValue());
-                    }
-                    break;
+//                case "NUMERO_CCT_CT_E_AT":
+//                    if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
+//                        treatmentVo.setDecisionNumber(fileFieldValue.getValue());
+//                    }
+//                    break;
                 case "NUMERO_CCT_CT_E_FSTP":
                     if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
                         treatmentVo.setDecisionNumber(fileFieldValue.getValue());
@@ -77,6 +93,11 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
                 case "DESTINATAIRE_ADRESSE_PAYSADDRESS_NOMPAYS":
                     if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
                         treatmentVo.setConsigneeCountry(fileFieldValue.getValue());
+                    }
+                    break;
+                case "INFORMATIONS_GENERALES_PAYS_DESTINATION_NOMPAYS":
+                    if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
+                        treatmentVo.setDestinationCountry(fileFieldValue.getValue());
                     }
                     break;
                 case "TRAITEMENT_SOCIETE_TRAITEMENT_NOM":
@@ -130,6 +151,16 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
         treatmentVo.setDecisionPlace(file.getBureau().getLabelFr());
         if (referenceNumber != null && treatmentVo.getDecisionNumber() == null) {
             treatmentVo.setDecisionNumber(referenceNumber);
+        }
+        if (FileTypeCode.CCT_CT_E_ATP.equals(file.getFileType().getCode())) {
+            Calendar calendar = Calendar.getInstance();
+            Date signatureDate = file.getSignatureDate();
+            if (signatureDate != null) {
+                calendar.setTime(signatureDate);
+            }
+            int year = calendar.get(Calendar.YEAR);
+            String s = String.format("%s/%s/%s/ATP/MINADER/SG/DRCQ", file.getNumeroDemande(), file.getNumeroDossier(), year);
+            treatmentVo.setDecisionNumber(s);
         }
         treatmentVo.setGeneralObservations(treatmentResult.getGeneralObservations());
         treatmentVo.setHomologationNumber(treatmentResult.getHomologationNumber());

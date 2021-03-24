@@ -1,0 +1,17 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+    <h:panelGroup styleClass="grise" rendered="#{fileItemCctDetailController.commonObservationPrintable}">
+        <p:panelGrid columns="2">
+            <h:outputLabel for="commonObservation">
+                #{bundle['Observation']} <span>#{fileItemCctDetailController.commonObservationRequired ? '*' : ''}</span>
+            </h:outputLabel>
+            <h:panelGroup>
+                <p:inputTextarea id="commonObservation" value="#{fileItemCctDetailController.commonObservation}" required="#{fileItemCctDetailController.commonObservationRequired}" requiredMessage="#{bundle['field']} #{bundle['Observation']} #{bundle['RequiredMessage_standard']}" maxlength="255" validatorMessage="#{bundle['field']} #{bundle['Observation']} : #{bundle['max_length_255']}">
+                    <f:validateLength maximum="255" />
+                </p:inputTextarea>
+                <p:message for="commonObservation" />
+            </h:panelGroup>
+        </p:panelGrid>
+    </h:panelGroup>
+
+</ui:composition>

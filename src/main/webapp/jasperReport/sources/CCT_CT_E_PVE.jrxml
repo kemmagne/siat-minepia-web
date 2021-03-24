@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CCT_CT_E_PVE" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7a809a72-f080-4526-a48b-8df309c7056d">
 	<property name="ireport.zoom" value="1.331000000000001"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="582"/>
+	<property name="ireport.y" value="54"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -158,7 +158,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement x="0" y="70" width="95" height="20" uuid="7a061596-f463-45c0-92d9-60fede3665e1"/>
+				<reportElement x="0" y="70" width="97" height="20" uuid="7a061596-f463-45c0-92d9-60fede3665e1"/>
 				<textElement verticalAlignment="Bottom">
 					<font size="10"/>
 				</textElement>

@@ -1,6 +1,7 @@
 package org.guce.siat.web.reports.vo;
 
 import java.util.Date;
+import org.guce.siat.common.model.User;
 
 /**
  * The Class CtCctCpEFileVo.
@@ -10,8 +11,14 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
     private String exporterName;
 
     private String exporterAddress;
-    
+
     private String exporter;
+
+    private String exporterCountry;
+
+    private String exporterTown;
+
+    private String exporterPoBox;
 
     /**
      * The consignor name.
@@ -34,7 +41,7 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
     private String consignorCountry;
 
     private String consignee;
-    
+
     /**
      * The consignee name.
      */
@@ -54,6 +61,10 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
      * The consignee country.
      */
     private String consigneeCountry;
+
+    private String consigneeTown;
+
+    private String consigneePoBox;
 
     /**
      * The means of transport.
@@ -131,6 +142,8 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
      */
     private String additionalInformation;
 
+    private User signatoryUser;
+
     /**
      * The signatory name.
      */
@@ -178,12 +191,15 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
     private String netWeight;
     private String grossWeight;
     private String lotsNumbers;
-    
+
     private Date treatmentDate;
-    
+    private Date treatmentEndDate;
+
     private String namesAnnex;
     private String lotsNumbersAnnex;
     private String containersNumbersAnnex;
+
+    private String userAddInfos;
 
     /**
      * Gets the consignor name.
@@ -336,6 +352,22 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
      */
     public String getMeansOfTransport() {
         return meansOfTransport;
+    }
+
+    public String getConsigneeTown() {
+        return consigneeTown;
+    }
+
+    public void setConsigneeTown(String consigneeTown) {
+        this.consigneeTown = consigneeTown;
+    }
+
+    public String getConsigneePoBox() {
+        return consigneePoBox;
+    }
+
+    public void setConsigneePoBox(String consigneePoBox) {
+        this.consigneePoBox = consigneePoBox;
     }
 
     /**
@@ -563,6 +595,14 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
      */
     public void setAdditionalInformation(final String additionalInformation) {
         this.additionalInformation = additionalInformation;
+    }
+
+    public User getSignatoryUser() {
+        return signatoryUser;
+    }
+
+    public void setSignatoryUser(User signatoryUser) {
+        this.signatoryUser = signatoryUser;
     }
 
     /**
@@ -882,6 +922,14 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
         this.treatmentDate = treatmentDate;
     }
 
+    public Date getTreatmentEndDate() {
+        return treatmentEndDate;
+    }
+
+    public void setTreatmentEndDate(Date treatmentEndDate) {
+        this.treatmentEndDate = treatmentEndDate;
+    }
+
     public String getNamesAnnex() {
         return namesAnnex;
     }
@@ -905,7 +953,7 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
     public void setContainersNumbersAnnex(String containersNumbersAnnex) {
         this.containersNumbersAnnex = containersNumbersAnnex;
     }
-    
+
     public String getConsignee() {
         return consignee;
     }
@@ -921,6 +969,37 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
     public void setExporter(String exporter) {
         this.exporter = exporter;
     }
-    
-    
+
+    public String getExporterCountry() {
+        return exporterCountry;
+    }
+
+    public void setExporterCountry(String exporterCountry) {
+        this.exporterCountry = exporterCountry;
+    }
+
+    public String getExporterTown() {
+        return exporterTown;
+    }
+
+    public void setExporterTown(String exporterTown) {
+        this.exporterTown = exporterTown;
+    }
+
+    public String getExporterPoBox() {
+        return exporterPoBox;
+    }
+
+    public void setExporterPoBox(String exporterPoBox) {
+        this.exporterPoBox = exporterPoBox;
+    }
+
+    public String getUserAddInfos() {
+        return userAddInfos;
+    }
+
+    public void setUserAddInfos(String userAddInfos) {
+        this.userAddInfos = userAddInfos;
+    }
+
 }

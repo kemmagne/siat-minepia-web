@@ -29,6 +29,7 @@ import org.guce.siat.common.service.EbxmlPropertiesService;
 import org.guce.siat.common.service.FieldGroupService;
 import org.guce.siat.common.service.FileFieldService;
 import org.guce.siat.common.service.FileFieldValueService;
+import org.guce.siat.common.service.FileItemFieldValueService;
 import org.guce.siat.common.service.FileItemService;
 import org.guce.siat.common.service.FileProducer;
 import org.guce.siat.common.service.FileService;
@@ -374,6 +375,9 @@ public abstract class DefaultDetailController implements Serializable {
 
     @ManagedProperty(value = "#{cotationService}")
     protected CotationService cotationService;
+
+    @ManagedProperty(value = "#{fileItemFieldValueService}")
+    protected FileItemFieldValueService fileItemFieldValueService;
 
     /**
      * The transaction manager.
@@ -1382,6 +1386,14 @@ public abstract class DefaultDetailController implements Serializable {
      */
     public void setTransactionManager(final PlatformTransactionManager transactionManager) {
         this.transactionManager = transactionManager;
+    }
+
+    public FileItemFieldValueService getFileItemFieldValueService() {
+        return fileItemFieldValueService;
+    }
+
+    public void setFileItemFieldValueService(FileItemFieldValueService fileItemFieldValueService) {
+        this.fileItemFieldValueService = fileItemFieldValueService;
     }
 
     /**

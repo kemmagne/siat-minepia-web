@@ -70,16 +70,20 @@ public class CtCctTreatmentFileVo {
     private String protectionEquipements;
     private boolean preventionPlaquePresent;
     private String generalObservations;
-	private boolean productUsedFungicide;
-	private boolean productUsedInsecticide;
-	private boolean productUsedInsecticideFungicide;
-	private boolean treatmentModeFumigation;
-	private boolean treatmentModePulverisation;
-	private boolean treatmentModeSoaking;
-	private boolean treatmentModeHeat;
-        private String inspector;
-    
-        private String signatory;
+    private boolean productUsedFungicide;
+    private boolean productUsedInsecticide;
+    private boolean productUsedInsecticideFungicide;
+    private boolean treatmentModeFumigation;
+    private boolean treatmentModePulverisation;
+    private boolean treatmentModeSoaking;
+    private boolean treatmentModeHeat;
+    private String inspector;
+
+    private String signatory;
+
+    private String destinationCountry;
+
+    private String dtFileNumber;
 
     public String getDecisionNumber() {
         return decisionNumber;
@@ -505,61 +509,61 @@ public class CtCctTreatmentFileVo {
         this.treatmentCompanyBp = treatmentCompanyBp;
     }
 
-	public boolean isProductUsedFungicide() {
-		return productUsedFungicide;
-	}
+    public boolean isProductUsedFungicide() {
+        return productUsedFungicide;
+    }
 
-	public void setProductUsedFungicide(boolean productUsedFungicide) {
-		this.productUsedFungicide = productUsedFungicide;
-	}
+    public void setProductUsedFungicide(boolean productUsedFungicide) {
+        this.productUsedFungicide = productUsedFungicide;
+    }
 
-	public boolean isProductUsedInsecticide() {
-		return productUsedInsecticide;
-	}
+    public boolean isProductUsedInsecticide() {
+        return productUsedInsecticide;
+    }
 
-	public void setProductUsedInsecticide(boolean productUsedInsecticide) {
-		this.productUsedInsecticide = productUsedInsecticide;
-	}
+    public void setProductUsedInsecticide(boolean productUsedInsecticide) {
+        this.productUsedInsecticide = productUsedInsecticide;
+    }
 
-	public boolean isProductUsedInsecticideFungicide() {
-		return productUsedInsecticideFungicide;
-	}
+    public boolean isProductUsedInsecticideFungicide() {
+        return productUsedInsecticideFungicide;
+    }
 
-	public void setProductUsedInsecticideFungicide(boolean productUsedInsecticideFungicide) {
-		this.productUsedInsecticideFungicide = productUsedInsecticideFungicide;
-	}
+    public void setProductUsedInsecticideFungicide(boolean productUsedInsecticideFungicide) {
+        this.productUsedInsecticideFungicide = productUsedInsecticideFungicide;
+    }
 
-	public boolean isTreatmentModeFumigation() {
-		return treatmentModeFumigation;
-	}
+    public boolean isTreatmentModeFumigation() {
+        return treatmentModeFumigation;
+    }
 
-	public void setTreatmentModeFumigation(boolean treatmentModeFumigation) {
-		this.treatmentModeFumigation = treatmentModeFumigation;
-	}
+    public void setTreatmentModeFumigation(boolean treatmentModeFumigation) {
+        this.treatmentModeFumigation = treatmentModeFumigation;
+    }
 
-	public boolean isTreatmentModePulverisation() {
-		return treatmentModePulverisation;
-	}
+    public boolean isTreatmentModePulverisation() {
+        return treatmentModePulverisation;
+    }
 
-	public void setTreatmentModePulverisation(boolean treatmentModePulverisation) {
-		this.treatmentModePulverisation = treatmentModePulverisation;
-	}
+    public void setTreatmentModePulverisation(boolean treatmentModePulverisation) {
+        this.treatmentModePulverisation = treatmentModePulverisation;
+    }
 
-	public boolean isTreatmentModeSoaking() {
-		return treatmentModeSoaking;
-	}
+    public boolean isTreatmentModeSoaking() {
+        return treatmentModeSoaking;
+    }
 
-	public void setTreatmentModeSoaking(boolean treatmentModeSoaking) {
-		this.treatmentModeSoaking = treatmentModeSoaking;
-	}
+    public void setTreatmentModeSoaking(boolean treatmentModeSoaking) {
+        this.treatmentModeSoaking = treatmentModeSoaking;
+    }
 
-	public boolean isTreatmentModeHeat() {
-		return treatmentModeHeat;
-	}
+    public boolean isTreatmentModeHeat() {
+        return treatmentModeHeat;
+    }
 
-	public void setTreatmentModeHeat(boolean treatmentModeHeat) {
-		this.treatmentModeHeat = treatmentModeHeat;
-	}	
+    public void setTreatmentModeHeat(boolean treatmentModeHeat) {
+        this.treatmentModeHeat = treatmentModeHeat;
+    }
 
     public String getSignatory() {
         return signatory;
@@ -584,9 +588,21 @@ public class CtCctTreatmentFileVo {
     public void setInspector(String inspector) {
         this.inspector = inspector;
     }
-     
 
-    /**
-     *
-     */
+    public String getDestinationCountry() {
+        return destinationCountry;
+    }
+
+    public void setDestinationCountry(String destinationCountry) {
+        this.destinationCountry = destinationCountry;
+    }
+
+    public String getDtFileNumber() {
+        return dtFileNumber;
+    }
+
+    public void setDtFileNumber(String dtFileNumber) {
+        this.dtFileNumber = dtFileNumber;
+    }
+
 }

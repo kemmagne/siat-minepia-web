@@ -6,9 +6,11 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -32,6 +34,7 @@ import org.guce.siat.common.utils.Constants;
 import org.guce.siat.common.utils.DateUtils;
 import org.guce.siat.common.utils.enums.FileTypeCode;
 import org.guce.siat.core.ct.service.CommonService;
+import org.guce.siat.core.ct.util.enums.CctExportProductType;
 import org.guce.siat.web.common.AbstractController;
 import org.guce.siat.web.common.ControllerConstants;
 import org.guce.siat.web.ct.controller.util.JsfUtil;
@@ -154,6 +157,8 @@ public class FileItemCctController extends AbstractController<File> {
      */
     private Boolean firstCheck;
 
+    private final Map<File, CctExportProductType> productTypes = new HashMap<>();
+
     /**
      * Instantiates a new file item cct controller.
      */
@@ -215,7 +220,7 @@ public class FileItemCctController extends AbstractController<File> {
     public List<File> getItems() {
         try {
             if (items == null) {
-                items = new ArrayList(Utils.getFilesSet(fileTypeStepService, userAuthorityFileTypeService, fileItemService, commonService, fileFieldValueService, getLoggedUser()));
+                items = new ArrayList(Utils.getFilesSet(fileTypeStepService, userAuthorityFileTypeService, fileItemService, commonService, fileFieldValueService, getLoggedUser(), productTypes));
             }
         } catch (final Exception ex) {
             LOG.error(ex.getMessage(), ex);
@@ -237,7 +242,7 @@ public class FileItemCctController extends AbstractController<File> {
                         lastDecisionDate2 = file2.getCreatedDate();
                     }
 
-                    return lastDecisionDate2.compareTo(lastDecisionDate1);
+                    return lastDecisionDate1.compareTo(lastDecisionDate2);
                 }
             });
             setFirstCheck(false);
@@ -645,6 +650,11 @@ public class FileItemCctController extends AbstractController<File> {
     @Override
     public File getSelected() {
         return super.getSelected();
+    }
+
+    public String getProductType(File file) {
+        CctExportProductType productType = productTypes.get(file);
+        return productType != null ? productType.getLabel() : null;
     }
 
 }

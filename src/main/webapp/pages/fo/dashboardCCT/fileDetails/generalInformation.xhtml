@@ -6,7 +6,7 @@
             <a href="#" class="gototop"></a>
             <p:accordionPanel id="accRec">
                 <p:tab title="#{bundle['GeneralInformation_fileDetails']}" titleStyleClass="title" dynamic="true" cache="true">
-                    <c:forEach var="fileFieldGroupDto" items="#{fileItemCctDetailController.fileFieldGroupDtos}" >
+                    <c:forEach var="fileFieldGroupDto" items="#{fileItemCctDetailController.fileFieldGroupDtos}">
                         <div class="breadcump-ginfo">
                             <a href="##{fileFieldGroupDto.labelEn}" >#{facesContext.viewRoot.locale eq 'en' ? fileFieldGroupDto.labelEn : fileFieldGroupDto.labelFr}</a>
                         </div>

@@ -380,6 +380,7 @@ public interface ControllerConstants {
 
             String STATISTIC_ACTIVITY_REPORT = "/pages/fo/statistic/activityReport/index.xhtml";
             String STATISTIC_GLOBAL_DELAY_LISTING = "/pages/fo/statistic/globalDelayListing/index.xhtml";
+            String STATISTIC_GLOBAL_QUANTITY_LISTING = "/pages/fo/statistic/globalQuantityListing/index.xhtml";
             String STATISTIC_DELAY_LISTING_STAKEHOLDER = "/pages/fo/statistic/delayListingStakeholder/index.xhtml";
             String STATISTIC_EXPORT_NSH_DESTINIATION = "/pages/fo/statistic/exportNshDestination/index.xhtml";
             String STATISTIC_EXPORT_NSH_DESTINIATION_SENDER = "/pages/fo/statistic/exportNshDestSender/index.xhtml";
@@ -438,6 +439,8 @@ public interface ControllerConstants {
          * The Interface Messages.
          */
         interface Messages {
+
+            String PRODUCT_TYPE_MISSED = "ProductTypeMissed";
 
             /**
              * The Constant CHOOSE_DECISION_ERROR.
@@ -648,6 +651,8 @@ public interface ControllerConstants {
              * The no fimex message.
              */
             String NO_FIMEX_MESSAGE = "noFimexMessage";
+
+            String ALREADY_DECIDED = "alreadyDecided";
         }
     }
 }
