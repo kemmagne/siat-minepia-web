@@ -10,9 +10,9 @@
             <h:panelGrid columns="2">
                 <h:outputLabel for="DateTreatment" value="#{bundle['TreatmentResultDateTitle']}" />
                 <h:panelGroup>
-                <p:calendar navigator="true" value="#{fileItemCctDetailController.treatmentResult.treatmentDate}" showOn="button"
-                            pattern="dd/MM/yyyy" readonlyInput="true" id="DateTreatment" title="#{bundle['TreatmentResultDateTitle']}" requiredMessage="#{bundle['TreatmentResultDateRequiredMessage']}" />
-                <p:message for="DateTreatment" id="DateTreatmentMsg" />
+                    <p:calendar navigator="true" value="#{fileItemCctDetailController.treatmentResult.treatmentDate}" showOn="button"
+                                pattern="dd/MM/yyyy" readonlyInput="true" id="DateTreatment" title="#{bundle['TreatmentResultDateTitle']}" requiredMessage="#{bundle['TreatmentResultDateRequiredMessage']}" />
+                    <p:message for="DateTreatment" id="DateTreatmentMsg" />
                 </h:panelGroup>
                 <h:outputLabel value="#{bundle['TreatmentType']}" for="TreatmentType" />
                 <p:inputText id="TreatmentType" value="#{fileItemCctDetailController.treatmentResult.treatmentType}" required="true" />
@@ -28,7 +28,7 @@
 
                 <h:outputLabel value="#{bundle['SuperviseurTraitement']}" for="SuperviseurTraitement" />
                 <p:inputText value="#{fileItemCctDetailController.treatmentResult.supervisor}" id="SuperviseurTraitement" required="true" />
-                
+
             </h:panelGrid>
 
         </p:panel>
@@ -165,9 +165,9 @@
 
             <h:outputLabel for="treatmentResultDate" value="#{bundle['TreatmentResultDateLabel']} :" />
             <h:panelGroup>
-                <p:calendar  navigator="true" required="true" value="#{fileItemCctDetailController.treatmentResult.treatmentDate}" showOn="button"
-                             pattern="dd/MM/yyyy HH:mm" readonlyInput="true" id="treatmentResultDate" title="#{bundle['TreatmentResultDateTitle']}"
-                             requiredMessage="#{bundle['TreatmentResultDateRequiredMessage']}" />
+                <p:calendar navigator="true" required="true" value="#{fileItemCctDetailController.treatmentResult.treatmentDate}" showOn="button"
+                            pattern="dd/MM/yyyy HH:mm" readonlyInput="true" id="treatmentResultDate" title="#{bundle['TreatmentResultDateTitle']}"
+                            requiredMessage="#{bundle['TreatmentResultDateRequiredMessage']}" />
                 <p:message for="treatmentResultDate" id="treatmentResultDateMsg" />
             </h:panelGroup>
 

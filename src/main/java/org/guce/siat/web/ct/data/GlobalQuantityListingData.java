@@ -27,6 +27,9 @@ public class GlobalQuantityListingData implements Serializable {
     private String cdaName;
     private String volume;
     private String quantity;
+    private String treatmentSociety;
+    private String nsh;
+    private String nshLabel;
 
     public String getProcessName() {
         return processName;
@@ -154,6 +157,30 @@ public class GlobalQuantityListingData implements Serializable {
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
+    }
+
+    public String getTreatmentSociety() {
+        return treatmentSociety;
+    }
+
+    public void setTreatmentSociety(String treatmentSociety) {
+        this.treatmentSociety = treatmentSociety;
+    }
+
+    public String getNsh() {
+        return nsh;
+    }
+
+    public void setNsh(String nsh) {
+        this.nsh = nsh;
+    }
+
+    public String getNshLabel() {
+        return nshLabel;
+    }
+
+    public void setNshLabel(String nshLabel) {
+        this.nshLabel = nshLabel;
     }
 
 }

@@ -7,7 +7,7 @@
         <h:form id="filtredFileItemListForm">
 
             <h:panelGrid columns="2">
-                <h:commandLink action="#{exporter.exportPDF(table, 'GLOBAL_QUANTITY_LISTING')}">
+                <h:commandLink action="#{exporter.exportPDF(table, 'GLOBAL_QUANTITY_DETAIL_LISTING')}">
                     <h:outputText styleClass="sprite sprite-pdf" />
                 </h:commandLink>
 
@@ -61,23 +61,35 @@
                     </f:facet>
                     <h:outputText value="#{delay.productType}" />
                 </p:column>
-                <p:column rendered="true">
+                <p:column>
                     <f:facet name="header">
                         <h:outputText value="CDA" title="CDA" />
                     </f:facet>
                     <h:outputText value="#{delay.cdaName}" />
                 </p:column>
-                <p:column rendered="true">
+                <p:column>
                     <f:facet name="header">
                         <h:outputText value="#{bundle['treatmentSociety']}" title="#{bundle['treatmentSociety']}" />
                     </f:facet>
                     <h:outputText value="#{delay.treatmentSociety}" />
                 </p:column>
-                <p:column rendered="true">
+                <p:column>
                     <f:facet name="header">
                         <h:outputText value="Destination" title="Destination" />
                     </f:facet>
                     <h:outputText value="#{delay.destinationCountry}" />
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['FileItemInformationLabel_nsh']}" title="#{bundle['FileItemInformationLabel_nsh']}" />
+                    </f:facet>
+                    <h:outputText value="#{delay.nsh}" />
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Description" title="Description" />
+                    </f:facet>
+                    <h:outputText value="#{delay.nshLabel}" />
                 </p:column>
                 <p:column>
                     <f:facet name="header">

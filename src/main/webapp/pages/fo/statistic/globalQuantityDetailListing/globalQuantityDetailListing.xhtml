@@ -2,11 +2,11 @@
 
     <br />
 
-    <h:form id="globalQuantityListingSearchForm" class="search-style">
+    <h:form id="globalQuantityDetailListingSearchForm" class="search-style">
 
         <p:accordionPanel styleClass="search">
 
-            <p:tab title="#{bundle['globalQuantityListing_Search']}" dynamic="true" cache="true">
+            <p:tab title="#{bundle['globalQuantityDetailListing_Search']}" dynamic="true" cache="true">
 
                 <h:panelGrid columns="4" cellspacing="10">
                     <p:outputPanel styleClass="search-select">
@@ -27,12 +27,7 @@
                         </p:selectCheckboxMenu>
                     </p:outputPanel>
 
-                    <p:outputPanel rendered="false" styleClass="search-select">
-                        <h:outputLabel value="#{bundle['exporterNiu']}" />
-                        <p:inputText value="#{statisticController.cteFilter.clientNiu}" />
-                    </p:outputPanel>
-
-                    <p:outputPanel rendered="true" styleClass="search-select">
+                    <p:outputPanel styleClass="search-select">
                         <p:outputLabel for="destinationCountry" value="Destination" />
                         <p:selectOneMenu id="destinationCountry" value="#{statisticController.cteFilter.destinationCountry}" filter="true" filterMatchMode="contains">
                             <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
@@ -40,7 +35,7 @@
                         </p:selectOneMenu>
                     </p:outputPanel>
 
-                    <p:outputPanel rendered="true" styleClass="search-select">
+                    <p:outputPanel styleClass="search-select">
                         <p:outputLabel for="companyNiu" value="#{bundle['exporterNiu']}" />
                         <p:selectOneMenu id="companyNiu" value="#{statisticController.cteFilter.clientNiu}" filter="true" filterMatchMode="contains">
                             <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
@@ -48,7 +43,7 @@
                         </p:selectOneMenu>
                     </p:outputPanel>
 
-                    <p:outputPanel rendered="true" styleClass="search-select">
+                    <p:outputPanel styleClass="search-select">
                         <p:outputLabel for="companyName" value="#{bundle['companyName']}" />
                         <p:selectOneMenu id="companyName" value="#{statisticController.cteFilter.companyName}" filter="true" filterMatchMode="contains">
                             <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
@@ -56,7 +51,7 @@
                         </p:selectOneMenu>
                     </p:outputPanel>
 
-                    <p:outputPanel rendered="true" styleClass="search-select">
+                    <p:outputPanel styleClass="search-select">
                         <p:outputLabel for="CDA" value="CDA" />
                         <p:selectOneMenu id="CDA" value="#{statisticController.cteFilter.cda}" filter="true" filterMatchMode="contains">
                             <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
@@ -64,11 +59,19 @@
                         </p:selectOneMenu>
                     </p:outputPanel>
 
-                    <p:outputPanel rendered="true" styleClass="search-select">
+                    <p:outputPanel styleClass="search-select">
                         <p:outputLabel for="treatmentSociety" value="#{bundle['treatmentSociety']}" />
                         <p:selectOneMenu id="treatmentSociety" value="#{statisticController.cteFilter.treatmentSociety}" filter="true" filterMatchMode="contains">
                             <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
                             <f:selectItems value="#{statisticController.treatmentSocieties}" var="entry" itemValue="#{entry.key}" itemLabel="#{entry.value}" />
+                        </p:selectOneMenu>
+                    </p:outputPanel>
+
+                    <p:outputPanel styleClass="search-select">
+                        <p:outputLabel for="nsh" value="#{bundle['FileItemInformationLabel_nsh']}" />
+                        <p:selectOneMenu id="nsh" value="#{statisticController.cteFilter.nsh}" filter="true" filterMatchMode="contains">
+                            <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+                            <f:selectItems value="#{statisticController.specificNshList}" var="entry" itemValue="#{entry.goodsItemCode}" itemLabel="#{entry.goodsItemCode} - #{entry.goodsItemDesc}" />
                         </p:selectOneMenu>
                     </p:outputPanel>
                 </h:panelGrid>
@@ -110,12 +113,12 @@
 
                     <h:panelGroup>
                         <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" icon="ui-icon-search"
-                                         title="#{bundle['ButtonSearch']}" action="#{statisticController.doGlobalQuantityListingFilter()}"
-                                         update=":filtredFileItemListForm:datalist globalQuantityListingSearchForm :growl" oncomplete="PF('datalistTable').filter();" />
+                                         title="#{bundle['ButtonSearch']}" action="#{statisticController.doGlobalQuantityDetailListingFilter()}"
+                                         update=":filtredFileItemListForm:datalist globalQuantityDetailListingSearchForm :growl" oncomplete="PF('datalistTable').filter();" />
 
                         <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" icon="ui-icon-refresh"
-                                         title="#{bundle['ButtonReset']}" action="#{statisticController.initGlobalQuantityListingSearch()}"
-                                         oncomplete="PF('datalistTable').filter();" update=":filtredFileItemListForm:datalist globalQuantityListingSearchForm" />
+                                         title="#{bundle['ButtonReset']}" action="#{statisticController.initGlobalQuantityDetailListingSearch()}"
+                                         oncomplete="PF('datalistTable').filter();" update=":filtredFileItemListForm:datalist globalQuantityDetailListingSearchForm" />
 
                     </h:panelGroup>
 

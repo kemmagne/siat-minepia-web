@@ -1,23 +1,32 @@
 package org.guce.siat.web.reports.exporter;
 
+import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Transformer;
 import org.apache.commons.lang.StringUtils;
+import org.guce.siat.common.lookup.ServiceUtility;
 import org.guce.siat.common.model.Container;
 import org.guce.siat.common.model.File;
 import org.guce.siat.common.model.FileFieldValue;
 import org.guce.siat.common.model.FileItem;
 import org.guce.siat.common.model.FileItemFieldValue;
+import org.guce.siat.common.service.ApplicationPropretiesService;
+import org.guce.siat.common.utils.QRCodeGenerator;
 import org.guce.siat.core.ct.model.CCTCPParamValue;
 import org.guce.siat.core.ct.model.TreatmentInfos;
 import org.guce.siat.core.ct.util.enums.CctExportProductType;
+import org.guce.siat.web.common.util.WebConstants;
 import org.guce.siat.web.ct.controller.util.Utils;
 import org.guce.siat.web.reports.vo.CtCctCpEFileItemVo;
 import org.guce.siat.web.reports.vo.CtCctCpEFileVo;
@@ -95,8 +104,8 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
             ctCctCpEFileVo.setExporterTown(file.getClient().getCity());
             ctCctCpEFileVo.setExporterPoBox(file.getClient().getPostalCode());
         }
-        ctCctCpEFileVo.setOrigin(file.getCountryOfOrigin() != null ? (file.getCountryOfOrigin().getCountryNameFr() != null ? file.getCountryOfOrigin().getCountryNameFr() : file.getCountryOfOrigin().getCountryName()) : null);
-        ctCctCpEFileVo.setDestination(file.getCountryOfDestination() != null ? (file.getCountryOfDestination().getCountryNameFr() != null ? file.getCountryOfDestination().getCountryNameFr() : file.getCountryOfDestination().getCountryName()) : null);
+        ctCctCpEFileVo.setOrigin(file.getCountryOfOrigin() != null ? file.getCountryOfOrigin().getCountryName() : null);
+        ctCctCpEFileVo.setDestination(file.getCountryOfDestination() != null ? file.getCountryOfDestination().getCountryName() : null);
 
         // traitement
         if (treatmentInfos != null) {
@@ -111,7 +120,9 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
             ctCctCpEFileVo.setTreatmentsCarriedOut(treatmentInfos.getTreatmentsCarriedOut());
             ctCctCpEFileVo.setAdditionalDeclaration(treatmentInfos.getAdditionnalDeclaration());
             ctCctCpEFileVo.setTreatmentDate(treatmentInfos.getTreatmentDate());
-            ctCctCpEFileVo.setTreatmentEndDate(treatmentInfos.getTreatmentEndDate());
+            if (treatmentInfos.getTreatmentDate() != null && treatmentInfos.getTreatmentEndDate() != null && treatmentInfos.getTreatmentEndDate().after(treatmentInfos.getTreatmentDate())) {
+                ctCctCpEFileVo.setTreatmentEndDate(treatmentInfos.getTreatmentEndDate());
+            }
         }
 
         final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
@@ -288,8 +299,6 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
 
             String unit = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("UNITE", fileItemList.get(0)).getValue();
 
-            boolean hasVolume = false;
-            boolean hasWeight = false;
             FileItemFieldValue fileItemFieldValue;
             for (final FileItem fileItem : fileItemList) {
 
@@ -310,7 +319,6 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                     }
 
                     netWeight = netWeight.add(new BigDecimal(fileItem.getQuantity()));
-                    hasWeight = true;
                 } else if (Utils.getWoodProductsTypes().contains(productType)) {
                     FileItemFieldValue ngf = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("NOMBRE_GRUMES", fileItem);
                     if (ngf != null) {
@@ -321,7 +329,6 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
 
                     final String volumeStr = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("VOLUME", fileItem).getValue();
                     netWeight = netWeight.add(new BigDecimal(volumeStr));
-                    hasVolume = true;
                 } else if (Utils.COTONPRODUCTTYPE.equalsIgnoreCase(productType)) {
                     FileItemFieldValue ngf = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("NOMBRE_GRUMES", fileItem);
                     if (ngf != null) {
@@ -336,12 +343,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                         netWeight = netWeight.add(new BigDecimal(fileItem.getQuantity()));
                     }
                     unit = Utils.getProductTypePackaging().get(productType);
-                    hasWeight = true;
                 } else {
-//                    FileItemFieldValue nsf = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("NOMBRE_SACS", fileItem);
-//                    if (nsf != null) {
-//                        nb = nsf.getValue();
-//                    }
                     nb = fileItem.getQuantity();
                     emballage = unit;
                     netWeight = netWeight.add(new BigDecimal(fileItem.getQuantity()));
@@ -374,7 +376,19 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
 
             builder.append(netWeight).append(" ").append(unit);
             builder.append("<br/>").append("PB : ").append(grossWeight.toString()).append(" KG");
-            ctCctCpEFileVo.setQuantities(builder.toString());
+            if (!CctExportProductType.AUTRES.name().equals(productType)) {
+                ctCctCpEFileVo.setQuantities(builder.toString());
+            } else {
+                List<String> list = new ArrayList<>();
+                for (final FileItem fileItem : fileItemList) {
+                    fileItemFieldValue = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("POIDS_BRUT", fileItem);
+                    if (fileItemFieldValue != null) {
+                        String gw = fileItemFieldValue.getValue();
+                        list.add(String.format("%s KG", gw));
+                    }
+                }
+                ctCctCpEFileVo.setQuantities(StringUtils.join(list, "<br/>"));
+            }
             if (paramValue != null && !commoditiesListAttachment.isEmpty()) {
                 commoditiesList.add("- " + paramValue.getLabelMore());
                 ctCctCpEFileVo.setNamesAnnex(StringUtils.join(commoditiesListAttachment, "<br/>"));
@@ -392,7 +406,46 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
             }
         }
 
+        try {
+            String qrCodeContent = getDocumentPageUrl(file);
+            int qrCodeImageSize = 512;
+            ctCctCpEFileVo.setQrCode(new ByteArrayInputStream(new QRCodeGenerator().generateQR(qrCodeContent, qrCodeImageSize)));
+        } catch (Exception ex) {
+            logger.error(file.getNumeroDossier(), ex);
+        }
+
         return new JRBeanCollectionDataSource(Collections.singleton(ctCctCpEFileVo));
+    }
+
+    private String getDocumentPageUrl(File file) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext extContext = context.getExternalContext();
+        String documentPageUrl = "/pages/unsecure/document.xhtml";
+        String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, documentPageUrl));
+        url = Utils.getFinalDetailPageUrl(file, url, false, false);
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        String scheme = request.getScheme(); // https
+        String serverName = request.getServerName(); // localhost
+        Integer serverPort = request.getServerPort(); // 40081 ==> {scheme}://{serverName}:{serverPort}
+        ApplicationPropretiesService applicationPropretiesService = ServiceUtility.getBean(ApplicationPropretiesService.class);
+        String environment = applicationPropretiesService.getAppEnv();
+        String urlPrefix = StringUtils.EMPTY;
+        switch (environment) {
+            case "production":
+                urlPrefix = "https://siat.guichetunique.cm";
+                break;
+            case "standalone":
+                urlPrefix = "https://siat-web1:40081";
+                break;
+            case "test":
+                urlPrefix = "https://testsiat.guichetunique.cm";
+                break;
+            default:
+                urlPrefix = "https://localhost:40081";
+                break;
+        }
+        url = urlPrefix.concat(url);
+        return url;
     }
 
     @Override
