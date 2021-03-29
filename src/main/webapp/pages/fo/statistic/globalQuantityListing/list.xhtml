@@ -107,6 +107,14 @@
                         <f:convertDateTime type="date" pattern="dd/MM/yyyy HH:mm:ss" locale="fr" />
                     </h:outputText>
                 </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="#{bundle['TreatmentResultDateTitle']}" title="#{bundle['TreatmentResultDateTitle']}" />
+                    </f:facet>
+                    <h:outputText value="#{delay.treatmentDate}">
+                        <f:convertDateTime type="date" pattern="dd/MM/yyyy" locale="fr" />
+                    </h:outputText>
+                </p:column>
 
             </p:dataTable>
 

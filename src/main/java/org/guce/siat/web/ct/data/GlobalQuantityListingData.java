@@ -30,6 +30,7 @@ public class GlobalQuantityListingData implements Serializable {
     private String treatmentSociety;
     private String nsh;
     private String nshLabel;
+    private Date treatmentDate;
 
     public String getProcessName() {
         return processName;
@@ -181,6 +182,14 @@ public class GlobalQuantityListingData implements Serializable {
 
     public void setNshLabel(String nshLabel) {
         this.nshLabel = nshLabel;
+    }
+
+    public Date getTreatmentDate() {
+        return treatmentDate;
+    }
+
+    public void setTreatmentDate(Date treatmentDate) {
+        this.treatmentDate = treatmentDate;
     }
 
 }

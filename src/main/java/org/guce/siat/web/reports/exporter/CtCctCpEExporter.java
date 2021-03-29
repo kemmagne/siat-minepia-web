@@ -1,8 +1,8 @@
 package org.guce.siat.web.reports.exporter;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.math.BigDecimal;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -26,7 +26,6 @@ import org.guce.siat.common.utils.QRCodeGenerator;
 import org.guce.siat.core.ct.model.CCTCPParamValue;
 import org.guce.siat.core.ct.model.TreatmentInfos;
 import org.guce.siat.core.ct.util.enums.CctExportProductType;
-import org.guce.siat.web.common.util.WebConstants;
 import org.guce.siat.web.ct.controller.util.Utils;
 import org.guce.siat.web.reports.vo.CtCctCpEFileItemVo;
 import org.guce.siat.web.reports.vo.CtCctCpEFileVo;
@@ -409,7 +408,9 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
         try {
             String qrCodeContent = getDocumentPageUrl(file);
             int qrCodeImageSize = 512;
-            ctCctCpEFileVo.setQrCode(new ByteArrayInputStream(new QRCodeGenerator().generateQR(qrCodeContent, qrCodeImageSize)));
+            InputStream is = new ByteArrayInputStream(new QRCodeGenerator().generateQR(qrCodeContent, qrCodeImageSize));
+            ctCctCpEFileVo.setQrCode(is);
+            ctCctCpEFileVo.setQrCodeAnnex(is);
         } catch (Exception ex) {
             logger.error(file.getNumeroDossier(), ex);
         }
@@ -429,7 +430,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
         Integer serverPort = request.getServerPort(); // 40081 ==> {scheme}://{serverName}:{serverPort}
         ApplicationPropretiesService applicationPropretiesService = ServiceUtility.getBean(ApplicationPropretiesService.class);
         String environment = applicationPropretiesService.getAppEnv();
-        String urlPrefix = StringUtils.EMPTY;
+        String urlPrefix;
         switch (environment) {
             case "production":
                 urlPrefix = "https://siat.guichetunique.cm";

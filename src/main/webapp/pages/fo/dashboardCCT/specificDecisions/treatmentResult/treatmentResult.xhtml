@@ -129,8 +129,7 @@
                 <p:selectBooleanCheckbox value="#{fileItemCctDetailController.treatmentResult.preventionPlaquePresent}" id="PresencePlaqueProtection"/>
 
                 <h:outputLabel value="#{bundle['NatureSecPersonnel']}" for="NatureSecPersonnel" />
-                <p:inputText value="#{fileItemCctDetailController.treatmentResult.staffSecurityNature}"
-                             id="NatureSecPersonnel" required="true" />
+                <p:inputText value="#{fileItemCctDetailController.treatmentResult.staffSecurityNature}" id="NatureSecPersonnel" required="true" />
 
                 <h:outputLabel value="#{bundle['EquipementsProtection']}" for="EquipementsProtection" />
                 <p:selectManyMenu required="true" id="EquipementsProtection" value="#{fileItemCctDetailController.treatmentResult.protectionEquipementsList}">
@@ -138,8 +137,7 @@
                 </p:selectManyMenu>
 
                 <h:outputLabel value="#{bundle['ObservationsGenerales']}" for="ObservationsGenerales" />
-                <p:inputTextarea id="ObservationsGenerales" value="#{fileItemCctDetailController.treatmentResult.generalObservations}"
-                                 rows="3" maxlength="255" />
+                <p:inputTextarea id="ObservationsGenerales" value="#{fileItemCctDetailController.treatmentResult.generalObservations}" rows="3" maxlength="255" />
 
             </h:panelGrid>
 
@@ -182,15 +180,13 @@
             <p:inputText title="#{bundle['TreatmentDosageTitle']}" value="#{fileItemCctDetailController.treatmentResult.dosage}" id="treatmentDosage" />
 
             <h:outputLabel for="treatmentResultObservation" value="#{bundle['TreatmentResultObservationLabel']} :" />
-            <p:inputTextarea title="#{bundle['TreatmentResultObservationTitle']}" value="#{fileItemCctDetailController.treatmentResult.observation}"
-                             id="treatmentResultObservation" />
+            <p:inputTextarea title="#{bundle['TreatmentResultObservationTitle']}" value="#{fileItemCctDetailController.treatmentResult.observation}" id="treatmentResultObservation" />
 
         </p:panelGrid>
 
         <p:panel rendered="false" header="#{bundle['TreatmentResultDetails']}" style="width:100%" toggleable="true">
 
-            <p:dataTable id="treatmentResultDetails" widgetVar="treatmentResultDetailsTable" var="item"
-                         value="#{fileItemCctDetailController.treatmentFileManagers}">
+            <p:dataTable id="treatmentResultDetails" widgetVar="treatmentResultDetailsTable" var="item" value="#{fileItemCctDetailController.treatmentFileManagers}">
 
                 <p:column headerText="#{bundle['TreatmentResultDetailsTreatmentType']}" id="treatmentTypeColumn">
                     <f:facet name="header">

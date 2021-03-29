@@ -1257,12 +1257,14 @@ public class StatisticController extends AbstractController<FileItem> {
 
                 col = line[i++];
                 if (col != null) {
-                    globalQuantity.setEntryDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").parse(col.toString()));
+//                    globalQuantity.setEntryDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").parse(col.toString()));
+                    globalQuantity.setEntryDate((Date) col);
                 }
 
                 col = line[i++];
                 if (col != null) {
-                    globalQuantity.setReleaseDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").parse(col.toString()));
+//                    globalQuantity.setReleaseDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").parse(col.toString()));
+                    globalQuantity.setReleaseDate((Date) col);
                 }
 
                 col = line[i++];
@@ -1301,6 +1303,11 @@ public class StatisticController extends AbstractController<FileItem> {
                     if (col != null) {
                         globalQuantity.setNshLabel(col.toString());
                     }
+                }
+
+                col = line[i++];
+                if (col != null) {
+                    globalQuantity.setTreatmentDate((Date) col);
                 }
 
                 globalQuantityListingDataList.add(globalQuantity);

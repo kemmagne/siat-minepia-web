@@ -4,7 +4,7 @@
     <p:panelGrid columns="2">
         <h:outputLabel for="PveAuthorizationNumber" value="#{bundle['AuthorizationNumber']}" />
         <h:panelGroup>
-            <p:inputText value="#{fileItemCctDetailController.pottingReport.authorizationNumber}" id="PveAuthorizationNumber" required="true"
+            <p:inputText value="#{fileItemCctDetailController.pottingReport.authorizationNumber}" id="PveAuthorizationNumber" required="false"
                          requiredMessage="#{bundle['Field']} #{bundle['AuthorizationNumber']} #{bundle['RequiredMessage']}">
                 <f:validateLength maximum="35" />
             </p:inputText>
@@ -14,7 +14,7 @@
         <h:outputLabel for="PveAuthorizationDate" value="#{bundle['AuthorizationDate']}" />
         <h:panelGroup>
             <p:calendar navigator="true" readonlyInput="true" pattern="dd/MM/yyyy"
-                        value="#{fileItemCctDetailController.pottingReport.authorizationDate}" showOn="button" id="PveAuthorizationDate" required="true"
+                        value="#{fileItemCctDetailController.pottingReport.authorizationDate}" showOn="button" id="PveAuthorizationDate" required="false"
                         requiredMessage="#{bundle['Field']} #{bundle['AuthorizationDate']} #{bundle['RequiredMessage']}" />
             <p:message for="PveAuthorizationDate" />
         </h:panelGroup>
@@ -37,7 +37,7 @@
 
         <h:outputLabel for="PveTreatmentCertNumber" value="#{bundle['TreatmentCertNumber']}" />
         <h:panelGroup>
-            <p:inputText value="#{fileItemCctDetailController.pottingReport.treatmentCertNumber}" id="PveTreatmentCertNumber" required="true"
+            <p:inputText value="#{fileItemCctDetailController.pottingReport.treatmentCertNumber}" id="PveTreatmentCertNumber" required="false"
                          requiredMessage="#{bundle['Field']} #{bundle['TreatmentCertNumber']} #{bundle['RequiredMessage']}">
                 <f:validateLength maximum="35" />
             </p:inputText>
@@ -47,7 +47,7 @@
         <h:outputLabel for="PveTreatmentCertDate" value="#{bundle['TreatmentCertDate']}" />
         <h:panelGroup>
             <p:calendar navigator="true" readonlyInput="true" pattern="dd/MM/yyyy"
-                        value="#{fileItemCctDetailController.pottingReport.treatmentCertDate}" showOn="button" id="PveTreatmentCertDate" required="true"
+                        value="#{fileItemCctDetailController.pottingReport.treatmentCertDate}" showOn="button" id="PveTreatmentCertDate" required="false"
                         requiredMessage="#{bundle['Field']} #{bundle['TreatmentCertDate']} #{bundle['RequiredMessage']}" />
             <p:message for="PveTreatmentCertDate" />
         </h:panelGroup>

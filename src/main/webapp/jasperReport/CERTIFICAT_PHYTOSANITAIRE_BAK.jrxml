@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CERTIFICAT_PHYTOSANITAIRE" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6f5c0835-9f5c-4b28-b5db-296746e60a32">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="240"/>
+	<property name="ireport.y" value="192"/>
 	<parameter name="MINADER_LOGO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -328,17 +328,31 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 				</rectangle>
 				<staticText>
 					<reportElement x="3" y="1" width="471" height="30" uuid="b3e8b9af-85ad-4670-99a8-03d3b8273c46"/>
-					<textElement markup="html">
+					<textElement>
 						<font size="8"/>
 					</textElement>
-					<text><![CDATA[Marque des colis, nombre et nature des colis, nom des produits, nom botanique des produits<br><i>Distinguish marks, number and description of packages, name of product, botanical name of products</i>]]></text>
+					<text><![CDATA[Marque des colis, nombre et nature des colis, nom des produits, nom botanique des produits]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="478" y="1" width="77" height="30" uuid="a6640fd9-268d-498d-bcf5-dbfd93ddd57f"/>
-					<textElement markup="html">
+					<reportElement x="3" y="11" width="472" height="30" uuid="897d6a22-3c14-4ba1-af8f-bfe006002c51"/>
+					<textElement>
+						<font size="8" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[Distinguish marks, number and description of packages, name of product, botanical name of products]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="474" y="1" width="80" height="15" uuid="a6640fd9-268d-498d-bcf5-dbfd93ddd57f"/>
+					<textElement>
 						<font size="8"/>
 					</textElement>
-					<text><![CDATA[Quantité déclarée<br><i>Declared quantity</i>]]></text>
+					<text><![CDATA[Quantité déclarée]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="474" y="13" width="79" height="15" uuid="bcefb3a6-c41d-4c65-a118-33faa71b1a0e"/>
+					<textElement>
+						<font size="8" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[Declared quantity]]></text>
 				</staticText>
 				<rectangle>
 					<reportElement mode="Transparent" x="0" y="168" width="555" height="85" uuid="15bb6579-91b6-45c7-9272-147e1f30346b"/>
@@ -598,8 +612,8 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					<textFieldExpression><![CDATA[$F{additionalInfos}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="478" y="25" width="77" height="137" uuid="72013e41-0a92-4b43-95be-71e1e23fa01f"/>
-					<textElement verticalAlignment="Top" markup="html">
+					<reportElement x="474" y="31" width="81" height="137" uuid="72013e41-0a92-4b43-95be-71e1e23fa01f"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{quantities}]]></textFieldExpression>
@@ -654,7 +668,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					<textFieldExpression><![CDATA[$F{treatmentsCarriedOut}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="1" y="25" width="473" height="74" uuid="703a3b6f-fcc0-456e-929f-963839d7506e"/>
+					<reportElement x="1" y="24" width="473" height="74" uuid="703a3b6f-fcc0-456e-929f-963839d7506e"/>
 					<textElement textAlignment="Center" verticalAlignment="Top" markup="html">
 						<font size="8" isBold="true"/>
 						<paragraph spacingBefore="2"/>
