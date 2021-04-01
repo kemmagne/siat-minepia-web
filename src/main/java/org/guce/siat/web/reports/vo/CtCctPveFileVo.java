@@ -13,6 +13,8 @@ import org.guce.siat.core.ct.model.PottingReport;
  */
 public class CtCctPveFileVo implements Serializable {
 
+    private static final long serialVersionUID = 8192691989353720982L;
+
     private File file;
     private List<PottingPresent> presents;
     private List<ContainerVo> containers;

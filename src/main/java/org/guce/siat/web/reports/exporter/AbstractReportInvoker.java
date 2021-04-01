@@ -28,7 +28,7 @@ public abstract class AbstractReportInvoker implements ReportCommand {
     /**
      * The Constant LOG.
      */
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractReportInvoker.class);
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * The pdf file name.
@@ -78,7 +78,7 @@ public abstract class AbstractReportInvoker implements ReportCommand {
 
             //set pdf type
             try ( // Provides an output stream for sending binary data
-                     ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream()) {
+                    ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream()) {
                 //set pdf type
                 httpServletResponse.setContentType("application/pdf");
                 httpServletResponse.setContentLength(bytes.length);
@@ -88,7 +88,7 @@ public abstract class AbstractReportInvoker implements ReportCommand {
             }
             FacesContext.getCurrentInstance().responseComplete();
         } catch (final JRException | IOException ex) {
-            LOG.error(ex.getMessage(), ex);
+            logger.error(ex.getMessage(), ex);
         }
     }
 
@@ -151,7 +151,7 @@ public abstract class AbstractReportInvoker implements ReportCommand {
             pdfReport = JasperExportManager.exportReportToPdf(jasperPrint);
 
         } catch (final JRException e) {
-            LOG.error(Objects.toString(e), e);
+            logger.error(Objects.toString(e), e);
         }
         return pdfReport;
     }
@@ -169,7 +169,7 @@ public abstract class AbstractReportInvoker implements ReportCommand {
                     getJRParameters(), reportDataSource);
 
         } catch (final JRException e) {
-            LOG.error(Objects.toString(e), e);
+            logger.error(Objects.toString(e), e);
         }
         return jasperPrint;
     }

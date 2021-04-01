@@ -59,6 +59,14 @@
         <!-- TreatmentInfos -->
         <p:panel header="#{bundle['TreatmentInfos']}" rendered="#{fileItemCctDetailController.treatmentInfos.delivrableType eq 'CCT_CT_E' or fileItemCctDetailController.phytoTransitFile}">
             <h:panelGrid columns="2">
+
+                <h:outputLabel rendered="true" value="#{bundle['DestinationCountry']}" for="DestinationCountry" />
+                <p:selectOneMenu id="DestinationCountry" value="#{fileItemCctDetailController.currentFile.countryOfDestination}">
+                    <f:converter binding="#{countryConverter}" />
+                    <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+                    <f:selectItems value="#{fileItemCctDetailController.countriesList}" var="country" itemLabel="#{country.countryName}" itemValue="#{country}" />
+                </p:selectOneMenu>
+
                 <h:outputLabel value="#{bundle['TreatmentStartDate']}" for="TreatmentStartDate" />
                 <h:panelGroup>
                     <p:calendar navigator="true" readonlyInput="true" pattern="dd/MM/yyyy"
@@ -126,7 +134,7 @@
         </p:panel>
 
         <p:panel rendered="true">
-            <ui:include src="fileItemDtos.xhtml" />
+            <ui:include src="../common/fileItemDtos.xhtml" />
         </p:panel>
 
     </p:scrollPanel>

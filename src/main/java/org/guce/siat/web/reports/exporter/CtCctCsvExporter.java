@@ -20,22 +20,18 @@ import org.guce.siat.common.model.FileItemFieldValue;
 import org.guce.siat.common.model.ItemFlow;
 import org.guce.siat.common.model.ItemFlowData;
 import org.guce.siat.common.model.User;
-import org.guce.siat.common.utils.QRCodeUtils;
+import org.guce.siat.common.utils.QRCodeGenerator;
+;
 import org.guce.siat.core.ct.model.ApprovedDecision;
 import org.guce.siat.web.reports.vo.CtCctCsvFileItemVo;
 import org.guce.siat.web.reports.vo.CtCctCsvFileVo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The Class CtCctCsvExporter.
  */
-public class CtCctCsvExporter extends AbstractReportInvoker {
 
-    /**
-     * The Constant LOG.
-     */
-    private static final Logger LOG = LoggerFactory.getLogger(CtCctCsvExporter.class);
+
+public class CtCctCsvExporter extends AbstractReportInvoker {
 
     /**
      * The file.
@@ -59,7 +55,6 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
         this.user = connected;
         this.decision = decision;
     }
-
 
     /*
 	 * (non-Javadoc)
@@ -165,7 +160,7 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
                                 try {
                                     ctCctCsvFileVo.setExpeditionDate(new SimpleDateFormat("dd/MM/yyyy").parse(fileFieldValue.getValue()));
                                 } catch (final ParseException e) {
-                                    LOG.error(Objects.toString(e), e);
+                                    logger.error(Objects.toString(e), e);
                                 }
                             }
                             break;
@@ -423,7 +418,11 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
                     + " Nom Fournisseur : " + ctCctCsvFileVo.getConsignorName()
                     + " Referencence Dedouanement : " + ctCctCsvFileVo.getCertificateReferenceNumber()
                     + " Numero BL ou LTA : " + ctCctCsvFileVo.getLadingNumberLTA();
-            ctCctCsvFileVo.setQrCode(new ByteArrayInputStream(QRCodeUtils.generateQR(qrContent, 512)));
+            try {
+                ctCctCsvFileVo.setQrCode(new ByteArrayInputStream(new QRCodeGenerator().generateQR(qrContent, 512)));
+            } catch (Exception ex) {
+                logger.error(file.getNumeroDossier(), ex);
+            }
 
             ctCctCsvFileVo.setFileItemList(fileItemVos);
         }

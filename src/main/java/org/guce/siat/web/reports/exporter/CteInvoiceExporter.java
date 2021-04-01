@@ -1,8 +1,6 @@
 package org.guce.siat.web.reports.exporter;
 
-import com.google.zxing.WriterException;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,8 +8,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.collections.CollectionUtils;
 import org.guce.siat.common.model.File;
@@ -20,7 +16,7 @@ import org.guce.siat.common.model.FileItem;
 import org.guce.siat.common.model.FileItemFieldValue;
 import org.guce.siat.common.model.ItemFlow;
 import org.guce.siat.common.utils.DateUtils;
-import org.guce.siat.common.utils.QRCodeUtils;
+import org.guce.siat.common.utils.QRCodeGenerator;
 import org.guce.siat.common.utils.enums.FlowCode;
 import org.guce.siat.core.ct.model.PaymentData;
 import org.guce.siat.core.ct.util.enums.CctExportProductType;
@@ -186,10 +182,9 @@ public class CteInvoiceExporter extends AbstractReportInvoker {
         String qrCodeContent = MessageFormat.format("{0}, {1}, {2}, {3}, {4}, {5}",
                 file.getNumeroDemande(), file.getReferenceSiat(), paymentData.getMontantHt() + paymentData.getMontantTva(), DateUtils.formatSimpleDate(DateUtils.FRENCH_DATE_TIME, invValidItemFlow.getCreated()), file.getClient().getCompanyName(), invValidItemFlow.getSender().getLastName());
         try {
-            byte[] qrCodeBytes = QRCodeUtils.createQRImage(qrCodeContent, 100);
-            invoiceVo.setQrCode(new ByteArrayInputStream(qrCodeBytes));
-        } catch (WriterException | IOException ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+            invoiceVo.setQrCode(new ByteArrayInputStream(new QRCodeGenerator().generateQR(qrCodeContent, 512)));
+        } catch (Exception ex) {
+            logger.error(file.getNumeroDossier(), ex);
         }
 
         return new JRBeanCollectionDataSource(Collections.singleton(invoiceVo));

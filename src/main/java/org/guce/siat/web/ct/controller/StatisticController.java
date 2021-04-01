@@ -58,6 +58,7 @@ import org.guce.siat.core.ct.model.AnalyseOrder;
 import org.guce.siat.core.ct.model.Laboratory;
 import org.guce.siat.core.ct.service.CommonService;
 import org.guce.siat.core.ct.service.LaboratoryService;
+import org.guce.siat.core.ct.service.MinaderStatisticsService;
 import org.guce.siat.core.ct.util.enums.CctExportProductType;
 import org.guce.siat.web.common.AbstractController;
 import org.guce.siat.web.common.ControllerConstants;
@@ -67,6 +68,7 @@ import org.guce.siat.web.ct.data.DelayListingStakeholderData;
 import org.guce.siat.web.ct.data.ExportNshDestinationData;
 import org.guce.siat.web.ct.data.GlobalDelayListingData;
 import org.guce.siat.web.ct.data.GlobalQuantityListingData;
+import org.guce.siat.web.ct.data.Pair;
 import org.guce.siat.web.ct.data.ServiceItemDto;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -93,6 +95,9 @@ public class StatisticController extends AbstractController<FileItem> {
      * The Constant DATE_VALIDATION_ERROR_MESSAGE.
      */
     private static final String DATE_VALIDATION_ERROR_MESSAGE = "DateValidationError";
+
+    @ManagedProperty(value = "#{minaderStatisticsService}")
+    private MinaderStatisticsService minaderStatisticsService;
 
     /**
      * The common service.
@@ -283,6 +288,11 @@ public class StatisticController extends AbstractController<FileItem> {
     private List<Country> countries;
 
     /**
+     * The destination countries.
+     */
+    private List<Country> destinationCountries;
+
+    /**
      * The check operation.
      */
     private Boolean checkOperation;
@@ -316,6 +326,11 @@ public class StatisticController extends AbstractController<FileItem> {
      * The decision type.
      */
     private List<String> decisionType = new ArrayList<>();
+
+    private List<Pair> companiesList;
+    private List<Pair> cdas;
+    private List<Pair> treatmentSocieties;
+    private List<Item> specificNshList;
 
     /**
      * Inits the.
@@ -444,11 +459,41 @@ public class StatisticController extends AbstractController<FileItem> {
     }
 
     public synchronized void initGlobalQuantityListingSearch() {
+        initGlobalQuantityListingSearchCommon(false);
+    }
+
+    public synchronized void initGlobalQuantityDetailListingSearch() {
+        initGlobalQuantityListingSearchCommon(true);
+    }
+
+    private void initGlobalQuantityListingSearchCommon(boolean detail) {
         cteFilter = new CteFilter();
         Calendar c = Calendar.getInstance();
         c.set(Calendar.DAY_OF_MONTH, 1);
         cteFilter.setCreationFromDate(c.getTime());
         cteFilter.setCreationToDate(Calendar.getInstance().getTime());
+        List<Company> list = companyService.findCompaniesByFileTypes(FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI);
+        companiesList = new ArrayList<>();
+        for (Company company : list) {
+            if (!companiesList.contains(new Pair(company.getNumContribuable(), company.getCompanyName()))) {
+                companiesList.add(new Pair(company.getNumContribuable(), company.getCompanyName()));
+            }
+        }
+        Map<String, String> map;
+        map = minaderStatisticsService.findCDAs();
+        cdas = new ArrayList<>();
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            cdas.add(new Pair(entry.getKey(), entry.getValue()));
+        }
+        map = minaderStatisticsService.findTreatmentSocieties();
+        treatmentSocieties = new ArrayList<>();
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            treatmentSocieties.add(new Pair(entry.getKey(), entry.getValue()));
+        }
+        destinationCountries = minaderStatisticsService.findDestinationCountries();
+        if (detail) {
+            specificNshList = itemService.findNSHByFileTypes(FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI);
+        }
         globalQuantityListingDataList = new ArrayList<>();
     }
 
@@ -658,14 +703,24 @@ public class StatisticController extends AbstractController<FileItem> {
         }
     }
 
-    public void goToGlobalQuantityListingSearchPage() {
+    public synchronized void goToGlobalQuantityListingSearchPage() {
+        goToGlobalQuantityListingCommon(false);
+    }
+
+    public synchronized void goToGlobalQuantityDetailListingSearchPage() {
+        goToGlobalQuantityListingCommon(true);
+    }
+
+    private void goToGlobalQuantityListingCommon(boolean detail) {
+
         try {
-            initGlobalQuantityListingSearch();
-            final FacesContext context = FacesContext.getCurrentInstance();
-            final ExternalContext extContext = context.getExternalContext();
-            final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, ControllerConstants.Pages.FO.STATISTIC_GLOBAL_QUANTITY_LISTING));
+            initGlobalQuantityListingSearchCommon(detail);
+            FacesContext context = FacesContext.getCurrentInstance();
+            ExternalContext extContext = context.getExternalContext();
+            String page = !detail ? ControllerConstants.Pages.FO.STATISTIC_GLOBAL_QUANTITY_LISTING : ControllerConstants.Pages.FO.STATISTIC_GLOBAL_QUANTITY_DETAIL_LISTING;
+            String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, page));
             extContext.redirect(url);
-        } catch (final IOException ioe) {
+        } catch (IOException ioe) {
             logger.error(ioe.getMessage(), ioe);
         }
     }
@@ -1139,39 +1194,120 @@ public class StatisticController extends AbstractController<FileItem> {
 
         List<Object[]> objectList = commonService.getGlobalQuantityListing(cteFilter, loggedUser);
         globalQuantityListingDataList = new ArrayList<>();
-        for (Object[] object : objectList) {
+        fillGlobalQuantityListingDataList(objectList, false);
+    }
+
+    public synchronized void doGlobalQuantityDetailListingFilter() {
+
+        if (!validate()) {
+            return;
+        }
+
+        //Adjust the end-date to 23:59:59
+        if (cteFilter.getCreationToDate() != null) {
+            cteFilter.setCreationToDate(toLastTimeOfDay(cteFilter.getCreationToDate()));
+        }
+        if (cteFilter.getValidationToDate() != null) {
+            cteFilter.setValidationToDate(toLastTimeOfDay(cteFilter.getValidationToDate()));
+        }
+
+        List<Object[]> objectList = commonService.getGlobalQuantityDetailListing(cteFilter, loggedUser);
+        globalQuantityListingDataList = new ArrayList<>();
+        fillGlobalQuantityListingDataList(objectList, true);
+    }
+
+    private void fillGlobalQuantityListingDataList(List<Object[]> objectList, boolean detail) {
+        Object col;
+        for (Object[] line : objectList) {
+
             try {
+
                 GlobalQuantityListingData globalQuantity = new GlobalQuantityListingData();
-                if (object[0] != null) {
-                    globalQuantity.setExpecNumber(object[0].toString());
+
+                int i = 0;
+                col = line[i++];
+                if (col != null) {
+                    globalQuantity.setExpecNumber(col.toString());
                 }
-                if (object[1] != null) {
-                    globalQuantity.setSubfileNumber(object[1].toString());
+
+                col = line[i++];
+                if (col != null) {
+                    globalQuantity.setSubfileNumber(col.toString());
                 }
-                if (object[2] != null) {
-                    globalQuantity.setProcessName(object[2].toString());
+
+                col = line[i++];
+                if (col != null) {
+                    globalQuantity.setProcessName(col.toString());
                 }
-                if (object[3] != null) {
-                    globalQuantity.setExporterNiu(object[3].toString());
+
+                col = line[i++];
+                if (col != null) {
+                    globalQuantity.setExporterNiu(col.toString());
                 }
-                if (object[4] != null) {
-                    globalQuantity.setExporterName(object[4].toString());
+
+                col = line[i++];
+                if (col != null) {
+                    globalQuantity.setExporterName(col.toString());
                 }
-                if (object[5] != null) {
-                    globalQuantity.setProductType(object[5].toString());
+
+                col = line[i++];
+                if (col != null) {
+                    globalQuantity.setProductType(col.toString());
                 }
-                if (object[6] != null) {
-                    globalQuantity.setEntryDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").parse(object[6].toString()));
+
+                col = line[i++];
+                if (col != null) {
+//                    globalQuantity.setEntryDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").parse(col.toString()));
+                    globalQuantity.setEntryDate((Date) col);
                 }
-                if (object[7] != null) {
-                    globalQuantity.setReleaseDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").parse(object[7].toString()));
+
+                col = line[i++];
+                if (col != null) {
+//                    globalQuantity.setReleaseDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").parse(col.toString()));
+                    globalQuantity.setReleaseDate((Date) col);
                 }
-                if (object[8] != null) {
-                    globalQuantity.setQuantity(object[8].toString());
+
+                col = line[i++];
+                if (col != null) {
+                    globalQuantity.setQuantity(col.toString());
                 }
-                if (object[9] != null) {
-                    globalQuantity.setVolume(object[9].toString());
-                    globalQuantity.setVolume(globalQuantity.getVolume().replace('.', ','));
+
+                col = line[i++];
+                if (col != null) {
+                    String volume = col.toString();
+                    volume = volume.replace('.', ',');
+                    globalQuantity.setVolume(volume);
+                }
+
+                col = line[i++];
+                if (col != null) {
+                    globalQuantity.setDestinationCountry(col.toString());
+                }
+
+                col = line[i++];
+                if (col != null) {
+                    globalQuantity.setTreatmentSociety(col.toString());
+                }
+
+                col = line[i++];
+                if (col != null) {
+                    globalQuantity.setCdaName(col.toString());
+                }
+
+                if (detail) {
+                    col = line[i++];
+                    if (col != null) {
+                        globalQuantity.setNsh(col.toString());
+                    }
+                    col = line[i++];
+                    if (col != null) {
+                        globalQuantity.setNshLabel(col.toString());
+                    }
+                }
+
+                col = line[i++];
+                if (col != null) {
+                    globalQuantity.setTreatmentDate((Date) col);
                 }
 
                 globalQuantityListingDataList.add(globalQuantity);
@@ -1584,6 +1720,14 @@ public class StatisticController extends AbstractController<FileItem> {
      */
     public void setAnalyseFilter(final AnalyseFilter analyseFilter) {
         this.analyseFilter = analyseFilter;
+    }
+
+    public MinaderStatisticsService getMinaderStatisticsService() {
+        return minaderStatisticsService;
+    }
+
+    public void setMinaderStatisticsService(MinaderStatisticsService minaderStatisticsService) {
+        this.minaderStatisticsService = minaderStatisticsService;
     }
 
     /**
@@ -2282,6 +2426,26 @@ public class StatisticController extends AbstractController<FileItem> {
     @Override
     public FileItem getSelected() {
         return super.getSelected();
+    }
+
+    public List<Pair> getCompaniesList() {
+        return companiesList;
+    }
+
+    public List<Pair> getCdas() {
+        return cdas;
+    }
+
+    public List<Pair> getTreatmentSocieties() {
+        return treatmentSocieties;
+    }
+
+    public List<Country> getDestinationCountries() {
+        return destinationCountries;
+    }
+
+    public List<Item> getSpecificNshList() {
+        return specificNshList;
     }
 
 }

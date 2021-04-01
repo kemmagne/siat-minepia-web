@@ -1,5 +1,6 @@
 package org.guce.siat.web.reports.vo;
 
+import java.io.InputStream;
 import java.util.Date;
 import org.guce.siat.common.model.User;
 
@@ -200,6 +201,9 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
     private String containersNumbersAnnex;
 
     private String userAddInfos;
+
+    private InputStream qrCode;
+    private InputStream qrCodeAnnex;
 
     /**
      * Gets the consignor name.
@@ -1000,6 +1004,22 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
 
     public void setUserAddInfos(String userAddInfos) {
         this.userAddInfos = userAddInfos;
+    }
+
+    public InputStream getQrCode() {
+        return qrCode;
+    }
+
+    public void setQrCode(InputStream qrCode) {
+        this.qrCode = qrCode;
+    }
+
+    public InputStream getQrCodeAnnex() {
+        return qrCodeAnnex;
+    }
+
+    public void setQrCodeAnnex(InputStream qrCodeAnnex) {
+        this.qrCodeAnnex = qrCodeAnnex;
     }
 
 }

@@ -381,6 +381,7 @@ public interface ControllerConstants {
             String STATISTIC_ACTIVITY_REPORT = "/pages/fo/statistic/activityReport/index.xhtml";
             String STATISTIC_GLOBAL_DELAY_LISTING = "/pages/fo/statistic/globalDelayListing/index.xhtml";
             String STATISTIC_GLOBAL_QUANTITY_LISTING = "/pages/fo/statistic/globalQuantityListing/index.xhtml";
+            String STATISTIC_GLOBAL_QUANTITY_DETAIL_LISTING = "/pages/fo/statistic/globalQuantityDetailListing/index.xhtml";
             String STATISTIC_DELAY_LISTING_STAKEHOLDER = "/pages/fo/statistic/delayListingStakeholder/index.xhtml";
             String STATISTIC_EXPORT_NSH_DESTINIATION = "/pages/fo/statistic/exportNshDestination/index.xhtml";
             String STATISTIC_EXPORT_NSH_DESTINIATION_SENDER = "/pages/fo/statistic/exportNshDestSender/index.xhtml";

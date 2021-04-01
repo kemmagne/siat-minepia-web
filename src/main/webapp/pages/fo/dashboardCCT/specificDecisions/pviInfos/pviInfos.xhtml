@@ -81,6 +81,10 @@
             <p:outputLabel for="couvertDoc" value="#{bundle['couvertDoc']}" />
             <p:selectBooleanCheckbox required="false" id="couvertDoc" value="#{fileItemCctDetailController.inspectionReportData.pviCouvertDoc}" />
         </h:panelGrid>
+
+        <p:panel rendered="true">
+            <ui:include src="../common/fileItemDtos.xhtml" />
+        </p:panel>
     </p:scrollPanel>
 
 </ui:composition>

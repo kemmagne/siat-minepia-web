@@ -20,6 +20,7 @@
 	<field name="deliveryPlace" class="java.lang.String"/>
 	<field name="exporter" class="java.lang.String"/>
 	<field name="userAddInfos" class="java.lang.String"/>
+	<field name="qrCodeAnnex" class="java.io.InputStream"/>
 	<background>
 		<band height="802">
 			<printWhenExpression><![CDATA[$P{DRAFT}]]></printWhenExpression>
@@ -110,14 +111,14 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					<textFieldExpression><![CDATA[$F{exporter} != null ? $F{exporter} : ($F{exporterName} + ", " + $F{exporterAddress})]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="5" y="32" width="180" height="20" isPrintWhenDetailOverflows="true" uuid="ab1b2ed0-8cbb-4018-a0a2-0dd9c2930e18"/>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="2" y="32" width="100" height="20" isPrintWhenDetailOverflows="true" uuid="ab1b2ed0-8cbb-4018-a0a2-0dd9c2930e18"/>
 					<textElement markup="html">
 						<font size="7" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA["N° " + $F{decisionNumber}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="5" y="53" width="180" height="20" isPrintWhenDetailOverflows="true" uuid="6d206b09-e369-4a57-9f0c-8c9edb67cd25"/>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="2" y="53" width="100" height="20" isPrintWhenDetailOverflows="true" uuid="6d206b09-e369-4a57-9f0c-8c9edb67cd25"/>
 					<textElement markup="html">
 						<font size="8" isBold="true"/>
 					</textElement>
@@ -134,6 +135,10 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					</textElement>
 					<textFieldExpression><![CDATA["CERTIFICAT PHYTOSANITAIRE" + (!$F{transit} ? "" : " DE REEXPORTATION")]]></textFieldExpression>
 				</textField>
+				<image>
+					<reportElement x="125" y="15" width="55" height="55" isPrintWhenDetailOverflows="true" uuid="b283722b-d84b-4ea3-a8b5-13f9fcba9eb2"/>
+					<imageExpression><![CDATA[$F{qrCodeAnnex}]]></imageExpression>
+				</image>
 			</frame>
 		</band>
 	</title>

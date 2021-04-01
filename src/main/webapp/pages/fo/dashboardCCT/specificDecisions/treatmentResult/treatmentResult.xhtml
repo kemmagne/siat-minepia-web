@@ -10,9 +10,9 @@
             <h:panelGrid columns="2">
                 <h:outputLabel for="DateTreatment" value="#{bundle['TreatmentResultDateTitle']}" />
                 <h:panelGroup>
-                <p:calendar navigator="true" value="#{fileItemCctDetailController.treatmentResult.treatmentDate}" showOn="button"
-                            pattern="dd/MM/yyyy" readonlyInput="true" id="DateTreatment" title="#{bundle['TreatmentResultDateTitle']}" requiredMessage="#{bundle['TreatmentResultDateRequiredMessage']}" />
-                <p:message for="DateTreatment" id="DateTreatmentMsg" />
+                    <p:calendar navigator="true" value="#{fileItemCctDetailController.treatmentResult.treatmentDate}" showOn="button"
+                                pattern="dd/MM/yyyy" readonlyInput="true" id="DateTreatment" title="#{bundle['TreatmentResultDateTitle']}" requiredMessage="#{bundle['TreatmentResultDateRequiredMessage']}" />
+                    <p:message for="DateTreatment" id="DateTreatmentMsg" />
                 </h:panelGroup>
                 <h:outputLabel value="#{bundle['TreatmentType']}" for="TreatmentType" />
                 <p:inputText id="TreatmentType" value="#{fileItemCctDetailController.treatmentResult.treatmentType}" required="true" />
@@ -28,7 +28,7 @@
 
                 <h:outputLabel value="#{bundle['SuperviseurTraitement']}" for="SuperviseurTraitement" />
                 <p:inputText value="#{fileItemCctDetailController.treatmentResult.supervisor}" id="SuperviseurTraitement" required="true" />
-                
+
             </h:panelGrid>
 
         </p:panel>
@@ -129,8 +129,7 @@
                 <p:selectBooleanCheckbox value="#{fileItemCctDetailController.treatmentResult.preventionPlaquePresent}" id="PresencePlaqueProtection"/>
 
                 <h:outputLabel value="#{bundle['NatureSecPersonnel']}" for="NatureSecPersonnel" />
-                <p:inputText value="#{fileItemCctDetailController.treatmentResult.staffSecurityNature}"
-                             id="NatureSecPersonnel" required="true" />
+                <p:inputText value="#{fileItemCctDetailController.treatmentResult.staffSecurityNature}" id="NatureSecPersonnel" required="true" />
 
                 <h:outputLabel value="#{bundle['EquipementsProtection']}" for="EquipementsProtection" />
                 <p:selectManyMenu required="true" id="EquipementsProtection" value="#{fileItemCctDetailController.treatmentResult.protectionEquipementsList}">
@@ -138,8 +137,7 @@
                 </p:selectManyMenu>
 
                 <h:outputLabel value="#{bundle['ObservationsGenerales']}" for="ObservationsGenerales" />
-                <p:inputTextarea id="ObservationsGenerales" value="#{fileItemCctDetailController.treatmentResult.generalObservations}"
-                                 rows="3" maxlength="255" />
+                <p:inputTextarea id="ObservationsGenerales" value="#{fileItemCctDetailController.treatmentResult.generalObservations}" rows="3" maxlength="255" />
 
             </h:panelGrid>
 
@@ -165,9 +163,9 @@
 
             <h:outputLabel for="treatmentResultDate" value="#{bundle['TreatmentResultDateLabel']} :" />
             <h:panelGroup>
-                <p:calendar  navigator="true" required="true" value="#{fileItemCctDetailController.treatmentResult.treatmentDate}" showOn="button"
-                             pattern="dd/MM/yyyy HH:mm" readonlyInput="true" id="treatmentResultDate" title="#{bundle['TreatmentResultDateTitle']}"
-                             requiredMessage="#{bundle['TreatmentResultDateRequiredMessage']}" />
+                <p:calendar navigator="true" required="true" value="#{fileItemCctDetailController.treatmentResult.treatmentDate}" showOn="button"
+                            pattern="dd/MM/yyyy HH:mm" readonlyInput="true" id="treatmentResultDate" title="#{bundle['TreatmentResultDateTitle']}"
+                            requiredMessage="#{bundle['TreatmentResultDateRequiredMessage']}" />
                 <p:message for="treatmentResultDate" id="treatmentResultDateMsg" />
             </h:panelGroup>
 
@@ -182,15 +180,13 @@
             <p:inputText title="#{bundle['TreatmentDosageTitle']}" value="#{fileItemCctDetailController.treatmentResult.dosage}" id="treatmentDosage" />
 
             <h:outputLabel for="treatmentResultObservation" value="#{bundle['TreatmentResultObservationLabel']} :" />
-            <p:inputTextarea title="#{bundle['TreatmentResultObservationTitle']}" value="#{fileItemCctDetailController.treatmentResult.observation}"
-                             id="treatmentResultObservation" />
+            <p:inputTextarea title="#{bundle['TreatmentResultObservationTitle']}" value="#{fileItemCctDetailController.treatmentResult.observation}" id="treatmentResultObservation" />
 
         </p:panelGrid>
 
         <p:panel rendered="false" header="#{bundle['TreatmentResultDetails']}" style="width:100%" toggleable="true">
 
-            <p:dataTable id="treatmentResultDetails" widgetVar="treatmentResultDetailsTable" var="item"
-                         value="#{fileItemCctDetailController.treatmentFileManagers}">
+            <p:dataTable id="treatmentResultDetails" widgetVar="treatmentResultDetailsTable" var="item" value="#{fileItemCctDetailController.treatmentFileManagers}">
 
                 <p:column headerText="#{bundle['TreatmentResultDetailsTreatmentType']}" id="treatmentTypeColumn">
                     <f:facet name="header">

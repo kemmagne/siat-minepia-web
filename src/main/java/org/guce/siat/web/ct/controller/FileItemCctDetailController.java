@@ -69,6 +69,7 @@ import org.guce.siat.common.model.Authority;
 import org.guce.siat.common.model.Bureau;
 import org.guce.siat.common.model.Container;
 import org.guce.siat.common.model.CopyRecipient;
+import org.guce.siat.common.model.Country;
 import org.guce.siat.common.model.DataType;
 import org.guce.siat.common.model.FieldGroup;
 import org.guce.siat.common.model.File;
@@ -123,7 +124,6 @@ import org.guce.siat.core.ct.model.InspectionReport;
 import org.guce.siat.core.ct.model.InterceptionNotification;
 import org.guce.siat.core.ct.model.InvoiceLine;
 import org.guce.siat.core.ct.model.Laboratory;
-import org.guce.siat.core.ct.model.ParamCCTCP;
 import org.guce.siat.core.ct.model.PaymentData;
 import org.guce.siat.core.ct.model.PaymentItemFlow;
 import org.guce.siat.core.ct.model.PottingReport;
@@ -154,6 +154,7 @@ import org.guce.siat.web.ct.controller.util.InspectionReportEtiquetageVo;
 import org.guce.siat.web.ct.controller.util.InspectionReportTemperatureVo;
 import org.guce.siat.web.ct.controller.util.JsfUtil;
 import org.guce.siat.web.ct.controller.util.RelatedFilesUtils;
+import org.guce.siat.web.ct.controller.util.ReportGeneratorUtils;
 import org.guce.siat.web.ct.controller.util.Utils;
 import org.guce.siat.web.ct.controller.util.enums.DataTypeEnnumeration;
 import org.guce.siat.web.ct.controller.util.enums.DataTypePropEnnum;
@@ -787,9 +788,6 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
     private final String TRANSITE_SUPER_FILE_TYPE = "2";
     private final String TRANSITE_SUPER_FILE_TYPE_KEY = "TYPE_DOSSIER_EGUCE";
-    private final String COUNT_GOODS = "goods";
-    private final String COUNT_CONTAINERS = "containers";
-    private final String COUNT_PACKAGES = "packages";
 
     private List<DecisionHistory> decisionHistories;
     private boolean maskOfficialPosition;
@@ -815,6 +813,8 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
     private List<FileItemDto> fileItemDtos;
 
+    private List<Country> countriesList;
+
     /**
      * Inits the.
      */
@@ -831,6 +831,8 @@ public class FileItemCctDetailController extends DefaultDetailController {
         allowedRecommandation = checkIsAllowadRecommandation();
         listUserAuthorityFileTypes = userAuthorityFileTypeService.findUserAuthorityFileTypeByFileTypeAndUserList(currentFile.getFileType(), loggedUser.getMergedDelegatorList());
 
+        countriesList = countryService.findAll();
+
         getRelatedFileTypesInfos();
 
         selectedFileItemCheck = new FileItemCheck(getCurrentFileItem(), false, false, false);
@@ -843,12 +845,6 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 logger.error(currentFile.toString(), ex);
             }
         }
-//        else if (ptFieldValue == null && isPhyto()) {
-//            showErrorFacesMessage(ControllerConstants.Bundle.Messages.PRODUCT_TYPE_MISSED, null);
-//            logger.warn("Cannot find the product type for the phyto file " + currentFile.getNumeroDossier());
-//            goToPreviousPage();
-//            return;
-//        }
 
         final FileTypeStep fileTypeStep = fileTypeStepService.findFileTypeStepByFileTypeAndStep(selectedFileItemCheck.getFileItem().getFile().getFileType(), selectedFileItemCheck.getFileItem().getStep());
         if (fileTypeStep != null && fileTypeStep.getLabelFr() != null) {
@@ -1558,6 +1554,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
             if (ir != null) {
                 inspectionReportData.from(ir);
             }
+            prepareGoodsForModif();
         } // Signature de DCC (Certificat de Contrôle Documentaire)
         else if (DCC_FLOW_CODES.contains(selectedFlow.getCode())) {
             lastDecisions = itemFlowService.findLastSentItemFlowByFileItem(selectedFileItemCheck.getFileItem());
@@ -1640,7 +1637,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
             if (cCTCPParamValue == null) {
                 cCTCPParamValue = new CCTCPParamValue();
-                fillCCTCPParamValue(cCTCPParamValue);
+                ReportGeneratorUtils.fillCCTCPParamValue(cCTCPParamValue, getLoggedUser(), currentFile);
             }
 
             specificDecision = CctSpecificDecision.CCT_CP;
@@ -2171,6 +2168,11 @@ public class FileItemCctDetailController extends DefaultDetailController {
             return;
         }
 
+        ItemFlow ifl = itemFlowService.findLastItemFlowByFileItem(currentFileItem);
+        if (selectedFlow.getCode().equals(ifl.getFlow().getCode())) {
+            return;
+        }
+
         DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
         transactionDefinition.setPropagationBehavior(GLOBAL_PROPAGATION_TRANSACTION_BEHAVIOUR);
         TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
@@ -2291,7 +2293,6 @@ public class FileItemCctDetailController extends DefaultDetailController {
             } else if (isPhytoReadyForSignature(selectedFlow)) {
                 commonService.takeDecisionAndSaveTreatmentInfos(treatmentInfos, itemFlowsToAdd);
                 saveModifiedGoods();
-//                commonService.takeDecisionAndSaveCCTCPParamValue(cCTCPParamValue, itemFlowsToAdd);
             } // Demande de Traitement
             else if ((FlowCode.FL_CT_64.name().equals(selectedFlow.getCode()) && chckedListSize == Constants.ONE)) {
                 if (CollectionUtils.isNotEmpty(treatmentPartsList)) {
@@ -2314,6 +2315,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
             } else if (isPviReadyForSignature(selectedFlow)) {
                 List<InspectionReport> inspectionReports = inspectionReportData.transformToReportList(null);
                 commonService.takeDecisionAndSaveInspectionReport(inspectionReports.get(0), itemFlowsToAdd);
+                saveModifiedGoods();
             } // Saisie Constat
             else if (CONSTAT_FLOW_LIST.contains(selectedFlow.getCode())) {
                 Appointment appointment1 = appointmentService.findAppoitmentByFileItemAndController(productInfoItemsEnabled, loggedUser);
@@ -4075,7 +4077,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                     return fileToDownload;
                 }
             } catch (Exception e) {
-                logger.error(currentFile.toString(), e);
+                logger.error(file.toString(), e);
                 final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.GENERATE_REPORT_FAILED);
                 JsfUtil.addErrorMessage(msg);
             }
@@ -6234,13 +6236,13 @@ public class FileItemCctDetailController extends DefaultDetailController {
                         }
                         if (paramValue == null) {
                             paramValue = new CCTCPParamValue();
-                            fillCCTCPParamValue(paramValue);
+                            ReportGeneratorUtils.fillCCTCPParamValue(paramValue, getLoggedUser(), currentFile);
                         }
                         if (ti.getDelivrableType() == null || "CCT_CT_E".equals(ti.getDelivrableType())) {
-                            Map<String, Integer> count = countFileContainerAndPackage(currentFile);
-                            if (count.get(COUNT_GOODS) > paramValue.getMaxGoodsLineNumber()
-                                    || count.get(COUNT_CONTAINERS) > paramValue.getMaxContainerNumber()
-                                    || count.get(COUNT_PACKAGES) > paramValue.getMaxPackageNumber()) {
+                            Map<String, Integer> count = ReportGeneratorUtils.countFileContainerAndPackage(currentFile);
+                            if (count.get(ReportGeneratorUtils.COUNT_GOODS) > paramValue.getMaxGoodsLineNumber()
+                                    || count.get(ReportGeneratorUtils.COUNT_CONTAINERS) > paramValue.getMaxContainerNumber()
+                                    || count.get(ReportGeneratorUtils.COUNT_PACKAGES) > paramValue.getMaxPackageNumber()) {
                                 forAnnexes = new HashMap();
                                 forAnnexes.put("ti", ti);
                                 forAnnexes.put("paramValue", paramValue);
@@ -6390,14 +6392,14 @@ public class FileItemCctDetailController extends DefaultDetailController {
                         }
                         CCTCPParamValue paramValue = cCTCPParamValueService.findCCTCPParamValueByItemFlow(itemFlow2);
                         if (paramValue == null) {
-                            fillCCTCPParamValue(paramValue);
+                            ReportGeneratorUtils.fillCCTCPParamValue(paramValue, getLoggedUser(), currentFile);
                         }
 
                         if (ti.getDelivrableType() == null || "CCT_CT_E".equals(ti.getDelivrableType())) {
-                            Map<String, Integer> count = countFileContainerAndPackage(file);
-                            if (count.get(COUNT_GOODS) > paramValue.getMaxGoodsLineNumber()
-                                    || count.get(COUNT_CONTAINERS) > paramValue.getMaxContainerNumber()
-                                    || count.get(COUNT_PACKAGES) > paramValue.getMaxPackageNumber()) {
+                            Map<String, Integer> count = ReportGeneratorUtils.countFileContainerAndPackage(file);
+                            if (count.get(ReportGeneratorUtils.COUNT_GOODS) > paramValue.getMaxGoodsLineNumber()
+                                    || count.get(ReportGeneratorUtils.COUNT_CONTAINERS) > paramValue.getMaxContainerNumber()
+                                    || count.get(ReportGeneratorUtils.COUNT_PACKAGES) > paramValue.getMaxPackageNumber()) {
                                 forAnnexes = new HashMap();
                                 forAnnexes.put("ti", ti);
                                 forAnnexes.put("paramValue", paramValue);
@@ -6642,37 +6644,6 @@ public class FileItemCctDetailController extends DefaultDetailController {
         }
     }
 
-    private void fillCCTCPParamValue(CCTCPParamValue cCTCPParamValue) {
-        Service uService = serviceService.findServiceByUser(getLoggedUser());
-        ParamCCTCP params = paramCCTCPService.findParamCCTCPByAdministration(uService);
-        if (params != null) {
-            cCTCPParamValue.setMaxContainerNumber(params.getMaxContainerNumber());
-            cCTCPParamValue.setMaxGoodsLineNumber(params.getMaxGoodsLineNumber());
-            cCTCPParamValue.setMaxPackageNumber(params.getMaxPackageNumber());
-            cCTCPParamValue.setLabelMore(params.getLabelAttachment());
-        } else {
-            params = paramCCTCPService.findParamCCTCPDefault();
-            if (params != null) {
-                cCTCPParamValue.setMaxContainerNumber(params.getMaxContainerNumber());
-                cCTCPParamValue.setMaxGoodsLineNumber(params.getMaxGoodsLineNumber());
-                cCTCPParamValue.setMaxPackageNumber(params.getMaxPackageNumber());
-                cCTCPParamValue.setLabelMore(params.getLabelAttachment());
-            } else {
-                //LOAD DEFAULT NOT REGISTERED VALUE HERE
-                cCTCPParamValue.setMaxContainerNumber(18);
-                cCTCPParamValue.setMaxGoodsLineNumber(6);
-                cCTCPParamValue.setMaxPackageNumber(6);
-                cCTCPParamValue.setLabelMore("Voir pièce jointe");
-            }
-        }
-
-        Map<String, Integer> count = countFileContainerAndPackage(currentFile);
-        cCTCPParamValue.setFileGoodsCountValue(count.get(COUNT_GOODS));
-        cCTCPParamValue.setFileContainerCountValue(count.get(COUNT_CONTAINERS));
-        cCTCPParamValue.setFilePackageCountValue(count.get(COUNT_PACKAGES));
-
-    }
-
     public boolean isMaskOfficialPosition() {
         return maskOfficialPosition;
     }
@@ -6755,68 +6726,17 @@ public class FileItemCctDetailController extends DefaultDetailController {
         return res;
     }
 
-    private Map<String, Integer> countFileContainerAndPackage(File file) {
-        Map<String, Integer> count = new HashMap<>();
-
-        count.put(COUNT_GOODS, 0);
-        count.put(COUNT_CONTAINERS, 0);
-        count.put(COUNT_PACKAGES, 0);
-
-        final List<FileItem> fileItemList = file.getFileItemsList();
-        count.put(COUNT_GOODS, fileItemList.size());
-        final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
-        if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
-            String containersNumbers = null;
-            String packageNumber = null;
-            for (final FileFieldValue fileFieldValue1 : fileFieldValueList) {
-                switch (fileFieldValue1.getFileField().getCode()) {
-                    case "INSPECTION_CONTENEURS_CONTENEUR":
-                        containersNumbers = fileFieldValue1.getValue();
-                        break;
-                    case "NUMEROS_LOTS":
-                        packageNumber = fileFieldValue1.getValue();
-                        break;
-                }
-            }
-            if (org.apache.commons.lang.StringUtils.isNotBlank(containersNumbers)) {
-                final String[] tab1 = containersNumbers.split(";");
-                final int size = tab1.length;
-                final int positionScelles = "Type".equalsIgnoreCase(tab1[0].split(",")[1]) ? 2 : 1;
-                final StringBuilder builder = new StringBuilder();
-                for (int i = 1; i < size; i++) {
-                    if (org.apache.commons.lang.StringUtils.isBlank(tab1[i])) {
-                        continue;
-                    }
-                    final String[] tab2 = tab1[i].split(",");
-                    builder.append(tab2[0]).append("/").append(tab2[positionScelles]).append(" ");
-                }
-                String containerNumbers[] = builder.substring(0, builder.lastIndexOf(" ")).split(" ");
-                count.put(COUNT_CONTAINERS, containerNumbers.length);
-            } else {
-                List<Container> containers = file.getContainers();
-                if (CollectionUtils.isNotEmpty(containers)) {
-                    count.put(COUNT_CONTAINERS, containers.size());
-                }
-            }
-            if (org.apache.commons.lang.StringUtils.isNotBlank(packageNumber)) {
-                String packagesNumbers[] = packageNumber.split(" ");
-                count.put(COUNT_PACKAGES, packagesNumbers.length);
-            }
-        }
-        return count;
-    }
-
     @Override
     public boolean canDecide() {
         UserAuthorityFileType uaft = userAuthorityFileTypeService.findByCurrentStepFileAndLoggedUser(currentStep, currentFile, getLoggedUser());
-        userDecisionAllowed = uaft != null;
+        userDecisionAllowed = uaft != null || "standalone".equals(applicationPropretiesService.getAppEnv());
         return userDecisionAllowed;
     }
 
     @Override
     public boolean canConfirm() {
         ItemFlow itemFlow = currentFileItem.getItemFlowsList().get(0);
-        userConfirmationAllowed = getLoggedUser().equals(itemFlow.getSender());
+        userConfirmationAllowed = getLoggedUser().equals(itemFlow.getSender()) || "standalone".equals(applicationPropretiesService.getAppEnv());
         return userConfirmationAllowed;
     }
 
@@ -6924,6 +6844,10 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
     public boolean isCommonObservationRequired() {
         return commonObservationRequired;
+    }
+
+    public List<Country> getCountriesList() {
+        return countriesList;
     }
 
 }

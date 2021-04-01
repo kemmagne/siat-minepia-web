@@ -1577,8 +1577,7 @@ public class SearchController extends AbstractController<FileItem> {
             getSelected().getFile().setAssignedUser(assignedUser);
             transferService.save(transfer);
             fileService.update(getSelected().getFile());
-            JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                    TRANSFER_DONE));
+            JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(TRANSFER_DONE));
             context.execute("PF('DialogCotation').hide();");
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);

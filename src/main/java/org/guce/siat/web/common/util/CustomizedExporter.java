@@ -15,7 +15,11 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.guce.siat.common.model.File;
 import org.guce.siat.common.utils.Constants;
+import org.guce.siat.core.ct.filter.CteFilter;
 import org.guce.siat.web.common.ControllerConstants;
+import org.guce.siat.web.ct.data.GlobalQuantityListingData;
+import org.guce.util.exporter.CommonExporter;
+import org.guce.util.exporter.ExcelExporter;
 import org.guce.util.exporter.PDFExporter;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.export.Exporter;
@@ -51,10 +55,8 @@ public class CustomizedExporter {
      * Export pdf using guce-utils-exporter.
      *
      * @param table the table
-     * @param filename the filename
-     * @throws IOException Signals that an I/O exception has occurred.
      */
-    public void exportFiles(DataTable table) throws IOException {
+    public void exportFiles(DataTable table) {
         try {
             PDFExporter exporter = new PDFExporter();
             exporter.setPageSizeAndOrientation(Page.Page_A4_Landscape());
@@ -93,6 +95,72 @@ public class CustomizedExporter {
             exporter.setData(data);
 
             String fileName = "DASHBOARD-FILES-".concat(new SimpleDateFormat("yyyyMMdd_HHmm").format(Calendar.getInstance().getTime())).concat(".pdf");
+            String mimeType = "application/pdf";
+
+            FacesContext fc = FacesContext.getCurrentInstance();
+            ExternalContext ec = fc.getExternalContext();
+            ec.responseReset();
+            ec.setResponseContentType(mimeType);
+            ec.setResponseHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", fileName));
+            OutputStream output = ec.getResponseOutputStream();
+            output.write(exporter.getByteArray());
+            fc.responseComplete();
+        } catch (Exception ex) {
+            LOG.error(ex.getMessage(), ex);
+        }
+    }
+
+    public void exportGlobalQuantityListingPDF(DataTable table, CteFilter filter) throws IOException {
+        PDFExporter exporter = new PDFExporter();
+        exporter.setPageSizeAndOrientation(Page.Page_A4_Landscape());
+        exportGlobalQuantityListing(exporter, table, filter, false);
+    }
+
+    public void exportGlobalQuantityListingExcel(DataTable table, CteFilter filter) throws IOException {
+        ExcelExporter exporter = new ExcelExporter();
+        exportGlobalQuantityListing(exporter, table, filter, false);
+    }
+
+    private void exportGlobalQuantityListing(CommonExporter exporter, DataTable table, CteFilter filter, boolean detail) throws IOException {
+        try {
+            exporter.setTitle("LISTING DES QUANTITES : ".concat(new SimpleDateFormat("dd/MM/yyyy").format(filter.getCreationFromDate())).concat(" - ").concat(new SimpleDateFormat("dd/MM/yyyy").format(filter.getCreationToDate())));
+
+            Locale locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
+            List<String> list = new ArrayList<>();
+            list.add(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, locale).getString("FileLabel_eforce_num"));
+            list.add(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, locale).getString("FileLabel_num_eguce"));
+            list.add(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, locale).getString("FileLabel_num_siat"));
+            list.add(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, locale).getString("FileLabel_date_dossier"));
+            list.add(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, locale).getString("processName"));
+            list.add(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, locale).getString("FileItemInformationLabel_step"));
+            list.add(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, locale).getString("GeneralInformationLabel_Client"));
+            int nbColumns = list.size();
+            String[] columnsNames = list.toArray(new String[nbColumns]);
+            exporter.setColumnsNames(columnsNames);
+
+            List<String[]> data = new ArrayList<>();
+            List<GlobalQuantityListingData> globalQuantityListingDataList = (List<GlobalQuantityListingData>) table.getValue();
+            for (GlobalQuantityListingData globalQuantityListingData : globalQuantityListingDataList) {
+
+                list = new ArrayList<>();
+//                list.add(file.getNumeroDemande());
+//                list.add(file.getNumeroDossier());
+//                list.add(file.getReferenceSiat());
+//                list.add(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(file.getCreatedDate()));
+//                list.add(file.getFileType().getLabelFr());
+//                list.add(file.getRedefinedLabelFr());
+//                list.add(file.getClient().getCompanyName());
+
+                data.add(list.toArray(new String[nbColumns]));
+            }
+
+            exporter.setData(data);
+
+            String fileName = "LISTING-QUANTITES";
+            if (detail) {
+                fileName = fileName.concat("-DETAIL");
+            }
+            fileName = fileName.concat("-").concat(new SimpleDateFormat("yyyyMMdd_HHmm").format(Calendar.getInstance().getTime())).concat(".pdf");
             String mimeType = "application/pdf";
 
             FacesContext fc = FacesContext.getCurrentInstance();

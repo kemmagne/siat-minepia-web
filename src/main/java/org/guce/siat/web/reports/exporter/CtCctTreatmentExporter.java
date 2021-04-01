@@ -1,7 +1,6 @@
 package org.guce.siat.web.reports.exporter;
 
 import java.math.BigDecimal;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -152,14 +151,15 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
         if (referenceNumber != null && treatmentVo.getDecisionNumber() == null) {
             treatmentVo.setDecisionNumber(referenceNumber);
         }
-        if (FileTypeCode.CCT_CT_E_ATP.equals(file.getFileType().getCode())) {
+        if (FileTypeCode.CCT_CT_E_ATP.equals(file.getFileType().getCode()) || FileTypeCode.CCT_CT_E_FSTP.equals(file.getFileType().getCode())) {
             Calendar calendar = Calendar.getInstance();
             Date signatureDate = file.getSignatureDate();
             if (signatureDate != null) {
                 calendar.setTime(signatureDate);
             }
             int year = calendar.get(Calendar.YEAR);
-            String s = String.format("%s/%s/%s/ATP/MINADER/SG/DRCQ", file.getNumeroDemande(), file.getNumeroDossier(), year);
+            String fileType = FileTypeCode.CCT_CT_E_ATP.equals(file.getFileType().getCode()) ? "ATP" : "FSTP";
+            String s = String.format("%s/%s/%s/%s/MINADER/SG/DRCQ", file.getNumeroDossier(), file.getNumeroDemande(), year, fileType);
             treatmentVo.setDecisionNumber(s);
         }
         treatmentVo.setGeneralObservations(treatmentResult.getGeneralObservations());

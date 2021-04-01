@@ -25,6 +25,7 @@ import org.guce.siat.common.service.ApplicationPropretiesService;
 import org.guce.siat.common.service.AppointmentService;
 import org.guce.siat.common.service.AuthorityService;
 import org.guce.siat.common.service.CoreService;
+import org.guce.siat.common.service.CountryService;
 import org.guce.siat.common.service.EbxmlPropertiesService;
 import org.guce.siat.common.service.FieldGroupService;
 import org.guce.siat.common.service.FileFieldService;
@@ -384,6 +385,12 @@ public abstract class DefaultDetailController implements Serializable {
      */
     @ManagedProperty(value = "#{transactionManager}")
     protected PlatformTransactionManager transactionManager;
+
+    /**
+     * The country service.
+     */
+    @ManagedProperty(value = "#{countryService}")
+    protected CountryService countryService;
 
     /**
      * The logged user.
@@ -1394,6 +1401,14 @@ public abstract class DefaultDetailController implements Serializable {
 
     public void setFileItemFieldValueService(FileItemFieldValueService fileItemFieldValueService) {
         this.fileItemFieldValueService = fileItemFieldValueService;
+    }
+
+    public CountryService getCountryService() {
+        return countryService;
+    }
+
+    public void setCountryService(CountryService countryService) {
+        this.countryService = countryService;
     }
 
     /**
