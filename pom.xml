@@ -20,13 +20,27 @@
 
     <profiles>
         <profile>
+            <id>profile-etl</id>
+            <properties>
+                <environment>etl</environment>
+                <global-config.properties>/home/htiomy/siat/config/ct/global-config.properties</global-config.properties>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>environment</name>
+                    <value>etl</value>
+                </property>
+            </activation>
+        </profile>
+        <profile>
             <id>profile-ht</id>
             <properties>
                 <environment>ht</environment>
                 <global-config.properties>/root/siat/config/ct/global-config.properties</global-config.properties>
             </properties>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <!--<activeByDefault>true</activeByDefault>-->
                 <property>
                     <name>environment</name>
                     <value>ht</value>
