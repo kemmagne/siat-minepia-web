@@ -37,6 +37,8 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
 
     public static final String CP_COTCOCAF = "CERTIFICAT_PHYTOSANITAIRE_CACAO_CAFE_COTON";
     public static final String CP_BOIS_CONV = "CERTIFICAT_PHYTOSANITAIRE_BOIS_CONVENTIONNEL";
+    public static final String CP_DEF_ANNEX = "CERTIFICAT_PHYTOSANITAIRE_ANNEXE";
+    public static final String CP_ANNEX_AUTRES = "CERTIFICAT_PHYTOSANITAIRE_ANNEXE_AUTRES";
 
     /**
      * The file.
@@ -298,6 +300,8 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
 
             String unit = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("UNITE", fileItemList.get(0)).getValue();
 
+            List<String> othersGrossWeightList = new ArrayList<>();
+            List<String> othersGrossWeightAnnextList = new ArrayList<>();
             FileItemFieldValue fileItemFieldValue;
             for (final FileItem fileItem : fileItemList) {
 
@@ -356,7 +360,19 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
 
                 fileItemFieldValue = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("POIDS_BRUT", fileItem);
                 if (fileItemFieldValue != null) {
-                    grossWeight = grossWeight.add(new BigDecimal(fileItemFieldValue.getValue()));
+                    String gw = fileItemFieldValue.getValue();
+                    grossWeight = grossWeight.add(new BigDecimal(gw));
+                    if (paramValue != null && commoditiesCount <= paramValue.getMaxGoodsLineNumber() - 1) {
+                        othersGrossWeightList.add(String.format("%s KG", gw));
+                    } else {
+                        othersGrossWeightAnnextList.add(String.format("%s KG", gw));
+                    }
+                } else {
+                    if (paramValue != null && commoditiesCount <= paramValue.getMaxGoodsLineNumber() - 1) {
+                        othersGrossWeightList.add("-");
+                    } else {
+                        othersGrossWeightAnnextList.add("-");
+                    }
                 }
             }
 
@@ -378,15 +394,8 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
             if (!CctExportProductType.AUTRES.name().equals(productType)) {
                 ctCctCpEFileVo.setQuantities(builder.toString());
             } else {
-                List<String> list = new ArrayList<>();
-                for (final FileItem fileItem : fileItemList) {
-                    fileItemFieldValue = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("POIDS_BRUT", fileItem);
-                    if (fileItemFieldValue != null) {
-                        String gw = fileItemFieldValue.getValue();
-                        list.add(String.format("%s KG", gw));
-                    }
-                }
-                ctCctCpEFileVo.setQuantities(StringUtils.join(list, "<br/>"));
+                ctCctCpEFileVo.setQuantities(StringUtils.join(othersGrossWeightList, "<br/>"));
+                ctCctCpEFileVo.setQuantitiesAnnex(StringUtils.join(othersGrossWeightAnnextList, "<br/>"));
             }
             if (paramValue != null && !commoditiesListAttachment.isEmpty()) {
                 commoditiesList.add("- " + paramValue.getLabelMore());
@@ -397,7 +406,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
         }
 
         ctCctCpEFileVo.setFileItemList(fileItemVos);
-        if (productType != null && !"CERTIFICAT_PHYTOSANITAIRE_ANNEXE".equals(jasperFileName)) {
+        if (productType != null && !CP_DEF_ANNEX.equals(jasperFileName) && !CP_ANNEX_AUTRES.equals(jasperFileName)) {
             if (Utils.getCacaProductsTypes().contains(productType) || Utils.COTONPRODUCTTYPE.equalsIgnoreCase(productType)) {
                 jasperFileName = CP_COTCOCAF;
             } else if (Utils.getWoodProductsTypes().contains(productType) && !hasContainers) {
@@ -408,9 +417,9 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
         try {
             String qrCodeContent = getDocumentPageUrl(file);
             int qrCodeImageSize = 512;
-            InputStream is = new ByteArrayInputStream(new QRCodeGenerator().generateQR(qrCodeContent, qrCodeImageSize));
-            ctCctCpEFileVo.setQrCode(is);
-            ctCctCpEFileVo.setQrCodeAnnex(is);
+            InputStream qrCodeStream = new ByteArrayInputStream(new QRCodeGenerator().generateQR(qrCodeContent, qrCodeImageSize));
+            ctCctCpEFileVo.setQrCode(qrCodeStream);
+            ctCctCpEFileVo.setQrCodeAnnex(qrCodeStream);
         } catch (Exception ex) {
             logger.error(file.getNumeroDossier(), ex);
         }
@@ -432,11 +441,11 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
         String environment = applicationPropretiesService.getAppEnv();
         String urlPrefix;
         switch (environment) {
+            case "standalone":
+//                urlPrefix = "https://siat-web1:40081";
+//                break;
             case "production":
                 urlPrefix = "https://siat.guichetunique.cm";
-                break;
-            case "standalone":
-                urlPrefix = "https://siat-web1:40081";
                 break;
             case "test":
                 urlPrefix = "https://testsiat.guichetunique.cm";

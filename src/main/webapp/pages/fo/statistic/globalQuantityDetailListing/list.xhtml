@@ -7,14 +7,13 @@
         <h:form id="filtredFileItemListForm">
 
             <h:panelGrid columns="2">
-                <h:commandLink action="#{exporter.exportPDF(table, 'GLOBAL_QUANTITY_DETAIL_LISTING')}">
+                <h:commandLink action="#{statisticController.exportGlobalQuantityDetailListingPDF()}">
                     <h:outputText styleClass="sprite sprite-pdf" />
                 </h:commandLink>
 
-                <h:commandLink>
+                <h:commandLink action="#{statisticController.exportGlobalQuantityDetailListingExcel()}">
                     <h:graphicImage styleClass="sprite sprite-pdf" library="img" name="excel.png"
-                                    style="width: 34px;height: 34px;display: block;	top: 15px;	right: 52px;position: absolute;" />
-                    <p:dataExporter type="xls" target="datalist" fileName="#{bundle['fileItemDesicionSearch_result']}" />
+                                    style="width: 34px;height: 34px;display: block;top: 15px;	right: 52px;position: absolute;" />
                 </h:commandLink>
             </h:panelGrid>
             <br />

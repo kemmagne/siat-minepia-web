@@ -120,6 +120,7 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
     private String packaging;
     private String names;
     private String quantities;
+    private String quantitiesAnnex;
 
     private boolean transit;
 
@@ -916,6 +917,14 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
 
     public void setQuantities(String quantities) {
         this.quantities = quantities;
+    }
+
+    public String getQuantitiesAnnex() {
+        return quantitiesAnnex;
+    }
+
+    public void setQuantitiesAnnex(String quantitiesAnnex) {
+        this.quantitiesAnnex = quantitiesAnnex;
     }
 
     public Date getTreatmentDate() {

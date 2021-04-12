@@ -1228,7 +1228,6 @@ public class FileItemCctDetailController extends DefaultDetailController {
      * @return the list
      */
     public List<FileItemCheck> selectCheckedFileItemCheck() {
-        @SuppressWarnings("unchecked")
         final List<FileItemCheck> selectedProducts = (List<FileItemCheck>) CollectionUtils.select(productInfoChecks,
                 new Predicate() {
             @Override
@@ -2054,7 +2053,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
      */
     private void loadProductHistoryList() {
         itemFlowHistoryDtoList = new ArrayList<>();
-        List<ItemFlow> itemFlowHistoryList = selectedFileItemCheck.getFileItem().getItemFlowsList();
+        List<ItemFlow> itemFlowHistoryList = itemFlowService.findItemFlowByFileItem(selectedFileItemCheck.getFileItem());
         if (CollectionUtils.isNotEmpty(itemFlowHistoryList)) {
             for (int i = 0; i < itemFlowHistoryList.size(); i++) {
                 final FileTypeFlow fileTypeFlow = fileTypeFlowService.findByFlowAndFileType(selectedFileItemCheck.getFileItem()
@@ -2593,7 +2592,6 @@ public class FileItemCctDetailController extends DefaultDetailController {
      * @param fileItemCheckList the file item check list
      * @return the file item list from file item chek list
      */
-    @SuppressWarnings("unchecked")
     private List<FileItem> getFileItemListFromFileItemChekList(final List<FileItemCheck> fileItemCheckList) {
         return (List<FileItem>) CollectionUtils.collect(fileItemCheckList, new Transformer() {
             @Override
@@ -6191,9 +6189,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
     private byte[] getReportBytes(final FileTypeFlowReport fileTypeFlowReport, final boolean draft) throws Exception {
         final String nomClasse = fileTypeFlowReport.getReportClassName();
-        @SuppressWarnings("rawtypes")
         final Class classe = Class.forName(nomClasse);
-        @SuppressWarnings({"rawtypes", "unchecked"})
         byte[] report = null;
         Map<String, Object> forAnnexes = null;
         AbstractReportInvoker reportInvoker = null;
@@ -6246,7 +6242,11 @@ public class FileItemCctDetailController extends DefaultDetailController {
                                 forAnnexes = new HashMap();
                                 forAnnexes.put("ti", ti);
                                 forAnnexes.put("paramValue", paramValue);
-                                forAnnexes.put("fileNameAnnex", "CERTIFICAT_PHYTOSANITAIRE_ANNEXE");
+                                if (!CctExportProductType.AUTRES.equals(productType)) {
+                                    forAnnexes.put("fileNameAnnex", CtCctCpEExporter.CP_DEF_ANNEX);
+                                } else {
+                                    forAnnexes.put("fileNameAnnex", CtCctCpEExporter.CP_ANNEX_AUTRES);
+                                }
                             }
                             reportInvoker = new CtCctCpEExporter(currentFile, ti, paramValue, "CERTIFICAT_PHYTOSANITAIRE");
 
@@ -6348,10 +6348,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
     private byte[] getReportBytes(final File file, final FileTypeFlowReport fileTypeFlowReport, final boolean draft) throws Exception {
         final String nomClasse = fileTypeFlowReport.getReportClassName();
-        @SuppressWarnings("rawtypes")
         final Class classe = Class.forName(nomClasse);
-        @SuppressWarnings({"rawtypes", "unchecked"})
-//        Constructor c1;
         Map<String, Object> forAnnexes = null;
         byte[] report = null;
         AbstractReportInvoker reportInvoker = null;
@@ -6381,8 +6378,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                         }
                         final TreatmentInfos ti = treatmentInfosService.findTreatmentInfosByItemFlow(itemFlow);
                         if (ti == null || ti.getId() == null) {
-                            final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale())
-                                    .getString("draftNotAllowedForReject");
+                            final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString("draftNotAllowedForReject");
                             JsfUtil.addErrorMessage(msg);
                             return null;
                         }
@@ -6403,7 +6399,11 @@ public class FileItemCctDetailController extends DefaultDetailController {
                                 forAnnexes = new HashMap();
                                 forAnnexes.put("ti", ti);
                                 forAnnexes.put("paramValue", paramValue);
-                                forAnnexes.put("fileNameAnnex", "CERTIFICAT_PHYTOSANITAIRE_ANNEXE");
+                                if (!CctExportProductType.AUTRES.equals(productType)) {
+                                    forAnnexes.put("fileNameAnnex", CtCctCpEExporter.CP_DEF_ANNEX);
+                                } else {
+                                    forAnnexes.put("fileNameAnnex", CtCctCpEExporter.CP_ANNEX_AUTRES);
+                                }
                             }
                             reportInvoker = new CtCctCpEExporter(file, ti, paramValue, "CERTIFICAT_PHYTOSANITAIRE");
 

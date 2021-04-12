@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CERTIFICAT_PHYTOSANITAIRE" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6f5c0835-9f5c-4b28-b5db-296746e60a32">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="240"/>
+	<property name="ireport.y" value="192"/>
 	<parameter name="MINADER_LOGO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -302,10 +302,10 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					</textElement>
 					<textFieldExpression><![CDATA[$F{destination}]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="0" y="0" width="185" height="32" uuid="5f736704-de28-4476-bbc7-83e413ffb94a"/>
 					<textElement textAlignment="Center">
-						<font size="8" isBold="true"/>
+						<font size="10" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA["CERTIFICAT PHYTOSANITAIRE" + (!$F{transit} ? "" : " DE REEXPORTATION")]]></textFieldExpression>
 				</textField>
@@ -321,22 +321,22 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 			<frame>
 				<reportElement x="0" y="0" width="555" height="530" uuid="f4fb2e2b-5496-45ae-9db7-9a6e6de4e89f"/>
 				<rectangle>
-					<reportElement mode="Transparent" x="0" y="0" width="474" height="168" uuid="7b6abe5f-6b42-47e9-a87b-983d15fb41a8"/>
+					<reportElement mode="Transparent" x="0" y="0" width="475" height="100" uuid="7b6abe5f-6b42-47e9-a87b-983d15fb41a8"/>
 				</rectangle>
 				<rectangle>
-					<reportElement mode="Transparent" x="474" y="0" width="81" height="168" uuid="5ae95ce3-ded3-429d-84c1-f2564ca076c9"/>
+					<reportElement mode="Transparent" x="475" y="0" width="80" height="168" uuid="5ae95ce3-ded3-429d-84c1-f2564ca076c9"/>
 				</rectangle>
 				<staticText>
-					<reportElement x="3" y="1" width="471" height="30" uuid="b3e8b9af-85ad-4670-99a8-03d3b8273c46"/>
+					<reportElement x="3" y="1" width="470" height="30" uuid="b3e8b9af-85ad-4670-99a8-03d3b8273c46"/>
 					<textElement markup="html">
-						<font size="8"/>
+						<font size="8" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Marque des colis, nombre et nature des colis, nom des produits, nom botanique des produits<br><i>Distinguish marks, number and description of packages, name of product, botanical name of products</i>]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="478" y="1" width="77" height="30" uuid="a6640fd9-268d-498d-bcf5-dbfd93ddd57f"/>
 					<textElement markup="html">
-						<font size="8"/>
+						<font size="8" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Quantité déclarée<br><i>Declared quantity</i>]]></text>
 				</staticText>
@@ -598,25 +598,39 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					<textFieldExpression><![CDATA[$F{additionalInfos}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="478" y="25" width="77" height="137" uuid="72013e41-0a92-4b43-95be-71e1e23fa01f"/>
+					<reportElement x="478" y="25" width="77" height="74" uuid="72013e41-0a92-4b43-95be-71e1e23fa01f"/>
 					<textElement verticalAlignment="Top" markup="html">
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{quantities}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="1" y="119" width="473" height="48" uuid="250714b0-f608-4b46-88f0-7575ef9ab224"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
+					<reportElement x="1" y="25" width="473" height="74" uuid="703a3b6f-fcc0-456e-929f-963839d7506e"/>
+					<textElement textAlignment="Center" verticalAlignment="Top" markup="html">
 						<font size="8" isBold="true"/>
+						<paragraph spacingBefore="2"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{containersNumbers}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{names}]]></textFieldExpression>
 				</textField>
+				<rectangle>
+					<reportElement x="0" y="100" width="475" height="20" uuid="7aee76c8-3fa1-42b8-a6bc-e330036c2f79"/>
+				</rectangle>
 				<textField isBlankWhenNull="true">
-					<reportElement x="5" y="98" width="469" height="20" uuid="f9d4ac49-0104-4bde-ac21-834103fce845"/>
+					<reportElement mode="Opaque" x="1" y="100" width="472" height="20" uuid="f9d4ac49-0104-4bde-ac21-834103fce845"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{lotsNumbers}]]></textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement x="0" y="120" width="475" height="48" uuid="29bf9057-5255-4026-8571-720f2f69a4d7"/>
+				</rectangle>
+				<textField isBlankWhenNull="true">
+					<reportElement x="1" y="120" width="473" height="48" uuid="250714b0-f608-4b46-88f0-7575ef9ab224"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{containersNumbers}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="360" y="324" width="185" height="13" uuid="9ec2a24e-d838-4a70-bd5d-671c0ed70b7c"/>
@@ -653,20 +667,6 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					</textElement>
 					<textFieldExpression><![CDATA[$F{treatmentsCarriedOut}]]></textFieldExpression>
 				</textField>
-				<textField isBlankWhenNull="true">
-					<reportElement x="1" y="25" width="473" height="74" uuid="703a3b6f-fcc0-456e-929f-963839d7506e"/>
-					<textElement textAlignment="Center" verticalAlignment="Top" markup="html">
-						<font size="8" isBold="true"/>
-						<paragraph spacingBefore="2"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{names}]]></textFieldExpression>
-				</textField>
-				<line>
-					<reportElement x="0" y="98" width="474" height="1" uuid="20ab5909-0384-4488-8671-46f204accad7"/>
-				</line>
-				<line>
-					<reportElement x="0" y="118" width="474" height="1" uuid="795ce32b-1750-459c-98ff-0a0e397eee5c"/>
-				</line>
 				<line>
 					<reportElement x="0" y="514" width="355" height="1" uuid="a8d9c722-8616-4e21-826a-4f098c9a8d92"/>
 				</line>
