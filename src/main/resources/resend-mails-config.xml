@@ -38,4 +38,62 @@
             </list>
         </property>
     </bean>
+    
+    <!-- Quartz scheduler related configuration -->
+<!--    <bean name="messageSenderJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="org.guce.siat.common.job.MessageSenderJob"/>
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="propertiesLoader" value-ref="propertiesLoader"></entry>
+                <entry key="fileProducer" value-ref="fileProducer"></entry>
+                <entry key="emailSenderService" value-ref="emailSenderService"></entry>
+                <entry key="messageToSendService" value-ref="messageToSendService"></entry>
+            </map>
+        </property>
+    </bean>-->
+
+<!--    <bean id="ctMessageSenderCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="messageSenderJob"/>
+         every 3 minutes, at the first second 
+        <property name="cronExpression" value="0 0/3 * ? * *"/>
+    </bean>-->
+<!--    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="ctMessageSenderCronTrigger"/>
+            </list>
+        </property>
+    </bean>-->
+    
+    
+    <!-- Scheduler task configuration for message resender -->
+    
+<!--    <bean id="taskResendMessageToSend" class="org.guce.siat.common.job.TaskResendMessage">
+        
+    </bean>-->
+    <!-- specifing class and method that is going to be called on a specified time basis -->
+<!--    <bean id="jobResendMessageToSend" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="taskResendMessageToSend" />
+        <property name="targetMethod" value="resendMessageNotAlreadySended" />
+    </bean>-->
+
+    <!-- Run the job every minute -->
+<!--    <bean id="cronTriggerResendMessageToSend" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="jobResendMessageToSend" />
+        <property name="cronExpression" value="0 0/3 * ? * *" />
+    </bean>-->
+
+    <!-- scheduler factory bean to bind,the executing code and time intervals together -->
+<!--    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="jobDetails">
+            <list>
+                <ref bean="jobResendMessageToSend" />
+            </list>
+        </property>
+        <property name="triggers">
+            <list>
+                <ref bean="cronTriggerResendMessageToSend" />
+            </list>
+        </property>
+    </bean>-->
 </beans>

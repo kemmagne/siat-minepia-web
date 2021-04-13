@@ -5974,12 +5974,18 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 transactionDefinition.setPropagationBehavior(GLOBAL_PROPAGATION_TRANSACTION_BEHAVIOUR);
                 TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
                 try {
+                    Flow currentSelectedFlow = selectedItemFlowDto.getItemFlow().getFlow();
                     final Flow flowToSend = selectedItemFlowDto.getItemFlow().getFlow();
                     final File selectedFile = selectedItemFlowDto.getItemFlow().getFileItem().getFile();
                     //generate report
                     Map<String, byte[]> attachedByteFiles = null;
                     final List<FileItem> fileItemList = selectedFile.getFileItemsList();
-                    final List<ItemFlow> itemFlowList = selectedItemFlowDto.getItemFlow().getFlow().getItemsFlowsList();
+//                    final List<ItemFlow> itemFlowList = selectedItemFlowDto.getItemFlow().getFlow().getItemsFlowsList();
+                    List<Long> fileItems = new ArrayList<>();
+                    for (FileItem fileItem : fileItemList) {
+                        fileItems.add(fileItem.getId());
+                    }
+                    final List<ItemFlow> itemFlowList = itemFlowService.findItemFlowsByFileItemListAndFlow(fileItems, FlowCode.valueOf(currentSelectedFlow.getCode()));
                     String service = StringUtils.EMPTY;
                     String documentType = StringUtils.EMPTY;
 
