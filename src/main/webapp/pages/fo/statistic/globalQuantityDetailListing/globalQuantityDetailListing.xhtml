@@ -23,7 +23,7 @@
                             <p:outputLabel for="productType" value="#{bundle['simpleSearch_productTypeLabel']}" />
                         </h:panelGroup>
                         <p:selectCheckboxMenu id="productType" title="#{bundle['simpleSearch_productTypeTitle']}" label="#{bundle['simpleSearch_productTypeTitle']}" value="#{statisticController.cteFilter.productNatureList}" filter="true" filterMatchMode="contains">
-                            <f:selectItems value="#{statisticController.productTypesMap.entrySet()}" var="entry" itemValue="#{entry.key}" itemLabel="#{entry.value}" />
+                            <f:selectItems value="#{statisticController.productTypesMap.entrySet()}" var="productType" itemValue="#{productType.key}" itemLabel="#{productType.value}" />
                         </p:selectCheckboxMenu>
                     </p:outputPanel>
 
@@ -31,23 +31,15 @@
                         <p:outputLabel for="destinationCountry" value="Destination" />
                         <p:selectOneMenu id="destinationCountry" value="#{statisticController.cteFilter.destinationCountry}" filter="true" filterMatchMode="contains">
                             <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-                            <f:selectItems value="#{statisticController.destinationCountries}" var="country" itemLabel="#{country.countryName}" itemValue="#{country.countryIdAlpha2}" />
-                        </p:selectOneMenu>
-                    </p:outputPanel>
-
-                    <p:outputPanel styleClass="search-select">
-                        <p:outputLabel for="companyNiu" value="#{bundle['exporterNiu']}" />
-                        <p:selectOneMenu id="companyNiu" value="#{statisticController.cteFilter.clientNiu}" filter="true" filterMatchMode="contains">
-                            <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-                            <f:selectItems value="#{statisticController.companiesList}" var="client" itemLabel="#{client.key}" itemValue="#{client.key}" />
+                            <f:selectItems value="#{statisticController.destinationCountries}" var="country" itemValue="#{country.key}" itemLabel="#{country.value}" />
                         </p:selectOneMenu>
                     </p:outputPanel>
 
                     <p:outputPanel styleClass="search-select">
                         <p:outputLabel for="companyName" value="#{bundle['companyName']}" />
-                        <p:selectOneMenu id="companyName" value="#{statisticController.cteFilter.companyName}" filter="true" filterMatchMode="contains">
+                        <p:selectOneMenu id="companyName" value="#{statisticController.cteFilter.clientNiu}" filter="true" filterMatchMode="contains">
                             <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-                            <f:selectItems value="#{statisticController.companiesList}" var="client" itemLabel="#{client.value}" itemValue="#{client.value}" />
+                            <f:selectItems value="#{statisticController.companiesList}" var="client" itemValue="#{client.key}" itemLabel="#{client.value}" />
                         </p:selectOneMenu>
                     </p:outputPanel>
 
@@ -55,7 +47,7 @@
                         <p:outputLabel for="CDA" value="CDA" />
                         <p:selectOneMenu id="CDA" value="#{statisticController.cteFilter.cda}" filter="true" filterMatchMode="contains">
                             <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-                            <f:selectItems value="#{statisticController.cdas}" var="entry" itemValue="#{entry.key}" itemLabel="#{entry.value}" />
+                            <f:selectItems value="#{statisticController.cdas}" var="cda" itemValue="#{cda.key}" itemLabel="#{cda.value}" />
                         </p:selectOneMenu>
                     </p:outputPanel>
 
@@ -63,7 +55,7 @@
                         <p:outputLabel for="treatmentSociety" value="#{bundle['treatmentSociety']}" />
                         <p:selectOneMenu id="treatmentSociety" value="#{statisticController.cteFilter.treatmentSociety}" filter="true" filterMatchMode="contains">
                             <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-                            <f:selectItems value="#{statisticController.treatmentSocieties}" var="entry" itemValue="#{entry.key}" itemLabel="#{entry.value}" />
+                            <f:selectItems value="#{statisticController.treatmentSocieties}" var="treatmentSociety" itemValue="#{treatmentSociety.key}" itemLabel="#{treatmentSociety.value}" />
                         </p:selectOneMenu>
                     </p:outputPanel>
 
@@ -71,7 +63,7 @@
                         <p:outputLabel for="nsh" value="#{bundle['FileItemInformationLabel_nsh']}" />
                         <p:selectOneMenu id="nsh" value="#{statisticController.cteFilter.nsh}" filter="true" filterMatchMode="contains">
                             <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-                            <f:selectItems value="#{statisticController.specificNshList}" var="entry" itemValue="#{entry.goodsItemCode}" itemLabel="#{entry.goodsItemCode} - #{entry.goodsItemDesc}" />
+                            <f:selectItems value="#{statisticController.specificNshList}" var="nsh" itemValue="#{nsh.goodsItemCode}" itemLabel="#{nsh.goodsItemCode} - #{nsh.goodsItemDesc}" />
                         </p:selectOneMenu>
                     </p:outputPanel>
                 </h:panelGrid>
