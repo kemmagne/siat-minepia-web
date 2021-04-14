@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RequestMapping("ws")
 @RestController
-@Transactional(noRollbackFor = {CmisObjectNotFoundException.class, CmisContentAlreadyExistsException.class})
 public class MessageCtRestController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MessageCtRestController.class);

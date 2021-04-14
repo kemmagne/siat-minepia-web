@@ -1497,7 +1497,7 @@ public class FileItemApDetailController implements Serializable {
                                 if (Arrays.asList(FlowCode.FL_AP_160.name(), FlowCode.FL_AP_161.name(), FlowCode.FL_AP_162.name(),
                                         FlowCode.FL_AP_163.name(), FlowCode.FL_AP_164.name(), FlowCode.FL_AP_165.name(),
                                         FlowCode.FL_AP_193.name(), FlowCode.FL_AP_194.name()).contains(
-                                                flx.getCode())) {
+                                        flx.getCode())) {
                                     it.remove();
                                 }
                             }
@@ -1507,7 +1507,7 @@ public class FileItemApDetailController implements Serializable {
                                 if (Arrays.asList(FlowCode.FL_AP_160.name(), FlowCode.FL_AP_161.name(), FlowCode.FL_AP_162.name(),
                                         FlowCode.FL_AP_163.name(), FlowCode.FL_AP_164.name(), FlowCode.FL_AP_165.name(),
                                         FlowCode.FL_AP_193.name(), FlowCode.FL_AP_194.name()).contains(
-                                                flx.getCode())) {
+                                        flx.getCode())) {
                                     it1.remove();
                                 }
                             }
@@ -1633,7 +1633,7 @@ public class FileItemApDetailController implements Serializable {
         if (Arrays.asList(FlowCode.FL_AP_160.name(), FlowCode.FL_AP_161.name(), FlowCode.FL_AP_162.name(),
                 FlowCode.FL_AP_163.name(), FlowCode.FL_AP_164.name(), FlowCode.FL_AP_165.name(), FlowCode.FL_AP_167.name(),
                 FlowCode.FL_AP_193.name(), FlowCode.FL_AP_194.name()).contains(
-                        selectedFlow.getCode())) {
+                selectedFlow.getCode())) {
             isPayment = Boolean.TRUE;
             paymentData = new PaymentData();
 
@@ -1676,7 +1676,7 @@ public class FileItemApDetailController implements Serializable {
                     inputText.setRequiredMessage(dataType.getLabel()
                             + Constants.SPACE
                             + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                            "RequiredMessage_standard"));
+                                    "RequiredMessage_standard"));
                 }
                 inputText.setId(ID_DECISION_LABEL + stringId);
                 htmlPanelGroup.getChildren().add(inputText);
@@ -1688,7 +1688,7 @@ public class FileItemApDetailController implements Serializable {
                     booleanCheckbox.setRequiredMessage(dataType.getLabel()
                             + Constants.SPACE
                             + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                            "RequiredMessage_standard"));
+                                    "RequiredMessage_standard"));
                 }
                 booleanCheckbox.setId(ID_DECISION_LABEL + stringId);
                 htmlPanelGroup.getChildren().add(booleanCheckbox);
@@ -1700,7 +1700,7 @@ public class FileItemApDetailController implements Serializable {
                     calendar.setRequiredMessage(dataType.getLabel()
                             + Constants.SPACE
                             + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                            "RequiredMessage_standard"));
+                                    "RequiredMessage_standard"));
                 }
                 calendar.setId(ID_DECISION_LABEL + stringId);
                 calendar.setPattern("dd-MM-yyyy");
@@ -1722,7 +1722,7 @@ public class FileItemApDetailController implements Serializable {
                     inputTextarea.setRequiredMessage(dataType.getLabel()
                             + Constants.SPACE
                             + ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                            "RequiredMessage_standard"));
+                                    "RequiredMessage_standard"));
                 }
                 inputTextarea.setRows(10);
                 inputTextarea.setId(ID_DECISION_LABEL + stringId);
@@ -2303,7 +2303,7 @@ public class FileItemApDetailController implements Serializable {
     public synchronized void sendDecisions() throws JAXBException, IOException {
         final DefaultTransactionDefinition def = new DefaultTransactionDefinition();
         def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-        final TransactionStatus status = transactionManager.getTransaction(def);
+        TransactionStatus status = transactionManager.getTransaction(def);
         try {
             // Cotation case
             if (currentFile.getFileItemsList() != null && cotationAllowed != null && cotationAllowed && ((decisionAtCotationLevel != null && !decisionAtCotationLevel) || decisionAtCotationLevel == null)) {
@@ -2334,220 +2334,220 @@ public class FileItemApDetailController implements Serializable {
                         final Flow flowToSend = map.get(fileItemList.get(0));
                         //generate report
                         Map<String, byte[]> attachedByteFiles = null;
-                        try {
-                            String reportNumber;
-                            if (FlowCode.FL_AP_107.name().equals(flowToSend.getCode()) || FlowCode.FL_AP_169.name().equals(flowToSend.getCode()) || FlowCode.FL_AP_202.name().equals(flowToSend.getCode())) {
-                                ItemFlow decisionFlow = null;
-                                if (currentFile.getFileType().getCode().equals(FileTypeCode.VTP_MINSANTE)) {
-                                    decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_103);
-                                    if (decisionFlow == null) {
-                                        decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_169);
-                                    }
-                                    if (decisionFlow == null) {
-                                        decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_170);
-                                    }
-                                    if (decisionFlow == null) {
-                                        decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_171);
-                                    }
-                                    if (decisionFlow == null) {
-                                        decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_172);
-                                    }
-                                    if (decisionFlow == null) {
-                                        decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_173);
-                                    }
-                                } else if (currentFile.getFileType().getCode().equals(FileTypeCode.VTD_MINSANTE)) {
-                                    decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_105);
-                                    if (decisionFlow == null) {
-                                        decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_169);
-                                    }
-                                    if (decisionFlow == null) {
-                                        decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_170);
-                                    }
-                                } else if (isBsbeMinfofFileType()) {
-                                    decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_106);
+//                        try {
+                        String reportNumber;
+                        if (FlowCode.FL_AP_107.name().equals(flowToSend.getCode()) || FlowCode.FL_AP_169.name().equals(flowToSend.getCode()) || FlowCode.FL_AP_202.name().equals(flowToSend.getCode())) {
+                            ItemFlow decisionFlow = null;
+                            if (currentFile.getFileType().getCode().equals(FileTypeCode.VTP_MINSANTE)) {
+                                decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_103);
+                                if (decisionFlow == null) {
+                                    decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_169);
                                 }
-                                if (decisionFlow != null) {
-                                    // Persist SIGNATAIRE_DATE
-                                    FileField signataireDateFileField = fileFieldService.findFileFieldByCodeAndFileType(SIGNATAIRE_DATE_FIELD_NAME, currentFile.getFileType().getCode());
-                                    if (signataireDateFileField != null && decisionFlow.getCreated() != null) {
-                                        FileFieldValue signataireDateFieldValue = fileFieldValueService.findValueByFileFieldAndFile(signataireDateFileField.getCode(), currentFile);
-                                        if (signataireDateFieldValue != null) {
-                                            signataireDateFieldValue.setValue(new SimpleDateFormat("dd/MM/yyyy").format(decisionFlow.getCreated()));
-                                            fileFieldValueService.update(signataireDateFieldValue);
-                                        } else {
-                                            signataireDateFieldValue = new FileFieldValue();
-                                            signataireDateFieldValue.setFile(currentFile);
-                                            signataireDateFieldValue.setFileField(signataireDateFileField);
-                                            signataireDateFieldValue.setValue(new SimpleDateFormat("dd/MM/yyyy").format(decisionFlow.getCreated()));
-                                            currentFile.getFileFieldValueList().add(signataireDateFieldValue);
-                                            fileFieldValueService.save(signataireDateFieldValue);
-                                        }
-                                    }
-                                    final List<ItemFlowData> itemFlowDataList = decisionFlow.getItemFlowsDataList();
-                                    for (final ItemFlowData ifd : itemFlowDataList) {
-                                        if (ifd.getDataType().getLabel().equalsIgnoreCase("Date validité")) {
-                                            final FileField dateValidityField = fileFieldService.findFileFieldByCodeAndFileType(
-                                                    VALIDITY_DATE_FIELD_NAME, currentFile.getFileType().getCode());
-                                            if (dateValidityField != null) {
-                                                FileFieldValue dateValidityFieldValue = fileFieldValueService.findValueByFileFieldAndFile(dateValidityField.getCode(), currentFile);
-                                                if (dateValidityFieldValue != null) {
-                                                    dateValidityFieldValue.setValue(ifd.getValue());
-                                                    fileFieldValueService.update(dateValidityFieldValue);
-                                                } else {
-                                                    dateValidityFieldValue = new FileFieldValue();
-                                                    dateValidityFieldValue.setFile(currentFile);
-                                                    dateValidityFieldValue.setFileField(dateValidityField);
-                                                    dateValidityFieldValue.setValue(ifd.getValue());
-                                                    currentFile.getFileFieldValueList().add(dateValidityFieldValue);
-                                                    fileFieldValueService.save(dateValidityFieldValue);
-                                                }
-                                            }
-                                            break;
-                                        }
-                                        if (isBsbeMinfofFileType() && ifd.getDataType().getLabel().equalsIgnoreCase("Numéro Enregistrement BSB")) {
-                                            final FileField registrationNumberField = fileFieldService.findFileFieldByCodeAndFileType(
-                                                    "BULLETIN_SPECIFICATION_NUMERO_ENREGISTREMENT", currentFile.getFileType().getCode());
-                                            final FileField registrationDateField = fileFieldService.findFileFieldByCodeAndFileType(
-                                                    "BULLETIN_SPECIFICATION_DATE", currentFile.getFileType().getCode());
-                                            if (registrationNumberField != null) {
-                                                FileFieldValue registrationNumberFieldValue = fileFieldValueService.findValueByFileFieldAndFile(registrationNumberField.getCode(), currentFile);
-                                                if (registrationNumberFieldValue != null) {
-                                                    registrationNumberFieldValue.setValue(ifd.getValue());
-                                                    fileFieldValueService.update(registrationNumberFieldValue);
-                                                } else {
-                                                    registrationNumberFieldValue = new FileFieldValue();
-                                                    registrationNumberFieldValue.setFile(currentFile);
-                                                    registrationNumberFieldValue.setFileField(registrationNumberField);
-                                                    registrationNumberFieldValue.setValue(ifd.getValue());
-                                                    currentFile.getFileFieldValueList().add(registrationNumberFieldValue);
-                                                    fileFieldValueService.save(registrationNumberFieldValue);
-                                                }
-                                            }
-                                            if (registrationDateField != null) {
-                                                FileFieldValue registrationDateFieldValue = fileFieldValueService.findValueByFileFieldAndFile(registrationDateField.getCode(), currentFile);
-                                                if (registrationDateFieldValue != null) {
-                                                    registrationDateFieldValue.setValue(SIMPLE_DATE_FORMAT.format(java.util.Calendar.getInstance().getTime()));
-                                                    fileFieldValueService.update(registrationDateFieldValue);
-                                                } else {
-                                                    registrationDateFieldValue = new FileFieldValue();
-                                                    registrationDateFieldValue.setFile(currentFile);
-                                                    registrationDateFieldValue.setFileField(registrationDateField);
-                                                    registrationDateFieldValue.setValue(SIMPLE_DATE_FORMAT.format(java.util.Calendar.getInstance().getTime()));
-                                                    currentFile.getFileFieldValueList().add(registrationDateFieldValue);
-                                                    fileFieldValueService.save(registrationDateFieldValue);
-                                                }
-                                            }
-                                            break;
-                                        }
-                                    }
+                                if (decisionFlow == null) {
+                                    decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_170);
                                 }
-                                attachedByteFiles = new HashMap<>();
-
-                                final List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<>();
-
-                                final List<FileTypeFlowReport> fileTypeFlowReportsList = flowToSend.getFileTypeFlowReportsList();
-
-                                if (fileTypeFlowReportsList != null) {
-
-                                    for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
-                                        if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType())) {
-                                            fileTypeFlowReports.add(fileTypeFlowReport);
-                                        }
-                                    }
+                                if (decisionFlow == null) {
+                                    decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_171);
                                 }
-                                for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
-
-                                    //Begin Add new field value with report Number
-                                    final ReportOrganism reportOrganism = reportOrganismService
-                                            .findReportByFileTypeFlowReport(fileTypeFlowReport);
-                                    final FileField reportField = fileFieldService.findFileFieldByCodeAndFileType(
-                                            fileTypeFlowReport.getFileFieldName(), fileTypeFlowReport.getFileType().getCode());
-                                    reportNumber = (reportOrganism.getSequence() + 1)
-                                            + (reportOrganism.getValue() != null ? reportOrganism.getValue() : StringUtils.EMPTY);
-                                    if (reportField != null) {
-                                        FileFieldValue reportFieldValue = fileFieldValueService.findValueByFileFieldAndFile(reportField.getCode(), currentFile);
-                                        if (reportFieldValue == null) {
-                                            reportFieldValue = new FileFieldValue();
-                                            reportFieldValue.setFile(currentFile);
-                                            reportFieldValue.setFileField(reportField);
-                                            reportFieldValue.setValue(reportNumber);
-                                            currentFile.getFileFieldValueList().add(reportFieldValue);
-                                            fileFieldValueService.save(reportFieldValue);
-                                        }
-                                    }
-                                    //End Add new field value with report Number
-                                    byte[] report;
-
-                                    if (aiMinmidtFileType) {
-                                        Attachment finalAttachment = findAuthorizationAttachment();
-                                        if (finalAttachment == null) {
-                                            if (fileToSave != null) {
-                                                JsfUtil.addErrorMessage("Le rapport n'a pu être enregistré, mais sera envoyé");
-                                                report = FileUtils.readFileToByteArray(fileToSave);
-                                            } else {
-                                                JsfUtil.addErrorMessage("Le rapport n'a pu être enregistré");
-                                                return;
-                                            }
-                                        } else {
-                                            report = getBytesFromAttachment(finalAttachment);
-                                        }
+                                if (decisionFlow == null) {
+                                    decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_172);
+                                }
+                                if (decisionFlow == null) {
+                                    decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_173);
+                                }
+                            } else if (currentFile.getFileType().getCode().equals(FileTypeCode.VTD_MINSANTE)) {
+                                decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_105);
+                                if (decisionFlow == null) {
+                                    decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_169);
+                                }
+                                if (decisionFlow == null) {
+                                    decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_170);
+                                }
+                            } else if (isBsbeMinfofFileType()) {
+                                decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_106);
+                            }
+                            if (decisionFlow != null) {
+                                // Persist SIGNATAIRE_DATE
+                                FileField signataireDateFileField = fileFieldService.findFileFieldByCodeAndFileType(SIGNATAIRE_DATE_FIELD_NAME, currentFile.getFileType().getCode());
+                                if (signataireDateFileField != null && decisionFlow.getCreated() != null) {
+                                    FileFieldValue signataireDateFieldValue = fileFieldValueService.findValueByFileFieldAndFile(signataireDateFileField.getCode(), currentFile);
+                                    if (signataireDateFieldValue != null) {
+                                        signataireDateFieldValue.setValue(new SimpleDateFormat("dd/MM/yyyy").format(decisionFlow.getCreated()));
+                                        fileFieldValueService.update(signataireDateFieldValue);
                                     } else {
-                                        final String nomClasse = fileTypeFlowReport.getReportClassName();
-                                        @SuppressWarnings("rawtypes")
-                                        final Class classe = Class.forName(nomClasse);
-                                        if (bsbeMinfofFileType) {
-                                            Constructor c1 = classe.getConstructor(File.class, List.class, String.class);
-                                            report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile, specsList, woodsType == null ? "GRUMES" : woodsType.getValue()));
-                                        } else {
-                                            report = ReportGeneratorUtils.generateReportBytes(fileFieldValueService, classe, currentFile);
-                                        }
+                                        signataireDateFieldValue = new FileFieldValue();
+                                        signataireDateFieldValue.setFile(currentFile);
+                                        signataireDateFieldValue.setFileField(signataireDateFileField);
+                                        signataireDateFieldValue.setValue(new SimpleDateFormat("dd/MM/yyyy").format(decisionFlow.getCreated()));
+                                        currentFile.getFileFieldValueList().add(signataireDateFieldValue);
+                                        fileFieldValueService.save(signataireDateFieldValue);
                                     }
-                                    attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
-                                    List<Attachment> filesToSend = findAttachmentsToSend(currentFile.getFileType().getCode());
-                                    for (Attachment att : (List<Attachment>) safe(filesToSend)) {
-                                        attachedByteFiles.put(att.getDocumentName(), getBytesFromAttachment(att));
-                                    }
-                                    String targetAttachmentName = new StringBuilder().append(currentFile.getNumeroDossier())
-                                            .append("-").append(currentFile.getReferenceSiat()).append("-")
-                                            .append(fileTypeFlowReport.getReportName()).toString();
-                                    java.io.File folder = new java.io.File(applicationPropretiesService.getAttachementFolder());
-                                    if (!folder.exists()) {
-                                        folder.mkdirs();
-                                    }
-                                    final java.io.File targetAttachment = new java.io.File(folder, targetAttachmentName);
-
-                                    try (FileOutputStream fileOuputStream = new FileOutputStream(targetAttachment)) {
-                                        fileOuputStream.write(report);
-                                    }
-
-                                    //Update report sequence
-                                    reportOrganism.setSequence(reportOrganism.getSequence() + 1);
-                                    reportOrganismService.update(reportOrganism);
-                                    final Map<String, Date> dateParams = new HashMap<>();
-                                    dateParams.put("SIGNATURE_DATE", java.util.Calendar.getInstance().getTime());
-                                    fileService.updateSpecificColumn(dateParams, currentFile);
                                 }
-                            } else if (FlowCode.FL_AP_202.name().equals(flowToSend.getCode())) {
-                                FileMarshall fileMarshall = fileMarshallServce.findByFile(currentFile);
-                                if (fileMarshall != null) {
-                                    Serializable object = (Serializable) SerializationUtils.deserialize(fileMarshall.getMarshall());
-                                    File previousFile;
-                                    switch (currentFile.getFileType().getCode()) {
-                                        case BSBE_MINFOF:
-                                            previousFile = xmlConverterService.convertDocumentToFile(object);
-                                            break;
-                                        default:
-                                            previousFile = null;
+                                final List<ItemFlowData> itemFlowDataList = decisionFlow.getItemFlowsDataList();
+                                for (final ItemFlowData ifd : itemFlowDataList) {
+                                    if (ifd.getDataType().getLabel().equalsIgnoreCase("Date validité")) {
+                                        final FileField dateValidityField = fileFieldService.findFileFieldByCodeAndFileType(
+                                                VALIDITY_DATE_FIELD_NAME, currentFile.getFileType().getCode());
+                                        if (dateValidityField != null) {
+                                            FileFieldValue dateValidityFieldValue = fileFieldValueService.findValueByFileFieldAndFile(dateValidityField.getCode(), currentFile);
+                                            if (dateValidityFieldValue != null) {
+                                                dateValidityFieldValue.setValue(ifd.getValue());
+                                                fileFieldValueService.update(dateValidityFieldValue);
+                                            } else {
+                                                dateValidityFieldValue = new FileFieldValue();
+                                                dateValidityFieldValue.setFile(currentFile);
+                                                dateValidityFieldValue.setFileField(dateValidityField);
+                                                dateValidityFieldValue.setValue(ifd.getValue());
+                                                currentFile.getFileFieldValueList().add(dateValidityFieldValue);
+                                                fileFieldValueService.save(dateValidityFieldValue);
+                                            }
+                                        }
+                                        break;
                                     }
-                                    if (previousFile != null) {
-                                        xmlConverterService.rollbackFile(currentFile, previousFile);
+                                    if (isBsbeMinfofFileType() && ifd.getDataType().getLabel().equalsIgnoreCase("Numéro Enregistrement BSB")) {
+                                        final FileField registrationNumberField = fileFieldService.findFileFieldByCodeAndFileType(
+                                                "BULLETIN_SPECIFICATION_NUMERO_ENREGISTREMENT", currentFile.getFileType().getCode());
+                                        final FileField registrationDateField = fileFieldService.findFileFieldByCodeAndFileType(
+                                                "BULLETIN_SPECIFICATION_DATE", currentFile.getFileType().getCode());
+                                        if (registrationNumberField != null) {
+                                            FileFieldValue registrationNumberFieldValue = fileFieldValueService.findValueByFileFieldAndFile(registrationNumberField.getCode(), currentFile);
+                                            if (registrationNumberFieldValue != null) {
+                                                registrationNumberFieldValue.setValue(ifd.getValue());
+                                                fileFieldValueService.update(registrationNumberFieldValue);
+                                            } else {
+                                                registrationNumberFieldValue = new FileFieldValue();
+                                                registrationNumberFieldValue.setFile(currentFile);
+                                                registrationNumberFieldValue.setFileField(registrationNumberField);
+                                                registrationNumberFieldValue.setValue(ifd.getValue());
+                                                currentFile.getFileFieldValueList().add(registrationNumberFieldValue);
+                                                fileFieldValueService.save(registrationNumberFieldValue);
+                                            }
+                                        }
+                                        if (registrationDateField != null) {
+                                            FileFieldValue registrationDateFieldValue = fileFieldValueService.findValueByFileFieldAndFile(registrationDateField.getCode(), currentFile);
+                                            if (registrationDateFieldValue != null) {
+                                                registrationDateFieldValue.setValue(SIMPLE_DATE_FORMAT.format(java.util.Calendar.getInstance().getTime()));
+                                                fileFieldValueService.update(registrationDateFieldValue);
+                                            } else {
+                                                registrationDateFieldValue = new FileFieldValue();
+                                                registrationDateFieldValue.setFile(currentFile);
+                                                registrationDateFieldValue.setFileField(registrationDateField);
+                                                registrationDateFieldValue.setValue(SIMPLE_DATE_FORMAT.format(java.util.Calendar.getInstance().getTime()));
+                                                currentFile.getFileFieldValueList().add(registrationDateFieldValue);
+                                                fileFieldValueService.save(registrationDateFieldValue);
+                                            }
+                                        }
+                                        break;
                                     }
                                 }
                             }
-                        } catch (final Exception e) {
-                            LOG.error("Error occured when loading report: " + e.getMessage(), e);
-                            attachedByteFiles = null;
+                            attachedByteFiles = new HashMap<>();
+
+                            final List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<>();
+
+                            final List<FileTypeFlowReport> fileTypeFlowReportsList = flowToSend.getFileTypeFlowReportsList();
+
+                            if (fileTypeFlowReportsList != null) {
+
+                                for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
+                                    if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType())) {
+                                        fileTypeFlowReports.add(fileTypeFlowReport);
+                                    }
+                                }
+                            }
+                            for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
+
+                                //Begin Add new field value with report Number
+                                final ReportOrganism reportOrganism = reportOrganismService
+                                        .findReportByFileTypeFlowReport(fileTypeFlowReport);
+                                final FileField reportField = fileFieldService.findFileFieldByCodeAndFileType(
+                                        fileTypeFlowReport.getFileFieldName(), fileTypeFlowReport.getFileType().getCode());
+                                reportNumber = (reportOrganism.getSequence() + 1)
+                                        + (reportOrganism.getValue() != null ? reportOrganism.getValue() : StringUtils.EMPTY);
+                                if (reportField != null) {
+                                    FileFieldValue reportFieldValue = fileFieldValueService.findValueByFileFieldAndFile(reportField.getCode(), currentFile);
+                                    if (reportFieldValue == null) {
+                                        reportFieldValue = new FileFieldValue();
+                                        reportFieldValue.setFile(currentFile);
+                                        reportFieldValue.setFileField(reportField);
+                                        reportFieldValue.setValue(reportNumber);
+                                        currentFile.getFileFieldValueList().add(reportFieldValue);
+                                        fileFieldValueService.save(reportFieldValue);
+                                    }
+                                }
+                                //End Add new field value with report Number
+                                byte[] report;
+
+                                if (aiMinmidtFileType) {
+                                    Attachment finalAttachment = findAuthorizationAttachment();
+                                    if (finalAttachment == null) {
+                                        if (fileToSave != null) {
+                                            JsfUtil.addErrorMessage("Le rapport n'a pu être enregistré, mais sera envoyé");
+                                            report = FileUtils.readFileToByteArray(fileToSave);
+                                        } else {
+                                            JsfUtil.addErrorMessage("Le rapport n'a pu être enregistré");
+                                            return;
+                                        }
+                                    } else {
+                                        report = getBytesFromAttachment(finalAttachment);
+                                    }
+                                } else {
+                                    final String nomClasse = fileTypeFlowReport.getReportClassName();
+                                    @SuppressWarnings("rawtypes")
+                                    final Class classe = Class.forName(nomClasse);
+                                    if (bsbeMinfofFileType) {
+                                        Constructor c1 = classe.getConstructor(File.class, List.class, String.class);
+                                        report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile, specsList, woodsType == null ? "GRUMES" : woodsType.getValue()));
+                                    } else {
+                                        report = ReportGeneratorUtils.generateReportBytes(fileFieldValueService, classe, currentFile);
+                                    }
+                                }
+                                attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
+                                List<Attachment> filesToSend = findAttachmentsToSend(currentFile.getFileType().getCode());
+                                for (Attachment att : (List<Attachment>) safe(filesToSend)) {
+                                    attachedByteFiles.put(att.getDocumentName(), getBytesFromAttachment(att));
+                                }
+                                String targetAttachmentName = new StringBuilder().append(currentFile.getNumeroDossier())
+                                        .append("-").append(currentFile.getReferenceSiat()).append("-")
+                                        .append(fileTypeFlowReport.getReportName()).toString();
+                                java.io.File folder = new java.io.File(applicationPropretiesService.getAttachementFolder());
+                                if (!folder.exists()) {
+                                    folder.mkdirs();
+                                }
+                                final java.io.File targetAttachment = new java.io.File(folder, targetAttachmentName);
+
+                                try (FileOutputStream fileOuputStream = new FileOutputStream(targetAttachment)) {
+                                    fileOuputStream.write(report);
+                                }
+
+                                //Update report sequence
+                                reportOrganism.setSequence(reportOrganism.getSequence() + 1);
+                                reportOrganismService.update(reportOrganism);
+                                final Map<String, Date> dateParams = new HashMap<>();
+                                dateParams.put("SIGNATURE_DATE", java.util.Calendar.getInstance().getTime());
+                                fileService.updateSpecificColumn(dateParams, currentFile);
+                            }
+                        } else if (FlowCode.FL_AP_202.name().equals(flowToSend.getCode())) {
+                            FileMarshall fileMarshall = fileMarshallServce.findByFile(currentFile);
+                            if (fileMarshall != null) {
+                                Serializable object = (Serializable) SerializationUtils.deserialize(fileMarshall.getMarshall());
+                                File previousFile;
+                                switch (currentFile.getFileType().getCode()) {
+                                    case BSBE_MINFOF:
+                                        previousFile = xmlConverterService.convertDocumentToFile(object);
+                                        break;
+                                    default:
+                                        previousFile = null;
+                                }
+                                if (previousFile != null) {
+                                    xmlConverterService.rollbackFile(currentFile, previousFile);
+                                }
+                            }
                         }
+//                        } catch (final Exception e) {
+//                            LOG.error("Error occured when loading report: " + e.getMessage(), e);
+//                            attachedByteFiles = null;
+//                        }
 
                         // convert file to document
                         final Serializable documentSerializable = xmlConverterService.convertFileToDocument(productInfoItems.get(0)
@@ -2611,7 +2611,9 @@ public class FileItemApDetailController implements Serializable {
                         .getString(ControllerConstants.Bundle.Messages.SEND_ERROR);
                 JsfUtil.addErrorMessage(msg);
             }
-            transactionManager.commit(status);
+            TransactionStatus tsCommit = status;
+            status = null;
+            transactionManager.commit(tsCommit);
             if (LOG.isDebugEnabled()) {
                 LOG.info("####SEND DECISION Transaction commited####");
             }
@@ -2619,11 +2621,16 @@ public class FileItemApDetailController implements Serializable {
             final File file = fileService.find(currentFile.getId());
             final Step currentStep = file.getFileItemsList().get(0).getStep();
             notificationEmail(currentFile, currentStep);
-        } catch (final Exception e) {
-            transactionManager.rollback(status);
-
-            LOG.error("####SEND DECISION Transaction rollbacked#### " + e.getMessage(), e);
-
+        } catch (Exception e) {
+            LOG.error(currentFile.toString(), e);
+            showErrorFacesMessage(ControllerConstants.Bundle.Messages.SEND_ERROR, null);
+        } finally {
+            if (status != null) {
+                transactionManager.rollback(status);
+                if (LOG.isDebugEnabled()) {
+                    LOG.info("####SEND DECISION Transaction rollbacked####");
+                }
+            }
         }
     }
 
