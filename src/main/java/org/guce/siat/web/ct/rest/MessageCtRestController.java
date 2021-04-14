@@ -1,6 +1,8 @@
 package org.guce.siat.web.ct.rest;
 
 import java.util.Map;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisContentAlreadyExistsException;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisObjectNotFoundException;
 import org.guce.orchestra.core.OrchestraEbxmlMessage;
 import org.guce.siat.common.service.ProcessMessageService;
 import org.guce.siat.common.utils.EbxmlUtils;
@@ -23,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RequestMapping("ws")
 @RestController
-@Transactional
+@Transactional(noRollbackFor = {CmisObjectNotFoundException.class, CmisContentAlreadyExistsException.class})
 public class MessageCtRestController {
 
     private static final Logger LOG = LoggerFactory.getLogger(MessageCtRestController.class);
