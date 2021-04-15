@@ -5978,12 +5978,8 @@ public class FileItemCctDetailController extends DefaultDetailController {
                     //generate report
                     Map<String, byte[]> attachedByteFiles = null;
                     final List<FileItem> fileItemList = selectedFile.getFileItemsList();
-//                    final List<ItemFlow> itemFlowList = selectedItemFlowDto.getItemFlow().getFlow().getItemsFlowsList();
-                    List<Long> fileItems = new ArrayList<>();
-                    for (FileItem fileItem : fileItemList) {
-                        fileItems.add(fileItem.getId());
-                    }
-                    final List<ItemFlow> itemFlowList = itemFlowService.findItemFlowsByFileItemListAndFlow(fileItems, FlowCode.valueOf(currentSelectedFlow.getCode()));
+//                    final List<ItemFlow> itemFlowList = selectedItemFlowDto.getItemFlow().getFlow().getItemsFlowsList();                    
+                    final List<ItemFlow> itemFlowList = itemFlowService.findLastItemFlowsByFileItemListAndFlow(fileItemList, FlowCode.valueOf(currentSelectedFlow.getCode()));
                     String service = StringUtils.EMPTY;
                     String documentType = StringUtils.EMPTY;
 

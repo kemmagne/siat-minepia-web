@@ -5498,11 +5498,7 @@ public class FileItemApDetailController implements Serializable {
                     final String service = StringUtils.EMPTY;
                     final String documentType = StringUtils.EMPTY;
 //                    final List<ItemFlow> itemFlowList = selectedItemFlowDto.getItemFlow().getFlow().getItemsFlowsList();
-                    List<Long> fileItems = new ArrayList<>();
-                    for (FileItem fileItem : fileItemList) {
-                        fileItems.add(fileItem.getId());
-                    }
-                    final List<ItemFlow> itemFlowList = itemFlowService.findItemFlowsByFileItemListAndFlow(fileItems, FlowCode.valueOf(currentSelectedFlow.getCode()));
+                    final List<ItemFlow> itemFlowList = itemFlowService.findLastItemFlowsByFileItemListAndFlow(fileItemList, FlowCode.valueOf(currentSelectedFlow.getCode()));
                     //generate report
                     Map<String, byte[]> attachedByteFiles = null;
                     if (FlowCode.FL_AP_107.name().equals(currentSelectedFlow.getCode()) || FlowCode.FL_AP_169.name().equals(currentSelectedFlow.getCode())) {
