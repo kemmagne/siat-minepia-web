@@ -5978,7 +5978,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                     //generate report
                     Map<String, byte[]> attachedByteFiles = null;
                     final List<FileItem> fileItemList = selectedFile.getFileItemsList();
-//                    final List<ItemFlow> itemFlowList = selectedItemFlowDto.getItemFlow().getFlow().getItemsFlowsList();                    
+//                    final List<ItemFlow> itemFlowList = selectedItemFlowDto.getItemFlow().getFlow().getItemsFlowsList();
                     final List<ItemFlow> itemFlowList = itemFlowService.findLastItemFlowsByFileItemListAndFlow(fileItemList, FlowCode.valueOf(currentSelectedFlow.getCode()));
                     String service = StringUtils.EMPTY;
                     String documentType = StringUtils.EMPTY;
@@ -6732,6 +6732,9 @@ public class FileItemCctDetailController extends DefaultDetailController {
     public boolean canDecide() {
         UserAuthorityFileType uaft = userAuthorityFileTypeService.findByCurrentStepFileAndLoggedUser(currentStep, currentFile, getLoggedUser());
         userDecisionAllowed = uaft != null || "standalone".equals(applicationPropretiesService.getAppEnv());
+        if (currentFileItem.getStep() != null && currentFileItem.getStep().getTreatmentStep() != null && currentFileItem.getStep().getTreatmentStep()) {
+            userDecisionAllowed = Objects.equals(getLoggedUser(), currentFile.getAssignedUser()) || "standalone".equals(applicationPropretiesService.getAppEnv());
+        }
         return userDecisionAllowed;
     }
 

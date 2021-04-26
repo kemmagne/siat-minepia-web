@@ -34,15 +34,21 @@ import org.guce.siat.common.utils.enums.StepCode;
 import org.guce.siat.core.ct.model.Laboratory;
 import org.guce.siat.core.ct.model.TreatmentCompany;
 import org.guce.siat.core.ct.service.CommonService;
-import org.guce.siat.core.ct.service.MinaderStatisticsService;
 import org.guce.siat.core.ct.util.enums.CctExportProductType;
 import org.guce.siat.web.common.util.WebConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author tadzotsa
  */
-public class Utils {
+public final class Utils {
+
+    /**
+     * The Constant LOG.
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(Utils.class);
 
     public final static String COTONPRODUCTTYPE = "COTON";
 
@@ -131,13 +137,17 @@ public class Utils {
             file.setRedefinedLabelEn(fileItem.getRedefinedLabelEn());
             file.setRedefinedLabelFr(fileItem.getRedefinedLabelFr());
             Step step = fileItem.getStep();
+            if (step == null) {
+                LOG.warn("The step of the file {} ; file item (line number = {})", file.getNumeroDossier(), fileItem.getLineNumber());
+                continue;
+            }
             file.setStep(step);
 
-            if (!isPhyto(file) || Arrays.asList(StepCode.ST_CT_57, StepCode.ST_CT_60, StepCode.ST_CT_03, StepCode.ST_CT_47, StepCode.ST_CT_53, StepCode.ST_CT_62).contains(fileItem.getStep().getStepCode())) {
+            if (!isPhyto(file) || Arrays.asList(StepCode.ST_CT_57, StepCode.ST_CT_60).contains(fileItem.getStep().getStepCode())) {
                 continue;
             }
 
-            if (MinaderStatisticsService.TREATMENT_STEPS_CODES.contains(fileItem.getStep().getStepCode()) && !loggedUser.equals(file.getAssignedUser())) {
+            if (step.getTreatmentStep() != null && step.getTreatmentStep() && !Objects.equals(loggedUser, file.getAssignedUser())) {
                 iterator.remove();
                 continue;
             }
@@ -147,17 +157,17 @@ public class Utils {
                 continue;
             }
 
-            CctExportProductType productType = null;
+            CctExportProductType productType;
             try {
                 productType = CctExportProductType.valueOf(ffv.getValue());
             } catch (Exception ex) {
+                continue;
             }
-            if (productType != null) {
-                if (!userProductTypes.contains(productType)) {
-                    iterator.remove();
-                } else {
-                    productTypes.put(file, productType);
-                }
+
+            if (!userProductTypes.contains(productType)) {
+                iterator.remove();
+            } else {
+                productTypes.put(file, productType);
             }
         }
 

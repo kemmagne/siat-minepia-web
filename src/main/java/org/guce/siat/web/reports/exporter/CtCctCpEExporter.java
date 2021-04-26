@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
@@ -229,26 +230,25 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                 List<Container> containers = file.getContainers();
                 if (CollectionUtils.isNotEmpty(containers)) {
                     hasContainers = true;
+                    final List<String> containers1 = new ArrayList<>();
+                    final List<String> containers2 = new ArrayList<>();
+                    final int maxContainersNumber = paramValue.getMaxContainerNumber();
+                    final AtomicInteger counter = new AtomicInteger(0);
                     Collection<String> containerNumbers = CollectionUtils.collect(containers, new Transformer() {
                         @Override
                         public String transform(Object input) {
                             Container container = (Container) input;
+                            if (counter.intValue() < maxContainersNumber) {
+                                containers1.add(String.format("%s/%s", container.getContNumber(), container.getContSeal1()));
+                            } else {
+                                containers2.add(String.format("%s/%s", container.getContNumber(), container.getContSeal1()));
+                            }
+                            counter.addAndGet(1);
                             return String.format("%s/%s", container.getContNumber(), container.getContSeal1());
                         }
                     });
 
                     if (paramValue != null && containers.size() > paramValue.getMaxContainerNumber()) {
-                        List<String> containers1 = new ArrayList<>();
-                        List<String> containers2 = new ArrayList<>();
-                        int containerCount = 0;
-                        for (String containerNumber : containerNumbers) {
-                            containerCount++;
-                            if (containerCount <= paramValue.getMaxContainerNumber()) {
-                                containers1.add(containerNumber);
-                            } else {
-                                containers2.add(containerNumber);
-                            }
-                        }
                         containers1.add("- " + paramValue.getLabelMore());
                         ctCctCpEFileVo.setContainersNumbers(StringUtils.join(containers1, " "));
                         ctCctCpEFileVo.setContainersNumbersAnnex(StringUtils.join(containers2, " "));

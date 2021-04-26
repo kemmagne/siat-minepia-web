@@ -26,6 +26,7 @@ import org.guce.siat.common.service.AbstractService;
 import org.guce.siat.common.utils.Constants;
 import org.guce.siat.web.ct.controller.util.JsfUtil;
 import org.guce.siat.web.ct.controller.util.enums.PersistenceActions;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class AbstractController.
@@ -33,6 +34,8 @@ import org.guce.siat.web.ct.controller.util.enums.PersistenceActions;
  * @param <T> the generic type
  */
 public abstract class AbstractController<T extends Serializable> implements Serializable {
+
+    protected final org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * The Constant serialVersionUID.
