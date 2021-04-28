@@ -216,7 +216,7 @@ public final class ReportGeneratorUtils {
                 cCTCPParamValue.setLabelMore(params.getLabelAttachment());
             } else {
                 //LOAD DEFAULT NOT REGISTERED VALUE HERE
-                cCTCPParamValue.setMaxContainerNumber(18);
+                cCTCPParamValue.setMaxContainerNumber(12);
                 cCTCPParamValue.setMaxGoodsLineNumber(6);
                 cCTCPParamValue.setMaxPackageNumber(6);
                 cCTCPParamValue.setLabelMore("Voir pièce jointe");
