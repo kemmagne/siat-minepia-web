@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Transformer;
@@ -208,21 +207,21 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
 
                 String contNumbers = builder.toString().trim();
                 String containerNumbers[] = contNumbers.split(" ");
-                if (paramValue != null && containerNumbers.length > paramValue.getMaxContainerNumber()) {
+                int maxContainerNumber = 12;
+                if (paramValue != null && containerNumbers.length > maxContainerNumber) {
                     List<String> containers1 = new ArrayList<>();
                     List<String> containers2 = new ArrayList<>();
                     int containerCount = 0;
                     for (String containerNumber : containerNumbers) {
                         containerCount++;
-                        if (containerCount <= paramValue.getMaxContainerNumber()) {
+                        if (containerCount <= maxContainerNumber) {
                             containers1.add(containerNumber);
                         } else {
                             containers2.add(containerNumber);
                         }
                     }
-                    containers1.add("- " + paramValue.getLabelMore());
-                    ctCctCpEFileVo.setContainersNumbers(StringUtils.join(containers1, " "));
-                    ctCctCpEFileVo.setContainersNumbersAnnex(StringUtils.join(containers2, " "));
+                    ctCctCpEFileVo.setContainersNumbers(StringUtils.join(containers1, " - ").concat("\n- " + paramValue.getLabelMore()));
+                    ctCctCpEFileVo.setContainersNumbersAnnex(StringUtils.join(containers2, " - "));
                 } else {
                     ctCctCpEFileVo.setContainersNumbers(contNumbers);
                 }
@@ -232,7 +231,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                     hasContainers = true;
                     final List<String> containers1 = new ArrayList<>();
                     final List<String> containers2 = new ArrayList<>();
-                    final int maxContainersNumber = paramValue.getMaxContainerNumber();
+                    final int maxContainersNumber = 12;
                     final AtomicInteger counter = new AtomicInteger(0);
                     Collection<String> containerNumbers = CollectionUtils.collect(containers, new Transformer() {
                         @Override
@@ -248,12 +247,11 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                         }
                     });
 
-                    if (paramValue != null && containers.size() > paramValue.getMaxContainerNumber()) {
-                        containers1.add("- " + paramValue.getLabelMore());
-                        ctCctCpEFileVo.setContainersNumbers(StringUtils.join(containers1, " "));
-                        ctCctCpEFileVo.setContainersNumbersAnnex(StringUtils.join(containers2, " "));
+                    if (paramValue != null && containers.size() > maxContainersNumber) {
+                        ctCctCpEFileVo.setContainersNumbers(StringUtils.join(containers1, " - ").concat("\n- " + paramValue.getLabelMore()));
+                        ctCctCpEFileVo.setContainersNumbersAnnex(StringUtils.join(containers2, " - "));
                     } else {
-                        ctCctCpEFileVo.setContainersNumbers(StringUtils.join(containerNumbers, ' '));
+                        ctCctCpEFileVo.setContainersNumbers(StringUtils.join(containerNumbers, " - "));
                     }
                 }
             }
@@ -261,21 +259,21 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
             if (StringUtils.isNotBlank(packageNumber)) {
 
                 String packagesNumbers[] = packageNumber.split(" ");
-                if (paramValue != null && packagesNumbers.length > paramValue.getMaxPackageNumber()) {
+                int maxPackagesNumber = 6;
+                if (paramValue != null && packagesNumbers.length > maxPackagesNumber) {
                     List<String> packages1 = new ArrayList<>();
                     List<String> packages2 = new ArrayList<>();
                     int containerCount = 0;
                     for (String containerNumber : packagesNumbers) {
                         containerCount++;
-                        if (containerCount <= paramValue.getMaxPackageNumber()) {
+                        if (containerCount <= maxPackagesNumber) {
                             packages1.add(containerNumber);
                         } else {
                             packages2.add(containerNumber);
                         }
                     }
-                    packages1.add("- " + paramValue.getLabelMore());
-                    ctCctCpEFileVo.setLotsNumbers(StringUtils.join(packages1, " "));
-                    ctCctCpEFileVo.setLotsNumbersAnnex(StringUtils.join(packages2, " "));
+                    ctCctCpEFileVo.setLotsNumbers(StringUtils.join(packages1, " - ").concat("\n- " + paramValue.getLabelMore()));
+                    ctCctCpEFileVo.setLotsNumbersAnnex(StringUtils.join(packages2, " - "));
                 } else {
 
                     ctCctCpEFileVo.setLotsNumbers(packageNumber);
@@ -352,7 +350,8 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                     netWeight = netWeight.add(new BigDecimal(fileItem.getQuantity()));
                 }
                 commoditiesCount++;
-                if (paramValue != null && commoditiesCount <= paramValue.getMaxGoodsLineNumber() - 1) {
+                int maxGoodsNumber = 6;
+                if (paramValue != null && commoditiesCount <= maxGoodsNumber - 1) {
                     commoditiesList.add(String.format("%s %s %s", nb, emballage, comName));
                 } else {
                     commoditiesListAttachment.add(String.format("%s %s %s", nb, emballage, comName));
@@ -362,13 +361,13 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                 if (fileItemFieldValue != null) {
                     String gw = fileItemFieldValue.getValue();
                     grossWeight = grossWeight.add(new BigDecimal(gw));
-                    if (paramValue != null && commoditiesCount <= paramValue.getMaxGoodsLineNumber() - 1) {
+                    if (paramValue != null && commoditiesCount <= maxGoodsNumber - 1) {
                         othersGrossWeightList.add(String.format("%s KG", gw));
                     } else {
                         othersGrossWeightAnnextList.add(String.format("%s KG", gw));
                     }
                 } else {
-                    if (paramValue != null && commoditiesCount <= paramValue.getMaxGoodsLineNumber() - 1) {
+                    if (paramValue != null && commoditiesCount <= maxGoodsNumber - 1) {
                         othersGrossWeightList.add("-");
                     } else {
                         othersGrossWeightAnnextList.add("-");
@@ -376,7 +375,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                 }
             }
 
-            final StringBuilder builder = new StringBuilder();
+            StringBuilder builder = new StringBuilder();
             if (Utils.getCacaProductsTypes().contains(productType)) {
                 builder.append("PN : ");
             } else if (Utils.COTONPRODUCTTYPE.equalsIgnoreCase(productType)) {
@@ -433,17 +432,11 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
         String documentPageUrl = "/pages/unsecure/document.xhtml";
         String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, documentPageUrl));
         url = Utils.getFinalDetailPageUrl(file, url, false, false);
-        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        String scheme = request.getScheme(); // https
-        String serverName = request.getServerName(); // localhost
-        Integer serverPort = request.getServerPort(); // 40081 ==> {scheme}://{serverName}:{serverPort}
         ApplicationPropretiesService applicationPropretiesService = ServiceUtility.getBean(ApplicationPropretiesService.class);
         String environment = applicationPropretiesService.getAppEnv();
         String urlPrefix;
         switch (environment) {
             case "standalone":
-//                urlPrefix = "https://siat-web1:40081";
-//                break;
             case "production":
                 urlPrefix = "https://siat.guichetunique.cm";
                 break;

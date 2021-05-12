@@ -161,37 +161,31 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="2" y="24" width="553" height="20" uuid="24f9caf2-4e87-4119-9ddf-778282742daf"/>
-				<textElement textAlignment="Center" markup="html"/>
+				<textElement textAlignment="Center" markup="html">
+					<font size="8" isBold="true"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{namesAnnex}]]></textFieldExpression>
 			</textField>
 			<rectangle>
 				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="0" y="-2" width="555" height="46" uuid="bba3a0fa-196a-4dec-a32b-77804b4519fc"/>
 			</rectangle>
 		</band>
-		<band height="33" splitType="Prevent">
-			<printWhenExpression><![CDATA[$F{lotsNumbersAnnex} != null]]></printWhenExpression>
+		<band height="60" splitType="Prevent">
+			<printWhenExpression><![CDATA[$F{lotsNumbersAnnex} != null || $F{containersNumbersAnnex} != null]]></printWhenExpression>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="2" y="2" width="552" height="31" uuid="fbfc0edf-7c21-4911-8a23-b8cc5162c65c"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="2" y="2" width="552" height="58" uuid="fbfc0edf-7c21-4911-8a23-b8cc5162c65c"/>
 				<textElement textAlignment="Center" markup="html">
-					<font isUnderline="false"/>
+					<font size="8" isBold="true" isUnderline="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{lotsNumbersAnnex}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{lotsNumbersAnnex} != null ? $F{lotsNumbersAnnex} : "") + "<br><br>" + ($F{containersNumbersAnnex} != null ? $F{containersNumbersAnnex} : "")]]></textFieldExpression>
 			</textField>
 			<rectangle>
-				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="0" y="-3" width="555" height="32" uuid="fd57a025-404c-493f-93dc-c3f783d517b8"/>
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="0" y="-3" width="555" height="63" uuid="fd57a025-404c-493f-93dc-c3f783d517b8"/>
 			</rectangle>
 		</band>
 		<band height="229" splitType="Prevent">
 			<rectangle>
 				<reportElement positionType="Float" x="0" y="28" width="555" height="195" uuid="d3ac723e-303d-4528-a079-e519dc5f8852"/>
-			</rectangle>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1" y="1" width="553" height="31" uuid="08102bf1-4b4c-490b-9a1d-df74a94550fd"/>
-				<textElement textAlignment="Center" markup="html"/>
-				<textFieldExpression><![CDATA[$F{containersNumbersAnnex}]]></textFieldExpression>
-			</textField>
-			<rectangle>
-				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="0" y="-3" width="555" height="31" uuid="fe5d09f8-b697-42f8-bf49-546f00ce518f"/>
 			</rectangle>
 			<staticText>
 				<reportElement positionType="Float" x="275" y="41" width="193" height="13" uuid="638001a1-d42b-4f74-b796-9e72730749e0"/>

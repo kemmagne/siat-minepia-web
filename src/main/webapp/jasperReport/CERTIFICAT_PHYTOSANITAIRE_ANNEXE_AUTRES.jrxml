@@ -190,20 +190,10 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 				<textElement textAlignment="Center" markup="html">
 					<font size="8" isBold="true" isUnderline="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{lotsNumbersAnnex}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{lotsNumbersAnnex} != null ? $F{lotsNumbersAnnex} : "") + "<br><br>" + ($F{containersNumbersAnnex} != null ? $F{containersNumbersAnnex} : "")]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="230" splitType="Prevent">
-			<rectangle>
-				<reportElement x="0" y="0" width="470" height="28" uuid="22a1afb4-40fc-4410-9dd6-6e7fd22616ae"/>
-			</rectangle>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="1" y="1" width="469" height="26" uuid="08102bf1-4b4c-490b-9a1d-df74a94550fd"/>
-				<textElement textAlignment="Center" markup="html">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{containersNumbersAnnex}]]></textFieldExpression>
-			</textField>
 			<rectangle>
 				<reportElement positionType="Float" x="0" y="28" width="555" height="195" uuid="d3ac723e-303d-4528-a079-e519dc5f8852"/>
 			</rectangle>

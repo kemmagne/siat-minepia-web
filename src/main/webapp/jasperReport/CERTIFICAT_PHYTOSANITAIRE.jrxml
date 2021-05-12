@@ -627,7 +627,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 				</rectangle>
 				<textField isBlankWhenNull="true">
 					<reportElement x="1" y="120" width="473" height="48" uuid="250714b0-f608-4b46-88f0-7575ef9ab224"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{containersNumbers}]]></textFieldExpression>
