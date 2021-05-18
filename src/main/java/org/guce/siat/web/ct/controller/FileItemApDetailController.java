@@ -104,6 +104,7 @@ import org.guce.siat.common.service.FileTypeStepService;
 import org.guce.siat.common.service.FlowService;
 import org.guce.siat.common.service.ItemFlowService;
 import org.guce.siat.common.service.MailService;
+import org.guce.siat.common.service.MessageToSendService;
 import org.guce.siat.common.service.RecommandationAuthorityService;
 import org.guce.siat.common.service.RecommandationService;
 import org.guce.siat.common.service.ReportOrganismService;
@@ -343,6 +344,12 @@ public class FileItemApDetailController implements Serializable {
 
     @ManagedProperty(value = "#{attachmentService}")
     private AttachmentService attachmentService;
+    
+    /**
+     * The message not already send service.
+     */
+    @ManagedProperty(value = "#{messageToSendService}")
+    private MessageToSendService messageToSendService;
 
     /**
      * The index page url.
@@ -2558,44 +2565,16 @@ public class FileItemApDetailController implements Serializable {
                         try (final ByteArrayOutputStream output = SendDocumentUtils.prepareApDocument(documentSerializable, service, documentType)) {
                             xmlBytes = output.toByteArray();
                         }
-
+                        
                         if (CollectionUtils.isNotEmpty(flowToSend.getCopyRecipientsList())) {
                             final List<CopyRecipient> copyRecipients = flowToSend.getCopyRecipientsList();
                             for (final CopyRecipient copyRecipient : copyRecipients) {
                                 LOG.info("SEND COPY RECIPIENT TO {}", copyRecipient.getToAuthority().getRole());
-                                final Map<String, Object> data = new HashMap<>();
-                                data.put(ESBConstants.FLOW, xmlBytes);
-                                data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
-                                data.put(ESBConstants.TYPE_DOCUMENT, documentType);
-                                data.put(ESBConstants.SERVICE, service);
-                                data.put(ESBConstants.MESSAGE, null);
-                                data.put(ESBConstants.EBXML_TYPE, "STANDARD");
-                                data.put(ESBConstants.TO_PARTY_ID, copyRecipient.getToAuthority().getRole());
-                                data.put(ESBConstants.DEAD, "0");
-                                //
-                                data.put(ESBConstants.ITEM_FLOWS, itemFlowList);
-                                fileProducer.sendFile(data);
-                                if (LOG.isDebugEnabled()) {
-                                    LOG.debug("Message sent to OUT queue");
-                                }
+                                send(status, xmlBytes, attachedByteFiles, service, documentType, copyRecipient.getToAuthority().getRole(), itemFlowList);
 
                             }
                         } else {
-                            final Map<String, Object> data = new HashMap<>();
-                            data.put(ESBConstants.FLOW, xmlBytes);
-                            data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
-                            data.put(ESBConstants.TYPE_DOCUMENT, documentType);
-                            data.put(ESBConstants.SERVICE, service);
-                            data.put(ESBConstants.MESSAGE, null);
-                            data.put(ESBConstants.EBXML_TYPE, "STANDARD");
-                            data.put(ESBConstants.TO_PARTY_ID, currentFile.getEmetteur());
-                            data.put(ESBConstants.DEAD, "0");
-                            //
-                            data.put(ESBConstants.ITEM_FLOWS, itemFlowList);
-                            fileProducer.sendFile(data);
-                            if (LOG.isDebugEnabled()) {
-                                LOG.debug("Message sent to OUT queue");
-                            }
+                            send(status, xmlBytes, attachedByteFiles, service, documentType, currentFile.getEmetteur(), itemFlowList);
                         }
 
                     }
@@ -2631,6 +2610,34 @@ public class FileItemApDetailController implements Serializable {
                     LOG.info("####SEND DECISION Transaction rollbacked####");
                 }
             }
+        }
+    }
+
+    private void send(TransactionStatus transactionStatus, byte[] xmlBytes, Map<String, byte[]> attachedByteFiles, String service, String documentType, String toPartyId, List<ItemFlow> itemFlowList) {
+        Map<String, Object> data = new HashMap<>();
+        data.put(ESBConstants.FLOW, xmlBytes);
+        data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
+        data.put(ESBConstants.TYPE_DOCUMENT, documentType);
+        data.put(ESBConstants.SERVICE, service);
+        data.put(ESBConstants.MESSAGE, null);
+        data.put(ESBConstants.EBXML_TYPE, "STANDARD");
+        data.put(ESBConstants.TO_PARTY_ID, toPartyId);
+        data.put(ESBConstants.DEAD, "0");
+        //
+        data.put(ESBConstants.ITEM_FLOWS, itemFlowList);
+        if (!fileProducer.sendFile(data)) {
+            if (transactionStatus != null) {
+//                transactionManager.rollback(transactionStatus);
+            }
+            LOG.warn("cannot send the décision : " + currentFile.getNumeroDossier());
+            messageToSendService.saveOrUpadateNotSendedMessageAsMessageToResend(data);
+            showErrorFacesMessage(ControllerConstants.Bundle.Messages.SEND_ERROR, null);
+            return;
+        }else{
+            messageToSendService.deleteNotSendedMessageIfExistsAsMessageToResend(data);
+        }
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Message sent to OUT queue");
         }
     }
 
@@ -5127,6 +5134,24 @@ public class FileItemApDetailController implements Serializable {
     }
 
     /**
+     * Gets the message to send service.
+     *
+     * @return the messageToSendService
+     */
+    public MessageToSendService getMessageToSendService() {
+        return messageToSendService;
+    }
+
+    /**
+     * Sets the message to send service.
+     *
+     * @param messageToSendService the messageToSendService to set
+     */
+    public void setMessageToSendService(MessageToSendService messageToSendService) {
+        this.messageToSendService = messageToSendService;
+    }
+
+    /**
      * Notification email.
      *
      * @param file the file
@@ -5540,35 +5565,10 @@ public class FileItemApDetailController implements Serializable {
                         final List<CopyRecipient> copyRecipients = currentSelectedFlow.getCopyRecipientsList();
                         for (final CopyRecipient copyRecipient : copyRecipients) {
                             LOG.info("SEND COPY RECIPIENT TO {}", copyRecipient.getToAuthority().getRole());
-                            final Map<String, Object> data = new HashMap<>();
-                            data.put(ESBConstants.FLOW, xmlBytes);
-                            data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
-                            data.put(ESBConstants.TYPE_DOCUMENT, documentType);
-                            data.put(ESBConstants.SERVICE, service);
-                            data.put(ESBConstants.MESSAGE, null);
-                            data.put(ESBConstants.EBXML_TYPE, "STANDARD");
-                            data.put(ESBConstants.TO_PARTY_ID, copyRecipient.getToAuthority().getRole());
-                            data.put(ESBConstants.DEAD, "0");
-                            //
-                            data.put(ESBConstants.ITEM_FLOWS, itemFlowList);
-                            fileProducer.sendFile(data);
-                            LOG.info("Message sent to OUT queue");
-
+                            send(transactionStatus, xmlBytes, attachedByteFiles, service, documentType, copyRecipient.getToAuthority().getRole(), itemFlowList);
                         }
                     } else {
-                        final Map<String, Object> data = new HashMap<>();
-                        data.put(ESBConstants.FLOW, xmlBytes);
-                        data.put(ESBConstants.ATTACHMENT, attachedByteFiles);
-                        data.put(ESBConstants.TYPE_DOCUMENT, documentType);
-                        data.put(ESBConstants.SERVICE, service);
-                        data.put(ESBConstants.MESSAGE, null);
-                        data.put(ESBConstants.EBXML_TYPE, "STANDARD");
-                        data.put(ESBConstants.TO_PARTY_ID, ebxmlPropertiesService.getToPartyId());
-                        data.put(ESBConstants.DEAD, "0");
-                        //
-                        data.put(ESBConstants.ITEM_FLOWS, itemFlowList);
-                        fileProducer.sendFile(data);
-                        LOG.info("Message sent to OUT queue");
+                        send(transactionStatus, xmlBytes, attachedByteFiles, service, documentType, ebxmlPropertiesService.getToPartyId(), itemFlowList);
                     }
 
                     transactionManager.commit(transactionStatus);

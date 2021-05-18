@@ -41,6 +41,7 @@ import org.guce.siat.common.service.FileTypeStepService;
 import org.guce.siat.common.service.FlowService;
 import org.guce.siat.common.service.ItemFlowService;
 import org.guce.siat.common.service.MailService;
+import org.guce.siat.common.service.MessageToSendService;
 import org.guce.siat.common.service.ParamsOrganismService;
 import org.guce.siat.common.service.ParamsService;
 import org.guce.siat.common.service.RecommandationAuthorityService;
@@ -77,6 +78,7 @@ import org.guce.siat.web.ct.controller.util.JsfUtil;
 import org.guce.siat.web.ct.controller.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.PlatformTransactionManager;
 
 /**
@@ -313,6 +315,12 @@ public abstract class DefaultDetailController implements Serializable {
      */
     @ManagedProperty(value = "#{fileProducer}")
     protected FileProducer fileProducer;
+    
+    /**
+     * The message not already send service.
+     */
+    @ManagedProperty(value = "#{messageToSendService}")
+    protected MessageToSendService messageToSendService;
 
     /**
      * The treatment result service.
@@ -1455,4 +1463,11 @@ public abstract class DefaultDetailController implements Serializable {
         this.fileNumer = fileNumer;
     }
 
+    public MessageToSendService getMessageToSendService() {
+        return messageToSendService;
+    }
+
+    public void setMessageToSendService(MessageToSendService messageToSendService) {
+        this.messageToSendService = messageToSendService;
+    }
 }

@@ -58,6 +58,7 @@ import org.apache.commons.collections.Transformer;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.guce.orchestra.core.OrchestraEbxmlMessage;
 import org.guce.siat.common.data.FieldGroupDto;
 import org.guce.siat.common.data.ItemFlowDto;
 import org.guce.siat.common.mail.MailConstants;
@@ -85,6 +86,7 @@ import org.guce.siat.common.model.FileTypeStep;
 import org.guce.siat.common.model.Flow;
 import org.guce.siat.common.model.ItemFlow;
 import org.guce.siat.common.model.ItemFlowData;
+import org.guce.siat.common.model.MessageToSend;
 import org.guce.siat.common.model.Organism;
 import org.guce.siat.common.model.ParamsOrganism;
 import org.guce.siat.common.model.Recommandation;
@@ -99,6 +101,7 @@ import org.guce.siat.common.model.UserAuthority;
 import org.guce.siat.common.model.UserAuthorityFileType;
 import org.guce.siat.common.utils.Constants;
 import org.guce.siat.common.utils.DateUtils;
+import org.guce.siat.common.utils.EbxmlUtils;
 import org.guce.siat.common.utils.RepetableUtil;
 import org.guce.siat.common.utils.SiatUtils;
 import org.guce.siat.common.utils.Tab;
@@ -3104,11 +3107,14 @@ public class FileItemCctDetailController extends DefaultDetailController {
         data.put(ESBConstants.ITEM_FLOWS, itemFlowList);
         if (!fileProducer.sendFile(data)) {
             if (transactionStatus != null) {
-                transactionManager.rollback(transactionStatus);
+//                transactionManager.rollback(transactionStatus);
             }
             logger.warn("cannot send the décision : " + currentFile.getNumeroDossier());
+            messageToSendService.saveOrUpadateNotSendedMessageAsMessageToResend(data);
             showErrorFacesMessage(ControllerConstants.Bundle.Messages.SEND_ERROR, null);
             return;
+        }else{
+            messageToSendService.deleteNotSendedMessageIfExistsAsMessageToResend(data);
         }
         if (logger.isDebugEnabled()) {
             logger.debug("Message sent to OUT queue");

@@ -68,23 +68,23 @@
     
     <!-- Scheduler task configuration for message resender -->
     
-<!--    <bean id="taskResendMessageToSend" class="org.guce.siat.common.job.TaskResendMessage">
+    <bean id="taskResendMessageToSend" class="org.guce.siat.common.job.TaskResendMessage">
         
-    </bean>-->
+    </bean>
     <!-- specifing class and method that is going to be called on a specified time basis -->
-<!--    <bean id="jobResendMessageToSend" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <bean id="jobResendMessageToSend" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
         <property name="targetObject" ref="taskResendMessageToSend" />
         <property name="targetMethod" value="resendMessageNotAlreadySended" />
-    </bean>-->
+    </bean>
 
     <!-- Run the job every minute -->
-<!--    <bean id="cronTriggerResendMessageToSend" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+    <bean id="cronTriggerResendMessageToSend" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="jobResendMessageToSend" />
-        <property name="cronExpression" value="0 0/3 * ? * *" />
-    </bean>-->
+        <property name="cronExpression" value="0 0/5 * ? * *" />
+    </bean>
 
     <!-- scheduler factory bean to bind,the executing code and time intervals together -->
-<!--    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="jobDetails">
             <list>
                 <ref bean="jobResendMessageToSend" />
@@ -95,5 +95,5 @@
                 <ref bean="cronTriggerResendMessageToSend" />
             </list>
         </property>
-    </bean>-->
+    </bean>
 </beans>
