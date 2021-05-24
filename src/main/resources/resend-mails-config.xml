@@ -77,7 +77,7 @@
         <property name="targetMethod" value="resendMessageNotAlreadySended" />
     </bean>
 
-    <!-- Run the job every minute -->
+    <!-- Run the job every five minute -->
     <bean id="cronTriggerResendMessageToSend" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="jobResendMessageToSend" />
         <property name="cronExpression" value="0 0/5 * ? * *" />
