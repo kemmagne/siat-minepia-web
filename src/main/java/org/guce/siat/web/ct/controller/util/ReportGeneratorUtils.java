@@ -33,6 +33,7 @@ import org.guce.siat.core.ct.service.InspectionReportService;
 import org.guce.siat.core.ct.service.PottingReportService;
 import org.guce.siat.core.ct.service.TreatmentInfosService;
 import org.guce.siat.core.ct.service.TreatmentResultService;
+import org.guce.siat.core.ct.util.enums.CctExportProductType;
 import org.guce.siat.web.common.ControllerConstants;
 import org.guce.siat.web.reports.exporter.AbstractReportInvoker;
 import org.guce.siat.web.reports.exporter.CtCctCpEExporter;
@@ -56,6 +57,11 @@ public final class ReportGeneratorUtils {
     public static final String COUNT_GOODS = "goods";
     public static final String COUNT_CONTAINERS = "containers";
     public static final String COUNT_PACKAGES = "packages";
+
+    public static final String CP_COTCOCAF = "CERTIFICAT_PHYTOSANITAIRE_CACAO_CAFE_COTON";
+    public static final String CP_BOIS_CONV = "CERTIFICAT_PHYTOSANITAIRE_BOIS_CONVENTIONNEL";
+    public static final String CP_DEF_ANNEX = "CERTIFICAT_PHYTOSANITAIRE_ANNEXE";
+    public static final String CP_ANNEX_AUTRES = "CERTIFICAT_PHYTOSANITAIRE_ANNEXE_AUTRES";
 
     private ReportGeneratorUtils() {
     }
@@ -128,13 +134,19 @@ public final class ReportGeneratorUtils {
 
                     if (ti.getDelivrableType() == null || "CCT_CT_E".equals(ti.getDelivrableType())) {
                         Map<String, Integer> count = countFileContainerAndPackage(file);
-                        if (count.get(COUNT_GOODS) > paramValue.getMaxGoodsLineNumber()
-                                || count.get(COUNT_CONTAINERS) > paramValue.getMaxContainerNumber()
-                                || count.get(COUNT_PACKAGES) > paramValue.getMaxPackageNumber()) {
+                        if (count.get(ReportGeneratorUtils.COUNT_GOODS) > paramValue.getMaxGoodsLineNumber()
+                                || count.get(ReportGeneratorUtils.COUNT_CONTAINERS) > paramValue.getMaxContainerNumber()
+                                || count.get(ReportGeneratorUtils.COUNT_PACKAGES) > paramValue.getMaxPackageNumber()) {
                             forAnnexes = new HashMap();
                             forAnnexes.put("ti", ti);
                             forAnnexes.put("paramValue", paramValue);
-                            forAnnexes.put("fileNameAnnex", "CERTIFICAT_PHYTOSANITAIRE_ANNEXE");
+
+                            FileFieldValue ffv = fileFieldValueService.findValueByFileFieldAndFile(CctExportProductType.getFileFieldCode(), file);
+                            if (!CctExportProductType.AUTRES.name().equals(ffv.getValue())) {
+                                forAnnexes.put("fileNameAnnex", ReportGeneratorUtils.CP_DEF_ANNEX);
+                            } else {
+                                forAnnexes.put("fileNameAnnex", ReportGeneratorUtils.CP_ANNEX_AUTRES);
+                            }
                         }
                         reportInvoker = new CtCctCpEExporter(file, ti, paramValue, "CERTIFICAT_PHYTOSANITAIRE");
 
@@ -193,39 +205,9 @@ public final class ReportGeneratorUtils {
     }
 
     public static void fillCCTCPParamValue(CCTCPParamValue cCTCPParamValue, User user, File currentFile) {
-//        ServiceService serviceService = ServiceUtility.getBean(ServiceService.class);
-//        ParamCCTCPService paramCCTCPService = ServiceUtility.getBean(ParamCCTCPService.class);
-//
-//        Service uService = serviceService.findServiceByUser(user);
-//        ParamCCTCP params = paramCCTCPService.findParamCCTCPByAdministration(uService);
-//        if (params != null) {
-//            cCTCPParamValue.setMaxContainerNumber(params.getMaxContainerNumber());
-//            cCTCPParamValue.setMaxGoodsLineNumber(params.getMaxGoodsLineNumber());
-//            cCTCPParamValue.setMaxPackageNumber(params.getMaxPackageNumber());
-//            cCTCPParamValue.setLabelMore(params.getLabelAttachment());
-//        } else {
-//            params = paramCCTCPService.findParamCCTCPDefault();
-//            if (params != null) {
-//                cCTCPParamValue.setMaxContainerNumber(params.getMaxContainerNumber());
-//                cCTCPParamValue.setMaxGoodsLineNumber(params.getMaxGoodsLineNumber());
-//                cCTCPParamValue.setMaxPackageNumber(params.getMaxPackageNumber());
-//                cCTCPParamValue.setLabelMore(params.getLabelAttachment());
-//            } else {
-//                //LOAD DEFAULT NOT REGISTERED VALUE HERE
-//                cCTCPParamValue.setMaxContainerNumber(12);
-//                cCTCPParamValue.setMaxGoodsLineNumber(6);
-//                cCTCPParamValue.setMaxPackageNumber(6);
-//                cCTCPParamValue.setLabelMore("Voir pièce jointe");
-//            }
-//        }
-//
-//        Map<String, Integer> count = countFileContainerAndPackage(currentFile);
-//        cCTCPParamValue.setFileGoodsCountValue(count.get(COUNT_GOODS));
-//        cCTCPParamValue.setFileContainerCountValue(count.get(COUNT_CONTAINERS));
-//        cCTCPParamValue.setFilePackageCountValue(count.get(COUNT_PACKAGES));
-        cCTCPParamValue.setMaxContainerNumber(12);
+        cCTCPParamValue.setMaxContainerNumber(20);
         cCTCPParamValue.setMaxGoodsLineNumber(6);
-        cCTCPParamValue.setMaxPackageNumber(6);
+        cCTCPParamValue.setMaxPackageNumber(20);
         cCTCPParamValue.setLabelMore("Voir pièce jointe");
     }
 

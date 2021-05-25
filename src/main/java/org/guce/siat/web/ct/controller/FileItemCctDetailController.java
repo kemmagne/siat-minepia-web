@@ -6245,9 +6245,9 @@ public class FileItemCctDetailController extends DefaultDetailController {
                                 forAnnexes.put("ti", ti);
                                 forAnnexes.put("paramValue", paramValue);
                                 if (!CctExportProductType.AUTRES.equals(productType)) {
-                                    forAnnexes.put("fileNameAnnex", CtCctCpEExporter.CP_DEF_ANNEX);
+                                    forAnnexes.put("fileNameAnnex", ReportGeneratorUtils.CP_DEF_ANNEX);
                                 } else {
-                                    forAnnexes.put("fileNameAnnex", CtCctCpEExporter.CP_ANNEX_AUTRES);
+                                    forAnnexes.put("fileNameAnnex", ReportGeneratorUtils.CP_ANNEX_AUTRES);
                                 }
                             }
                             reportInvoker = new CtCctCpEExporter(currentFile, ti, paramValue, "CERTIFICAT_PHYTOSANITAIRE");
@@ -6402,9 +6402,9 @@ public class FileItemCctDetailController extends DefaultDetailController {
                                 forAnnexes.put("ti", ti);
                                 forAnnexes.put("paramValue", paramValue);
                                 if (!CctExportProductType.AUTRES.equals(productType)) {
-                                    forAnnexes.put("fileNameAnnex", CtCctCpEExporter.CP_DEF_ANNEX);
+                                    forAnnexes.put("fileNameAnnex", ReportGeneratorUtils.CP_DEF_ANNEX);
                                 } else {
-                                    forAnnexes.put("fileNameAnnex", CtCctCpEExporter.CP_ANNEX_AUTRES);
+                                    forAnnexes.put("fileNameAnnex", ReportGeneratorUtils.CP_ANNEX_AUTRES);
                                 }
                             }
                             reportInvoker = new CtCctCpEExporter(file, ti, paramValue, "CERTIFICAT_PHYTOSANITAIRE");
