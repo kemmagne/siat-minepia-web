@@ -26,6 +26,7 @@ import org.guce.siat.common.utils.QRCodeGenerator;
 import org.guce.siat.core.ct.model.CCTCPParamValue;
 import org.guce.siat.core.ct.model.TreatmentInfos;
 import org.guce.siat.core.ct.util.enums.CctExportProductType;
+import org.guce.siat.web.ct.controller.util.ReportGeneratorUtils;
 import org.guce.siat.web.ct.controller.util.Utils;
 import org.guce.siat.web.reports.vo.CtCctCpEFileItemVo;
 import org.guce.siat.web.reports.vo.CtCctCpEFileVo;
@@ -34,11 +35,6 @@ import org.guce.siat.web.reports.vo.CtCctCpEFileVo;
  * The Class CtCctCpEExporter.
  */
 public class CtCctCpEExporter extends AbstractReportInvoker {
-
-    public static final String CP_COTCOCAF = "CERTIFICAT_PHYTOSANITAIRE_CACAO_CAFE_COTON";
-    public static final String CP_BOIS_CONV = "CERTIFICAT_PHYTOSANITAIRE_BOIS_CONVENTIONNEL";
-    public static final String CP_DEF_ANNEX = "CERTIFICAT_PHYTOSANITAIRE_ANNEXE";
-    public static final String CP_ANNEX_AUTRES = "CERTIFICAT_PHYTOSANITAIRE_ANNEXE_AUTRES";
 
     /**
      * The file.
@@ -207,20 +203,19 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
 
                 String contNumbers = builder.toString().trim();
                 String containerNumbers[] = contNumbers.split(" ");
-                int maxContainerNumber = 12;
-                if (paramValue != null && containerNumbers.length > maxContainerNumber) {
+                if (paramValue != null && containerNumbers.length > paramValue.getMaxContainerNumber()) {
                     List<String> containers1 = new ArrayList<>();
                     List<String> containers2 = new ArrayList<>();
                     int containerCount = 0;
                     for (String containerNumber : containerNumbers) {
                         containerCount++;
-                        if (containerCount <= maxContainerNumber) {
+                        if (containerCount <= paramValue.getMaxContainerNumber()) {
                             containers1.add(containerNumber);
                         } else {
                             containers2.add(containerNumber);
                         }
                     }
-                    ctCctCpEFileVo.setContainersNumbers(StringUtils.join(containers1, " - ").concat("\n- " + paramValue.getLabelMore()));
+                    ctCctCpEFileVo.setContainersNumbers(StringUtils.join(containers1, " - "));
                     ctCctCpEFileVo.setContainersNumbersAnnex(StringUtils.join(containers2, " - "));
                 } else {
                     ctCctCpEFileVo.setContainersNumbers(contNumbers);
@@ -231,13 +226,16 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                     hasContainers = true;
                     final List<String> containers1 = new ArrayList<>();
                     final List<String> containers2 = new ArrayList<>();
-                    final int maxContainersNumber = 12;
+                    final AtomicInteger maxContainersNumber = new AtomicInteger(12);
+                    if (paramValue != null) {
+                        maxContainersNumber.set(paramValue.getMaxContainerNumber());
+                    }
                     final AtomicInteger counter = new AtomicInteger(0);
                     Collection<String> containerNumbers = CollectionUtils.collect(containers, new Transformer() {
                         @Override
                         public String transform(Object input) {
                             Container container = (Container) input;
-                            if (counter.intValue() < maxContainersNumber) {
+                            if (counter.intValue() < maxContainersNumber.get()) {
                                 containers1.add(String.format("%s/%s", container.getContNumber(), container.getContSeal1()));
                             } else {
                                 containers2.add(String.format("%s/%s", container.getContNumber(), container.getContSeal1()));
@@ -247,8 +245,8 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                         }
                     });
 
-                    if (paramValue != null && containers.size() > maxContainersNumber) {
-                        ctCctCpEFileVo.setContainersNumbers(StringUtils.join(containers1, " - ").concat("\n- " + paramValue.getLabelMore()));
+                    if (paramValue != null && containers.size() > maxContainersNumber.get()) {
+                        ctCctCpEFileVo.setContainersNumbers(StringUtils.join(containers1, " - "));
                         ctCctCpEFileVo.setContainersNumbersAnnex(StringUtils.join(containers2, " - "));
                     } else {
                         ctCctCpEFileVo.setContainersNumbers(StringUtils.join(containerNumbers, " - "));
@@ -260,6 +258,9 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
 
                 String packagesNumbers[] = packageNumber.split(" ");
                 int maxPackagesNumber = 6;
+                if (paramValue != null) {
+                    maxPackagesNumber = paramValue.getMaxPackageNumber();
+                }
                 if (paramValue != null && packagesNumbers.length > maxPackagesNumber) {
                     List<String> packages1 = new ArrayList<>();
                     List<String> packages2 = new ArrayList<>();
@@ -272,7 +273,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                             packages2.add(containerNumber);
                         }
                     }
-                    ctCctCpEFileVo.setLotsNumbers(StringUtils.join(packages1, " - ").concat("\n- " + paramValue.getLabelMore()));
+                    ctCctCpEFileVo.setLotsNumbers(StringUtils.join(packages1, " - "));
                     ctCctCpEFileVo.setLotsNumbersAnnex(StringUtils.join(packages2, " - "));
                 } else {
 
@@ -283,17 +284,17 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
         }
         ctCctCpEFileVo.setDecisionNumber(file.getNumeroDossier());
 
-        final List<FileItem> fileItemList = file.getFileItemsList();
+        List<FileItem> fileItemList = file.getFileItemsList();
 
-        final List<CtCctCpEFileItemVo> fileItemVos = new ArrayList<>();
+        List<CtCctCpEFileItemVo> fileItemVos = new ArrayList<>();
 
         BigDecimal netWeight = BigDecimal.ZERO;
         BigDecimal grossWeight = BigDecimal.ZERO;
 
         if (CollectionUtils.isNotEmpty(fileItemList)) {
 
-            final List<String> commoditiesList = new ArrayList<>();
-            final List<String> commoditiesListAttachment = new ArrayList<>();
+            List<String> commoditiesList = new ArrayList<>();
+            List<String> commoditiesListAttachment = new ArrayList<>();
             int commoditiesCount = 0;
 
             String unit = "";
@@ -305,7 +306,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
             List<String> othersGrossWeightList = new ArrayList<>();
             List<String> othersGrossWeightAnnextList = new ArrayList<>();
             FileItemFieldValue fileItemFieldValue;
-            for (final FileItem fileItem : fileItemList) {
+            for (FileItem fileItem : fileItemList) {
 
                 String comName = "";
                 fileItemFieldValue = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("NOM_COMMERCIAL", fileItem);
@@ -336,7 +337,6 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                     if (volumeFifv != null) {
                         netWeight = netWeight.add(new BigDecimal(volumeFifv.getValue()));
                     }
-                    
                 } else if (Utils.COTONPRODUCTTYPE.equalsIgnoreCase(productType)) {
                     FileItemFieldValue ngf = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("NOMBRE_GRUMES", fileItem);
                     if (ngf != null) {
@@ -358,6 +358,9 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                 }
                 commoditiesCount++;
                 int maxGoodsNumber = 6;
+                if (paramValue != null) {
+                    maxGoodsNumber = paramValue.getMaxGoodsLineNumber();
+                }
                 if (paramValue != null && commoditiesCount <= maxGoodsNumber - 1) {
                     commoditiesList.add(String.format("%s %s %s", nb, emballage, comName));
                 } else {
@@ -404,7 +407,6 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                 ctCctCpEFileVo.setQuantitiesAnnex(StringUtils.join(othersGrossWeightAnnextList, "<br/>"));
             }
             if (paramValue != null && !commoditiesListAttachment.isEmpty()) {
-                commoditiesList.add("- " + paramValue.getLabelMore());
                 ctCctCpEFileVo.setNamesAnnex(StringUtils.join(commoditiesListAttachment, "<br/>"));
             }
 
@@ -412,11 +414,11 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
         }
 
         ctCctCpEFileVo.setFileItemList(fileItemVos);
-        if (productType != null && !CP_DEF_ANNEX.equals(jasperFileName) && !CP_ANNEX_AUTRES.equals(jasperFileName)) {
+        if (productType != null && !ReportGeneratorUtils.CP_DEF_ANNEX.equals(jasperFileName) && !ReportGeneratorUtils.CP_ANNEX_AUTRES.equals(jasperFileName)) {
             if (Utils.getCacaProductsTypes().contains(productType) || Utils.COTONPRODUCTTYPE.equalsIgnoreCase(productType)) {
-                jasperFileName = CP_COTCOCAF;
+                jasperFileName = ReportGeneratorUtils.CP_COTCOCAF;
             } else if (Utils.getWoodProductsTypes().contains(productType) && !hasContainers) {
-                jasperFileName = CP_BOIS_CONV;
+                jasperFileName = ReportGeneratorUtils.CP_BOIS_CONV;
             }
         }
 
@@ -460,7 +462,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
 
     @Override
     protected Map<String, Object> getJRParameters() {
-        final Map<String, Object> jRParameters = super.getJRParameters();
+        Map<String, Object> jRParameters = super.getJRParameters();
         jRParameters.put("MINADER_LOGO", getRealPath(IMAGES_PATH, "phytosanitaire", "jpg"));
         return jRParameters;
     }

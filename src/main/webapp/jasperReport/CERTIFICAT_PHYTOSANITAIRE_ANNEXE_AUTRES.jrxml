@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CERTIFICAT_PHYTOSANITAIRE" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6f5c0835-9f5c-4b28-b5db-296746e60a32">
 	<property name="ireport.zoom" value="1.0000000000000004"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="96"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="MINADER_LOGO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -180,13 +180,13 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 				<textFieldExpression><![CDATA[$F{quantitiesAnnex}]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="331" splitType="Prevent">
+		<band height="293" splitType="Prevent">
 			<printWhenExpression><![CDATA[$F{lotsNumbersAnnex} != null || $F{containersNumbersAnnex} != null]]></printWhenExpression>
 			<rectangle>
-				<reportElement x="0" y="0" width="555" height="331" uuid="4a208087-01be-4509-9b63-5d3397e7216e"/>
+				<reportElement x="0" y="0" width="555" height="293" uuid="4a208087-01be-4509-9b63-5d3397e7216e"/>
 			</rectangle>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="1" y="0" width="554" height="331" uuid="fbfc0edf-7c21-4911-8a23-b8cc5162c65c"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="1" y="0" width="554" height="293" uuid="fbfc0edf-7c21-4911-8a23-b8cc5162c65c"/>
 				<textElement textAlignment="Center" markup="html">
 					<font size="8" isBold="true" isUnderline="false"/>
 				</textElement>
