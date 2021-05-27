@@ -296,7 +296,11 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
             final List<String> commoditiesListAttachment = new ArrayList<>();
             int commoditiesCount = 0;
 
-            String unit = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("UNITE", fileItemList.get(0)).getValue();
+            String unit = "";
+            FileItemFieldValue unitFifv = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("UNITE", fileItemList.get(0));
+            if(unitFifv != null){
+                unit = unitFifv.getValue();
+            }
 
             List<String> othersGrossWeightList = new ArrayList<>();
             List<String> othersGrossWeightAnnextList = new ArrayList<>();
@@ -328,8 +332,11 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                         nb = fileItem.getQuantity();
                     }
 
-                    final String volumeStr = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("VOLUME", fileItem).getValue();
-                    netWeight = netWeight.add(new BigDecimal(volumeStr));
+                    FileItemFieldValue volumeFifv = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("VOLUME", fileItem);
+                    if (volumeFifv != null) {
+                        netWeight = netWeight.add(new BigDecimal(volumeFifv.getValue()));
+                    }
+                    
                 } else if (Utils.COTONPRODUCTTYPE.equalsIgnoreCase(productType)) {
                     FileItemFieldValue ngf = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("NOMBRE_GRUMES", fileItem);
                     if (ngf != null) {

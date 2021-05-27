@@ -562,7 +562,7 @@ public class UserController extends AbstractController<User> {
             LOG.error(null, pe);
             if (CONSTRAINT_VIOLATION_EXCEPTION.equals(pe.getCause().getClass().getName())) {
                 JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                        USER_EXIST_ERROR_MESSAGE));
+                        PERSISTENCE_ERROR_OCCURED));
             } else {
                 JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
                         PERSISTENCE_ERROR_OCCURED));
