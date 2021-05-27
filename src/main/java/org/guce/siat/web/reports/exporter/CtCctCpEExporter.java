@@ -203,19 +203,20 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
 
                 String contNumbers = builder.toString().trim();
                 String containerNumbers[] = contNumbers.split(" ");
-                if (paramValue != null && containerNumbers.length > paramValue.getMaxContainerNumber()) {
+                int maxContainerNumber = 12;
+                if (paramValue != null && containerNumbers.length > maxContainerNumber) {
                     List<String> containers1 = new ArrayList<>();
                     List<String> containers2 = new ArrayList<>();
                     int containerCount = 0;
                     for (String containerNumber : containerNumbers) {
                         containerCount++;
-                        if (containerCount <= paramValue.getMaxContainerNumber()) {
+                        if (containerCount <= maxContainerNumber) {
                             containers1.add(containerNumber);
                         } else {
                             containers2.add(containerNumber);
                         }
                     }
-                    ctCctCpEFileVo.setContainersNumbers(StringUtils.join(containers1, " - "));
+                    ctCctCpEFileVo.setContainersNumbers(StringUtils.join(containers1, " - ").concat("\n- " + paramValue.getLabelMore()));
                     ctCctCpEFileVo.setContainersNumbersAnnex(StringUtils.join(containers2, " - "));
                 } else {
                     ctCctCpEFileVo.setContainersNumbers(contNumbers);
@@ -226,16 +227,13 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                     hasContainers = true;
                     final List<String> containers1 = new ArrayList<>();
                     final List<String> containers2 = new ArrayList<>();
-                    final AtomicInteger maxContainersNumber = new AtomicInteger(12);
-                    if (paramValue != null) {
-                        maxContainersNumber.set(paramValue.getMaxContainerNumber());
-                    }
+                    final int maxContainersNumber = 12;
                     final AtomicInteger counter = new AtomicInteger(0);
                     Collection<String> containerNumbers = CollectionUtils.collect(containers, new Transformer() {
                         @Override
                         public String transform(Object input) {
                             Container container = (Container) input;
-                            if (counter.intValue() < maxContainersNumber.get()) {
+                            if (counter.intValue() < maxContainersNumber) {
                                 containers1.add(String.format("%s/%s", container.getContNumber(), container.getContSeal1()));
                             } else {
                                 containers2.add(String.format("%s/%s", container.getContNumber(), container.getContSeal1()));
@@ -245,8 +243,8 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                         }
                     });
 
-                    if (paramValue != null && containers.size() > maxContainersNumber.get()) {
-                        ctCctCpEFileVo.setContainersNumbers(StringUtils.join(containers1, " - "));
+                    if (paramValue != null && containers.size() > maxContainersNumber) {
+                        ctCctCpEFileVo.setContainersNumbers(StringUtils.join(containers1, " - ").concat("\n- " + paramValue.getLabelMore()));
                         ctCctCpEFileVo.setContainersNumbersAnnex(StringUtils.join(containers2, " - "));
                     } else {
                         ctCctCpEFileVo.setContainersNumbers(StringUtils.join(containerNumbers, " - "));
@@ -258,9 +256,6 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
 
                 String packagesNumbers[] = packageNumber.split(" ");
                 int maxPackagesNumber = 6;
-                if (paramValue != null) {
-                    maxPackagesNumber = paramValue.getMaxPackageNumber();
-                }
                 if (paramValue != null && packagesNumbers.length > maxPackagesNumber) {
                     List<String> packages1 = new ArrayList<>();
                     List<String> packages2 = new ArrayList<>();
@@ -273,7 +268,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                             packages2.add(containerNumber);
                         }
                     }
-                    ctCctCpEFileVo.setLotsNumbers(StringUtils.join(packages1, " - "));
+                    ctCctCpEFileVo.setLotsNumbers(StringUtils.join(packages1, " - ").concat("\n- " + paramValue.getLabelMore()));
                     ctCctCpEFileVo.setLotsNumbersAnnex(StringUtils.join(packages2, " - "));
                 } else {
 
@@ -358,9 +353,6 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                 }
                 commoditiesCount++;
                 int maxGoodsNumber = 6;
-                if (paramValue != null) {
-                    maxGoodsNumber = paramValue.getMaxGoodsLineNumber();
-                }
                 if (paramValue != null && commoditiesCount <= maxGoodsNumber - 1) {
                     commoditiesList.add(String.format("%s %s %s", nb, emballage, comName));
                 } else {
