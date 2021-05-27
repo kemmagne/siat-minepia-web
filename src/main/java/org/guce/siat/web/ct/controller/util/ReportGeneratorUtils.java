@@ -205,10 +205,10 @@ public final class ReportGeneratorUtils {
     }
 
     public static void fillCCTCPParamValue(CCTCPParamValue cCTCPParamValue, User user, File currentFile) {
-        cCTCPParamValue.setMaxContainerNumber(20);
+        cCTCPParamValue.setMaxContainerNumber(12);
         cCTCPParamValue.setMaxGoodsLineNumber(6);
-        cCTCPParamValue.setMaxPackageNumber(20);
-        cCTCPParamValue.setLabelMore("Voir pièce jointe");
+        cCTCPParamValue.setMaxPackageNumber(12);
+        cCTCPParamValue.setLabelMore("Voir Annexe");
     }
 
     public static Map<String, Integer> countFileContainerAndPackage(File file) {

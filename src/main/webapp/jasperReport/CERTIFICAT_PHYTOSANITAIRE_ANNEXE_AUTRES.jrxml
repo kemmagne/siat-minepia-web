@@ -180,13 +180,16 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 				<textFieldExpression><![CDATA[$F{quantitiesAnnex}]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="293" splitType="Prevent">
+		<band height="49" splitType="Prevent">
 			<printWhenExpression><![CDATA[$F{lotsNumbersAnnex} != null || $F{containersNumbersAnnex} != null]]></printWhenExpression>
-			<rectangle>
-				<reportElement x="0" y="0" width="555" height="293" uuid="4a208087-01be-4509-9b63-5d3397e7216e"/>
-			</rectangle>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="1" y="0" width="554" height="293" uuid="fbfc0edf-7c21-4911-8a23-b8cc5162c65c"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="0" width="555" height="49" uuid="fbfc0edf-7c21-4911-8a23-b8cc5162c65c"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
 				<textElement textAlignment="Center" markup="html">
 					<font size="8" isBold="true" isUnderline="false"/>
 				</textElement>
