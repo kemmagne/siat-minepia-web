@@ -1,10 +1,8 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui">
 
-    <h:panelGroup styleClass="grise"
-                  rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'CCT_CP'}">
+    <h:panelGroup styleClass="grise" rendered="#{fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'CCT_CP'}">
 
-        <h:panelGrid columns="3" rendered="#{fileItemCctDetailController.cCTCPParamValue.fileContainerCountValue ne 0}">
+        <h:panelGrid columns="3" rendered="#{false and fileItemCctDetailController.cCTCPParamValue.fileContainerCountValue ne 0}">
 
             <h:outputLabel value="#{bundle['CctCp_NumberOfContainer']}* : " />
             <p:inputText id="numberOfContainer" title="#{bundle['CctCp_NumberOfContainer']}" required="true"

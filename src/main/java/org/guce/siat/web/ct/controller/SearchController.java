@@ -1564,7 +1564,6 @@ public class SearchController extends AbstractController<FileItem> {
         transfer = new Transfer();
         if (selected != null) {
             transfer.setFile(getSelected().getFile());
-            transfer.setCreatedDate(java.util.Calendar.getInstance().getTime());
             transfer.setUser(loggedUser);
         }
     }

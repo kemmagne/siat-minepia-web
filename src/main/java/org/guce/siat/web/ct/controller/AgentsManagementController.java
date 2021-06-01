@@ -133,7 +133,7 @@ public class AgentsManagementController extends AbstractController<User> {
             }
         }
 
-        commonService.save(getSelected(), list);
+        commonService.associateAgentToProductTypes(getLoggedUser(), getSelected(), list);
 
         refreshItems();
         resetForm();

@@ -37,6 +37,7 @@
     </bean>
 
     <import resource="classpath:resend-mails-config.xml" />
+    <import resource="classpath:resend-message-to-resend-config.xml" />
 
     <!-- Hikari DataSource -->
     <!--    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">

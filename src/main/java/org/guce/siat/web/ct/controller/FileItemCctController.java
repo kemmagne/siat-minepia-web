@@ -39,8 +39,6 @@ import org.guce.siat.web.common.AbstractController;
 import org.guce.siat.web.common.ControllerConstants;
 import org.guce.siat.web.ct.controller.util.JsfUtil;
 import org.guce.siat.web.ct.controller.util.Utils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The Class FileItemCctController.
@@ -53,11 +51,6 @@ public class FileItemCctController extends AbstractController<File> {
      * The Constant serialVersionUID.
      */
     private static final long serialVersionUID = 4138042330970406266L;
-
-    /**
-     * The Constant LOG.
-     */
-    private static final Logger LOG = LoggerFactory.getLogger(FileItemCctController.class);
 
     /**
      * The file type step service.
@@ -171,8 +164,8 @@ public class FileItemCctController extends AbstractController<File> {
      */
     @PostConstruct
     public void init() {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug(Constants.INIT_LOG_INFO_MESSAGE, FileItemCctController.class.getName());
+        if (logger.isDebugEnabled()) {
+            logger.debug(Constants.INIT_LOG_INFO_MESSAGE, FileItemCctController.class.getName());
         }
         super.setService(fileService);
         super.setPageUrl(ControllerConstants.Pages.FO.DASHBOARD_CCT_INDEX_PAGE);
@@ -223,7 +216,7 @@ public class FileItemCctController extends AbstractController<File> {
                 items = new ArrayList(Utils.getFilesSet(fileTypeStepService, userAuthorityFileTypeService, fileItemService, commonService, fileFieldValueService, getLoggedUser(), productTypes));
             }
         } catch (final Exception ex) {
-            LOG.error(ex.getMessage(), ex);
+            logger.error(ex.getMessage(), ex);
             JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(PERSISTENCE_ERROR_OCCURED));
         }
 

@@ -1,0 +1,88 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task-4.0.xsd">
+    
+    <task:scheduled-tasks scheduler="ctResendMessagesToResendScheduler">
+        <task:scheduled ref="taskResenderForMessageToResend" method="resendMessageNotAlreadySended" cron="0 */5 * ? * *" initial-delay="30000"/>
+    </task:scheduled-tasks>
+
+    <task:scheduler id="ctResendMessagesToResendScheduler" pool-size="10" />
+    
+    <task:scheduled-tasks scheduler="ctPurgeMessagesToResendScheduler">
+        <task:scheduled ref="taskResenderForMessageToResend" method="purgeAllMessagesExceededMaxNumberOfRetry" cron="0 */10 * ? * *" initial-delay="45000"/>
+    </task:scheduled-tasks>
+
+    <task:scheduler id="ctPurgeMessagesToResendScheduler" pool-size="10" />
+    
+    
+    <!-- Scheduler task configuration for message resender -->
+    
+<!--    <bean id="taskResendMessageToSend" class="org.guce.siat.common.job.TaskResendMessageToResend">
+        
+    </bean>-->
+    <!-- specifing class and method that is going to be called on a specified time basis -->
+<!--    <bean id="jobResendMessageToSend" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="taskResendMessageToSend" />
+        <property name="targetMethod" value="resendMessageNotAlreadySended" />
+    </bean>-->
+
+    <!-- Run the job every five minute -->
+<!--    <bean id="cronTriggerResendMessageToSend" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="jobResendMessageToSend" />
+        <property name="cronExpression" value="0 */5 * ? * *" />
+    </bean>-->
+
+    <!-- scheduler factory bean to bind,the executing code and time intervals together -->
+<!--    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="jobDetails">
+            <list>
+                <ref bean="jobResendMessageToSend" />
+            </list>
+        </property>
+        <property name="triggers">
+            <list>
+                <ref bean="cronTriggerResendMessageToSend" />
+            </list>
+        </property>
+    </bean>-->
+    
+    
+    
+    
+    <!-- Scheduler task configuration for message purger -->
+    
+<!--    <bean id="taskPurgeMessageToSend" class="org.guce.siat.common.job.TaskResendMessageToResend">
+        
+    </bean>-->
+    <!-- specifing class and method that is going to be called on a specified time basis -->
+<!--    <bean id="jobPurgeMessageToSend" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="taskPurgeMessageToSend" />
+        <property name="targetMethod" value="purgeAllMessagesExceededMaxNumberOfRetry" />
+    </bean>-->
+
+    <!-- Run the job every five minute -->
+<!--    <bean id="cronTriggerPurgeMessageToSend" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="jobPurgeMessageToSend" />
+        <property name="cronExpression" value="0 */10 * ? * *" />
+    </bean>-->
+
+    <!-- scheduler factory bean to bind,the executing code and time intervals together -->
+<!--    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="jobDetails">
+            <list>
+                <ref bean="jobPurgeMessageToSend" />
+            </list>
+        </property>
+        <property name="triggers">
+            <list>
+                <ref bean="cronTriggerPurgeMessageToSend" />
+            </list>
+        </property>
+    </bean>-->
+</beans>
