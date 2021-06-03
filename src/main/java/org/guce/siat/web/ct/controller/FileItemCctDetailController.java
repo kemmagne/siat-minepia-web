@@ -3104,7 +3104,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
         data.put(ESBConstants.ITEM_FLOWS, itemFlowList);
         if (!fileProducer.sendFile(data)) {
             if (transactionStatus != null) {
-                transactionManager.rollback(transactionStatus);
+//                transactionManager.rollback(transactionStatus);
             }
             logger.warn("cannot send the décision : " + currentFile.getNumeroDossier());
             messageToSendService.saveOrUpadateNotSendedMessageAsMessageToResend(data);
