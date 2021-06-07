@@ -9,13 +9,13 @@
         http://www.springframework.org/schema/task/spring-task-4.0.xsd">
     
     <task:scheduled-tasks scheduler="ctResendMessagesToResendScheduler">
-        <task:scheduled ref="taskResenderForMessageToResend" method="resendMessageNotAlreadySended" cron="0 */5 * ? * *"/>
+        <task:scheduled ref="taskResenderForMessageToResend" method="resendMessageNotAlreadySended" cron="0 */30 * ? * *"/>
     </task:scheduled-tasks>
 
     <task:scheduler id="ctResendMessagesToResendScheduler" pool-size="10" />
     
     <task:scheduled-tasks scheduler="ctPurgeMessagesToResendScheduler">
-        <task:scheduled ref="taskResenderForMessageToResend" method="purgeAllMessagesExceededMaxNumberOfRetry" cron="0 */10 * ? * *"/>
+        <task:scheduled ref="taskResenderForMessageToResend" method="purgeAllMessagesExceededMaxNumberOfRetry" cron="0 0 0 ? * *"/>
     </task:scheduled-tasks>
 
     <task:scheduler id="ctPurgeMessagesToResendScheduler" pool-size="10" />
