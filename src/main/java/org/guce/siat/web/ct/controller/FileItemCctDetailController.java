@@ -2884,7 +2884,8 @@ public class FileItemCctDetailController extends DefaultDetailController {
      * Send decisions.
      */
     public synchronized void sendDecisions() {
-
+        logger.info("--------------------------------------------- Prise d'une décision CCT - DEBUT ----------------------------------------------");
+        logger.info(currentFile.toString());
         if (!userConfirmationAllowed) {
             return;
         }
@@ -2923,7 +2924,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                             break;
                         } else {
                             ItemFlow draftItemFlow = itemFlowService.findDraftByFileItem(selected);
-                            if (!draftItemFlow.getSender().getId().equals(getLoggedUser().getId())) {
+                            if (draftItemFlow != null && draftItemFlow.getSender() != null && draftItemFlow.getSender().getId() != null && !draftItemFlow.getSender().getId().equals(getLoggedUser().getId())) {
                                 break;
                             }
                         }
@@ -3041,9 +3042,9 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
                             // prepare document to send
                             byte[] xmlBytes;
-                            try (ByteArrayOutputStream output = SendDocumentUtils.prepareCctDocument(documentSerializable, service, documentType)) {
-                                xmlBytes = output.toByteArray();
-                            }
+                            ByteArrayOutputStream output = SendDocumentUtils.prepareCctDocument(documentSerializable, service, documentType); 
+                            xmlBytes = output.toByteArray();
+                            
 
                             if (CollectionUtils.isNotEmpty(flowToSend.getCopyRecipientsList())) {
                                 List<CopyRecipient> copyRecipients = flowToSend.getCopyRecipientsList();
@@ -3088,6 +3089,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 }
             }
         }
+        logger.info("--------------------------------------------- Prise d'une décision CCT - FIN ----------------------------------------------");
     }
 
     private void send(TransactionStatus transactionStatus, byte[] xmlBytes, Map<String, byte[]> attachedByteFiles, String service, String documentType, String toPartyId, List<ItemFlow> itemFlowList) {

@@ -2303,11 +2303,11 @@ public class FileItemApDetailController implements Serializable {
     /**
      * Send decisions.
      *
-     * @throws JAXBException the JAXB exception
-     * @throws IOException Signals that an I/O exception has occurred.
      */
     @SuppressWarnings("unused")
-    public synchronized void sendDecisions() throws JAXBException, IOException {
+    public synchronized void sendDecisions() {
+        LOG.info("--------------------------------------------- Prise d'une décision AP - DEBUT ----------------------------------------------");
+        LOG.info(currentFile.toString());
         final DefaultTransactionDefinition def = new DefaultTransactionDefinition();
         def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
         TransactionStatus status = transactionManager.getTransaction(def);
@@ -2562,9 +2562,8 @@ public class FileItemApDetailController implements Serializable {
 
                         // prepare document to send
                         byte[] xmlBytes;
-                        try (final ByteArrayOutputStream output = SendDocumentUtils.prepareApDocument(documentSerializable, service, documentType)) {
-                            xmlBytes = output.toByteArray();
-                        }
+                        ByteArrayOutputStream output = SendDocumentUtils.prepareApDocument(documentSerializable, service, documentType);
+                        xmlBytes = output.toByteArray();                        
                         
                         if (CollectionUtils.isNotEmpty(flowToSend.getCopyRecipientsList())) {
                             final List<CopyRecipient> copyRecipients = flowToSend.getCopyRecipientsList();
@@ -2611,6 +2610,7 @@ public class FileItemApDetailController implements Serializable {
                 }
             }
         }
+        LOG.info("--------------------------------------------- Prise d'une décision AP - FIN ----------------------------------------------");
     }
 
     private void send(TransactionStatus transactionStatus, byte[] xmlBytes, Map<String, byte[]> attachedByteFiles, String service, String documentType, String toPartyId, List<ItemFlow> itemFlowList) {
