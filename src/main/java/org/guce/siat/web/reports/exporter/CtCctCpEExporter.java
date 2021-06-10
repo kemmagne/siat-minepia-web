@@ -353,7 +353,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                 }
                 commoditiesCount++;
                 int maxGoodsNumber = 6;
-                if (paramValue != null && commoditiesCount <= maxGoodsNumber - 1) {
+                if (paramValue != null && commoditiesCount <= maxGoodsNumber) {
                     commoditiesList.add(String.format("%s %s %s", nb, emballage, comName));
                 } else {
                     commoditiesListAttachment.add(String.format("%s %s %s", nb, emballage, comName));
@@ -363,13 +363,13 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                 if (fileItemFieldValue != null) {
                     String gw = fileItemFieldValue.getValue();
                     grossWeight = grossWeight.add(new BigDecimal(gw));
-                    if (paramValue != null && commoditiesCount <= maxGoodsNumber - 1) {
+                    if (paramValue != null && commoditiesCount <= maxGoodsNumber) {
                         othersGrossWeightList.add(String.format("%s KG", gw));
                     } else {
                         othersGrossWeightAnnextList.add(String.format("%s KG", gw));
                     }
                 } else {
-                    if (paramValue != null && commoditiesCount <= maxGoodsNumber - 1) {
+                    if (paramValue != null && commoditiesCount <= maxGoodsNumber) {
                         othersGrossWeightList.add("-");
                     } else {
                         othersGrossWeightAnnextList.add("-");
