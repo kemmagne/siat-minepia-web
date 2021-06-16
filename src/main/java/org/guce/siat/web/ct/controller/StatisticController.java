@@ -2551,5 +2551,50 @@ public class StatisticController extends AbstractController<FileItem> {
     public void setExporter(CustomizedExporter exporter) {
         this.exporter = exporter;
     }
+    
+    public List<Pair> searchCompanies(String query) {
+        List<Pair> companies = new ArrayList<>();
+        if(query != null && !query.isEmpty()){
+            String queryLowerCase = query.toLowerCase();
+            companies = companyService.findCompaniesByNumeroContribuableOrCompanyName(queryLowerCase);
+        }
+        return companies;
+    }
 
+    public List<Item> searchNsh(String query) {
+        List<Item> nshSearchList = new ArrayList<>();
+        if(query != null && !query.isEmpty()){
+            String queryLowerCase = query.toLowerCase();
+            nshSearchList = itemService.findNSHByCodeAndDescriptionAndFileTypes(queryLowerCase, FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI);
+        }
+        return nshSearchList;
+    }
+    
+    
+    public List<Pair> searchDestinationCountries(String query) {
+        List<Pair> destCountries = new ArrayList<>();
+        if(query != null && !query.isEmpty()){
+            String queryLowerCase = query.toLowerCase();
+            destCountries = minaderStatisticsService.findDestinationCountriesByCodeORNameLike(queryLowerCase);
+        }
+        return destCountries;
+    }
+    
+    public List<Pair> searchCdas(String query) {
+        List<Pair> cadsList = new ArrayList<>();
+        if(query != null && !query.isEmpty()){
+            String queryLowerCase = query.toLowerCase();
+            cadsList = minaderStatisticsService.findCDAsByNuiOrNameLike(queryLowerCase);
+        }
+        return cadsList;
+    }
+    
+    public List<Pair> searchTreatmentSocieties(String query) {
+        List<Pair> treatmentSocietiesList = new ArrayList<>();
+        if(query != null && !query.isEmpty()){
+            String queryLowerCase = query.toLowerCase();
+            treatmentSocietiesList = minaderStatisticsService.findTreatmentSocietiesByNuiOrNameLike(queryLowerCase);
+        }
+        return treatmentSocietiesList;
+    }
 }

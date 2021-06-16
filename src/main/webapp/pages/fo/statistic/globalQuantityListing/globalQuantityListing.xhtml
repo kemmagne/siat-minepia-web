@@ -7,57 +7,41 @@
         <p:accordionPanel styleClass="search">
 
             <p:tab title="#{bundle['globalQuantityListing_Search']}" dynamic="true" cache="true">
+                <h:panelGrid columns="6" cellspacing="10">
+                    <p:outputLabel for="fileType" value="#{bundle['simpleSearch_fileTypeLabel']}" />
+                    <p:selectCheckboxMenu id="fileType" title="#{bundle['simpleSearch_fileTypeTitle']}" label="#{bundle['simpleSearch_fileTypeTitle']}" value="#{statisticController.cteFilter.processCodeList}" filter="true" filterMatchMode="contains" style="width: 203px">
+                        <f:selectItems value="#{statisticController.fileTypeList}" var="fileType" itemLabel="#{fileType.labelFr}" itemValue="#{fileType.id}"/>
+                    </p:selectCheckboxMenu>
 
-                <h:panelGrid columns="4" cellspacing="10">
-                    <p:outputPanel styleClass="search-select">
-                        <h:panelGroup>
-                            <p:outputLabel for="fileType" value="#{bundle['simpleSearch_fileTypeLabel']}" />
-                        </h:panelGroup>
-                        <p:selectCheckboxMenu id="fileType" title="#{bundle['simpleSearch_fileTypeTitle']}" label="#{bundle['simpleSearch_fileTypeTitle']}" value="#{statisticController.cteFilter.processCodeList}" filter="true" filterMatchMode="contains">
-                            <f:selectItems value="#{statisticController.fileTypeList}" var="fileType" itemLabel="#{fileType.labelFr}" itemValue="#{fileType.id}"/>
-                        </p:selectCheckboxMenu>
-                    </p:outputPanel>
+                    <p:outputLabel for="productType" value="#{bundle['simpleSearch_productTypeLabel']}" />
+                    <p:selectCheckboxMenu id="productType" title="#{bundle['simpleSearch_productTypeTitle']}" label="#{bundle['simpleSearch_productTypeTitle']}" value="#{statisticController.cteFilter.productNatureList}" filter="true" filterMatchMode="contains" style="width: 203px">
+                        <f:selectItems value="#{statisticController.productTypesMap.entrySet()}" var="productType" itemValue="#{productType.key}" itemLabel="#{productType.value}" />
+                    </p:selectCheckboxMenu>
 
-                    <p:outputPanel styleClass="search-select">
-                        <h:panelGroup>
-                            <p:outputLabel for="productType" value="#{bundle['simpleSearch_productTypeLabel']}" />
-                        </h:panelGroup>
-                        <p:selectCheckboxMenu id="productType" title="#{bundle['simpleSearch_productTypeTitle']}" label="#{bundle['simpleSearch_productTypeTitle']}" value="#{statisticController.cteFilter.productNatureList}" filter="true" filterMatchMode="contains">
-                            <f:selectItems value="#{statisticController.productTypesMap.entrySet()}" var="productType" itemValue="#{productType.key}" itemLabel="#{productType.value}" />
-                        </p:selectCheckboxMenu>
-                    </p:outputPanel>
+                    <p:outputLabel for="destinationCountry" value="Destination" />
+                    <p:autoComplete id="destinationCountry" value="#{statisticController.cteFilter.destinationCountry}" placeholder="#{bundle['SearchOneCountry']}"
+                                    completeMethod="#{statisticController.searchDestinationCountries}" size="250" minQueryLength="2" emptyMessage="#{bundle['NoResults']}"
+                                    var="country" itemLabel="#{country.value}" itemValue="#{country.key}" style="width: 203px"
+                                    forceSelection="true" scrollHeight="250" />
 
-                    <p:outputPanel rendered="true" styleClass="search-select">
-                        <p:outputLabel for="destinationCountry" value="Destination" />
-                        <p:selectOneMenu id="destinationCountry" value="#{statisticController.cteFilter.destinationCountry}" filter="true" filterMatchMode="contains">
-                            <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-                            <f:selectItems value="#{statisticController.destinationCountries}" var="country" itemValue="#{country.key}" itemLabel="#{country.value}" />
-                        </p:selectOneMenu>
-                    </p:outputPanel>
 
-                    <p:outputPanel rendered="true" styleClass="search-select">
-                        <p:outputLabel for="companyName" value="#{bundle['companyName']}" />
-                        <p:selectOneMenu id="companyName" value="#{statisticController.cteFilter.clientNiu}" filter="true" filterMatchMode="contains">
-                            <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-                            <f:selectItems value="#{statisticController.companiesList}" var="client" itemValue="#{client.key}" itemLabel="#{client.value}" />
-                        </p:selectOneMenu>
-                    </p:outputPanel>
+                    <p:outputLabel for="companyName" value="#{bundle['companyName']}" />
+                    <p:autoComplete id="companyName" value="#{statisticController.cteFilter.clientNiu}" placeholder="#{bundle['SearchOneCompany']}"
+                                    completeMethod="#{statisticController.searchCompanies}" size="250" minQueryLength="2" emptyMessage="#{bundle['NoResults']}"
+                                    var="client" itemLabel="#{client.value}" itemValue="#{client.key}" style="width: 203px"
+                                    forceSelection="true" scrollHeight="250" />
 
-                    <p:outputPanel rendered="true" styleClass="search-select">
-                        <p:outputLabel for="CDA" value="CDA" />
-                        <p:selectOneMenu id="CDA" value="#{statisticController.cteFilter.cda}" filter="true" filterMatchMode="contains">
-                            <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-                            <f:selectItems value="#{statisticController.cdas}" var="cda" itemValue="#{cda.key}" itemLabel="#{cda.value}" />
-                        </p:selectOneMenu>
-                    </p:outputPanel>
+                    <p:outputLabel for="CDA" value="CDA" />
+                    <p:autoComplete id="CDA" value="#{statisticController.cteFilter.cda}" placeholder="#{bundle['SearchOneCDA']}"
+                                    completeMethod="#{statisticController.searchCdas}" size="250" minQueryLength="2" emptyMessage="#{bundle['NoResults']}"
+                                    var="cda" itemLabel="#{cda.value}" itemValue="#{cda.key}" style="width: 203px"
+                                    forceSelection="true" scrollHeight="250" />
 
-                    <p:outputPanel rendered="true" styleClass="search-select">
-                        <p:outputLabel for="treatmentSociety" value="#{bundle['treatmentSociety']}" />
-                        <p:selectOneMenu id="treatmentSociety" value="#{statisticController.cteFilter.treatmentSociety}" filter="true" filterMatchMode="contains">
-                            <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-                            <f:selectItems value="#{statisticController.treatmentSocieties}" var="treatmentSociety" itemValue="#{treatmentSociety.key}" itemLabel="#{treatmentSociety.value}" />
-                        </p:selectOneMenu>
-                    </p:outputPanel>
+                    <p:outputLabel for="treatmentSociety" value="#{bundle['treatmentSociety']}" />
+                    <p:autoComplete id="treatmentSociety" value="#{statisticController.cteFilter.treatmentSociety}" placeholder="#{bundle['SearchOneTreatmentSociety']}"
+                                    completeMethod="#{statisticController.searchTreatmentSocieties}" size="250" minQueryLength="2" emptyMessage="#{bundle['NoResults']}"
+                                    var="treatmentSociety" itemLabel="#{treatmentSociety.value}" itemValue="#{treatmentSociety.key}" style="width: 203px"
+                                    forceSelection="true" scrollHeight="250" />
                 </h:panelGrid>
 
                 <h:panelGrid columns="10" cellpadding="10">
