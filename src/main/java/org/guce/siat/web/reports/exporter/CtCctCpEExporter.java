@@ -204,6 +204,9 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                 String contNumbers = builder.toString().trim();
                 String containerNumbers[] = contNumbers.split(" ");
                 int maxContainerNumber = 12;
+                if (paramValue != null && paramValue.getMaxContainerNumber() > 0) {
+                    maxContainerNumber = paramValue.getMaxContainerNumber();
+                }
                 if (paramValue != null && containerNumbers.length > maxContainerNumber) {
                     List<String> containers1 = new ArrayList<>();
                     List<String> containers2 = new ArrayList<>();
@@ -227,7 +230,12 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                     hasContainers = true;
                     final List<String> containers1 = new ArrayList<>();
                     final List<String> containers2 = new ArrayList<>();
-                    final int maxContainersNumber = 12;
+                    final int maxContainersNumber;
+                    if (paramValue != null && paramValue.getMaxContainerNumber() > 0) {
+                        maxContainersNumber = paramValue.getMaxContainerNumber();
+                    }else{
+                        maxContainersNumber = 12;
+                    }
                     final AtomicInteger counter = new AtomicInteger(0);
                     Collection<String> containerNumbers = CollectionUtils.collect(containers, new Transformer() {
                         @Override
@@ -256,6 +264,9 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
 
                 String packagesNumbers[] = packageNumber.split(" ");
                 int maxPackagesNumber = 12;
+                if (paramValue != null && paramValue.getMaxPackageNumber() > 0) {
+                    maxPackagesNumber = paramValue.getMaxPackageNumber();
+                }
                 if (paramValue != null && packagesNumbers.length > maxPackagesNumber) {
                     List<String> packages1 = new ArrayList<>();
                     List<String> packages2 = new ArrayList<>();
@@ -294,7 +305,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
 
             String unit = "";
             FileItemFieldValue unitFifv = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("UNITE", fileItemList.get(0));
-            if(unitFifv != null){
+            if (unitFifv != null) {
                 unit = unitFifv.getValue();
             }
 
@@ -353,6 +364,9 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                 }
                 commoditiesCount++;
                 int maxGoodsNumber = 6;
+                if (paramValue != null && paramValue.getMaxGoodsLineNumber() > 0) {
+                    maxGoodsNumber = paramValue.getMaxGoodsLineNumber();
+                }
                 if (paramValue != null && commoditiesCount <= maxGoodsNumber) {
                     commoditiesList.add(String.format("%s %s %s", nb, emballage, comName));
                 } else {
