@@ -255,7 +255,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
             if (StringUtils.isNotBlank(packageNumber)) {
 
                 String packagesNumbers[] = packageNumber.split(" ");
-                int maxPackagesNumber = 6;
+                int maxPackagesNumber = 12;
                 if (paramValue != null && packagesNumbers.length > maxPackagesNumber) {
                     List<String> packages1 = new ArrayList<>();
                     List<String> packages2 = new ArrayList<>();
