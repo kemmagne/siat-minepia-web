@@ -13,7 +13,7 @@
     <!-- .STANDALONE -->
     <!-- .TEST -->
     <!-- .HT -->
-    <version>2.6.16</version>
+    <version>2.6.16-TEST</version>
     <packaging>war</packaging>
 
     <name>siat-ct-web</name>
