@@ -46,7 +46,7 @@
 
     </p:tabView>
 
-    <p:panel rendered="#{fileItemCctDetailController.checkMinaderMinistry and fileItemCctDetailController.currentFile.fileType.code eq 'CCT_CT_E_ATP'}">
+    <p:panel rendered="#{fileItemCctDetailController.checkMinaderMinistry and fileItemCctDetailController.currentFile.fileType.code eq 'CCT_CT_E_ATP' or fileItemCctDetailController.currentFile.fileType.code eq 'CCT_CT_E_FSTP'}">
 
         <h:panelGrid columns="2">
             <h:outputLabel value="#{bundle['TreatmentResultDateLabel']} : " />
@@ -79,7 +79,7 @@
 
             <h:outputLabel value="#{bundle['TreatmentMode']}" />
             <h:panelGroup>
-                <p:selectManyMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.treatmentModesList}">
+                <p:selectManyMenu disabled="false"  value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.treatmentModesList}">
                     <f:selectItems value="#{fileItemCctDetailController.pivTreatmentTypes}" var="tt" itemLabel="#{bundle[tt.label]}" itemValue="#{tt.value}"/>
                 </p:selectManyMenu>
             </h:panelGroup>
@@ -89,7 +89,7 @@
 
             <h:outputLabel value="#{bundle['ProduitUtilise']}" />
             <h:panelGroup>
-                <p:selectManyMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.productUsedList}">
+                <p:selectManyMenu disabled="false" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.productUsedList}">
                     <f:selectItems value="#{fileItemCctDetailController.trProductsUsed}" var="pu" itemLabel="#{bundle[pu.label]}" itemValue="#{pu.value}" />
                 </p:selectManyMenu>
             </h:panelGroup>
@@ -180,7 +180,7 @@
 
             <h:outputLabel value="#{bundle['EquipementsProtection']}" />
             <h:panelGroup>
-                <p:selectManyMenu disabled="true" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.protectionEquipementsList}">
+                <p:selectManyMenu  disabled="false" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentResult.protectionEquipementsList}">
                     <f:selectItems value="#{fileItemCctDetailController.trProtectionEquipments}" var="pe" itemLabel="#{bundle[pe.label]}" itemValue="#{pe.value}" />
                 </p:selectManyMenu>
             </h:panelGroup>

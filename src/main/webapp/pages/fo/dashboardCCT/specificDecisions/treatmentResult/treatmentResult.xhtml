@@ -5,7 +5,7 @@
 
         <p:messages autoUpdate="true" />
 
-        <p:panel rendered="#{fileItemCctDetailController.isAtReadyForSignature(fileItemCctDetailController.selectedFlow)}">
+        <p:panel rendered="#{fileItemCctDetailController.isAtReadyForSignature(fileItemCctDetailController.selectedFlow) or fileItemCctDetailController.isFstpReadyForSignature(fileItemCctDetailController.selectedFlow)}">
 
             <h:panelGrid columns="2">
                 <h:outputLabel for="DateTreatment" value="#{bundle['TreatmentResultDateTitle']}" />
