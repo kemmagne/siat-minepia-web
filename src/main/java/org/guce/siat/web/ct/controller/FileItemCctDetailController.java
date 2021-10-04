@@ -997,7 +997,8 @@ public class FileItemCctDetailController extends DefaultDetailController {
                     }
 
                     if (equalsSteps) {
-                        if (isCheckMinaderMinistry() && Arrays.asList(FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVI).contains(currentFile.getFileType().getCode())) {
+                        if ((isCheckMinaderMinistry() && Arrays.asList(FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVI).contains(currentFile.getFileType().getCode()))
+                                || FileTypeCode.CCT_CSV.equals(currentFile.getFileType().getCode())) {
                             flows = flowService.findFlowsByFromStepAndFileType2(referenceFileItemCheck.getStep(), referenceFileItemCheck.getFile().getFileType());
                             List<String> flowsToRemove = new ArrayList<>();
                             for (Flow flx : flows) {
@@ -1485,7 +1486,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
             }
         }
 
-        if (isPhytoBilling(selectedFlow)) {
+        if (isPhytoBilling(selectedFlow) || FlowCode.FL_CT_159.name().equals(selectedFlow.getCode())) {
             counter = -1L;
             invoiceTotalAmount = 0L;
             specificDecision = CctSpecificDecision.CCT_CT_E_BILL;
@@ -2388,7 +2389,16 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 // Recuperate the values of DataType (Observation text area ...)
                 List<ItemFlowData> flowDatas = getValuesOfDataTypeForDecision(itemFlowsToAdd, selectedFlow.getDataTypeList());
 
-                if (Arrays.asList(FlowCode.FL_CT_92.name()).contains(selectedFlow.getCode()) || isPhytoBilling(selectedFlow)) {
+                if (Arrays.asList(FlowCode.FL_CT_92.name(), FlowCode.FL_CT_159.name()).contains(selectedFlow.getCode()) || isPhytoBilling(selectedFlow)) {
+
+                    if (FlowCode.FL_CT_159.name().equals(selectedFlow.getCode())) {
+                        try {
+                            paymentData.setMontantHt((long) Integer.parseInt(flowDatas.get(0).getValue()));
+                        } catch (NumberFormatException nfe) {
+                            showErrorFacesMessage(ControllerConstants.Bundle.Messages.CANNOT_PARSE_AMOUNT_ERROR, null);
+                            return;
+                        }
+                    }
 
                     if (isPhytoBilling(selectedFlow)) {
                         if (CollectionUtils.isEmpty(paymentData.getInvoiceLines())) {
@@ -6463,7 +6473,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                         }
                         break;
                     }
-                    case CCT_CT_E_ATP:{
+                    case CCT_CT_E_ATP: {
                         final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(ffi, FlowCode.FL_CT_07);
                         final TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
                         if (draft) {

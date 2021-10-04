@@ -3,46 +3,49 @@ package org.guce.siat.web.ct.controller.util.enums;
 /**
  * The Enum LocaleValues.
  */
-public enum DataTypeEnnumeration
-{
+public enum DataTypeEnnumeration {
 
-	/** The inputtext. */
-	INPUTTEXT("inputText"),
+    /**
+     * The inputtext.
+     */
+    INPUTTEXT("inputText"),
+    /**
+     * The chekbox.
+     */
+    CHEKBOX("selectBooleanCheckbox"),
+    /**
+     * The calendar.
+     */
+    CALENDAR("calendar"),
+    /**
+     * The inputtextarea.
+     */
+    INPUTTEXTAREA("inputTextarea");
 
-	/** The chekbox. */
-	CHEKBOX("selectBooleanCheckbox"),
+    /**
+     * The inputnumber.
+     */
+    //	INPUTNUMBER("inputNumber");
+    /**
+     * The code.
+     */
+    private final String code;
 
-	/** The calendar. */
-	CALENDAR("calendar"),
+    /**
+     * Instantiates a new locale values.
+     *
+     * @param code the code
+     */
+    private DataTypeEnnumeration(final String code) {
+        this.code = code.intern();
+    }
 
-	/** The inputtextarea. */
-        INPUTTEXTAREA("inputTextarea");
-
-	/** The inputnumber. */
-	//	INPUTNUMBER("inputNumber");
-
-	/** The code. */
-	private final String code;
-
-	/**
-	 * Instantiates a new locale values.
-	 *
-	 * @param code
-	 *           the code
-	 */
-	private DataTypeEnnumeration(final String code)
-	{
-		this.code = code.intern();
-	}
-
-
-	/**
-	 * Gets the code.
-	 *
-	 * @return the code
-	 */
-	public String getCode()
-	{
-		return this.code;
-	}
+    /**
+     * Gets the code.
+     *
+     * @return the code
+     */
+    public String getCode() {
+        return this.code;
+    }
 }

@@ -225,7 +225,7 @@ public class CostsController extends AbstractController<PaymentData> implements 
         final TransactionStatus status = transactionManager.getTransaction(def);
         try {
             Flow flowToExecute;
-            if (Arrays.asList(FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP).contains(currentFile.getFileType().getCode())) {
+            if (Arrays.asList(FileTypeCode.CCT_CSV, FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP).contains(currentFile.getFileType().getCode())) {
                 flowToExecute = flowService.findFlowByCode(FlowCode.FL_CT_123.name());
             } else if (Arrays.asList(FileTypeCode.CCT_CT_E_PVI, FileTypeCode.CCT_CT_E_FSTP).contains(currentFile.getFileType().getCode())) {
                 flowToExecute = flowService.findFlowByCode(FlowCode.FL_CT_126.name());
@@ -261,7 +261,7 @@ public class CostsController extends AbstractController<PaymentData> implements 
             final Serializable documentSerializable = xmlConverterService.convertFileToDocument(currentFile, currentFile.getFileItemsList(), lastItemFlows, flowToExecute);
             byte[] xmlBytes;
             // prepare document to send
-            if (isPhyto()) {
+            if (isPhyto() || FileTypeCode.CCT_CSV.equals(currentFile.getFileType().getCode())) {
                 try (final ByteArrayOutputStream output = SendDocumentUtils.preparePaymentDocument(documentSerializable, service, documentType)) {
                     xmlBytes = output.toByteArray();
                 }
