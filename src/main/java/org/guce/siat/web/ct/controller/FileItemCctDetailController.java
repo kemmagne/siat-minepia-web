@@ -997,8 +997,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                     }
 
                     if (equalsSteps) {
-                        if ((isCheckMinaderMinistry() && Arrays.asList(FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVI).contains(currentFile.getFileType().getCode()))
-                                || FileTypeCode.CCT_CSV.equals(currentFile.getFileType().getCode())) {
+                        if (isPhyto() || FileTypeCode.CCT_CSV.equals(currentFile.getFileType().getCode())) {
                             flows = flowService.findFlowsByFromStepAndFileType2(referenceFileItemCheck.getStep(), referenceFileItemCheck.getFile().getFileType());
                             List<String> flowsToRemove = new ArrayList<>();
                             for (Flow flx : flows) {
