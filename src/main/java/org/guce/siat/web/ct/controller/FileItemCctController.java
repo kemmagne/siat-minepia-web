@@ -1,7 +1,6 @@
 package org.guce.siat.web.ct.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -32,7 +31,6 @@ import org.guce.siat.common.service.ItemFlowService;
 import org.guce.siat.common.service.UserAuthorityFileTypeService;
 import org.guce.siat.common.utils.Constants;
 import org.guce.siat.common.utils.DateUtils;
-import org.guce.siat.common.utils.enums.FileTypeCode;
 import org.guce.siat.core.ct.service.CommonService;
 import org.guce.siat.core.ct.util.enums.CctExportProductType;
 import org.guce.siat.web.common.AbstractController;
@@ -244,8 +242,7 @@ public class FileItemCctController extends AbstractController<File> {
     }
 
     public boolean isPhyto(File currentFile) {
-        boolean checkMinaderMinistry = currentFile.getDestinataire().equalsIgnoreCase(Constants.MINADER_MINISTRY);
-        return checkMinaderMinistry && Arrays.asList(FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI).contains(currentFile.getFileType().getCode());
+        return Utils.isPhyto(currentFile);
     }
 
     /**
