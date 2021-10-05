@@ -390,8 +390,8 @@ public class LoginBean implements Serializable {
 
             String message = MessageFormat.format(
                     ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                    "authentification_loginFailed_lockedUser"), ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale())
-                    .getString(SEND_MAIL_MESSAGE), user.getLogin(), DateUtils.formatSimpleDateForOracle(lastAttemptsTime));
+                            "authentification_loginFailed_lockedUser"), ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale())
+                            .getString(SEND_MAIL_MESSAGE), user.getLogin(), DateUtils.formatSimpleDateForOracle(lastAttemptsTime));
             JsfUtil.addErrorMessage(message);
         } catch (SessionAuthenticationException sae) {
             //maximum of sessions exceeded
@@ -439,7 +439,7 @@ public class LoginBean implements Serializable {
 
         cctRendred = Boolean.FALSE;
 
-        List<FileTypeCode> cctCodes = Arrays.asList(FileTypeCode.CCT_CT, FileTypeCode.CC_CT, FileTypeCode.CQ_CT,
+        List<FileTypeCode> cctCodes = Arrays.asList(FileTypeCode.CCT_CSV, FileTypeCode.CCT_CT, FileTypeCode.CC_CT, FileTypeCode.CQ_CT,
                 FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI);
 
         List<FileType> fileTypes = fileTypeService.findDistinctFileTypesByUser(getLoggedUser());
