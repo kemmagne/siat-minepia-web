@@ -39,6 +39,13 @@ public abstract class AbstractReportInvoker implements ReportCommand {
      * The jasper file name.
      */
     protected String jasperFileName;
+    
+    /**
+     * The pdf form file name.
+     */
+    protected String sourceFileName;
+
+    protected String realPath;
 
     private boolean draft;
 
@@ -59,6 +66,7 @@ public abstract class AbstractReportInvoker implements ReportCommand {
     public AbstractReportInvoker(final String jasperFileName, final String pdfFileName) {
         this.jasperFileName = jasperFileName;
         this.pdfFileName = pdfFileName;
+        this.sourceFileName = jasperFileName;
     }
 
     /*
@@ -114,6 +122,9 @@ public abstract class AbstractReportInvoker implements ReportCommand {
      * @return the real path
      */
     protected String getRealPath(final String relativePath, final String fileName, final String fileExtension) {
+        if (realPath != null) {
+            return realPath;
+        }
         final StringBuilder builder = new StringBuilder();
         builder.append(File.separator);
         builder.append(relativePath);

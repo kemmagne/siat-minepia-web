@@ -814,6 +814,8 @@ public class FileItemCctDetailController extends DefaultDetailController {
     private List<FileItemDto> fileItemDtos;
 
     private List<Country> countriesList;
+    
+    private boolean ccsMinsantefFileType;
 
     /**
      * Inits the.
@@ -897,6 +899,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
         authoritiesList = new DualListModel<>(new ArrayList<Authority>(), new ArrayList<Authority>());
         selectedAttachment = null;
+        ccsMinsantefFileType = FileTypeCode.CCS_MINSANTE.equals(currentFile.getFileType().getCode());
     }
 
     /**
@@ -1474,13 +1477,19 @@ public class FileItemCctDetailController extends DefaultDetailController {
         decisionDiv.getChildren().clear();
         final List<FileItemCheck> checksProduct = selectCheckedFileItemCheck();
         isPayment = Boolean.FALSE;
-        if (FlowCode.FL_CT_92.name().equals(selectedFlow.getCode())) {
+        if (FlowCode.FL_CT_92.name().equals(selectedFlow.getCode()) || FlowCode.FL_CT_158.name().equals(selectedFlow.getCode())) {
             isPayment = Boolean.TRUE;
             paymentData = new PaymentData();
             paymentData.setPaymentItemFlowList(new ArrayList<PaymentItemFlow>());
-            for (final FileItemCheck fileItemCheck : checksProduct) {
-                if (fileItemCheck.getDecisionCheck()) {
-                    paymentData.getPaymentItemFlowList().add(new PaymentItemFlow(false, fileItemCheck.getFileItem().getId()));
+            if (FlowCode.FL_CT_158.name().equals(selectedFlow.getCode())) {
+                FileItem fi = currentFile.getFileItemsList().get(0);
+                paymentData.setRefFacture(currentFile.getNumeroDossier());
+                paymentData.getPaymentItemFlowList().add(new PaymentItemFlow(false, fi.getId(), fi.getNsh()));
+            } else {
+                for (final FileItemCheck fileItemCheck : checksProduct) {
+                    if (fileItemCheck.getDecisionCheck()) {
+                        paymentData.getPaymentItemFlowList().add(new PaymentItemFlow(false, fileItemCheck.getFileItem().getId()));
+                    }
                 }
             }
         }
@@ -2388,7 +2397,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 // Recuperate the values of DataType (Observation text area ...)
                 List<ItemFlowData> flowDatas = getValuesOfDataTypeForDecision(itemFlowsToAdd, selectedFlow.getDataTypeList());
 
-                if (Arrays.asList(FlowCode.FL_CT_92.name()).contains(selectedFlow.getCode()) || isPhytoBilling(selectedFlow)) {
+                if (Arrays.asList(FlowCode.FL_CT_92.name(), FlowCode.FL_CT_158.name()).contains(selectedFlow.getCode()) || isPhytoBilling(selectedFlow)) {
 
                     if (isPhytoBilling(selectedFlow)) {
                         if (CollectionUtils.isEmpty(paymentData.getInvoiceLines())) {
@@ -2399,9 +2408,8 @@ public class FileItemCctDetailController extends DefaultDetailController {
                         if (CollectionUtils.isNotEmpty(paymentData.getPaymentItemFlowList())) {
                             coreService.delete(paymentData.getPaymentItemFlowList());
                         }
+                        paymentAmoutValueChangedListenerCte();
                     }
-
-                    paymentAmoutValueChangedListenerCte();
 
                     commonService.takeDacisionAndSavePayment(itemFlowsToAdd, paymentData);
                     itemFlowService.takeDecision(itemFlowsToAdd, flowDatas);
@@ -6339,6 +6347,9 @@ public class FileItemCctDetailController extends DefaultDetailController {
                     break;
                 }
             }
+        } else if (FileTypeCode.CCS_MINSANTE.equals(currentFile.getFileType().getCode())) {
+            Constructor constructor = classe.getConstructor(File.class);
+            reportInvoker = (AbstractReportInvoker) constructor.newInstance(currentFile);
         }
         if (FileTypeCode.CCT_CT_E_FSTP.equals(currentFile.getFileType().getCode()) && reportInvokersForFstpAndAtp != null) {
             List<JasperPrint> inputStreamsForFstpAndAtp = new ArrayList<>();
@@ -6463,7 +6474,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                         }
                         break;
                     }
-                    case CCT_CT_E_ATP:{
+                    case CCT_CT_E_ATP: {
                         final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(ffi, FlowCode.FL_CT_07);
                         final TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
                         if (draft) {
@@ -6872,11 +6883,12 @@ public class FileItemCctDetailController extends DefaultDetailController {
     public List<FileTypeDto> getRelatedFileTypesInfos() {
 
         List<FileTypeCode> codes = new ArrayList<>(Arrays.asList(FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI));
-        codes.remove(currentFile.getFileType().getCode());
+        if (codes.contains(currentFile.getFileType().getCode())) {
+            codes.remove(currentFile.getFileType().getCode());
 
-        List<FileType> fileTypes = fileTypeService.findFileTypesByCodes(codes.toArray(new FileTypeCode[0]));
-        relatedFileTypesInfos = RelatedFilesUtils.getRelatedFileTypesInfos(this, fileTypes);
-
+            List<FileType> fileTypes = fileTypeService.findFileTypesByCodes(codes.toArray(new FileTypeCode[0]));
+            relatedFileTypesInfos = RelatedFilesUtils.getRelatedFileTypesInfos(this, fileTypes);
+        }
         return relatedFileTypesInfos;
     }
 
@@ -6918,4 +6930,13 @@ public class FileItemCctDetailController extends DefaultDetailController {
         return countriesList;
     }
 
+    public boolean isCcsMinsantefFileType() {
+        return ccsMinsantefFileType;
+    }
+
+    public void setCcsMinsantefFileType(boolean ccsMinsantefFileType) {
+        this.ccsMinsantefFileType = ccsMinsantefFileType;
+    }
+
+    
 }
