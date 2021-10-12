@@ -3042,9 +3042,8 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
                             // prepare document to send
                             byte[] xmlBytes;
-                            ByteArrayOutputStream output = SendDocumentUtils.prepareCctDocument(documentSerializable, service, documentType); 
+                            ByteArrayOutputStream output = SendDocumentUtils.prepareCctDocument(documentSerializable, service, documentType);
                             xmlBytes = output.toByteArray();
-                            
 
                             if (CollectionUtils.isNotEmpty(flowToSend.getCopyRecipientsList())) {
                                 List<CopyRecipient> copyRecipients = flowToSend.getCopyRecipientsList();
@@ -3112,7 +3111,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
             messageToSendService.saveOrUpadateNotSendedMessageAsMessageToResend(data);
             showErrorFacesMessage(ControllerConstants.Bundle.Messages.SEND_ERROR, null);
             return;
-        }else{
+        } else {
             messageToSendService.deleteNotSendedMessageIfExistsAsMessageToResend(data);
         }
         if (logger.isDebugEnabled()) {
@@ -6255,6 +6254,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                                     forAnnexes.put("fileNameAnnex", ReportGeneratorUtils.CP_ANNEX_AUTRES);
                                 }
                             }
+                            //Appel de la methode de generation du jasper
                             reportInvoker = new CtCctCpEExporter(currentFile, ti, paramValue, "CERTIFICAT_PHYTOSANITAIRE");
 
                         } else if ("CQ_CT".equals(ti.getDelivrableType())) {
@@ -6707,6 +6707,9 @@ public class FileItemCctDetailController extends DefaultDetailController {
 //                        case "AUTRE_INFORMATION_RENSEIGNEMENT_COMPLEMENTAIRE":
 //                            treatInfo.setAdditionalInfos(fileFieldValue1.getValue());
 //                            break;
+                        case "AUTRE_NUMERO_CERTIFICAT_ORIGIN":
+                            treatInfo.setCertificatCountryOrigin(fileFieldValue1.getValue());
+                            break;
                         case "AUTRE_INFORMATION_FUMIGATION":
                             treatInfo.setFumigation(Boolean.parseBoolean(fileFieldValue1.getValue()));
                             break;
