@@ -2,6 +2,7 @@ package org.guce.siat.web.ct.controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -337,7 +338,7 @@ public class UserController extends AbstractController<User> {
 	 * @see org.guce.siat.web.common.AbstractController#create()
      */
     @Override
-    public synchronized void create() {
+    public void create() {
         getSelected().setAccountNonExpired(Boolean.TRUE);
         getSelected().setDeleted(Boolean.FALSE);
         getSelected().setAccountNonLocked(Boolean.TRUE);
@@ -480,14 +481,14 @@ public class UserController extends AbstractController<User> {
      * Fill user authority file type.
      */
     private void fillUserAuthorityFileType() {
-        userAuthFileTypes = new ArrayList<>();
-        Set<UserAuthority> authorities = new HashSet<>();
-        for (List<FileTypeAutorityData> vos : fileTypeAutorityDatas) {
-            for (FileTypeAutorityData fileTypeAutorityVo : vos) {
+        userAuthFileTypes = new ArrayList<UserAuthorityFileType>();
+        final Set<UserAuthority> authorities = new HashSet<UserAuthority>();
+        for (final List<FileTypeAutorityData> vos : fileTypeAutorityDatas) {
+            for (final FileTypeAutorityData fileTypeAutorityVo : vos) {
                 if (fileTypeAutorityVo.isChecked()) {
-                    UserAuthority userAuthority = new UserAuthority();
-                    UserAuthorityFileType uaf = new UserAuthorityFileType();
-                    UserAuthorityFileTypeId uafId = new UserAuthorityFileTypeId();
+                    final UserAuthority userAuthority = new UserAuthority();
+                    final UserAuthorityFileType uaf = new UserAuthorityFileType();
+                    final UserAuthorityFileTypeId uafId = new UserAuthorityFileTypeId();
                     userAuthority.setAuthorityGranted(fileTypeAutorityVo.getAuthority());
                     userAuthority.setUser(getSelected());
                     authorities.add(userAuthority);
@@ -498,12 +499,12 @@ public class UserController extends AbstractController<User> {
                 }
             }
         }
-        List<UserAuthority> userAuthorities = new ArrayList<>();
+        final List<UserAuthority> userAuthorities = new ArrayList<UserAuthority>();
         userAuthorities.addAll(authorities);
         getSelected().setUserAuthorityList(userAuthorities);
     }
 
-    public synchronized void resetPassword() {
+    public void resetPassword() {
 
         if (selected == null) {
             return;
@@ -528,7 +529,7 @@ public class UserController extends AbstractController<User> {
 	 * @see org.guce.siat.web.common.AbstractController#edit()
      */
     @Override
-    public synchronized void edit() {
+    public void edit() {
         getSelected().setAccountNonExpired(Boolean.TRUE);
         getSelected().setDeleted(Boolean.FALSE);
         getSelected().setCredentialsNonExpired(Boolean.TRUE);
@@ -579,7 +580,7 @@ public class UserController extends AbstractController<User> {
 	 * @see org.guce.siat.web.common.AbstractController#delete()
      */
     @Override
-    public synchronized void delete() {
+    public void delete() {
         getSelected().setDeleted(true);
         getSelected().setAdministration(null);
         userService.update(getSelected());

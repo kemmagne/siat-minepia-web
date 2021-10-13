@@ -6199,6 +6199,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
         byte[] report = null;
         Map<String, Object> forAnnexes = null;
         AbstractReportInvoker reportInvoker = null;
+        List<AbstractReportInvoker> reportInvokersForFstpAndAtp = null;
         if (checkMinaderMinistry) {
             String reportNumber = null;
             if (draft && !FileTypeCode.CCT_CT_E_PVE.equals(currentFile.getFileType().getCode())) {
@@ -6277,7 +6278,21 @@ public class FileItemCctDetailController extends DefaultDetailController {
                         }
                         break;
                     }
-                    case CCT_CT_E_ATP:
+                    case CCT_CT_E_ATP: {
+                        final ItemFlow itemFlow;
+                        if (currentFile.getParent() == null) {
+                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
+                        } else {
+                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_112);
+                        }
+                        final TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
+                        if (draft) {
+                            reportInvoker = new CtCctTreatmentExporter(currentFile, "CCT_CT_E_ATP", tr, reportNumber);
+                        } else {
+                            reportInvoker = new CtCctTreatmentExporter(currentFile, "CCT_CT_E_ATP", tr);
+                        }
+                        break;
+                    }
                     case CCT_CT_E_FSTP: {
                         final ItemFlow itemFlow;
                         if (currentFile.getParent() == null) {
@@ -6286,17 +6301,19 @@ public class FileItemCctDetailController extends DefaultDetailController {
                             itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_112);
                         }
                         final TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
-                        if (FileTypeCode.CCT_CT_E_ATP.equals(currentFile.getFileType().getCode())) {
-                            if (draft) {
-                                reportInvoker = new CtCctTreatmentExporter(currentFile, "CCT_CT_E_ATP", tr, reportNumber);
-                            } else {
-                                reportInvoker = new CtCctTreatmentExporter(currentFile, "CCT_CT_E_ATP", tr);
-                            }
-                        } else if (draft) {
+                        reportInvokersForFstpAndAtp = new ArrayList<>();
+                        if (draft) {
                             reportInvoker = new CtCctTreatmentExporter(currentFile, "CCT_CT_E_FSTP", tr, reportNumber);
                         } else {
                             reportInvoker = new CtCctTreatmentExporter(currentFile, "CCT_CT_E_FSTP", tr);
                         }
+                        reportInvokersForFstpAndAtp.add(reportInvoker);
+                        if (draft) {
+                            reportInvoker = new CtCctTreatmentExporter(currentFile, "CCT_CT_E_ATP", tr, reportNumber);
+                        } else {
+                            reportInvoker = new CtCctTreatmentExporter(currentFile, "CCT_CT_E_ATP", tr);
+                        }
+                        reportInvokersForFstpAndAtp.add(reportInvoker);
                         break;
                     }
                     default:
@@ -6324,7 +6341,22 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 }
             }
         }
-        if (reportInvoker != null) {
+        if (FileTypeCode.CCT_CT_E_FSTP.equals(currentFile.getFileType().getCode()) && reportInvokersForFstpAndAtp != null) {
+            List<JasperPrint> inputStreamsForFstpAndAtp = new ArrayList<>();
+            for (AbstractReportInvoker reportInvokerFstpOrAtp : reportInvokersForFstpAndAtp) {
+                reportInvokerFstpOrAtp.setDraft(draft);
+                reportInvokerFstpOrAtp.setFileFieldValueService(fileFieldValueService);
+                reportInvokerFstpOrAtp.setItemFlowService(itemFlowService);
+                reportInvokerFstpOrAtp.setPottingReportService(pottingReportService);
+                reportInvokerFstpOrAtp.setCctDetailController(this);
+                JasperPrint reportJPForFstpOrAtp = JsfUtil.getReportJP(reportInvokerFstpOrAtp);
+                inputStreamsForFstpAndAtp.add(reportJPForFstpOrAtp);
+            }
+            if (!CollectionUtils.isEmpty(inputStreamsForFstpAndAtp)) {
+                report = JsfUtil.mergePdf(inputStreamsForFstpAndAtp);
+            }
+
+        } else if (reportInvoker != null) {
             reportInvoker.setDraft(draft);
             reportInvoker.setFileFieldValueService(fileFieldValueService);
             reportInvoker.setItemFlowService(itemFlowService);
@@ -6359,6 +6391,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
         Map<String, Object> forAnnexes = null;
         byte[] report = null;
         AbstractReportInvoker reportInvoker = null;
+        List<AbstractReportInvoker> reportInvokersForFstpAndAtp = null;
         FileItem ffi = file.getFileItemsList().get(0);
         if (checkMinaderMinistry) {
             String reportNumber = null;
@@ -6397,7 +6430,9 @@ public class FileItemCctDetailController extends DefaultDetailController {
                         if (paramValue == null) {
                             ReportGeneratorUtils.fillCCTCPParamValue(paramValue, getLoggedUser(), currentFile);
                         }
-
+                        if (paramValue == null) {
+                            paramValue = cCTCPParamValue;
+                        }
                         if (ti.getDelivrableType() == null || "CCT_CT_E".equals(ti.getDelivrableType())) {
                             Map<String, Integer> count = ReportGeneratorUtils.countFileContainerAndPackage(file);
                             if (count.get(ReportGeneratorUtils.COUNT_GOODS) > paramValue.getMaxGoodsLineNumber()
@@ -6429,23 +6464,32 @@ public class FileItemCctDetailController extends DefaultDetailController {
                         }
                         break;
                     }
-                    case CCT_CT_E_ATP:
+                    case CCT_CT_E_ATP:{
+                        final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(ffi, FlowCode.FL_CT_07);
+                        final TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
+                        if (draft) {
+                            reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_ATP", tr, reportNumber);
+                        } else {
+                            reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_ATP", tr);
+                        }
+                        break;
+                    }
                     case CCT_CT_E_FSTP: {
                         final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(ffi, FlowCode.FL_CT_07);
                         final TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
-                        if (FileTypeCode.CCT_CT_E_ATP.equals(file.getFileType().getCode())) {
-                            if (draft) {
-                                reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_ATP", tr, reportNumber);
-                            } else {
-                                reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_ATP", tr);
-                            }
+                        reportInvokersForFstpAndAtp = new ArrayList<>();
+                        if (draft) {
+                            reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_FSTP", tr, reportNumber);
                         } else {
-                            if (draft) {
-                                reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_FSTP", tr, reportNumber);
-                            } else {
-                                reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_FSTP", tr);
-                            }
+                            reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_FSTP", tr);
                         }
+                        reportInvokersForFstpAndAtp.add(reportInvoker);
+                        if (draft) {
+                            reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_ATP", tr, reportNumber);
+                        } else {
+                            reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_ATP", tr);
+                        }
+                        reportInvokersForFstpAndAtp.add(reportInvoker);
                         break;
                     }
                     default:
@@ -6473,7 +6517,22 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 }
             }
         }
-        if (reportInvoker != null) {
+        if ((FileTypeCode.CCT_CT_E_FSTP.equals(currentFile.getFileType().getCode()) || FileTypeCode.CCT_CT_E_ATP.equals(currentFile.getFileType().getCode())) && reportInvokersForFstpAndAtp != null) {
+            List<JasperPrint> inputStreamsForFstpAndAtp = new ArrayList<>();
+            for (AbstractReportInvoker reportInvokerFstpOrAtp : reportInvokersForFstpAndAtp) {
+                reportInvokerFstpOrAtp.setDraft(draft);
+                reportInvokerFstpOrAtp.setFileFieldValueService(fileFieldValueService);
+                reportInvokerFstpOrAtp.setItemFlowService(itemFlowService);
+                reportInvokerFstpOrAtp.setPottingReportService(pottingReportService);
+                reportInvokerFstpOrAtp.setCctDetailController(this);
+                JasperPrint reportJPForFstpOrAtp = JsfUtil.getReportJP(reportInvokerFstpOrAtp);
+                inputStreamsForFstpAndAtp.add(reportJPForFstpOrAtp);
+            }
+            if (!CollectionUtils.isEmpty(inputStreamsForFstpAndAtp)) {
+                report = JsfUtil.mergePdf(inputStreamsForFstpAndAtp);
+            }
+
+        } else if (reportInvoker != null) {
             reportInvoker.setDraft(draft);
             reportInvoker.setFileFieldValueService(fileFieldValueService);
             reportInvoker.setItemFlowService(itemFlowService);

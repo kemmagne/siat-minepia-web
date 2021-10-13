@@ -158,7 +158,9 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
                 calendar.setTime(signatureDate);
             }
             int year = calendar.get(Calendar.YEAR);
-            String fileType = FileTypeCode.CCT_CT_E_ATP.equals(file.getFileType().getCode()) ? "ATP" : "FSTP";
+            //String fileType = FileTypeCode.CCT_CT_E_ATP.equals(file.getFileType().getCode()) ? "ATP" : "FSTP";
+            String fileType = "ATP";
+            String numeroDossier = file.getNumeroDossier().replaceAll("DT", "AT");
             String s = String.format("%s/%s/%s/%s/MINADER/SG/DRCQ", file.getNumeroDossier(), file.getNumeroDemande(), year, fileType);
             treatmentVo.setDecisionNumber(s);
         }
