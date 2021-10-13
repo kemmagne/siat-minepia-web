@@ -55,10 +55,16 @@ public class CcsMinsanteFormExporter extends AbstractReportInvoker {
     public CcsMinsanteFormExporter(File file) {
         super("CCS_MINSANTE", "CCS_MINSANTE");
         this.file = file;
-        
+
         initDecimalFormat();
     }
 
+    public CcsMinsanteFormExporter(File file, String pdfFormFileName) {
+        super(pdfFormFileName, "CCS_MINSANTE");
+        this.file = file;
+
+        initDecimalFormat();
+    }
 
     private void initDecimalFormat() {
         NumberFormat nf = NumberFormat.getNumberInstance(Locale.FRANCE);
@@ -106,12 +112,12 @@ public class CcsMinsanteFormExporter extends AbstractReportInvoker {
         List<Container> containers = file.getContainers();
 
         int modifIndex = 0;
-        String  senderName= StringUtils.EMPTY, senderAddress = StringUtils.EMPTY, transportWay = StringUtils.EMPTY,
+        String senderName = StringUtils.EMPTY, senderAddress = StringUtils.EMPTY, transportWay = StringUtils.EMPTY,
                 goodsName = StringUtils.EMPTY, diNumber = StringUtils.EMPTY,
                 blNumber = StringUtils.EMPTY, goodsVolume = StringUtils.EMPTY,
                 container20Number = StringUtils.EMPTY, container40Number = StringUtils.EMPTY, originCountry = StringUtils.EMPTY,
                 makerCountry = StringUtils.EMPTY;
-        
+
         for (FileFieldValue fileFieldValue : fileFieldValueList) {
             switch (fileFieldValue.getFileField().getCode()) {
                 case "DOCUMENTS_NUMERO_DI":
@@ -121,7 +127,7 @@ public class CcsMinsanteFormExporter extends AbstractReportInvoker {
                     blNumber = fileFieldValue.getValue() != null ? fileFieldValue.getValue() : "";
                     break;
                 case "TRANSPORT_PAYS_PROVENANCE_NOM_PAYS":
-                    blNumber = fileFieldValue.getValue() != null ? fileFieldValue.getValue() : "";
+                    originCountry = fileFieldValue.getValue() != null ? fileFieldValue.getValue() : "";
                     break;
                 case "EXPORTATEUR_ADRESSE_ADRESSE1":
                     senderAddress = fileFieldValue.getValue() != null ? fileFieldValue.getValue() : "";
@@ -132,27 +138,27 @@ public class CcsMinsanteFormExporter extends AbstractReportInvoker {
                 case "TRANSPORT_NB_CONTENEUR40":
                     container40Number = fileFieldValue.getValue() != null ? fileFieldValue.getValue() : "";
                     break;
-                
+
             }
         }
         values.put("NUMERO_CCS", file.getNumeroDossier());
-        if(file.getSignatory() != null){
+        if (file.getSignatory() != null) {
             values.put("NOM_SIGNATAIRE_1", file.getSignatory().getLastName());
-            values.put("NOM_SIGNATAIRE_2", file.getSignatory().getFirstName() +" "+file.getSignatory().getLastName());
+            values.put("NOM_SIGNATAIRE_2", file.getSignatory().getFirstName() + " " + file.getSignatory().getLastName());
         }
         values.put("NUMERO_BL", blNumber);
         values.put("NUMERO_DI", diNumber);
-        if(file.getClient() != null){
+        if (file.getClient() != null) {
             String companyName = file.getClient().getCompanyName();
             String companyAddress = StringUtils.EMPTY;
-            if(StringUtils.isNotEmpty(file.getClient().getFullAddress())){
+            if (StringUtils.isNotEmpty(file.getClient().getFullAddress())) {
                 companyAddress = file.getClient().getFullAddress();
-            }else if(StringUtils.isNotEmpty(file.getClient().getFirstAddress())){
+            } else if (StringUtils.isNotEmpty(file.getClient().getFirstAddress())) {
                 companyAddress = file.getClient().getFirstAddress();
             }
-            values.put("NOM_ADRESSE_DESTINATAIRE", companyName+" "+companyAddress);
+            values.put("NOM_ADRESSE_DESTINATAIRE", companyName + " " + companyAddress);
         }
-        
+
         Iterator<PDField> fieldsIter = acroForm.getFieldIterator();
         while (fieldsIter.hasNext()) {
             PDField field = fieldsIter.next();
