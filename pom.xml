@@ -37,7 +37,7 @@
             <id>profile-ht</id>
             <properties>
                 <environment>ht</environment>
-                <global-config.properties>/root/siat/config/ct/global-config.properties</global-config.properties>
+                <global-config.properties>/home/htiomy/siat/config/ct/global-config.properties</global-config.properties>
             </properties>
             <activation>
                 <property>
