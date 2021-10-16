@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="file" language="groovy" pageWidth="595" pageHeight="842" columnWidth="585" leftMargin="5" rightMargin="5" topMargin="5" bottomMargin="5" uuid="28078ea8-15af-47d5-9f91-aa95db5f187e">
 	<property name="ireport.zoom" value="1.272292855117456"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="192"/>
+	<property name="ireport.y" value="229"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<style name="table">
 		<box>
@@ -318,7 +318,7 @@
 					</graphicElement>
 				</rectangle>
 				<staticText>
-					<reportElement mode="Transparent" x="4" y="1" width="100" height="12" uuid="0c6b0712-9990-4831-84bd-c3a67d7e3165"/>
+					<reportElement mode="Transparent" x="4" y="1" width="171" height="12" uuid="0c6b0712-9990-4831-84bd-c3a67d7e3165"/>
 					<textElement verticalAlignment="Middle" markup="none">
 						<font size="8" isBold="false" isUnderline="false"/>
 					</textElement>
@@ -592,7 +592,7 @@
 					<textFieldExpression><![CDATA[($F{placeOfShipment}!= null && $F{placeOfShipment}.trim().length()>0 ? $F{placeOfShipment} : "-")]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement mode="Transparent" x="4" y="1" width="166" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="27c0c8aa-d064-4d9b-9038-32f8124b83e9"/>
+					<reportElement mode="Transparent" x="4" y="1" width="267" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="27c0c8aa-d064-4d9b-9038-32f8124b83e9"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -914,7 +914,7 @@
 				</textField>
 				<staticText>
 					<reportElement mode="Transparent" x="10" y="19" width="14" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="a4c16186-6c86-4fd4-bf25-4c07c373ed54">
-						<printWhenExpression><![CDATA[$F{cvsGoodFor}!= null && ($F{cvsGoodFor}.trim().equalsIgnoreCase("ambient") || $F{cvsProductTemperature}.trim().equalsIgnoreCase("ambiante"))]]></printWhenExpression>
+						<printWhenExpression><![CDATA[$F{cvsProductTemperature}!= null && ($F{cvsProductTemperature}.trim().equalsIgnoreCase("ambient") || $F{cvsProductTemperature}.trim().equalsIgnoreCase("ambiante"))]]></printWhenExpression>
 					</reportElement>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -960,7 +960,7 @@
 				</staticText>
 				<staticText>
 					<reportElement mode="Transparent" x="114" y="19" width="14" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="42419354-1d40-40d9-a2f8-091ff6212f08">
-						<printWhenExpression><![CDATA[$F{cvsGoodFor}!= null && ($F{cvsGoodFor}.trim().equalsIgnoreCase("chilled") || $F{cvsProductTemperature}.trim().equalsIgnoreCase("refrigerée"))]]></printWhenExpression>
+						<printWhenExpression><![CDATA[$F{cvsProductTemperature}!= null && ($F{cvsProductTemperature}.trim().equalsIgnoreCase("chilled") || $F{cvsProductTemperature}.trim().equalsIgnoreCase("refrigerée"))]]></printWhenExpression>
 					</reportElement>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -970,7 +970,7 @@
 				</staticText>
 				<staticText>
 					<reportElement mode="Transparent" x="216" y="19" width="14" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="abc781b7-0760-454f-b59c-7e502bbdf58f">
-						<printWhenExpression><![CDATA[$F{cvsGoodFor}!= null && ($F{cvsGoodFor}.trim().equalsIgnoreCase("frozen") || $F{cvsProductTemperature}.trim().equalsIgnoreCase("congelée"))]]></printWhenExpression>
+						<printWhenExpression><![CDATA[$F{cvsProductTemperature}!= null && ($F{cvsProductTemperature}.trim().equalsIgnoreCase("frozen") || $F{cvsProductTemperature}.trim().equalsIgnoreCase("congelée"))]]></printWhenExpression>
 					</reportElement>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -1340,7 +1340,7 @@ Titre et Qualité]]></text>
 					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 						<font size="8" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[($F{signatoryName}!= null && $F{signatoryName}.trim().length()>0 ? $F{signatoryName} : "-")+","+($F{signatoryAddress}!= null && $F{signatoryAddress}.trim().length()>0 ? $F{signatoryAddress} : "-")]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{signatoryName}!= null && $F{signatoryName}.trim().length()>0 ? $F{signatoryName} : "-"]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement mode="Transparent" x="33" y="220" width="137" height="24" uuid="646bca33-3213-44d1-bf9d-c0c0bc1594ed"/>
