@@ -294,7 +294,7 @@ public class CostsController extends AbstractController<PaymentData> implements 
                         LOG.debug("Message sent to OUT queue");
                     }
                 }
-            } else if (isPhyto()) {
+            } else if (isPhyto() || FileTypeCode.CCT_CSV.equals(currentFile.getFileType().getCode())) {
                 final Map<String, Object> data = new HashMap<>();
                 data.put(ESBConstants.FLOW, xmlBytes);
                 data.put(ESBConstants.ATTACHMENT, new HashMap<>());
