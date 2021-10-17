@@ -130,6 +130,7 @@ import org.guce.siat.core.ct.model.PottingReport;
 import org.guce.siat.core.ct.model.Sample;
 import org.guce.siat.core.ct.model.TreatmentCompany;
 import org.guce.siat.core.ct.model.TreatmentInfos;
+import org.guce.siat.core.ct.model.TreatmentInfosCCSMinsante;
 import org.guce.siat.core.ct.model.TreatmentOrder;
 import org.guce.siat.core.ct.model.TreatmentPart;
 import org.guce.siat.core.ct.model.TreatmentResult;
@@ -643,6 +644,8 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
     private TreatmentInfos treatmentInfos;
 
+    private TreatmentInfosCCSMinsante treatmentInfosCCSMinsante;
+
     private ApprovedDecision approvedDecision;
 
     private CCTCPParamValue cCTCPParamValue;
@@ -814,8 +817,10 @@ public class FileItemCctDetailController extends DefaultDetailController {
     private List<FileItemDto> fileItemDtos;
 
     private List<Country> countriesList;
-    
+
     private boolean ccsMinsantefFileType;
+    private boolean ccsMinsanteFoodProducts;
+    private boolean ccsMinsanteDrugProducts;
 
     /**
      * Inits the.
@@ -982,8 +987,8 @@ public class FileItemCctDetailController extends DefaultDetailController {
             }
             // Show Decsion System Only if we have decision = Étude Approfondie
             if (CollectionUtils.isNotEmpty(chckedProductInfoChecksList)
-                    && (StepCode.ST_CT_04.equals(chckedProductInfoChecksList.get(0).getFileItem().getStep().getStepCode()))) {
-                setDisionSystemAllowed(true);
+                    && (StepCode.ST_CT_04.equals(chckedProductInfoChecksList.get(0).getFileItem().getStep().getStepCode())) && !isCcsMinsantefFileType()) {
+                    setDisionSystemAllowed(true);
             } else {
                 disabledTabSynthese = chckedProductInfoChecksList.size() > Constants.ONE;
             }
@@ -1701,6 +1706,8 @@ public class FileItemCctDetailController extends DefaultDetailController {
             } else {
                 showErrorFacesMessage(ControllerConstants.Bundle.Messages.CHECK_ANALYSE_DECISION_ERROR, ControllerConstants.Bundle.Messages.CHECK_PRODUCTS_DECISION_MSG);
             }
+        } else if (isCCSMinsanteReadyForSignature(selectedFlow)) {
+            treatmentInfosCCSMinsante = new TreatmentInfosCCSMinsante();
         } // Generic : construction du formulaire à partir des DataType
         else {
             buildGenericFormFromDataType(selectedFlow.getDataTypeList());
@@ -1859,6 +1866,14 @@ public class FileItemCctDetailController extends DefaultDetailController {
         paymentData.setAutreMontant(invoiceOtherAmount);
     }
 
+    /**
+     * CCS Minsante products Type value changed listener.
+     */
+    public void ccsProductsTypeChangedListener() {
+        ccsMinsanteFoodProducts = treatmentInfosCCSMinsante.isProductFoodIHC() || treatmentInfosCCSMinsante.isHygienSanitationProducts() || treatmentInfosCCSMinsante.isFleaMarket() || treatmentInfosCCSMinsante.isThriftShop() || treatmentInfosCCSMinsante.isVehicle();
+        ccsMinsanteDrugProducts = !ccsMinsanteFoodProducts;
+    }
+
     public synchronized void addInvoiceLine() {
         InvoiceLine invoiceLine = new InvoiceLine();
         invoiceLine.setId(counter--);
@@ -1918,6 +1933,8 @@ public class FileItemCctDetailController extends DefaultDetailController {
             specificDecisionsHistory.setLastAnalyseOrder(analyseOrderService.findByItemFlow(lastDecisions));
         } else if (isPhytoReadyForSignature(lastDecisions.getFlow())) {
             specificDecisionsHistory.setLastTreatmentInfos(treatmentInfosService.findTreatmentInfosByItemFlow(lastDecisions));
+        } else if (isCCSMinsanteReadyForSignature(lastDecisions.getFlow())) {
+            specificDecisionsHistory.setLastTreatmentInfosCCSMinsante(treatmentInfosCCSMinsanteService.findTreatmentInfosByItemFlow(lastDecisions));
         } else if (isPviReadyForSignature(lastDecisions.getFlow())) {
 //            specificDecisionsHistory.setLastDecisionIR(inspectionReportService.findLastInspectionReportsByFileItem(lastDecisions
 //                    .getFileItem()));
@@ -1938,7 +1955,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
             specificDecisionsHistory.setLastTreatmentResult(treatmentResultService.findTreatmentResultByItemFlow(lastDecisions));
             final List<TreatmentPart> treatmentParts = specificDecisionsHistory.getLastTreatmentResult().getTreatmentOrder().getTreatmentPartsList();
             downloadAttachment(treatmentParts);
-        } else if (FlowCode.FL_CT_93.name().equals(lastDecisions.getFlow().getCode())) {
+        } else if (FlowCode.FL_CT_93.name().equals(lastDecisions.getFlow().getCode()) || FlowCode.FL_CT_160.name().equals(lastDecisions.getFlow().getCode())) {
             specificDecisionsHistory.setLastPaymentData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
         } else if (isPhytoBilling(lastDecisions.getFlow())) {
             lastSpecificDecision = CctSpecificDecision.CCT_CT_E_BILL;
@@ -1972,6 +1989,8 @@ public class FileItemCctDetailController extends DefaultDetailController {
             specificDecisionsHistory.setDecisionDetailsAO(analyseOrderService.findByItemFlow(selectedItemFlowDto.getItemFlow()));
         } else if (isPhytoReadyForSignature(selectedItemFlowDto.getItemFlow().getFlow())) {
             specificDecisionsHistory.setDecisionDetailsTI(treatmentInfosService.findTreatmentInfosByItemFlow(selectedItemFlowDto.getItemFlow()));
+        } else if (isCCSMinsanteReadyForSignature(selectedItemFlowDto.getItemFlow().getFlow())) {
+            specificDecisionsHistory.setDecisionDetailsTICCSMinsante(treatmentInfosCCSMinsanteService.findTreatmentInfosByItemFlow(selectedItemFlowDto.getItemFlow()));
         } else if (isPviReadyForSignature(selectedItemFlowDto.getItemFlow().getFlow())) {
             specificDecisionsHistory.setDecisionDetailsIR(inspectionReportService.findByItemFlow(selectedItemFlowDto.getItemFlow()));
         } else if (isAtReadyForSignature(selectedItemFlowDto.getItemFlow().getFlow())) {
@@ -2298,6 +2317,8 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 if (CollectionUtils.isNotEmpty(analysePartsList)) {
                     commonService.takeDecisionAndSaveAnalyseRequest(analysePartsList, analyseOrder, itemFlowsToAdd);
                 }
+            } else if (isCCSMinsanteReadyForSignature(selectedFlow)) {
+                commonService.takeDecisionAndSaveTreatmentInfosCCSMinsante(treatmentInfosCCSMinsante, itemFlowsToAdd);
             } else if (isPhytoReadyForSignature(selectedFlow)) {
                 commonService.takeDecisionAndSaveTreatmentInfos(treatmentInfos, itemFlowsToAdd);
                 saveModifiedGoods();
@@ -5152,6 +5173,14 @@ public class FileItemCctDetailController extends DefaultDetailController {
         this.treatmentInfos = treatmentInfos;
     }
 
+    public TreatmentInfosCCSMinsante getTreatmentInfosCCSMinsante() {
+        return treatmentInfosCCSMinsante;
+    }
+
+    public void setTreatmentInfosCCSMinsante(TreatmentInfosCCSMinsante treatmentInfosCCSMinsante) {
+        this.treatmentInfosCCSMinsante = treatmentInfosCCSMinsante;
+    }
+
     /**
      * Gets the treatment companys.
      *
@@ -6064,6 +6093,11 @@ public class FileItemCctDetailController extends DefaultDetailController {
         return ok;
     }
 
+    public boolean isCCSMinsanteReadyForSignature(Flow flow) {
+        boolean ok = flow != null && FileTypeCode.CCS_MINSANTE.equals(currentFile.getFileType().getCode()) && Arrays.asList(FlowCode.FL_CT_07.name()).contains(flow.getCode());
+        return ok;
+    }
+
     public boolean isPhytoReadyForSignatureEnd(Flow flow) {
         phytoEnd = flow != null && checkMinaderMinistry && FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode()) && FlowCode.FL_CT_08.name().equals(flow.getCode());
         return phytoEnd;
@@ -6348,8 +6382,14 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 }
             }
         } else if (FileTypeCode.CCS_MINSANTE.equals(currentFile.getFileType().getCode())) {
-            Constructor constructor = classe.getConstructor(File.class);
-            reportInvoker = (AbstractReportInvoker) constructor.newInstance(currentFile);
+            final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
+            final TreatmentInfosCCSMinsante tr = treatmentInfosCCSMinsanteService.findTreatmentInfosByItemFlow(itemFlow);
+            Constructor constructor = classe.getConstructor(File.class, String.class, TreatmentInfosCCSMinsante.class);
+            String reportPdfFormFileName = "CCS_MINSANTE";
+            if (tr.isCcsMinsanteDrugProducts()) {
+                reportPdfFormFileName = "CCS_MINSANTE_MEDICAMENTS";
+            }
+            reportInvoker = (AbstractReportInvoker) constructor.newInstance(currentFile, reportPdfFormFileName, tr);
         }
         if (FileTypeCode.CCT_CT_E_FSTP.equals(currentFile.getFileType().getCode()) && reportInvokersForFstpAndAtp != null) {
             List<JasperPrint> inputStreamsForFstpAndAtp = new ArrayList<>();
@@ -6938,5 +6978,20 @@ public class FileItemCctDetailController extends DefaultDetailController {
         this.ccsMinsantefFileType = ccsMinsantefFileType;
     }
 
-    
+    public boolean isCcsMinsanteFoodProducts() {
+        return ccsMinsanteFoodProducts;
+    }
+
+    public void setCcsMinsanteFoodProducts(boolean ccsMinsanteFoodProducts) {
+        this.ccsMinsanteFoodProducts = ccsMinsanteFoodProducts;
+    }
+
+    public boolean isCcsMinsanteDrugProducts() {
+        return ccsMinsanteDrugProducts;
+    }
+
+    public void setCcsMinsanteDrugProducts(boolean ccsMinsanteDrugProducts) {
+        this.ccsMinsanteDrugProducts = ccsMinsanteDrugProducts;
+    }
+
 }

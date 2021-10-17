@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -29,8 +30,11 @@ import org.guce.siat.common.model.Container;
 import org.guce.siat.common.model.File;
 import org.guce.siat.common.model.FileFieldValue;
 import org.guce.siat.common.model.FileItem;
+import org.guce.siat.common.model.FileItemFieldValue;
 import org.guce.siat.common.model.Item;
 import org.guce.siat.common.utils.DateUtils;
+import org.guce.siat.core.ct.model.TreatmentInfosCCSMinsante;
+import org.guce.siat.web.ct.controller.util.Utils;
 import org.springframework.util.Assert;
 
 /**
@@ -41,6 +45,9 @@ public class CcsMinsanteFormExporter extends AbstractReportInvoker {
 
     private static final String FORM_FIELD_CHECKBOX_CHECKED_VALUE = "OK";
     private static final String FORM_FIELD_CHECKBOX_NOCHECKED_VALUE = "Off";
+    
+    private static final String CONFORME_O = "O";
+    private static final String CONFRME_N = "N";
 
     /**
      * The decimal format
@@ -51,18 +58,19 @@ public class CcsMinsanteFormExporter extends AbstractReportInvoker {
      * The file.
      */
     private final File file;
+    private final TreatmentInfosCCSMinsante treatmentInfos;
 
-    public CcsMinsanteFormExporter(File file) {
+    public CcsMinsanteFormExporter(File file, TreatmentInfosCCSMinsante treatmentInfos) {
         super("CCS_MINSANTE", "CCS_MINSANTE");
         this.file = file;
-
+        this.treatmentInfos = treatmentInfos;
         initDecimalFormat();
     }
 
-    public CcsMinsanteFormExporter(File file, String pdfFormFileName) {
+    public CcsMinsanteFormExporter(File file, String pdfFormFileName, TreatmentInfosCCSMinsante treatmentInfos) {
         super(pdfFormFileName, "CCS_MINSANTE");
         this.file = file;
-
+        this.treatmentInfos = treatmentInfos;
         initDecimalFormat();
     }
 
@@ -114,9 +122,9 @@ public class CcsMinsanteFormExporter extends AbstractReportInvoker {
         int modifIndex = 0;
         String senderName = StringUtils.EMPTY, senderAddress = StringUtils.EMPTY, transportWay = StringUtils.EMPTY,
                 goodsName = StringUtils.EMPTY, diNumber = StringUtils.EMPTY,
-                blNumber = StringUtils.EMPTY, goodsVolume = StringUtils.EMPTY,
+                blNumber = StringUtils.EMPTY, goodsWeight = StringUtils.EMPTY,
                 container20Number = StringUtils.EMPTY, container40Number = StringUtils.EMPTY, originCountry = StringUtils.EMPTY,
-                makerCountry = StringUtils.EMPTY;
+                makerCountry = StringUtils.EMPTY, signatureDate = StringUtils.EMPTY;
 
         for (FileFieldValue fileFieldValue : fileFieldValueList) {
             switch (fileFieldValue.getFileField().getCode()) {
@@ -126,7 +134,7 @@ public class CcsMinsanteFormExporter extends AbstractReportInvoker {
                 case "TRANSPORT_NUMERO_BL":
                     blNumber = fileFieldValue.getValue() != null ? fileFieldValue.getValue() : "";
                     break;
-                case "TRANSPORT_PAYS_PROVENANCE_NOM_PAYS":
+                case "TRANSPORT_PAYS_ORIGINE_NOM_PAYS":
                     originCountry = fileFieldValue.getValue() != null ? fileFieldValue.getValue() : "";
                     break;
                 case "EXPORTATEUR_ADRESSE_ADRESSE1":
@@ -138,6 +146,12 @@ public class CcsMinsanteFormExporter extends AbstractReportInvoker {
                 case "TRANSPORT_NB_CONTENEUR40":
                     container40Number = fileFieldValue.getValue() != null ? fileFieldValue.getValue() : "";
                     break;
+                case "TRANSPORT_MOYEN_TRANSPORT_LIBELLE":
+                    transportWay = fileFieldValue.getValue() != null ? fileFieldValue.getValue() : "";
+                    break;
+                case "SIGNATAIRE_DATE":
+                    signatureDate = fileFieldValue.getValue() != null ? fileFieldValue.getValue() : "";
+                    break;
 
             }
         }
@@ -148,6 +162,29 @@ public class CcsMinsanteFormExporter extends AbstractReportInvoker {
         }
         values.put("NUMERO_BL", blNumber);
         values.put("NUMERO_DI", diNumber);
+        values.put("NOM_ADRESSE_EXPEDITEUR", senderAddress);
+        values.put("NOMBRE_CONTENEUR_20", container20Number);
+        values.put("NOMBRE_CONTENEUR_40", container40Number);
+        values.put("PROVENANCE_MARCHANDISE", originCountry);
+        values.put("DATE_SIGNATURE_CCS", signatureDate);
+        values.put("NAVIRE_TRANSPORTEUR", transportWay);
+        FileItemFieldValue fileItemFieldValue;
+        modifIndex = 1;
+        for (FileItem fi : fileItems) {
+            FileItemFieldValue goodNameFileItemFieldValue = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("DESCRIPTION", fi);
+            if (goodNameFileItemFieldValue != null) {
+                goodsName = goodNameFileItemFieldValue.getValue();
+            }
+            if (modifIndex <= 3) {
+                FileItemFieldValue goodsWeightFileItemFieldValue = getFileFieldValueService().findFileItemFieldValueByCodeAndFileItem("POIDS", fi);
+                if (goodsWeightFileItemFieldValue != null) {
+                    goodsWeight = goodsWeightFileItemFieldValue.getValue();
+                }
+                values.put("TONNAGE_CONVENTIONNEL_" + modifIndex, goodsWeight);
+            }
+        }
+        values.put("MARCHANDISE_DESIGNATION", goodsName);
+
         if (file.getClient() != null) {
             String companyName = file.getClient().getCompanyName();
             String companyAddress = StringUtils.EMPTY;
@@ -157,6 +194,81 @@ public class CcsMinsanteFormExporter extends AbstractReportInvoker {
                 companyAddress = file.getClient().getFirstAddress();
             }
             values.put("NOM_ADRESSE_DESTINATAIRE", companyName + " " + companyAddress);
+        }
+        int i = 1;
+        for (Container container : containers) {
+            if (i <= 5) {
+                values.put("NUMERO_CONTENEUR_" + i, container.getContNumber());
+            }
+        }
+
+        if (treatmentInfos != null) {
+            if (treatmentInfos.getItemFlow() != null && treatmentInfos.getItemFlow().getSender() != null) {
+                String controllerName = treatmentInfos.getItemFlow().getSender().getFirstName() + " " + treatmentInfos.getItemFlow().getSender().getLastName();
+                values.put("NOM_CONTROLEUR", controllerName);
+            }
+            if (treatmentInfos.isCcsMinsanteDrugProducts()) {
+                values.put("PDT_MEDICAMENTS", treatmentInfos.isDrugs()? FORM_FIELD_CHECKBOX_CHECKED_VALUE : FORM_FIELD_CHECKBOX_NOCHECKED_VALUE);
+                values.put("PDT_DISPO_MEDICAUX", treatmentInfos.isMedicalDevices()? FORM_FIELD_CHECKBOX_CHECKED_VALUE : FORM_FIELD_CHECKBOX_NOCHECKED_VALUE);
+                values.put("PDT_DERMOCO", treatmentInfos.isTropicalCorticosteroids()? FORM_FIELD_CHECKBOX_CHECKED_VALUE : FORM_FIELD_CHECKBOX_NOCHECKED_VALUE);
+                values.put("PDT_PRODUIT_LABO", treatmentInfos.isLaboratoryProducts()? FORM_FIELD_CHECKBOX_CHECKED_VALUE : FORM_FIELD_CHECKBOX_NOCHECKED_VALUE);
+                values.put("PDT_EMB_PRODUITS_FINIS", treatmentInfos.isPackagingSfProducts()? FORM_FIELD_CHECKBOX_CHECKED_VALUE : FORM_FIELD_CHECKBOX_NOCHECKED_VALUE);
+                
+                values.put("DOC_CONFORME_A", treatmentInfos.isConformeA()? CONFORME_O : CONFRME_N);
+                values.put("DOC_OBSERVATIONS_A", treatmentInfos.getConformityObservationA());
+                
+                values.put("DOC_CONFORME_AMM", treatmentInfos.isConformeAMM()? CONFORME_O : CONFRME_N);
+                values.put("DOC_OBSERVATIONS_AMM", treatmentInfos.getConformityObservationAMM());
+                
+                values.put("DOC_CONFORME_AI", treatmentInfos.isConformeAI()? CONFORME_O : CONFRME_N);
+                values.put("DOC_OBSERVATIONS_AI", treatmentInfos.getConformityObservationAI());
+                
+                values.put("DOC_CONFORME_VT", treatmentInfos.isConformeVT()? CONFORME_O : CONFRME_N);
+                values.put("DOC_OBSERVATIONS_VT", treatmentInfos.getConformityObservationVT());
+                
+                values.put("DOC_CONFORME_AOI", treatmentInfos.isConformeAOI()? CONFORME_O : CONFRME_N);
+                values.put("DOC_OBSERVATIONS_AOI", treatmentInfos.getConformityObservationAOI());
+                
+                values.put("DOC_CONFORME_CC", treatmentInfos.isConformeCC()? CONFORME_O : CONFRME_N);
+                values.put("DOC_OBSERVATIONS_CC", treatmentInfos.getConformityObservationCC());
+                
+                values.put("DOC_CONFORME_CBPSD", treatmentInfos.isConformeCBPSD()? CONFORME_O : CONFRME_N);
+                values.put("DOC_OBSERVATIONS_CBPSD", treatmentInfos.getConformityObservationCBPSD());
+                
+            } else {
+                values.put("PDT_DENREES_AL", treatmentInfos.isProductFoodIHC() ? FORM_FIELD_CHECKBOX_CHECKED_VALUE : FORM_FIELD_CHECKBOX_NOCHECKED_VALUE);
+                values.put("PDT_FRIPERIE", treatmentInfos.isThriftShop() ? FORM_FIELD_CHECKBOX_CHECKED_VALUE : FORM_FIELD_CHECKBOX_NOCHECKED_VALUE);
+                values.put("PDT_BROCANTE", treatmentInfos.isFleaMarket() ? FORM_FIELD_CHECKBOX_CHECKED_VALUE : FORM_FIELD_CHECKBOX_NOCHECKED_VALUE);
+                values.put("PDT_VEHICULE", treatmentInfos.isVehicle() ? FORM_FIELD_CHECKBOX_CHECKED_VALUE : FORM_FIELD_CHECKBOX_NOCHECKED_VALUE);
+                values.put("PDT_HYG_ASS", treatmentInfos.isHygienSanitationProducts() ? FORM_FIELD_CHECKBOX_CHECKED_VALUE : FORM_FIELD_CHECKBOX_NOCHECKED_VALUE);
+                
+                values.put("DOC_CONFORME_A", treatmentInfos.isConformeA()? CONFORME_O : CONFRME_N);
+                values.put("DOC_OBSERVATIONS_A", treatmentInfos.getConformityObservationA());
+                
+                values.put("DOC_CONFORME_AMM_AMC", treatmentInfos.isConformeAmmAmc()? CONFORME_O : CONFRME_N);
+                values.put("DOC_OBSERVATIONS_AMM_AMC", treatmentInfos.getConformityObservationAmmAmc());
+                
+                values.put("DOC_CONFORME_AI", treatmentInfos.isConformeAI()? CONFORME_O : CONFRME_N);
+                values.put("DOC_OBSERVATIONS_AI", treatmentInfos.getConformityObservationAI());
+                
+                values.put("DOC_CONFORME_ATQ", treatmentInfos.isConformeATQ()? CONFORME_O : CONFRME_N);
+                values.put("DOC_OBSERVATIONS_ATQ", treatmentInfos.getConformityObservationATQ());
+                
+                values.put("DOC_CONFORME_CF_CD", treatmentInfos.isConformeAOI()? CONFORME_O : CONFRME_N);
+                values.put("DOC_OBSERVATIONS_CFCD", treatmentInfos.getConformityObservationAOI());
+                
+                values.put("DOC_CONFORME_CC", treatmentInfos.isConformeCC()? CONFORME_O : CONFRME_N);
+                values.put("DOC_OBSERVATIONS_CC", treatmentInfos.getConformityObservationCC());
+                
+                values.put("DOC_CONFORME_CAPC_M", treatmentInfos.isConformeCAPCM()? CONFORME_O : CONFRME_N);
+                values.put("DOC_OBSERVATIONS_CAPCM", treatmentInfos.getConformityObservationCAPCM());
+                
+                values.put("DOC_CONFORME_CAPC_M", treatmentInfos.isConformeCAPCM()? CONFORME_O : CONFRME_N);
+                values.put("DOC_OBSERVATIONS_CAPCM", treatmentInfos.getConformityObservationCAPCM());
+                
+                values.put("DOC_CONFORME_CE", treatmentInfos.isConformeCAPCM()? CONFORME_O : CONFRME_N);
+                values.put("DOC_OBSERVATIONS_CE", treatmentInfos.getConformityObservationCE());
+            }
         }
 
         Iterator<PDField> fieldsIter = acroForm.getFieldIterator();
@@ -186,17 +298,6 @@ public class CcsMinsanteFormExporter extends AbstractReportInvoker {
         for (int i = 0; i < nbFields; i++) {
             values.put(String.format("%s_%s", fieldPrefix, i + 1), Objects.toString(currentValue.charAt(i)));
         }
-
-//        int length = currentValue.length();
-//        int remaining = nbFields - length;
-//
-//        for (int i = 0; i < remaining; i++) {
-//            values.put(String.format("%s_%s", fieldPrefix, i + 1), "0");
-//        }
-//
-//        for (int i = remaining; i < nbFields; i++) {
-//            values.put(String.format("%s_%s", fieldPrefix, i + 1), Objects.toString(currentValue.charAt(i - remaining)));
-//        }
     }
 
     /**

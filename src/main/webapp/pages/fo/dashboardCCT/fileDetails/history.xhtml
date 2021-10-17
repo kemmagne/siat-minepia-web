@@ -152,6 +152,9 @@
                             <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTI}">
                                 <ui:include src="../specificDecisions/treatmentInfos/treatmentInfosHistory.xhtml" />
                             </h:panelGroup>
+                            <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.decisionDetailsTICCSMinsante}">
+                                <ui:include src="../specificDecisions/treatmentInfosCCSMinsante/treatmentInfosHistory.xhtml" />
+                            </h:panelGroup>
 
                             <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.approvedDecision}">
                                 <ui:include src="../specificDecisions/dcc/dccHistory.xhtml" />
