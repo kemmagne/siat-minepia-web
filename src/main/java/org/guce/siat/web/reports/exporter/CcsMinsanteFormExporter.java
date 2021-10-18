@@ -160,6 +160,11 @@ public class CcsMinsanteFormExporter extends AbstractReportInvoker {
             values.put("NOM_SIGNATAIRE_1", file.getSignatory().getLastName());
             values.put("NOM_SIGNATAIRE_2", file.getSignatory().getFirstName() + " " + file.getSignatory().getLastName());
         }
+        if(file.getSignatureDate() != null){
+            values.put("DATE_SIGNATURE_CCS", DateUtils.formatSimpleDate(DateUtils.FRENCH_DATE, file.getSignatureDate()));
+        }else{
+            values.put("DATE_SIGNATURE_CCS", DateUtils.formatSimpleDate(DateUtils.FRENCH_DATE, java.util.Calendar.getInstance().getTime()));
+        }
         values.put("NUMERO_BL", blNumber);
         values.put("NUMERO_DI", diNumber);
         values.put("NOM_ADRESSE_EXPEDITEUR", senderAddress);
@@ -254,8 +259,8 @@ public class CcsMinsanteFormExporter extends AbstractReportInvoker {
                 values.put("DOC_CONFORME_ATQ", treatmentInfos.isConformeATQ()? CONFORME_O : CONFRME_N);
                 values.put("DOC_OBSERVATIONS_ATQ", treatmentInfos.getConformityObservationATQ());
                 
-                values.put("DOC_CONFORME_CF_CD", treatmentInfos.isConformeAOI()? CONFORME_O : CONFRME_N);
-                values.put("DOC_OBSERVATIONS_CFCD", treatmentInfos.getConformityObservationAOI());
+                values.put("DOC_CONFORME_CF_CD", treatmentInfos.isConformeCFCD()? CONFORME_O : CONFRME_N);
+                values.put("DOC_OBSERVATIONS_CFCD", treatmentInfos.getConformityObservationCFCD());
                 
                 values.put("DOC_CONFORME_CC", treatmentInfos.isConformeCC()? CONFORME_O : CONFRME_N);
                 values.put("DOC_OBSERVATIONS_CC", treatmentInfos.getConformityObservationCC());
@@ -263,10 +268,7 @@ public class CcsMinsanteFormExporter extends AbstractReportInvoker {
                 values.put("DOC_CONFORME_CAPC_M", treatmentInfos.isConformeCAPCM()? CONFORME_O : CONFRME_N);
                 values.put("DOC_OBSERVATIONS_CAPCM", treatmentInfos.getConformityObservationCAPCM());
                 
-                values.put("DOC_CONFORME_CAPC_M", treatmentInfos.isConformeCAPCM()? CONFORME_O : CONFRME_N);
-                values.put("DOC_OBSERVATIONS_CAPCM", treatmentInfos.getConformityObservationCAPCM());
-                
-                values.put("DOC_CONFORME_CE", treatmentInfos.isConformeCAPCM()? CONFORME_O : CONFRME_N);
+                values.put("DOC_CONFORME_CE", treatmentInfos.isConformeCE()? CONFORME_O : CONFRME_N);
                 values.put("DOC_OBSERVATIONS_CE", treatmentInfos.getConformityObservationCE());
             }
         }

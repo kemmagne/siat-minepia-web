@@ -1021,6 +1021,15 @@ public class FileItemCctDetailController extends DefaultDetailController {
                                 }
                             }
                             flows = deleteFlowFromFlowList(flows, flowsToRemove.toArray(new String[0]));
+                        }else if (isCcsMinsantefFileType()) {
+                            flows = flowService.findFlowsByFromStepAndFileType2(referenceFileItemCheck.getStep(), referenceFileItemCheck.getFile().getFileType());
+                            List<String> flowsToRemove = new ArrayList<>();
+                            for (Flow flx : flows) {
+                                if (flx.getIsCota()) {
+                                    flowsToRemove.add(flx.getCode());
+                                }
+                            }
+                            flows = deleteFlowFromFlowList(flows, flowsToRemove.toArray(new String[0]));
                         } else {
                             flows = flowService.findFlowsByFromStepAndFileType(referenceFileItemCheck.getStep(), referenceFileItemCheck.getFile().getFileType());
                         }
@@ -1078,12 +1087,12 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
                         boolean payed = false;
                         for (ItemFlowDto hist : itemFlowHistoryDtoList) {
-                            if (hist.getItemFlow() != null && hist.getItemFlow().getFlow() != null && FlowCode.FL_CT_93.name().equals(hist.getItemFlow().getFlow().getCode())) {
+                            if (hist.getItemFlow() != null && hist.getItemFlow().getFlow() != null && Arrays.asList(FlowCode.FL_CT_93.name(), FlowCode.FL_CT_160.name()).contains(hist.getItemFlow().getFlow().getCode())) {
                                 payed = true;
                                 Iterator<Flow> it = flows.iterator();
                                 while (it.hasNext()) {
                                     Flow flx = it.next();
-                                    if (Arrays.asList(FlowCode.FL_CT_92.name()).contains(flx.getCode())) {
+                                    if (Arrays.asList(FlowCode.FL_CT_92.name(), FlowCode.FL_CT_158.name()).contains(flx.getCode())) {
                                         it.remove();
                                     }
                                 }
