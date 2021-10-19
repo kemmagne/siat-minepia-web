@@ -1806,6 +1806,7 @@ public class FileItemApDetailController implements Serializable {
 
         paymentData.setMontantHt(invoiceTotalAmount);
         paymentData.setMontantTva(totalTva);
+        paymentData.setMontantEncaissement(invoiceTotalTtcAmount.doubleValue());
         paymentData.setAutreMontant(invoiceOtherAmount);
     }
 
