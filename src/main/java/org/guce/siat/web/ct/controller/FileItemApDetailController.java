@@ -169,7 +169,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
  */
 @ManagedBean(name = "fileItemApDetailController")
 @SessionScoped
-public class FileItemApDetailController implements Serializable {
+public class FileItemApDetailController extends DefaultDetailController implements Serializable {
 
     /**
      * The Constant serialVersionUID.
@@ -1035,7 +1035,7 @@ public class FileItemApDetailController implements Serializable {
 
                 if (equalsSteps) {
                     //Pour la Retreive Seulement une seule decision
-                    if (FileTypeCode.BSBE_MINFOF.equals(currentFile.getFileType().getCode())) {
+                    if (Arrays.asList(FileTypeCode.BSBE_MINFOF, FileTypeCode.VT_MINEPIA).contains(currentFile.getFileType().getCode()) ) {
                         flows = flowService.findFlowsByFromStepAndFileType2(referenceFileItem.getStep(), referenceFileItem
                                 .getFile().getFileType());
                         if (!CollectionUtils.isEmpty(flows)) {
@@ -2453,8 +2453,8 @@ public class FileItemApDetailController implements Serializable {
 
                             final List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<>();
 
-                            final List<FileTypeFlowReport> fileTypeFlowReportsList = flowToSend.getFileTypeFlowReportsList();
-
+                            //final List<FileTypeFlowReport> fileTypeFlowReportsList = flowToSend.getFileTypeFlowReportsList();
+                            List<FileTypeFlowReport> fileTypeFlowReportsList = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(flowToSend, currentFile.getFileType());
                             if (fileTypeFlowReportsList != null) {
 
                                 for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
@@ -5611,6 +5611,26 @@ public class FileItemApDetailController implements Serializable {
             JsfUtil.addErrorMessage(clientId, msg);
         }
         LOG.warn(msg);
+    }
+
+    @Override
+    public String getDetailIndexPageUrl() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean canDecide() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean canConfirm() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean canRollback() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
