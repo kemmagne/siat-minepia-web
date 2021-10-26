@@ -344,7 +344,7 @@ public class FileItemApDetailController extends DefaultDetailController implemen
 
     @ManagedProperty(value = "#{attachmentService}")
     private AttachmentService attachmentService;
-    
+
     /**
      * The message not already send service.
      */
@@ -1035,7 +1035,7 @@ public class FileItemApDetailController extends DefaultDetailController implemen
 
                 if (equalsSteps) {
                     //Pour la Retreive Seulement une seule decision
-                    if (Arrays.asList(FileTypeCode.BSBE_MINFOF, FileTypeCode.VT_MINEPIA).contains(currentFile.getFileType().getCode()) ) {
+                    if (Arrays.asList(FileTypeCode.BSBE_MINFOF, FileTypeCode.VT_MINEPIA).contains(currentFile.getFileType().getCode())) {
                         flows = flowService.findFlowsByFromStepAndFileType2(referenceFileItem.getStep(), referenceFileItem
                                 .getFile().getFileType());
                         if (!CollectionUtils.isEmpty(flows)) {
@@ -1842,7 +1842,7 @@ public class FileItemApDetailController extends DefaultDetailController implemen
                 && FileTypeCode.CAT_MINADER.equals(lastDecisions.getFileItem().getFile().getFileType().getCode())) {
             lastDecisionTR = essayTestApService.findByItemFlow(lastDecisions);
             lastDecisionER = essayTestApService.findByItemFlow(lastDecisions);
-        } else if (FlowCode.FL_AP_166.name().equals(lastDecisions.getFlow().getCode())) {
+        } else if (Arrays.asList(FlowCode.FL_AP_VT1_03.name(), FlowCode.FL_AP_166.name()).contains(lastDecisions.getFlow().getCode())) {
             specificDecisionsHistory.setLastPaymentData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
             //    specificDecisionsHistory.setDecisionDetailsPayData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
         }
@@ -2564,8 +2564,8 @@ public class FileItemApDetailController extends DefaultDetailController implemen
                         // prepare document to send
                         byte[] xmlBytes;
                         ByteArrayOutputStream output = SendDocumentUtils.prepareApDocument(documentSerializable, service, documentType);
-                        xmlBytes = output.toByteArray();                        
-                        
+                        xmlBytes = output.toByteArray();
+
                         if (CollectionUtils.isNotEmpty(flowToSend.getCopyRecipientsList())) {
                             final List<CopyRecipient> copyRecipients = flowToSend.getCopyRecipientsList();
                             for (final CopyRecipient copyRecipient : copyRecipients) {
@@ -2634,7 +2634,7 @@ public class FileItemApDetailController extends DefaultDetailController implemen
             messageToSendService.saveOrUpadateNotSendedMessageAsMessageToResend(data);
             showErrorFacesMessage(ControllerConstants.Bundle.Messages.SEND_ERROR, null);
             return;
-        }else{
+        } else {
             messageToSendService.deleteNotSendedMessageIfExistsAsMessageToResend(data);
         }
         if (LOG.isDebugEnabled()) {
@@ -3360,21 +3360,12 @@ public class FileItemApDetailController extends DefaultDetailController implemen
      */
     private void checkGenerateReportAllowed() {
         generateReportAllowed = false;
-        final Flow reportingFlow = flowService.findByToStep(selectedFileItem.getStep());
+        final Flow reportingFlow = flowService.findByToStep(selectedFileItem.getStep(), currentFile.getFileType());
         if (reportingFlow == null) {
             return;
         }
-        final List<FileTypeFlowReport> fileTypeFlowReportsList = reportingFlow.getFileTypeFlowReportsList();
-
-        if (StepCode.ST_AP_44.name().equals(selectedFileItem.getStep().getStepCode().name())
-                && CollectionUtils.isNotEmpty(fileTypeFlowReportsList)) {
-
-            for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
-                if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType())) {
-                    generateReportAllowed = true;
-                }
-            }
-        }
+        final List<FileTypeFlowReport> fileTypeFlowReportsList = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getFileType());
+        generateReportAllowed = StepCode.ST_AP_44.equals(selectedFileItem.getStep().getStepCode()) && CollectionUtils.isNotEmpty(fileTypeFlowReportsList);
         if (aiMinmidtFileType) {
             generateReportAllowed = false;
         }
@@ -3386,17 +3377,20 @@ public class FileItemApDetailController extends DefaultDetailController implemen
      * @return the streamed content
      */
     public StreamedContent downloadReport() {
-        final List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<>();
+        List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<>();
 
-        final Flow reportingFlow = flowService.findByToStep(selectedFileItem.getStep());
-        final List<FileTypeFlowReport> fileTypeFlowReportsList = reportingFlow.getFileTypeFlowReportsList();
-
-        if (fileTypeFlowReportsList != null && !aiMinmidtFileType) {
-            for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
-                if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType())) {
-                    fileTypeFlowReports.add(fileTypeFlowReport);
-                }
-            }
+        final Flow reportingFlow = flowService.findByToStep(selectedFileItem.getStep(), currentFile.getFileType());
+//        final List<FileTypeFlowReport> fileTypeFlowReportsList = reportingFlow.getFileTypeFlowReportsList();
+//
+//        if (fileTypeFlowReportsList != null && !aiMinmidtFileType) {
+//            for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
+//                if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType())) {
+//                    fileTypeFlowReports.add(fileTypeFlowReport);
+//                }
+//            }
+//        }
+        if (!aiMinmidtFileType) {
+            fileTypeFlowReports = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getFileType());
         }
         for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
 

@@ -99,7 +99,11 @@ public class VtMinepiaExporter extends AbstractReportInvoker {
 				vtMinepiaVo.setAddress(file.getClient().getFullAddress());
 				vtMinepiaVo.setProfession(file.getClient().getProfession());
 			}
-
+                        
+                        if(file.getSignatory() != null){
+                            vtMinepiaVo.setSignatory(String.format("%s %s", file.getSignatory().getFirstLogin(), file.getSignatory().getLastName()));
+                        }
+                        vtMinepiaVo.setCode(String.format("%s/%s", file.getNumeroDemande(), file.getNumeroDossier()));
 			final List<FileItem> fileItemList = file.getFileItemsList();
 
 			final List<VtMinepiaFileItemVo> fileItemVos = new ArrayList<VtMinepiaFileItemVo>();
