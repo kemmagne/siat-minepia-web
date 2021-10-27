@@ -32,19 +32,22 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
     private final File file;
     private final TreatmentResult treatmentResult;
     private final String referenceNumber;
+    private final FileTypeCode exporterFileType;
 
-    public CtCctTreatmentExporter(File file, String jasperFileName, TreatmentResult treatmentResult) {
+    public CtCctTreatmentExporter(File file, String jasperFileName, TreatmentResult treatmentResult, FileTypeCode fileType) {
         super(jasperFileName, jasperFileName);
         this.file = file;
         this.treatmentResult = treatmentResult;
         this.referenceNumber = null;
+        this.exporterFileType = fileType;
     }
 
-    public CtCctTreatmentExporter(File file, String jasperFileName, TreatmentResult treatmentResult, String referenceNumber) {
+    public CtCctTreatmentExporter(File file, String jasperFileName, TreatmentResult treatmentResult, String referenceNumber, FileTypeCode fileType) {
         super(jasperFileName, jasperFileName);
         this.file = file;
         this.treatmentResult = treatmentResult;
         this.referenceNumber = referenceNumber;
+        this.exporterFileType = fileType;
     }
 
     @Override
@@ -158,8 +161,9 @@ public class CtCctTreatmentExporter extends AbstractReportInvoker {
                 calendar.setTime(signatureDate);
             }
             int year = calendar.get(Calendar.YEAR);
-            String fileType = FileTypeCode.CCT_CT_E_ATP.equals(file.getFileType().getCode()) ? "ATP" : "FSTP";
-            String s = String.format("%s/%s/%s/%s/MINADER/SG/DRCQ", file.getNumeroDossier(), file.getNumeroDemande(), year, fileType);
+            String fileType = FileTypeCode.CCT_CT_E_FSTP.equals(exporterFileType) ? "FSTP" : "ATP";
+            String numeroDossier = FileTypeCode.CCT_CT_E_FSTP.equals(exporterFileType) ? file.getNumeroDossier() : file.getNumeroDossier().replaceAll("DT", "AT");
+            String s = String.format("%s/%s/%s/%s/MINADER/SG/DRCQ", numeroDossier, file.getNumeroDemande(), year, fileType);
             treatmentVo.setDecisionNumber(s);
         }
         treatmentVo.setGeneralObservations(treatmentResult.getGeneralObservations());
