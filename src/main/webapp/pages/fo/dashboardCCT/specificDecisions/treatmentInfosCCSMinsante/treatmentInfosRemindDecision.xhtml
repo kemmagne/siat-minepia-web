@@ -1,140 +1,141 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
 
-   <h5 style="font-weight: bold;">#{bundle['CCS_Treatment_Infos_Products_Informations']}</h5>
+   <h5 style="font-weight: bold;" class="title">#{bundle['CCS_Treatment_Infos_Products_Informations']}</h5>
     <br />
     <h:panelGrid columns="1" cellspacing="5">
-        <p:selectBooleanCheckbox value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.productFoodIHC}" disabled="true" itemLabel="#{bundle['CCS_Treatment_Infos_FoodIHC']}">
+        <p:selectBooleanCheckbox style="font-size: 12px; font-weight: bold;" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.productFoodIHC}" disabled="true" itemLabel="#{bundle['CCS_Treatment_Infos_FoodIHC']}">
         </p:selectBooleanCheckbox>
-        <p:selectBooleanCheckbox value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.hygienSanitationProducts}" disabled="true" itemLabel="#{bundle['CCS_Treatment_Infos_HygienSanitationProducts']}">
+        <p:selectBooleanCheckbox style="font-size: 12px; font-weight: bold;" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.hygienSanitationProducts}" disabled="true" itemLabel="#{bundle['CCS_Treatment_Infos_HygienSanitationProducts']}">
         </p:selectBooleanCheckbox>
-        <p:selectBooleanCheckbox value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.thriftShop}" disabled="true" itemLabel="#{bundle['CCS_Treatment_Infos_ThriftShop']}">
+        <p:selectBooleanCheckbox style="font-size: 12px; font-weight: bold;" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.thriftShop}" disabled="true" itemLabel="#{bundle['CCS_Treatment_Infos_ThriftShop']}">
         </p:selectBooleanCheckbox>
-        <p:selectBooleanCheckbox value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.fleaMarket}" disabled="true" itemLabel="#{bundle['CCS_Treatment_Infos_FleaMarket']}">
+        <p:selectBooleanCheckbox style="font-size: 12px; font-weight: bold;" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.fleaMarket}" disabled="true" itemLabel="#{bundle['CCS_Treatment_Infos_FleaMarket']}">
         </p:selectBooleanCheckbox>
-        <p:selectBooleanCheckbox value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.vehicle}" disabled="true" itemLabel="#{bundle['CCS_Treatment_Infos_Vehicle']}">
+        <p:selectBooleanCheckbox style="font-size: 12px; font-weight: bold;" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.vehicle}" disabled="true" itemLabel="#{bundle['CCS_Treatment_Infos_Vehicle']}">
         </p:selectBooleanCheckbox>
     </h:panelGrid>
+    <p style="border-bottom: 1px solid #e6e3de;"></p>
     <br />
     <h:panelGrid columns="1" cellspacing="5">
-        <p:selectBooleanCheckbox value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.drugs}" disabled="true" itemLabel="#{bundle['CCS_Treatment_Infos_Drugs']}">
+        <p:selectBooleanCheckbox style="font-size: 12px; font-weight: bold;" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.drugs}" disabled="true" itemLabel="#{bundle['CCS_Treatment_Infos_Drugs']}">
         </p:selectBooleanCheckbox>
-        <p:selectBooleanCheckbox value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.medicalDevices}" disabled="true" itemLabel="#{bundle['CCS_Treatment_Infos_MedicalDevices']}">
+        <p:selectBooleanCheckbox style="font-size: 12px; font-weight: bold;" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.medicalDevices}" disabled="true" itemLabel="#{bundle['CCS_Treatment_Infos_MedicalDevices']}">
         </p:selectBooleanCheckbox>
-        <p:selectBooleanCheckbox value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.tropicalCorticosteroids}" disabled="true" itemLabel="#{bundle['CCS_Treatment_Infos_TropicalCorticosteroids']}">
+        <p:selectBooleanCheckbox style="font-size: 12px; font-weight: bold;" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.tropicalCorticosteroids}" disabled="true" itemLabel="#{bundle['CCS_Treatment_Infos_TropicalCorticosteroids']}">
         </p:selectBooleanCheckbox>
-        <p:selectBooleanCheckbox value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.laboratoryProducts}" disabled="true" itemLabel="#{bundle['CCS_Treatment_Infos_LaboratoryProducts']}">
+        <p:selectBooleanCheckbox style="font-size: 12px; font-weight: bold;" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.laboratoryProducts}" disabled="true" itemLabel="#{bundle['CCS_Treatment_Infos_LaboratoryProducts']}">
         </p:selectBooleanCheckbox>
-        <p:selectBooleanCheckbox value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.packagingSfProducts}" disabled="true" itemLabel="#{bundle['CCS_Treatment_Infos_PackagingSfProducts']}">
+        <p:selectBooleanCheckbox style="font-size: 12px; font-weight: bold;" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.packagingSfProducts}" disabled="true" itemLabel="#{bundle['CCS_Treatment_Infos_PackagingSfProducts']}">
         </p:selectBooleanCheckbox>
     </h:panelGrid>
+    <p style="border-bottom: 1px solid #e6e3de;"></p>
     <br />
-    <h5 style="font-weight: bold;">#{bundle['CCS_Treatment_Infos_Presented_controled_Documents']}</h5>
+    <h5 style="font-weight: bold;" class="title">#{bundle['CCS_Treatment_Infos_Presented_controled_Documents']}</h5>
     <br />
     <p:outputPanel >
         <p:outputPanel rendered="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.ccsMinsanteFoodProducts or fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.ccsMinsanteDrugProducts}">
             <h:panelGrid  columns="3" cellspacing="5" >
-                <h:outputText value="#{bundle['CCS_Treatment_Infos_Documents_codes']}" />
-                <h:outputText value="#{bundle['CCS_Treatment_Infos_Documents_conformes_O_N']}" />
-                <h:outputText value="#{bundle['CCS_Treatment_Infos_Documents_conformes_Observations']}" />
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="#{bundle['CCS_Treatment_Infos_Documents_codes']}" />
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="#{bundle['CCS_Treatment_Infos_Documents_conformes_O_N']}" />
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="#{bundle['CCS_Treatment_Infos_Documents_conformes_Observations']}" />
             </h:panelGrid>
+            <p style="border-bottom: 1px solid #e6e3de;"></p>
             <h:panelGrid  columns="3" cellspacing="5" rendered="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.ccsMinsanteFoodProducts or fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.ccsMinsanteDrugProducts}">
-                <h:outputText value="A" />
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="A" />
 
                 <p:selectBooleanCheckbox value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformeA}" disabled="true"/>
 
-                <h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformityObservationA}" />
+                <h:outputText style="font-size: 12px;" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformityObservationA}" />
             </h:panelGrid>
             <h:panelGrid  columns="3" cellspacing="5" rendered="#{fileItemCctDetailController.ccsMinsanteFoodProducts}">
-                <h:outputText value="AMM/AMC" />
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="AMM/AMC" />
 
                 <p:selectBooleanCheckbox value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformeAmmAmc}" disabled="true"/>
 
-                <h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformityObservationAmmAmc}" />
+                <h:outputText style="font-size: 12px;" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformityObservationAmmAmc}" />
                     
             </h:panelGrid>
             <h:panelGrid  columns="3" cellspacing="5" rendered="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.ccsMinsanteDrugProducts}">
-                <h:outputText value="AMM" />
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="AMM" />
 
                 <p:selectBooleanCheckbox value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformeAMM}" disabled="true"/>
 
-                <h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformityObservationAMM}" />
+                <h:outputText style="font-size: 12px;" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformityObservationAMM}" />
                    
             </h:panelGrid>
-            <h:panelGrid  columns="3" cellspacing="5" rendered="#{fileItemCctDetailController.ccsMinsanteFoodProducts or fileItemCctDetailController.ccsMinsanteDrugProducts}">
-                <h:outputText value="AI" />
+            <h:panelGrid  columns="3" cellspacing="5" rendered="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.ccsMinsanteFoodProducts or fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.ccsMinsanteDrugProducts}">
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="AI" />
 
                 <p:selectBooleanCheckbox value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformeAI}" disabled="true"/>
 
-                <h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformityObservationAI}" />
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformityObservationAI}" />
                     
             </h:panelGrid>
             <h:panelGrid  columns="3" cellspacing="5" rendered="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.ccsMinsanteFoodProducts}">
-                <h:outputText value="ATQ" />
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="ATQ" />
 
                 <p:selectBooleanCheckbox value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformeATQ}" disabled="true"/>
 
-                <h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformityObservationATQ}" />
+                <h:outputText style="font-size: 12px;" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformityObservationATQ}" />
                    
             </h:panelGrid>
             <h:panelGrid  columns="3" cellspacing="5" rendered="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.ccsMinsanteDrugProducts}">
-                <h:outputText value="VT" />
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="VT" />
 
                 <p:selectBooleanCheckbox value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformeVT}" disabled="true"/>
 
-                <h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformityObservationVT}" />
+                <h:outputText style="font-size: 12px;" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformityObservationVT}" />
                     
             </h:panelGrid>
             <h:panelGrid  columns="3" cellspacing="5" rendered="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.ccsMinsanteDrugProducts}">
-                <h:outputText value="AOI" />
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="AOI" />
 
                 <p:selectBooleanCheckbox value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformeAOI}" disabled="true"/>
 
-                <h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformityObservationAOI}" />
+                <h:outputText style="font-size: 12px;" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformityObservationAOI}" />
                     
             </h:panelGrid>
-            <h:panelGrid  columns="3" cellspacing="5" rendered="#{fileItemCctDetailController.ccsMinsanteFoodProducts or fileItemCctDetailController.ccsMinsanteDrugProducts}">
-                <h:outputText value="CC" />
+            <h:panelGrid  columns="3" cellspacing="5" rendered="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.ccsMinsanteFoodProducts or fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.ccsMinsanteDrugProducts}">
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="CC" />
 
                 <p:selectBooleanCheckbox value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformeCC}" disabled="true"/>
 
-                <h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformityObservationCC}" />
+                <h:outputText style="font-size: 12px;" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformityObservationCC}" />
                    
             </h:panelGrid>
             <h:panelGrid  columns="3" cellspacing="5" rendered="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.ccsMinsanteDrugProducts}">
-                <h:outputText value="CBPSD" />
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="CBPSD" />
 
                 <p:selectBooleanCheckbox value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformeCBPSD}" disabled="true"/>
 
-                <h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformityObservationCBPSD}" />
+                <h:outputText style="font-size: 12px;" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformityObservationCBPSD}" />
                  
             </h:panelGrid>
             <h:panelGrid  columns="3" cellspacing="5" rendered="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.ccsMinsanteFoodProducts}">
-                <h:outputText value="CF/CD" />
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="CF/CD" />
 
                 <p:selectBooleanCheckbox value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformeCFCD}" disabled="true"/>
 
-                <h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformityObservationCFCD}" />
+                <h:outputText style="font-size: 12px;" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformityObservationCFCD}" />
                    
             </h:panelGrid>
             <h:panelGrid  columns="3" cellspacing="5" rendered="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.ccsMinsanteFoodProducts}">
-                <h:outputText value="CAPC/M" />
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="CAPC/M" />
 
                 <p:selectBooleanCheckbox value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformeCAPCM}" disabled="true"/>
 
-                <h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformityObservationCAPCM}" />
+                <h:outputText style="font-size: 12px;" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformityObservationCAPCM}" />
                     
             </h:panelGrid>
             <h:panelGrid  columns="3" cellspacing="5" rendered="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.ccsMinsanteFoodProducts}">
-                <h:outputText value="CE" />
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="CE" />
 
                 <p:selectBooleanCheckbox value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformeCE}" disabled="true"/>
 
-                <h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformityObservationCE}" />
+                <h:outputText style="font-size: 12px;" value="#{fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante.conformityObservationCE}" />
                     
             </h:panelGrid>
         </p:outputPanel>
     </p:outputPanel>
 </ui:composition>
-
-

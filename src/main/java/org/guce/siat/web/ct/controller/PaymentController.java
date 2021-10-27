@@ -330,6 +330,7 @@ public class PaymentController extends AbstractController<FileItem> {
     public List<FileDto> getFileDtoList() {
 
         final List<File> paymentFileList = getFilesList();
+        Long amount;
         fileDtoList = new ArrayList<>();
         for (final File paymentFile : paymentFileList) {
             final FileDto fileDto = new FileDto();
@@ -344,7 +345,8 @@ public class PaymentController extends AbstractController<FileItem> {
             }
 
             if (paymentData != null) {
-                fileDto.setAmount(paymentData.getMontantHt());
+                amount = (paymentData.getMontantEncaissement() != null && paymentData.getMontantEncaissement() > 0) ? paymentData.getMontantEncaissement().longValue() : paymentData.getMontantHt();
+                fileDto.setAmount(amount);
                 fileDto.setKind(paymentData.getNatureFrais());
                 fileDtoList.add(fileDto);
             }

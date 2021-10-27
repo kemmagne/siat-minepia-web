@@ -13,7 +13,7 @@
     <!-- .STANDALONE -->
     <!-- .TEST -->
     <!-- .HT -->
-    <version>2.6.18-ccs-beta.4</version>
+    <version>2.6.18-ccs-beta.5</version>
     <packaging>war</packaging>
 
     <name>siat-ct-web</name>

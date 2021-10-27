@@ -171,7 +171,6 @@ public class CcsMinsanteFormExporter extends AbstractReportInvoker {
         values.put("NOMBRE_CONTENEUR_20", container20Number);
         values.put("NOMBRE_CONTENEUR_40", container40Number);
         values.put("PROVENANCE_MARCHANDISE", originCountry);
-        values.put("DATE_SIGNATURE_CCS", signatureDate);
         values.put("NAVIRE_TRANSPORTEUR", transportWay);
         FileItemFieldValue fileItemFieldValue;
         modifIndex = 1;

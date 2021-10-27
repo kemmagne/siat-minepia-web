@@ -1865,13 +1865,14 @@ public class FileItemCctDetailController extends DefaultDetailController {
         Long totalTva = 0L;
         for (final PaymentItemFlow pi : paymentData.getPaymentItemFlowList()) {
             invoiceTotalAmount += pi.getMontantHt() != null ? pi.getMontantHt() : 0;
-            invoiceTotalAmount += invoiceOtherAmount != null ? invoiceOtherAmount : 0;
             invoiceTotalTtcAmount += invoiceTotalAmount;
             invoiceTotalTtcAmount += pi.getMontantTva() != null ? pi.getMontantTva() : 0;
             totalTva += pi.getMontantTva() != null ? pi.getMontantTva() : 0;
         }
+        invoiceTotalAmount += invoiceOtherAmount != null ? invoiceOtherAmount : 0;
         paymentData.setMontantHt(invoiceTotalAmount);
         paymentData.setMontantTva(totalTva);
+        paymentData.setMontantEncaissement((double)invoiceTotalAmount);
         paymentData.setAutreMontant(invoiceOtherAmount);
     }
 
@@ -1880,7 +1881,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
      */
     public void ccsProductsTypeChangedListener() {
         ccsMinsanteFoodProducts = treatmentInfosCCSMinsante.isProductFoodIHC() || treatmentInfosCCSMinsante.isHygienSanitationProducts() || treatmentInfosCCSMinsante.isFleaMarket() || treatmentInfosCCSMinsante.isThriftShop() || treatmentInfosCCSMinsante.isVehicle();
-        ccsMinsanteDrugProducts = !ccsMinsanteFoodProducts;
+        ccsMinsanteDrugProducts = treatmentInfosCCSMinsante.isDrugs() || treatmentInfosCCSMinsante.isMedicalDevices() || treatmentInfosCCSMinsante.isTropicalCorticosteroids() || treatmentInfosCCSMinsante.isLaboratoryProducts() || treatmentInfosCCSMinsante.isPackagingSfProducts();
     }
 
     public synchronized void addInvoiceLine() {
