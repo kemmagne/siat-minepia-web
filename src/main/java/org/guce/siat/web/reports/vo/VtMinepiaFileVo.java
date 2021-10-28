@@ -31,6 +31,9 @@ public class VtMinepiaFileVo extends AbstractFileVo<VtMinepiaFileItemVo>
 
 	/** The code. */
 	private String code;
+        
+        /** The Signature date. */
+        private String signatureDate;
 
 	/**
 	 * Gets the country of origin.
@@ -200,4 +203,13 @@ public class VtMinepiaFileVo extends AbstractFileVo<VtMinepiaFileItemVo>
 		this.code = code;
 	}
 
+    public String getSignatureDate() {
+        return signatureDate;
+    }
+
+    public void setSignatureDate(String signatureDate) {
+        this.signatureDate = signatureDate;
+    }
+
+        
 }

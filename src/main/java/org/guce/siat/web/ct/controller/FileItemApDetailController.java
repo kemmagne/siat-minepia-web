@@ -2449,6 +2449,10 @@ public class FileItemApDetailController extends DefaultDetailController implemen
                                     }
                                 }
                             }
+                            // edit signature elements
+                            Date now = java.util.Calendar.getInstance().getTime();
+                            currentFile.setSignatureDate(now);
+                            currentFile.setSignatory(getLoggedUser());
                             attachedByteFiles = new HashMap<>();
 
                             final List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<>();
@@ -2531,9 +2535,10 @@ public class FileItemApDetailController extends DefaultDetailController implemen
                                 //Update report sequence
                                 reportOrganism.setSequence(reportOrganism.getSequence() + 1);
                                 reportOrganismService.update(reportOrganism);
-                                final Map<String, Date> dateParams = new HashMap<>();
-                                dateParams.put("SIGNATURE_DATE", java.util.Calendar.getInstance().getTime());
-                                fileService.updateSpecificColumn(dateParams, currentFile);
+//                                final Map<String, Date> dateParams = new HashMap<>();
+//                                dateParams.put("SIGNATURE_DATE", java.util.Calendar.getInstance().getTime());
+//                                fileService.updateSpecificColumn(dateParams, currentFile);
+                                fileService.update(currentFile);
                             }
                         } else if (FlowCode.FL_AP_202.name().equals(flowToSend.getCode())) {
                             FileMarshall fileMarshall = fileMarshallServce.findByFile(currentFile);
@@ -3391,6 +3396,12 @@ public class FileItemApDetailController extends DefaultDetailController implemen
 //        }
         if (!aiMinmidtFileType) {
             fileTypeFlowReports = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getFileType());
+        }
+        if (currentFile.getSignatory() == null) {
+            currentFile.setSignatory(getLoggedUser());
+        }
+        if (currentFile.getSignatureDate() == null) {
+            currentFile.setSignatureDate(java.util.Calendar.getInstance().getTime());
         }
         for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
 
