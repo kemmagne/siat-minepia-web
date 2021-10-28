@@ -1869,10 +1869,10 @@ public class FileItemCctDetailController extends DefaultDetailController {
             invoiceTotalTtcAmount += pi.getMontantTva() != null ? pi.getMontantTva() : 0;
             totalTva += pi.getMontantTva() != null ? pi.getMontantTva() : 0;
         }
-        invoiceTotalAmount += invoiceOtherAmount != null ? invoiceOtherAmount : 0;
+        invoiceTotalTtcAmount += invoiceOtherAmount != null ? invoiceOtherAmount : 0;
         paymentData.setMontantHt(invoiceTotalAmount);
         paymentData.setMontantTva(totalTva);
-        paymentData.setMontantEncaissement((double)invoiceTotalAmount);
+        paymentData.setMontantEncaissement(Double.parseDouble(invoiceTotalTtcAmount.toString()));
         paymentData.setAutreMontant(invoiceOtherAmount);
     }
 

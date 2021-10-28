@@ -262,7 +262,9 @@ public class PaymentController extends AbstractController<FileItem> {
                 paymentData.setQualiteSignature(user.getPosition().getLabelFr());
                 paymentData.setLieuSignature(user.getAdministration().getLabelFr());
                 Long amount = paymentData.getMontantHt() + paymentData.getMontantTva();
-                paymentData.setMontantEncaissement(Double.parseDouble(amount.toString()));
+                if (paymentData.getMontantEncaissement() == null || paymentData.getMontantEncaissement() == 0) {
+                    paymentData.setMontantEncaissement(Double.parseDouble(amount.toString()));
+                }
 
                 if (selectedFile.getFile().getClient() != null) {
                     paymentData.setPartVersCont(selectedFile.getFile().getClient().getNumContribuable());
