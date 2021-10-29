@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CERTIFICAT_PHYTOSANITAIRE" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6f5c0835-9f5c-4b28-b5db-296746e60a32">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="432"/>
 	<parameter name="MINADER_LOGO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -387,7 +387,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					<textElement markup="none">
 						<font size="8" isItalic="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA["This is to certify that the plants, plants, products or other regulated articles describes above have beeb imported in to Cameroon,covered by the technics document N°………… the original certified true copy of each is attached to this certificate. They are packages repackaged in original , new containers ; that based on the original technics document and a additional inspection , they are considered to comply with the current phytosanitary of the contracting importing arty and that during storing in Cameroon the consignment has not beeb subjected to the risk of infestation or infection."]]></textFieldExpression>
+					<textFieldExpression><![CDATA["This is to certify that the plants, plants, products or other regulated articles describes above have beeb imported in to Cameroon,covered by the technics document N°"+ $F{originCountryPhytoNumber} +" the original certified true copy of each is attached to this certificate. They are packages repackaged in original , new containers ; that based on the original technics document and a additional inspection , they are considered to comply with the current phytosanitary of the contracting importing arty and that during storing in Cameroon the consignment has not beeb subjected to the risk of infestation or infection."]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="7" y="215" width="548" height="46" uuid="c515f3be-2a3d-4c1d-9fd5-0a92266abcf0">
