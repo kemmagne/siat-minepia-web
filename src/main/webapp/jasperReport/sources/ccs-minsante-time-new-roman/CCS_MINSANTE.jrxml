@@ -1,0 +1,900 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CCS_MINSANTE" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ab09c848-fe40-4724-be9a-0874e8d853ec">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="192"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#FFBFBF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<parameter name="CONTROLLER_STAMP" class="java.lang.String"/>
+	<parameter name="CONTROLLER_SIGNATURE" class="java.lang.String"/>
+	<parameter name="SIGNATORY_STAMP" class="java.lang.String"/>
+	<parameter name="SIGNATORY_SIGNATURE" class="java.lang.String"/>
+	<parameter name="QR_CODE_STR" class="java.lang.String"/>
+	<parameter name="NUMERO_PAGE" class="java.lang.String"/>
+	<parameter name="DRAFT" class="java.lang.Boolean"/>
+	<parameter name="MINSANTE_LOGO" class="java.lang.String"/>
+	<field name="decisionNumber" class="java.lang.String"/>
+	<field name="signatureDate" class="java.lang.String"/>
+	<field name="signatory" class="java.lang.String"/>
+	<field name="importer" class="java.lang.String"/>
+	<field name="importerAddress" class="java.lang.String"/>
+	<field name="provider" class="java.lang.String"/>
+	<field name="providerAddress" class="java.lang.String"/>
+	<field name="ship" class="java.lang.String"/>
+	<field name="productType1" class="java.lang.String"/>
+	<field name="productType2" class="java.lang.String"/>
+	<field name="productType3" class="java.lang.String"/>
+	<field name="productType4" class="java.lang.String"/>
+	<field name="productType5" class="java.lang.String"/>
+	<field name="diNumber" class="java.lang.String"/>
+	<field name="blNumber" class="java.lang.String"/>
+	<field name="lotsNumber" class="java.lang.String"/>
+	<field name="packaging" class="java.lang.String"/>
+	<field name="numberContainers20" class="java.lang.String"/>
+	<field name="numberContainers40" class="java.lang.String"/>
+	<field name="provenance" class="java.lang.String"/>
+	<field name="controller" class="java.lang.String"/>
+	<field name="docConformeA" class="java.lang.String"/>
+	<field name="docConformeAmmAmc" class="java.lang.String"/>
+	<field name="observationDocConformeA" class="java.lang.String"/>
+	<field name="observationDocConformeAmmAmc" class="java.lang.String"/>
+	<field name="docConformeAi" class="java.lang.String"/>
+	<field name="observationDocConformeAi" class="java.lang.String"/>
+	<field name="docConformeAtq" class="java.lang.String"/>
+	<field name="observationDocConformeAtq" class="java.lang.String"/>
+	<field name="docConformeCc" class="java.lang.String"/>
+	<field name="observationDocConformeCc" class="java.lang.String"/>
+	<field name="docConformeCfCd" class="java.lang.String"/>
+	<field name="observationDocConformeCfCd" class="java.lang.String"/>
+	<field name="docConformeCapcm" class="java.lang.String"/>
+	<field name="observationDocConformeCapcm" class="java.lang.String"/>
+	<field name="docConformeCe" class="java.lang.String"/>
+	<field name="observationDocConformeCe" class="java.lang.String"/>
+	<field name="qrCode" class="java.io.InputStream"/>
+	<field name="controllerStamp" class="java.io.InputStream"/>
+	<field name="controllerSignature" class="java.io.InputStream"/>
+	<field name="signatoryStamp" class="java.io.InputStream"/>
+	<field name="signatorySignature" class="java.io.InputStream"/>
+	<background>
+		<band height="802" splitType="Stretch">
+			<printWhenExpression><![CDATA[$P{DRAFT}]]></printWhenExpression>
+			<image scaleImage="FillFrame">
+				<reportElement x="30" y="153" width="514" height="521" uuid="53a192b4-1b2a-48f8-b75a-667f02090a48"/>
+				<imageExpression><![CDATA["../images/reports/draft.jpg"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="435" y="699" width="130" height="103" uuid="c26357a5-cb2b-473d-a0c4-45e25fdb010d"/>
+				<imageExpression><![CDATA["../images/reports/draft.jpg"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="445" y="10" width="130" height="103" uuid="3d26cf3c-3789-465c-b29e-0c48dc3fc984"/>
+				<imageExpression><![CDATA["../images/reports/draft.jpg"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="20" y="10" width="130" height="103" uuid="8caf8ec3-d9f5-42b9-a407-d13ca08cce81"/>
+				<imageExpression><![CDATA["../images/reports/draft.jpg"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="10" y="699" width="130" height="103" uuid="83b91390-4f92-4239-84e0-bea4dc7a8c89"/>
+				<imageExpression><![CDATA["../images/reports/draft.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</background>
+	<title>
+		<band height="517" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="225" height="135" uuid="64411bef-b5f6-4cc4-9da1-38dd98715e77"/>
+				<textElement textAlignment="Center" markup="styled">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPUBLIQUE DU CAMEROUN
+Paix-Travail-Patrie<br />
+MINISTERE DE LA SANTE PUBLIQUE<br />
+DELEGATION REGIONALE DE LA SANTE<br />
+POSTE DE SANTE AUX FRONTIERES DU PORT AUTONOME DE DOUALA<br />
+B.P : 106 Douala TEL : 33-42-17-60
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="338" y="0" width="217" height="147" uuid="43edd1ef-2d58-4762-b368-5ecb7777a2ec"/>
+				<textElement textAlignment="Center" markup="styled">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPUBLIC OF CAMEROON
+Peace-Work-Fatherland<br />
+MINISTRY OF PUBLIC HEALTH<br />
+REGIONAL DELEGATION OF PUBLIC HEALTH<br />
+HEALTH PORT OFFICE OF DOUALA<br />
+P.O BOX : 106 Douala TEL : 33-42-17-60<br />
+FAX :233427610
+]]></text>
+			</staticText>
+			<image scaleImage="FillFrame">
+				<reportElement x="247" y="13" width="70" height="111" uuid="21b05db5-418c-4594-8c8d-0ef394bb764b"/>
+				<imageExpression><![CDATA[new java.io.File($P{MINSANTE_LOGO})]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="150" y="153" width="232" height="20" uuid="4a7be0d9-cc1a-4402-bcd8-0b76ef25ab77"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[CERTIFICAT DE CONTRÔLE SANITAIRE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="150" y="173" width="232" height="20" uuid="d609af29-b3ed-44b0-bf00-2e97822bbc1c"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[HEALTH CERTIFICATE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="445" y="153" width="20" height="20" uuid="6086d7b7-1f67-487b-a320-ae01970c5c27"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[N° : ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="465" y="153" width="90" height="20" uuid="bdadadd1-17c5-4cf0-9e75-13506caa35be"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{decisionNumber}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="382" y="173" width="83" height="20" uuid="5a13934e-3772-4b97-abc2-1315e6cf12f7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Date de signature : ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="465" y="173" width="90" height="20" uuid="095a16b5-43d2-4b08-b2ba-d55d3a779c73"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="false"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{signatureDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="83" y="200" width="408" height="29" uuid="37e67589-9a9c-449d-8cd4-3ee6fc75d52f"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Loi 64/LF/23 du 23 Novembre 1964 portant protection de la Santé Publique au Cameroun,
+Règlement Sanitaire International révisé en 2005.
+]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="16" y="236" width="527" height="32" uuid="f59eb545-7808-4784-98ce-39436c7c5740"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Je soussignée, "+$F{signatory}+". Chef de Poste Santé aux Frontières du Port Autonome de Douala, certifie avoir contrôlé les documents sanitaires des marchandises décrits ci-dessous :"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="169" y="271" width="198" height="18" uuid="b5726bc3-e014-44f4-aa18-a6f6c51982ce"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="11" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Informations sur les transitaires]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="294" width="153" height="20" uuid="ca5ab106-915b-44f5-b0f9-7b72f4a73bc8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Noms et adresses expéditeur]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement mode="Transparent" x="16" y="294" width="153" height="20" uuid="8d3cbc04-028b-482b-aa5c-39271a76178e"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="16" y="314" width="153" height="20" uuid="9ae43dd0-0409-4e64-9410-1c2e6729995f"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="16" y="334" width="153" height="20" uuid="60a07bd7-e198-4be5-9179-b8199f22be37"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="169" y="294" width="374" height="20" uuid="aedd05de-274a-4ce8-b88f-a65b81010e58"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="169" y="314" width="374" height="20" uuid="2fe43aab-3fd8-4d5b-b0ad-2ac4bfc3aa3f"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="169" y="334" width="374" height="20" uuid="ba976cef-1c2c-4a32-8e31-465c13f440fe"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="16" y="314" width="153" height="20" uuid="79f29949-3a98-416c-a57d-be44bb2c66ef"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Navire transporteur]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="334" width="153" height="20" uuid="032c29bf-dbb4-49c9-bce9-b74baa687be4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Noms et adresses destinataire]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="169" y="334" width="374" height="20" uuid="85b4f8fb-2c8a-4f22-905c-f2ce3dcce1de"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="false"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{importer}+"; "+$F{importerAddress}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="169" y="314" width="374" height="20" uuid="9ee5d6dc-e940-4f83-83fd-bd00654bbf61"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ship}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="169" y="294" width="374" height="20" uuid="4c7ca927-d9a3-4a81-bb58-6e54343659ee"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{provider}+"; "+$F{providerAddress}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="169" y="358" width="198" height="18" uuid="1b8fe0fc-3f59-4651-8fe2-9e8e4f81e1ce"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="11" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Informations sur la marchandise]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="41" y="382" width="220" height="15" uuid="fb331dc6-57e2-42ac-a7e6-48f2cdbba84a"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Produits et denrées alimentaires destinés à la consommation humaine]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement mode="Transparent" x="16" y="382" width="15" height="15" uuid="bf9f25ca-fa9c-47d2-800b-07b6c950bd7a"/>
+			</rectangle>
+			<textField>
+				<reportElement x="16" y="382" width="15" height="15" uuid="a15cdb4c-58d2-445b-a61d-1ce0653c17b7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{productType1}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement mode="Transparent" x="378" y="382" width="15" height="15" uuid="f7466cc0-4941-4d20-b9d2-3929f9d26c7f"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="276" y="382" width="15" height="15" uuid="f020b98d-2989-48f5-b690-44eb52c52986"/>
+			</rectangle>
+			<textField>
+				<reportElement x="276" y="382" width="15" height="15" uuid="54e6b57b-4314-4364-8d00-a70f5993895d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{productType2}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement mode="Transparent" x="465" y="382" width="15" height="15" uuid="1c484337-9884-4a30-998e-11a263a8a0ea"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="402" y="382" width="46" height="15" uuid="d53b33e8-2c69-4b45-83df-17353ac78c51"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Brocante ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="491" y="382" width="52" height="15" uuid="3de00da0-8630-4f2f-8061-d247be1ef86c"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Véhicule]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement mode="Transparent" x="16" y="401" width="15" height="15" uuid="8fbd763e-3d10-4e01-830d-ee510ba50d3a"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="41" y="401" width="206" height="15" uuid="1264ae82-ef28-495c-b8b5-d17ad3e91031"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Produits d’hygiène et d’assainissement]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="378" y="382" width="15" height="15" uuid="50493f47-446e-4fdb-bc05-495753d35ce8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{productType3}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="465" y="382" width="15" height="15" uuid="581f2472-57ca-4b04-b24f-a2b3f3345306"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{productType4}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="16" y="401" width="15" height="15" uuid="da786fec-852a-417a-9606-ad5cd3e48317"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{productType5}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="300" y="382" width="63" height="15" uuid="a2c2b86f-e150-4755-8cda-c615da6d4e60"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Friperie]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="420" width="37" height="21" uuid="5ac18180-b506-4021-98ad-9e08884f3b8b"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[N° DI : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="205" y="420" width="44" height="21" uuid="f71f7e77-e49b-4748-a079-b9c6307a4212"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[N° B.L : ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="53" y="420" width="116" height="21" uuid="cdd46590-9923-45bd-9265-3a2c108f124a"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{diNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="249" y="420" width="142" height="21" uuid="cea7207e-b8b6-48c6-aa1f-286735ac39e1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{blNumber}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement mode="Transparent" x="16" y="444" width="100" height="31" uuid="b998757c-ddc9-4452-8622-1821190c2783"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="116" y="444" width="131" height="31" uuid="2486e49f-6529-4df8-86f5-0a2e6f1d8514"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="247" y="444" width="120" height="31" uuid="4137a191-a68f-4211-bc5c-ab12f405932c"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="367" y="444" width="99" height="31" uuid="9f8d1343-1400-4f66-a3a3-43c562d3414e"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="466" y="444" width="77" height="31" uuid="cff9e173-2ee3-4eb4-b08a-3c28342c155d"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="16" y="475" width="100" height="39" uuid="9676c664-f9b4-4606-8538-905cc80abfd8"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="116" y="475" width="131" height="39" uuid="cb616888-03d4-40d6-b26d-54d58b7965a6"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="247" y="475" width="120" height="39" uuid="6f03ff46-18ab-423f-be9a-93cda2f1de66"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="367" y="475" width="100" height="39" uuid="d732ae97-7e4b-4c7a-ad97-ccca7b81ddc5"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="466" y="475" width="77" height="39" uuid="7855bf7c-3a3e-4985-9952-d698e5ccfd0f"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="247" y="475" width="62" height="20" uuid="bbd3ce7c-7e74-4561-a90c-7468475d759b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="309" y="475" width="58" height="20" uuid="e86564b6-0653-4270-9b10-4191bc3b4f61"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="247" y="495" width="62" height="19" uuid="82b859b5-f638-41e9-9438-bc78d7e10e0a"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="309" y="495" width="58" height="19" uuid="f467766f-1c14-41e4-bbec-9256b01c4369"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="16" y="444" width="100" height="31" uuid="d82aefa2-c99d-419e-b41a-4b546919ad7a"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre de lots déclarés]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="116" y="444" width="131" height="31" uuid="f043cdd8-6b66-44b5-b7d8-6577f44307c2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Type de conditionnement]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="247" y="444" width="120" height="31" uuid="2e184eaa-f480-40bd-8a40-06fe156eae74"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre de conteneurs]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="247" y="475" width="62" height="20" uuid="488c3f5d-3388-4861-9a75-53d80c6cb9d2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[20 pieds]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="309" y="475" width="58" height="20" uuid="a2a01db5-be7d-42d2-a769-9179fbf9917c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[40 pieds]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="367" y="444" width="99" height="31" uuid="33926411-3b83-477d-8bcc-c28dac307af8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Provenance]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="467" y="444" width="76" height="31" uuid="3e06c247-ba39-4363-87a7-1c465fc90ba6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fabriquant]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="247" y="495" width="62" height="19" uuid="d7ca6b0f-48e4-414d-808d-582f2ab51848"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numberContainers20}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="309" y="495" width="58" height="19" uuid="ce92b104-75bf-432b-9526-1de14eb2bcd7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numberContainers40}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="16" y="475" width="100" height="39" uuid="6a3423b4-9ea9-4ba5-9cc0-b84e58b981b4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lotsNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="116" y="475" width="133" height="39" uuid="e0342e6a-3615-42fd-a47b-42ee0d795dc7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{packaging}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="FillFrame">
+				<reportElement x="34" y="143" width="50" height="50" uuid="b67ace66-6a02-44df-a998-c2dc9034b1d4"/>
+				<imageExpression><![CDATA[$F{qrCode}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="367" y="475" width="100" height="39" uuid="293d4fb7-01f4-48bd-8365-8412f537c24b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{provenance}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="285" splitType="Stretch">
+			<staticText>
+				<reportElement x="169" y="3" width="198" height="17" uuid="206e8d3b-c04c-4174-ae2b-8659cca52dd9"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Times New Roman" size="11" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Documents présentés et contrôlés]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="16" y="22" width="114" height="20" uuid="80d50334-fbe0-4f04-b218-177e6e889c0e"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="130" y="22" width="117" height="20" uuid="e1a0b941-78e4-46cb-b2b8-c8de20cf1f24"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="247" y="22" width="296" height="20" uuid="277ce7ce-6af8-4322-89df-d7f90e569521"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="130" y="42" width="117" height="15" uuid="3f6a3ef5-bd1a-42eb-b085-9a359291dae6"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="16" y="42" width="114" height="15" uuid="2b4afdcf-9d12-4abe-99be-d812a996d373"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="247" y="42" width="296" height="15" uuid="dd44463a-6e74-4407-a768-e8d04ba453e9"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="130" y="57" width="117" height="15" uuid="8861fdc9-3876-41ef-9449-765a4d1cb794"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="16" y="57" width="114" height="15" uuid="9aeb5a41-31f4-4f31-b33a-5360af35ff4b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="247" y="57" width="296" height="15" uuid="cfa8c9a6-f2d7-449c-a273-47df62f8eb2d"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="130" y="72" width="117" height="15" uuid="c3932a45-9c44-4218-b2c2-21fb3cea3534"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="16" y="72" width="114" height="15" uuid="ed22a5cf-f1e7-4ff9-b012-020d6429aab0"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="247" y="72" width="296" height="15" uuid="a8c8cf9f-55bd-4023-828c-cdff6e3e64eb"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="130" y="87" width="117" height="15" uuid="ebe28d03-3626-43e8-82af-14963f33dba3"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="16" y="87" width="114" height="15" uuid="8bce7458-62da-4f95-9daf-165e0b8191ac"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="247" y="87" width="296" height="15" uuid="d2b0675d-da9e-46e4-9384-820f594a9e8b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="130" y="102" width="117" height="15" uuid="930f88f3-f4a1-496f-bf76-1cffdc2e1174"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="16" y="102" width="114" height="15" uuid="efcff054-80fe-4b72-8e70-c234102cce6c"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="247" y="102" width="296" height="15" uuid="cee9c9c2-308f-4c4a-9827-4642328cc87f"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="130" y="117" width="117" height="15" uuid="3741fd12-9a08-4491-8c89-a6b393a54450"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="16" y="117" width="114" height="15" uuid="bdcd1d77-55ae-4714-9685-f53657553907"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="247" y="117" width="296" height="15" uuid="676b4d09-b878-47b8-956e-6a75691431a4"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="130" y="132" width="117" height="15" uuid="4b41ccf2-edc4-47e9-8d65-b07772309403"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="16" y="132" width="114" height="15" uuid="36cc43a5-8d79-4b04-bbbd-a9aeb28e3f9a"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="247" y="132" width="296" height="15" uuid="741bb6d9-f384-4166-bf5f-bd8cae061369"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="130" y="147" width="117" height="15" uuid="fe67565b-8549-4d38-a682-00dd50a9b8a9"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="16" y="147" width="114" height="15" uuid="277426bd-0df3-40df-aecf-b5b74b1ded4a"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="247" y="147" width="296" height="15" uuid="ff6aeca3-0c7c-46a1-b9b9-429ba825f06a"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="16" y="166" width="527" height="40" uuid="2fb527c6-477a-4aab-8d12-2ffb84d9cbc3"/>
+				<textElement>
+					<font fontName="Times New Roman" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[N .B : Ce document n’est valide que pour les produits qui y sont mentionnés et pour une seule et unique cargaison. Le conteneur sera décontaminé après dépotage par le personnel PSF/PAD conformément au RSI avant tout usage. Tout contrevenant à ces dispositions s’expose à des poursuites judiciaires conformément à la réglementation en vigueur.
+Physical examination of the container shall be done by health autority during depotage and before sending products to the market for consumption. For Failure inspection, serious sanction shall be levied to the concern.
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="207" width="390" height="12" uuid="ea0d067c-85e4-4ab0-96ad-099561064226"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[En foi de quoi, le présent certificat de contrôle sanitaire est délivré pour servir et valoir ce que de droit.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="222" width="209" height="14" uuid="b05661c1-33e5-4480-b9f3-6de5f5e21a7a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="9" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Le Contrôleur/ Vérificateur]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="356" y="222" width="187" height="14" uuid="66227c57-c9a3-4c5d-8577-e0902d67d2da"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="9" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Le Chef de Poste]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="16" y="237" width="209" height="15" uuid="560a267e-e35e-470c-8788-45c808735428"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{controller}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="356" y="237" width="187" height="15" uuid="a5d98990-0cb0-45bf-be7b-d2b1ac0f36d0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{signatory}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="16" y="22" width="114" height="20" uuid="82511740-2a21-45de-9234-c0d9628c198d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CODE DOCUMENTS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="130" y="22" width="119" height="20" uuid="ad273bde-3895-4af7-b16e-f62c5825554d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Conformes (O/N)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="247" y="22" width="296" height="20" uuid="b06be35d-e09b-4372-a003-b2bef81ab3b0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Observations]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="42" width="114" height="15" uuid="402f7be0-cf07-43e6-9a85-7a8208be69c1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[A]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="57" width="114" height="15" uuid="245b7f3e-c3d2-406c-8b8b-de558cbb2de1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[AMM/AMC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="72" width="114" height="15" uuid="3567088f-81dd-4bd9-a0ce-58e09694ecfb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[AI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="87" width="114" height="15" uuid="0c1592a6-8c51-4aef-9da4-cfd32fa8f8e0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ATQ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="102" width="114" height="15" uuid="e8d9da54-12f1-4f6d-ae9c-f4d88a9a4fd0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="117" width="114" height="15" uuid="d042afaa-5bc0-4693-98f9-55833038d7ea"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CF/CD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="132" width="114" height="15" uuid="cf0a39bb-4b93-4db8-8ad2-20dff07c648a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CAPC/M]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="16" y="147" width="114" height="15" uuid="46887899-9b54-43ff-bd57-16f72c8cd9fe"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CE]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="130" y="42" width="117" height="15" uuid="35fee431-b14d-4666-928b-52829f0933b5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{docConformeA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="57" width="117" height="15" uuid="0534d236-293f-4161-be1e-1da56fad5caa"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{docConformeAmmAmc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="247" y="42" width="296" height="15" uuid="6e64ac51-501d-4c8b-a434-fa504a51aa0a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{observationDocConformeA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="247" y="57" width="296" height="15" uuid="b438249e-a5ae-4767-85f0-2f21e524df53"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{observationDocConformeAmmAmc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="72" width="117" height="15" uuid="4d411533-6684-479d-9fe9-40e7e58d2b65"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{docConformeAi}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="247" y="72" width="296" height="15" uuid="64d0d0dc-b701-4ef7-a6d7-6960c987d0d9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{observationDocConformeAi}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="87" width="117" height="15" uuid="3c6bd7f0-754d-40ae-a577-53f57095c244"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{docConformeAtq}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="247" y="87" width="296" height="15" uuid="b89a9d9f-2f42-43a2-9505-0335a5458767"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{observationDocConformeAtq}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="102" width="117" height="15" uuid="5b607f33-742b-42a6-885b-9d4386d7ca81"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{docConformeCc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="247" y="102" width="296" height="15" uuid="89db969f-b451-464c-b842-8a327d82a9ea"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{observationDocConformeCc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="117" width="117" height="15" uuid="1dad93c7-6fc7-4545-94b8-77b048596d42"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{docConformeCfCd}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="247" y="117" width="296" height="15" uuid="0d3d463c-8319-4d8f-9f55-aa2a69eec871"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{observationDocConformeCfCd}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="132" width="117" height="15" uuid="5c012f01-26a3-4771-a005-c0e34a2f5ef0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{docConformeCapcm}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="247" y="132" width="296" height="15" uuid="969db9cf-4d33-4e39-89b1-8cce5cdd8fb4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{observationDocConformeCapcm}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="147" width="117" height="15" uuid="99905e3f-23eb-4d8c-a211-9d7f07729bb2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{docConformeCe}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="247" y="148" width="296" height="14" uuid="9ffe2012-2b75-45eb-9bb2-51d98698691b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{observationDocConformeCe}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="FillFrame">
+				<reportElement x="57" y="186" width="77" height="77" uuid="d6a29a68-6216-4bf7-b876-2d54a8ab9fc2"/>
+				<imageExpression><![CDATA[$F{controllerStamp}]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame">
+				<reportElement x="117" y="205" width="80" height="70" uuid="1186ba9b-dcb7-488f-a107-d4e7ac1ff562"/>
+				<imageExpression><![CDATA[$F{controllerSignature}]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame">
+				<reportElement x="377" y="186" width="77" height="77" uuid="cb89e001-9f3d-4d18-a77a-9c8509babafb"/>
+				<imageExpression><![CDATA[$F{signatoryStamp}]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame">
+				<reportElement x="437" y="205" width="80" height="70" uuid="1b470f63-0d5d-462f-beab-086b8b1e968a"/>
+				<imageExpression><![CDATA[$F{signatorySignature}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="269" y="255" width="7" height="20" uuid="bc71c39e-47f4-401b-9d80-a0838ffc0ec5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[/]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="276" y="255" width="8" height="20" uuid="29b62610-0e67-4dda-a10b-25d848f52e72"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[2]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="261" y="255" width="8" height="20" uuid="510ae359-913e-4ed9-9e54-0d87e88715cf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[1]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>
