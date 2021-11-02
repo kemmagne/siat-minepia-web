@@ -23,7 +23,7 @@
             <id>profile-etl</id>
             <properties>
                 <environment>etl</environment>
-                <global-config.properties>/global-config.properties</global-config.properties>
+                <global-config.properties>/home/htiomy/siat/config/ct/global-config.properties</global-config.properties>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>

@@ -114,7 +114,7 @@
 							<textField>
 								<reportElement x="0" y="0" width="160" height="30" uuid="574239cb-7ea4-440f-9b87-77cba96ad0d0"/>
 								<textElement verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="11"/>
+									<font fontName="Times New Roman" size="10"/>
 									<paragraph leftIndent="5"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
@@ -149,7 +149,7 @@
 							<textField>
 								<reportElement x="0" y="0" width="240" height="30" uuid="f78c9032-22c0-4d99-a082-1027e1c4df54"/>
 								<textElement verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="11"/>
+									<font fontName="Times New Roman" size="10"/>
 									<paragraph leftIndent="5"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{desc}]]></textFieldExpression>
@@ -171,7 +171,7 @@
 							<textField>
 								<reportElement x="0" y="0" width="126" height="30" uuid="b596a6be-ab81-4cfa-a567-758c27fe5781"/>
 								<textElement verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="11"/>
+									<font fontName="Times New Roman" size="10"/>
 									<paragraph leftIndent="5"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$V{TOTAL_QUANTITY}]]></textFieldExpression>
@@ -181,7 +181,7 @@
 							<textField>
 								<reportElement x="0" y="0" width="126" height="30" uuid="9779e751-9ba6-46a5-b655-51c20ca800c2"/>
 								<textElement verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="11"/>
+									<font fontName="Times New Roman" size="10"/>
 									<paragraph leftIndent="5"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>

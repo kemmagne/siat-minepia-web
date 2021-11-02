@@ -202,15 +202,15 @@ public class CostsController extends AbstractController<PaymentData> implements 
             return;
         }
         //save attachments here
-        if (attachmentList != null) {
-            final Session sessionCmisClient = CmisSession.getInstance();
-            for (Attachment at : attachmentList) {
-                if (at.getId() == null) {
-                    CmisUtils.sendDocument(Arrays.asList(at.getAttachmentFile()), sessionCmisClient, at.getPath());
-                    attachmentService.save(at);
-                }
-            }
-        }
+//        if (attachmentList != null) {
+//            final Session sessionCmisClient = CmisSession.getInstance();
+//            for (Attachment at : attachmentList) {
+//                if (at.getId() == null) {
+//                    CmisUtils.sendDocument(Arrays.asList(at.getAttachmentFile()), sessionCmisClient, at.getPath());
+//                    attachmentService.save(at);
+//                }
+//            }
+//        }
         sendPayment();
         returnToPaymentView();
     }

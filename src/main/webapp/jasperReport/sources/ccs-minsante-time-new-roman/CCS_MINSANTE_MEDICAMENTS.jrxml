@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CCS_MINSANTE" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ab09c848-fe40-4724-be9a-0874e8d853ec">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="240"/>
+	<property name="ireport.y" value="192"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -170,85 +170,85 @@ FAX :233427610
 			<staticText>
 				<reportElement x="83" y="200" width="408" height="29" uuid="37e67589-9a9c-449d-8cd4-3ee6fc75d52f"/>
 				<textElement textAlignment="Center">
-					<font fontName="Times New Roman" size="11" isBold="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Loi 64/LF/23 du 23 Novembre 1964 portant protection de la Santé Publique au Cameroun,
 Règlement Sanitaire International révisé en 2005.
 ]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="16" y="236" width="527" height="32" uuid="f59eb545-7808-4784-98ce-39436c7c5740"/>
+				<reportElement x="16" y="236" width="527" height="27" uuid="f59eb545-7808-4784-98ce-39436c7c5740"/>
 				<textElement>
-					<font fontName="Times New Roman" size="11" isBold="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Je soussignée, "+$F{signatory}+". Chef de Poste Santé aux Frontières du Port Autonome de Douala, certifie avoir contrôlé les documents sanitaires des marchandises décrits ci-dessous :"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="169" y="273" width="198" height="18" uuid="b5726bc3-e014-44f4-aa18-a6f6c51982ce"/>
+				<reportElement x="169" y="271" width="198" height="18" uuid="b5726bc3-e014-44f4-aa18-a6f6c51982ce"/>
 				<textElement textAlignment="Center">
 					<font fontName="Times New Roman" size="11" isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Informations sur les transitaires]]></text>
 			</staticText>
+			<rectangle>
+				<reportElement mode="Transparent" x="16" y="294" width="153" height="20" uuid="8d3cbc04-028b-482b-aa5c-39271a76178e"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="16" y="314" width="153" height="20" uuid="9ae43dd0-0409-4e64-9410-1c2e6729995f"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="16" y="334" width="153" height="20" uuid="60a07bd7-e198-4be5-9179-b8199f22be37"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="169" y="294" width="374" height="20" uuid="aedd05de-274a-4ce8-b88f-a65b81010e58"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="169" y="314" width="374" height="20" uuid="2fe43aab-3fd8-4d5b-b0ad-2ac4bfc3aa3f"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="169" y="334" width="374" height="20" uuid="ba976cef-1c2c-4a32-8e31-465c13f440fe"/>
+			</rectangle>
 			<staticText>
-				<reportElement x="16" y="296" width="153" height="20" uuid="ca5ab106-915b-44f5-b0f9-7b72f4a73bc8"/>
+				<reportElement x="16" y="294" width="153" height="20" uuid="ca5ab106-915b-44f5-b0f9-7b72f4a73bc8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11" isBold="true" isUnderline="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Noms et adresses expéditeur]]></text>
 			</staticText>
-			<rectangle>
-				<reportElement mode="Transparent" x="16" y="296" width="153" height="20" uuid="8d3cbc04-028b-482b-aa5c-39271a76178e"/>
-			</rectangle>
-			<rectangle>
-				<reportElement mode="Transparent" x="16" y="316" width="153" height="20" uuid="9ae43dd0-0409-4e64-9410-1c2e6729995f"/>
-			</rectangle>
-			<rectangle>
-				<reportElement mode="Transparent" x="16" y="336" width="153" height="20" uuid="60a07bd7-e198-4be5-9179-b8199f22be37"/>
-			</rectangle>
-			<rectangle>
-				<reportElement mode="Transparent" x="169" y="296" width="374" height="20" uuid="aedd05de-274a-4ce8-b88f-a65b81010e58"/>
-			</rectangle>
-			<rectangle>
-				<reportElement mode="Transparent" x="169" y="316" width="374" height="20" uuid="2fe43aab-3fd8-4d5b-b0ad-2ac4bfc3aa3f"/>
-			</rectangle>
-			<rectangle>
-				<reportElement x="169" y="336" width="374" height="20" uuid="ba976cef-1c2c-4a32-8e31-465c13f440fe"/>
-			</rectangle>
 			<staticText>
-				<reportElement x="16" y="316" width="153" height="20" uuid="79f29949-3a98-416c-a57d-be44bb2c66ef"/>
+				<reportElement x="16" y="314" width="153" height="20" uuid="79f29949-3a98-416c-a57d-be44bb2c66ef"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11" isBold="true" isUnderline="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Navire transporteur]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="16" y="336" width="153" height="20" uuid="032c29bf-dbb4-49c9-bce9-b74baa687be4"/>
+				<reportElement x="16" y="334" width="153" height="20" uuid="032c29bf-dbb4-49c9-bce9-b74baa687be4"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11" isBold="true" isUnderline="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Noms et adresses destinataire]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="169" y="336" width="374" height="20" uuid="85b4f8fb-2c8a-4f22-905c-f2ce3dcce1de"/>
+				<reportElement x="169" y="334" width="374" height="20" uuid="85b4f8fb-2c8a-4f22-905c-f2ce3dcce1de"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11" isBold="false"/>
+					<font fontName="Times New Roman" size="10" isBold="false"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{importer}+"; "+$F{importerAddress}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="169" y="316" width="374" height="20" uuid="9ee5d6dc-e940-4f83-83fd-bd00654bbf61"/>
+				<reportElement x="169" y="314" width="374" height="20" uuid="9ee5d6dc-e940-4f83-83fd-bd00654bbf61"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="Times New Roman" size="10"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ship}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="169" y="296" width="374" height="20" uuid="4c7ca927-d9a3-4a81-bb58-6e54343659ee"/>
+				<reportElement x="169" y="294" width="374" height="20" uuid="4c7ca927-d9a3-4a81-bb58-6e54343659ee"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="Times New Roman" size="10"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{provider}+"; "+$F{providerAddress}]]></textFieldExpression>
@@ -353,21 +353,21 @@ Règlement Sanitaire International révisé en 2005.
 			<staticText>
 				<reportElement x="16" y="429" width="37" height="21" uuid="5ac18180-b506-4021-98ad-9e08884f3b8b"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11" isBold="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[N° DI : ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="205" y="429" width="44" height="21" uuid="f71f7e77-e49b-4748-a079-b9c6307a4212"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11" isBold="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[N° B.L : ]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="53" y="429" width="116" height="21" uuid="cdd46590-9923-45bd-9265-3a2c108f124a"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="Times New Roman" size="10"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{diNumber}]]></textFieldExpression>
@@ -375,7 +375,7 @@ Règlement Sanitaire International révisé en 2005.
 			<textField>
 				<reportElement x="249" y="429" width="142" height="21" uuid="cea7207e-b8b6-48c6-aa1f-286735ac39e1"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="Times New Roman" size="10"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{blNumber}]]></textFieldExpression>
@@ -425,77 +425,77 @@ Règlement Sanitaire International révisé en 2005.
 			<staticText>
 				<reportElement x="16" y="455" width="100" height="31" uuid="d82aefa2-c99d-419e-b41a-4b546919ad7a"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font fontName="Times New Roman" size="11" isBold="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nombre de lots déclarés]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="116" y="455" width="131" height="31" uuid="f043cdd8-6b66-44b5-b7d8-6577f44307c2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11" isBold="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Type de conditionnement]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="247" y="455" width="120" height="31" uuid="2e184eaa-f480-40bd-8a40-06fe156eae74"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11" isBold="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nombre de conteneurs]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="247" y="486" width="62" height="20" uuid="488c3f5d-3388-4861-9a75-53d80c6cb9d2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11" isBold="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[20 pieds]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="309" y="486" width="58" height="20" uuid="a2a01db5-be7d-42d2-a769-9179fbf9917c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11" isBold="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[40 pieds]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="367" y="455" width="99" height="31" uuid="33926411-3b83-477d-8bcc-c28dac307af8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11" isBold="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Provenance]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="467" y="455" width="76" height="31" uuid="3e06c247-ba39-4363-87a7-1c465fc90ba6"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11" isBold="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fabriquant]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="247" y="506" width="62" height="19" uuid="d7ca6b0f-48e4-414d-808d-582f2ab51848"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="Times New Roman" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{numberContainers20}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="309" y="506" width="58" height="19" uuid="ce92b104-75bf-432b-9526-1de14eb2bcd7"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="Times New Roman" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{numberContainers40}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="16" y="486" width="100" height="39" uuid="6a3423b4-9ea9-4ba5-9cc0-b84e58b981b4"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="Times New Roman" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{lotsNumber}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="116" y="486" width="133" height="39" uuid="e0342e6a-3615-42fd-a47b-42ee0d795dc7"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="Times New Roman" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{packaging}]]></textFieldExpression>
 			</textField>
@@ -506,7 +506,7 @@ Règlement Sanitaire International révisé en 2005.
 			<textField>
 				<reportElement x="367" y="486" width="100" height="39" uuid="293d4fb7-01f4-48bd-8365-8412f537c24b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="Times New Roman" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{provenance}]]></textFieldExpression>
 			</textField>
@@ -676,147 +676,147 @@ Physical examination of the container shall be done by health autority during de
 			<staticText>
 				<reportElement x="16" y="47" width="114" height="15" uuid="402f7be0-cf07-43e6-9a85-7a8208be69c1"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11" isBold="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[A]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="16" y="62" width="114" height="15" uuid="245b7f3e-c3d2-406c-8b8b-de558cbb2de1"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11" isBold="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[AMM]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="16" y="77" width="114" height="15" uuid="3567088f-81dd-4bd9-a0ce-58e09694ecfb"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11" isBold="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[AI]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="16" y="92" width="114" height="15" uuid="0c1592a6-8c51-4aef-9da4-cfd32fa8f8e0"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11" isBold="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[VT]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="16" y="107" width="114" height="15" uuid="e8d9da54-12f1-4f6d-ae9c-f4d88a9a4fd0"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11" isBold="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[AOI]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="16" y="122" width="114" height="15" uuid="d042afaa-5bc0-4693-98f9-55833038d7ea"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11" isBold="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[CC]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="16" y="137" width="114" height="15" uuid="cf0a39bb-4b93-4db8-8ad2-20dff07c648a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11" isBold="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[CBPSD]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="130" y="47" width="117" height="15" uuid="35fee431-b14d-4666-928b-52829f0933b5"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="Times New Roman" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{docConformeA}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="130" y="62" width="117" height="15" uuid="0534d236-293f-4161-be1e-1da56fad5caa"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="Times New Roman" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{docConformeAmm}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="247" y="47" width="296" height="15" uuid="6e64ac51-501d-4c8b-a434-fa504a51aa0a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="Times New Roman" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{observationDocConformeA}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="247" y="62" width="296" height="15" uuid="b438249e-a5ae-4767-85f0-2f21e524df53"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="Times New Roman" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{observationDocConformeAmm}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="130" y="77" width="117" height="15" uuid="4d411533-6684-479d-9fe9-40e7e58d2b65"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="Times New Roman" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{docConformeAi}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="247" y="77" width="296" height="15" uuid="64d0d0dc-b701-4ef7-a6d7-6960c987d0d9"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="Times New Roman" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{observationDocConformeAi}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="130" y="92" width="117" height="15" uuid="3c6bd7f0-754d-40ae-a577-53f57095c244"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="Times New Roman" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{docConformeVt}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="247" y="92" width="296" height="15" uuid="b89a9d9f-2f42-43a2-9505-0335a5458767"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="Times New Roman" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{observationDocConformeVt}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="130" y="107" width="117" height="15" uuid="5b607f33-742b-42a6-885b-9d4386d7ca81"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="Times New Roman" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{docConformeAoi}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="247" y="107" width="296" height="15" uuid="89db969f-b451-464c-b842-8a327d82a9ea"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="Times New Roman" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{observationDocConformeAoi}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="130" y="122" width="117" height="15" uuid="1dad93c7-6fc7-4545-94b8-77b048596d42"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="Times New Roman" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{docConformeCc}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="247" y="122" width="296" height="15" uuid="0d3d463c-8319-4d8f-9f55-aa2a69eec871"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="Times New Roman" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{observationDocConformeCc}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="130" y="137" width="117" height="15" uuid="5c012f01-26a3-4771-a005-c0e34a2f5ef0"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="Times New Roman" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{docConformeCbpsd}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="247" y="137" width="296" height="15" uuid="969db9cf-4d33-4e39-89b1-8cce5cdd8fb4"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="Times New Roman" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{observationDocConformeCbpsd}]]></textFieldExpression>
 			</textField>
