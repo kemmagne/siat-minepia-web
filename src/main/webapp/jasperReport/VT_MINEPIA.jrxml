@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VT_MINEPIA" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="487cd13d-5160-41db-a737-71f51ecf7f75">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="38"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -184,7 +184,7 @@
 			<componentElement>
 				<reportElement key="table" style="table" x="49" y="0" width="455" height="113" uuid="7e9cd7c0-b81e-42e9-913d-de2a0b29e0de"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="Table Dataset 1" uuid="05a747fa-2be0-4730-8ab3-088384a38c23">
+					<datasetRun subDataset="Table Dataset 1" uuid="76dc7eef-0fbe-4f77-b354-0ee2df9a4d84">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{fileItemList})]]></dataSourceExpression>
 					</datasetRun>
 					<jr:column width="120" uuid="494c43f6-9a3b-4c4f-bd72-30447afe6824">
@@ -198,7 +198,16 @@
 								<text><![CDATA[NSH]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="table_TD" height="43" rowSpan="1">
+						<jr:columnFooter style="table" height="37" rowSpan="1">
+							<box>
+								<pen lineStyle="Solid" lineColor="#FFFFFF"/>
+								<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineStyle="Solid" lineColor="#FFFFFF"/>
+								<bottomPen lineStyle="Solid" lineColor="#FFFFFF"/>
+								<rightPen lineStyle="Solid" lineColor="#FFFFFF"/>
+							</box>
+						</jr:columnFooter>
+						<jr:detailCell style="table" height="43" rowSpan="1">
 							<textField>
 								<reportElement x="0" y="0" width="120" height="40" uuid="294b9415-448a-4d7e-a77b-727a0fa93769"/>
 								<textElement verticalAlignment="Middle">
@@ -221,6 +230,9 @@
 							</staticText>
 						</jr:columnHeader>
 						<jr:columnFooter style="table" height="37" rowSpan="1">
+							<box>
+								<leftPen lineWidth="0.0"/>
+							</box>
 							<staticText>
 								<reportElement x="0" y="0" width="201" height="37" uuid="42c2ff44-246a-4a06-878f-0b84a4a7f618"/>
 								<textElement verticalAlignment="Middle">
@@ -230,7 +242,7 @@
 								<text><![CDATA[Total]]></text>
 							</staticText>
 						</jr:columnFooter>
-						<jr:detailCell style="table_TD" height="43" rowSpan="1">
+						<jr:detailCell style="table" height="43" rowSpan="1">
 							<textField>
 								<reportElement x="0" y="0" width="201" height="40" uuid="9c4910fb-3018-45e1-b7a1-d04acca5cc0a"/>
 								<textElement verticalAlignment="Middle">
@@ -262,7 +274,7 @@
 								<textFieldExpression><![CDATA[$V{SUM}]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
-						<jr:detailCell style="table_TD" height="43" rowSpan="1">
+						<jr:detailCell style="table" height="43" rowSpan="1">
 							<textField>
 								<reportElement x="0" y="0" width="133" height="40" uuid="5d476492-b457-4981-bacd-872c4a181666"/>
 								<textElement verticalAlignment="Middle">
@@ -286,7 +298,7 @@
 	<summary>
 		<band height="155" splitType="Stretch">
 			<textField>
-				<reportElement x="260" y="99" width="243" height="20" uuid="e312f30f-7728-496c-b834-afaf012aaba7"/>
+				<reportElement x="262" y="99" width="241" height="20" uuid="e312f30f-7728-496c-b834-afaf012aaba7"/>
 				<textElement verticalAlignment="Middle" markup="styled">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
@@ -300,7 +312,7 @@
 				<text><![CDATA[et délivre le présent visa technique conformément aux conventions et textes réglementaires en vigueur <style isItalic="true" >(and issues this technical visa in accordance with the conventions and laws in force)</style>.  ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="49" y="60" width="454" height="15" uuid="53c39cec-d580-4eab-800f-cb046ffcb653"/>
+				<reportElement x="49" y="59" width="454" height="15" uuid="53c39cec-d580-4eab-800f-cb046ffcb653"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12" isBold="true" isItalic="true"/>
 				</textElement>
