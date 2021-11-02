@@ -37,21 +37,15 @@
 		</p:column>
 	</p:dataTable>
         <br />
-	<h:panelGrid columns="2" cellspacing="5">
+	<h:panelGrid columns="6" cellspacing="5">
+
+		<h:outputText value="Total HT (FCFA) :" />
+		<h:outputText id="total" value="#{fileItemCctDetailController.invoiceTotalAmount}" />
+
 		<h:outputText value="#{bundle['Payment_otherAmount_label']}" />
 		<h:inputText style="width: 50px" id="other" value="#{fileItemCctDetailController.invoiceOtherAmount}">
 			<p:ajax event="blur" listener="#{fileItemCctDetailController.paymentAmoutValueChangedListener}" update="total totalttc" />
 		</h:inputText>
-	</h:panelGrid>
-	<br />
-	<h:panelGrid columns="6" cellspacing="5">
-            
-                <h:outputText value="" />
-		<h:inputText style="width: 50px" value="">
-		</h:inputText>
-
-		<h:outputText value="Total HT (FCFA) :" />
-		<h:outputText id="total" value="#{fileItemCctDetailController.invoiceTotalAmount}" />
 
 		<h:outputText value="Total TTC (FCFA) :" />
 		<h:outputText id="totalttc" value="#{fileItemCctDetailController.invoiceTotalTtcAmount}" />

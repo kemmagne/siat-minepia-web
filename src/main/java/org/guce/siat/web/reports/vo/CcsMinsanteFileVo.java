@@ -1,21 +1,17 @@
 package org.guce.siat.web.reports.vo;
 
-import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 /**
  * The Class CcsMinsanteFileVo.
  */
 public class CcsMinsanteFileVo extends AbstractFileVo<CcsMinsanteFileItemVo> {
 
-    /**
-     * The country of origin.
-     */
-    private String countryOfOrigin;
 
     /**
      * The country of provenance.
      */
-    private String countryOfProvenance;
+    private String provenance;
 
     /**
      * The provider.
@@ -23,9 +19,9 @@ public class CcsMinsanteFileVo extends AbstractFileVo<CcsMinsanteFileItemVo> {
     private String provider;
 
     /**
-     * The invoice.
+     * The provider address.
      */
-    private String invoice;
+    private String providerAddress;
 
     /**
      * The importer.
@@ -33,535 +29,510 @@ public class CcsMinsanteFileVo extends AbstractFileVo<CcsMinsanteFileItemVo> {
     private String importer;
 
     /**
-     * The address.
+     * The importer address.
      */
-    private String address;
+    private String importerAddress;
 
     /**
-     * The profession.
+     * The ship.
      */
-    private String profession;
+    private String ship;
 
     /**
-     * The code.
+     * The signature Date.
      */
-    private String code;
+    private String signatureDate;
 
-    private String pharmacistName;
+    private String productType1;
 
-    private String pharmacy;
+    private String productType2;
 
-    private String pharmacyRoad;
+    private String productType3;
 
-    private String pharmacyPoBox;
+    private String productType4;
 
-    private String pharmacyTel;
+    private String productType5;
 
-    private String invoiceNumber;
+    private String diNumber;
 
-    private String invoiceDate;
+    private String blNumber;
 
-    private String invoiceAmount;
+    private String lotsNumber;
 
-    private String loadingCustomsOffice;
+    private String packaging;
 
-    private String transportWay;
-	
-	private String transportMode;
+    private String numberContainers20;
 
-    private String enterringCustomsOffice;
+    private String numberContainers40;
 
-    private String expirationDate;
+    private String controller;
 
-    private String supplierName;
+    private String docConformeA;
 
-    private String attestation;
+    private String observationDocConformeA;
 
-    private String billOfLanding;
-	
-	private String clientName;
-	private String clientAddress;
-	private String clientPobox;
-	private String clientCity;
-	private String clientCountry;
-	private String clientTaxpayerNumber;
-	private String clientMail;
-	private String clientPhone;
-	private String clientInscriptionCode;
-	private String clientInscriptionDate;
-	private String clientInscriptionIssueDate;
-	
-	private String supplierAddress;
-	private String supplierPobox;
-	private String supplierCity;
-	private String supplierCountry;
-	private String supplierMail;
-	private String supplierPhone;
-	private String supplierFax;
-	
-	private String currency;
-	
-	private ByteArrayInputStream qrCode;
-	
-	private String diNumber;
-	private String vtpNumber;
-	
-	private String signatoryDate;
+    private String docConformeAmmAmc;
 
-    /**
-     * Gets the country of origin.
-     *
-     * @return the country of origin
-     */
-    public String getCountryOfOrigin() {
-        return countryOfOrigin;
+    private String observationDocConformeAmmAmc;
+    
+    private String docConformeAi;
+    
+    private String observationDocConformeAi;
+    
+    private String docConformeAtq;
+    
+    private String observationDocConformeAtq;
+    
+    private String docConformeCc;
+    
+    private String observationDocConformeCc;
+    
+    private String docConformeCfCd;
+    
+    private String observationDocConformeCfCd;
+    
+    private String docConformeCapcm;
+    
+    private String observationDocConformeCapcm;
+
+    private String docConformeCe;
+    
+    private String observationDocConformeCe;
+    
+    private String docConformeAmm;
+    
+    private String observationDocConformeAmm;
+    
+    private String docConformeAoi;
+    
+    private String observationDocConformeAoi;
+    
+    private String docConformeVt;
+
+    private String observationDocConformeVt;
+    
+    private String docConformeCbpsd;
+    
+    private String observationDocConformeCbpsd;
+    
+    private String containersNumbers;
+    
+    private Boolean hasContainers;
+
+    private InputStream qrCode;
+    
+    private InputStream controllerStamp;
+    
+    private InputStream controllerSignature;
+    
+    private InputStream signatoryStamp;
+    
+    private InputStream signatorySignature;
+
+    public CcsMinsanteFileVo() {
+    }
+    
+
+    public String getProvenance() {
+        return provenance;
     }
 
-    /**
-     * Sets the country of origin.
-     *
-     * @param countryOfOrigin the new country of origin
-     */
-    public void setCountryOfOrigin(final String countryOfOrigin) {
-        this.countryOfOrigin = countryOfOrigin;
+    public void setProvenance(String provenance) {
+        this.provenance = provenance;
     }
 
-    /**
-     * Gets the provider.
-     *
-     * @return the provider
-     */
     public String getProvider() {
         return provider;
     }
 
-    /**
-     * Sets the provider.
-     *
-     * @param provider the new provider
-     */
-    public void setProvider(final String provider) {
+    public void setProvider(String provider) {
         this.provider = provider;
     }
 
-    /**
-     * Gets the invoice.
-     *
-     * @return the invoice
-     */
-    public String getInvoice() {
-        return invoice;
+    public String getProviderAddress() {
+        return providerAddress;
     }
 
-    /**
-     * Sets the invoice.
-     *
-     * @param invoice the new invoice
-     */
-    public void setInvoice(final String invoice) {
-        this.invoice = invoice;
+    public void setProviderAddress(String providerAddress) {
+        this.providerAddress = providerAddress;
     }
 
-    /**
-     * Gets the country of provenance.
-     *
-     * @return the country of provenance
-     */
-    public String getCountryOfProvenance() {
-        return countryOfProvenance;
-    }
-
-    /**
-     * Sets the country of provenance.
-     *
-     * @param countryOfProvenance the new country of provenance
-     */
-    public void setCountryOfProvenance(final String countryOfProvenance) {
-        this.countryOfProvenance = countryOfProvenance;
-    }
-
-    /**
-     * Gets the importer.
-     *
-     * @return the importer
-     */
     public String getImporter() {
         return importer;
     }
 
-    /**
-     * Sets the importer.
-     *
-     * @param importer the new importer
-     */
-    public void setImporter(final String importer) {
+    public void setImporter(String importer) {
         this.importer = importer;
     }
 
-    /**
-     * Gets the address.
-     *
-     * @return the address
-     */
-    public String getAddress() {
-        return address;
+    public String getImporterAddress() {
+        return importerAddress;
     }
 
-    /**
-     * Sets the address.
-     *
-     * @param address the new address
-     */
-    public void setAddress(final String address) {
-        this.address = address;
+    public void setImporterAddress(String importerAddress) {
+        this.importerAddress = importerAddress;
     }
 
-    /**
-     * Gets the profession.
-     *
-     * @return the profession
-     */
-    public String getProfession() {
-        return profession;
+    public String getShip() {
+        return ship;
     }
 
-    /**
-     * Sets the profession.
-     *
-     * @param profession the new profession
-     */
-    public void setProfession(final String profession) {
-        this.profession = profession;
+    public void setShip(String ship) {
+        this.ship = ship;
     }
 
-    /**
-     * Gets the code.
-     *
-     * @return the code
-     */
-    public String getCode() {
-        return code;
+    public String getSignatureDate() {
+        return signatureDate;
     }
 
-    /**
-     * Sets the code.
-     *
-     * @param code the new code
-     */
-    public void setCode(final String code) {
-        this.code = code;
+    public void setSignatureDate(String signatureDate) {
+        this.signatureDate = signatureDate;
     }
 
-    public String getPharmacistName() {
-        return pharmacistName;
+    public String getProductType1() {
+        return productType1;
     }
 
-    public void setPharmacistName(String pharmacistName) {
-        this.pharmacistName = pharmacistName;
+    public void setProductType1(String productType1) {
+        this.productType1 = productType1;
     }
 
-    public String getPharmacy() {
-        return pharmacy;
+    public String getProductType2() {
+        return productType2;
     }
 
-    public void setPharmacy(String pharmacy) {
-        this.pharmacy = pharmacy;
+    public void setProductType2(String productType2) {
+        this.productType2 = productType2;
     }
 
-    public String getPharmacyRoad() {
-        return pharmacyRoad;
+    public String getProductType3() {
+        return productType3;
     }
 
-    public void setPharmacyRoad(String pharmacyRoad) {
-        this.pharmacyRoad = pharmacyRoad;
+    public void setProductType3(String productType3) {
+        this.productType3 = productType3;
     }
 
-    public String getPharmacyPoBox() {
-        return pharmacyPoBox;
+    public String getProductType4() {
+        return productType4;
     }
 
-    public void setPharmacyPoBox(String pharmacyPoBox) {
-        this.pharmacyPoBox = pharmacyPoBox;
+    public void setProductType4(String productType4) {
+        this.productType4 = productType4;
     }
 
-    public String getPharmacyTel() {
-        return pharmacyTel;
+    public String getProductType5() {
+        return productType5;
     }
 
-    public void setPharmacyTel(String pharmacyTel) {
-        this.pharmacyTel = pharmacyTel;
+    public void setProductType5(String productType5) {
+        this.productType5 = productType5;
     }
 
-    public String getInvoiceNumber() {
-        return invoiceNumber;
+    public String getDiNumber() {
+        return diNumber;
     }
 
-    public void setInvoiceNumber(String invoiceNumber) {
-        this.invoiceNumber = invoiceNumber;
+    public void setDiNumber(String diNumber) {
+        this.diNumber = diNumber;
     }
 
-    public String getInvoiceDate() {
-        return invoiceDate;
+    public String getBlNumber() {
+        return blNumber;
     }
 
-    public void setInvoiceDate(String invoiceDate) {
-        this.invoiceDate = invoiceDate;
+    public void setBlNumber(String blNumber) {
+        this.blNumber = blNumber;
     }
 
-    public String getInvoiceAmount() {
-        return invoiceAmount;
+    public String getLotsNumber() {
+        return lotsNumber;
     }
 
-    public void setInvoiceAmount(String invoiceAmount) {
-        this.invoiceAmount = invoiceAmount;
+    public void setLotsNumber(String lotsNumber) {
+        this.lotsNumber = lotsNumber;
     }
 
-    public String getLoadingCustomsOffice() {
-        return loadingCustomsOffice;
+    public String getPackaging() {
+        return packaging;
     }
 
-    public void setLoadingCustomsOffice(String loadingCustomsOffice) {
-        this.loadingCustomsOffice = loadingCustomsOffice;
+    public void setPackaging(String packaging) {
+        this.packaging = packaging;
     }
 
-    public String getTransportWay() {
-        return transportWay;
+    public String getNumberContainers20() {
+        return numberContainers20;
     }
 
-    public void setTransportWay(String transportWay) {
-        this.transportWay = transportWay;
+    public void setNumberContainers20(String numberContainers20) {
+        this.numberContainers20 = numberContainers20;
     }
 
-    public String getEnterringCustomsOffice() {
-        return enterringCustomsOffice;
+    public String getNumberContainers40() {
+        return numberContainers40;
     }
 
-    public void setEnterringCustomsOffice(String enterringCustomsOffice) {
-        this.enterringCustomsOffice = enterringCustomsOffice;
+    public void setNumberContainers40(String numberContainers40) {
+        this.numberContainers40 = numberContainers40;
     }
 
-    public String getExpirationDate() {
-        return expirationDate;
+
+    public String getController() {
+        return controller;
     }
 
-    public void setExpirationDate(String expirationDate) {
-        this.expirationDate = expirationDate;
+    public void setController(String controller) {
+        this.controller = controller;
     }
 
-    public String getSupplierName() {
-        return supplierName;
+    public String getDocConformeA() {
+        return docConformeA;
     }
 
-    public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
+    public void setDocConformeA(String docConformeA) {
+        this.docConformeA = docConformeA;
     }
 
-    public String getAttestation() {
-        return attestation;
+    public String getObservationDocConformeA() {
+        return observationDocConformeA;
     }
 
-    public void setAttestation(String attestation) {
-        this.attestation = attestation;
+    public void setObservationDocConformeA(String observationDocConformeA) {
+        this.observationDocConformeA = observationDocConformeA;
     }
 
-    public String getBillOfLanding() {
-        return billOfLanding;
+    public String getDocConformeAmmAmc() {
+        return docConformeAmmAmc;
     }
 
-    public void setBillOfLanding(String billOfLanding) {
-        this.billOfLanding = billOfLanding;
+    public void setDocConformeAmmAmc(String docConformeAmmAmc) {
+        this.docConformeAmmAmc = docConformeAmmAmc;
     }
 
-	public String getClientName() {
-		return clientName;
-	}
+    public String getObservationDocConformeAmmAmc() {
+        return observationDocConformeAmmAmc;
+    }
 
-	public void setClientName(String clientName) {
-		this.clientName = clientName;
-	}
+    public void setObservationDocConformeAmmAmc(String observationDocConformeAmmAmc) {
+        this.observationDocConformeAmmAmc = observationDocConformeAmmAmc;
+    }
 
-	public String getClientAddress() {
-		return clientAddress;
-	}
+    public String getDocConformeAi() {
+        return docConformeAi;
+    }
 
-	public void setClientAddress(String clientAddress) {
-		this.clientAddress = clientAddress;
-	}
+    public void setDocConformeAi(String docConformeAi) {
+        this.docConformeAi = docConformeAi;
+    }
 
-	public String getClientPobox() {
-		return clientPobox;
-	}
+    public String getObservationDocConformeAi() {
+        return observationDocConformeAi;
+    }
 
-	public void setClientPobox(String clientPobox) {
-		this.clientPobox = clientPobox;
-	}
+    public void setObservationDocConformeAi(String observationDocConformeAi) {
+        this.observationDocConformeAi = observationDocConformeAi;
+    }
 
-	public String getClientCity() {
-		return clientCity;
-	}
+    public String getDocConformeAtq() {
+        return docConformeAtq;
+    }
 
-	public void setClientCity(String clientCity) {
-		this.clientCity = clientCity;
-	}
+    public void setDocConformeAtq(String docConformeAtq) {
+        this.docConformeAtq = docConformeAtq;
+    }
 
-	public String getClientCountry() {
-		return clientCountry;
-	}
+    public String getObservationDocConformeAtq() {
+        return observationDocConformeAtq;
+    }
 
-	public void setClientCountry(String clientCountry) {
-		this.clientCountry = clientCountry;
-	}
+    public void setObservationDocConformeAtq(String observationDocConformeAtq) {
+        this.observationDocConformeAtq = observationDocConformeAtq;
+    }
 
-	public String getClientTaxpayerNumber() {
-		return clientTaxpayerNumber;
-	}
+    public String getDocConformeCc() {
+        return docConformeCc;
+    }
 
-	public void setClientTaxpayerNumber(String clientTaxpayerNumber) {
-		this.clientTaxpayerNumber = clientTaxpayerNumber;
-	}
+    public void setDocConformeCc(String docConformeCc) {
+        this.docConformeCc = docConformeCc;
+    }
 
-	public String getClientMail() {
-		return clientMail;
-	}
+    public String getObservationDocConformeCc() {
+        return observationDocConformeCc;
+    }
 
-	public void setClientMail(String clientMail) {
-		this.clientMail = clientMail;
-	}
+    public void setObservationDocConformeCc(String observationDocConformeCc) {
+        this.observationDocConformeCc = observationDocConformeCc;
+    }
 
-	public String getClientPhone() {
-		return clientPhone;
-	}
+    public String getDocConformeCfCd() {
+        return docConformeCfCd;
+    }
 
-	public void setClientPhone(String clientPhone) {
-		this.clientPhone = clientPhone;
-	}
+    public void setDocConformeCfCd(String docConformeCfCd) {
+        this.docConformeCfCd = docConformeCfCd;
+    }
 
-	public String getClientInscriptionCode() {
-		return clientInscriptionCode;
-	}
+    public String getObservationDocConformeCfCd() {
+        return observationDocConformeCfCd;
+    }
 
-	public void setClientInscriptionCode(String clientInscriptionCode) {
-		this.clientInscriptionCode = clientInscriptionCode;
-	}
+    public void setObservationDocConformeCfCd(String observationDocConformeCfCd) {
+        this.observationDocConformeCfCd = observationDocConformeCfCd;
+    }
 
-	public String getClientInscriptionDate() {
-		return clientInscriptionDate;
-	}
+    public String getDocConformeCapcm() {
+        return docConformeCapcm;
+    }
 
-	public void setClientInscriptionDate(String clientInscriptionDate) {
-		this.clientInscriptionDate = clientInscriptionDate;
-	}
+    public void setDocConformeCapcm(String docConformeCapcm) {
+        this.docConformeCapcm = docConformeCapcm;
+    }
 
-	public String getClientInscriptionIssueDate() {
-		return clientInscriptionIssueDate;
-	}
+    public String getObservationDocConformeCapcm() {
+        return observationDocConformeCapcm;
+    }
 
-	public void setClientInscriptionIssueDate(String clientInscriptionIssueDate) {
-		this.clientInscriptionIssueDate = clientInscriptionIssueDate;
-	}
+    public void setObservationDocConformeCapcm(String observationDocConformeCapcm) {
+        this.observationDocConformeCapcm = observationDocConformeCapcm;
+    }
 
-	public String getSupplierAddress() {
-		return supplierAddress;
-	}
+    public String getDocConformeCe() {
+        return docConformeCe;
+    }
 
-	public void setSupplierAddress(String supplierAddress) {
-		this.supplierAddress = supplierAddress;
-	}
+    public void setDocConformeCe(String docConformeCe) {
+        this.docConformeCe = docConformeCe;
+    }
 
-	public String getSupplierPobox() {
-		return supplierPobox;
-	}
+    public String getObservationDocConformeCe() {
+        return observationDocConformeCe;
+    }
 
-	public void setSupplierPobox(String supplierPobox) {
-		this.supplierPobox = supplierPobox;
-	}
+    public void setObservationDocConformeCe(String observationDocConformeCe) {
+        this.observationDocConformeCe = observationDocConformeCe;
+    }
 
-	public String getSupplierCity() {
-		return supplierCity;
-	}
+    public String getDocConformeAmm() {
+        return docConformeAmm;
+    }
 
-	public void setSupplierCity(String supplierCity) {
-		this.supplierCity = supplierCity;
-	}
+    public void setDocConformeAmm(String docConformeAmm) {
+        this.docConformeAmm = docConformeAmm;
+    }
 
-	public String getSupplierCountry() {
-		return supplierCountry;
-	}
+    public String getObservationDocConformeAmm() {
+        return observationDocConformeAmm;
+    }
 
-	public void setSupplierCountry(String supplierCountry) {
-		this.supplierCountry = supplierCountry;
-	}
+    public void setObservationDocConformeAmm(String observationDocConformeAmm) {
+        this.observationDocConformeAmm = observationDocConformeAmm;
+    }
 
-	public String getSupplierMail() {
-		return supplierMail;
-	}
+    public String getDocConformeAoi() {
+        return docConformeAoi;
+    }
 
-	public void setSupplierMail(String supplierMail) {
-		this.supplierMail = supplierMail;
-	}
+    public void setDocConformeAoi(String docConformeAoi) {
+        this.docConformeAoi = docConformeAoi;
+    }
 
-	public String getSupplierPhone() {
-		return supplierPhone;
-	}
+    public String getObservationDocConformeAoi() {
+        return observationDocConformeAoi;
+    }
 
-	public void setSupplierPhone(String supplierPhone) {
-		this.supplierPhone = supplierPhone;
-	}
+    public void setObservationDocConformeAoi(String observationDocConformeAoi) {
+        this.observationDocConformeAoi = observationDocConformeAoi;
+    }
 
-	public String getSupplierFax() {
-		return supplierFax;
-	}
+    public String getDocConformeVt() {
+        return docConformeVt;
+    }
 
-	public void setSupplierFax(String supplierFax) {
-		this.supplierFax = supplierFax;
-	}
+    public void setDocConformeVt(String docConformeVt) {
+        this.docConformeVt = docConformeVt;
+    }
 
-	public String getTransportMode() {
-		return transportMode;
-	}
+    public String getObservationDocConformeVt() {
+        return observationDocConformeVt;
+    }
 
-	public void setTransportMode(String transportMode) {
-		this.transportMode = transportMode;
-	}
+    public void setObservationDocConformeVt(String observationDocConformeVt) {
+        this.observationDocConformeVt = observationDocConformeVt;
+    }
 
-	public String getCurrency() {
-		return currency;
-	}
+    public String getDocConformeCbpsd() {
+        return docConformeCbpsd;
+    }
 
-	public void setCurrency(String currency) {
-		this.currency = currency;
-	}
+    public void setDocConformeCbpsd(String docConformeCbpsd) {
+        this.docConformeCbpsd = docConformeCbpsd;
+    }
 
-	public ByteArrayInputStream getQrCode() {
-		return qrCode;
-	}
+    public String getObservationDocConformeCbpsd() {
+        return observationDocConformeCbpsd;
+    }
 
-	public void setQrCode(ByteArrayInputStream qrCode) {
-		this.qrCode = qrCode;
-	}
+    public void setObservationDocConformeCbpsd(String observationDocConformeCbpsd) {
+        this.observationDocConformeCbpsd = observationDocConformeCbpsd;
+    }
 
-	public String getDiNumber() {
-		return diNumber;
-	}
+    public InputStream getQrCode() {
+        return qrCode;
+    }
 
-	public void setDiNumber(String diNumber) {
-		this.diNumber = diNumber;
-	}
+    public void setQrCode(InputStream qrCode) {
+        this.qrCode = qrCode;
+    }
 
-	public String getVtpNumber() {
-		return vtpNumber;
-	}
+    public InputStream getControllerStamp() {
+        return controllerStamp;
+    }
 
-	public void setVtpNumber(String vtpNumber) {
-		this.vtpNumber = vtpNumber;
-	}
+    public void setControllerStamp(InputStream controllerStamp) {
+        this.controllerStamp = controllerStamp;
+    }
 
-	public String getSignatoryDate() {
-		return signatoryDate;
-	}
+    public InputStream getControllerSignature() {
+        return controllerSignature;
+    }
 
-	public void setSignatoryDate(String signatoryDate) {
-		this.signatoryDate = signatoryDate;
-	}
+    public void setControllerSignature(InputStream controllerSignature) {
+        this.controllerSignature = controllerSignature;
+    }
 
+    public InputStream getSignatoryStamp() {
+        return signatoryStamp;
+    }
+
+    public void setSignatoryStamp(InputStream signatoryStamp) {
+        this.signatoryStamp = signatoryStamp;
+    }
+
+    public InputStream getSignatorySignature() {
+        return signatorySignature;
+    }
+
+    public void setSignatorySignature(InputStream signatorySignature) {
+        this.signatorySignature = signatorySignature;
+    }
+
+    public String getContainersNumbers() {
+        return containersNumbers;
+    }
+
+    public void setContainersNumbers(String containersNumbers) {
+        this.containersNumbers = containersNumbers;
+    }
+
+    public Boolean getHasContainers() {
+        return hasContainers;
+    }
+
+    public void setHasContainers(Boolean hasContainers) {
+        this.hasContainers = hasContainers;
+    }
+
+    
 }

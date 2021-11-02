@@ -13,7 +13,7 @@
     <!-- .STANDALONE -->
     <!-- .TEST -->
     <!-- .HT -->
-    <version>2.6.17-beta.10</version>
+    <version>2.6.17-beta.11</version>
     <packaging>war</packaging>
 
     <name>siat-ct-web</name>
@@ -23,7 +23,7 @@
             <id>profile-etl</id>
             <properties>
                 <environment>etl</environment>
-                <global-config.properties>/home/htiomy/siat/config/ct/global-config.properties</global-config.properties>
+                <global-config.properties>/global-config.properties</global-config.properties>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
@@ -240,7 +240,7 @@
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports-fonts</artifactId>
-            <version>6.0.0</version>
+            <version>6.15.0</version>
         </dependency>
         <dependency>
             <groupId>ar.com.fdvs</groupId>

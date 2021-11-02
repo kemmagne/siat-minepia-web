@@ -2,7 +2,7 @@
       xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" >
     <ui:composition>
 
-        <h:form id="userEditForm">
+        <h:form id="userEditForm" enctype="multipart/form-data">
 
             <p:panel id="userEditPanel" rendered="#{not empty userController.selected and not empty userController.selected.id}"
                      widgetVar="userEditPanelWidget" resizable="false" header="#{bundle['EditUserTitle']}">
@@ -106,15 +106,49 @@
 
                         <p:outputLabel value="#{bundle['EditUserLabel_enabled']}" for="user_enabled" />
                         <h:panelGroup>
-                            <p:selectBooleanCheckbox id="user_enabled" value="#{userController.selected.enabled}" title="#{bundle.EditUserTitle_enabled}" />
+                            <p:selectBooleanCheckbox id="user_enabled" value="#{userController.selected.enabled}" />
                             <p:message for="user_enabled" />
                         </h:panelGroup>
 
                         <p:outputLabel value="#{bundle['EditUserLabel_non_locked']}" for="user_non_locked" />
                         <h:panelGroup>
                             <p:selectBooleanCheckbox id="user_non_locked" value="#{userController.selected.accountNonLocked}"
-                                                     title="#{bundle['EditUserTitle_non_locked']}" />
+                                                     />
                             <p:message for="user_non_locked" />
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{bundle['CreateUserLabel_signature']}" for="fileSignature" />
+
+                        <h:panelGroup id="fileSignature">
+                            <p:fileUpload id="fileUploadSignature" label="#{bundle['CreatesignatureLabel_signature']}"
+                                          fileUploadListener="#{userController.fileUploadSignatureListener}" mode="advanced" auto="true"
+                                          style="width:200px" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="4194304"
+                                          invalidSizeMessage="#{bundle['Createsignature_invalidSize']}" invalidFileMessage="#{bundle['Createsignature_invalidFileType']}">
+                            </p:fileUpload>
+
+                            <p:commandButton id="downloadSignatureLink" icon="ui-icon-arrowthichk-s" value="#{bundle['Createsignature_visualize']}" action="#{userController.visualizeSignature()}"
+                                             process="@this,:userEditForm :showSignatureView" update="userEditForm :showSignatureView"
+                                             oncomplete="PF('showSignatureDialog').show();return false;" rendered="#{not empty userController.userSelectedStampSignature.signaturePath }"/>
+
+
+                            <h:outputText value=""/>
+                        </h:panelGroup>
+
+                        <p:outputLabel style="margin-top: 50px" value="#{bundle['CreateUserLabel_stamp']}"  for="fileStamp" />
+
+                        <h:panelGroup id="fileStamp">
+                            <p:fileUpload id="fileUploadStamp" label="#{bundle['CreatesignatureLabel_stamp']}"
+                                          fileUploadListener="#{userController.fileUploadStampListener}" mode="advanced" auto="true"
+                                          style="width:200px" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="4194304"
+                                          invalidSizeMessage="#{bundle['Createsignature_invalidSize']}" invalidFileMessage="#{bundle['Createsignature_invalidFileType']}">
+                            </p:fileUpload>
+
+                            <p:commandButton id="downloadStampLink" icon="ui-icon-arrowthichk-s" value="#{bundle['Createsignature_visualize']}" action="#{userController.visualizeStamp()}"
+                                             process="@this,:userEditForm :showStampView" update="userEditForm :showStampView"
+                                             oncomplete="PF('showStampDialog').show();return false;" rendered="#{not empty userController.userSelectedStampSignature.stampPath }"/>
+
+
+                            <h:outputText value=""/>
                         </h:panelGroup>
 
                     </p:panelGrid>
@@ -169,6 +203,26 @@
                 </h:panelGrid>
                 <br/>
                 <h:outputText value="#{bundle['PasswordShouldBeChanged']}" />
+            </h:form>
+        </p:dialog>
+
+        <p:dialog closeOnEscape="true" id="showSignatureView" widgetVar="showSignatureDialog" modal="true" resizable="true" appendTo="@(body)"
+                  header="#{bundle['ShowSignature_title']}" height="auto" width="auto" position="center center" dynamic="true" onShow="PF('showSignatureDialog').initPosition()">
+            <h:form id="showSignatureViewForm" prependId="false">
+                <h:panelGrid columns="1">
+                    <p:graphicImage value="#{userController.signateurStreamContent}" cache="false"  >
+                    </p:graphicImage>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog closeOnEscape="true" id="showStampView" widgetVar="showStampDialog" modal="true" resizable="true" appendTo="@(body)"
+                  header="#{bundle['ShowStamp_title']}" height="auto" width="auto" position="center center" dynamic="true" onShow="PF('showStampDialog').initPosition()">
+            <h:form id="showStampViewForm" prependId="false">
+                <h:panelGrid columns="1">
+                    <p:graphicImage value="#{userController.stampStreamContent}" cache="false">
+                    </p:graphicImage>
+                </h:panelGrid>
             </h:form>
         </p:dialog>
 

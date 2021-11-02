@@ -1,5 +1,7 @@
 package org.guce.siat.web.ct.controller;
 
+import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -8,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.logging.Level;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -44,14 +47,21 @@ import org.guce.siat.common.utils.Constants;
 import org.guce.siat.common.utils.enums.AuthorityConstants;
 import org.guce.siat.common.utils.enums.PositionType;
 import org.guce.siat.common.utils.enums.Theme;
+import org.guce.siat.core.ct.model.UserStampSignature;
+import org.guce.siat.core.ct.service.UserStampSignatureService;
 import org.guce.siat.web.common.AbstractController;
 import org.guce.siat.web.common.ControllerConstants;
 import org.guce.siat.web.ct.controller.util.JsfUtil;
 import org.guce.siat.web.ct.controller.util.enums.PersistenceActions;
 import org.guce.siat.web.ct.data.FileTypeAutorityData;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 
 /**
  * The Class UserController.
@@ -176,6 +186,9 @@ public class UserController extends AbstractController<User> {
      */
     @ManagedProperty(value = "#{userAuthorityService}")
     private UserAuthorityService userAuthorityService;
+    
+   @ManagedProperty(value = "#{userStampSignatureService}")
+    private UserStampSignatureService userStampSignatureService;
 
     /**
      * The mail service.
@@ -249,6 +262,22 @@ public class UserController extends AbstractController<User> {
     private List<List<FileTypeAutorityData>> historyfileTypeAutorityDatas;
 
     /**
+     * the signature of the user
+     */
+    private UploadedFile fileSignature;
+
+    /**
+     * the stamp of the user
+     */
+    private UploadedFile fileStamp;
+
+    private UserStampSignature userSelectedStampSignature;
+    
+    private DefaultStreamedContent signateurStreamContent;
+    
+    private DefaultStreamedContent stampStreamContent;
+
+    /**
      * Instantiates a new user controller.
      */
     public UserController() {
@@ -307,7 +336,7 @@ public class UserController extends AbstractController<User> {
                     + "," + PositionType.CHEF_SECTEUR.getCode()
                     + "," + PositionType.AGENT.getCode()
                     + "," + PositionType.OBSERVATEUR
-                    .getCode()).contains(getSelected().getPosition().getCode())) {
+                            .getCode()).contains(getSelected().getPosition().getCode())) {
                 getSelected().setAdministration(selectedEntity);
             }
         } else if (getLoggedUser().getAuthoritiesList().contains(AuthorityConstants.ADMIN_MINISTERE.getCode())) {
@@ -355,6 +384,8 @@ public class UserController extends AbstractController<User> {
                     userAuthorityFileTypeService.saveListUserAuthorityFileType(userAuthFileTypes, getSelected());
                     final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
                             User.class.getSimpleName() + PersistenceActions.CREATE.getCode());
+                    //save user signature and stamp
+                    this.saveUserSignatureAndStamp(getSelected(), fileSignature, fileStamp);
                     JsfUtil.addSuccessMessage(msg);
                     //send mail params
                     final String subject = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
@@ -470,7 +501,7 @@ public class UserController extends AbstractController<User> {
             historyfileTypeAutorityDatas.add(innerList);
             fileTypeAutorityDatas.add(innerList);
         }
-
+        userSelectedStampSignature = userStampSignatureService.findUserStampSignatureByUser(getSelected());
         positionChangedHandler();
         subDepartmentChangedHandler();
         serviceChangedHandler();
@@ -548,7 +579,8 @@ public class UserController extends AbstractController<User> {
                 userService.update(getSelected());
                 final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
                         User.class.getSimpleName() + PersistenceActions.UPDATE.getCode());
-
+                //save user signature and stamp
+                this.saveUserSignatureAndStamp(getSelected(), fileSignature, fileStamp);
                 JsfUtil.addSuccessMessage(msg);
                 resetAttributes();
                 if (!isValidationFailed()) {
@@ -693,7 +725,7 @@ public class UserController extends AbstractController<User> {
                 initFileTypeAuthorityDatas();
             }
         }
-
+        userSelectedStampSignature = new UserStampSignature();
     }
 
     /**
@@ -1223,5 +1255,124 @@ public class UserController extends AbstractController<User> {
     public String getNewPassword() {
         return newPassword;
     }
+    
+    
 
+    public UploadedFile getFileSignature() {
+        return fileSignature;
+    }
+
+    public void setFileSignature(UploadedFile fileSignature) {
+        this.fileSignature = fileSignature;
+    }
+
+    public UploadedFile getFileStamp() {
+        return fileStamp;
+    }
+
+    public void setFileStamp(UploadedFile fileStamp) {
+        this.fileStamp = fileStamp;
+    }
+
+    public UserStampSignatureService getUserStampSignatureService() {
+        return userStampSignatureService;
+    }
+
+    public void setUserStampSignatureService(UserStampSignatureService userStampSignatureService) {
+        this.userStampSignatureService = userStampSignatureService;
+    }
+
+    public UserStampSignature getUserSelectedStampSignature() {
+        return userSelectedStampSignature;
+    }
+
+    public void setUserSelectedStampSignature(UserStampSignature userSelectedStampSignature) {
+        this.userSelectedStampSignature = userSelectedStampSignature;
+    }
+
+    public DefaultStreamedContent getSignateurStreamContent() {
+        return signateurStreamContent;
+    }
+
+    public void setSignateurStreamContent(DefaultStreamedContent signateurStreamContent) {
+        this.signateurStreamContent = signateurStreamContent;
+    }
+
+    public DefaultStreamedContent getStampStreamContent() {
+        return stampStreamContent;
+    }
+
+    public void setStampStreamContent(DefaultStreamedContent stampStreamContent) {
+        this.stampStreamContent = stampStreamContent;
+    }
+    // new user with signature
+    public void fileUploadSignatureListener(FileUploadEvent e) {
+        // Get uploaded file from the FileUploadEvent
+        this.fileSignature = e.getFile();
+        // Print out the information of the file
+    }
+    // new user with stamp
+
+    public void fileUploadStampListener(FileUploadEvent e) {
+        this.fileStamp = e.getFile();
+    }
+
+    public void saveUserSignatureAndStamp(User user, UploadedFile signatureFile, UploadedFile stampFile) {
+        try {
+            byte[] signatureData = null;
+            String signatureFileName = null;
+            byte[] stampData = null;
+            String stampFileName = null;
+            if (signatureFile != null) {
+                if (Arrays.asList(MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE,
+                        MediaType.IMAGE_PNG_VALUE).contains(signatureFile.getContentType())) {
+                    signatureData = signatureFile.getContents();
+                    signatureFileName = signatureFile.getFileName();
+                }
+            }
+
+            if (stampFile != null) {
+                if (Arrays.asList(MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE,
+                        MediaType.IMAGE_PNG_VALUE).contains(stampFile.getContentType())) {
+                    stampData = stampFile.getContents();
+                    stampFileName = stampFile.getFileName();
+                }
+            }
+
+            userSelectedStampSignature = userStampSignatureService.saveUserStampSignature(user, signatureData, signatureFileName, stampData, stampFileName);
+        } catch (Exception ex) {
+            LOG.error(null, ex);
+        }
+
+    }
+
+    public void visualizeSignature() {
+        String contentType;
+        String fileName;
+        try {
+            if (userSelectedStampSignature != null) {
+                if (StringUtils.isNotEmpty(userSelectedStampSignature.getSignaturePath())) {
+                    InputStream signatureInputStream = userStampSignatureService.getUserSignature(userSelectedStampSignature);
+                    signateurStreamContent = new DefaultStreamedContent(signatureInputStream);
+                }
+            }
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void visualizeStamp() {
+        String contentType;
+        String fileName;
+        try {
+            if (userSelectedStampSignature != null) {
+                if (StringUtils.isNotEmpty(userSelectedStampSignature.getStampPath())) {
+                    InputStream stampInputStream = userStampSignatureService.getUserStamp(userSelectedStampSignature);
+                    stampStreamContent = new DefaultStreamedContent(stampInputStream);
+                }
+            }
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
