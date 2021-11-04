@@ -33,6 +33,7 @@
 		</variable>
 	</subDataset>
 	<parameter name="DRAFT" class="java.lang.Boolean"/>
+	<parameter name="MINSANTE_LOGO" class="java.lang.String"/>
 	<field name="fileItemList" class="java.util.List"/>
 	<field name="containersNumbers" class="java.lang.String"/>
 	<field name="hasContainers" class="java.lang.Boolean"/>
@@ -62,10 +63,45 @@
 		</band>
 	</background>
 	<title>
-		<band height="60" splitType="Stretch">
+		<band height="150" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="225" height="135" uuid="74ecc686-50a1-4570-a409-2a3d07c25d79"/>
+				<textElement textAlignment="Center" markup="styled">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPUBLIQUE DU CAMEROUN
+Paix-Travail-Patrie<br />
+MINISTERE DE LA SANTE PUBLIQUE<br />
+DELEGATION REGIONALE DE LA SANTE<br />
+POSTE DE SANTE AUX FRONTIERES DU PORT AUTONOME DE DOUALA<br />
+B.P : 106 Douala TEL : 33-42-17-60
+]]></text>
+			</staticText>
+			<image scaleImage="FillFrame">
+				<reportElement x="247" y="13" width="70" height="111" uuid="41ef1125-f941-4b55-9d05-068a6f56cdbb"/>
+				<imageExpression><![CDATA[new java.io.File($P{MINSANTE_LOGO})]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="338" y="0" width="217" height="147" uuid="1a24eeff-c134-4a45-b947-d573814ddef7"/>
+				<textElement textAlignment="Center" markup="styled">
+					<font fontName="Times New Roman" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPUBLIC OF CAMEROON
+Peace-Work-Fatherland<br />
+MINISTRY OF PUBLIC HEALTH<br />
+REGIONAL DELEGATION OF PUBLIC HEALTH<br />
+HEALTH PORT OFFICE OF DOUALA<br />
+P.O BOX : 106 Douala TEL : 33-42-17-60<br />
+FAX :233427610
+]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="64" splitType="Stretch">
 			<printWhenExpression><![CDATA[$F{hasContainers}]]></printWhenExpression>
 			<staticText>
-				<reportElement x="185" y="0" width="168" height="19" uuid="5bc50e13-9f88-48d6-b721-c03b863ce110"/>
+				<reportElement x="16" y="3" width="527" height="19" uuid="5bc50e13-9f88-48d6-b721-c03b863ce110"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="11" isBold="true" isUnderline="true"/>
 				</textElement>
@@ -79,9 +115,6 @@
 				<textFieldExpression><![CDATA[$F{containersNumbers}]]></textFieldExpression>
 			</textField>
 		</band>
-	</title>
-	<pageHeader>
-		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
 		<band splitType="Stretch"/>
@@ -107,10 +140,16 @@
 						</jr:columnHeader>
 						<jr:columnFooter height="30" rowSpan="1">
 							<box>
-								<topPen lineWidth="1.0"/>
+								<topPen lineWidth="0.0"/>
+								<leftPen lineWidth="1.0"/>
+								<bottomPen lineWidth="1.0"/>
 							</box>
 						</jr:columnFooter>
 						<jr:detailCell style="table" height="30" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.25"/>
+								<leftPen lineWidth="1.0"/>
+							</box>
 							<textField>
 								<reportElement x="0" y="0" width="160" height="30" uuid="574239cb-7ea4-440f-9b87-77cba96ad0d0"/>
 								<textElement verticalAlignment="Middle">
@@ -134,6 +173,7 @@
 						</jr:columnHeader>
 						<jr:columnFooter style="table" height="30" rowSpan="1">
 							<box>
+								<topPen lineWidth="0.0"/>
 								<leftPen lineWidth="0.0"/>
 							</box>
 							<staticText>
@@ -146,6 +186,10 @@
 							</staticText>
 						</jr:columnFooter>
 						<jr:detailCell style="table" height="30" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0"/>
+								<leftPen lineWidth="0.0"/>
+							</box>
 							<textField>
 								<reportElement x="0" y="0" width="240" height="30" uuid="f78c9032-22c0-4d99-a082-1027e1c4df54"/>
 								<textElement verticalAlignment="Middle">
@@ -168,6 +212,10 @@
 							</staticText>
 						</jr:columnHeader>
 						<jr:columnFooter style="table" height="30" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0"/>
+								<leftPen lineWidth="0.0"/>
+							</box>
 							<textField>
 								<reportElement x="0" y="0" width="126" height="30" uuid="b596a6be-ab81-4cfa-a567-758c27fe5781"/>
 								<textElement verticalAlignment="Middle">
@@ -178,6 +226,10 @@
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="table" height="30" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0"/>
+								<leftPen lineWidth="0.0"/>
+							</box>
 							<textField>
 								<reportElement x="0" y="0" width="126" height="30" uuid="9779e751-9ba6-46a5-b655-51c20ca800c2"/>
 								<textElement verticalAlignment="Middle">

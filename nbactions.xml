@@ -33,4 +33,16 @@
                 <activatedProfile>profile-standalone</activatedProfile>
             </activatedProfiles>
         </action>
+        <action>
+            <actionName>CUSTOM-skip-test-build</actionName>
+            <displayName>skip-test-build</displayName>
+
+            <goals>
+                <goal>clean</goal>
+                <goal>install</goal>
+            </goals>
+            <properties>
+                <skipTests>true</skipTests>
+            </properties>
+        </action>
     </actions>

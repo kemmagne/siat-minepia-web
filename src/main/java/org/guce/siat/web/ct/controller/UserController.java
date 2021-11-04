@@ -186,8 +186,8 @@ public class UserController extends AbstractController<User> {
      */
     @ManagedProperty(value = "#{userAuthorityService}")
     private UserAuthorityService userAuthorityService;
-    
-   @ManagedProperty(value = "#{userStampSignatureService}")
+
+    @ManagedProperty(value = "#{userStampSignatureService}")
     private UserStampSignatureService userStampSignatureService;
 
     /**
@@ -272,9 +272,9 @@ public class UserController extends AbstractController<User> {
     private UploadedFile fileStamp;
 
     private UserStampSignature userSelectedStampSignature;
-    
+
     private DefaultStreamedContent signateurStreamContent;
-    
+
     private DefaultStreamedContent stampStreamContent;
 
     /**
@@ -385,7 +385,10 @@ public class UserController extends AbstractController<User> {
                     final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
                             User.class.getSimpleName() + PersistenceActions.CREATE.getCode());
                     //save user signature and stamp
-                    this.saveUserSignatureAndStamp(getSelected(), fileSignature, fileStamp);
+                    userSelectedStampSignature = this.getUserSignatureAndStampByUserAndSignatureAndStamp(getSelected(), fileSignature, fileStamp);
+                    if (userSelectedStampSignature != null) {
+                        userStampSignatureService.save(userSelectedStampSignature);
+                    }
                     JsfUtil.addSuccessMessage(msg);
                     //send mail params
                     final String subject = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
@@ -580,7 +583,12 @@ public class UserController extends AbstractController<User> {
                 final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
                         User.class.getSimpleName() + PersistenceActions.UPDATE.getCode());
                 //save user signature and stamp
-                this.saveUserSignatureAndStamp(getSelected(), fileSignature, fileStamp);
+                userSelectedStampSignature = this.getUserSignatureAndStampByUserAndSignatureAndStamp(getSelected(), fileSignature, fileStamp);
+                if (userSelectedStampSignature != null && userSelectedStampSignature.getId() != null) {
+                    userStampSignatureService.update(userSelectedStampSignature);
+                } else if (userSelectedStampSignature != null) {
+                    userStampSignatureService.save(userSelectedStampSignature);
+                }
                 JsfUtil.addSuccessMessage(msg);
                 resetAttributes();
                 if (!isValidationFailed()) {
@@ -1255,8 +1263,6 @@ public class UserController extends AbstractController<User> {
     public String getNewPassword() {
         return newPassword;
     }
-    
-    
 
     public UploadedFile getFileSignature() {
         return fileSignature;
@@ -1305,6 +1311,7 @@ public class UserController extends AbstractController<User> {
     public void setStampStreamContent(DefaultStreamedContent stampStreamContent) {
         this.stampStreamContent = stampStreamContent;
     }
+
     // new user with signature
     public void fileUploadSignatureListener(FileUploadEvent e) {
         // Get uploaded file from the FileUploadEvent
@@ -1317,7 +1324,7 @@ public class UserController extends AbstractController<User> {
         this.fileStamp = e.getFile();
     }
 
-    public void saveUserSignatureAndStamp(User user, UploadedFile signatureFile, UploadedFile stampFile) {
+    public UserStampSignature getUserSignatureAndStampByUserAndSignatureAndStamp(User user, UploadedFile signatureFile, UploadedFile stampFile) {
         try {
             byte[] signatureData = null;
             String signatureFileName = null;
@@ -1339,9 +1346,10 @@ public class UserController extends AbstractController<User> {
                 }
             }
 
-            userSelectedStampSignature = userStampSignatureService.saveUserStampSignature(user, signatureData, signatureFileName, stampData, stampFileName);
+            return userStampSignatureService.getUserSignatureAndStampByUserAndSignatureAndStamp(user, signatureData, signatureFileName, stampData, stampFileName);
         } catch (Exception ex) {
             LOG.error(null, ex);
+            return null;
         }
 
     }
@@ -1360,7 +1368,7 @@ public class UserController extends AbstractController<User> {
             java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void visualizeStamp() {
         String contentType;
         String fileName;

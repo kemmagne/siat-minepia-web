@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CCS_MINSANTE" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ab09c848-fe40-4724-be9a-0874e8d853ec">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="192"/>
+	<property name="ireport.y" value="288"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -609,7 +609,7 @@ Règlement Sanitaire International révisé en 2005.
 				<reportElement x="247" y="137" width="296" height="15" uuid="741bb6d9-f384-4166-bf5f-bd8cae061369"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="16" y="158" width="527" height="40" uuid="2fb527c6-477a-4aab-8d12-2ffb84d9cbc3"/>
+				<reportElement x="16" y="158" width="527" height="46" uuid="2fb527c6-477a-4aab-8d12-2ffb84d9cbc3"/>
 				<textElement>
 					<font fontName="Times New Roman" size="8" isBold="true"/>
 				</textElement>
@@ -618,35 +618,35 @@ Physical examination of the container shall be done by health autority during de
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="16" y="200" width="390" height="12" uuid="ea0d067c-85e4-4ab0-96ad-099561064226"/>
+				<reportElement x="16" y="204" width="390" height="12" uuid="ea0d067c-85e4-4ab0-96ad-099561064226"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[En foi de quoi, le présent certificat de contrôle sanitaire est délivré pour servir et valoir ce que de droit.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="16" y="215" width="209" height="14" uuid="b05661c1-33e5-4480-b9f3-6de5f5e21a7a"/>
+				<reportElement x="16" y="220" width="209" height="14" uuid="b05661c1-33e5-4480-b9f3-6de5f5e21a7a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="9" isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Le Contrôleur/ Vérificateur]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="356" y="215" width="187" height="14" uuid="66227c57-c9a3-4c5d-8577-e0902d67d2da"/>
+				<reportElement x="356" y="220" width="187" height="14" uuid="66227c57-c9a3-4c5d-8577-e0902d67d2da"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="9" isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Le Chef de Poste]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="16" y="230" width="209" height="15" uuid="560a267e-e35e-470c-8788-45c808735428"/>
+				<reportElement x="16" y="235" width="209" height="15" uuid="560a267e-e35e-470c-8788-45c808735428"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="9" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{controller}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="356" y="230" width="187" height="15" uuid="a5d98990-0cb0-45bf-be7b-d2b1ac0f36d0"/>
+				<reportElement x="356" y="235" width="187" height="15" uuid="a5d98990-0cb0-45bf-be7b-d2b1ac0f36d0"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="9"/>
 				</textElement>
