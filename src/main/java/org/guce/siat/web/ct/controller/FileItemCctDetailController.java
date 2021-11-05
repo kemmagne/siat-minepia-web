@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,6 +28,7 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -1726,6 +1728,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
         } else if (isCCSMinsanteReadyForSignature(selectedFlow)) {
             ItemFlow itemFlow;
             TreatmentInfosCCSMinsante tr = null;
+            treatmentInfosCCSMinsante = new TreatmentInfosCCSMinsante();
             if (selectedFlow.getCode().equals(FlowCode.FL_CT_07.name())) {
                 itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
                 if (itemFlow != null) {
@@ -1735,17 +1738,22 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 File updatedFile = fileService.findByNumDossierGuce(currentFile.getNumeroDossierBase());
                 if (updatedFile != null) {
                     FileItem updatedFileFileItem = updatedFile.getFileItemsList().get(0);
-                    itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(updatedFileFileItem, FlowCode.FL_CT_CCS_03);
+                    itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(updatedFileFileItem, FlowCode.FL_CT_07);
                     if (itemFlow != null) {
                         tr = treatmentInfosCCSMinsanteService.findTreatmentInfosByItemFlow(itemFlow);
                     }
                 }
             }
             if (tr != null) {
-                treatmentInfosCCSMinsante = tr;
-            } else {
-                treatmentInfosCCSMinsante = new TreatmentInfosCCSMinsante();
-            }
+                try {
+                    BeanUtils.copyProperties(treatmentInfosCCSMinsante, tr);
+                    if(treatmentInfosCCSMinsante != null && treatmentInfosCCSMinsante.getId() != null){
+                        treatmentInfosCCSMinsante.setId(null);
+                    }
+                } catch (IllegalAccessException | InvocationTargetException ex) {
+                    Logger.getLogger(FileItemCctDetailController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } 
         } // Generic : construction du formulaire à partir des DataType
         else {
             buildGenericFormFromDataType(selectedFlow.getDataTypeList());
@@ -1909,8 +1917,8 @@ public class FileItemCctDetailController extends DefaultDetailController {
      * CCS Minsante products Type value changed listener.
      */
     public void ccsProductsTypeChangedListener() {
-        ccsMinsanteFoodProducts = treatmentInfosCCSMinsante.isProductFoodIHC() || treatmentInfosCCSMinsante.isHygienSanitationProducts() || treatmentInfosCCSMinsante.isFleaMarket() || treatmentInfosCCSMinsante.isThriftShop() || treatmentInfosCCSMinsante.isVehicle();
-        ccsMinsanteDrugProducts = treatmentInfosCCSMinsante.isDrugs() || treatmentInfosCCSMinsante.isMedicalDevices() || treatmentInfosCCSMinsante.isTropicalCorticosteroids() || treatmentInfosCCSMinsante.isLaboratoryProducts() || treatmentInfosCCSMinsante.isPackagingSfProducts();
+        ccsMinsanteFoodProducts = treatmentInfosCCSMinsante != null && (treatmentInfosCCSMinsante.isProductFoodIHC() || treatmentInfosCCSMinsante.isHygienSanitationProducts() || treatmentInfosCCSMinsante.isFleaMarket() || treatmentInfosCCSMinsante.isThriftShop() || treatmentInfosCCSMinsante.isVehicle());
+        ccsMinsanteDrugProducts = treatmentInfosCCSMinsante != null && (treatmentInfosCCSMinsante.isDrugs() || treatmentInfosCCSMinsante.isMedicalDevices() || treatmentInfosCCSMinsante.isTropicalCorticosteroids() || treatmentInfosCCSMinsante.isLaboratoryProducts() || treatmentInfosCCSMinsante.isPackagingSfProducts());
     }
 
     public synchronized void addInvoiceLine() {
@@ -3053,7 +3061,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                             String reportNumber;
                             if (Arrays.asList(FlowCode.FL_CT_89.name(), FlowCode.FL_CT_08.name(),
                                     FlowCode.FL_CT_114.name(), FlowCode.FL_CT_117.name(), FlowCode.FL_CT_140.name(),
-                                    FlowCode.FL_CT_CVS_03.name(), FlowCode.FL_CT_CVS_07.name())
+                                    FlowCode.FL_CT_CVS_03.name(), FlowCode.FL_CT_CVS_07.name(), FlowCode.FL_CT_CCS_05.name())
                                     .contains(flowToSend.getCode())) {
                                 // edit signature elements
                                 Date now = java.util.Calendar.getInstance().getTime();
@@ -4044,6 +4052,10 @@ public class FileItemCctDetailController extends DefaultDetailController {
             reportingFlow = flowService.findFlowByCode(FlowCode.FL_CT_114.name());
         }
 
+        if (FileTypeCode.CCS_MINSANTE.equals(currentFile.getFileType().getCode()) && currentFile.getParent() != null) {
+            reportingFlow = flowService.findFlowByCode(FlowCode.FL_CT_CCS_05.name());
+        }
+        
         boolean okInvoice = StepCode.ST_CT_57.equals(currentFileItem.getStep().getStepCode()) || StepCode.ST_CT_60.equals(currentFileItem.getStep().getStepCode());
         ItemFlow draftItemFlow = itemFlowService.findDraftByFileItem(currentFileItem);
         okInvoice = okInvoice && draftItemFlow != null && Arrays.asList(FlowCode.FL_CT_121.name(), FlowCode.FL_CT_133.name()).contains(draftItemFlow.getFlow().getCode());
@@ -4058,7 +4070,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
         fileTypeFlowReportsDraft = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getFileType());
         generateDraftAllowed = sendDecisionAllowed && showDecisionButton && displayGenerateDraft
-                && ((Arrays.asList(StepCode.ST_CT_38, StepCode.ST_CT_31, StepCode.ST_CT_53, StepCode.ST_CT_55, StepCode.ST_CT_56, StepCode.ST_CT_64).contains(currentFileItem.getStep().getStepCode())
+                && ((Arrays.asList(StepCode.ST_CT_38, StepCode.ST_CT_31, StepCode.ST_CT_53, StepCode.ST_CT_55, StepCode.ST_CT_56, StepCode.ST_CT_64, StepCode.ST_CT_CCS_02).contains(currentFileItem.getStep().getStepCode())
                 && reportingFlow.equals(currentDecision))
                 || (currentDecision != null && StepCode.ST_CT_65.equals(currentFileItem.getStep().getStepCode()) && FlowCode.FL_CT_153.name().equals(currentDecision.getCode()))
                 || okInvoice || isPveReadyForSignature(currentDecision))
@@ -6422,13 +6434,18 @@ public class FileItemCctDetailController extends DefaultDetailController {
             }
         } else if (FileTypeCode.CCS_MINSANTE.equals(currentFile.getFileType().getCode())) {
             List<AbstractReportInvoker> reportInvokersPrincipalAndAnnex = null;
-            final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
+            ItemFlow itemFlow;
+            if(currentFile.getParent() != null){
+                itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_CCS_03);
+            }else {
+                itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
+            }
             final TreatmentInfosCCSMinsante tr = treatmentInfosCCSMinsanteService.findTreatmentInfosByItemFlow(itemFlow);
             reportInvokersPrincipalAndAnnex = new ArrayList<>();
             Constructor constructor = classe.getConstructor(File.class, String.class, TreatmentInfosCCSMinsante.class);
             String reportFileName = "CCS_MINSANTE";
             String reportAnnexFileName = "CCS_MINSANTE_ANNEXE";
-            if (tr.isCcsMinsanteDrugProducts()) {
+            if (tr != null && tr.isCcsMinsanteDrugProducts()) {
                 reportFileName = "CCS_MINSANTE_MEDICAMENTS";
             }
             //reportInvoker = (AbstractReportInvoker) constructor.newInstance(currentFile, reportFileName, tr);
@@ -7041,6 +7058,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
     }
 
     public boolean isCcsMinsanteFoodProducts() {
+        ccsMinsanteFoodProducts = treatmentInfosCCSMinsante != null && (treatmentInfosCCSMinsante.isProductFoodIHC() || treatmentInfosCCSMinsante.isHygienSanitationProducts() || treatmentInfosCCSMinsante.isFleaMarket() || treatmentInfosCCSMinsante.isThriftShop() || treatmentInfosCCSMinsante.isVehicle());
         return ccsMinsanteFoodProducts;
     }
 
@@ -7049,6 +7067,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
     }
 
     public boolean isCcsMinsanteDrugProducts() {
+        ccsMinsanteDrugProducts = treatmentInfosCCSMinsante != null && (treatmentInfosCCSMinsante.isDrugs() || treatmentInfosCCSMinsante.isMedicalDevices() || treatmentInfosCCSMinsante.isTropicalCorticosteroids() || treatmentInfosCCSMinsante.isLaboratoryProducts() || treatmentInfosCCSMinsante.isPackagingSfProducts());
         return ccsMinsanteDrugProducts;
     }
 
