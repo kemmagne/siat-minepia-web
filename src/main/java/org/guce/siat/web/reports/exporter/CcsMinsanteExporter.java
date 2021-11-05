@@ -118,7 +118,7 @@ public class CcsMinsanteExporter extends AbstractReportInvoker {
 
             }
         }
-        ccsMinsanteVo.setDecisionNumber(file.getNumeroDossier());
+        ccsMinsanteVo.setDecisionNumber(file.getParent() != null ? file.getParent().getNumeroDossier() : file.getNumeroDossier());
         if (file.getSignatory() != null) {
             ccsMinsanteVo.setSignatory(String.format("%s %s", file.getSignatory().getFirstName(), file.getSignatory().getLastName()));
         }
