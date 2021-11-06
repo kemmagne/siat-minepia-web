@@ -1486,6 +1486,13 @@ public class FileItemCctDetailController extends DefaultDetailController {
             }
         }
 
+        if (isCsvBeforeTreatment(selectedFlow)) {
+            inspectorList = userService.findCotationsAgentByBureauAndRole(currentFile.getBureau(), AuthorityConstants.SOCIETE_TRAITEMENT.getCode());
+            if (currentFile.getAssignedUser() != null) {
+                assignedUserForCotation = currentFile.getAssignedUser();
+            }
+        }
+
         if (isPhytoBilling(selectedFlow) || FlowCode.FL_CT_159.name().equals(selectedFlow.getCode())) {
             counter = -1L;
             invoiceTotalAmount = 0L;
@@ -2225,6 +2232,8 @@ public class FileItemCctDetailController extends DefaultDetailController {
                     showErrorFacesMessage(ControllerConstants.Bundle.Messages.CHECK_TREATMENT_TYPE_CHOOSEN_MSG, ControllerConstants.Bundle.Messages.CHECK_TREATMENT_TYPE_ERROR);
                     return;
                 }
+            } else if (isCsvBeforeTreatment(selectedFlow) && currentFile.getAssignedUser() == null) {
+                currentFile.setAssignedUser(assignedUserForCotation);
             }
             // Check if the step of fileItems was changed by another user when
             // the decision popup is open
@@ -2997,7 +3006,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                             String reportNumber;
                             if (Arrays.asList(FlowCode.FL_CT_89.name(), FlowCode.FL_CT_08.name(),
                                     FlowCode.FL_CT_114.name(), FlowCode.FL_CT_117.name(), FlowCode.FL_CT_140.name(),
-                                    FlowCode.FL_CT_CVS_03.name(), FlowCode.FL_CT_CVS_07.name())
+                                    FlowCode.FL_CT_CVS_03.name(), FlowCode.FL_CT_CVS_07.name(), FlowCode.FL_CT_162.name(), FlowCode.FL_CT_169.name())
                                     .contains(flowToSend.getCode())) {
                                 // edit signature elements
                                 Date now = java.util.Calendar.getInstance().getTime();
@@ -6794,7 +6803,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
 //                            treatInfo.setAdditionalInfos(fileFieldValue1.getValue());
 //                            break;
                         case "AUTRE_NUMERO_CERTIFICAT_ORIGIN":
-                            treatInfo.setCertificatCountryOrigin(fileFieldValue1.getValue());
+//                            treatInfo.setCertificatCountryOrigin(fileFieldValue1.getValue());
                             break;
                         case "AUTRE_INFORMATION_FUMIGATION":
                             treatInfo.setFumigation(Boolean.parseBoolean(fileFieldValue1.getValue()));
@@ -6920,6 +6929,17 @@ public class FileItemCctDetailController extends DefaultDetailController {
         List<FileTypeCode> codes = new ArrayList<>(Arrays.asList(FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI));
         boolean ok = checkMinaderMinistry && flow != null && codes.contains(currentFile.getFileType().getCode()) && Arrays.asList(FlowCode.FL_CT_104.name(), FlowCode.FL_CT_118.name()).contains(flow.getCode());
         return ok;
+    }
+
+    /**
+     * Lorsque le signature décide transmettre le dossier à un agent de
+     * traitement
+     *
+     * @param flow
+     * @return
+     */
+    public boolean isCsvBeforeTreatment(Flow flow) {
+        return checkMinepiaMinistry && flow != null && Arrays.asList(FlowCode.FL_CT_165.name(), FlowCode.FL_CT_171.name()).contains(flow.getCode());
     }
 
     public List<Appointment> getRelatedAppointments() {

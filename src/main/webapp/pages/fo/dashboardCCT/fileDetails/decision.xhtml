@@ -35,6 +35,10 @@
                         </h:panelGroup>
                     </h:panelGrid>
 
+                    <p:panel rendered="#{fileItemCctDetailController.isCsvBeforeTreatment(fileItemCctDetailController.selectedFlow)}">
+                        <ui:include src="../specificDecisions/csv/dispatch.xhtml" />
+                    </p:panel>
+
                     <br />
 
                     <h:panelGrid id="dataTypeRepeater" binding="#{fileItemCctDetailController.decisionDiv}" columns="2" />
