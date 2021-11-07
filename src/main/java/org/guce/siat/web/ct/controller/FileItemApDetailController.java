@@ -660,6 +660,13 @@ public class FileItemApDetailController extends DefaultDetailController implemen
      * The generate report allowed.
      */
     private Boolean generateReportAllowed;
+    
+    /**
+     * The generate report allowed.
+     */
+    private boolean generateDraftAllowed;
+
+    private List<FileTypeFlowReport> fileTypeFlowReportsDraft;
 
     /**
      * The ebxml properties service.
@@ -954,6 +961,8 @@ public class FileItemApDetailController extends DefaultDetailController implemen
         checkIsAllowedRecommandation();
 
         checkGenerateReportAllowed();
+        
+        checkGenerateDraftAllowed();
 
         tabList = new ArrayList<>();
         tabIndexList = concatenateActiveIndexString(tabList);
@@ -2344,7 +2353,7 @@ public class FileItemApDetailController extends DefaultDetailController implemen
                         Map<String, byte[]> attachedByteFiles = null;
 //                        try {
                         String reportNumber;
-                        if (FlowCode.FL_AP_107.name().equals(flowToSend.getCode()) || FlowCode.FL_AP_169.name().equals(flowToSend.getCode()) || FlowCode.FL_AP_202.name().equals(flowToSend.getCode())) {
+                        if (FlowCode.FL_AP_107.name().equals(flowToSend.getCode()) || FlowCode.FL_AP_169.name().equals(flowToSend.getCode()) || FlowCode.FL_AP_202.name().equals(flowToSend.getCode()) || FlowCode.FL_AP_VT1_06.name().equals(flowToSend.getCode())) {
                             ItemFlow decisionFlow = null;
                             if (currentFile.getFileType().getCode().equals(FileTypeCode.VTP_MINSANTE)) {
                                 decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_103);
@@ -2788,6 +2797,7 @@ public class FileItemApDetailController extends DefaultDetailController implemen
             sendDecisionAllowed = true;
             fileItemHasDraft = true;
         }
+        checkGenerateDraftAllowed();
     }
 
     /**
@@ -3359,6 +3369,31 @@ public class FileItemApDetailController extends DefaultDetailController implemen
         fileFieldGroupDto.setFieldValues(fieldValues);
 
     }
+    
+    /**
+     * Check generate draft allowed.
+     */
+    private void checkGenerateDraftAllowed() {
+        Flow reportingFlow = flowService.findFlowByCode(FlowCode.FL_AP_107.name());
+
+        if (FileTypeCode.VT_MINEPIA.equals(currentFile.getFileType().getCode()) && currentFile.getParent() != null) {
+            reportingFlow = flowService.findFlowByCode(FlowCode.FL_AP_VT1_06.name());
+        }
+
+        
+        Flow currentDecision = selectedFlow;
+        if(currentDecision == null){
+            ItemFlow draftItemFlow = itemFlowService.findDraftByFileItem(selectedFileItem);
+            if(draftItemFlow != null){
+                currentDecision = draftItemFlow.getFlow();
+            }
+        }
+        
+        fileTypeFlowReportsDraft = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getFileType());
+        generateDraftAllowed = sendDecisionAllowed && (Arrays.asList(StepCode.ST_AP_54, StepCode.ST_AP_VT1_01).contains(selectedFileItem.getStep().getStepCode())
+                && reportingFlow.equals(currentDecision))
+                && CollectionUtils.isNotEmpty(fileTypeFlowReportsDraft);
+    }
 
     /**
      * Check generate report allowed.
@@ -3379,11 +3414,12 @@ public class FileItemApDetailController extends DefaultDetailController implemen
     /**
      * Download report.
      *
+     * @param draft
      * @return the streamed content
      */
-    public StreamedContent downloadReport() {
+    public StreamedContent downloadReport(boolean draft) {
         List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<>();
-
+        AbstractReportInvoker reportInvoker = null;
         final Flow reportingFlow = flowService.findByToStep(selectedFileItem.getStep(), currentFile.getFileType());
 //        final List<FileTypeFlowReport> fileTypeFlowReportsList = reportingFlow.getFileTypeFlowReportsList();
 //
@@ -3395,7 +3431,12 @@ public class FileItemApDetailController extends DefaultDetailController implemen
 //            }
 //        }
         if (!aiMinmidtFileType) {
-            fileTypeFlowReports = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getFileType());
+            if(draft){
+                fileTypeFlowReports = fileTypeFlowReportsDraft;
+            }else{
+                fileTypeFlowReports = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getFileType());
+            }
+            
         }
         if (currentFile.getSignatory() == null) {
             currentFile.setSignatory(getLoggedUser());
@@ -3415,6 +3456,11 @@ public class FileItemApDetailController extends DefaultDetailController implemen
                 if (bsbeMinfofFileType) {
                     Constructor c1 = classe.getConstructor(File.class, List.class, String.class);
                     report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile, specsList, woodsType == null ? "GRUMES" : woodsType.getValue()));
+                } else if(FileTypeCode.VT_MINEPIA.equals(currentFile.getFileType().getCode())){
+                    Constructor c1 = classe.getConstructor(File.class);
+                    reportInvoker = (AbstractReportInvoker) c1.newInstance(currentFile);
+                    reportInvoker.setDraft(draft);
+                    report = JsfUtil.getReport(reportInvoker);
                 } else {
                     report = ReportGeneratorUtils.generateReportBytes(fileFieldValueService, classe, currentFile);
                 }
@@ -5617,6 +5663,24 @@ public class FileItemApDetailController extends DefaultDetailController implemen
         }
         LOG.warn(msg);
     }
+
+    public boolean isGenerateDraftAllowed() {
+        return generateDraftAllowed;
+    }
+
+    public void setGenerateDraftAllowed(boolean generateDraftAllowed) {
+        this.generateDraftAllowed = generateDraftAllowed;
+    }
+
+    public List<FileTypeFlowReport> getFileTypeFlowReportsDraft() {
+        return fileTypeFlowReportsDraft;
+    }
+
+    public void setFileTypeFlowReportsDraft(List<FileTypeFlowReport> fileTypeFlowReportsDraft) {
+        this.fileTypeFlowReportsDraft = fileTypeFlowReportsDraft;
+    }
+    
+    
 
     @Override
     public String getDetailIndexPageUrl() {

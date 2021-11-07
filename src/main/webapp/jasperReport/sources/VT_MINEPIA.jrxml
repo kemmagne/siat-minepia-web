@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VT_MINEPIA" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="487cd13d-5160-41db-a737-71f51ecf7f75">
-	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="325"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -33,6 +33,7 @@
 		</variable>
 	</subDataset>
 	<parameter name="MINEPIA_LOGO" class="java.lang.String"/>
+	<parameter name="DRAFT" class="java.lang.Boolean"/>
 	<field name="code" class="java.lang.String"/>
 	<field name="signatory" class="java.lang.String"/>
 	<field name="importer" class="java.lang.String"/>
@@ -44,10 +45,35 @@
 	<field name="fileItemList" class="java.util.List"/>
 	<field name="signatureDate" class="java.lang.String"/>
 	<background>
-		<band splitType="Stretch"/>
+		<band height="802" splitType="Stretch">
+			<printWhenExpression><![CDATA[$P{DRAFT}]]></printWhenExpression>
+			<image>
+				<reportElement x="435" y="699" width="130" height="103" uuid="6993a0d1-75b5-4057-9796-d99e6931d351"/>
+				<imageExpression><![CDATA["../images/reports/draft.jpg"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="445" y="10" width="130" height="103" uuid="3f10213c-29d0-4398-bf55-3f8cd2739825"/>
+				<imageExpression><![CDATA["../images/reports/draft.jpg"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="20" y="10" width="130" height="103" uuid="fe625461-9066-4c01-bdc7-be0b1e0b97e8"/>
+				<imageExpression><![CDATA["../images/reports/draft.jpg"]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame">
+				<reportElement x="30" y="153" width="514" height="521" uuid="31ec8da2-0946-46b7-9583-15ceb69700cd"/>
+				<imageExpression><![CDATA["../images/reports/draft.jpg"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="10" y="699" width="130" height="103" uuid="92dee7fb-a766-430c-ba4b-b9b901f8df0b"/>
+				<imageExpression><![CDATA["../images/reports/draft.jpg"]]></imageExpression>
+			</image>
+		</band>
 	</background>
 	<title>
-		<band height="247" splitType="Stretch">
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="94" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="0" width="229" height="10" uuid="7a4d4f3c-958b-427a-a2fa-4bc96deb2987"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -150,47 +176,50 @@
 				<reportElement x="240" y="1" width="76" height="79" uuid="ac22faa8-10da-43ad-b2f6-28e8a4928ab9"/>
 				<imageExpression><![CDATA[new java.io.File($P{MINEPIA_LOGO})]]></imageExpression>
 			</image>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="153" splitType="Stretch">
 			<staticText>
-				<reportElement x="148" y="102" width="259" height="20" uuid="a9f6831e-543b-4eed-8cc8-eb4b010615b1"/>
+				<reportElement x="148" y="8" width="259" height="20" uuid="a9f6831e-543b-4eed-8cc8-eb4b010615b1"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled">
 					<font fontName="Times New Roman" size="14" isBold="true" isItalic="false"/>
 				</textElement>
 				<text><![CDATA[VISA TECHNIQUE <style isItalic='true'>(TECHNICAL VISA)</style>]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="148" y="122" width="259" height="20" uuid="c91356dd-65e3-4fb2-af7f-7b068d499af7"/>
+				<reportElement x="148" y="28" width="259" height="20" uuid="c91356dd-65e3-4fb2-af7f-7b068d499af7"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="14" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="49" y="158" width="454" height="89" uuid="9166d524-c2d5-4fb1-95ec-324b66d87d9c"/>
+				<reportElement x="49" y="64" width="454" height="89" uuid="9166d524-c2d5-4fb1-95ec-324b66d87d9c"/>
 				<textElement textAlignment="Justified" markup="styled">
 					<font fontName="Times New Roman" size="12"/>
+					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Je soussigné <style isItalic='true'>(I the undersigned)</style> <style isBold='true'>"+ $F{signatory}+"</style>, certifie avoir étudié la demande <style isItalic='true'>(certifies to have examined the application)</style> introduite par <style isItalic='true'>(submitted by)</style> <style isBold='true'>"+$F{importer}+"</style>, adresse <style isItalic='true'>(address)</style>: <style isBold='true'>"+$F{address}+"</style>, attributaire de l’Avis Technique <style isItalic='true'>(holder of the Technical Notice)</style> N° <style isBold='true'>"+$F{decisionNumber}+"</style>, pour la facture N° <style isBold='true'>"+$F{invoice}+"</style> composée de <style isItalic='true'>(for the invoice composed of)</style> :"]]></textFieldExpression>
 			</textField>
 		</band>
-	</title>
-	<pageHeader>
-		<band splitType="Stretch"/>
-	</pageHeader>
-	<columnHeader>
-		<band splitType="Stretch"/>
-	</columnHeader>
-	<detail>
-		<band height="113" splitType="Stretch">
+		<band height="113">
 			<componentElement>
-				<reportElement key="table" style="table" x="49" y="0" width="455" height="113" uuid="7e9cd7c0-b81e-42e9-913d-de2a0b29e0de"/>
+				<reportElement key="table" style="table" x="49" y="0" width="454" height="113" uuid="7e9cd7c0-b81e-42e9-913d-de2a0b29e0de"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="Table Dataset 1" uuid="05a747fa-2be0-4730-8ab3-088384a38c23">
+					<datasetRun subDataset="Table Dataset 1" uuid="821a30d0-0bcb-42a3-90db-675bd849b824">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{fileItemList})]]></dataSourceExpression>
 					</datasetRun>
-					<jr:column width="120" uuid="494c43f6-9a3b-4c4f-bd72-30447afe6824">
-						<jr:columnHeader style="table" height="32" rowSpan="1">
+					<jr:column width="93" uuid="494c43f6-9a3b-4c4f-bd72-30447afe6824">
+						<jr:columnHeader style="table" height="37" rowSpan="1">
+							<box>
+								<bottomPen lineWidth="1.0"/>
+							</box>
 							<staticText>
-								<reportElement x="0" y="0" width="120" height="32" uuid="08adeda2-30e4-468c-9183-b367fc63c368"/>
+								<reportElement x="0" y="0" width="93" height="37" uuid="08adeda2-30e4-468c-9183-b367fc63c368"/>
 								<textElement verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="13" isBold="true"/>
 									<paragraph leftIndent="5"/>
@@ -198,21 +227,36 @@
 								<text><![CDATA[NSH]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:detailCell style="table_TD" height="43" rowSpan="1">
+						<jr:columnFooter style="table" height="37" rowSpan="1">
+							<box>
+								<pen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+							</box>
+						</jr:columnFooter>
+						<jr:detailCell style="table" height="37" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0"/>
+							</box>
 							<textField>
-								<reportElement x="0" y="0" width="120" height="40" uuid="294b9415-448a-4d7e-a77b-727a0fa93769"/>
+								<reportElement x="0" y="0" width="93" height="37" uuid="294b9415-448a-4d7e-a77b-727a0fa93769"/>
 								<textElement verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="12"/>
+									<font fontName="Times New Roman" size="9"/>
 									<paragraph leftIndent="5"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="201" uuid="54fe3679-0915-452d-93ce-5ccc16472833">
-						<jr:columnHeader style="table" height="32" rowSpan="1">
+					<jr:column width="260" uuid="54fe3679-0915-452d-93ce-5ccc16472833">
+						<jr:columnHeader style="table" height="37" rowSpan="1">
+							<box>
+								<leftPen lineWidth="0.0"/>
+							</box>
 							<staticText>
-								<reportElement x="0" y="0" width="201" height="32" uuid="3869cb9c-e15e-475a-a4ac-69a6b8494e81"/>
+								<reportElement x="0" y="0" width="260" height="37" uuid="3869cb9c-e15e-475a-a4ac-69a6b8494e81"/>
 								<textElement verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="12" isBold="true"/>
 									<paragraph leftIndent="5"/>
@@ -221,8 +265,12 @@
 							</staticText>
 						</jr:columnHeader>
 						<jr:columnFooter style="table" height="37" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0"/>
+								<leftPen lineWidth="0.0"/>
+							</box>
 							<staticText>
-								<reportElement x="0" y="0" width="201" height="37" uuid="42c2ff44-246a-4a06-878f-0b84a4a7f618"/>
+								<reportElement x="0" y="0" width="260" height="37" uuid="42c2ff44-246a-4a06-878f-0b84a4a7f618"/>
 								<textElement verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="12" isBold="true"/>
 									<paragraph leftIndent="5"/>
@@ -230,21 +278,28 @@
 								<text><![CDATA[Total]]></text>
 							</staticText>
 						</jr:columnFooter>
-						<jr:detailCell style="table_TD" height="43" rowSpan="1">
+						<jr:detailCell style="table" height="37" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0"/>
+								<leftPen lineWidth="0.0"/>
+							</box>
 							<textField>
-								<reportElement x="0" y="0" width="201" height="40" uuid="9c4910fb-3018-45e1-b7a1-d04acca5cc0a"/>
+								<reportElement x="0" y="0" width="260" height="37" uuid="9c4910fb-3018-45e1-b7a1-d04acca5cc0a"/>
 								<textElement verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="13"/>
+									<font fontName="Times New Roman" size="8"/>
 									<paragraph leftIndent="5"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{desc}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="133" uuid="ba0e818d-eb62-4a6a-a728-a566f215f58f">
-						<jr:columnHeader style="table" height="32" rowSpan="1">
+					<jr:column width="100" uuid="ba0e818d-eb62-4a6a-a728-a566f215f58f">
+						<jr:columnHeader style="table" height="37" rowSpan="1">
+							<box>
+								<leftPen lineWidth="0.0"/>
+							</box>
 							<staticText>
-								<reportElement x="0" y="2" width="133" height="30" uuid="ba500511-9894-47c9-964b-6dded80495d1"/>
+								<reportElement x="0" y="0" width="100" height="37" uuid="ba500511-9894-47c9-964b-6dded80495d1"/>
 								<textElement verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="12" isBold="true"/>
 									<paragraph leftIndent="5"/>
@@ -253,20 +308,28 @@
 							</staticText>
 						</jr:columnHeader>
 						<jr:columnFooter style="table" height="37" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0"/>
+								<leftPen lineWidth="0.0"/>
+							</box>
 							<textField>
-								<reportElement x="0" y="1" width="133" height="36" uuid="b275395a-7b38-401d-a844-3f5eeb79eee2"/>
+								<reportElement x="0" y="0" width="100" height="36" uuid="b275395a-7b38-401d-a844-3f5eeb79eee2"/>
 								<textElement verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="12"/>
+									<font fontName="Times New Roman" size="9"/>
 									<paragraph leftIndent="5"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$V{SUM}]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
-						<jr:detailCell style="table_TD" height="43" rowSpan="1">
+						<jr:detailCell style="table" height="37" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0"/>
+								<leftPen lineWidth="0.0"/>
+							</box>
 							<textField>
-								<reportElement x="0" y="0" width="133" height="40" uuid="5d476492-b457-4981-bacd-872c4a181666"/>
+								<reportElement x="0" y="0" width="100" height="37" uuid="5d476492-b457-4981-bacd-872c4a181666"/>
 								<textElement verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="12"/>
+									<font fontName="Times New Roman" size="9"/>
 									<paragraph leftIndent="5"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
@@ -276,36 +339,59 @@
 				</jr:table>
 			</componentElement>
 		</band>
-	</detail>
-	<columnFooter>
-		<band splitType="Stretch"/>
-	</columnFooter>
-	<pageFooter>
-		<band splitType="Stretch"/>
-	</pageFooter>
-	<summary>
-		<band height="155" splitType="Stretch">
+		<band height="148">
 			<textField>
-				<reportElement x="260" y="99" width="243" height="20" uuid="e312f30f-7728-496c-b834-afaf012aaba7"/>
+				<reportElement x="262" y="97" width="241" height="20" uuid="e312f30f-7728-496c-b834-afaf012aaba7"/>
 				<textElement verticalAlignment="Middle" markup="styled">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Fait à <style isBold='true'>"+ $F{decisionPlace}+"</style>, le <style isBold='true'>"+$F{signatureDate}+"</style>"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="49" y="10" width="454" height="42" uuid="905ac6d3-bb3a-40b5-ace9-f8519a1e50e7"/>
+				<reportElement x="49" y="8" width="454" height="42" uuid="905ac6d3-bb3a-40b5-ace9-f8519a1e50e7"/>
 				<textElement textAlignment="Justified" verticalAlignment="Middle" markup="styled">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
 				<text><![CDATA[et délivre le présent visa technique conformément aux conventions et textes réglementaires en vigueur <style isItalic="true" >(and issues this technical visa in accordance with the conventions and laws in force)</style>.  ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="49" y="60" width="454" height="15" uuid="53c39cec-d580-4eab-800f-cb046ffcb653"/>
+				<reportElement x="49" y="57" width="454" height="15" uuid="53c39cec-d580-4eab-800f-cb046ffcb653"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12" isBold="true" isItalic="true"/>
 				</textElement>
 				<text><![CDATA[NB : ce visa technique est valable pour une facture/connaissement]]></text>
 			</staticText>
 		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement x="268" y="2" width="8" height="20" uuid="2a05f0f1-003a-46f3-9a55-b08201c382d9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="284" y="2" width="8" height="20" uuid="fe6ab506-0969-4724-bd5e-caf185bf3bd9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_COUNT}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="276" y="2" width="8" height="20" uuid="c4e2370c-cd8e-407b-b977-db855f7cd91e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<text><![CDATA[/]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
 	</summary>
 </jasperReport>

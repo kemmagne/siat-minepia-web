@@ -95,7 +95,8 @@ public class VtMinepiaExporter extends AbstractReportInvoker {
 					}
 				}
 			}
-                        vtMinepiaVo.setDecisionNumber(file.getNumeroDossier());
+                        String numeroDossier = file.getParent() != null ? file.getParent().getNumeroDossier() : file.getNumeroDossier();
+                        vtMinepiaVo.setDecisionNumber(numeroDossier);
                         if(StringUtils.isEmpty(vtMinepiaVo.getDecisionPlace())){
                             vtMinepiaVo.setDecisionPlace("Douala");
                         }
@@ -113,7 +114,7 @@ public class VtMinepiaExporter extends AbstractReportInvoker {
                             String signatureDate = DateUtils.formatSimpleDate("dd/MM/yyyy", file.getSignatureDate());
                             vtMinepiaVo.setSignatureDate(signatureDate);
                         }
-                        vtMinepiaVo.setCode(String.format("%s/%s", file.getNumeroDemande(), file.getNumeroDossier()));
+                        vtMinepiaVo.setCode(String.format("%s/%s", file.getNumeroDemande(), numeroDossier));
 			final List<FileItem> fileItemList = file.getFileItemsList();
 
 			final List<VtMinepiaFileItemVo> fileItemVos = new ArrayList<VtMinepiaFileItemVo>();
