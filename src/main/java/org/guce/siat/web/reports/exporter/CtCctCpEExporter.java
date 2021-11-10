@@ -117,7 +117,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
             ctCctCpEFileVo.setTreatmentsCarriedOut(treatmentInfos.getTreatmentsCarriedOut());
             ctCctCpEFileVo.setAdditionalDeclaration(treatmentInfos.getAdditionnalDeclaration());
             ctCctCpEFileVo.setTreatmentDate(treatmentInfos.getTreatmentDate());
-            ctCctCpEFileVo.setOriginCountryPhytoNumber(treatmentInfos.getCertificatCountryOrigin());
+//            ctCctCpEFileVo.setOriginCountryPhytoNumber(treatmentInfos.getCertificatCountryOrigin());
             if (treatmentInfos.getTreatmentDate() != null && treatmentInfos.getTreatmentEndDate() != null && treatmentInfos.getTreatmentEndDate().after(treatmentInfos.getTreatmentDate())) {
                 ctCctCpEFileVo.setTreatmentEndDate(treatmentInfos.getTreatmentEndDate());
             }
@@ -234,7 +234,7 @@ public class CtCctCpEExporter extends AbstractReportInvoker {
                     final int maxContainersNumber;
                     if (paramValue != null && paramValue.getMaxContainerNumber() > 0) {
                         maxContainersNumber = paramValue.getMaxContainerNumber();
-                    }else{
+                    } else {
                         maxContainersNumber = 12;
                     }
                     final AtomicInteger counter = new AtomicInteger(0);

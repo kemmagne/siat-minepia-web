@@ -1,0 +1,57 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+    <br />
+
+    <h:form id="imCargFilesStatisticsSearchForm" class="search-style">
+
+        <p:accordionPanel styleClass="search">
+
+            <p:tab title="#{bundle['imCargFilesStatistics_Search']}" dynamic="true" cache="true">
+
+                <h:panelGrid columns="6">
+                    <p:outputPanel  styleClass="search-select">
+                        <h:outputLabel value="#{bundle['importer']}" />
+                        <p:inputText value="#{statisticController.imCargFilter.niu}" />
+                    </p:outputPanel>
+                </h:panelGrid>
+
+                <h:panelGrid columns="10" cellpadding="10">
+                    <h:outputLabel value="#{bundle['createDate']}" />
+                    <h:panelGroup>
+                        <p:outputLabel for="fromDate" value="#{bundle['statisticsOnBusinessSearch_fromDateLabel']}" />
+                        <p:calendar navigator="true" id="fromDate" value="#{statisticController.imCargFilter.fromDate}"
+                                    title="#{bundle['statisticsOnBusinessSearch_fromDateTitre']}" showOn="button" pattern="dd/MM/yyyy"
+                                    maxdate="#{statisticController.imCargFilter.toDate}" readonlyInput="true">
+                            <p:ajax event="dateSelect" update="toDate" />
+                        </p:calendar>
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <p:outputLabel for="toDate" value="#{bundle['statisticsOnBusinessSearch_toDateLabel']}" />
+                        <p:calendar navigator="true" id="toDate" value="#{statisticController.imCargFilter.toDate}"
+                                    title="#{bundle['statisticsOnBusinessSearch_toDateTitre']}" showOn="button" pattern="dd/MM/yyyy"
+                                    mindate="#{statisticController.imCargFilter.fromDate}" readonlyInput="true">
+                            <p:ajax event="dateSelect" update="fromDate" />
+                        </p:calendar>
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" icon="ui-icon-search"
+                                         title="#{bundle['ButtonSearch']}" action="#{statisticController.doImCargFilesStatisticsFilter()}"
+                                         update=":filtredFileItemListForm:datalist imCargFilesStatisticsSearchForm :growl" oncomplete="PF('datalistTable').filter();" />
+
+                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" icon="ui-icon-refresh"
+                                         title="#{bundle['ButtonReset']}" action="#{statisticController.initImCargFilesStatisticsSearch()}"
+                                         oncomplete="PF('datalistTable').filter();" update=":filtredFileItemListForm:datalist imCargFilesStatisticsSearchForm" />
+
+                    </h:panelGroup>
+
+                </h:panelGrid>
+
+            </p:tab>
+
+        </p:accordionPanel>
+
+    </h:form>
+</ui:composition>

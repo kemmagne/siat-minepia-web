@@ -6464,7 +6464,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                         }
                         break;
                     }
-                    case CCT_CT_E_ATP:{
+                    case CCT_CT_E_ATP: {
                         final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(ffi, FlowCode.FL_CT_07);
                         final TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
                         if (draft) {
@@ -6766,9 +6766,9 @@ public class FileItemCctDetailController extends DefaultDetailController {
 //                        case "AUTRE_INFORMATION_RENSEIGNEMENT_COMPLEMENTAIRE":
 //                            treatInfo.setAdditionalInfos(fileFieldValue1.getValue());
 //                            break;
-                        case "AUTRE_NUMERO_CERTIFICAT_ORIGIN":
-                            treatInfo.setCertificatCountryOrigin(fileFieldValue1.getValue());
-                            break;
+//                        case "AUTRE_NUMERO_CERTIFICAT_ORIGIN":
+//                            treatInfo.setCertificatCountryOrigin(fileFieldValue1.getValue());
+//                            break;
                         case "AUTRE_INFORMATION_FUMIGATION":
                             treatInfo.setFumigation(Boolean.parseBoolean(fileFieldValue1.getValue()));
                             break;
