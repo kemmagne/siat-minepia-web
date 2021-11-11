@@ -123,6 +123,11 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
     private String quantitiesAnnex;
 
     private boolean transit;
+    
+    /**
+     * The origin country phyto number
+     */
+    private String originCountryPhytoNumber;
 
     /**
      * The chemical product active matter.
@@ -1029,6 +1034,14 @@ public class CtCctCpEFileVo extends AbstractFileVo<CtCctCpEFileItemVo> {
 
     public void setQrCodeAnnex(InputStream qrCodeAnnex) {
         this.qrCodeAnnex = qrCodeAnnex;
+    }
+
+    public String getOriginCountryPhytoNumber() {
+        return originCountryPhytoNumber;
+    }
+
+    public void setOriginCountryPhytoNumber(String originCountryPhytoNumber) {
+        this.originCountryPhytoNumber = originCountryPhytoNumber;
     }
 
 }

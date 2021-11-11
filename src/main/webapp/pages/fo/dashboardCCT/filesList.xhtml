@@ -44,7 +44,7 @@
                         <h:outputText value="#{bundle['FileLabel_date_dossier']}" title="#{bundle['FileTitle_date_dossier']}" />
                     </f:facet>
                     <h:outputText value="#{item.createdDate}">
-                        <f:convertDateTime type="date" pattern="dd/MM/yyyy HH:mm" locale="fr"  />
+                        <f:convertDateTime type="date" pattern="dd/MM/yyyy HH:mm" locale="fr" />
                     </h:outputText>
                 </p:column>
 
@@ -69,7 +69,7 @@
                     <h:outputText value="#{item.client.companyName}" />
                 </p:column>
 
-                <p:column>
+                <p:column rendered="#{true or fileItemCctController.isPhyto(item)}">
                     <f:facet name="header">
                         <h:outputText value="#{bundle['productType']}" title="#{bundle['productType']}" />
                     </f:facet>

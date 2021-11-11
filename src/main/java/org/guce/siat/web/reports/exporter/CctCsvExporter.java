@@ -31,7 +31,7 @@ import org.guce.siat.web.reports.vo.CtCctCsvFileVo;
  */
 
 
-public class CtCctCsvExporter extends AbstractReportInvoker {
+public class CctCsvExporter extends AbstractReportInvoker {
 
     /**
      * The file.
@@ -49,7 +49,7 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
      * @param connected the user connected
      * @param decision the decision updated by operator
      */
-    public CtCctCsvExporter(final File file, User connected, ApprovedDecision decision) {
+    public CctCsvExporter(final File file, User connected, ApprovedDecision decision) {
         super("CT_CCT_CSV", "CT_CCT_CSV");
         this.file = file;
         this.user = connected;
@@ -67,6 +67,24 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
         final CtCctCsvFileVo ctCctCsvFileVo = new CtCctCsvFileVo();
 
         if ((file != null)) {
+
+            ctCctCsvFileVo.setCertificateReferenceNumber(file.getNumeroDemande() + "/" + file.getNumeroDossier());
+
+            if (file.getClient() != null) {
+                ctCctCsvFileVo.setConsigneeName(file.getClient().getCompanyName());
+                ctCctCsvFileVo.setConsigneeAddress1(file.getClient().getFirstAddress());
+                ctCctCsvFileVo.setConsigneeAddress2(file.getClient().getCompanyName());
+                ctCctCsvFileVo.setConsigneeTelephone(file.getClient().getPhone());
+                if (file.getClient().getCountry() != null) {
+                    ctCctCsvFileVo.setConsigneeCountry(file.getClient().getCountry().getCountryName());
+                }
+            }
+
+            if (file.getSignatory() != null) {
+                ctCctCsvFileVo.setSignatoryName(file.getSignatory().getLastName() + " " + file.getSignatory().getFirstName());
+                ctCctCsvFileVo.setSignatoryPosition(file.getSignatory().getPosition().getLabelFr());
+            }
+
             final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
             ctCctCsvFileVo.setDecisionPlace(file.getBureau().getLabelFr());
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -87,56 +105,57 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
             if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
                 for (final FileFieldValue fileFieldValue : fileFieldValueList) {
                     switch (fileFieldValue.getFileField().getCode()) {
-                        case "CERTIFICATE_NUMBER":
-                            if (ctCctCsvFileVo.getCertificateReferenceNumber() == null) {
-                                ctCctCsvFileVo.setCertificateReferenceNumber(fileFieldValue.getValue());
-                            }
-                            break;
-                        case "NUMERO_CCT_CT":
-                            if (ctCctCsvFileVo.getCertificateReferenceNumber() == null) {
-                                ctCctCsvFileVo.setCertificateReferenceNumber(fileFieldValue.getValue());
-                            }
-                            break;
-                        case "CODE_BUREAU":
+//                        case "CERTIFICATE_NUMBER":
+//                            if (ctCctCsvFileVo.getCertificateReferenceNumber() == null) {
+//                                ctCctCsvFileVo.setCertificateReferenceNumber(fileFieldValue.getValue());
+//                            }
+//                            break;
+//                        case "NUMERO_CCT_CT":
+//                            if (ctCctCsvFileVo.getCertificateReferenceNumber() == null) {
+//                                ctCctCsvFileVo.setCertificateReferenceNumber(fileFieldValue.getValue());
+//                            }
+//                            break;
+//                        case "CODE_BUREAU":
 //                            ctCctCsvFileVo.setVeterinaryAuthority(fileFieldValue.getValue());
-                            break;
-                        case "PAYS_ORIGINE":
+//                            break;
+                        case "INFORMATIONS_GENERALES_PAYS_ORIGINE_NOMPAYS":
                             ctCctCsvFileVo.setCountryOfOrigin(fileFieldValue.getValue());
                             break;
-                        case "PAYS_DESTINATION":
+                        case "INFORMATIONS_GENERALES_PAYS_DESTINATION_NOMPAYS":
                             ctCctCsvFileVo.setCountryOfDestination(fileFieldValue.getValue());
                             break;
-                        case "LIEU_CHARGEMENT":
+                        case "INFORMATIONS_GENERALES_LIEU_CHARGEMENT_LIBELLE":
                             ctCctCsvFileVo.setPlaceOfLoading(fileFieldValue.getValue());
+                            ctCctCsvFileVo.setPlaceOfShipment(fileFieldValue.getValue());
                             break;
-                        case "TRANSITAIRE_RAISONSOCIALE":
-                            ctCctCsvFileVo.setConsigneeName(fileFieldValue.getValue());
-                            break;
-                        case "TRANSITAIRE_ADRESSE_ADRESSE1":
-                            ctCctCsvFileVo.setConsigneeAddress1(fileFieldValue.getValue());
-                            break;
-                        case "TRANSITAIRE_TELEPHONE_FIXE_NUMERO":
-                            ctCctCsvFileVo.setConsigneeTelephone(fileFieldValue.getValue());
-                            break;
-                        case "DESTINATAIRE_RAISON_SOCIALE":
-                            ctCctCsvFileVo.setConsigneeName(fileFieldValue.getValue());
-                            break;
-                        case "DESTINATAIRE_ADRESSE_ADRESSE1":
-                            ctCctCsvFileVo.setConsigneeAddress1(fileFieldValue.getValue());
-                            break;
-                        case "DESTINATAIRE_ADRESSE_ADRESSE2":
-                            ctCctCsvFileVo.setConsigneeAddress2(fileFieldValue.getValue());
-                            break;
-                        case "DESTINATAIRE_ADRESSE_PAYSADDRESS_NOMPAYS":
-                            ctCctCsvFileVo.setConsigneeCountry(fileFieldValue.getValue());
-                            break;
-                        case "DESTINATAIRE_TELEPHONE_FIXE_NUMERO":
-                            ctCctCsvFileVo.setConsigneeTelephone(fileFieldValue.getValue());
-                            break;
+//                        case "TRANSITAIRE_RAISONSOCIALE":
+//                            ctCctCsvFileVo.setConsigneeName(fileFieldValue.getValue());
+//                            break;
+//                        case "TRANSITAIRE_ADRESSE_ADRESSE1":
+//                            ctCctCsvFileVo.setConsigneeAddress1(fileFieldValue.getValue());
+//                            break;
+//                        case "TRANSITAIRE_TELEPHONE_FIXE_NUMERO":
+//                            ctCctCsvFileVo.setConsigneeTelephone(fileFieldValue.getValue());
+//                            break;
+//                        case "DESTINATAIRE_RAISON_SOCIALE":
+//                            ctCctCsvFileVo.setConsigneeName(fileFieldValue.getValue());
+//                            break;
+//                        case "DESTINATAIRE_ADRESSE_ADRESSE1":
+//                            ctCctCsvFileVo.setConsigneeAddress1(fileFieldValue.getValue());
+//                            break;
+//                        case "DESTINATAIRE_ADRESSE_ADRESSE2":
+//                            ctCctCsvFileVo.setConsigneeAddress2(fileFieldValue.getValue());
+//                            break;
+//                        case "DESTINATAIRE_ADRESSE_PAYSADDRESS_NOMPAYS":
+//                            ctCctCsvFileVo.setConsigneeCountry(fileFieldValue.getValue());
+//                            break;
+//                        case "DESTINATAIRE_TELEPHONE_FIXE_NUMERO":
+//                            ctCctCsvFileVo.setConsigneeTelephone(fileFieldValue.getValue());
+//                            break;
                         case "INFORMATIONS_GENERALES_PAYS_ORIGINE_NOM_PAYS":
                             ctCctCsvFileVo.setCountryOfOrigin(fileFieldValue.getValue());
                             break;
-                        case "MINEPIA_ZONE_ORIGINE":
+                        case "ZONR_ORIGINE_NOM":
                             ctCctCsvFileVo.setZoneOfOrigin(fileFieldValue.getValue());
                             break;
                         case "INFORMATIONS_GENERALES_PAYS_DESTINATION_NOM_PAYS":
@@ -145,14 +164,11 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
                         case "ZONE_DESTINATION_NOM":
                             ctCctCsvFileVo.setZoneOfDestination(fileFieldValue.getValue());
                             break;
-                        case "MINEPIA_LIEU_ORIGINE_NOM":
+                        case "LIEU_ORIGINE_NOM":
                             ctCctCsvFileVo.setPlaceOfOriginName(fileFieldValue.getValue());
                             break;
-                        case "MINEPIA_LIEU_ORIGINE_ADRESSE":
+                        case "LIEU_ORIGINE_ADRESSE":
                             ctCctCsvFileVo.setPlaceOfOriginAddress(fileFieldValue.getValue());
-                            break;
-                        case "INFORMATIONS_GENERALES_LIEU_CHARGEMENT_LIBELLE":
-                            ctCctCsvFileVo.setPlaceOfShipment(fileFieldValue.getValue());
                             break;
                         case "EXPEDITION_DATE_EXPEDITION_DATE":
                             if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
@@ -175,82 +191,82 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
                         case "TRANSPORT_IDENTIFICATION":
                             ctCctCsvFileVo.setTransportIdentification(fileFieldValue.getValue());
                             break;
-                        case "INFORMATIONS_GENERALES_SIGNATAIRE_NOM":
-                            ctCctCsvFileVo.setSignatoryName(fileFieldValue.getValue());
-                            break;
-                        case "INFORMATIONS_GENERALES_SIGNATAIRE_LIEU":
-                            ctCctCsvFileVo.setSignatoryAddress(fileFieldValue.getValue());
-                            break;
-                        case "INFORMATIONS_GENERALES_SIGNATAIRE_QUALITE":
-                            ctCctCsvFileVo.setSignatoryPosition(fileFieldValue.getValue());
-                            break;
+//                        case "INFORMATIONS_GENERALES_SIGNATAIRE_NOM":
+//                            ctCctCsvFileVo.setSignatoryName(fileFieldValue.getValue());
+//                            break;
+//                        case "INFORMATIONS_GENERALES_SIGNATAIRE_LIEU":
+//                            ctCctCsvFileVo.setSignatoryAddress(fileFieldValue.getValue());
+//                            break;
+//                        case "INFORMATIONS_GENERALES_SIGNATAIRE_QUALITE":
+//                            ctCctCsvFileVo.setSignatoryPosition(fileFieldValue.getValue());
+//                            break;
                         case "TOTAL_NBR_LOTS_COLIS":
                             ctCctCsvFileVo.setTotalNumberOfPackages(fileFieldValue.getValue());
                             break;
                         case "INFORMATIONS_GENERALES_TRANSPORT_NUM_CONNAISSEMENT_LTA":
                             ctCctCsvFileVo.setLadingNumberLTA(fileFieldValue.getValue());
                             break;
-                        case "DATE_DEPART": {
+                        case "MINEPIA_DATE_DEPART": {
                             ctCctCsvFileVo.setCvsDepartureDate(fileFieldValue.getValue());
                             break;
                         }
-                        case "TEMPERATURE_PRODUIT": {
+                        case "MINEPIA_TEMPERATURE_PRODUIT": {
                             ctCctCsvFileVo.setCvsProductTemperature(fileFieldValue.getValue());
                             break;
                         }
-                        case "NOMBRE_UNITES_EMBALLES": {
+                        case "MINEPIA_NOMBRE_UNITES_EMBALLES": {
                             ctCctCsvFileVo.setCvsNbPackagedUnit(fileFieldValue.getValue());
                             break;
                         }
-                        case "NATURE_EMBALLAGE": {
+                        case "MINEPIA_NATURE_EMBALLAGE": {
                             ctCctCsvFileVo.setCvsPackageNature(fileFieldValue.getValue());
                             break;
                         }
-                        case "MARCHANDISE_POUR": {
+                        case "MINEPIA_MARCHANDISE_POUR": {
                             ctCctCsvFileVo.setCvsGoodFor(fileFieldValue.getValue());
                             break;
                         }
-                        case "MARCHANDISE_ESPECE": {
+                        case "MINEPIA_MARCHANDISE_ESPECE": {
                             ctCctCsvFileVo.setCvsGoodSpecies(fileFieldValue.getValue());
                             break;
                         }
-                        case "MARCHANDISE_NATURE": {
+                        case "MINEPIA_MARCHANDISE_NATURE": {
                             ctCctCsvFileVo.setCvsGoodNature(fileFieldValue.getValue());
                             break;
                         }
-                        case "MARCHANDISE_TRAITEMENT": {
+                        case "MINEPIA_MARCHANDISE_TRAITEMENT": {
                             ctCctCsvFileVo.setCvsGoodTreatment(fileFieldValue.getValue());
                             break;
                         }
-                        case "MARCHANDISE_NB_COLIS": {
+                        case "MINEPIA_MARCHANDISE_NB_COLIS": {
                             ctCctCsvFileVo.setCvsGoodPackageNumber(fileFieldValue.getValue());
                             break;
                         }
-                        case "MARCHANDISE_NB_APPROUVES": {
+                        case "MINEPIA_MARCHANDISE_NB_APPROUVES": {
                             ctCctCsvFileVo.setCvsGoodPackageApproved(fileFieldValue.getValue());
                             break;
                         }
-                        case "MARCHANDISE_POIDS_NET": {
+                        case "MINEPIA_MARCHANDISE_POIDS_NET": {
                             ctCctCsvFileVo.setCvsGoodPackageNetWeight(fileFieldValue.getValue());
                             break;
                         }
-                        case "ID_CONTENEURS_SCELLES": {
+                        case "MINEPIA_ID_CONTENEURS_SCELLES": {
                             ctCctCsvFileVo.setCvsIdContainersSeals(fileFieldValue.getValue());
                             break;
                         }
-                        case "NO_PERMIS_CITES": {
+                        case "MINEPIA_NO_PERMIS_CITES": {
                             ctCctCsvFileVo.setCvsPermitCITES(fileFieldValue.getValue());
                             break;
                         }
-                        case "EXPEDITEUR_RAISON_SOCIAL": {
+                        case "EXPORTATEUR_RAISONSOCIALE": {
                             ctCctCsvFileVo.setConsignorName(fileFieldValue.getValue());
                             break;
                         }
-                        case "EXPEDITEUR_ADRESSE1": {
+                        case "EXPORTATEUR_ADRESSE_ADRESSE1": {
                             ctCctCsvFileVo.setConsignorAddress1(fileFieldValue.getValue());
                             break;
                         }
-                        case "EXPEDITEUR_TELEPHONE_MOBILE_NUMERO": {
+                        case "EXPORTATEUR_TELEPHONE_MOBILE_NUMERO": {
                             ctCctCsvFileVo.setConsignorTelephone(fileFieldValue.getValue());
                             break;
                         }
@@ -367,20 +383,21 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
                                 case "NUMERO_CONTENEUR":
                                     fileItemVo.setContainerNumber(fileItemFieldValue.getValue());
                                     break;
-                                case "DESCRIPTION":
+                                case "SPECIFICATION_TECHNIQUE":
                                     fileItemVo.setDesc(fileItemFieldValue.getValue());
                                     break;
 //                                case "QUANTITE":
 //                                    fileItemVo.setNumberOfPackages(fileItemFieldValue.getValue());
 //                                    break;
-                                case "QUANTITE_TOTALE":
-                                    fileItemVo.setTotalQuantity(fileItemFieldValue.getValue());
-                                    break;
+//                                case "QUANTITE_TOTALE":
+//                                    fileItemVo.setTotalQuantity(fileItemFieldValue.getValue());
+//                                    break;
 //                                case "NBR_LOTS_COLIS":
 //                                    fileItemVo.setNumberOfPackages(fileItemFieldValue.getValue());
 //                                    break;
-                                case "POIDS_NET":
+                                case "POIDS":
                                     fileItemVo.setNetWeight(fileItemFieldValue.getValue());
+                                    fileItemVo.setTotalQuantity(fileItemFieldValue.getValue());
                                 case "TEMPERATURE":
                                     fileItemVo.setTemperature(fileItemFieldValue.getValue());
                                     break;

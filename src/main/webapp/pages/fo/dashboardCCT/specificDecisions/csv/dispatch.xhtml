@@ -1,0 +1,19 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+
+    <p:panelGrid columns="2">
+
+        <h:outputLabel for="dispatch_inspector" value="#{bundle['Dispatch_user']}" />
+        <h:panelGroup>
+            <p:selectOneMenu id="dispatch_inspector" value="#{fileItemCctDetailController.assignedUserForCotation}" style="width:125px"
+                             required="true" requiredMessage="#{bundle['Dispatch_user_message_required']}" disabled="#{fileItemCctDetailController.currentFile.assignedUser ne null}">
+                <f:selectItem itemLabel=" #{bundle['SelectOneMessage']}" />
+                <f:selectItems value="#{fileItemCctDetailController.inspectorList}" var="inspector" itemValue="#{inspector}"
+                               itemLabel="#{inspector.firstName} #{inspector.lastName}" />
+                <f:converter binding="#{userConverter}" />
+            </p:selectOneMenu>
+            <p:message for="dispatch_inspector" />
+        </h:panelGroup>
+
+    </p:panelGrid>
+
+</ui:composition>
