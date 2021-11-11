@@ -166,6 +166,7 @@ public class CcsMinsanteExporter extends AbstractReportInvoker {
                 fileItemVo.setFobValue(fileItem.getFobValue());
                 if (fileItem.getNsh() != null) {
                     fileItemVo.setCode(fileItem.getNsh().getGoodsItemCode());
+                    fileItemVo.setDesc(fileItem.getNsh().getGoodsItemDesc());
                 }
                 if (fileItemVo.getDesignation() == null || StringUtils.isEmpty(fileItemVo.getDesignation())) {
                     if (fileItem.getNsh() != null) {

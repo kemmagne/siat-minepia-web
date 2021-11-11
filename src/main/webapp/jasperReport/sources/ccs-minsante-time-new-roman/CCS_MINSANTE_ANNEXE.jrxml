@@ -63,6 +63,9 @@
 		</band>
 	</background>
 	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
 		<band height="150" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="0" width="225" height="135" uuid="74ecc686-50a1-4570-a409-2a3d07c25d79"/>
@@ -96,41 +99,39 @@ FAX :233427610
 ]]></text>
 			</staticText>
 		</band>
-	</title>
-	<pageHeader>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
 		<band height="64" splitType="Stretch">
 			<printWhenExpression><![CDATA[$F{hasContainers}]]></printWhenExpression>
 			<staticText>
-				<reportElement x="16" y="3" width="527" height="19" uuid="5bc50e13-9f88-48d6-b721-c03b863ce110"/>
+				<reportElement x="15" y="1" width="526" height="19" uuid="5bc50e13-9f88-48d6-b721-c03b863ce110"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="11" isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Numéros des conteneurs]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="16" y="22" width="527" height="33" uuid="b63c07a7-2743-476a-999f-3a04a641982f"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="15" y="20" width="526" height="33" uuid="b63c07a7-2743-476a-999f-3a04a641982f"/>
 				<textElement textAlignment="Center">
 					<font fontName="Times New Roman"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{containersNumbers}]]></textFieldExpression>
 			</textField>
 		</band>
-	</pageHeader>
-	<columnHeader>
-		<band splitType="Stretch"/>
-	</columnHeader>
-	<detail>
-		<band height="125" splitType="Stretch">
+		<band height="125">
 			<componentElement>
-				<reportElement key="table" style="table" mode="Opaque" x="16" y="0" width="527" height="125" uuid="847b9c2a-1e93-4763-aed2-0526369badf5"/>
+				<reportElement key="table" style="table" mode="Opaque" x="15" y="0" width="526" height="125" uuid="847b9c2a-1e93-4763-aed2-0526369badf5"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="fileItemsDataSet" uuid="001d2c82-7b6a-4b02-87b4-ecad39981811">
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{fileItemList})]]></dataSourceExpression>
 					</datasetRun>
-					<jr:column width="160" uuid="38214fb5-9f68-41bb-9dec-f5e7f85a9f42">
-						<jr:columnHeader style="table" height="30" rowSpan="1">
+					<jr:column width="100" uuid="38214fb5-9f68-41bb-9dec-f5e7f85a9f42">
+						<jr:columnHeader style="table" height="40" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="160" height="30" uuid="103a268e-69d5-4ce2-b83d-493a18a355ee"/>
+								<reportElement x="0" y="0" width="100" height="40" uuid="103a268e-69d5-4ce2-b83d-493a18a355ee"/>
 								<textElement verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="11" isBold="true"/>
 									<paragraph leftIndent="5"/>
@@ -138,32 +139,36 @@ FAX :233427610
 								<text><![CDATA[NSH]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:columnFooter height="30" rowSpan="1">
+						<jr:columnFooter style="table" height="40" rowSpan="1">
 							<box>
 								<topPen lineWidth="0.0"/>
 								<leftPen lineWidth="1.0"/>
 								<bottomPen lineWidth="1.0"/>
+								<rightPen lineWidth="0.0"/>
 							</box>
 						</jr:columnFooter>
-						<jr:detailCell style="table" height="30" rowSpan="1">
+						<jr:detailCell style="table" height="44" rowSpan="1">
 							<box>
 								<topPen lineWidth="0.25"/>
 								<leftPen lineWidth="1.0"/>
 							</box>
 							<textField>
-								<reportElement x="0" y="0" width="160" height="30" uuid="574239cb-7ea4-440f-9b87-77cba96ad0d0"/>
+								<reportElement x="0" y="0" width="100" height="44" uuid="574239cb-7ea4-440f-9b87-77cba96ad0d0"/>
 								<textElement verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="10"/>
+									<font fontName="Times New Roman" size="9"/>
 									<paragraph leftIndent="5"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="240" uuid="c07ba6c8-379d-4551-9c89-8ce661abd0f7">
-						<jr:columnHeader style="table" height="30" rowSpan="1">
+					<jr:column width="326" uuid="c07ba6c8-379d-4551-9c89-8ce661abd0f7">
+						<jr:columnHeader style="table" height="40" rowSpan="1">
+							<box>
+								<leftPen lineWidth="0.25"/>
+							</box>
 							<staticText>
-								<reportElement x="0" y="0" width="240" height="30" uuid="6236dfb7-aaf3-4488-8c56-768ced73f852"/>
+								<reportElement x="0" y="0" width="326" height="40" uuid="6236dfb7-aaf3-4488-8c56-768ced73f852"/>
 								<textElement verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="11" isBold="true"/>
 									<paragraph leftIndent="5"/>
@@ -171,13 +176,13 @@ FAX :233427610
 								<text><![CDATA[Désignation de la marchandise]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:columnFooter style="table" height="30" rowSpan="1">
+						<jr:columnFooter style="table" height="40" rowSpan="1">
 							<box>
 								<topPen lineWidth="0.0"/>
 								<leftPen lineWidth="0.0"/>
 							</box>
 							<staticText>
-								<reportElement x="0" y="0" width="240" height="30" uuid="a28d53b1-16d8-4576-ad50-65c669b14344"/>
+								<reportElement x="0" y="0" width="326" height="39" uuid="a28d53b1-16d8-4576-ad50-65c669b14344"/>
 								<textElement verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="11" isBold="true"/>
 									<paragraph leftIndent="5"/>
@@ -185,25 +190,28 @@ FAX :233427610
 								<text><![CDATA[Total]]></text>
 							</staticText>
 						</jr:columnFooter>
-						<jr:detailCell style="table" height="30" rowSpan="1">
+						<jr:detailCell style="table" height="44" rowSpan="1">
 							<box>
 								<topPen lineWidth="0.0"/>
 								<leftPen lineWidth="0.0"/>
 							</box>
 							<textField>
-								<reportElement x="0" y="0" width="240" height="30" uuid="f78c9032-22c0-4d99-a082-1027e1c4df54"/>
+								<reportElement x="0" y="0" width="326" height="44" uuid="f78c9032-22c0-4d99-a082-1027e1c4df54"/>
 								<textElement verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="10"/>
+									<font fontName="Times New Roman" size="8"/>
 									<paragraph leftIndent="5"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{desc}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="126" uuid="cd84c9a6-fd1c-444f-b661-dc07e3fbc4b5">
-						<jr:columnHeader style="table" height="30" rowSpan="1">
+					<jr:column width="100" uuid="cd84c9a6-fd1c-444f-b661-dc07e3fbc4b5">
+						<jr:columnHeader style="table" height="40" rowSpan="1">
+							<box>
+								<leftPen lineWidth="0.0"/>
+							</box>
 							<staticText>
-								<reportElement x="0" y="0" width="126" height="30" uuid="545ddb60-994b-491f-bfb2-4afaae3fd613"/>
+								<reportElement x="0" y="0" width="100" height="40" uuid="545ddb60-994b-491f-bfb2-4afaae3fd613"/>
 								<textElement verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="11" isBold="true"/>
 									<paragraph leftIndent="5"/>
@@ -211,29 +219,29 @@ FAX :233427610
 								<text><![CDATA[Tonnage(Kg)]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:columnFooter style="table" height="30" rowSpan="1">
+						<jr:columnFooter style="table" height="40" rowSpan="1">
 							<box>
 								<topPen lineWidth="0.0"/>
 								<leftPen lineWidth="0.0"/>
 							</box>
 							<textField>
-								<reportElement x="0" y="0" width="126" height="30" uuid="b596a6be-ab81-4cfa-a567-758c27fe5781"/>
+								<reportElement x="0" y="0" width="100" height="39" uuid="b596a6be-ab81-4cfa-a567-758c27fe5781"/>
 								<textElement verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="10"/>
+									<font fontName="Times New Roman" size="9"/>
 									<paragraph leftIndent="5"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$V{TOTAL_QUANTITY}]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
-						<jr:detailCell style="table" height="30" rowSpan="1">
+						<jr:detailCell style="table" height="44" rowSpan="1">
 							<box>
 								<topPen lineWidth="0.0"/>
 								<leftPen lineWidth="0.0"/>
 							</box>
 							<textField>
-								<reportElement x="0" y="0" width="126" height="30" uuid="9779e751-9ba6-46a5-b655-51c20ca800c2"/>
+								<reportElement x="0" y="0" width="100" height="44" uuid="9779e751-9ba6-46a5-b655-51c20ca800c2"/>
 								<textElement verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="10"/>
+									<font fontName="Times New Roman" size="9"/>
 									<paragraph leftIndent="5"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
@@ -256,20 +264,20 @@ FAX :233427610
 				</textElement>
 				<text><![CDATA[/]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="291" y="2" width="8" height="20" uuid="fb746434-efa5-4cef-bbb8-032960067805"/>
+			<textField>
+				<reportElement x="276" y="2" width="8" height="20" uuid="41673e00-5b9a-4fb4-8ca9-4c95d2b866bd"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman"/>
 				</textElement>
-				<text><![CDATA[2]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="276" y="2" width="8" height="20" uuid="6591ad96-0902-4c60-a33d-32fba83aefe8"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}+1]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="291" y="2" width="8" height="20" uuid="7609708a-288d-4a46-b23f-1e50df9cd0f9"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman"/>
 				</textElement>
-				<text><![CDATA[2]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA[$V{PAGE_COUNT}+1]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageFooter>
 	<summary>
