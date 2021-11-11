@@ -226,7 +226,11 @@ public class CostsController extends AbstractController<PaymentData> implements 
         try {
             Flow flowToExecute;
             if (Arrays.asList(FileTypeCode.CCT_CSV).contains(currentFile.getFileType().getCode())) {
-                flowToExecute = flowService.findFlowByCode(FlowCode.FL_CT_167.name());
+                if (currentFile.getParent() == null) {
+                    flowToExecute = flowService.findFlowByCode(FlowCode.FL_CT_167.name());
+                } else {
+                    flowToExecute = flowService.findFlowByCode(FlowCode.FL_CT_175.name());
+                }
             } else if (Arrays.asList(FileTypeCode.CCT_CSV, FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP).contains(currentFile.getFileType().getCode())) {
                 flowToExecute = flowService.findFlowByCode(FlowCode.FL_CT_123.name());
             } else if (Arrays.asList(FileTypeCode.CCT_CT_E_PVI, FileTypeCode.CCT_CT_E_FSTP).contains(currentFile.getFileType().getCode())) {

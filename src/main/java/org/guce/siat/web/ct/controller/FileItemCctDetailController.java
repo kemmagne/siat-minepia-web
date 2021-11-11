@@ -1493,7 +1493,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
             }
         }
 
-        if (isPhytoBilling(selectedFlow) || FlowCode.FL_CT_159.name().equals(selectedFlow.getCode())) {
+        if (isPhytoBilling(selectedFlow) || Arrays.asList(FlowCode.FL_CT_159.name(), FlowCode.FL_CT_174.name()).contains(selectedFlow.getCode())) {
             counter = -1L;
             invoiceTotalAmount = 0L;
             if (!Arrays.asList(FileTypeCode.CCT_CSV).contains(currentFile.getFileType().getCode())) {
@@ -2400,9 +2400,9 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 // Recuperate the values of DataType (Observation text area ...)
                 List<ItemFlowData> flowDatas = getValuesOfDataTypeForDecision(itemFlowsToAdd, selectedFlow.getDataTypeList());
 
-                if (Arrays.asList(FlowCode.FL_CT_92.name(), FlowCode.FL_CT_159.name()).contains(selectedFlow.getCode()) || isPhytoBilling(selectedFlow)) {
+                if (Arrays.asList(FlowCode.FL_CT_92.name(), FlowCode.FL_CT_159.name(), FlowCode.FL_CT_174.name()).contains(selectedFlow.getCode()) || isPhytoBilling(selectedFlow)) {
 
-                    if (FlowCode.FL_CT_159.name().equals(selectedFlow.getCode())) {
+                    if (Arrays.asList(FlowCode.FL_CT_159.name(), FlowCode.FL_CT_174.name()).contains(selectedFlow.getCode())) {
                         try {
                             paymentData.setMontantHt((long) Integer.parseInt(flowDatas.get(0).getValue()));
                         } catch (NumberFormatException nfe) {

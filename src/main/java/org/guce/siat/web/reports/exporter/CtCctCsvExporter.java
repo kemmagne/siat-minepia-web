@@ -136,7 +136,7 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
                         case "INFORMATIONS_GENERALES_PAYS_ORIGINE_NOM_PAYS":
                             ctCctCsvFileVo.setCountryOfOrigin(fileFieldValue.getValue());
                             break;
-                        case "ZONR_ORIGINE_NOM":
+                        case "MINEPIA_ZONE_ORIGINE":
                             ctCctCsvFileVo.setZoneOfOrigin(fileFieldValue.getValue());
                             break;
                         case "INFORMATIONS_GENERALES_PAYS_DESTINATION_NOM_PAYS":
@@ -145,16 +145,15 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
                         case "ZONE_DESTINATION_NOM":
                             ctCctCsvFileVo.setZoneOfDestination(fileFieldValue.getValue());
                             break;
-                        case "LIEU_ORIGINE_NOM":
+                        case "MINEPIA_LIEU_ORIGINE_NOM":
                             ctCctCsvFileVo.setPlaceOfOriginName(fileFieldValue.getValue());
                             break;
-                        case "LIEU_ORIGINE_ADRESSE":
+                        case "MINEPIA_LIEU_ORIGINE_ADRESSE":
                             ctCctCsvFileVo.setPlaceOfOriginAddress(fileFieldValue.getValue());
                             break;
                         case "INFORMATIONS_GENERALES_LIEU_CHARGEMENT_LIBELLE":
                             ctCctCsvFileVo.setPlaceOfShipment(fileFieldValue.getValue());
                             break;
-
                         case "EXPEDITION_DATE_EXPEDITION_DATE":
                             if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
                                 try {
@@ -368,7 +367,7 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
                                 case "NUMERO_CONTENEUR":
                                     fileItemVo.setContainerNumber(fileItemFieldValue.getValue());
                                     break;
-                                case "SPECIFICATION_TECHNIQUE":
+                                case "DESCRIPTION":
                                     fileItemVo.setDesc(fileItemFieldValue.getValue());
                                     break;
 //                                case "QUANTITE":
