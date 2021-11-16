@@ -276,6 +276,18 @@
                     <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="statisticsOnBusinessMenuItem"
                                 value="#{bundle['appmenu_search_statisticsOnBusiness']}" actionListener="#{statisticController.goToStatisticsBusinessPage}"
                                 rendered="#{request.isUserInRole('SUPER')}" />
+                    <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="imCargFilesStatisticsMenuItem"
+                                value="#{bundle['appmenu_search_imCargFilesStatisticsBy']}" actionListener="#{statisticController.goToImCargFilesStatisticsPage}"
+                                rendered="#{request.isUserInRole('SUPER') and statisticController.mincommerce}" />
+                    <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="imCargStatisticsByProductMenuItem"
+                                value="#{bundle['appmenu_search_imCargStatisticsByProduct']}" actionListener="#{statisticController.goToImCargStatisticsByProductPage}"
+                                rendered="#{request.isUserInRole('SUPER') and statisticController.mincommerce}" />
+                    <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="imCargStatisticsByImporterMenuItem"
+                                value="#{bundle['appmenu_search_imCargStatisticsByImporter']}" actionListener="#{statisticController.goToImCargStatisticsByImporterPage}"
+                                rendered="#{request.isUserInRole('SUPER') and statisticController.mincommerce}" />
+                    <p:menuitem onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="imCargStatisticsByCountryMenuItem"
+                                value="#{bundle['appmenu_search_imCargStatisticsByCountry']}" actionListener="#{statisticController.goToImCargStatisticsByCountryPage}"
+                                rendered="#{request.isUserInRole('SUPER') and statisticController.mincommerce}" />
                 </p:submenu>
 
                 <p:submenu id="filesTrackingMenu" label="#{bundle['appmenu_file_tracking']}" styleClass="staticMenuItem"

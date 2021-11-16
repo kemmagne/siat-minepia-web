@@ -1,0 +1,59 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+    <br />
+
+    <p:panel header="#{bundle['fileItemDesicionSearch_result']}">
+
+
+        <h:form id="filtredFileItemListForm">
+
+            <h:panelGrid columns="2">
+                <h:commandLink action="#{exporter.exportPDF(table, 'IM_STATISTIQUES')}">
+                    <h:outputText styleClass="sprite sprite-pdf" />
+                </h:commandLink>
+
+                <h:commandLink>
+                    <h:graphicImage styleClass="sprite sprite-pdf" library="img" name="excel.png"
+                                    style="width: 34px;height: 34px;display: block;top: 15px;right: 52px;position: absolute;" />
+                    <p:dataExporter type="xls" target="datalist" fileName="#{bundle['fileItemDesicionSearch_result']}" />
+                </h:commandLink>
+            </h:panelGrid>
+            <br />
+
+            <p:dataTable id="datalist" binding="#{table}" widgetVar="datalistTable" value="#{statisticController.nshList}"
+                         filteredValue="" var="nsh" rows="10" paginator="true" rowsPerPageTemplate="10,20,30"
+                         emptyMessage="#{bundle['AucuneResultat']}" rowIndexVar="rowIdx"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+
+                <p:columnGroup type="header">
+                    <p:row>
+                        <p:column headerText="#{bundle['Period']}"/>
+                        <ui:repeat value="#{statisticController.yearsList}" var="year">
+                            <p:column colspan="2" headerText="#{year}"/>
+                        </ui:repeat>
+                    </p:row>
+                    <p:row>
+                        <p:column headerText="#{bundle['Label']}"/>
+                        <ui:repeat value="#{statisticController.qvList}" var="qv">
+                            <p:column headerText="#{qv}"/>
+                        </ui:repeat>
+                    </p:row>
+                </p:columnGroup>
+
+                <p:column>
+                    <h:outputText value="#{nsh.goodsItemCode}"/>
+                </p:column>
+
+                <p:columns value="#{statisticController.qvList}" var="qv" columnIndexVar="colIdx">
+                    <h:outputText value="#{statisticController.imCargDataList.get(rowIdx).get(colIdx).qv}"/>
+                </p:columns>
+
+            </p:dataTable>
+
+        </h:form>
+
+    </p:panel>
+
+</ui:composition>
