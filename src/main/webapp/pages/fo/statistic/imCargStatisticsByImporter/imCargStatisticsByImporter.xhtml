@@ -9,49 +9,49 @@
 
             <p:tab title="#{bundle['imCargStatisticsByImporter_Search']}" dynamic="true" cache="true">
 
-                <h:panelGrid columns="4">
+                <h:panelGrid columns="6" style="width: 100%">
 
-                    <p:outputPanel styleClass="search-select">
-                        <p:outputLabel for="yearStart" value="#{bundle['yearStart']}" />
-                        <p:inputText id="yearStart" value="#{statisticController.imCargFilter.yearStart}" />
-                    </p:outputPanel>
+                    <!--<p:outputPanel styleClass="search-select">-->
+                    <p:outputLabel for="yearStart" value="#{bundle['yearStart']}" />
+                    <p:inputText id="yearStart" value="#{statisticController.imCargFilter.yearStart}" />
+                    <!--</p:outputPanel>-->
 
-                    <p:outputPanel styleClass="search-select">
-                        <p:outputLabel for="yearEnd" value="#{bundle['yearEnd']}" />
-                        <p:inputText id="yearEnd" value="#{statisticController.imCargFilter.yearEnd}" />
-                    </p:outputPanel>
+                    <!--<p:outputPanel styleClass="search-select">-->
+                    <p:outputLabel for="yearEnd" value="#{bundle['yearEnd']}" />
+                    <p:inputText id="yearEnd" value="#{statisticController.imCargFilter.yearEnd}" />
+                    <!--</p:outputPanel>-->
 
-                    <p:outputPanel styleClass="search-select">
-                        <h:outputLabel value="#{bundle['provenaneCountry']}" for="provenaneCountry" />
-                        <p:selectOneMenu id="provenaneCountry" label="provenaneCountry" value="#{statisticController.imCargFilter.provenanceCountry}">
-                            <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-                            <f:selectItems value="#{statisticController.countries}" var="c" itemLabel="#{c.countryName}" itemValue="#{c.countryIdAlpha2}" />
-                        </p:selectOneMenu>
-                    </p:outputPanel>
+                    <!--<p:outputPanel styleClass="search-select">-->
+                    <h:outputLabel value="#{bundle['provenaneCountry']}" for="provenaneCountry" />
+                    <p:selectOneMenu id="provenaneCountry" label="provenaneCountry" value="#{statisticController.imCargFilter.provenanceCountry}">
+                        <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+                        <f:selectItems value="#{statisticController.countries}" var="c" itemLabel="#{c.countryName}" itemValue="#{c.countryIdAlpha2}" />
+                    </p:selectOneMenu>
+                    <!--</p:outputPanel>-->
 
-                    <p:outputPanel styleClass="search-select">
-                        <h:outputLabel value="#{bundle['category']}" for="category" />
-                        <p:selectOneMenu id="category" label="category" value="#{statisticController.imCargFilter.category}">
-                            <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-                            <f:selectItems value="#{statisticController.categories}" var="c" itemLabel="#{c}" itemValue="#{c}" />
-                        </p:selectOneMenu>
-                    </p:outputPanel>
+                    <!--<p:outputPanel styleClass="search-select">-->
+                    <h:outputLabel value="#{bundle['category']}" for="category" />
+                    <p:selectOneMenu id="category" label="category" value="#{statisticController.imCargFilter.category}">
+                        <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+                        <f:selectItems value="#{statisticController.categories}" var="c" itemLabel="#{c}" itemValue="#{c}" />
+                    </p:selectOneMenu>
+                    <!--</p:outputPanel>-->
 
-                    <p:outputPanel styleClass="search-select">
-                        <h:outputLabel value="#{bundle['model']}" for="model" />
-                        <p:selectOneMenu id="model" label="model" value="#{statisticController.imCargFilter.model}">
-                            <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-                            <f:selectItems value="#{statisticController.models}" var="m" itemLabel="#{m}" itemValue="#{m}" />
-                        </p:selectOneMenu>
-                    </p:outputPanel>
+                    <!--<p:outputPanel styleClass="search-select">-->
+                    <h:outputLabel value="#{bundle['model']}" for="model" />
+                    <p:selectOneMenu id="model" label="model" value="#{statisticController.imCargFilter.model}">
+                        <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+                        <f:selectItems value="#{statisticController.models}" var="m" itemLabel="#{m}" itemValue="#{m}" />
+                    </p:selectOneMenu>
+                    <!--</p:outputPanel>-->
 
-                    <p:outputPanel styleClass="search-select">
-                        <h:outputLabel value="#{bundle['mark']}" for="mark" />
-                        <p:selectOneMenu id="mark" label="mark" value="#{statisticController.imCargFilter.mark}">
-                            <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-                            <f:selectItems value="#{statisticController.marks}" var="m" itemLabel="#{m}" itemValue="#{m}" />
-                        </p:selectOneMenu>
-                    </p:outputPanel>
+                    <!--<p:outputPanel styleClass="search-select">-->
+                    <h:outputLabel value="#{bundle['mark']}" for="mark" />
+                    <p:selectOneMenu id="mark" label="mark" value="#{statisticController.imCargFilter.mark}">
+                        <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+                        <f:selectItems value="#{statisticController.marks}" var="m" itemLabel="#{m}" itemValue="#{m}" />
+                    </p:selectOneMenu>
+                    <!--</p:outputPanel>-->
                 </h:panelGrid>
 
                 <h:panelGrid columns="10" cellpadding="10">
