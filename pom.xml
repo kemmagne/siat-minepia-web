@@ -37,7 +37,7 @@
             <id>profile-ht</id>
             <properties>
                 <environment>ht</environment>
-                <global-config.properties>${user.home}/siat/config/ct/global-config.properties</global-config.properties>
+                <global-config.properties>~/siat/config/ct/global-config.properties</global-config.properties>
             </properties>
             <activation>
                 <property>
