@@ -37,6 +37,12 @@
 	<field name="fileItemList" class="java.util.List"/>
 	<field name="containersNumbers" class="java.lang.String"/>
 	<field name="hasContainers" class="java.lang.Boolean"/>
+	<field name="controller" class="java.lang.String"/>
+	<field name="signatory" class="java.lang.String"/>
+	<field name="controllerStamp" class="java.io.InputStream"/>
+	<field name="controllerSignature" class="java.io.InputStream"/>
+	<field name="signatoryStamp" class="java.io.InputStream"/>
+	<field name="signatorySignature" class="java.io.InputStream"/>
 	<background>
 		<band height="802" splitType="Stretch">
 			<printWhenExpression><![CDATA[$P{DRAFT}]]></printWhenExpression>
@@ -121,7 +127,7 @@ FAX :233427610
 				<textFieldExpression><![CDATA[$F{containersNumbers}]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="125">
+		<band height="250">
 			<componentElement>
 				<reportElement key="table" style="table" mode="Opaque" x="15" y="0" width="526" height="125" uuid="847b9c2a-1e93-4763-aed2-0526369badf5"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
@@ -250,6 +256,66 @@ FAX :233427610
 					</jr:column>
 				</jr:table>
 			</componentElement>
+			<textField>
+				<reportElement x="5" y="208" width="209" height="15" uuid="560a267e-e35e-470c-8788-45c808735428">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{controller}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="FillFrame">
+				<reportElement x="426" y="169" width="89" height="80" uuid="1b470f63-0d5d-462f-beab-086b8b1e968a">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$F{signatorySignature}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="345" y="208" width="187" height="15" uuid="a5d98990-0cb0-45bf-be7b-d2b1ac0f36d0">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{signatory}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="FillFrame">
+				<reportElement x="366" y="142" width="100" height="100" uuid="cb89e001-9f3d-4d18-a77a-9c8509babafb">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$F{signatoryStamp}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="345" y="193" width="187" height="14" uuid="66227c57-c9a3-4c5d-8577-e0902d67d2da">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="9" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Le Chef de Poste]]></text>
+			</staticText>
+			<image scaleImage="FillFrame">
+				<reportElement x="106" y="169" width="89" height="80" uuid="1186ba9b-dcb7-488f-a107-d4e7ac1ff562">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$F{controllerSignature}]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame">
+				<reportElement x="46" y="141" width="100" height="100" uuid="d6a29a68-6216-4bf7-b876-2d54a8ab9fc2">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$F{controllerStamp}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="5" y="193" width="209" height="14" uuid="b05661c1-33e5-4480-b9f3-6de5f5e21a7a">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="9" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Le Contrôleur/ Vérificateur]]></text>
+			</staticText>
 		</band>
 	</detail>
 	<columnFooter>
@@ -258,25 +324,25 @@ FAX :233427610
 	<pageFooter>
 		<band height="22" splitType="Stretch">
 			<staticText>
-				<reportElement x="284" y="2" width="7" height="20" uuid="db9665d1-8153-4132-a4c0-619212394e7a"/>
+				<reportElement x="278" y="2" width="7" height="20" uuid="f24d3e02-a7c4-408c-b431-b41ec4e5c68d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="11"/>
 				</textElement>
 				<text><![CDATA[/]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="276" y="2" width="8" height="20" uuid="41673e00-5b9a-4fb4-8ca9-4c95d2b866bd"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}+1]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="291" y="2" width="8" height="20" uuid="7609708a-288d-4a46-b23f-1e50df9cd0f9"/>
+				<reportElement x="285" y="2" width="8" height="20" uuid="ac48518e-2880-4393-94d6-e333e0182494"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{PAGE_COUNT}+1]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="270" y="2" width="8" height="20" uuid="6638bac1-869f-4d4b-a980-fa505ef6de63"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}+1]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>

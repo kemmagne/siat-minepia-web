@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CCS_MINSANTE" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ab09c848-fe40-4724-be9a-0874e8d853ec">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="192"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -37,6 +37,12 @@
 	<field name="fileItemList" class="java.util.List"/>
 	<field name="containersNumbers" class="java.lang.String"/>
 	<field name="hasContainers" class="java.lang.Boolean"/>
+	<field name="controller" class="java.lang.String"/>
+	<field name="signatory" class="java.lang.String"/>
+	<field name="controllerStamp" class="java.io.InputStream"/>
+	<field name="controllerSignature" class="java.io.InputStream"/>
+	<field name="signatoryStamp" class="java.io.InputStream"/>
+	<field name="signatorySignature" class="java.io.InputStream"/>
 	<background>
 		<band height="802" splitType="Stretch">
 			<printWhenExpression><![CDATA[$P{DRAFT}]]></printWhenExpression>
@@ -121,7 +127,7 @@ FAX :233427610
 				<textFieldExpression><![CDATA[$F{containersNumbers}]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="125">
+		<band height="250">
 			<componentElement>
 				<reportElement key="table" style="table" mode="Opaque" x="14" y="0" width="527" height="125" uuid="847b9c2a-1e93-4763-aed2-0526369badf5"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
@@ -248,6 +254,66 @@ FAX :233427610
 					</jr:column>
 				</jr:table>
 			</componentElement>
+			<image scaleImage="FillFrame">
+				<reportElement x="92" y="168" width="89" height="80" uuid="1186ba9b-dcb7-488f-a107-d4e7ac1ff562">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$F{controllerSignature}]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame">
+				<reportElement x="18" y="139" width="100" height="100" uuid="d6a29a68-6216-4bf7-b876-2d54a8ab9fc2">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$F{controllerStamp}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="0" y="211" width="209" height="15" uuid="560a267e-e35e-470c-8788-45c808735428">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Narrow" size="11" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{controller}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="195" width="211" height="14" uuid="b05661c1-33e5-4480-b9f3-6de5f5e21a7a">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Narrow" size="11" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Le Contrôleur/ Vérificateur]]></text>
+			</staticText>
+			<image scaleImage="FillFrame">
+				<reportElement x="423" y="168" width="89" height="80" uuid="1b470f63-0d5d-462f-beab-086b8b1e968a">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$F{signatorySignature}]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame">
+				<reportElement x="361" y="140" width="100" height="100" uuid="cb89e001-9f3d-4d18-a77a-9c8509babafb">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$F{signatoryStamp}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="340" y="210" width="187" height="15" uuid="a5d98990-0cb0-45bf-be7b-d2b1ac0f36d0">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Narrow" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{signatory}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="340" y="195" width="187" height="14" uuid="66227c57-c9a3-4c5d-8577-e0902d67d2da">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Narrow" size="11" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Le Chef de Poste]]></text>
+			</staticText>
 		</band>
 	</detail>
 	<columnFooter>
@@ -256,23 +322,23 @@ FAX :233427610
 	<pageFooter>
 		<band height="22" splitType="Stretch">
 			<staticText>
-				<reportElement x="284" y="2" width="7" height="20" uuid="db9665d1-8153-4132-a4c0-619212394e7a"/>
+				<reportElement x="284" y="2" width="7" height="20" uuid="fc3b7dc7-6b5e-4a07-bebe-5f333f9a9162"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Arial Narrow" size="11"/>
 				</textElement>
 				<text><![CDATA[/]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="276" y="2" width="8" height="20" uuid="f6e59476-a4f5-4de5-ad89-def975cc1bd9"/>
+				<reportElement x="276" y="2" width="8" height="20" uuid="687553f6-39e1-43f9-a905-792ce70fc265"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial Narrow"/>
+					<font fontName="Arial Narrow" size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}+1]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="291" y="2" width="8" height="20" uuid="ff080bdc-c8df-483d-8668-0b0f923d0810"/>
+				<reportElement x="291" y="2" width="8" height="20" uuid="daf59ac0-fdc1-4973-8daf-ee8f81c2ccf5"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial Narrow"/>
+					<font fontName="Arial Narrow" size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{PAGE_COUNT}+1]]></textFieldExpression>
 			</textField>
