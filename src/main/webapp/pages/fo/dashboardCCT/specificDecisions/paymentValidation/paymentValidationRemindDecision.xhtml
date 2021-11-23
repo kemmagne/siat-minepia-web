@@ -13,7 +13,7 @@
 				<p:panelGrid columns="2">
 
 					<p:outputLabel value="#{bundle['paymentValidDecisionTitleLabel_montantFrais']}" />
-					<h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.lastPaymentData.montantHt}" />
+                                        <h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.lastPaymentData.montantEncaissement != null ? fileItemCctDetailController.specificDecisionsHistory.lastPaymentData.montantEncaissement : fileItemCctDetailController.specificDecisionsHistory.lastPaymentData.montantHt}" />
 
 					<p:outputLabel value="#{bundle['paymentValidDecisionTitleLabel_natureFrais']}" />
 					<h:outputText value="#{fileItemCctDetailController.specificDecisionsHistory.lastPaymentData.natureFrais}" />

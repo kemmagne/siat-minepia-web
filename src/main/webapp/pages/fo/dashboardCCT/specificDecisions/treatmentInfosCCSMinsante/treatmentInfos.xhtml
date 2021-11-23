@@ -1,0 +1,173 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <h5 style="font-weight: bold;" class="title">#{bundle['CCS_Treatment_Infos_Products_Informations']}</h5>
+    <br />
+    <h:panelGrid id="foodProductsType_1" columns="2" cellspacing="0" styleClass="informationPanelGrid">
+        <p:selectBooleanCheckbox style="font-size: 12px; font-weight: bold;" value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.thriftShop}" itemLabel="#{bundle['CCS_Treatment_Infos_ThriftShop']}">
+            <p:ajax  listener="#{fileItemCctDetailController.ccsProductsTypeChangedListener}" update=":documentsForFoodAndDrugProducts" />
+        </p:selectBooleanCheckbox>
+        <p:selectBooleanCheckbox style="font-size: 12px; font-weight: bold;" value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.hygienSanitationProducts}" itemLabel="#{bundle['CCS_Treatment_Infos_HygienSanitationProducts']}">
+            <p:ajax  listener="#{fileItemCctDetailController.ccsProductsTypeChangedListener}" update=":documentsForFoodAndDrugProducts" />
+        </p:selectBooleanCheckbox>
+    </h:panelGrid>
+    <h:panelGrid id="foodProductsType_2" columns="2" cellspacing="5" >
+        <p:selectBooleanCheckbox style="font-size: 12px; font-weight: bold;" value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.fleaMarket}" itemLabel="#{bundle['CCS_Treatment_Infos_FleaMarket']}">
+            <p:ajax  listener="#{fileItemCctDetailController.ccsProductsTypeChangedListener}" update=":documentsForFoodAndDrugProducts" />
+        </p:selectBooleanCheckbox>
+        <p:selectBooleanCheckbox style="font-size: 12px; font-weight: bold;" value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.vehicle}" itemLabel="#{bundle['CCS_Treatment_Infos_Vehicle']}">
+            <p:ajax  listener="#{fileItemCctDetailController.ccsProductsTypeChangedListener}" update=":documentsForFoodAndDrugProducts" />
+        </p:selectBooleanCheckbox>
+    </h:panelGrid>
+    <h:panelGrid id="foodProductsType_3" columns="1" cellspacing="0" styleClass="informationPanelGrid">
+        <p:selectBooleanCheckbox style="font-size: 12px; font-weight: bold;" value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.productFoodIHC}" itemLabel="#{bundle['CCS_Treatment_Infos_FoodIHC']}">
+            <p:ajax  listener="#{fileItemCctDetailController.ccsProductsTypeChangedListener}" update=":documentsForFoodAndDrugProducts" />
+        </p:selectBooleanCheckbox>
+    </h:panelGrid>
+    <p style="border-bottom: 1px solid #e6e3de;"></p>
+    <br />
+    <h:panelGrid id="drugProductsType_1" columns="3" cellspacing="5">
+        <p:selectBooleanCheckbox style="font-size: 12px; font-weight: bold;" value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.drugs}" itemLabel="#{bundle['CCS_Treatment_Infos_Drugs']}">
+            <p:ajax  listener="#{fileItemCctDetailController.ccsProductsTypeChangedListener}" update=":documentsForFoodAndDrugProducts" />
+        </p:selectBooleanCheckbox>
+        <p:selectBooleanCheckbox style="font-size: 12px; font-weight: bold;" value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.medicalDevices}" itemLabel="#{bundle['CCS_Treatment_Infos_MedicalDevices']}">
+            <p:ajax  listener="#{fileItemCctDetailController.ccsProductsTypeChangedListener}" update=":documentsForFoodAndDrugProducts" />
+        </p:selectBooleanCheckbox>
+    </h:panelGrid>
+    <h:panelGrid id="drugProductsType_2" columns="2" cellspacing="5">
+        <p:selectBooleanCheckbox style="font-size: 12px; font-weight: bold;" value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.tropicalCorticosteroids}" itemLabel="#{bundle['CCS_Treatment_Infos_TropicalCorticosteroids']}">
+            <p:ajax  listener="#{fileItemCctDetailController.ccsProductsTypeChangedListener}" update=":documentsForFoodAndDrugProducts" />
+        </p:selectBooleanCheckbox>
+        <p:selectBooleanCheckbox style="font-size: 12px; font-weight: bold;" value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.laboratoryProducts}" itemLabel="#{bundle['CCS_Treatment_Infos_LaboratoryProducts']}">
+            <p:ajax  listener="#{fileItemCctDetailController.ccsProductsTypeChangedListener}" update=":documentsForFoodAndDrugProducts" />
+        </p:selectBooleanCheckbox>
+    </h:panelGrid>
+    <h:panelGrid id="drugProductsType_3" columns="1" cellspacing="5">
+        <p:selectBooleanCheckbox style="font-size: 12px; font-weight: bold;" value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.packagingSfProducts}" itemLabel="#{bundle['CCS_Treatment_Infos_PackagingSfProducts']}">
+            <p:ajax  listener="#{fileItemCctDetailController.ccsProductsTypeChangedListener}" update=":documentsForFoodAndDrugProducts" />
+        </p:selectBooleanCheckbox>
+    </h:panelGrid>
+    <p style="border-bottom: 1px solid #e6e3de;"></p>
+    <br />
+    <h5 style="font-weight: bold;" class="title">#{bundle['CCS_Treatment_Infos_Presented_controled_Documents']}</h5>
+    <br />
+    <p:outputPanel id="documentsForFoodAndDrugProducts">
+        <p:outputPanel rendered="#{fileItemCctDetailController.ccsMinsanteFoodProducts or fileItemCctDetailController.ccsMinsanteDrugProducts}">
+            <h:panelGrid  columns="3" cellspacing="5" >
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="#{bundle['CCS_Treatment_Infos_Documents_codes']}" />
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="#{bundle['CCS_Treatment_Infos_Documents_conformes_O_N']}" />
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="#{bundle['CCS_Treatment_Infos_Documents_conformes_Observations']}" />
+            </h:panelGrid>
+            <p style="border-bottom: 1px solid #e6e3de;"></p>
+            <br />
+            <h:panelGrid  columns="3" cellspacing="5" rendered="#{fileItemCctDetailController.ccsMinsanteFoodProducts or fileItemCctDetailController.ccsMinsanteDrugProducts}">
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="A" />
+
+                <p:selectBooleanCheckbox value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.conformeA}"/>
+
+                <p:inputTextarea style="height: 30px;" value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.conformityObservationA}" >
+                </p:inputTextarea>
+            </h:panelGrid>
+            <h:panelGrid  columns="3" cellspacing="5" rendered="#{fileItemCctDetailController.ccsMinsanteFoodProducts}">
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="AMM/AMC" />
+
+                <p:selectBooleanCheckbox value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.conformeAmmAmc}"/>
+
+                <p:inputTextarea style="height: 30px;" value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.conformityObservationAmmAmc}" maxlength="255" >
+                    <f:validateLength maximum="255" />
+                </p:inputTextarea>
+            </h:panelGrid>
+            <h:panelGrid  columns="3" cellspacing="5" rendered="#{fileItemCctDetailController.ccsMinsanteDrugProducts}">
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="AMM" />
+
+                <p:selectBooleanCheckbox value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.conformeAMM}"/>
+
+                <p:inputTextarea style="height: 30px;" value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.conformityObservationAMM}" maxlength="255" >
+                    <f:validateLength maximum="255" />
+                </p:inputTextarea>
+            </h:panelGrid>
+            <h:panelGrid  columns="3" cellspacing="5" rendered="#{fileItemCctDetailController.ccsMinsanteFoodProducts or fileItemCctDetailController.ccsMinsanteDrugProducts}">
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="AI" />
+
+                <p:selectBooleanCheckbox value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.conformeAI}"/>
+
+                <p:inputTextarea style="height: 30px;" value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.conformityObservationAI}" maxlength="255" >
+                    <f:validateLength maximum="255" />
+                </p:inputTextarea>
+            </h:panelGrid>
+            <h:panelGrid  columns="3" cellspacing="5" rendered="#{fileItemCctDetailController.ccsMinsanteFoodProducts}">
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="ATQ" />
+
+                <p:selectBooleanCheckbox value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.conformeATQ}"/>
+
+                <p:inputTextarea style="height: 30px;" value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.conformityObservationATQ}" maxlength="255" >
+                    <f:validateLength maximum="255" />
+                </p:inputTextarea>
+            </h:panelGrid>
+            <h:panelGrid  columns="3" cellspacing="5" rendered="#{fileItemCctDetailController.ccsMinsanteDrugProducts}">
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="VT" />
+
+                <p:selectBooleanCheckbox value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.conformeVT}"/>
+
+                <p:inputTextarea style="height: 30px;" value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.conformityObservationVT}" maxlength="255" >
+                    <f:validateLength maximum="255" />
+                </p:inputTextarea>
+            </h:panelGrid>
+            <h:panelGrid  columns="3" cellspacing="5" rendered="#{fileItemCctDetailController.ccsMinsanteDrugProducts}">
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="AOI" />
+
+                <p:selectBooleanCheckbox value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.conformeAOI}"/>
+
+                <p:inputTextarea style="height: 30px;" value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.conformityObservationAOI}" maxlength="255" >
+                    <f:validateLength maximum="255" />
+                </p:inputTextarea>
+            </h:panelGrid>
+            <h:panelGrid  columns="3" cellspacing="5" rendered="#{fileItemCctDetailController.ccsMinsanteFoodProducts or fileItemCctDetailController.ccsMinsanteDrugProducts}">
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="CC" />
+
+                <p:selectBooleanCheckbox value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.conformeCC}"/>
+
+                <p:inputTextarea style="height: 30px;" value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.conformityObservationCC}" maxlength="255" >
+                    <f:validateLength maximum="255" />
+                </p:inputTextarea>
+            </h:panelGrid>
+            <h:panelGrid  columns="3" cellspacing="5" rendered="#{fileItemCctDetailController.ccsMinsanteDrugProducts}">
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="CBPSD" />
+
+                <p:selectBooleanCheckbox value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.conformeCBPSD}"/>
+
+                <p:inputTextarea style="height: 30px;" value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.conformityObservationCBPSD}" maxlength="255" >
+                    <f:validateLength maximum="255" />
+                </p:inputTextarea>
+            </h:panelGrid>
+            <h:panelGrid  columns="3" cellspacing="5" rendered="#{fileItemCctDetailController.ccsMinsanteFoodProducts}">
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="CF/CD" />
+
+                <p:selectBooleanCheckbox value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.conformeCFCD}"/>
+
+                <p:inputTextarea style="height: 30px;" value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.conformityObservationCFCD}" maxlength="255" >
+                    <f:validateLength maximum="255" />
+                </p:inputTextarea>
+            </h:panelGrid>
+            <h:panelGrid  columns="3" cellspacing="5" rendered="#{fileItemCctDetailController.ccsMinsanteFoodProducts}">
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="CAPC/M" />
+
+                <p:selectBooleanCheckbox value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.conformeCAPCM}"/>
+
+                <p:inputTextarea style="height: 30px;" value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.conformityObservationCAPCM}" maxlength="255" >
+                    <f:validateLength maximum="255" />
+                </p:inputTextarea>
+            </h:panelGrid>
+            <h:panelGrid  columns="3" cellspacing="5" rendered="#{fileItemCctDetailController.ccsMinsanteFoodProducts}">
+                <h:outputText style="font-size: 12px; font-weight: bold;" value="CE" />
+
+                <p:selectBooleanCheckbox value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.conformeCE}"/>
+
+                <p:inputTextarea style="height: 30px;" value="#{fileItemCctDetailController.treatmentInfosCCSMinsante.conformityObservationCE}" maxlength="255" >
+                    <f:validateLength maximum="255" />
+                </p:inputTextarea>
+            </h:panelGrid>
+        </p:outputPanel>
+    </p:outputPanel>
+
+</ui:composition>

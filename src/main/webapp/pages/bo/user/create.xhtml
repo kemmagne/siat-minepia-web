@@ -93,7 +93,7 @@
                                 value="#{bundle['User_sub_department']}" for="user_sub_direction" />
                         </h:panelGroup>
                         <h:panelGroup id="userSubDep">
-                            <p:selectOneMenu id="user_sub_direction" tyle="width: 133px" requiredMessage="#{bundle['CreateUserRequiredMessage_subDepartment']}"
+                            <p:selectOneMenu id="user_sub_direction" style="width: 133px" requiredMessage="#{bundle['CreateUserRequiredMessage_subDepartment']}"
                                              rendered="#{request.isUserInRole('ADMIN_ORG')  and userController.selected.position ne null and  userController.selected.position ne 'DIRECTEUR' and userController.selected.position ne 'SUPERVISEUR'}"
                                              required="true" value="#{userController.selectedsSubDepartment}" title="#{bundle['CreateUserTitle_position']}">
                                 <f:converter binding="#{subDepartmentConverter}" />
@@ -113,7 +113,7 @@
                                 value="#{bundle['User_service']}" for="userService" />
                         </h:panelGroup>
                         <h:panelGroup id="userServiceGrp">
-                            <p:selectOneMenu required="true" id="userService" tyle="width: 133px" requiredMessage="#{bundle['CreateUserRequiredMessage_service']}"
+                            <p:selectOneMenu required="true" id="userService" style="width: 133px" requiredMessage="#{bundle['CreateUserRequiredMessage_service']}"
                                              rendered="#{userController.selectedsSubDepartment ne null and userController.selected.position ne 'DIRECTEUR' and userController.selected.position ne 'SUPERVISEUR' and userController.selected.position ne 'SOUS_DIRECTEUR'}"
                                              value="#{userController.selectedService}">
                                 <f:converter binding="#{serviceConverter}" />
@@ -131,7 +131,7 @@
                                 value="#{bundle['User_buerau']}" for="userEntity" />
                         </h:panelGroup>
                         <h:panelGroup id="userEntityGrp">
-                            <p:selectOneMenu required="true" id="userEntity" tyle="width: 133px" requiredMessage="#{bundle['CreateUserRequiredMessage_bureau']}"
+                            <p:selectOneMenu required="true" id="userEntity" style="width: 133px" requiredMessage="#{bundle['CreateUserRequiredMessage_bureau']}"
                                              rendered="#{userController.selectedService ne null and (userController.selected.position eq 'CHEF_BUREAU' or userController.selected.position eq 'CHEF_SECTEUR' or userController.selected.position eq 'AGENT' or userController.selected.position eq 'OBSERVATEUR')}"
                                              value="#{userController.selectedEntity}">
                                 <f:converter binding="#{entityConverter}" />
@@ -149,7 +149,7 @@
                                 value="#{bundle['User_etendre_roles_administration']}" for="administrationExtendRoles" />
                         </h:panelGroup>
                         <h:panelGroup id="userRoleAdministrationExtendGrp">
-                            <p:selectOneMenu required="false" id="administrationExtendRoles" tyle="width: 133px"
+                            <p:selectOneMenu required="false" id="administrationExtendRoles" style="width: 133px"
                                              rendered="#{userController.selectedEntity ne null and (userController.selected.position eq 'AGENT' or userController.selected.position eq 'OBSERVATEUR')}"
                                              value="#{userController.selected.administrationExtendRoles}">
                                 <f:converter binding="#{administrationConverter}" />
@@ -159,6 +159,27 @@
                                                itemLabel="#{facesContext.viewRoot.locale eq 'fr' ? ad.labelFr : ad.labelEn}"/>
                             </p:selectOneMenu>
                             <p:message for="administrationExtendRoles" />
+                        </h:panelGroup>
+                        <p:outputLabel value="#{bundle['CreateUserLabel_signature']}" for="fileSignatureAdd" />
+
+                        <h:panelGroup id="fileSignatureAdd">
+                            <p:fileUpload label="#{bundle['CreatesignatureLabel_signature']}"
+                                          fileUploadListener="#{userController.fileUploadSignatureListener}" mode="advanced" auto="true"
+                                          style="width:200px" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="4194304"
+                                          invalidSizeMessage="#{bundle['Createsignature_invalidSize']}" invalidFileMessage="#{bundle['Createsignature_invalidFileType']}">
+                            </p:fileUpload>
+                            <h:outputText value=""/>
+                        </h:panelGroup>
+
+                        <p:outputLabel style="margin-top: 50px" value="#{bundle['CreateUserLabel_stamp']}"  for="fileStampAdd" />
+
+                        <h:panelGroup id="fileStampAdd">
+                            <p:fileUpload label="#{bundle['CreatesignatureLabel_stamp']}"
+                                          fileUploadListener="#{userController.fileUploadStampListener}" mode="advanced" auto="true"
+                                          style="width:200px" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="4194304"
+                                          invalidSizeMessage="#{bundle['Createsignature_invalidSize']}" invalidFileMessage="#{bundle['Createsignature_invalidFileType']}">
+                            </p:fileUpload>
+                            <h:outputText value=""/>
                         </h:panelGroup>
 
                     </p:panelGrid>

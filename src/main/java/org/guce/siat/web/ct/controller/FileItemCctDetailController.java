@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,6 +28,7 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -130,12 +132,14 @@ import org.guce.siat.core.ct.model.PottingReport;
 import org.guce.siat.core.ct.model.Sample;
 import org.guce.siat.core.ct.model.TreatmentCompany;
 import org.guce.siat.core.ct.model.TreatmentInfos;
+import org.guce.siat.core.ct.model.TreatmentInfosCCSMinsante;
 import org.guce.siat.core.ct.model.TreatmentOrder;
 import org.guce.siat.core.ct.model.TreatmentPart;
 import org.guce.siat.core.ct.model.TreatmentResult;
 import org.guce.siat.core.ct.model.TreatmentType;
 import org.guce.siat.core.ct.service.CCTCPParamValueService;
 import org.guce.siat.core.ct.service.ParamCCTCPService;
+import org.guce.siat.core.ct.service.UserStampSignatureService;
 import org.guce.siat.core.ct.util.enums.CctExportProductType;
 import org.guce.siat.core.gr.model.TrendPerformance;
 import org.guce.siat.core.gr.utils.SynthesisConfig;
@@ -180,6 +184,7 @@ import org.guce.siat.web.gr.controller.RiskController;
 import org.guce.siat.web.gr.util.GrUtilsWeb;
 import org.guce.siat.web.gr.util.ScenarioType;
 import org.guce.siat.web.reports.exporter.AbstractReportInvoker;
+import org.guce.siat.web.reports.exporter.CcsMinsanteExporter;
 import org.guce.siat.web.reports.exporter.CtCctCpEExporter;
 import org.guce.siat.web.reports.exporter.CtCctCqeExporter;
 import org.guce.siat.web.reports.exporter.CtCctCsvExporter;
@@ -299,6 +304,12 @@ public class FileItemCctDetailController extends DefaultDetailController {
      */
     @ManagedProperty(value = "#{paramCCTCPService}")
     private ParamCCTCPService paramCCTCPService;
+    
+    /**
+     * The User Signature and Stamp service.
+     */
+    @ManagedProperty(value = "#{userStampSignatureService}")
+    private UserStampSignatureService userStampSignatureService;
 
     /**
      * The index page URL.
@@ -643,6 +654,8 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
     private TreatmentInfos treatmentInfos;
 
+    private TreatmentInfosCCSMinsante treatmentInfosCCSMinsante;
+
     private ApprovedDecision approvedDecision;
 
     private CCTCPParamValue cCTCPParamValue;
@@ -815,6 +828,10 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
     private List<Country> countriesList;
 
+    private boolean ccsMinsantefFileType;
+    private boolean ccsMinsanteFoodProducts;
+    private boolean ccsMinsanteDrugProducts;
+
     /**
      * Inits the.
      */
@@ -897,6 +914,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
         authoritiesList = new DualListModel<>(new ArrayList<Authority>(), new ArrayList<Authority>());
         selectedAttachment = null;
+        ccsMinsantefFileType = FileTypeCode.CCS_MINSANTE.equals(currentFile.getFileType().getCode());
     }
 
     /**
@@ -979,7 +997,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
             }
             // Show Decsion System Only if we have decision = Étude Approfondie
             if (CollectionUtils.isNotEmpty(chckedProductInfoChecksList)
-                    && (StepCode.ST_CT_04.equals(chckedProductInfoChecksList.get(0).getFileItem().getStep().getStepCode()))) {
+                    && (StepCode.ST_CT_04.equals(chckedProductInfoChecksList.get(0).getFileItem().getStep().getStepCode())) && !isCcsMinsantefFileType()) {
                 setDisionSystemAllowed(true);
             } else {
                 disabledTabSynthese = chckedProductInfoChecksList.size() > Constants.ONE;
@@ -1010,6 +1028,15 @@ public class FileItemCctDetailController extends DefaultDetailController {
                                     } else if (currentFile.getParent() != null && FlowCode.FL_CT_125.name().equals(flx.getCode())) {
                                         flowsToRemove.add(flx.getCode());
                                     }
+                                }
+                            }
+                            flows = deleteFlowFromFlowList(flows, flowsToRemove.toArray(new String[0]));
+                        } else if (isCcsMinsantefFileType()) {
+                            flows = flowService.findFlowsByFromStepAndFileType2(referenceFileItemCheck.getStep(), referenceFileItemCheck.getFile().getFileType());
+                            List<String> flowsToRemove = new ArrayList<>();
+                            for (Flow flx : flows) {
+                                if (flx.getIsCota()) {
+                                    flowsToRemove.add(flx.getCode());
                                 }
                             }
                             flows = deleteFlowFromFlowList(flows, flowsToRemove.toArray(new String[0]));
@@ -1070,12 +1097,12 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
                         boolean payed = false;
                         for (ItemFlowDto hist : itemFlowHistoryDtoList) {
-                            if (hist.getItemFlow() != null && hist.getItemFlow().getFlow() != null && FlowCode.FL_CT_93.name().equals(hist.getItemFlow().getFlow().getCode())) {
+                            if (hist.getItemFlow() != null && hist.getItemFlow().getFlow() != null && Arrays.asList(FlowCode.FL_CT_93.name(), FlowCode.FL_CT_160.name()).contains(hist.getItemFlow().getFlow().getCode())) {
                                 payed = true;
                                 Iterator<Flow> it = flows.iterator();
                                 while (it.hasNext()) {
                                     Flow flx = it.next();
-                                    if (Arrays.asList(FlowCode.FL_CT_92.name()).contains(flx.getCode())) {
+                                    if (Arrays.asList(FlowCode.FL_CT_92.name(), FlowCode.FL_CT_158.name()).contains(flx.getCode())) {
                                         it.remove();
                                     }
                                 }
@@ -1474,13 +1501,19 @@ public class FileItemCctDetailController extends DefaultDetailController {
         decisionDiv.getChildren().clear();
         final List<FileItemCheck> checksProduct = selectCheckedFileItemCheck();
         isPayment = Boolean.FALSE;
-        if (FlowCode.FL_CT_92.name().equals(selectedFlow.getCode())) {
+        if (FlowCode.FL_CT_92.name().equals(selectedFlow.getCode()) || FlowCode.FL_CT_158.name().equals(selectedFlow.getCode())) {
             isPayment = Boolean.TRUE;
             paymentData = new PaymentData();
             paymentData.setPaymentItemFlowList(new ArrayList<PaymentItemFlow>());
-            for (final FileItemCheck fileItemCheck : checksProduct) {
-                if (fileItemCheck.getDecisionCheck()) {
-                    paymentData.getPaymentItemFlowList().add(new PaymentItemFlow(false, fileItemCheck.getFileItem().getId()));
+            if (FlowCode.FL_CT_158.name().equals(selectedFlow.getCode())) {
+                FileItem fi = currentFile.getFileItemsList().get(0);
+                paymentData.setRefFacture(currentFile.getNumeroDossier());
+                paymentData.getPaymentItemFlowList().add(new PaymentItemFlow(false, fi.getId(), fi.getNsh()));
+            } else {
+                for (final FileItemCheck fileItemCheck : checksProduct) {
+                    if (fileItemCheck.getDecisionCheck()) {
+                        paymentData.getPaymentItemFlowList().add(new PaymentItemFlow(false, fileItemCheck.getFileItem().getId()));
+                    }
                 }
             }
         }
@@ -1692,6 +1725,35 @@ public class FileItemCctDetailController extends DefaultDetailController {
             } else {
                 showErrorFacesMessage(ControllerConstants.Bundle.Messages.CHECK_ANALYSE_DECISION_ERROR, ControllerConstants.Bundle.Messages.CHECK_PRODUCTS_DECISION_MSG);
             }
+        } else if (isCCSMinsanteReadyForSignature(selectedFlow)) {
+            ItemFlow itemFlow;
+            TreatmentInfosCCSMinsante tr = null;
+            treatmentInfosCCSMinsante = new TreatmentInfosCCSMinsante();
+            if (selectedFlow.getCode().equals(FlowCode.FL_CT_07.name())) {
+                itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
+                if (itemFlow != null) {
+                    tr = treatmentInfosCCSMinsanteService.findTreatmentInfosByItemFlow(itemFlow);
+                }
+            } else if (selectedFlow.getCode().equals(FlowCode.FL_CT_CCS_03.name())) {
+                File updatedFile = fileService.findByNumDossierGuce(currentFile.getNumeroDossierBase());
+                if (updatedFile != null) {
+                    FileItem updatedFileFileItem = updatedFile.getFileItemsList().get(0);
+                    itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(updatedFileFileItem, FlowCode.FL_CT_07);
+                    if (itemFlow != null) {
+                        tr = treatmentInfosCCSMinsanteService.findTreatmentInfosByItemFlow(itemFlow);
+                    }
+                }
+            }
+            if (tr != null) {
+                try {
+                    BeanUtils.copyProperties(treatmentInfosCCSMinsante, tr);
+                    if(treatmentInfosCCSMinsante != null && treatmentInfosCCSMinsante.getId() != null){
+                        treatmentInfosCCSMinsante.setId(null);
+                    }
+                } catch (IllegalAccessException | InvocationTargetException ex) {
+                    Logger.getLogger(FileItemCctDetailController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } 
         } // Generic : construction du formulaire à partir des DataType
         else {
             buildGenericFormFromDataType(selectedFlow.getDataTypeList());
@@ -1840,14 +1902,23 @@ public class FileItemCctDetailController extends DefaultDetailController {
         Long totalTva = 0L;
         for (final PaymentItemFlow pi : paymentData.getPaymentItemFlowList()) {
             invoiceTotalAmount += pi.getMontantHt() != null ? pi.getMontantHt() : 0;
-            invoiceTotalAmount += invoiceOtherAmount != null ? invoiceOtherAmount : 0;
             invoiceTotalTtcAmount += invoiceTotalAmount;
             invoiceTotalTtcAmount += pi.getMontantTva() != null ? pi.getMontantTva() : 0;
             totalTva += pi.getMontantTva() != null ? pi.getMontantTva() : 0;
         }
+        invoiceTotalTtcAmount += invoiceOtherAmount != null ? invoiceOtherAmount : 0;
         paymentData.setMontantHt(invoiceTotalAmount);
         paymentData.setMontantTva(totalTva);
+        paymentData.setMontantEncaissement(Double.parseDouble(invoiceTotalTtcAmount.toString()));
         paymentData.setAutreMontant(invoiceOtherAmount);
+    }
+
+    /**
+     * CCS Minsante products Type value changed listener.
+     */
+    public void ccsProductsTypeChangedListener() {
+        ccsMinsanteFoodProducts = treatmentInfosCCSMinsante != null && (treatmentInfosCCSMinsante.isProductFoodIHC() || treatmentInfosCCSMinsante.isHygienSanitationProducts() || treatmentInfosCCSMinsante.isFleaMarket() || treatmentInfosCCSMinsante.isThriftShop() || treatmentInfosCCSMinsante.isVehicle());
+        ccsMinsanteDrugProducts = treatmentInfosCCSMinsante != null && (treatmentInfosCCSMinsante.isDrugs() || treatmentInfosCCSMinsante.isMedicalDevices() || treatmentInfosCCSMinsante.isTropicalCorticosteroids() || treatmentInfosCCSMinsante.isLaboratoryProducts() || treatmentInfosCCSMinsante.isPackagingSfProducts());
     }
 
     public synchronized void addInvoiceLine() {
@@ -1909,6 +1980,8 @@ public class FileItemCctDetailController extends DefaultDetailController {
             specificDecisionsHistory.setLastAnalyseOrder(analyseOrderService.findByItemFlow(lastDecisions));
         } else if (isPhytoReadyForSignature(lastDecisions.getFlow())) {
             specificDecisionsHistory.setLastTreatmentInfos(treatmentInfosService.findTreatmentInfosByItemFlow(lastDecisions));
+        } else if (isCCSMinsanteReadyForSignature(lastDecisions.getFlow())) {
+            specificDecisionsHistory.setLastTreatmentInfosCCSMinsante(treatmentInfosCCSMinsanteService.findTreatmentInfosByItemFlow(lastDecisions));
         } else if (isPviReadyForSignature(lastDecisions.getFlow())) {
 //            specificDecisionsHistory.setLastDecisionIR(inspectionReportService.findLastInspectionReportsByFileItem(lastDecisions
 //                    .getFileItem()));
@@ -1929,7 +2002,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
             specificDecisionsHistory.setLastTreatmentResult(treatmentResultService.findTreatmentResultByItemFlow(lastDecisions));
             final List<TreatmentPart> treatmentParts = specificDecisionsHistory.getLastTreatmentResult().getTreatmentOrder().getTreatmentPartsList();
             downloadAttachment(treatmentParts);
-        } else if (FlowCode.FL_CT_93.name().equals(lastDecisions.getFlow().getCode())) {
+        } else if (FlowCode.FL_CT_93.name().equals(lastDecisions.getFlow().getCode()) || FlowCode.FL_CT_160.name().equals(lastDecisions.getFlow().getCode())) {
             specificDecisionsHistory.setLastPaymentData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
         } else if (isPhytoBilling(lastDecisions.getFlow())) {
             lastSpecificDecision = CctSpecificDecision.CCT_CT_E_BILL;
@@ -1963,6 +2036,8 @@ public class FileItemCctDetailController extends DefaultDetailController {
             specificDecisionsHistory.setDecisionDetailsAO(analyseOrderService.findByItemFlow(selectedItemFlowDto.getItemFlow()));
         } else if (isPhytoReadyForSignature(selectedItemFlowDto.getItemFlow().getFlow())) {
             specificDecisionsHistory.setDecisionDetailsTI(treatmentInfosService.findTreatmentInfosByItemFlow(selectedItemFlowDto.getItemFlow()));
+        } else if (isCCSMinsanteReadyForSignature(selectedItemFlowDto.getItemFlow().getFlow())) {
+            specificDecisionsHistory.setDecisionDetailsTICCSMinsante(treatmentInfosCCSMinsanteService.findTreatmentInfosByItemFlow(selectedItemFlowDto.getItemFlow()));
         } else if (isPviReadyForSignature(selectedItemFlowDto.getItemFlow().getFlow())) {
             specificDecisionsHistory.setDecisionDetailsIR(inspectionReportService.findByItemFlow(selectedItemFlowDto.getItemFlow()));
         } else if (isAtReadyForSignature(selectedItemFlowDto.getItemFlow().getFlow())) {
@@ -2289,6 +2364,8 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 if (CollectionUtils.isNotEmpty(analysePartsList)) {
                     commonService.takeDecisionAndSaveAnalyseRequest(analysePartsList, analyseOrder, itemFlowsToAdd);
                 }
+            } else if (isCCSMinsanteReadyForSignature(selectedFlow)) {
+                commonService.takeDecisionAndSaveTreatmentInfosCCSMinsante(treatmentInfosCCSMinsante, itemFlowsToAdd);
             } else if (isPhytoReadyForSignature(selectedFlow)) {
                 commonService.takeDecisionAndSaveTreatmentInfos(treatmentInfos, itemFlowsToAdd);
                 saveModifiedGoods();
@@ -2388,7 +2465,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 // Recuperate the values of DataType (Observation text area ...)
                 List<ItemFlowData> flowDatas = getValuesOfDataTypeForDecision(itemFlowsToAdd, selectedFlow.getDataTypeList());
 
-                if (Arrays.asList(FlowCode.FL_CT_92.name()).contains(selectedFlow.getCode()) || isPhytoBilling(selectedFlow)) {
+                if (Arrays.asList(FlowCode.FL_CT_92.name(), FlowCode.FL_CT_158.name()).contains(selectedFlow.getCode()) || isPhytoBilling(selectedFlow)) {
 
                     if (isPhytoBilling(selectedFlow)) {
                         if (CollectionUtils.isEmpty(paymentData.getInvoiceLines())) {
@@ -2399,9 +2476,8 @@ public class FileItemCctDetailController extends DefaultDetailController {
                         if (CollectionUtils.isNotEmpty(paymentData.getPaymentItemFlowList())) {
                             coreService.delete(paymentData.getPaymentItemFlowList());
                         }
+                        paymentAmoutValueChangedListenerCte();
                     }
-
-                    paymentAmoutValueChangedListenerCte();
 
                     commonService.takeDacisionAndSavePayment(itemFlowsToAdd, paymentData);
                     itemFlowService.takeDecision(itemFlowsToAdd, flowDatas);
@@ -2985,7 +3061,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                             String reportNumber;
                             if (Arrays.asList(FlowCode.FL_CT_89.name(), FlowCode.FL_CT_08.name(),
                                     FlowCode.FL_CT_114.name(), FlowCode.FL_CT_117.name(), FlowCode.FL_CT_140.name(),
-                                    FlowCode.FL_CT_CVS_03.name(), FlowCode.FL_CT_CVS_07.name())
+                                    FlowCode.FL_CT_CVS_03.name(), FlowCode.FL_CT_CVS_07.name(), FlowCode.FL_CT_CCS_05.name())
                                     .contains(flowToSend.getCode())) {
                                 // edit signature elements
                                 Date now = java.util.Calendar.getInstance().getTime();
@@ -3976,6 +4052,10 @@ public class FileItemCctDetailController extends DefaultDetailController {
             reportingFlow = flowService.findFlowByCode(FlowCode.FL_CT_114.name());
         }
 
+        if (FileTypeCode.CCS_MINSANTE.equals(currentFile.getFileType().getCode()) && currentFile.getParent() != null) {
+            reportingFlow = flowService.findFlowByCode(FlowCode.FL_CT_CCS_05.name());
+        }
+        
         boolean okInvoice = StepCode.ST_CT_57.equals(currentFileItem.getStep().getStepCode()) || StepCode.ST_CT_60.equals(currentFileItem.getStep().getStepCode());
         ItemFlow draftItemFlow = itemFlowService.findDraftByFileItem(currentFileItem);
         okInvoice = okInvoice && draftItemFlow != null && Arrays.asList(FlowCode.FL_CT_121.name(), FlowCode.FL_CT_133.name()).contains(draftItemFlow.getFlow().getCode());
@@ -3990,7 +4070,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
         fileTypeFlowReportsDraft = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getFileType());
         generateDraftAllowed = sendDecisionAllowed && showDecisionButton && displayGenerateDraft
-                && ((Arrays.asList(StepCode.ST_CT_38, StepCode.ST_CT_31, StepCode.ST_CT_53, StepCode.ST_CT_55, StepCode.ST_CT_56, StepCode.ST_CT_64).contains(currentFileItem.getStep().getStepCode())
+                && ((Arrays.asList(StepCode.ST_CT_38, StepCode.ST_CT_31, StepCode.ST_CT_53, StepCode.ST_CT_55, StepCode.ST_CT_56, StepCode.ST_CT_64, StepCode.ST_CT_CCS_02).contains(currentFileItem.getStep().getStepCode())
                 && reportingFlow.equals(currentDecision))
                 || (currentDecision != null && StepCode.ST_CT_65.equals(currentFileItem.getStep().getStepCode()) && FlowCode.FL_CT_153.name().equals(currentDecision.getCode()))
                 || okInvoice || isPveReadyForSignature(currentDecision))
@@ -5144,6 +5224,14 @@ public class FileItemCctDetailController extends DefaultDetailController {
         this.treatmentInfos = treatmentInfos;
     }
 
+    public TreatmentInfosCCSMinsante getTreatmentInfosCCSMinsante() {
+        return treatmentInfosCCSMinsante;
+    }
+
+    public void setTreatmentInfosCCSMinsante(TreatmentInfosCCSMinsante treatmentInfosCCSMinsante) {
+        this.treatmentInfosCCSMinsante = treatmentInfosCCSMinsante;
+    }
+
     /**
      * Gets the treatment companys.
      *
@@ -6056,6 +6144,11 @@ public class FileItemCctDetailController extends DefaultDetailController {
         return ok;
     }
 
+    public boolean isCCSMinsanteReadyForSignature(Flow flow) {
+        boolean ok = flow != null && FileTypeCode.CCS_MINSANTE.equals(currentFile.getFileType().getCode()) && Arrays.asList(FlowCode.FL_CT_07.name(), FlowCode.FL_CT_CCS_03.name()).contains(flow.getCode());
+        return ok;
+    }
+
     public boolean isPhytoReadyForSignatureEnd(Flow flow) {
         phytoEnd = flow != null && checkMinaderMinistry && FileTypeCode.CCT_CT_E.equals(currentFile.getFileType().getCode()) && FlowCode.FL_CT_08.name().equals(flow.getCode());
         return phytoEnd;
@@ -6340,6 +6433,43 @@ public class FileItemCctDetailController extends DefaultDetailController {
                     break;
                 }
             }
+        } else if (FileTypeCode.CCS_MINSANTE.equals(currentFile.getFileType().getCode())) {
+            List<AbstractReportInvoker> reportInvokersPrincipalAndAnnex = null;
+            ItemFlow itemFlow;
+            if(currentFile.getParent() != null){
+                itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_CCS_03);
+            }else {
+                itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
+            }
+            final TreatmentInfosCCSMinsante tr = treatmentInfosCCSMinsanteService.findTreatmentInfosByItemFlow(itemFlow);
+            reportInvokersPrincipalAndAnnex = new ArrayList<>();
+            Constructor constructor = classe.getConstructor(File.class, String.class, TreatmentInfosCCSMinsante.class);
+            String reportFileName = "CCS_MINSANTE";
+            String reportAnnexFileName = "CCS_MINSANTE_ANNEXE";
+            if (tr != null && tr.isCcsMinsanteDrugProducts()) {
+                reportFileName = "CCS_MINSANTE_MEDICAMENTS";
+            }
+            //reportInvoker = (AbstractReportInvoker) constructor.newInstance(currentFile, reportFileName, tr);
+            //For principal report
+            reportInvoker = new CcsMinsanteExporter(currentFile, reportFileName, tr);
+            reportInvokersPrincipalAndAnnex.add(reportInvoker);
+            //For Annex report
+            reportInvoker = new CcsMinsanteExporter(currentFile, reportAnnexFileName, reportAnnexFileName, tr);
+            reportInvokersPrincipalAndAnnex.add(reportInvoker);
+            List<JasperPrint> inputStreamsForPrincipalAndAnnex = new ArrayList<>();
+            for (AbstractReportInvoker reportInvokerPrincipalOrAnnex: reportInvokersPrincipalAndAnnex) {
+                reportInvokerPrincipalOrAnnex.setDraft(draft);
+                reportInvokerPrincipalOrAnnex.setFileFieldValueService(fileFieldValueService);
+                reportInvokerPrincipalOrAnnex.setItemFlowService(itemFlowService);
+                reportInvokerPrincipalOrAnnex.setCctDetailController(this);
+                reportInvokerPrincipalOrAnnex.setUserStampSignatureService(userStampSignatureService);
+                JasperPrint reportJPForPrincipalOrAnnex = JsfUtil.getReportJP(reportInvokerPrincipalOrAnnex);
+                inputStreamsForPrincipalAndAnnex.add(reportJPForPrincipalOrAnnex);
+            }
+            if (!CollectionUtils.isEmpty(inputStreamsForPrincipalAndAnnex)) {
+                report = JsfUtil.mergePdf(inputStreamsForPrincipalAndAnnex);
+            }
+            reportInvoker = null;
         }
         if (FileTypeCode.CCT_CT_E_FSTP.equals(currentFile.getFileType().getCode()) && reportInvokersForFstpAndAtp != null) {
             List<JasperPrint> inputStreamsForFstpAndAtp = new ArrayList<>();
@@ -6876,11 +7006,12 @@ public class FileItemCctDetailController extends DefaultDetailController {
     public List<FileTypeDto> getRelatedFileTypesInfos() {
 
         List<FileTypeCode> codes = new ArrayList<>(Arrays.asList(FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI));
-        codes.remove(currentFile.getFileType().getCode());
+        if (codes.contains(currentFile.getFileType().getCode())) {
+            codes.remove(currentFile.getFileType().getCode());
 
-        List<FileType> fileTypes = fileTypeService.findFileTypesByCodes(codes.toArray(new FileTypeCode[0]));
-        relatedFileTypesInfos = RelatedFilesUtils.getRelatedFileTypesInfos(this, fileTypes);
-
+            List<FileType> fileTypes = fileTypeService.findFileTypesByCodes(codes.toArray(new FileTypeCode[0]));
+            relatedFileTypesInfos = RelatedFilesUtils.getRelatedFileTypesInfos(this, fileTypes);
+        }
         return relatedFileTypesInfos;
     }
 
@@ -6922,4 +7053,39 @@ public class FileItemCctDetailController extends DefaultDetailController {
         return countriesList;
     }
 
+    public boolean isCcsMinsantefFileType() {
+        return ccsMinsantefFileType;
+    }
+
+    public void setCcsMinsantefFileType(boolean ccsMinsantefFileType) {
+        this.ccsMinsantefFileType = ccsMinsantefFileType;
+    }
+
+    public boolean isCcsMinsanteFoodProducts() {
+        ccsMinsanteFoodProducts = treatmentInfosCCSMinsante != null && (treatmentInfosCCSMinsante.isProductFoodIHC() || treatmentInfosCCSMinsante.isHygienSanitationProducts() || treatmentInfosCCSMinsante.isFleaMarket() || treatmentInfosCCSMinsante.isThriftShop() || treatmentInfosCCSMinsante.isVehicle());
+        return ccsMinsanteFoodProducts;
+    }
+
+    public void setCcsMinsanteFoodProducts(boolean ccsMinsanteFoodProducts) {
+        this.ccsMinsanteFoodProducts = ccsMinsanteFoodProducts;
+    }
+
+    public boolean isCcsMinsanteDrugProducts() {
+        ccsMinsanteDrugProducts = treatmentInfosCCSMinsante != null && (treatmentInfosCCSMinsante.isDrugs() || treatmentInfosCCSMinsante.isMedicalDevices() || treatmentInfosCCSMinsante.isTropicalCorticosteroids() || treatmentInfosCCSMinsante.isLaboratoryProducts() || treatmentInfosCCSMinsante.isPackagingSfProducts());
+        return ccsMinsanteDrugProducts;
+    }
+
+    public void setCcsMinsanteDrugProducts(boolean ccsMinsanteDrugProducts) {
+        this.ccsMinsanteDrugProducts = ccsMinsanteDrugProducts;
+    }
+
+    public UserStampSignatureService getUserStampSignatureService() {
+        return userStampSignatureService;
+    }
+
+    public void setUserStampSignatureService(UserStampSignatureService userStampSignatureService) {
+        this.userStampSignatureService = userStampSignatureService;
+    }
+
+    
 }

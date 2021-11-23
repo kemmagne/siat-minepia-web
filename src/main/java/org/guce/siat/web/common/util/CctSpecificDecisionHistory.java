@@ -11,6 +11,7 @@ import org.guce.siat.core.ct.model.InterceptionNotification;
 import org.guce.siat.core.ct.model.PaymentData;
 import org.guce.siat.core.ct.model.PottingReport;
 import org.guce.siat.core.ct.model.TreatmentInfos;
+import org.guce.siat.core.ct.model.TreatmentInfosCCSMinsante;
 import org.guce.siat.core.ct.model.TreatmentOrder;
 import org.guce.siat.core.ct.model.TreatmentResult;
 
@@ -110,6 +111,10 @@ public class CctSpecificDecisionHistory implements Serializable {
     private PottingReport lastPottingReport;
 
     private PottingReport decisionDetailsPR;
+    
+    private TreatmentInfosCCSMinsante lastTreatmentInfosCCSMinsante;
+    
+    private TreatmentInfosCCSMinsante decisionDetailsTICCSMinsante;
 
     /**
      * Gets the last decision ir.
@@ -427,4 +432,19 @@ public class CctSpecificDecisionHistory implements Serializable {
         this.decisionDetailsPR = decisionDetailsPR;
     }
 
+    public TreatmentInfosCCSMinsante getLastTreatmentInfosCCSMinsante() {
+        return lastTreatmentInfosCCSMinsante;
+    }
+
+    public void setLastTreatmentInfosCCSMinsante(TreatmentInfosCCSMinsante lastTreatmentInfosCCSMinsante) {
+        this.lastTreatmentInfosCCSMinsante = lastTreatmentInfosCCSMinsante;
+    }
+
+    public TreatmentInfosCCSMinsante getDecisionDetailsTICCSMinsante() {
+        return decisionDetailsTICCSMinsante;
+    }
+
+    public void setDecisionDetailsTICCSMinsante(TreatmentInfosCCSMinsante decisionDetailsTICCSMinsante) {
+        this.decisionDetailsTICCSMinsante = decisionDetailsTICCSMinsante;
+    }
 }

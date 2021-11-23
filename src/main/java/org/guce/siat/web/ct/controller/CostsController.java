@@ -202,15 +202,15 @@ public class CostsController extends AbstractController<PaymentData> implements 
             return;
         }
         //save attachments here
-        if (attachmentList != null) {
-            final Session sessionCmisClient = CmisSession.getInstance();
-            for (Attachment at : attachmentList) {
-                if (at.getId() == null) {
-                    CmisUtils.sendDocument(Arrays.asList(at.getAttachmentFile()), sessionCmisClient, at.getPath());
-                    attachmentService.save(at);
-                }
-            }
-        }
+//        if (attachmentList != null) {
+//            final Session sessionCmisClient = CmisSession.getInstance();
+//            for (Attachment at : attachmentList) {
+//                if (at.getId() == null) {
+//                    CmisUtils.sendDocument(Arrays.asList(at.getAttachmentFile()), sessionCmisClient, at.getPath());
+//                    attachmentService.save(at);
+//                }
+//            }
+//        }
         sendPayment();
         returnToPaymentView();
     }
@@ -245,7 +245,9 @@ public class CostsController extends AbstractController<PaymentData> implements 
                 }
             } else if (Arrays.asList(FileTypeCode.CCT_CT, FileTypeCode.CC_CT, FileTypeCode.CQ_CT).contains(currentFile.getFileType().getCode())) {
                 flowToExecute = flowService.findFlowByCode(FlowCode.FL_CT_93.name());
-            } else {
+            } else if (Arrays.asList(FileTypeCode.CCS_MINSANTE).contains(currentFile.getFileType().getCode())) {
+                flowToExecute = flowService.findFlowByCode(FlowCode.FL_CT_160.name());
+            }else {
                 if (currentFile.getFileType().getCode().equals(FileTypeCode.PIVPSRP_MINADER)) {
                     flowToExecute = flowService.findFlowByCode(FlowCode.FL_AP_168.name());
                 } else {
@@ -265,7 +267,7 @@ public class CostsController extends AbstractController<PaymentData> implements 
                 try (final ByteArrayOutputStream output = SendDocumentUtils.preparePaymentDocument(documentSerializable, service, documentType)) {
                     xmlBytes = output.toByteArray();
                 }
-            } else if (Arrays.asList(FileTypeCode.CCT_CT, FileTypeCode.CC_CT, FileTypeCode.CQ_CT).contains(currentFile.getFileType().getCode())) {
+            } else if (Arrays.asList(FileTypeCode.CCT_CT, FileTypeCode.CC_CT, FileTypeCode.CQ_CT, FileTypeCode.CCS_MINSANTE).contains(currentFile.getFileType().getCode())) {
                 try (final ByteArrayOutputStream output = SendDocumentUtils.prepareCctDocument(documentSerializable, service, documentType)) {
                     xmlBytes = output.toByteArray();
                 }
@@ -303,6 +305,22 @@ public class CostsController extends AbstractController<PaymentData> implements 
                 data.put(ESBConstants.MESSAGE, null);
                 data.put(ESBConstants.EBXML_TYPE, "STANDARD");
                 data.put(ESBConstants.TO_PARTY_ID, ebxmlPropertiesService.getToPartyId());
+                data.put(ESBConstants.DEAD, "0");
+                //
+                data.put(ESBConstants.ITEM_FLOWS, lastItemFlows);
+                fileProducer.sendFile(data);
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Message sent to OUT queue");
+                }
+            }else {
+                final Map<String, Object> data = new HashMap<>();
+                data.put(ESBConstants.FLOW, xmlBytes);
+                data.put(ESBConstants.ATTACHMENT, new HashMap<>());
+                data.put(ESBConstants.SERVICE, service);
+                data.put(ESBConstants.TYPE_DOCUMENT, documentType);
+                data.put(ESBConstants.MESSAGE, null);
+                data.put(ESBConstants.EBXML_TYPE, "STANDARD");
+                data.put(ESBConstants.TO_PARTY_ID, currentFile.getEmetteur());
                 data.put(ESBConstants.DEAD, "0");
                 //
                 data.put(ESBConstants.ITEM_FLOWS, lastItemFlows);
