@@ -84,7 +84,7 @@ public class CcsMinsanteExporter extends AbstractReportInvoker {
                 goodsName = org.apache.commons.lang3.StringUtils.EMPTY, diNumber = org.apache.commons.lang3.StringUtils.EMPTY,
                 blNumber = org.apache.commons.lang3.StringUtils.EMPTY, goodsWeight = org.apache.commons.lang3.StringUtils.EMPTY,
                 container20Number = org.apache.commons.lang3.StringUtils.EMPTY, container40Number = org.apache.commons.lang3.StringUtils.EMPTY, originCountry = org.apache.commons.lang3.StringUtils.EMPTY,
-                makerCountry = org.apache.commons.lang3.StringUtils.EMPTY, signatureDate = org.apache.commons.lang3.StringUtils.EMPTY;
+                officeCode = org.apache.commons.lang3.StringUtils.EMPTY, signatureDate = org.apache.commons.lang3.StringUtils.EMPTY;
 
         for (FileFieldValue fileFieldValue : fileFieldValueList) {
             switch (fileFieldValue.getFileField().getCode()) {
@@ -115,9 +115,13 @@ public class CcsMinsanteExporter extends AbstractReportInvoker {
                 case "SIGNATAIRE_DATE":
                     signatureDate = fileFieldValue.getValue() != null ? fileFieldValue.getValue() : "";
                     break;
+                case "CODE_BUREAU":
+                    officeCode = fileFieldValue.getValue() != null ? fileFieldValue.getValue() : "";
+                    break;
 
             }
         }
+        ccsMinsanteVo.setDecisionPlace(getDecisionPlaceByOfficeCode(officeCode));
         ccsMinsanteVo.setDecisionNumber(file.getParent() != null ? file.getParent().getNumeroDossier() : file.getNumeroDossier());
         if (file.getSignatory() != null) {
             ccsMinsanteVo.setSignatory(String.format("%s %s", file.getSignatory().getFirstName(), file.getSignatory().getLastName()));
@@ -312,6 +316,30 @@ public class CcsMinsanteExporter extends AbstractReportInvoker {
         }
 
         return new JRBeanCollectionDataSource(Collections.singleton(ccsMinsanteVo));
+    }
+    
+    
+    public String getDecisionPlaceByOfficeCode(String officeCode){
+        String siatOfficeCode;
+        String decisionPlace = null;
+        if(StringUtils.isNotEmpty(officeCode)){
+            if("MINSANTE_CMKPB".equalsIgnoreCase(officeCode)){
+                decisionPlace = "Kribi";
+            }else{
+                decisionPlace = "Douala";
+            }
+        }
+        if(StringUtils.isEmpty(officeCode) || StringUtils.isNotEmpty(decisionPlace)){
+            siatOfficeCode = file.getBureau().getCode();
+            if("PSKBP".equalsIgnoreCase(siatOfficeCode)){
+                decisionPlace = "Kribi";
+            }else if("DLAPORT".equalsIgnoreCase(siatOfficeCode)){
+                decisionPlace = "Douala";
+            }else{
+                decisionPlace = "Douala";
+            }
+        }
+        return decisionPlace;
     }
 
     /*

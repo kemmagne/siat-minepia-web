@@ -43,6 +43,7 @@
 	<field name="controllerSignature" class="java.io.InputStream"/>
 	<field name="signatoryStamp" class="java.io.InputStream"/>
 	<field name="signatorySignature" class="java.io.InputStream"/>
+	<field name="decisionPlace" class="java.lang.String"/>
 	<background>
 		<band height="802" splitType="Stretch">
 			<printWhenExpression><![CDATA[$P{DRAFT}]]></printWhenExpression>
@@ -73,37 +74,24 @@
 	</title>
 	<pageHeader>
 		<band height="150" splitType="Stretch">
-			<staticText>
-				<reportElement x="0" y="0" width="225" height="135" uuid="00600ca1-ff89-4441-b4d5-3d783e03c184"/>
-				<textElement textAlignment="Center" markup="styled">
-					<font fontName="Arial Narrow" size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[REPUBLIQUE DU CAMEROUN
-Paix-Travail-Patrie<br />
-MINISTERE DE LA SANTE PUBLIQUE<br />
-DELEGATION REGIONALE DE LA SANTE<br />
-POSTE DE SANTE AUX FRONTIERES DU PORT AUTONOME DE DOUALA<br />
-B.P : 106 Douala TEL : 33-42-17-60
-]]></text>
-			</staticText>
 			<image scaleImage="FillFrame">
 				<reportElement x="247" y="17" width="70" height="111" uuid="c75d3cb1-5453-43b8-9ae9-a20d7cba18d8"/>
 				<imageExpression><![CDATA[new java.io.File($P{MINSANTE_LOGO})]]></imageExpression>
 			</image>
-			<staticText>
-				<reportElement x="338" y="0" width="217" height="147" uuid="82c858a1-291a-4ba8-b219-f929fa81d631"/>
+			<textField>
+				<reportElement x="0" y="0" width="225" height="135" uuid="a2462096-2787-40d3-b034-875a9df7ce6d"/>
 				<textElement textAlignment="Center" markup="styled">
-					<font fontName="Arial Narrow" isBold="true"/>
+					<font fontName="Arial Narrow" size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[REPUBLIC OF CAMEROON
-Peace-Work-Fatherland<br />
-MINISTRY OF PUBLIC HEALTH<br />
-REGIONAL DELEGATION OF PUBLIC HEALTH<br />
-HEALTH PORT OFFICE OF DOUALA<br />
-P.O BOX : 106 Douala TEL : 33-42-17-60<br />
-FAX :233427610
-]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA["REPUBLIQUE DU CAMEROUN<br />Paix-Travail-Patrie<br /><br />MINISTERE DE LA SANTE PUBLIQUE<br /><br />DELEGATION REGIONALE DE LA SANTE<br /><br />POSTE DE SANTE AUX FRONTIERES DU PORT AUTONOME DE "+ $F{decisionPlace}.toUpperCase() +"<br /><br />B.P : 106 "+$F{decisionPlace}+" TEL : 33-42-17-60"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="338" y="0" width="217" height="147" uuid="c626381a-a173-4bec-a9a4-05e1c3c82958"/>
+				<textElement textAlignment="Center" markup="styled">
+					<font fontName="Arial Narrow" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["REPUBLIC OF CAMEROON<br />Peace-Work-Fatherland<br /><br />MINISTRY OF PUBLIC HEALTH<br /><br />REGIONAL DELEGATION OF PUBLIC HEALTH<br /><br />HEALTH PORT OFFICE OF "+ $F{decisionPlace}.toUpperCase() +"<br /><br />P.O BOX : 106 "+$F{decisionPlace}+" TEL : 33-42-17-60<br />FAX :233427610"]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
@@ -127,7 +115,7 @@ FAX :233427610
 				<textFieldExpression><![CDATA[$F{containersNumbers}]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="250">
+		<band height="125">
 			<componentElement>
 				<reportElement key="table" style="table" mode="Opaque" x="14" y="0" width="527" height="125" uuid="847b9c2a-1e93-4763-aed2-0526369badf5"/>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
@@ -254,20 +242,34 @@ FAX :233427610
 					</jr:column>
 				</jr:table>
 			</componentElement>
+		</band>
+		<band height="130">
 			<image scaleImage="FillFrame">
-				<reportElement x="92" y="168" width="89" height="80" uuid="1186ba9b-dcb7-488f-a107-d4e7ac1ff562">
+				<reportElement x="361" y="11" width="100" height="100" uuid="cb89e001-9f3d-4d18-a77a-9c8509babafb">
 					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
 				</reportElement>
-				<imageExpression><![CDATA[$F{controllerSignature}]]></imageExpression>
+				<imageExpression><![CDATA[$F{signatoryStamp}]]></imageExpression>
 			</image>
 			<image scaleImage="FillFrame">
-				<reportElement x="18" y="139" width="100" height="100" uuid="d6a29a68-6216-4bf7-b876-2d54a8ab9fc2">
+				<reportElement x="423" y="39" width="89" height="80" uuid="1b470f63-0d5d-462f-beab-086b8b1e968a">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$F{signatorySignature}]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame">
+				<reportElement x="18" y="10" width="100" height="100" uuid="d6a29a68-6216-4bf7-b876-2d54a8ab9fc2">
 					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
 				</reportElement>
 				<imageExpression><![CDATA[$F{controllerStamp}]]></imageExpression>
 			</image>
+			<image scaleImage="FillFrame">
+				<reportElement x="92" y="39" width="89" height="80" uuid="1186ba9b-dcb7-488f-a107-d4e7ac1ff562">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$F{controllerSignature}]]></imageExpression>
+			</image>
 			<textField>
-				<reportElement x="0" y="211" width="209" height="15" uuid="560a267e-e35e-470c-8788-45c808735428">
+				<reportElement x="0" y="115" width="209" height="15" uuid="560a267e-e35e-470c-8788-45c808735428">
 					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -276,7 +278,7 @@ FAX :233427610
 				<textFieldExpression><![CDATA[$F{controller}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="195" width="211" height="14" uuid="b05661c1-33e5-4480-b9f3-6de5f5e21a7a">
+				<reportElement x="0" y="99" width="211" height="14" uuid="b05661c1-33e5-4480-b9f3-6de5f5e21a7a">
 					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -284,29 +286,8 @@ FAX :233427610
 				</textElement>
 				<text><![CDATA[Le Contrôleur/ Vérificateur]]></text>
 			</staticText>
-			<image scaleImage="FillFrame">
-				<reportElement x="423" y="168" width="89" height="80" uuid="1b470f63-0d5d-462f-beab-086b8b1e968a">
-					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
-				</reportElement>
-				<imageExpression><![CDATA[$F{signatorySignature}]]></imageExpression>
-			</image>
-			<image scaleImage="FillFrame">
-				<reportElement x="361" y="140" width="100" height="100" uuid="cb89e001-9f3d-4d18-a77a-9c8509babafb">
-					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
-				</reportElement>
-				<imageExpression><![CDATA[$F{signatoryStamp}]]></imageExpression>
-			</image>
-			<textField>
-				<reportElement x="340" y="210" width="187" height="15" uuid="a5d98990-0cb0-45bf-be7b-d2b1ac0f36d0">
-					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
-				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial Narrow" size="11"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{signatory}]]></textFieldExpression>
-			</textField>
 			<staticText>
-				<reportElement x="340" y="195" width="187" height="14" uuid="66227c57-c9a3-4c5d-8577-e0902d67d2da">
+				<reportElement x="340" y="100" width="187" height="14" uuid="66227c57-c9a3-4c5d-8577-e0902d67d2da">
 					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -314,6 +295,15 @@ FAX :233427610
 				</textElement>
 				<text><![CDATA[Le Chef de Poste]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="340" y="115" width="187" height="15" uuid="a5d98990-0cb0-45bf-be7b-d2b1ac0f36d0">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Narrow" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{signatory}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<columnFooter>
