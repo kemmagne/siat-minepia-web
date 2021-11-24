@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CERTIFICAT_PHYTOSANITAIRE" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6f5c0835-9f5c-4b28-b5db-296746e60a32">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="864"/>
+	<property name="ireport.y" value="380"/>
 	<parameter name="MINADER_LOGO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -61,10 +61,6 @@
 	<field name="consigneeCountry" class="java.lang.String"/>
 	<field name="treatmentEndDate" class="java.util.Date"/>
 	<field name="qrCode" class="java.io.InputStream"/>
-	<field name="originCountryPhytoNumber" class="java.lang.String">
-		<property name="OK" value="Boris"/>
-		<fieldDescription><![CDATA[Numero du certificat phyto du pays d'origine]]></fieldDescription>
-	</field>
 	<background>
 		<band height="802">
 			<printWhenExpression><![CDATA[$P{DRAFT}]]></printWhenExpression>
@@ -348,16 +344,7 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 					<reportElement mode="Transparent" x="0" y="168" width="555" height="85" uuid="15bb6579-91b6-45c7-9272-147e1f30346b"/>
 				</rectangle>
 				<staticText>
-					<reportElement x="5" y="168" width="550" height="63" uuid="a7b731fb-1599-4074-87a2-99b234fe8015">
-						<printWhenExpression><![CDATA[$F{transit}]]></printWhenExpression>
-					</reportElement>
-					<textElement>
-						<font size="8"/>
-					</textElement>
-					<text><![CDATA[Il est certifié que les végétaux, produits végétaux ou articles réglementés pesticide et appareil de traitement décrits cidessus ont été importés au Cameroun en provenance de $F{origin} et ont fait l'objet du certificat technique N° $F{originCountryPhytoNumber}. dont l'original la copie authentifiée est annexée au présent procès-verbal, qu'ils sont emballés remballés dans les emballages initiaux dans les nouveaux emballages que d'après le document technique original et une inspection supplémentaire ; ils sont jugés conformes aux exigences phytosanitaires en vigueur de la partie contractante importatrice, et qu'au cours de l'emmagasinage au Cameroun, l'envoi n'a pas été exposé au risque d'infestation ou d'infection. de détérioration de modification.]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="5" y="168" width="550" height="63" uuid="a7b731fb-1599-4074-87a2-99b234fe8015">
+					<reportElement x="4" y="168" width="550" height="63" uuid="a7b731fb-1599-4074-87a2-99b234fe8015">
 						<printWhenExpression><![CDATA[!$F{transit}]]></printWhenExpression>
 					</reportElement>
 					<textElement>
