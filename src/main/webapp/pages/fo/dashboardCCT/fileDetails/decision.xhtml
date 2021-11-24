@@ -80,6 +80,9 @@
                     <p:panel rendered="#{fileItemCctDetailController.isPhytoReadyForSignature(fileItemCctDetailController.selectedFlow)}">
                         <ui:include src="../specificDecisions/treatmentInfos/treatmentInfos.xhtml" />
                     </p:panel>
+                    <p:panel rendered="#{fileItemCctDetailController.isCCSMinsanteReadyForSignature(fileItemCctDetailController.selectedFlow)}">
+                        <ui:include src="../specificDecisions/treatmentInfosCCSMinsante/treatmentInfos.xhtml" />
+                    </p:panel>
 
                     <p:panel rendered="#{(fileItemCctDetailController.specificDecision ne null and fileItemCctDetailController.specificDecision eq 'TRR') or (fileItemCctDetailController.isFstpReadyForSignature(fileItemCctDetailController.selectedFlow) or fileItemCctDetailController.isAtReadyForSignature(fileItemCctDetailController.selectedFlow))}">
                         <ui:include src="../specificDecisions/treatmentResult/treatmentResult.xhtml" />
