@@ -22,9 +22,9 @@
                 <p:inputTextarea id="additionnalDeclaration" title="#{bundle['additionnalDeclaration']}"
                                  value="#{fileItemCctDetailController.treatmentInfos.additionnalDeclaration}" />
                 
-                <h:outputLabel rendered="#{fileItemCctDetailController.isPhytoTransitFile()}" for="certificatCountryOrigin" value="#{bundle['certificatCountryOrigin']}" />
-                <p:inputText rendered="#{fileItemCctDetailController.isPhytoTransitFile()}" id="certificatCountryOrigin" readonly="true" title="#{bundle['certificatCountryOrigin']}"
-                                 value="#{fileItemCctDetailController.treatmentInfos.certificatCountryOrigin}" />
+<!--                <h:outputLabel rendered="{fileItemCctDetailController.isPhytoTransitFile()}" for="certificatCountryOrigin" value="#{bundle['certificatCountryOrigin']}" />
+                <p:inputText rendered="{fileItemCctDetailController.isPhytoTransitFile()}" id="certificatCountryOrigin" readonly="true" title="#{bundle['certificatCountryOrigin']}"
+                                 value="{fileItemCctDetailController.treatmentInfos.certificatCountryOrigin}" />-->
             </h:panelGrid>
         </p:panel>
 
@@ -127,7 +127,7 @@
 
                 <h:outputLabel for="TOadditionalInfos" value="#{bundle['additionalInfos']}" />
                 <p:inputTextarea id="TOadditionalInfos" title="#{bundle['additionalInfos']}"
-                                 value="#{fileItemCctDetailController.treatmentInfos.additionalInfos}" />
+                                 value="#{fileItemCctDetailController.treatmepntInfos.additionalInfos}" />
 
                 <h:outputLabel for="TOfumigation" value="#{bundle['fumigation']}" />
                 <p:selectBooleanCheckbox id="TOfumigation" value="#{fileItemCctDetailController.treatmentInfos.fumigation}" />
