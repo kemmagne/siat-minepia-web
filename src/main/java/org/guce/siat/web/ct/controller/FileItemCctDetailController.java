@@ -304,7 +304,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
      */
     @ManagedProperty(value = "#{paramCCTCPService}")
     private ParamCCTCPService paramCCTCPService;
-    
+
     /**
      * The User Signature and Stamp service.
      */
@@ -1747,13 +1747,13 @@ public class FileItemCctDetailController extends DefaultDetailController {
             if (tr != null) {
                 try {
                     BeanUtils.copyProperties(treatmentInfosCCSMinsante, tr);
-                    if(treatmentInfosCCSMinsante != null && treatmentInfosCCSMinsante.getId() != null){
+                    if (treatmentInfosCCSMinsante != null && treatmentInfosCCSMinsante.getId() != null) {
                         treatmentInfosCCSMinsante.setId(null);
                     }
                 } catch (IllegalAccessException | InvocationTargetException ex) {
                     Logger.getLogger(FileItemCctDetailController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } 
+            }
         } // Generic : construction du formulaire à partir des DataType
         else {
             buildGenericFormFromDataType(selectedFlow.getDataTypeList());
@@ -4055,7 +4055,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
         if (FileTypeCode.CCS_MINSANTE.equals(currentFile.getFileType().getCode()) && currentFile.getParent() != null) {
             reportingFlow = flowService.findFlowByCode(FlowCode.FL_CT_CCS_05.name());
         }
-        
+
         boolean okInvoice = StepCode.ST_CT_57.equals(currentFileItem.getStep().getStepCode()) || StepCode.ST_CT_60.equals(currentFileItem.getStep().getStepCode());
         ItemFlow draftItemFlow = itemFlowService.findDraftByFileItem(currentFileItem);
         okInvoice = okInvoice && draftItemFlow != null && Arrays.asList(FlowCode.FL_CT_121.name(), FlowCode.FL_CT_133.name()).contains(draftItemFlow.getFlow().getCode());
@@ -6436,9 +6436,9 @@ public class FileItemCctDetailController extends DefaultDetailController {
         } else if (FileTypeCode.CCS_MINSANTE.equals(currentFile.getFileType().getCode())) {
             List<AbstractReportInvoker> reportInvokersPrincipalAndAnnex = null;
             ItemFlow itemFlow;
-            if(currentFile.getParent() != null){
+            if (currentFile.getParent() != null) {
                 itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_CCS_03);
-            }else {
+            } else {
                 itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
             }
             final TreatmentInfosCCSMinsante tr = treatmentInfosCCSMinsanteService.findTreatmentInfosByItemFlow(itemFlow);
@@ -6457,7 +6457,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
             reportInvoker = new CcsMinsanteExporter(currentFile, reportAnnexFileName, reportAnnexFileName, tr);
             reportInvokersPrincipalAndAnnex.add(reportInvoker);
             List<JasperPrint> inputStreamsForPrincipalAndAnnex = new ArrayList<>();
-            for (AbstractReportInvoker reportInvokerPrincipalOrAnnex: reportInvokersPrincipalAndAnnex) {
+            for (AbstractReportInvoker reportInvokerPrincipalOrAnnex : reportInvokersPrincipalAndAnnex) {
                 reportInvokerPrincipalOrAnnex.setDraft(draft);
                 reportInvokerPrincipalOrAnnex.setFileFieldValueService(fileFieldValueService);
                 reportInvokerPrincipalOrAnnex.setItemFlowService(itemFlowService);
@@ -6608,18 +6608,19 @@ public class FileItemCctDetailController extends DefaultDetailController {
                         final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(ffi, FlowCode.FL_CT_07);
                         final TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
                         reportInvokersForFstpAndAtp = new ArrayList<>();
+                        AbstractReportInvoker ri;
                         if (draft) {
-                            reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_FSTP", tr, reportNumber, FileTypeCode.CCT_CT_E_FSTP);
+                            ri = new CtCctTreatmentExporter(file, "CCT_CT_E_FSTP", tr, reportNumber, FileTypeCode.CCT_CT_E_FSTP);
                         } else {
-                            reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_FSTP", tr, FileTypeCode.CCT_CT_E_FSTP);
+                            ri = new CtCctTreatmentExporter(file, "CCT_CT_E_FSTP", tr, FileTypeCode.CCT_CT_E_FSTP);
                         }
-                        reportInvokersForFstpAndAtp.add(reportInvoker);
+                        reportInvokersForFstpAndAtp.add(ri);
                         if (draft) {
-                            reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_ATP", tr, reportNumber, FileTypeCode.CCT_CT_E_ATP);
+                            ri = new CtCctTreatmentExporter(file, "CCT_CT_E_ATP", tr, reportNumber, FileTypeCode.CCT_CT_E_ATP);
                         } else {
-                            reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_ATP", tr, FileTypeCode.CCT_CT_E_ATP);
+                            ri = new CtCctTreatmentExporter(file, "CCT_CT_E_ATP", tr, FileTypeCode.CCT_CT_E_ATP);
                         }
-                        reportInvokersForFstpAndAtp.add(reportInvoker);
+                        reportInvokersForFstpAndAtp.add(ri);
                         break;
                     }
                     default:
@@ -6647,7 +6648,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 }
             }
         }
-        if ((FileTypeCode.CCT_CT_E_FSTP.equals(currentFile.getFileType().getCode()) || FileTypeCode.CCT_CT_E_ATP.equals(currentFile.getFileType().getCode())) && reportInvokersForFstpAndAtp != null) {
+        if (FileTypeCode.CCT_CT_E_FSTP.equals(file.getFileType().getCode()) && reportInvokersForFstpAndAtp != null) {
             List<JasperPrint> inputStreamsForFstpAndAtp = new ArrayList<>();
             for (AbstractReportInvoker reportInvokerFstpOrAtp : reportInvokersForFstpAndAtp) {
                 reportInvokerFstpOrAtp.setDraft(draft);
@@ -7087,5 +7088,4 @@ public class FileItemCctDetailController extends DefaultDetailController {
         this.userStampSignatureService = userStampSignatureService;
     }
 
-    
 }
