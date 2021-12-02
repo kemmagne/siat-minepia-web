@@ -3092,11 +3092,16 @@ public class FileItemCctDetailController extends DefaultDetailController {
                                         }
                                     }
 
-                                    byte[] report = getReportBytes(fileTypeFlowReport, false);
-
-                                    if (report != null) {
-                                        attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
+                                    byte[] report = getReportBytes(currentFile, fileTypeFlowReport, false);
+                                    if (report == null) {
+                                        showErrorFacesMessage(ControllerConstants.Bundle.Messages.CANNOT_GENERATE_REPORT, null);
+                                        if (transactionStatus != null) {
+                                            transactionManager.rollback(transactionStatus);
+                                        }
+                                        return;
                                     }
+
+                                    attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
                                 }
 
                                 fileService.update(currentFile);
@@ -3106,11 +3111,17 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
                                 List<FileTypeFlowReport> fileTypeFlowReportList = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(flowToSend, currentFile.getFileType());
                                 FileTypeFlowReport fileTypeFlowReport = fileTypeFlowReportList.get(0);
-                                byte[] report = getReportBytes(fileTypeFlowReport, false);
+                                byte[] report = getReportBytes(currentFile, fileTypeFlowReport, false);
 
-                                if (report != null) {
-                                    attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
+                                if (report == null) {
+                                    showErrorFacesMessage(ControllerConstants.Bundle.Messages.CANNOT_GENERATE_REPORT, null);
+                                    if (transactionStatus != null) {
+                                        transactionManager.rollback(transactionStatus);
+                                    }
+                                    return;
                                 }
+
+                                attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
                             }
 
                             // convert file to document
@@ -4108,7 +4119,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
         for (FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
             //Begin Add new field value with report Number
             try {
-                byte[] report = getReportBytes(fileTypeFlowReport, draft);
+                byte[] report = getReportBytes(currentFile, fileTypeFlowReport, draft);
                 if (report != null) {
                     InputStream is = new ByteArrayInputStream(report);
                     String name = currentFile.getReferenceSiat() + '_' + fileTypeFlowReport.getReportName();
@@ -6070,7 +6081,6 @@ public class FileItemCctDetailController extends DefaultDetailController {
                     //generate report
                     Map<String, byte[]> attachedByteFiles = null;
                     final List<FileItem> fileItemList = selectedFile.getFileItemsList();
-//                    final List<ItemFlow> itemFlowList = selectedItemFlowDto.getItemFlow().getFlow().getItemsFlowsList();
                     final List<ItemFlow> itemFlowList = itemFlowService.findLastItemFlowsByFileItemListAndFlow(fileItemList, FlowCode.valueOf(currentSelectedFlow.getCode()));
                     String service = StringUtils.EMPTY;
                     String documentType = StringUtils.EMPTY;
@@ -6078,22 +6088,18 @@ public class FileItemCctDetailController extends DefaultDetailController {
                     if (Arrays.asList(FlowCode.FL_CT_89.name(), FlowCode.FL_CT_08.name(), FlowCode.FL_CT_114.name(), FlowCode.FL_CT_117.name(), FlowCode.FL_CT_140.name(), FlowCode.FL_CT_CVS_03.name(), FlowCode.FL_CT_CVS_07.name(), FlowCode.FL_CT_121.name(), FlowCode.FL_CT_133.name())
                             .contains(flowToSend.getCode())) {
 
-                        // edit signature elements
-                        Date now = java.util.Calendar.getInstance().getTime();
-                        selectedFile.setSignatureDate(now);
-                        selectedFile.setSignatory(loggedUser);
-
                         attachedByteFiles = new HashMap<>();
 
-                        final List<FileTypeFlowReport> fileTypeFlowReportList = fileTypeFlowReportService
-                                .findReportClassNameByFlowAndFileType(flowToSend, selectedFile.getFileType());
+                        final List<FileTypeFlowReport> fileTypeFlowReportList = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(flowToSend, selectedFile.getFileType());
                         for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportList) {
 
-                            final byte[] report = getReportBytes(fileTypeFlowReport, false);
-
-                            if (report != null) {
-                                attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
+                            final byte[] report = getReportBytes(selectedFile, fileTypeFlowReport, false);
+                            if (report == null) {
+                                showErrorFacesMessage(ControllerConstants.Bundle.Messages.CANNOT_GENERATE_REPORT, null);
+                                return;
                             }
+
+                            attachedByteFiles.put(fileTypeFlowReport.getReportName(), report);
                         }
                     }
 
@@ -6286,238 +6292,9 @@ public class FileItemCctDetailController extends DefaultDetailController {
         return fileItemDtos;
     }
 
-    private byte[] getReportBytes(final FileTypeFlowReport fileTypeFlowReport, final boolean draft) throws Exception {
-        final String nomClasse = fileTypeFlowReport.getReportClassName();
-        final Class classe = Class.forName(nomClasse);
-        byte[] report = null;
-        Map<String, Object> forAnnexes = null;
-        AbstractReportInvoker reportInvoker = null;
-        List<AbstractReportInvoker> reportInvokersForFstpAndAtp = null;
-        if (checkMinaderMinistry) {
-            String reportNumber = null;
-            if (draft && !FileTypeCode.CCT_CT_E_PVE.equals(currentFile.getFileType().getCode())) {
-                final ReportOrganism reportOrganism = reportOrganismService.findReportByFileTypeFlowReport(fileTypeFlowReport);
-                reportNumber = currentFile.getNumeroDemande() + "/" + currentFile.getNumeroDossier()
-                        + "/" + java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)
-                        + ((reportOrganism != null && reportOrganism.getValue() != null) ? reportOrganism.getValue() : StringUtils.EMPTY);
-
-            }
-            Flow flow = fileTypeFlowReport.getFlow();
-            if (BooleanUtils.toBoolean(flow.getToStep().getIsFinal())) {
-                switch (currentFile.getFileType().getCode()) {
-                    case CCT_CT_E: {
-                        ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(currentFileItem, FlowCode.FL_CT_151);
-                        if (itemFlow == null) {
-                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(currentFileItem, FlowCode.FL_CT_07);
-                        }
-                        if (itemFlow == null) {
-                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(currentFileItem, FlowCode.FL_CT_112);
-                        }
-                        if (itemFlow == null) {
-                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(currentFileItem, FlowCode.FL_CT_117);
-                        }
-
-                        final TreatmentInfos ti = treatmentInfosService.findTreatmentInfosByItemFlow(itemFlow);
-                        if (ti == null || ti.getId() == null) {
-                            final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString("draftNotAllowedForReject");
-                            JsfUtil.addErrorMessage(msg);
-                            return null;
-                        }
-
-                        final ItemFlow itemFlow2 = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_08);
-
-                        CCTCPParamValue paramValue = cCTCPParamValueService.findCCTCPParamValueByItemFlow(itemFlow2);
-                        if (phytoEnd && paramValue == null) {
-                            paramValue = cCTCPParamValue;
-                        }
-                        if (paramValue == null) {
-                            paramValue = new CCTCPParamValue();
-                            ReportGeneratorUtils.fillCCTCPParamValue(paramValue, getLoggedUser(), currentFile);
-                        }
-                        if (ti.getDelivrableType() == null || "CCT_CT_E".equals(ti.getDelivrableType())) {
-                            Map<String, Integer> count = ReportGeneratorUtils.countFileContainerAndPackage(currentFile);
-                            if (count.get(ReportGeneratorUtils.COUNT_GOODS) > paramValue.getMaxGoodsLineNumber()
-                                    || count.get(ReportGeneratorUtils.COUNT_CONTAINERS) > paramValue.getMaxContainerNumber()
-                                    || count.get(ReportGeneratorUtils.COUNT_PACKAGES) > paramValue.getMaxPackageNumber()) {
-                                forAnnexes = new HashMap();
-                                forAnnexes.put("ti", ti);
-                                forAnnexes.put("paramValue", paramValue);
-                                if (!CctExportProductType.AUTRES.equals(productType)) {
-                                    forAnnexes.put("fileNameAnnex", ReportGeneratorUtils.CP_DEF_ANNEX);
-                                } else {
-                                    forAnnexes.put("fileNameAnnex", ReportGeneratorUtils.CP_ANNEX_AUTRES);
-                                }
-                            }
-                            //Appel de la methode de generation du jasper
-                            reportInvoker = new CtCctCpEExporter(currentFile, ti, paramValue, "CERTIFICAT_PHYTOSANITAIRE");
-
-                        } else if ("CQ_CT".equals(ti.getDelivrableType())) {
-                            reportInvoker = new CtCctCqeExporter(currentFile, ti);
-                        }
-                        break;
-                    }
-                    case CCT_CT_E_PVI: {
-                        final ItemFlow itemFlow;
-                        if (currentFile.getParent() == null) {
-                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
-                        } else {
-                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_112);
-                        }
-                        final InspectionReport ir = inspectionReportService.findByItemFlow(itemFlow);
-                        if (draft) {
-                            reportInvoker = new CtPviExporter(currentFile, ir, reportNumber);
-                        } else {
-                            reportInvoker = new CtPviExporter(currentFile, ir);
-                        }
-                        break;
-                    }
-                    case CCT_CT_E_ATP: {
-                        final ItemFlow itemFlow;
-                        if (currentFile.getParent() == null) {
-                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
-                        } else {
-                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_112);
-                        }
-                        final TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
-                        if (draft) {
-                            reportInvoker = new CtCctTreatmentExporter(currentFile, "CCT_CT_E_ATP", tr, reportNumber, FileTypeCode.CCT_CT_E_ATP);
-                        } else {
-                            reportInvoker = new CtCctTreatmentExporter(currentFile, "CCT_CT_E_ATP", tr, FileTypeCode.CCT_CT_E_ATP);
-                        }
-                        break;
-                    }
-                    case CCT_CT_E_FSTP: {
-                        final ItemFlow itemFlow;
-                        if (currentFile.getParent() == null) {
-                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
-                        } else {
-                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_112);
-                        }
-                        final TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
-                        reportInvokersForFstpAndAtp = new ArrayList<>();
-                        if (draft) {
-                            reportInvoker = new CtCctTreatmentExporter(currentFile, "CCT_CT_E_FSTP", tr, reportNumber, FileTypeCode.CCT_CT_E_FSTP);
-                        } else {
-                            reportInvoker = new CtCctTreatmentExporter(currentFile, "CCT_CT_E_FSTP", tr, FileTypeCode.CCT_CT_E_FSTP);
-                        }
-                        reportInvokersForFstpAndAtp.add(reportInvoker);
-                        if (draft) {
-                            reportInvoker = new CtCctTreatmentExporter(currentFile, "CCT_CT_E_ATP", tr, reportNumber, FileTypeCode.CCT_CT_E_ATP);
-                        } else {
-                            reportInvoker = new CtCctTreatmentExporter(currentFile, "CCT_CT_E_ATP", tr, FileTypeCode.CCT_CT_E_ATP);
-                        }
-                        reportInvokersForFstpAndAtp.add(reportInvoker);
-                        break;
-                    }
-                    default:
-                        Constructor constructor = classe.getConstructor(File.class);
-                        reportInvoker = (AbstractReportInvoker) constructor.newInstance(currentFile);
-                        break;
-                }
-            } else if (FlowCode.FL_CT_121.name().equals(flow.getCode()) || FlowCode.FL_CT_133.name().equals(flow.getCode())) {
-                PaymentData payData;
-                payData = paymentDataService.findPaymentDataByFileItem(currentFile.getFileItemsList().get(0));
-                Constructor constructor = classe.getConstructor(File.class, PaymentData.class);
-                reportInvoker = (AbstractReportInvoker) constructor.newInstance(currentFile, payData);
-            }
-
-        } else if (checkMinepiaMinistry) {
-            switch (currentFile.getFileType().getCode()) {
-                case CCT_CT: {
-                    if (approvedDecision == null) {
-                        lastDecisions = itemFlowService.findLastSentItemFlowByFileItem(selectedFileItemCheck.getFileItem());
-
-                        approvedDecision = approvedDecisionService.findApprovedDecisionByItemFlow(lastDecisions);
-                    }
-                    reportInvoker = new CtCctCsvExporter(currentFile, loggedUser, approvedDecision);
-                    break;
-                }
-            }
-        } else if (FileTypeCode.CCS_MINSANTE.equals(currentFile.getFileType().getCode())) {
-            List<AbstractReportInvoker> reportInvokersPrincipalAndAnnex = null;
-            ItemFlow itemFlow;
-            if (currentFile.getParent() != null) {
-                itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_CCS_03);
-            } else {
-                itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
-            }
-            final TreatmentInfosCCSMinsante tr = treatmentInfosCCSMinsanteService.findTreatmentInfosByItemFlow(itemFlow);
-            reportInvokersPrincipalAndAnnex = new ArrayList<>();
-            Constructor constructor = classe.getConstructor(File.class, String.class, TreatmentInfosCCSMinsante.class);
-            String reportFileName = "CCS_MINSANTE";
-            String reportAnnexFileName = "CCS_MINSANTE_ANNEXE";
-            if (tr != null && tr.isCcsMinsanteDrugProducts()) {
-                reportFileName = "CCS_MINSANTE_MEDICAMENTS";
-            }
-            //reportInvoker = (AbstractReportInvoker) constructor.newInstance(currentFile, reportFileName, tr);
-            //For principal report
-            reportInvoker = new CcsMinsanteExporter(currentFile, reportFileName, tr);
-            reportInvokersPrincipalAndAnnex.add(reportInvoker);
-            //For Annex report
-            reportInvoker = new CcsMinsanteExporter(currentFile, reportAnnexFileName, reportAnnexFileName, tr);
-            reportInvokersPrincipalAndAnnex.add(reportInvoker);
-            List<JasperPrint> inputStreamsForPrincipalAndAnnex = new ArrayList<>();
-            for (AbstractReportInvoker reportInvokerPrincipalOrAnnex : reportInvokersPrincipalAndAnnex) {
-                reportInvokerPrincipalOrAnnex.setDraft(draft);
-                reportInvokerPrincipalOrAnnex.setFileFieldValueService(fileFieldValueService);
-                reportInvokerPrincipalOrAnnex.setItemFlowService(itemFlowService);
-                reportInvokerPrincipalOrAnnex.setCctDetailController(this);
-                reportInvokerPrincipalOrAnnex.setUserStampSignatureService(userStampSignatureService);
-                JasperPrint reportJPForPrincipalOrAnnex = JsfUtil.getReportJP(reportInvokerPrincipalOrAnnex);
-                inputStreamsForPrincipalAndAnnex.add(reportJPForPrincipalOrAnnex);
-            }
-            if (!CollectionUtils.isEmpty(inputStreamsForPrincipalAndAnnex)) {
-                report = JsfUtil.mergePdf(inputStreamsForPrincipalAndAnnex);
-            }
-            reportInvoker = null;
-        }
-        if (FileTypeCode.CCT_CT_E_FSTP.equals(currentFile.getFileType().getCode()) && reportInvokersForFstpAndAtp != null) {
-            List<JasperPrint> inputStreamsForFstpAndAtp = new ArrayList<>();
-            for (AbstractReportInvoker reportInvokerFstpOrAtp : reportInvokersForFstpAndAtp) {
-                reportInvokerFstpOrAtp.setDraft(draft);
-                reportInvokerFstpOrAtp.setFileFieldValueService(fileFieldValueService);
-                reportInvokerFstpOrAtp.setItemFlowService(itemFlowService);
-                reportInvokerFstpOrAtp.setPottingReportService(pottingReportService);
-                reportInvokerFstpOrAtp.setCctDetailController(this);
-                JasperPrint reportJPForFstpOrAtp = JsfUtil.getReportJP(reportInvokerFstpOrAtp);
-                inputStreamsForFstpAndAtp.add(reportJPForFstpOrAtp);
-            }
-            if (!CollectionUtils.isEmpty(inputStreamsForFstpAndAtp)) {
-                report = JsfUtil.mergePdf(inputStreamsForFstpAndAtp);
-            }
-
-        } else if (reportInvoker != null) {
-            reportInvoker.setDraft(draft);
-            reportInvoker.setFileFieldValueService(fileFieldValueService);
-            reportInvoker.setItemFlowService(itemFlowService);
-            reportInvoker.setPottingReportService(pottingReportService);
-            reportInvoker.setCctDetailController(this);
-            if (forAnnexes != null) {
-                JasperPrint page1 = JsfUtil.getReportJP(reportInvoker);
-                TreatmentInfos ti = (TreatmentInfos) forAnnexes.get("ti");
-                CCTCPParamValue paramValue = (CCTCPParamValue) forAnnexes.get("paramValue");
-                String fileAnnexName = (String) forAnnexes.get("fileNameAnnex");
-                CtCctCpEExporter exporter = new CtCctCpEExporter(currentFile, ti, paramValue, fileAnnexName);
-                exporter.setDraft(draft);
-                exporter.setFileFieldValueService(fileFieldValueService);
-                JasperPrint report2 = JsfUtil.getReportJP(exporter);
-
-                List<JasperPrint> inputStreams = new ArrayList<>();
-                inputStreams.add(page1);
-                inputStreams.add(report2);
-
-                report = JsfUtil.mergePdf(inputStreams);
-            } else {
-                report = JsfUtil.getReport(reportInvoker);
-            }
-        }
-
-        return report;
-    }
-
-    private byte[] getReportBytes(final File file, final FileTypeFlowReport fileTypeFlowReport, final boolean draft) throws Exception {
-        final String nomClasse = fileTypeFlowReport.getReportClassName();
-        final Class classe = Class.forName(nomClasse);
+    private byte[] getReportBytes(File file, FileTypeFlowReport fileTypeFlowReport, boolean draft) throws Exception {
+        String nomClasse = fileTypeFlowReport.getReportClassName();
+        Class classe = Class.forName(nomClasse);
         Map<String, Object> forAnnexes = null;
         byte[] report = null;
         AbstractReportInvoker reportInvoker = null;
@@ -6546,23 +6323,25 @@ public class FileItemCctDetailController extends DefaultDetailController {
                         if (itemFlow == null) {
                             itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(ffi, FlowCode.FL_CT_117);
                         }
+
                         final TreatmentInfos ti = treatmentInfosService.findTreatmentInfosByItemFlow(itemFlow);
                         if (ti == null || ti.getId() == null) {
                             final String msg = ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME, getCurrentLocale()).getString("draftNotAllowedForReject");
                             JsfUtil.addErrorMessage(msg);
                             return null;
                         }
-                        ItemFlow itemFlow2 = itemFlowService.findItemFlowByFileItemAndFlow(file.getFileItemsList().get(0), FlowCode.FL_CT_08);
+
+                        ItemFlow itemFlow2 = itemFlowService.findItemFlowByFileItemAndFlow(ffi, FlowCode.FL_CT_08);
                         if (itemFlow2 == null) {
-                            itemFlow2 = itemFlowService.findItemFlowByFileItemAndFlow(file.getFileItemsList().get(0), FlowCode.FL_CT_114);
+                            itemFlow2 = itemFlowService.findItemFlowByFileItemAndFlow(ffi, FlowCode.FL_CT_114);
                         }
                         CCTCPParamValue paramValue = cCTCPParamValueService.findCCTCPParamValueByItemFlow(itemFlow2);
+
                         if (paramValue == null) {
-                            ReportGeneratorUtils.fillCCTCPParamValue(paramValue, getLoggedUser(), currentFile);
+                            paramValue = new CCTCPParamValue();
+                            ReportGeneratorUtils.fillCCTCPParamValue(paramValue, getLoggedUser(), file);
                         }
-                        if (paramValue == null) {
-                            paramValue = cCTCPParamValue;
-                        }
+
                         if (ti.getDelivrableType() == null || "CCT_CT_E".equals(ti.getDelivrableType())) {
                             Map<String, Integer> count = ReportGeneratorUtils.countFileContainerAndPackage(file);
                             if (count.get(ReportGeneratorUtils.COUNT_GOODS) > paramValue.getMaxGoodsLineNumber()
@@ -6577,6 +6356,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                                     forAnnexes.put("fileNameAnnex", ReportGeneratorUtils.CP_ANNEX_AUTRES);
                                 }
                             }
+
                             reportInvoker = new CtCctCpEExporter(file, ti, paramValue, "CERTIFICAT_PHYTOSANITAIRE");
 
                         } else if ("CQ_CT".equals(ti.getDelivrableType())) {
@@ -6585,7 +6365,12 @@ public class FileItemCctDetailController extends DefaultDetailController {
                         break;
                     }
                     case CCT_CT_E_PVI: {
-                        final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(ffi, FlowCode.FL_CT_07);
+                        ItemFlow itemFlow;
+                        if (currentFile.getParent() == null) {
+                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
+                        } else {
+                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_112);
+                        }
                         final InspectionReport ir = inspectionReportService.findByItemFlow(itemFlow);
                         if (draft) {
                             reportInvoker = new CtPviExporter(file, ir, reportNumber);
@@ -6595,8 +6380,13 @@ public class FileItemCctDetailController extends DefaultDetailController {
                         break;
                     }
                     case CCT_CT_E_ATP: {
-                        final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(ffi, FlowCode.FL_CT_07);
-                        final TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
+                        ItemFlow itemFlow;
+                        if (currentFile.getParent() == null) {
+                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
+                        } else {
+                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_112);
+                        }
+                        TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
                         if (draft) {
                             reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_ATP", tr, reportNumber, FileTypeCode.CCT_CT_E_ATP);
                         } else {
@@ -6605,8 +6395,13 @@ public class FileItemCctDetailController extends DefaultDetailController {
                         break;
                     }
                     case CCT_CT_E_FSTP: {
-                        final ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(ffi, FlowCode.FL_CT_07);
-                        final TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
+                        ItemFlow itemFlow;
+                        if (currentFile.getParent() == null) {
+                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
+                        } else {
+                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_112);
+                        }
+                        TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
                         reportInvokersForFstpAndAtp = new ArrayList<>();
                         AbstractReportInvoker ri;
                         if (draft) {
@@ -6629,8 +6424,8 @@ public class FileItemCctDetailController extends DefaultDetailController {
                         break;
                 }
             } else if (FlowCode.FL_CT_121.name().equals(flow.getCode()) || FlowCode.FL_CT_133.name().equals(flow.getCode())) {
-                PaymentData payData;
-                payData = paymentDataService.findPaymentDataByFileItem(file.getFileItemsList().get(0));
+
+                PaymentData payData = paymentDataService.findPaymentDataByFileItem(file.getFileItemsList().get(0));
                 Constructor constructor = classe.getConstructor(File.class, PaymentData.class);
                 reportInvoker = (AbstractReportInvoker) constructor.newInstance(file, payData);
             }
@@ -6647,7 +6442,46 @@ public class FileItemCctDetailController extends DefaultDetailController {
                     break;
                 }
             }
+        } else if (FileTypeCode.CCS_MINSANTE.equals(file.getFileType().getCode())) {
+            ItemFlow itemFlow;
+            if (file.getParent() != null) {
+                itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_CCS_03);
+            } else {
+                itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
+            }
+            final TreatmentInfosCCSMinsante tr = treatmentInfosCCSMinsanteService.findTreatmentInfosByItemFlow(itemFlow);
+            List<AbstractReportInvoker> reportInvokersPrincipalAndAnnex = new ArrayList<>();
+            String reportFileName = "CCS_MINSANTE";
+            String reportAnnexFileName = "CCS_MINSANTE_ANNEXE";
+            if (tr != null && tr.isCcsMinsanteDrugProducts()) {
+                reportFileName = "CCS_MINSANTE_MEDICAMENTS";
+            }
+            //reportInvoker = (AbstractReportInvoker) constructor.newInstance(file, reportFileName, tr);
+            //For principal report
+            reportInvoker = new CcsMinsanteExporter(file, reportFileName, tr);
+            reportInvokersPrincipalAndAnnex.add(reportInvoker);
+            //For Annex report
+            reportInvoker = new CcsMinsanteExporter(file, reportAnnexFileName, reportAnnexFileName, tr);
+            reportInvokersPrincipalAndAnnex.add(reportInvoker);
+            List<JasperPrint> inputStreamsForPrincipalAndAnnex = new ArrayList<>();
+            for (AbstractReportInvoker reportInvokerPrincipalOrAnnex : reportInvokersPrincipalAndAnnex) {
+                reportInvokerPrincipalOrAnnex.setDraft(draft);
+                reportInvokerPrincipalOrAnnex.setFileFieldValueService(fileFieldValueService);
+                reportInvokerPrincipalOrAnnex.setItemFlowService(itemFlowService);
+                reportInvokerPrincipalOrAnnex.setCctDetailController(this);
+                reportInvokerPrincipalOrAnnex.setUserStampSignatureService(userStampSignatureService);
+                JasperPrint reportJPForPrincipalOrAnnex = JsfUtil.getReportJP(reportInvokerPrincipalOrAnnex);
+                inputStreamsForPrincipalAndAnnex.add(reportJPForPrincipalOrAnnex);
+            }
+            if (!CollectionUtils.isEmpty(inputStreamsForPrincipalAndAnnex)) {
+                report = JsfUtil.mergePdf(inputStreamsForPrincipalAndAnnex);
+            }
+            reportInvoker = null;
+        } else {
+            Constructor constructor = classe.getConstructor(File.class);
+            reportInvoker = (AbstractReportInvoker) constructor.newInstance(file);
         }
+
         if (FileTypeCode.CCT_CT_E_FSTP.equals(file.getFileType().getCode()) && reportInvokersForFstpAndAtp != null) {
             List<JasperPrint> inputStreamsForFstpAndAtp = new ArrayList<>();
             for (AbstractReportInvoker reportInvokerFstpOrAtp : reportInvokersForFstpAndAtp) {
@@ -6662,7 +6496,6 @@ public class FileItemCctDetailController extends DefaultDetailController {
             if (!CollectionUtils.isEmpty(inputStreamsForFstpAndAtp)) {
                 report = JsfUtil.mergePdf(inputStreamsForFstpAndAtp);
             }
-
         } else if (reportInvoker != null) {
             reportInvoker.setDraft(draft);
             reportInvoker.setFileFieldValueService(fileFieldValueService);
@@ -6688,6 +6521,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 report = JsfUtil.getReport(reportInvoker);
             }
         }
+
         return report;
     }
 

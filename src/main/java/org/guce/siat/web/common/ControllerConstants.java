@@ -482,6 +482,8 @@ public interface ControllerConstants {
              */
             String SEND_ERROR = "SendError";
 
+            String CANNOT_GENERATE_REPORT = "CannotGenerateReport";
+
             /**
              * The Constant SEND_ERROR.
              */
