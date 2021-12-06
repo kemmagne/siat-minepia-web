@@ -360,6 +360,10 @@ public interface ControllerConstants {
              * The search statistics on business.
              */
             String SEARCH_STATISTICS_ON_BUSINESS = "/pages/fo/statistic/statisticsOnBusiness/index.xhtml";
+            String SEARCH_IM_CARG_FILES_STATISTICS = "/pages/fo/statistic/imCargFilesStatistics/index.xhtml";
+            String SEARCH_IM_CARG_STATISTICS_BY_PRODUCT = "/pages/fo/statistic/imCargStatisticsByProduct/index.xhtml";
+            String SEARCH_IM_CARG_STATISTICS_BY_IMPORTER = "/pages/fo/statistic/imCargStatisticsByImporter/index.xhtml";
+            String SEARCH_IM_CARG_STATISTICS_BY_COUNTRY = "/pages/fo/statistic/imCargStatisticsByCountry/index.xhtml";
 
             String FILES_TRACKING = "/pages/fo/fileTracking/index.xhtml";
 
@@ -477,6 +481,8 @@ public interface ControllerConstants {
              * The Constant SEND_ERROR.
              */
             String SEND_ERROR = "SendError";
+
+            String CANNOT_GENERATE_REPORT = "CannotGenerateReport";
 
             /**
              * The Constant BILLING_WITHOUT_INVOICE_LINES_ERROR.

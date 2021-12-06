@@ -251,6 +251,8 @@ public class CostsController extends AbstractController<PaymentData> implements 
                 }
             } else if (Arrays.asList(FileTypeCode.CCT_CT, FileTypeCode.CC_CT, FileTypeCode.CQ_CT).contains(currentFile.getFileType().getCode())) {
                 flowToExecute = flowService.findFlowByCode(FlowCode.FL_CT_93.name());
+            } else if (Arrays.asList(FileTypeCode.CCS_MINSANTE).contains(currentFile.getFileType().getCode())) {
+                flowToExecute = flowService.findFlowByCode(FlowCode.FL_CT_160.name());
             } else {
                 switch (currentFile.getFileType().getCode()) {
                     case PIVPSRP_MINADER:
@@ -277,7 +279,7 @@ public class CostsController extends AbstractController<PaymentData> implements 
                 try (final ByteArrayOutputStream output = SendDocumentUtils.preparePaymentDocument(documentSerializable, service, documentType)) {
                     xmlBytes = output.toByteArray();
                 }
-            } else if (Arrays.asList(FileTypeCode.CCT_CT, FileTypeCode.CC_CT, FileTypeCode.CQ_CT).contains(currentFile.getFileType().getCode())) {
+            } else if (Arrays.asList(FileTypeCode.CCT_CT, FileTypeCode.CC_CT, FileTypeCode.CQ_CT, FileTypeCode.CCS_MINSANTE).contains(currentFile.getFileType().getCode())) {
                 try (final ByteArrayOutputStream output = SendDocumentUtils.prepareCctDocument(documentSerializable, service, documentType)) {
                     xmlBytes = output.toByteArray();
                 }

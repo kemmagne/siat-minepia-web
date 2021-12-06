@@ -59,6 +59,10 @@
                 <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfos}">
                     <ui:include src="../specificDecisions/treatmentInfos/treatmentInfosRemindDecision.xhtml" />
                 </h:panelGroup>
+                
+                <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastTreatmentInfosCCSMinsante}">
+                    <ui:include src="../specificDecisions/treatmentInfosCCSMinsante/treatmentInfosRemindDecision.xhtml" />
+                </h:panelGroup>
 
                 <h:panelGroup rendered="#{not empty fileItemCctDetailController.specificDecisionsHistory.lastPaymentData and empty fileItemCctDetailController.lastSpecificDecision}">
                     <ui:include src="../specificDecisions/paymentValidation/paymentValidationRemindDecision.xhtml" />

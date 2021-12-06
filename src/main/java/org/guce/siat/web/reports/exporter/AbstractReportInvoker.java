@@ -16,6 +16,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.guce.siat.common.service.FileFieldValueService;
 import org.guce.siat.common.service.ItemFlowService;
 import org.guce.siat.core.ct.service.PottingReportService;
+import org.guce.siat.core.ct.service.UserStampSignatureService;
 import org.guce.siat.web.ct.controller.FileItemCctDetailController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +40,13 @@ public abstract class AbstractReportInvoker implements ReportCommand {
      * The jasper file name.
      */
     protected String jasperFileName;
+    
+    /**
+     * The pdf form file name.
+     */
+    protected String sourceFileName;
+
+    protected String realPath;
 
     private boolean draft;
 
@@ -49,6 +57,8 @@ public abstract class AbstractReportInvoker implements ReportCommand {
     private PottingReportService pottingReportService;
 
     private FileItemCctDetailController cctDetailController;
+    
+    private UserStampSignatureService userStampSignatureService;
 
     /**
      * Instantiates a new jasper report builder.
@@ -59,6 +69,7 @@ public abstract class AbstractReportInvoker implements ReportCommand {
     public AbstractReportInvoker(final String jasperFileName, final String pdfFileName) {
         this.jasperFileName = jasperFileName;
         this.pdfFileName = pdfFileName;
+        this.sourceFileName = jasperFileName;
     }
 
     /*
@@ -114,6 +125,9 @@ public abstract class AbstractReportInvoker implements ReportCommand {
      * @return the real path
      */
     protected String getRealPath(final String relativePath, final String fileName, final String fileExtension) {
+        if (realPath != null) {
+            return realPath;
+        }
         final StringBuilder builder = new StringBuilder();
         builder.append(File.separator);
         builder.append(relativePath);
@@ -229,4 +243,11 @@ public abstract class AbstractReportInvoker implements ReportCommand {
         this.cctDetailController = cctDetailController;
     }
 
+    public UserStampSignatureService getUserStampSignatureService() {
+        return userStampSignatureService;
+    }
+
+    public void setUserStampSignatureService(UserStampSignatureService userStampSignatureService) {
+        this.userStampSignatureService = userStampSignatureService;
+    }
 }

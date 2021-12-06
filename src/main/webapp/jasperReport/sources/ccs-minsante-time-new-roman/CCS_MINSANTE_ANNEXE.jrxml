@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CCS_MINSANTE" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ab09c848-fe40-4724-be9a-0874e8d853ec">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="144"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#FFBFBF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="fileItemsDataSet" uuid="45725d97-8500-4a56-b24b-58d91bca7804">
+		<field name="code" class="java.lang.String"/>
+		<field name="desc" class="java.lang.String"/>
+		<field name="quantity" class="java.lang.Double"/>
+		<variable name="TOTAL_QUANTITY" class="java.lang.Double" calculation="Sum">
+			<variableExpression><![CDATA[$F{quantity}]]></variableExpression>
+			<initialValueExpression><![CDATA[0]]></initialValueExpression>
+		</variable>
+	</subDataset>
+	<parameter name="DRAFT" class="java.lang.Boolean"/>
+	<parameter name="MINSANTE_LOGO" class="java.lang.String"/>
+	<field name="fileItemList" class="java.util.List"/>
+	<field name="containersNumbers" class="java.lang.String"/>
+	<field name="hasContainers" class="java.lang.Boolean"/>
+	<field name="controller" class="java.lang.String"/>
+	<field name="signatory" class="java.lang.String"/>
+	<field name="controllerStamp" class="java.io.InputStream"/>
+	<field name="controllerSignature" class="java.io.InputStream"/>
+	<field name="signatoryStamp" class="java.io.InputStream"/>
+	<field name="signatorySignature" class="java.io.InputStream"/>
+	<field name="decisionPlace" class="java.lang.String"/>
+	<background>
+		<band height="802" splitType="Stretch">
+			<printWhenExpression><![CDATA[$P{DRAFT}]]></printWhenExpression>
+			<image scaleImage="FillFrame">
+				<reportElement x="30" y="153" width="514" height="521" uuid="0f4abd6d-6c44-490e-93ba-f26a0ef94f87"/>
+				<imageExpression><![CDATA["../images/reports/draft.jpg"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="20" y="10" width="130" height="103" uuid="70432c6d-4f38-4f05-8c1e-ac89635c3acb"/>
+				<imageExpression><![CDATA["../images/reports/draft.jpg"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="445" y="10" width="130" height="103" uuid="8bd94b5a-2654-42ce-a6a0-8661adbba1fa"/>
+				<imageExpression><![CDATA["../images/reports/draft.jpg"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="435" y="699" width="130" height="103" uuid="0f130bc3-d99d-46a6-9913-2ec2c666ec74"/>
+				<imageExpression><![CDATA["../images/reports/draft.jpg"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="10" y="699" width="130" height="103" uuid="8f038a34-dae9-4a11-8924-a6d56d8f098f"/>
+				<imageExpression><![CDATA["../images/reports/draft.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="150" splitType="Stretch">
+			<image scaleImage="FillFrame">
+				<reportElement x="247" y="13" width="70" height="111" uuid="41ef1125-f941-4b55-9d05-068a6f56cdbb"/>
+				<imageExpression><![CDATA[new java.io.File($P{MINSANTE_LOGO})]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="0" y="0" width="225" height="135" uuid="0d2c6fe0-bb37-4851-ba98-d54eb32dc51a"/>
+				<textElement textAlignment="Center" markup="styled">
+					<font fontName="Times New Roman" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["REPUBLIQUE DU CAMEROUN<br />Paix-Travail-Patrie<br /><br />MINISTERE DE LA SANTE PUBLIQUE<br /><br />DELEGATION REGIONALE DE LA SANTE<br /><br />POSTE DE SANTE AUX FRONTIERES DU PORT AUTONOME DE "+ $F{decisionPlace}.toUpperCase() +"<br /><br />B.P : 106 "+$F{decisionPlace}+" TEL : 33-42-17-60"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="338" y="0" width="217" height="147" uuid="bca3a8fd-f836-48ae-b04a-a97c0840e73d"/>
+				<textElement textAlignment="Center" markup="styled">
+					<font fontName="Times New Roman" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["REPUBLIC OF CAMEROON<br />Peace-Work-Fatherland<br /><br />MINISTRY OF PUBLIC HEALTH<br /><br />REGIONAL DELEGATION OF PUBLIC HEALTH<br /><br />HEALTH PORT OFFICE OF "+ $F{decisionPlace}.toUpperCase() +"<br /><br />P.O BOX : 106 "+$F{decisionPlace}+" TEL : 33-42-17-60<br />FAX :233427610"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="64" splitType="Stretch">
+			<printWhenExpression><![CDATA[$F{hasContainers}]]></printWhenExpression>
+			<staticText>
+				<reportElement x="15" y="1" width="526" height="19" uuid="5bc50e13-9f88-48d6-b721-c03b863ce110"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Numéros des conteneurs]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="15" y="20" width="526" height="33" uuid="b63c07a7-2743-476a-999f-3a04a641982f"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{containersNumbers}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="130">
+			<componentElement>
+				<reportElement key="table" style="table" mode="Opaque" x="15" y="0" width="526" height="125" uuid="847b9c2a-1e93-4763-aed2-0526369badf5"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="fileItemsDataSet" uuid="001d2c82-7b6a-4b02-87b4-ecad39981811">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{fileItemList})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="100" uuid="38214fb5-9f68-41bb-9dec-f5e7f85a9f42">
+						<jr:columnHeader style="table" height="40" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="100" height="40" uuid="103a268e-69d5-4ce2-b83d-493a18a355ee"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="11" isBold="true"/>
+									<paragraph leftIndent="5"/>
+								</textElement>
+								<text><![CDATA[NSH]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table" height="40" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0"/>
+								<leftPen lineWidth="1.0"/>
+								<bottomPen lineWidth="1.0"/>
+								<rightPen lineWidth="0.0"/>
+							</box>
+						</jr:columnFooter>
+						<jr:detailCell style="table" height="44" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.25"/>
+								<leftPen lineWidth="1.0"/>
+							</box>
+							<textField>
+								<reportElement x="0" y="0" width="100" height="44" uuid="574239cb-7ea4-440f-9b87-77cba96ad0d0"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="9"/>
+									<paragraph leftIndent="5"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="326" uuid="c07ba6c8-379d-4551-9c89-8ce661abd0f7">
+						<jr:columnHeader style="table" height="40" rowSpan="1">
+							<box>
+								<leftPen lineWidth="0.25"/>
+							</box>
+							<staticText>
+								<reportElement x="0" y="0" width="326" height="40" uuid="6236dfb7-aaf3-4488-8c56-768ced73f852"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="11" isBold="true"/>
+									<paragraph leftIndent="5"/>
+								</textElement>
+								<text><![CDATA[Désignation de la marchandise]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table" height="40" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0"/>
+								<leftPen lineWidth="0.0"/>
+							</box>
+							<staticText>
+								<reportElement x="0" y="0" width="326" height="39" uuid="a28d53b1-16d8-4576-ad50-65c669b14344"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="11" isBold="true"/>
+									<paragraph leftIndent="5"/>
+								</textElement>
+								<text><![CDATA[Total]]></text>
+							</staticText>
+						</jr:columnFooter>
+						<jr:detailCell style="table" height="44" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0"/>
+								<leftPen lineWidth="0.0"/>
+							</box>
+							<textField>
+								<reportElement x="0" y="0" width="326" height="44" uuid="f78c9032-22c0-4d99-a082-1027e1c4df54"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="8"/>
+									<paragraph leftIndent="5"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{desc}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="100" uuid="cd84c9a6-fd1c-444f-b661-dc07e3fbc4b5">
+						<jr:columnHeader style="table" height="40" rowSpan="1">
+							<box>
+								<leftPen lineWidth="0.0"/>
+							</box>
+							<staticText>
+								<reportElement x="0" y="0" width="100" height="40" uuid="545ddb60-994b-491f-bfb2-4afaae3fd613"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="11" isBold="true"/>
+									<paragraph leftIndent="5"/>
+								</textElement>
+								<text><![CDATA[Tonnage(Kg)]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table" height="40" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0"/>
+								<leftPen lineWidth="0.0"/>
+							</box>
+							<textField>
+								<reportElement x="0" y="0" width="100" height="39" uuid="b596a6be-ab81-4cfa-a567-758c27fe5781"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="9"/>
+									<paragraph leftIndent="5"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{TOTAL_QUANTITY}]]></textFieldExpression>
+							</textField>
+						</jr:columnFooter>
+						<jr:detailCell style="table" height="44" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0"/>
+								<leftPen lineWidth="0.0"/>
+							</box>
+							<textField>
+								<reportElement x="0" y="0" width="100" height="44" uuid="9779e751-9ba6-46a5-b655-51c20ca800c2"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="9"/>
+									<paragraph leftIndent="5"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+		<band height="130">
+			<image scaleImage="FillFrame">
+				<reportElement x="421" y="39" width="89" height="80" uuid="1b470f63-0d5d-462f-beab-086b8b1e968a">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$F{signatorySignature}]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame">
+				<reportElement x="41" y="11" width="100" height="100" uuid="d6a29a68-6216-4bf7-b876-2d54a8ab9fc2">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$F{controllerStamp}]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame">
+				<reportElement x="361" y="12" width="100" height="100" uuid="cb89e001-9f3d-4d18-a77a-9c8509babafb">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$F{signatoryStamp}]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame">
+				<reportElement x="101" y="39" width="89" height="80" uuid="1186ba9b-dcb7-488f-a107-d4e7ac1ff562">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$F{controllerSignature}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="340" y="115" width="187" height="15" uuid="a5d98990-0cb0-45bf-be7b-d2b1ac0f36d0">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{signatory}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="340" y="100" width="187" height="14" uuid="66227c57-c9a3-4c5d-8577-e0902d67d2da">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="9" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Le Chef de Poste]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="100" width="209" height="14" uuid="b05661c1-33e5-4480-b9f3-6de5f5e21a7a">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="9" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Le Contrôleur/ Vérificateur]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="115" width="209" height="15" uuid="560a267e-e35e-470c-8788-45c808735428">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{controller}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="22" splitType="Stretch">
+			<staticText>
+				<reportElement x="278" y="2" width="7" height="20" uuid="f24d3e02-a7c4-408c-b431-b41ec4e5c68d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[/]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="285" y="2" width="8" height="20" uuid="ac48518e-2880-4393-94d6-e333e0182494"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_COUNT}+1]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="270" y="2" width="8" height="20" uuid="6638bac1-869f-4d4b-a980-fa505ef6de63"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}+1]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

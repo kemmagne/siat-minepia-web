@@ -16,6 +16,9 @@ public interface ReportCommand
 
 	/** The images path. */
 	String IMAGES_PATH = "images/reports";
+        
+        /** The pdf forms path. */
+        String PDF_FORMS_PATH = "pdfForms";
 
 	/**
 	 * Generate report.

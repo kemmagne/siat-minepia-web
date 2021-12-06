@@ -37,7 +37,6 @@
             <id>profile-ht</id>
             <properties>
                 <environment>ht</environment>
-                <!--<global-config.properties>/root/siat/config/ct/global-config.properties</global-config.properties>-->
                 <global-config.properties>${user.home}/siat/config/ct/global-config.properties</global-config.properties>
             </properties>
             <activation>
@@ -179,6 +178,16 @@
             <type>jar</type>
         </dependency>
         <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>2.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>fontbox</artifactId>
+            <version>2.0.4</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
             <version>3.7</version>
@@ -231,7 +240,7 @@
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports-fonts</artifactId>
-            <version>6.0.0</version>
+            <version>6.15.0</version>
         </dependency>
         <dependency>
             <groupId>ar.com.fdvs</groupId>

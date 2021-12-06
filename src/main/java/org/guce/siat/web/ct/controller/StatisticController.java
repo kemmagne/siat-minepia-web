@@ -3,6 +3,7 @@ package org.guce.siat.web.ct.controller;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,9 +11,12 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -28,6 +32,7 @@ import org.apache.commons.lang.StringUtils;
 import org.guce.siat.common.model.Bureau;
 import org.guce.siat.common.model.Company;
 import org.guce.siat.common.model.Country;
+import org.guce.siat.common.model.File;
 import org.guce.siat.common.model.FileItem;
 import org.guce.siat.common.model.FileType;
 import org.guce.siat.common.model.Flow;
@@ -53,6 +58,7 @@ import org.guce.siat.core.ct.filter.AnalyseFilter;
 import org.guce.siat.core.ct.filter.CteFilter;
 import org.guce.siat.core.ct.filter.Filter;
 import org.guce.siat.core.ct.filter.HistoricClientFilter;
+import org.guce.siat.core.ct.filter.ImCargFilter;
 import org.guce.siat.core.ct.filter.InspectionDestribFilter;
 import org.guce.siat.core.ct.filter.SampleFilter;
 import org.guce.siat.core.ct.filter.StatisticBusinessFilter;
@@ -71,6 +77,7 @@ import org.guce.siat.web.ct.data.DelayListingStakeholderData;
 import org.guce.siat.web.ct.data.ExportNshDestinationData;
 import org.guce.siat.web.ct.data.GlobalDelayListingData;
 import org.guce.siat.web.ct.data.GlobalQuantityListingData;
+import org.guce.siat.web.ct.data.ImCargData;
 import org.guce.siat.web.ct.data.ServiceItemDto;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -174,6 +181,8 @@ public class StatisticController extends AbstractController<FileItem> {
     private Filter filter;
 
     private CteFilter cteFilter;
+
+    private ImCargFilter imCargFilter;
 
     /**
      * The filter decision delivree.
@@ -344,6 +353,16 @@ public class StatisticController extends AbstractController<FileItem> {
     private List<Pair> treatmentSocieties;
     private List<Item> specificNshList;
 
+    private List<String> categories;
+    private List<String> models;
+    private List<String> marks;
+
+    private List<File> imCargFiles;
+    private List<String> yearsList;
+    private List<String> qvList;
+    private List<Country> countriesList;
+    private List<List<ImCargData>> imCargDataList;
+
     /**
      * Inits the.
      */
@@ -503,6 +522,29 @@ public class StatisticController extends AbstractController<FileItem> {
         cteFilter.setCreationFromDate(c.getTime());
         cteFilter.setCreationToDate(Calendar.getInstance().getTime());
         delayListingStakeholderDataList = new ArrayList<>();
+    }
+
+    public void initImCargFilesStatisticsSearch() {
+        imCargFilter = new ImCargFilter();
+        imCargFiles = new ArrayList<>();
+    }
+
+    public void initImCargStatisticsByProductSearch() {
+        imCargFilter = new ImCargFilter();
+        countries = countryService.findAll();
+        doImCargStatisticsByProductFilter();
+    }
+
+    public void initImCargStatisticsByImporterSearch() {
+        imCargFilter = new ImCargFilter();
+        countries = countryService.findAll();
+        doImCargStatisticsByImporterFilter();
+    }
+
+    public void initImCargStatisticsByCountrySearch() {
+        imCargFilter = new ImCargFilter();
+        countries = countryService.findAll();
+        doImCargStatisticsByCountryFilter();
     }
 
     public void initExportNshDestinationSearch() {
@@ -778,6 +820,66 @@ public class StatisticController extends AbstractController<FileItem> {
             final FacesContext context = FacesContext.getCurrentInstance();
             final ExternalContext extContext = context.getExternalContext();
             final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, ControllerConstants.Pages.FO.SEARCH_STATISTICS_ON_BUSINESS));
+            extContext.redirect(url);
+        } catch (final IOException ioe) {
+            logger.error(ioe.getMessage(), ioe);
+        }
+    }
+
+    /**
+     * Go to im carg files statistics page.
+     */
+    public void goToImCargFilesStatisticsPage() {
+        try {
+            initImCargFilesStatisticsSearch();
+            final FacesContext context = FacesContext.getCurrentInstance();
+            final ExternalContext extContext = context.getExternalContext();
+            final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, ControllerConstants.Pages.FO.SEARCH_IM_CARG_FILES_STATISTICS));
+            extContext.redirect(url);
+        } catch (final IOException ioe) {
+            logger.error(ioe.getMessage(), ioe);
+        }
+    }
+
+    /**
+     * Go to im carg statistics by product page.
+     */
+    public void goToImCargStatisticsByProductPage() {
+        try {
+            initImCargStatisticsByProductSearch();
+            final FacesContext context = FacesContext.getCurrentInstance();
+            final ExternalContext extContext = context.getExternalContext();
+            final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, ControllerConstants.Pages.FO.SEARCH_IM_CARG_STATISTICS_BY_PRODUCT));
+            extContext.redirect(url);
+        } catch (final IOException ioe) {
+            logger.error(ioe.getMessage(), ioe);
+        }
+    }
+
+    /**
+     * Go to im carg statistics by importer page.
+     */
+    public void goToImCargStatisticsByImporterPage() {
+        try {
+            initImCargStatisticsByImporterSearch();
+            final FacesContext context = FacesContext.getCurrentInstance();
+            final ExternalContext extContext = context.getExternalContext();
+            final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, ControllerConstants.Pages.FO.SEARCH_IM_CARG_STATISTICS_BY_IMPORTER));
+            extContext.redirect(url);
+        } catch (final IOException ioe) {
+            logger.error(ioe.getMessage(), ioe);
+        }
+    }
+
+    /**
+     * Go to im carg statistics by provenance country page.
+     */
+    public void goToImCargStatisticsByCountryPage() {
+        try {
+            initImCargStatisticsByCountrySearch();
+            final FacesContext context = FacesContext.getCurrentInstance();
+            final ExternalContext extContext = context.getExternalContext();
+            final String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, ControllerConstants.Pages.FO.SEARCH_IM_CARG_STATISTICS_BY_COUNTRY));
             extContext.redirect(url);
         } catch (final IOException ioe) {
             logger.error(ioe.getMessage(), ioe);
@@ -1085,6 +1187,215 @@ public class StatisticController extends AbstractController<FileItem> {
                 exportNshDestinationData.setOfficeLabel(object[13].toString());
             }
             exportNshDestinationDataList.add(exportNshDestinationData);
+        }
+    }
+
+    public void doImCargFilesStatisticsFilter() {
+        imCargFiles = commonService.findImCargFiles(imCargFilter);
+    }
+
+    public void doImCargStatisticsByProductFilter() {
+        if (!checkYears()) {
+            return;
+        }
+
+        List<Object[]> objects = commonService.findImCargStatisticsByProduct(imCargFilter);
+
+        nshList = new ArrayList<>(getNshs(objects));
+        int nbRows = nshList.size();
+        int nbCols = yearsList.size();
+        imCargDataList = new ArrayList<>();
+        ImCargData data;
+        DecimalFormat df = new DecimalFormat("0.00");
+        for (int i = 0; i < nbRows; i++) {
+            List<ImCargData> list = new ArrayList<>();
+            for (int j = 0; j < nbCols - 1; j++) {
+                putQv(objects, list, nshList.get(i).getGoodsItemCode(), yearsList.get(j));
+            }
+
+            data = new ImCargData();
+            double d = (Double.parseDouble(list.get(qvList.size() - 4).getQv()) - Double.parseDouble(list.get(qvList.size() - 6).getQv())) / 100;
+            data.setQv(df.format(d));
+            list.add(data);
+
+            data = new ImCargData();
+            d = (Double.parseDouble(list.get(qvList.size() - 3).getQv()) - Double.parseDouble(list.get(qvList.size() - 5).getQv())) / 100;
+            data.setQv(df.format(d));
+            list.add(data);
+
+            imCargDataList.add(list);
+        }
+    }
+
+    public void doImCargStatisticsByImporterFilter() {
+        if (!checkYears()) {
+            return;
+        }
+
+        List<Object[]> objects = commonService.findImCargStatisticsByImporter(imCargFilter);
+
+        clientList = new ArrayList<>(getImporters(objects));
+        int nbRows = clientList.size();
+        int nbCols = yearsList.size();
+        imCargDataList = new ArrayList<>();
+        ImCargData data;
+        DecimalFormat df = new DecimalFormat("0.00");
+        for (int i = 0; i < nbRows; i++) {
+            List<ImCargData> list = new ArrayList<>();
+            for (int j = 0; j < nbCols - 1; j++) {
+                putQv(objects, list, clientList.get(i).getNumContribuable(), yearsList.get(j));
+            }
+
+            data = new ImCargData();
+            double d = (Double.parseDouble(list.get(qvList.size() - 4).getQv()) - Double.parseDouble(list.get(qvList.size() - 6).getQv())) / 100;
+            data.setQv(df.format(d));
+            list.add(data);
+
+            data = new ImCargData();
+            d = (Double.parseDouble(list.get(qvList.size() - 3).getQv()) - Double.parseDouble(list.get(qvList.size() - 5).getQv())) / 100;
+            data.setQv(df.format(d));
+            list.add(data);
+
+            imCargDataList.add(list);
+        }
+    }
+
+    public void doImCargStatisticsByCountryFilter() {
+        if (!checkYears()) {
+            return;
+        }
+
+        List<Object[]> objects = commonService.findImCargStatisticsByCountry(imCargFilter);
+
+        countriesList = new ArrayList<>(getCountries(objects));
+        int nbRows = countriesList.size();
+        int nbCols = yearsList.size();
+        imCargDataList = new ArrayList<>();
+        ImCargData data;
+        DecimalFormat df = new DecimalFormat("0.00");
+        for (int i = 0; i < nbRows; i++) {
+            List<ImCargData> list = new ArrayList<>();
+            for (int j = 0; j < nbCols - 1; j++) {
+                putQv(objects, list, countriesList.get(i).getCountryIdAlpha2(), yearsList.get(j));
+            }
+
+            data = new ImCargData();
+            double d = (Double.parseDouble(list.get(qvList.size() - 4).getQv()) - Double.parseDouble(list.get(qvList.size() - 6).getQv())) / 100;
+            data.setQv(df.format(d));
+            list.add(data);
+
+            data = new ImCargData();
+            d = (Double.parseDouble(list.get(qvList.size() - 3).getQv()) - Double.parseDouble(list.get(qvList.size() - 5).getQv())) / 100;
+            data.setQv(df.format(d));
+            list.add(data);
+
+            imCargDataList.add(list);
+        }
+    }
+
+    private boolean checkYears() {
+        Calendar calendar = Calendar.getInstance();
+        int yearEnd = calendar.get(Calendar.YEAR);
+        int yearStart = yearEnd - 3;
+
+        if (StringUtils.isNotBlank(imCargFilter.getYearStart()) && StringUtils.isBlank(imCargFilter.getYearEnd())) {
+            try {
+                yearStart = Integer.parseInt(imCargFilter.getYearStart());
+                yearEnd = yearStart + 3;
+            } catch (NumberFormatException nfe) {
+                return false;
+            }
+        } else if (StringUtils.isBlank(imCargFilter.getYearStart()) && StringUtils.isNotBlank(imCargFilter.getYearEnd())) {
+            try {
+                yearEnd = Integer.parseInt(imCargFilter.getYearEnd());
+                yearStart = yearEnd - 3;
+            } catch (NumberFormatException nfe) {
+                return false;
+            }
+        } else if (StringUtils.isNotBlank(imCargFilter.getYearStart()) && StringUtils.isNotBlank(imCargFilter.getYearEnd())) {
+            try {
+                yearStart = Integer.parseInt(imCargFilter.getYearStart());
+                yearEnd = Integer.parseInt(imCargFilter.getYearEnd());
+                if (yearEnd - yearStart != 3) {
+                    return false;
+                }
+            } catch (NumberFormatException nfe) {
+                return false;
+            }
+        }
+
+        imCargFilter.setYearStart(yearStart + "");
+        imCargFilter.setYearEnd(yearEnd + "");
+        yearsList = Arrays.asList((yearEnd - 3) + "", (yearEnd - 2) + "", (yearEnd - 1) + " (1)", yearEnd + " (2)", "Variation en % (2)/(1)");
+
+        int size = yearsList.size();
+        qvList = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            qvList.add("Q");
+            qvList.add("V");
+        }
+
+        return true;
+    }
+
+    private Set<Item> getNshs(List<Object[]> objects) {
+        Set<Item> set = new HashSet<>();
+        for (Object[] line : objects) {
+            if (line[0] == null) {
+                continue;
+            }
+            set.add(new Item(line[0].toString()));
+        }
+        return set;
+    }
+
+    private Set<Company> getImporters(List<Object[]> objects) {
+        Set<Company> set = new HashSet<>();
+        for (Object[] line : objects) {
+            if (line[0] == null) {
+                continue;
+            }
+            set.add(new Company(line[0].toString(), null));
+        }
+        return set;
+    }
+
+    private Set<Country> getCountries(List<Object[]> objects) {
+        Set<Country> set = new HashSet<>();
+        for (Object[] line : objects) {
+            if (line[0] == null) {
+                continue;
+            }
+            set.add(new Country(line[0].toString(), null));
+        }
+        return set;
+    }
+
+    private void putQv(List<Object[]> objects, List<ImCargData> list, String nsh, String year) {
+        ImCargData data;
+        boolean ok = false;
+        for (Object[] line : objects) {
+            if (line[0].toString().equals(nsh) && line[1].toString().equals(year.split(" ")[0])) {
+                data = new ImCargData();
+                data.setQv(line[2].toString());
+                list.add(data);
+
+                data = new ImCargData();
+                data.setQv(line[3].toString());
+                list.add(data);
+                ok = true;
+                break;
+            }
+        }
+
+        if (!ok) {
+            data = new ImCargData();
+            data.setQv("0");
+            list.add(data);
+
+            data = new ImCargData();
+            data.setQv("0");
+            list.add(data);
         }
     }
 
@@ -1888,6 +2199,14 @@ public class StatisticController extends AbstractController<FileItem> {
         this.cteFilter = cteFilter;
     }
 
+    public ImCargFilter getImCargFilter() {
+        return imCargFilter;
+    }
+
+    public void setImCargFilter(ImCargFilter imCargFilter) {
+        this.imCargFilter = imCargFilter;
+    }
+
     public BureauService getBureauService() {
         return bureauService;
     }
@@ -2551,10 +2870,10 @@ public class StatisticController extends AbstractController<FileItem> {
     public void setExporter(CustomizedExporter exporter) {
         this.exporter = exporter;
     }
-    
+
     public List<Pair> searchCompanies(String query) {
         List<Pair> companies = new ArrayList<>();
-        if(query != null && !query.isEmpty()){
+        if (query != null && !query.isEmpty()) {
             String queryLowerCase = query.toLowerCase();
             companies = companyService.findCompaniesByNumeroContribuableOrCompanyName(queryLowerCase);
         }
@@ -2563,38 +2882,78 @@ public class StatisticController extends AbstractController<FileItem> {
 
     public List<Item> searchNsh(String query) {
         List<Item> nshSearchList = new ArrayList<>();
-        if(query != null && !query.isEmpty()){
+        if (query != null && !query.isEmpty()) {
             String queryLowerCase = query.toLowerCase();
             nshSearchList = itemService.findNSHByCodeAndDescriptionAndFileTypes(queryLowerCase, FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI);
         }
         return nshSearchList;
     }
-    
-    
+
     public List<Pair> searchDestinationCountries(String query) {
         List<Pair> destCountries = new ArrayList<>();
-        if(query != null && !query.isEmpty()){
+        if (query != null && !query.isEmpty()) {
             String queryLowerCase = query.toLowerCase();
             destCountries = minaderStatisticsService.findDestinationCountriesByCodeORNameLike(queryLowerCase);
         }
         return destCountries;
     }
-    
+
     public List<Pair> searchCdas(String query) {
         List<Pair> cadsList = new ArrayList<>();
-        if(query != null && !query.isEmpty()){
+        if (query != null && !query.isEmpty()) {
             String queryLowerCase = query.toLowerCase();
             cadsList = minaderStatisticsService.findCDAsByNuiOrNameLike(queryLowerCase);
         }
         return cadsList;
     }
-    
+
     public List<Pair> searchTreatmentSocieties(String query) {
         List<Pair> treatmentSocietiesList = new ArrayList<>();
-        if(query != null && !query.isEmpty()){
+        if (query != null && !query.isEmpty()) {
             String queryLowerCase = query.toLowerCase();
             treatmentSocietiesList = minaderStatisticsService.findTreatmentSocietiesByNuiOrNameLike(queryLowerCase);
         }
         return treatmentSocietiesList;
     }
+
+    public List<String> getCategories() {
+        return categories;
+    }
+
+    public List<String> getModels() {
+        return models;
+    }
+
+    public List<String> getMarks() {
+        return marks;
+    }
+
+    public List<File> getImCargFiles() {
+        return imCargFiles;
+    }
+
+    public List<String> getYearsList() {
+        return yearsList;
+    }
+
+    public List<String> getQvList() {
+        return qvList;
+    }
+
+    public List<List<ImCargData>> getImCargDataList() {
+        return imCargDataList;
+    }
+
+    public List<Country> getCountriesList() {
+        return countriesList;
+    }
+
+    public boolean isMincommerce() {
+        return getCurrentMinistry() != null && Constants.MINCOMMERCE_MINISTRY.equals(getCurrentMinistry().getCode());
+    }
+
+    public boolean isMinader() {
+        return getCurrentMinistry() != null && Constants.MINADER_MINISTRY.equals(getCurrentMinistry().getCode());
+    }
+
 }
