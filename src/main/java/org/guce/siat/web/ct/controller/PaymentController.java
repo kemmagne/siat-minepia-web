@@ -36,6 +36,7 @@ import org.guce.siat.common.service.ServiceService;
 import org.guce.siat.common.service.UserAuthorityFileTypeService;
 import org.guce.siat.common.utils.Constants;
 import org.guce.siat.common.utils.enums.FileTypeCode;
+import org.guce.siat.common.utils.enums.FlowCode;
 import org.guce.siat.core.ct.filter.PaymentFilter;
 import org.guce.siat.core.ct.model.PaymentData;
 import org.guce.siat.core.ct.service.CommonService;
@@ -234,11 +235,15 @@ public class PaymentController extends AbstractController<FileItem> {
     public void goToCostsPage() {
         try {
             final FileItem selectedFileItem = selectedFile.getFile().getFileItemsList().get(0);
-            final ItemFlow lastItemFlow = itemFlowService.findLastSentItemFlowByFileItem(selectedFileItem);
-            final PaymentData paymentData;
+            ItemFlow lastItemFlow = itemFlowService.findLastSentItemFlowByFileItem(selectedFileItem);
+            PaymentData paymentData = null;
             if (isPhyto(selectedFile.getFile())) {
                 paymentData = paymentDataService.findPaymentDataByFileItem(selectedFileItem);
-            } else {
+            } else if (isCcsMinsante(selectedFile.getFile())) {
+                paymentData = getPaymentDataByFileAndPaymentFlow(selectedFile.getFile(), FlowCode.FL_CT_158);
+            } else if (isVtMinepia(selectedFile.getFile())) {
+                paymentData = getPaymentDataByFileAndPaymentFlow(selectedFile.getFile(), FlowCode.FL_AP_VT1_01);
+            }  else {
                 paymentData = paymentDataService.findPaymentDataByItemFlow(lastItemFlow);
             }
 
@@ -336,11 +341,15 @@ public class PaymentController extends AbstractController<FileItem> {
         fileDtoList = new ArrayList<>();
         for (final File paymentFile : paymentFileList) {
             final FileDto fileDto = new FileDto();
-            PaymentData paymentData;
+            PaymentData paymentData = null;
             fileDto.setFile(paymentFile);
 
             if (isPhyto(paymentFile)) {
                 paymentData = paymentDataService.findPaymentDataByFileItem(paymentFile.getFileItemsList().get(0));
+            } else if (isCcsMinsante(paymentFile)) {
+                paymentData = getPaymentDataByFileAndPaymentFlow(paymentFile, FlowCode.FL_CT_158);
+            } else if (isVtMinepia(paymentFile)) {
+                paymentData = getPaymentDataByFileAndPaymentFlow(paymentFile, FlowCode.FL_AP_VT1_01);
             } else {
                 final ItemFlow lastItemFlow = itemFlowService.findLastSentItemFlowByFileItem(paymentFile.getFileItemsList().get(0));
                 paymentData = paymentDataService.findPaymentDataByItemFlow(lastItemFlow);
@@ -687,4 +696,27 @@ public class PaymentController extends AbstractController<FileItem> {
         return checkMinaderMinistry && Arrays.asList(FileTypeCode.CCT_CT_E, FileTypeCode.CCT_CT_E_ATP, FileTypeCode.CCT_CT_E_FSTP, FileTypeCode.CCT_CT_E_PVE, FileTypeCode.CCT_CT_E_PVI).contains(currentFile.getFileType().getCode());
     }
 
+    public boolean isCcsMinsante(File currentFile) {
+        return FileTypeCode.CCS_MINSANTE.equals(currentFile.getFileType().getCode());
+    }
+
+    public boolean isVtMinepia(File currentFile) {
+        return FileTypeCode.VT_MINEPIA.equals(currentFile.getFileType().getCode());
+    }
+
+    private PaymentData getPaymentDataByFileAndPaymentFlow(File file, FlowCode paymentFlowCode) {
+        ItemFlow lastItemFlow;
+        PaymentData paymentData = null;
+        final List<ItemFlow> lastPaymentItemFlowList = itemFlowService.findLastItemFlowsByFileAndFlow(file, paymentFlowCode);
+        if (lastPaymentItemFlowList != null && !lastPaymentItemFlowList.isEmpty()) {
+            for (final ItemFlow itemFlow : lastPaymentItemFlowList) {
+                lastItemFlow = itemFlow;
+                paymentData = paymentDataService.findPaymentDataByItemFlow(lastItemFlow);
+                if (paymentData != null) {
+                    break;
+                }
+            }
+        }
+        return paymentData;
+    }
 }
