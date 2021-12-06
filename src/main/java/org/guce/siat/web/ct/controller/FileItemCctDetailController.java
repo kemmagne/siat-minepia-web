@@ -6760,9 +6760,9 @@ public class FileItemCctDetailController extends DefaultDetailController {
     @Override
     public boolean canDecide() {
         UserAuthorityFileType uaft = userAuthorityFileTypeService.findByCurrentStepFileAndLoggedUser(currentStep, currentFile, getLoggedUser());
-        userDecisionAllowed = uaft != null || "standalone".equals(applicationPropretiesService.getAppEnv());
-        if (currentFileItem.getStep() != null && currentFileItem.getStep().getTreatmentStep() != null && currentFileItem.getStep().getTreatmentStep()) {
-            userDecisionAllowed = Objects.equals(getLoggedUser(), currentFile.getAssignedUser()) || "standalone".equals(applicationPropretiesService.getAppEnv());
+        userDecisionAllowed = uaft != null;
+        if (userDecisionAllowed && BooleanUtils.toBoolean(currentFileItem.getStep().getTreatmentStep()) && checkMinaderMinistry) {
+            userDecisionAllowed = Objects.equals(getLoggedUser(), currentFile.getAssignedUser());
         }
         return userDecisionAllowed;
     }
@@ -6770,7 +6770,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
     @Override
     public boolean canConfirm() {
         ItemFlow itemFlow = currentFileItem.getItemFlowsList().get(0);
-        userConfirmationAllowed = getLoggedUser().equals(itemFlow.getSender()) || "standalone".equals(applicationPropretiesService.getAppEnv());
+        userConfirmationAllowed = getLoggedUser().equals(itemFlow.getSender());
         return userConfirmationAllowed;
     }
 
