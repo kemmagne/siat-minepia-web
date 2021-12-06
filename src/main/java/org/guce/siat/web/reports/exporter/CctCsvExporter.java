@@ -10,9 +10,12 @@ import java.util.List;
 import java.util.Objects;
 
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.commons.data.ContentStream;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.guce.siat.common.lookup.ServiceUtility;
 import org.guce.siat.common.model.File;
 import org.guce.siat.common.model.FileFieldValue;
 import org.guce.siat.common.model.FileItem;
@@ -21,8 +24,12 @@ import org.guce.siat.common.model.ItemFlow;
 import org.guce.siat.common.model.ItemFlowData;
 import org.guce.siat.common.model.User;
 import org.guce.siat.common.utils.QRCodeGenerator;
+import org.guce.siat.common.utils.ged.CmisClient;
+import org.guce.siat.common.utils.ged.CmisSession;
 ;
 import org.guce.siat.core.ct.model.ApprovedDecision;
+import org.guce.siat.core.ct.model.UserStampSignature;
+import org.guce.siat.core.ct.service.UserStampSignatureService;
 import org.guce.siat.web.reports.vo.CtCctCsvFileItemVo;
 import org.guce.siat.web.reports.vo.CtCctCsvFileVo;
 
@@ -164,11 +171,14 @@ public class CctCsvExporter extends AbstractReportInvoker {
                         case "ZONE_DESTINATION_NOM":
                             ctCctCsvFileVo.setZoneOfDestination(fileFieldValue.getValue());
                             break;
-                        case "LIEU_ORIGINE_NOM":
+                        case "MINEPIA_LIEU_ORIGINE_NOM":
                             ctCctCsvFileVo.setPlaceOfOriginName(fileFieldValue.getValue());
                             break;
-                        case "LIEU_ORIGINE_ADRESSE":
+                        case "MINEPIA_LIEU_ORIGINE_ADRESSE":
                             ctCctCsvFileVo.setPlaceOfOriginAddress(fileFieldValue.getValue());
+                            break;
+                        case "MINEPIA_ZONE_ORIGINE":
+                            ctCctCsvFileVo.setZoneOfOrigin(fileFieldValue.getValue());
                             break;
                         case "EXPEDITION_DATE_EXPEDITION_DATE":
                             if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
@@ -275,8 +285,10 @@ public class CctCsvExporter extends AbstractReportInvoker {
                             ctCctCsvFileVo.setCvsIdContainersSeals(value);
                             break;
                         }
-                        default:
+                        case "INFORMATIONS_GENERALES_LIEU_DECHARGEMENT_UNLOCODE": {
+                            ctCctCsvFileVo.setUnloadingPlace(fileFieldValue.getValue());
                             break;
+                        }
                     }
                 }
             }
@@ -383,7 +395,7 @@ public class CctCsvExporter extends AbstractReportInvoker {
                                 case "NUMERO_CONTENEUR":
                                     fileItemVo.setContainerNumber(fileItemFieldValue.getValue());
                                     break;
-                                case "SPECIFICATION_TECHNIQUE":
+                                case "DESCRIPTION":
                                     fileItemVo.setDesc(fileItemFieldValue.getValue());
                                     break;
 //                                case "QUANTITE":
@@ -441,6 +453,27 @@ public class CctCsvExporter extends AbstractReportInvoker {
             }
 
             ctCctCsvFileVo.setFileItemList(fileItemVos);
+
+            try {
+                Session sessionCmisClient = CmisSession.getInstance();
+                ContentStream contentStream;
+                UserStampSignatureService stampSignatureService = ServiceUtility.getBean(UserStampSignatureService.class);
+                UserStampSignature stampSignature = stampSignatureService.findUserStampSignatureByUser(file.getSignatory());
+                if (stampSignature != null && stampSignature.getSignaturePath() != null) {
+                    contentStream = CmisClient.getDocumentByPath(sessionCmisClient, stampSignature.getSignaturePath());
+                    if (contentStream != null) {
+                        ctCctCsvFileVo.setSignature(contentStream.getStream());
+                    }
+                }
+                if (stampSignature != null && stampSignature.getStampPath() != null) {
+                    contentStream = CmisClient.getDocumentByPath(sessionCmisClient, stampSignature.getStampPath());
+                    if (contentStream != null) {
+                        ctCctCsvFileVo.setStamp(contentStream.getStream());
+                    }
+                }
+            } catch (Exception ex) {
+                logger.error(file.getNumeroDossier(), ex);
+            }
         }
 
         return new JRBeanCollectionDataSource(Collections.singleton(ctCctCsvFileVo));
