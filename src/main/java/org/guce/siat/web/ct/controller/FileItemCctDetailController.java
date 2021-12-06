@@ -6315,7 +6315,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                     case CCT_CT_E: {
                         ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(ffi, FlowCode.FL_CT_151);
                         if (itemFlow == null) {
-                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(currentFileItem, FlowCode.FL_CT_07);
+                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(ffi, FlowCode.FL_CT_07);
                         }
                         if (itemFlow == null) {
                             itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(ffi, FlowCode.FL_CT_112);
@@ -6358,7 +6358,6 @@ public class FileItemCctDetailController extends DefaultDetailController {
                             }
 
                             reportInvoker = new CtCctCpEExporter(file, ti, paramValue, "CERTIFICAT_PHYTOSANITAIRE");
-
                         } else if ("CQ_CT".equals(ti.getDelivrableType())) {
                             reportInvoker = new CtCctCqeExporter(file, ti);
                         }
@@ -6367,9 +6366,9 @@ public class FileItemCctDetailController extends DefaultDetailController {
                     case CCT_CT_E_PVI: {
                         ItemFlow itemFlow;
                         if (currentFile.getParent() == null) {
-                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
+                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(ffi, FlowCode.FL_CT_07);
                         } else {
-                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_112);
+                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(ffi, FlowCode.FL_CT_112);
                         }
                         final InspectionReport ir = inspectionReportService.findByItemFlow(itemFlow);
                         if (draft) {
@@ -6382,9 +6381,9 @@ public class FileItemCctDetailController extends DefaultDetailController {
                     case CCT_CT_E_ATP: {
                         ItemFlow itemFlow;
                         if (currentFile.getParent() == null) {
-                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
+                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(ffi, FlowCode.FL_CT_07);
                         } else {
-                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_112);
+                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(ffi, FlowCode.FL_CT_112);
                         }
                         TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
                         if (draft) {
@@ -6397,9 +6396,9 @@ public class FileItemCctDetailController extends DefaultDetailController {
                     case CCT_CT_E_FSTP: {
                         ItemFlow itemFlow;
                         if (currentFile.getParent() == null) {
-                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
+                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(ffi, FlowCode.FL_CT_07);
                         } else {
-                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_112);
+                            itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(ffi, FlowCode.FL_CT_112);
                         }
                         TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
                         reportInvokersForFstpAndAtp = new ArrayList<>();
@@ -6424,8 +6423,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                         break;
                 }
             } else if (FlowCode.FL_CT_121.name().equals(flow.getCode()) || FlowCode.FL_CT_133.name().equals(flow.getCode())) {
-
-                PaymentData payData = paymentDataService.findPaymentDataByFileItem(file.getFileItemsList().get(0));
+                PaymentData payData = paymentDataService.findPaymentDataByFileItem(ffi);
                 Constructor constructor = classe.getConstructor(File.class, PaymentData.class);
                 reportInvoker = (AbstractReportInvoker) constructor.newInstance(file, payData);
             }
@@ -6434,8 +6432,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
             switch (file.getFileType().getCode()) {
                 case CCT_CT: {
                     if (approvedDecision == null) {
-                        lastDecisions = itemFlowService.findLastSentItemFlowByFileItem(selectedFileItemCheck.getFileItem());
-
+                        lastDecisions = itemFlowService.findLastSentItemFlowByFileItem(ffi);
                         approvedDecision = approvedDecisionService.findApprovedDecisionByItemFlow(lastDecisions);
                     }
                     reportInvoker = new CtCctCsvExporter(file, loggedUser, approvedDecision);
@@ -6445,9 +6442,9 @@ public class FileItemCctDetailController extends DefaultDetailController {
         } else if (FileTypeCode.CCS_MINSANTE.equals(file.getFileType().getCode())) {
             ItemFlow itemFlow;
             if (file.getParent() != null) {
-                itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_CCS_03);
+                itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(ffi, FlowCode.FL_CT_CCS_03);
             } else {
-                itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(currentFileItem, FlowCode.FL_CT_07);
+                itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(ffi, FlowCode.FL_CT_07);
             }
             final TreatmentInfosCCSMinsante tr = treatmentInfosCCSMinsanteService.findTreatmentInfosByItemFlow(itemFlow);
             List<AbstractReportInvoker> reportInvokersPrincipalAndAnnex = new ArrayList<>();
