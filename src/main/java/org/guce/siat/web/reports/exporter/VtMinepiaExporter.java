@@ -1,5 +1,7 @@
 package org.guce.siat.web.reports.exporter;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -7,6 +9,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
@@ -15,146 +19,215 @@ import org.apache.commons.lang.StringUtils;
 import org.guce.siat.common.model.File;
 import org.guce.siat.common.model.FileFieldValue;
 import org.guce.siat.common.model.FileItem;
+import org.guce.siat.common.service.ApplicationPropretiesService;
 import org.guce.siat.common.utils.DateUtils;
 import org.guce.siat.web.reports.vo.VtMinepiaFileItemVo;
 import org.guce.siat.web.reports.vo.VtMinepiaFileVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.guce.siat.common.lookup.ServiceUtility;
+import org.guce.siat.web.ct.controller.util.Utils;
 
 /**
  * The Class VtMinepiaExporter.
  */
 public class VtMinepiaExporter extends AbstractReportInvoker {
 
-	/**
-	 * The Constant LOG.
-	 */
-	private static final Logger LOG = LoggerFactory.getLogger(VtMinepiaExporter.class);
+    /**
+     * The Constant LOG.
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(VtMinepiaExporter.class);
 
-	/**
-	 * The file.
-	 */
-	private final File file;
+    /**
+     * The file.
+     */
+    private final File file;
 
-	/**
-	 * Instantiates a new vt minepia exporter.
-	 *
-	 * @param file the file
-	 */
-	public VtMinepiaExporter(final File file) {
-		super("VT_MINEPIA", "VT_MINEPIA");
-		this.file = file;
-	}
+    /**
+     * Instantiates a new vt minepia exporter.
+     *
+     * @param file the file
+     */
+    public VtMinepiaExporter(final File file) {
+        super("VT_MINEPIA", "VT_MINEPIA");
+        this.file = file;
+    }
 
-	/*
+    /*
 	 * (non-Javadoc)
 	 *
 	 * @see org.guce.siat.web.reports.vo.JasperExporter#getReportDataSource(java.lang.Object[])
-	 */
-	@Override
-	public JRBeanCollectionDataSource getReportDataSource() {
+     */
+    @Override
+    public JRBeanCollectionDataSource getReportDataSource() {
 
-		final VtMinepiaFileVo vtMinepiaVo = new VtMinepiaFileVo();
+        final VtMinepiaFileVo vtMinepiaVo = new VtMinepiaFileVo();
 
-		if ((file != null)) {
-			final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
-			
-			if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
-				for (final FileFieldValue fileFieldValue : fileFieldValueList) {
-					switch (fileFieldValue.getFileField().getCode()) {
-						case "NUMERO_VT_MINEPIA":
-							vtMinepiaVo.setDecisionNumber(fileFieldValue.getValue());
-							break;
-						case "FACTURE_NUMERO_FACTURE":
-							vtMinepiaVo.setInvoice(fileFieldValue.getValue());
-							break;
-						case "PAYS_ORIGINE_LIBELLE":
-							vtMinepiaVo.setCountryOfOrigin(fileFieldValue.getValue());
-							break;
-						case "PAYS_PROVENANCE_LIBELLE":
-							vtMinepiaVo.setCountryOfProvenance(fileFieldValue.getValue());
-							break;
-						case "FOURNISSEUR_RAISONSOCIALE":
-							vtMinepiaVo.setProvider(fileFieldValue.getValue());
-							break;
-						case "SIGNATAIRE_DATE":
-							if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
-								try {
-									vtMinepiaVo.setDecisionDate(new SimpleDateFormat("dd/MM/yyyy").parse(fileFieldValue.getValue()));
-                                                                        vtMinepiaVo.setSignatureDate(fileFieldValue.getValue());
-								} catch (final ParseException e) {
-									LOG.error(Objects.toString(e), e);
-								}
-							}
-							break;
-						case "SIGNATAIRE_LIEU":
-							vtMinepiaVo.setDecisionPlace(fileFieldValue.getValue());
-							break;
-						default:
-							break;
-					}
-				}
-			}
-                        String numeroDossier = file.getParent() != null ? file.getParent().getNumeroDossier() : file.getNumeroDossier();
-                        vtMinepiaVo.setDecisionNumber(numeroDossier);
-                        if(StringUtils.isEmpty(vtMinepiaVo.getDecisionPlace())){
-                            vtMinepiaVo.setDecisionPlace("Douala");
-                        }
+        if ((file != null)) {
+            final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
 
-			if ((file.getClient() != null)) {
-				vtMinepiaVo.setImporter(file.getClient().getCompanyName());
-				vtMinepiaVo.setAddress(file.getClient().getFullAddress());
-				vtMinepiaVo.setProfession(file.getClient().getProfession());
-			}
-                        
-                        if(file.getSignatory() != null){
-                            vtMinepiaVo.setSignatory(String.format("%s %s", file.getSignatory().getFirstName(), file.getSignatory().getLastName()));
-                        }
-                        if(file.getSignatureDate() != null){
-                            String signatureDate = DateUtils.formatSimpleDate("dd/MM/yyyy", file.getSignatureDate());
-                            vtMinepiaVo.setSignatureDate(signatureDate);
-                        }
-                        vtMinepiaVo.setCode(String.format("%s/%s", file.getNumeroDemande(), numeroDossier));
-			final List<FileItem> fileItemList = file.getFileItemsList();
+            if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
+                for (final FileFieldValue fileFieldValue : fileFieldValueList) {
+                    switch (fileFieldValue.getFileField().getCode()) {
+                        case "NUMERO_VT_MINEPIA":
+                            vtMinepiaVo.setDecisionNumber(fileFieldValue.getValue());
+                            break;
+                        case "FACTURE_NUMERO_FACTURE":
+                            vtMinepiaVo.setInvoice(fileFieldValue.getValue());
+                            break;
+                        case "PAYS_ORIGINE_LIBELLE":
+                            vtMinepiaVo.setCountryOfOrigin(fileFieldValue.getValue());
+                            break;
+                        case "PAYS_PROVENANCE_LIBELLE":
+                            vtMinepiaVo.setCountryOfProvenance(fileFieldValue.getValue());
+                            break;
+                        case "FOURNISSEUR_RAISONSOCIALE":
+                            vtMinepiaVo.setProvider(fileFieldValue.getValue());
+                            break;
+                        case "SIGNATAIRE_DATE":
+                            if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
+                                try {
+                                    vtMinepiaVo.setDecisionDate(new SimpleDateFormat("dd/MM/yyyy").parse(fileFieldValue.getValue()));
+                                    vtMinepiaVo.setSignatureDate(fileFieldValue.getValue());
+                                } catch (final ParseException e) {
+                                    LOG.error(Objects.toString(e), e);
+                                }
+                            }
+                            break;
+                        case "SIGNATAIRE_LIEU":
+                            vtMinepiaVo.setDecisionPlace(fileFieldValue.getValue());
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            String numeroDossier = file.getParent() != null ? file.getParent().getNumeroDossier() : file.getNumeroDossier();
+            vtMinepiaVo.setDecisionNumber(numeroDossier);
+            if (StringUtils.isEmpty(vtMinepiaVo.getDecisionPlace())) {
+                vtMinepiaVo.setDecisionPlace("Douala");
+            }
 
-			final List<VtMinepiaFileItemVo> fileItemVos = new ArrayList<VtMinepiaFileItemVo>();
+            if ((file.getClient() != null)) {
+                vtMinepiaVo.setImporter(file.getClient().getCompanyName());
+                vtMinepiaVo.setAddress(file.getClient().getFullAddress());
+                vtMinepiaVo.setProfession(file.getClient().getProfession());
+            }
 
-			if (CollectionUtils.isNotEmpty(fileItemList)) {
-				for (final FileItem fileItem : fileItemList) {
-					final VtMinepiaFileItemVo fileItemVo = new VtMinepiaFileItemVo();
-					fileItemVo.setCode(fileItem.getNsh() != null ? fileItem.getNsh().getGoodsItemCode() : null);
-					fileItemVo.setDesc(fileItem.getNsh() != null ? fileItem.getNsh().getGoodsItemDesc() : null);
-					fileItemVo.setQuantity(Double.valueOf(fileItem.getQuantity()));
+            if (file.getSignatory() != null) {
+                vtMinepiaVo.setSignatory(String.format("%s %s", file.getSignatory().getFirstName(), file.getSignatory().getLastName()));
+            }
+            if (file.getSignatureDate() != null) {
+                String signatureDate = DateUtils.formatSimpleDate("dd/MM/yyyy", file.getSignatureDate());
+                vtMinepiaVo.setSignatureDate(signatureDate);
+            }
+            vtMinepiaVo.setCode(String.format("%s/%s", file.getNumeroDemande(), numeroDossier));
+            final List<FileItem> fileItemList = file.getFileItemsList();
 
-					fileItemVos.add(fileItemVo);
-				}
-			}
+            final List<VtMinepiaFileItemVo> fileItemVos = new ArrayList<VtMinepiaFileItemVo>();
 
-			vtMinepiaVo.setFileItemList(fileItemVos);
-		}
+            if (CollectionUtils.isNotEmpty(fileItemList)) {
+                for (final FileItem fileItem : fileItemList) {
+                    final VtMinepiaFileItemVo fileItemVo = new VtMinepiaFileItemVo();
+                    fileItemVo.setCode(fileItem.getNsh() != null ? fileItem.getNsh().getGoodsItemCode() : null);
+                    fileItemVo.setDesc(fileItem.getNsh() != null ? fileItem.getNsh().getGoodsItemDesc() : null);
+                    fileItemVo.setQuantity(Double.valueOf(fileItem.getQuantity()));
 
-		return new JRBeanCollectionDataSource(Collections.singleton(vtMinepiaVo));
-	}
+                    fileItemVos.add(fileItemVo);
+                }
+            }
 
-	/*
+            vtMinepiaVo.setFileItemList(fileItemVos);
+//            String qrContent = getDocumentPageUrl(file);
+//            try {
+//                InputStream qrCode = new ByteArrayInputStream(new QRCodeGenerator().generateQR(qrContent, 512));
+//                ccsMinsanteVo.setQrCode(qrCode);
+//                if (file.getSignatory() != null) {
+//                    try {
+//                        InputStream signatorySignature = getUserStampSignatureService().getUserSignature(file.getSignatory());
+//                        if (signatorySignature != null) {
+//                            ccsMinsanteVo.setSignatorySignature(signatorySignature);
+//                        }
+//                    } catch (Exception ex) {
+//                    }
+//                    try {
+//                        InputStream signatoryStamp = getUserStampSignatureService().getUserStamp(file.getSignatory());
+//                        if (signatoryStamp != null) {
+//                            ccsMinsanteVo.setSignatoryStamp(signatoryStamp);
+//                        }
+//                    } catch (Exception ex) {
+//                    }
+//                }
+//                if (treatmentInfos.getItemFlow() != null && treatmentInfos.getItemFlow().getSender() != null) {
+//                    try {
+//                        InputStream controllerSignature = getUserStampSignatureService().getUserSignature(treatmentInfos.getItemFlow().getSender());
+//                        if (controllerSignature != null) {
+//                            ccsMinsanteVo.setControllerSignature(controllerSignature);
+//                        }
+//                    } catch (Exception ex) {
+//                    }
+//                    try {
+//                        InputStream controllerStamp = getUserStampSignatureService().getUserStamp(treatmentInfos.getItemFlow().getSender());
+//                        if (controllerStamp != null) {
+//                            ccsMinsanteVo.setControllerStamp(controllerStamp);
+//                        }
+//                    } catch (Exception ex) {
+//                    }
+//                }
+//            } catch (Exception ex) {
+//                logger.error(file.getNumeroDossier(), ex);
+//            }
+
+        }
+
+        return new JRBeanCollectionDataSource(Collections.singleton(vtMinepiaVo));
+    }
+
+    /*
 	 * (non-Javadoc)
 	 * 
 	 * @see org.guce.siat.web.reports.exporter.AbstractReportInvoker#getJRParameters()
-	 */
-	@Override
-	protected Map<String, Object> getJRParameters() {
-		final Map<String, Object> jRParameters = super.getJRParameters();
-		jRParameters.put("MINEPIA_LOGO", getRealPath(IMAGES_PATH, "minepia", "jpg"));
-		return jRParameters;
-	}
+     */
+    @Override
+    protected Map<String, Object> getJRParameters() {
+        final Map<String, Object> jRParameters = super.getJRParameters();
+        jRParameters.put("MINEPIA_LOGO", getRealPath(IMAGES_PATH, "minepia", "jpg"));
+        return jRParameters;
+    }
 
-	/**
-	 * Gets the file.
-	 *
-	 * @return the file
-	 */
-	public File getFile() {
-		return file;
-	}
+    /**
+     * Gets the file.
+     *
+     * @return the file
+     */
+    public File getFile() {
+        return file;
+    }
+
+    
+    private String getDocumentPageUrl(File file) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext extContext = context.getExternalContext();
+        String documentPageUrl = "/pages/unsecure/document.xhtml";
+        String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, documentPageUrl));
+        url = Utils.getFinalDetailPageUrl(file, url, false, false);
+        ApplicationPropretiesService applicationPropretiesService = ServiceUtility.getBean(ApplicationPropretiesService.class);
+        String environment = applicationPropretiesService.getAppEnv();
+        String urlPrefix;
+        switch (environment) {
+            case "standalone":
+            case "production":
+                urlPrefix = "https://siat.guichetunique.cm";
+                break;
+            case "test":
+                urlPrefix = "https://testsiat.guichetunique.cm";
+                break;
+            default:
+                urlPrefix = "https://localhost:40081";
+                break;
+        }
+        url = urlPrefix.concat(url);
+        return url;
+    }
 
 }
