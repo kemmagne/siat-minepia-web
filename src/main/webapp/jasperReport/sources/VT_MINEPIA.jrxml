@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VT_MINEPIA" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="487cd13d-5160-41db-a737-71f51ecf7f75">
 	<property name="ireport.zoom" value="1.0"/>
@@ -395,3 +396,424 @@
 		<band splitType="Stretch"/>
 	</summary>
 </jasperReport>
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="file" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="28078ea8-15af-47d5-9f91-aa95db5f187e">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="469"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="c784432f-19b9-4c23-9bb1-7acd2901288a">
+		<field name="code" class="java.lang.String"/>
+		<field name="desc" class="java.lang.String"/>
+		<field name="quantity" class="java.lang.Double"/>
+		<variable name="SUM" class="java.lang.Double" calculation="Sum">
+			<variableExpression><![CDATA[$F{quantity}]]></variableExpression>
+			<initialValueExpression><![CDATA[0]]></initialValueExpression>
+		</variable>
+	</subDataset>
+	<parameter name="MINEPIA_LOGO" class="java.lang.String"/>
+	<field name="countryOfOrigin" class="java.lang.String"/>
+	<field name="provider" class="java.lang.String"/>
+	<field name="invoice" class="java.lang.String"/>
+	<field name="countryOfProvenance" class="java.lang.String"/>
+	<field name="importer" class="java.lang.String"/>
+	<field name="profession" class="java.lang.String"/>
+	<field name="address" class="java.lang.String"/>
+	<field name="fileItemList" class="java.util.List"/>
+	<field name="decisionNumber" class="java.lang.String"/>
+	<field name="decisionDate" class="java.util.Date"/>
+	<field name="decisionPlace" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="363" splitType="Stretch">
+			<textField>
+				<reportElement x="10" y="129" width="174" height="12" uuid="d43748ad-5cf8-4a4b-bf50-b1ff8fc77136"/>
+				<textElement markup="none">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["N° "+($F{decisionNumber} != null  && $F{decisionNumber}.trim().length()>0 ? $F{decisionNumber} : "-")]]></textFieldExpression>
+			</textField>
+			<elementGroup>
+				<staticText>
+					<reportElement x="15" y="66" width="130" height="10" uuid="64c20376-3232-4775-93e4-dbe592c209eb"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[BUREAU NATIONAL DE L'OZONE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="15" y="20" width="130" height="8" uuid="56667fa5-dcc4-4b2e-8b07-a96aac1696a4"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="10" y="28" width="140" height="20" uuid="3005100a-2a68-46bd-9b18-4327c13e9557"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[MINISTÈRE DE L'ENVIRONNEMENT ET DE LA
+    PROTECTION DE LA NATURE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="15" y="76" width="130" height="8" uuid="2a9cc343-4f27-401a-8f6d-22e423dc4fd8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="15" y="56" width="130" height="10" uuid="2f8ca3fe-536c-4d2f-8210-cc46e8006012"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[SECRÉTERIAT GÉNÉRAL]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="15" y="48" width="130" height="8" uuid="03eef9ba-5a94-4e39-921f-4678cd226b65"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="15" y="10" width="130" height="10" uuid="25220a4d-2c33-4702-8ee9-c7d841d6f2ef"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[ Paix-Travail-Patrie]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="15" y="0" width="130" height="10" uuid="898b970c-05ed-4951-b8ce-0cdd0de02faf"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[RÉPUBLIQUE DU CAMEROUN
+]]></text>
+				</staticText>
+			</elementGroup>
+			<elementGroup>
+				<staticText>
+					<reportElement x="415" y="48" width="130" height="8" uuid="f1eb4dcf-f754-4de2-9514-0c4ed5812882"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="415" y="20" width="130" height="8" uuid="be32ad23-eac7-4847-9cce-65175f9c0adc"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="415" y="10" width="130" height="10" uuid="029ee73e-a2e3-4a51-aa59-063aa92ffa21"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[Peace-Work-Fatherland]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="415" y="0" width="130" height="10" uuid="df07ef27-c83a-4d21-8e3f-68d9a343f411"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[REPUBLIC OF CAMEROON
+]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="415" y="56" width="130" height="10" uuid="a6d01776-2f72-4567-b8e7-fd246affcb41"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[GENERAL SECRETARIAT]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="415" y="28" width="130" height="20" uuid="aa3eac8e-a117-46a3-9b9f-75d6694aabd1"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[MINISTRY OF ENVIRONMENT AND
+PROTECTION OF NATURE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="415" y="76" width="130" height="8" uuid="d24d613d-16a6-4a93-a7f5-0b062193ba9b"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[*******]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="415" y="66" width="130" height="10" uuid="4fab1483-b17b-4c04-afff-c9c542065ef9"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[NATIONAL OZONE OFFICE]]></text>
+				</staticText>
+			</elementGroup>
+			<image>
+				<reportElement x="34" y="84" width="45" height="45" uuid="495cc985-b22c-4597-8112-40a380ecb579"/>
+				<imageExpression><![CDATA[new java.io.File($P{MINEPIA_LOGO})]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="177" y="151" width="200" height="30" uuid="69aaa6e1-159a-41fc-b5f9-3ab414af9195"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VISA TECHNIQUE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="181" width="535" height="24" uuid="29b637bb-02e0-48f6-aa7e-e4d0ad964d62"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[POUR LE CONTROLE DE QUALITE DES EQUIPEMENTS/APPREILS DE FROID, MATERIELS ET SUBSTANCES CHIMIQUES NEFASTES À LA COUCHE D'OZONE À IMPORTER AU CAMEROUN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="215" width="535" height="36" uuid="8ea21934-441d-4c0e-a858-e6e97203594f"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Le Coordonnateur du Bureau National de l'Ozone délivre le présent visa technique étant entendu que ces Substances Chimiques sont autorisées à être importées au Cameroun en conformité avec le plan national d'élimination des Substances Appauvrissant la couche d'ozone et des obligations du calendrier établi par le protocole de Montréal.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="257" width="205" height="12" uuid="2631a369-7ce3-490c-89bd-36c3d03abe32"/>
+				<textElement markup="none">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Nom de l'importateur :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="269" width="205" height="12" uuid="c9b8f533-5128-4310-aa24-e3f2d65a6343"/>
+				<textElement markup="none">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Profession :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="281" width="205" height="12" uuid="eade97b1-d404-40ec-ab00-a728a6f765d4"/>
+				<textElement markup="none">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Adresse :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="293" width="205" height="12" uuid="a7ff2ce5-bf89-4a12-9aa3-1df1a9f1b894"/>
+				<textElement markup="none">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[N° de la facture :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="305" width="205" height="12" uuid="23fa18f2-fc19-43b7-b29c-20e08e0a5ec9"/>
+				<textElement markup="none">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Fournisseur]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="317" width="205" height="12" uuid="d9d55a73-8756-476f-b38e-3cdfe6fd8121"/>
+				<textElement markup="none">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Pays d'Origine : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="329" width="205" height="12" uuid="2c76c74f-dd58-4491-bd46-303c3bcbde0a"/>
+				<textElement markup="none">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Pays de Provenance :]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="215" y="317" width="330" height="12" uuid="bd0d6cf2-856b-4fb9-899d-d424b1ca05f3"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{countryOfOrigin}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="215" y="305" width="330" height="12" uuid="f6905a59-a9fe-4ca6-9d86-b51c6c09582a"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{provider}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="215" y="293" width="330" height="12" uuid="4f84dd4d-564b-4d12-99ee-b8784daff76f"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{invoice}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="215" y="329" width="330" height="12" uuid="ee33f780-d282-4e2b-8994-07f5de77f219"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{countryOfProvenance}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="215" y="257" width="330" height="12" uuid="101d234d-8e60-45bb-9943-123c986d4e75"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{importer}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="215" y="269" width="330" height="12" uuid="549dc86a-a577-4d03-bf77-b3d5050630aa"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{profession}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="215" y="281" width="330" height="12" uuid="61f9e533-c78b-4b97-a358-8c2fdd0cb5b4"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="180" splitType="Stretch">
+			<componentElement>
+				<reportElement key="table" style="table" x="10" y="0" width="535" height="180" uuid="70d340ae-56f2-41d3-981c-5f9abe44bdfa"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="Table Dataset 1" uuid="7f2dfe63-528e-4605-92fa-73e3225e5674">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{fileItemList})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="90" uuid="79334cb4-5c66-4305-84f3-989eae228bd8">
+						<jr:columnHeader height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="d52b9832-7144-4607-a3c6-3232ce60245b"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+									<font size="9"/>
+								</textElement>
+								<text><![CDATA[N°]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="table_TD" height="90" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="45" uuid="b7d4fa8d-1cce-4f41-a407-d42e6525374d"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="353" uuid="e0bcfa88-6d92-4831-840c-49f6a938a34c">
+						<jr:columnHeader height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="353" height="30" uuid="631a140f-39aa-4f2e-ad84-274d06d40cbb"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+									<font size="9"/>
+								</textElement>
+								<text><![CDATA[Désignation]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="353" height="30" uuid="7eb0fa72-72d4-4168-af90-aaf3f9b1b702"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Total]]></text>
+							</staticText>
+						</jr:columnFooter>
+						<jr:detailCell style="table_TD" height="90" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="353" height="45" uuid="31837ce5-b624-4cc2-81a5-25815314d8bc"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{desc}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="92" uuid="b595f029-503c-473b-bd1e-465d141b6633">
+						<jr:columnHeader height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="92" height="30" uuid="547310f6-420f-462b-91d5-b4462a5e7ae5"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+									<font size="9"/>
+								</textElement>
+								<text><![CDATA[Quantité]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter height="30" rowSpan="1">
+							<textField pattern="">
+								<reportElement x="0" y="0" width="92" height="30" uuid="3fa01739-cb7e-4a08-932c-029f2e7f1857"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="14" isBold="true" isUnderline="false"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{SUM}]]></textFieldExpression>
+							</textField>
+						</jr:columnFooter>
+						<jr:detailCell style="table_TD" height="90" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="45" uuid="73aa2199-db24-4065-be04-ebed34f786a1"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+	<summary>
+		<band height="100" splitType="Stretch">
+			<staticText>
+				<reportElement x="10" y="10" width="535" height="24" uuid="83832f53-ce46-4597-bf1a-41f012d56aa6"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Ces produits ci-dessus cités sont autorisés à être importés au Cameroun. En fois de quoi ce visa technique est délivré pour servir et valoir ce que de droit.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="44" width="535" height="12" uuid="caa5e3ad-a211-424c-b29f-1eea14a92539"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[NB : Ce document a une validité de trois mois.]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="10" y="66" width="322" height="15" uuid="ae3cc1cf-cf2d-4ee7-ae96-7fc4a596018b"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Fait à "+($F{decisionPlace} != null  && $F{decisionPlace}.trim().length()>0 ? $F{decisionPlace} : "-")+", le "+($F{decisionDate}!= null && $F{decisionDate}.toString().trim().length()>0 ? new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{decisionDate}) : "-")]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
+>>>>>>> master

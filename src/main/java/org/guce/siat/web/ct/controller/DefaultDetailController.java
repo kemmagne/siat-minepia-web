@@ -66,6 +66,7 @@ import org.guce.siat.core.ct.service.LaboratoryService;
 import org.guce.siat.core.ct.service.PaymentDataService;
 import org.guce.siat.core.ct.service.PottingReportService;
 import org.guce.siat.core.ct.service.TreatmentCompanyService;
+import org.guce.siat.core.ct.service.TreatmentInfosCCSMinsanteService;
 import org.guce.siat.core.ct.service.TreatmentInfosService;
 import org.guce.siat.core.ct.service.TreatmentOrderService;
 import org.guce.siat.core.ct.service.TreatmentResultService;
@@ -242,6 +243,12 @@ public abstract class DefaultDetailController implements Serializable {
      */
     @ManagedProperty(value = "#{treatmentInfosService}")
     protected TreatmentInfosService treatmentInfosService;
+    
+    /**
+     * The treatment infos service.
+     */
+    @ManagedProperty(value = "#{treatmentInfosCCSMinsanteService}")
+    protected TreatmentInfosCCSMinsanteService treatmentInfosCCSMinsanteService;
 
     /**
      * The EBXMl properties.
@@ -1069,6 +1076,14 @@ public abstract class DefaultDetailController implements Serializable {
 
     public void setTreatmentInfosService(final TreatmentInfosService treatmentInfosService) {
         this.treatmentInfosService = treatmentInfosService;
+    }
+
+    public TreatmentInfosCCSMinsanteService getTreatmentInfosCCSMinsanteService() {
+        return treatmentInfosCCSMinsanteService;
+    }
+
+    public void setTreatmentInfosCCSMinsanteService(TreatmentInfosCCSMinsanteService treatmentInfosCCSMinsanteService) {
+        this.treatmentInfosCCSMinsanteService = treatmentInfosCCSMinsanteService;
     }
 
     public ApprovedDecisionService getApprovedDecisionService() {

@@ -22,9 +22,9 @@
                 <p:inputTextarea id="additionnalDeclaration" title="#{bundle['additionnalDeclaration']}"
                                  value="#{fileItemCctDetailController.treatmentInfos.additionnalDeclaration}" />
                 
-                <h:outputLabel for="certificatCountryOrigin" value="#{bundle['certificatCountryOrigin']}" />
-                <p:inputTextarea id="certificatCountryOrigin" readonly="true" title="#{bundle['certificatCountryOrigin']}"
-                                 value="#{fileItemCctDetailController.treatmentInfos.certificatCountryOrigin}" />
+<!--                <h:outputLabel rendered="{fileItemCctDetailController.isPhytoTransitFile()}" for="certificatCountryOrigin" value="#{bundle['certificatCountryOrigin']}" />
+                <p:inputText rendered="{fileItemCctDetailController.isPhytoTransitFile()}" id="certificatCountryOrigin" readonly="true" title="#{bundle['certificatCountryOrigin']}"
+                                 value="{fileItemCctDetailController.treatmentInfos.certificatCountryOrigin}" />-->
             </h:panelGrid>
         </p:panel>
 

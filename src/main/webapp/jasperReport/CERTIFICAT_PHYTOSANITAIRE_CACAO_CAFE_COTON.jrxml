@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CERTIFICAT_PHYTOSANITAIRE" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6f5c0835-9f5c-4b28-b5db-296746e60a32">
 	<property name="ireport.zoom" value="1.3310000000000013"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="144"/>
+	<property name="ireport.y" value="384"/>
 	<parameter name="MINADER_LOGO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -62,6 +62,7 @@
 	<field name="signatoryUser" class="java.lang.Object"/>
 	<field name="treatmentEndDate" class="java.util.Date"/>
 	<field name="qrCode" class="java.io.InputStream"/>
+	<field name="originCountryPhytoNumber" class="java.lang.String"/>
 	<background>
 		<band height="802">
 			<printWhenExpression><![CDATA[$P{DRAFT}]]></printWhenExpression>
@@ -358,20 +359,42 @@ DEPARTMENT OF REGULATION AND QUALITY CONTROL OF INPUTS AND AGRICULTURAL PRODUCTS
 				<rectangle>
 					<reportElement mode="Transparent" x="0" y="168" width="555" height="85" uuid="15bb6579-91b6-45c7-9272-147e1f30346b"/>
 				</rectangle>
-				<staticText>
-					<reportElement x="5" y="168" width="550" height="63" uuid="a7b731fb-1599-4074-87a2-99b234fe8015"/>
-					<textElement>
+				<textField>
+					<reportElement x="5" y="168" width="550" height="63" uuid="854b32f0-eff7-4f29-a4a4-edbe6db35635">
+						<printWhenExpression><![CDATA[$F{transit}]]></printWhenExpression>
+					</reportElement>
+					<textElement markup="none">
 						<font size="8"/>
 					</textElement>
-					<text><![CDATA[Il est certifié que les végétaux ou autres articles régelmentés décrits ci-desous ont été inspectés et/ou testés suivant les procédures officielles appropriées et estimés et exempt d'organismes de quarantaine comme spécifié par la partie contractante importatrice et qu'ils sont jugés conformes aux exigences phytosanitaires en vigueur de la partie contractante importatrice, y compris à celle concernant les organismes règlementés non de quarantaire. Les végétaux sont réputés pratiquement exempts d'autres organismes nuisibles]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="7" y="215" width="548" height="45" uuid="c1929352-64a1-4cb0-a090-b5bf490d0ec0"/>
-					<textElement>
+					<textFieldExpression><![CDATA["Il est certifié que les végétaux, produits végétaux ou articles réglementés pesticide et appareil de traitement décrits cidessus ont été importés au Cameroun en provenance de "+ $F{origin}+" et ont fait l'objet du certificat technique N° "+ $F{originCountryPhytoNumber}+". dont l'original la copie authentifiée est annexée au présent procès-verbal, qu'ils sont emballés remballés dans les emballages initiaux dans les nouveaux emballages que d'après le document technique original et une inspection supplémentaire ; ils sont jugés conformes aux exigences phytosanitaires en vigueur de la partie contractante importatrice, et qu'au cours de l'emmagasinage au Cameroun, l'envoi n'a pas été exposé au risque d'infestation ou d'infection. de détérioration de modification."]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="5" y="168" width="550" height="63" uuid="73c84524-91ae-468c-a985-4466f4f56a9f">
+						<printWhenExpression><![CDATA[!$F{transit}]]></printWhenExpression>
+					</reportElement>
+					<textElement markup="none">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Il est certifié que les végétaux ou autres articles régelmentés décrits ci-desous ont été inspectés et/ou testés suivant les procédures officielles appropriées et estimés et exempt d'organismes de quarantaine comme spécifié par la partie contractante importatrice et qu'ils sont jugés conformes aux exigences phytosanitaires en vigueur de la partie contractante importatrice, y compris à celle concernant les organismes règlementés non de quarantaire. Les végétaux sont réputés pratiquement exempts d'autres organismes nuisibles"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="7" y="215" width="548" height="46" uuid="b1960942-7a47-4428-a441-9e083da4e26f">
+						<printWhenExpression><![CDATA[$F{transit}]]></printWhenExpression>
+					</reportElement>
+					<textElement markup="none">
 						<font size="8" isItalic="true"/>
 					</textElement>
-					<text><![CDATA[This is to certify that the plant products or other regulated articles described above have been inspected and / or tested acording to appropriate official procedure and are considered to be free from the quarantaine pests specified by the importing contracting party and to confirm with the current phytosanitary requirements of the importing contracting party, including those for regulated non quarantaine pests. They are deemed to be practically free from other pests.]]></text>
-				</staticText>
+					<textFieldExpression><![CDATA["This is to certify that the plants, plants, products or other regulated articles describes above have beeb imported in to Cameroon,covered by the technics document N°"+ $F{originCountryPhytoNumber} +" the original certified true copy of each is attached to this certificate. They are packages repackaged in original , new containers ; that based on the original technics document and a additional inspection , they are considered to comply with the current phytosanitary of the contracting importing arty and that during storing in Cameroon the consignment has not beeb subjected to the risk of infestation or infection."]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="7" y="215" width="548" height="46" uuid="c515f3be-2a3d-4c1d-9fd5-0a92266abcf0">
+						<printWhenExpression><![CDATA[!$F{transit}]]></printWhenExpression>
+					</reportElement>
+					<textElement markup="none">
+						<font size="8" isItalic="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["This is to certify that the plant products or other regulated articles described above have been inspected and / or tested acording to appropriate official procedure and are considered to be free from the quarantaine pests specified by the importing contracting party and to confirm with the current phytosanitary requirements of the importing contracting party, including those for regulated non quarantaine pests. They are deemed to be practically free from other pests."]]></textFieldExpression>
+				</textField>
 				<rectangle>
 					<reportElement mode="Transparent" x="0" y="253" width="555" height="26" uuid="6949a6cc-9079-4663-8ef9-fb9e33558b1d"/>
 				</rectangle>

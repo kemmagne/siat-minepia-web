@@ -103,6 +103,7 @@ public final class ReportGeneratorUtils {
         Map<String, Object> forAnnexes = null;
         byte[] report = null;
         AbstractReportInvoker reportInvoker = null;
+        List<AbstractReportInvoker> reportInvokersForFstpAndAtp = null;
         FileItem ffi = file.getFileItemsList().get(0);
 
         Flow flow = fileTypeFlowReport.getFlow();
@@ -165,10 +166,14 @@ public final class ReportGeneratorUtils {
                 case CCT_CT_E_FSTP: {
                     ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(ffi, FlowCode.FL_CT_07);
                     TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
+                    reportInvokersForFstpAndAtp = new ArrayList<>();
                     if (FileTypeCode.CCT_CT_E_ATP.equals(file.getFileType().getCode())) {
-                        reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_ATP", tr);
+                        reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_ATP", tr, FileTypeCode.CCT_CT_E_ATP);
                     } else {
-                        reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_FSTP", tr);
+                        reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_FSTP", tr, FileTypeCode.CCT_CT_E_FSTP);
+                        reportInvokersForFstpAndAtp.add(reportInvoker);
+                        reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_ATP", tr, FileTypeCode.CCT_CT_E_ATP);
+                        reportInvokersForFstpAndAtp.add(reportInvoker);
                     }
                     break;
                 }
@@ -178,8 +183,20 @@ public final class ReportGeneratorUtils {
                     break;
             }
         }
+        if (FileTypeCode.CCT_CT_E_FSTP.equals(file.getFileType().getCode()) && reportInvokersForFstpAndAtp != null) {
+            List<JasperPrint> inputStreamsForFstpAndAtp = new ArrayList<>();
+            for (AbstractReportInvoker reportInvokerFstpOrAtp : reportInvokersForFstpAndAtp) {
+                reportInvokerFstpOrAtp.setFileFieldValueService(fileFieldValueService);
+                reportInvokerFstpOrAtp.setItemFlowService(itemFlowService);
+                reportInvokerFstpOrAtp.setPottingReportService(pottingReportService);
+                JasperPrint reportJPForFstpOrAtp = JsfUtil.getReportJP(reportInvokerFstpOrAtp);
+                inputStreamsForFstpAndAtp.add(reportJPForFstpOrAtp);
+            }
+            if (!CollectionUtils.isEmpty(inputStreamsForFstpAndAtp)) {
+                report = JsfUtil.mergePdf(inputStreamsForFstpAndAtp);
+            }
 
-        if (reportInvoker != null) {
+        }else if (reportInvoker != null) {
             reportInvoker.setFileFieldValueService(fileFieldValueService);
             reportInvoker.setItemFlowService(itemFlowService);
             reportInvoker.setPottingReportService(pottingReportService);

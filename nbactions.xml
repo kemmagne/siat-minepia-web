@@ -34,7 +34,6 @@
         </activatedProfiles>
     </action>
     <action>
-
         <actionName>CUSTOM-skip-test-build</actionName>
         <displayName>skip-test-build</displayName>
 

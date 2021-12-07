@@ -259,6 +259,9 @@ public class CostsController extends AbstractController<PaymentData> implements 
                     case VT_MINEPIA:
                         flowToExecute = flowService.findFlowByCode(FlowCode.FL_AP_VT1_03.name());
                         break;
+                    case CCS_MINSANTE:
+                        flowToExecute = flowService.findFlowByCode(FlowCode.FL_CT_160.name());
+                        break;
                     default:
                         flowToExecute = flowService.findFlowByCode(FlowCode.FL_AP_166.name());
                         break;
@@ -277,7 +280,7 @@ public class CostsController extends AbstractController<PaymentData> implements 
                 try (final ByteArrayOutputStream output = SendDocumentUtils.preparePaymentDocument(documentSerializable, service, documentType)) {
                     xmlBytes = output.toByteArray();
                 }
-            } else if (Arrays.asList(FileTypeCode.CCT_CT, FileTypeCode.CC_CT, FileTypeCode.CQ_CT).contains(currentFile.getFileType().getCode())) {
+            } else if (Arrays.asList(FileTypeCode.CCT_CT, FileTypeCode.CC_CT, FileTypeCode.CQ_CT, FileTypeCode.CCS_MINSANTE).contains(currentFile.getFileType().getCode())) {
                 try (final ByteArrayOutputStream output = SendDocumentUtils.prepareCctDocument(documentSerializable, service, documentType)) {
                     xmlBytes = output.toByteArray();
                 }
