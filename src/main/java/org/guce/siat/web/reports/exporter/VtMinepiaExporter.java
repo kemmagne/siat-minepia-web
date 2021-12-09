@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.guce.siat.common.lookup.ServiceUtility;
 import org.guce.siat.web.ct.controller.util.Utils;
+import org.guce.siat.common.utils.QRCodeGenerator;
 
 /**
  * The Class VtMinepiaExporter.
@@ -89,7 +90,7 @@ public class VtMinepiaExporter extends AbstractReportInvoker {
                                 try {
                                     vtMinepiaVo.setDecisionDate(new SimpleDateFormat("dd/MM/yyyy").parse(fileFieldValue.getValue()));
                                     vtMinepiaVo.setSignatureDate(fileFieldValue.getValue());
-                                } catch (final ParseException e) {
+                                } catch (Exception e) {
                                     LOG.error(Objects.toString(e), e);
                                 }
                             }
@@ -138,45 +139,32 @@ public class VtMinepiaExporter extends AbstractReportInvoker {
             }
 
             vtMinepiaVo.setFileItemList(fileItemVos);
-//            String qrContent = getDocumentPageUrl(file);
-//            try {
-//                InputStream qrCode = new ByteArrayInputStream(new QRCodeGenerator().generateQR(qrContent, 512));
-//                ccsMinsanteVo.setQrCode(qrCode);
-//                if (file.getSignatory() != null) {
-//                    try {
-//                        InputStream signatorySignature = getUserStampSignatureService().getUserSignature(file.getSignatory());
-//                        if (signatorySignature != null) {
-//                            ccsMinsanteVo.setSignatorySignature(signatorySignature);
-//                        }
-//                    } catch (Exception ex) {
-//                    }
-//                    try {
-//                        InputStream signatoryStamp = getUserStampSignatureService().getUserStamp(file.getSignatory());
-//                        if (signatoryStamp != null) {
-//                            ccsMinsanteVo.setSignatoryStamp(signatoryStamp);
-//                        }
-//                    } catch (Exception ex) {
-//                    }
-//                }
-//                if (treatmentInfos.getItemFlow() != null && treatmentInfos.getItemFlow().getSender() != null) {
-//                    try {
-//                        InputStream controllerSignature = getUserStampSignatureService().getUserSignature(treatmentInfos.getItemFlow().getSender());
-//                        if (controllerSignature != null) {
-//                            ccsMinsanteVo.setControllerSignature(controllerSignature);
-//                        }
-//                    } catch (Exception ex) {
-//                    }
-//                    try {
-//                        InputStream controllerStamp = getUserStampSignatureService().getUserStamp(treatmentInfos.getItemFlow().getSender());
-//                        if (controllerStamp != null) {
-//                            ccsMinsanteVo.setControllerStamp(controllerStamp);
-//                        }
-//                    } catch (Exception ex) {
-//                    }
-//                }
-//            } catch (Exception ex) {
-//                logger.error(file.getNumeroDossier(), ex);
-//            }
+            String qrContent = getDocumentPageUrl(file);
+            try {
+                InputStream qrCode = new ByteArrayInputStream(new QRCodeGenerator().generateQR(qrContent, 512));
+                vtMinepiaVo.setQrCode(qrCode);
+                if (file.getSignatory() != null) {
+                    try {
+                        InputStream signatorySignature = getUserStampSignatureService().getUserSignature(file.getSignatory());
+                        if (signatorySignature != null) {
+                            vtMinepiaVo.setSignatorySignature(signatorySignature);
+                        }
+                    } catch (Exception ex) {
+                        LOG.error(Objects.toString(ex), ex);
+                    }
+                    try {
+                        InputStream signatoryStamp = getUserStampSignatureService().getUserStamp(file.getSignatory());
+                        if (signatoryStamp != null) {
+                            vtMinepiaVo.setSignatoryStamp(signatoryStamp);
+                        }
+                    } catch (Exception ex) {
+                        LOG.error(Objects.toString(ex), ex);
+                    }
+                }
+                
+            } catch (Exception ex) {
+                logger.error(file.getNumeroDossier(), ex);
+            }
 
         }
 

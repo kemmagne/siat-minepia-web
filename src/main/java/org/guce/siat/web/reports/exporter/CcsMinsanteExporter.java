@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -28,6 +29,8 @@ import org.guce.siat.core.ct.model.TreatmentInfosCCSMinsante;
 import org.guce.siat.web.ct.controller.util.Utils;
 import org.guce.siat.web.reports.vo.CcsMinsanteFileItemVo;
 import org.guce.siat.web.reports.vo.CcsMinsanteFileVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class CcsMinsanteExporter.
@@ -42,6 +45,11 @@ public class CcsMinsanteExporter extends AbstractReportInvoker {
     
     private static final String PACKAGING_CONTAINERIZED = "Conteneurisé";
     private static final String PACKAGING_CONVENTIONNAL = "Conventionnel";
+    
+    /**
+     * The Constant LOG.
+     */
+    private static final Logger LOG = LoggerFactory.getLogger(VtMinepiaExporter.class);
     /**
      * The file.
      */
@@ -302,6 +310,7 @@ public class CcsMinsanteExporter extends AbstractReportInvoker {
                         ccsMinsanteVo.setControllerSignature(controllerSignature);
                     }
                 } catch (Exception ex) {
+                    LOG.error(Objects.toString(ex), ex);
                 }
                 try {
                     InputStream controllerStamp = getUserStampSignatureService().getUserStamp(treatmentInfos.getItemFlow().getSender());
@@ -309,6 +318,7 @@ public class CcsMinsanteExporter extends AbstractReportInvoker {
                         ccsMinsanteVo.setControllerStamp(controllerStamp);
                     }
                 } catch (Exception ex) {
+                    LOG.error(Objects.toString(ex), ex);
                 }
             }
         } catch (Exception ex) {

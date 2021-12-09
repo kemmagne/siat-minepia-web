@@ -1,207 +1,206 @@
 package org.guce.siat.web.reports.vo;
 
-
+import java.io.InputStream;
 
 /**
  * The Class VtMinepiaFileVo.
  */
-public class VtMinepiaFileVo extends AbstractFileVo<VtMinepiaFileItemVo>
-{
+public class VtMinepiaFileVo extends AbstractFileVo<VtMinepiaFileItemVo> {
 
-	/** The country of origin. */
-	private String countryOfOrigin;
+    /**
+     * The country of origin.
+     */
+    private String countryOfOrigin;
 
-	/** The country of provenance. */
-	private String countryOfProvenance;
+    /**
+     * The country of provenance.
+     */
+    private String countryOfProvenance;
 
-	/** The provider. */
-	private String provider;
+    /**
+     * The provider.
+     */
+    private String provider;
 
-	/** The invoice. */
-	private String invoice;
+    /**
+     * The invoice.
+     */
+    private String invoice;
 
-	/** The importer. */
-	private String importer;
+    /**
+     * The importer.
+     */
+    private String importer;
 
-	/** The address. */
-	private String address;
+    /**
+     * The address.
+     */
+    private String address;
 
-	/** The profession. */
-	private String profession;
+    /**
+     * The profession.
+     */
+    private String profession;
 
-	/** The code. */
-	private String code;
-        
-        /** The Signature date. */
-        private String signatureDate;
+    /**
+     * The code.
+     */
+    private String code;
 
-	/**
-	 * Gets the country of origin.
-	 *
-	 * @return the country of origin
-	 */
-	public String getCountryOfOrigin()
-	{
-		return countryOfOrigin;
-	}
+    /**
+     * The Signature date.
+     */
+    private String signatureDate;
 
-	/**
-	 * Sets the country of origin.
-	 *
-	 * @param countryOfOrigin
-	 *           the new country of origin
-	 */
-	public void setCountryOfOrigin(final String countryOfOrigin)
-	{
-		this.countryOfOrigin = countryOfOrigin;
-	}
+    private InputStream qrCode;
 
-	/**
-	 * Gets the provider.
-	 *
-	 * @return the provider
-	 */
-	public String getProvider()
-	{
-		return provider;
-	}
+    private InputStream signatoryStamp;
 
-	/**
-	 * Sets the provider.
-	 *
-	 * @param provider
-	 *           the new provider
-	 */
-	public void setProvider(final String provider)
-	{
-		this.provider = provider;
-	}
+    private InputStream signatorySignature;
 
-	/**
-	 * Gets the invoice.
-	 *
-	 * @return the invoice
-	 */
-	public String getInvoice()
-	{
-		return invoice;
-	}
+    /**
+     * Gets the country of origin.
+     *
+     * @return the country of origin
+     */
+    public String getCountryOfOrigin() {
+        return countryOfOrigin;
+    }
 
-	/**
-	 * Sets the invoice.
-	 *
-	 * @param invoice
-	 *           the new invoice
-	 */
-	public void setInvoice(final String invoice)
-	{
-		this.invoice = invoice;
-	}
+    /**
+     * Sets the country of origin.
+     *
+     * @param countryOfOrigin the new country of origin
+     */
+    public void setCountryOfOrigin(final String countryOfOrigin) {
+        this.countryOfOrigin = countryOfOrigin;
+    }
 
-	/**
-	 * Gets the country of provenance.
-	 *
-	 * @return the country of provenance
-	 */
-	public String getCountryOfProvenance()
-	{
-		return countryOfProvenance;
-	}
+    /**
+     * Gets the provider.
+     *
+     * @return the provider
+     */
+    public String getProvider() {
+        return provider;
+    }
 
-	/**
-	 * Sets the country of provenance.
-	 *
-	 * @param countryOfProvenance
-	 *           the new country of provenance
-	 */
-	public void setCountryOfProvenance(final String countryOfProvenance)
-	{
-		this.countryOfProvenance = countryOfProvenance;
-	}
+    /**
+     * Sets the provider.
+     *
+     * @param provider the new provider
+     */
+    public void setProvider(final String provider) {
+        this.provider = provider;
+    }
 
-	/**
-	 * Gets the importer.
-	 *
-	 * @return the importer
-	 */
-	public String getImporter()
-	{
-		return importer;
-	}
+    /**
+     * Gets the invoice.
+     *
+     * @return the invoice
+     */
+    public String getInvoice() {
+        return invoice;
+    }
 
-	/**
-	 * Sets the importer.
-	 *
-	 * @param importer
-	 *           the new importer
-	 */
-	public void setImporter(final String importer)
-	{
-		this.importer = importer;
-	}
+    /**
+     * Sets the invoice.
+     *
+     * @param invoice the new invoice
+     */
+    public void setInvoice(final String invoice) {
+        this.invoice = invoice;
+    }
 
-	/**
-	 * Gets the address.
-	 *
-	 * @return the address
-	 */
-	public String getAddress()
-	{
-		return address;
-	}
+    /**
+     * Gets the country of provenance.
+     *
+     * @return the country of provenance
+     */
+    public String getCountryOfProvenance() {
+        return countryOfProvenance;
+    }
 
-	/**
-	 * Sets the address.
-	 *
-	 * @param address
-	 *           the new address
-	 */
-	public void setAddress(final String address)
-	{
-		this.address = address;
-	}
+    /**
+     * Sets the country of provenance.
+     *
+     * @param countryOfProvenance the new country of provenance
+     */
+    public void setCountryOfProvenance(final String countryOfProvenance) {
+        this.countryOfProvenance = countryOfProvenance;
+    }
 
-	/**
-	 * Gets the profession.
-	 *
-	 * @return the profession
-	 */
-	public String getProfession()
-	{
-		return profession;
-	}
+    /**
+     * Gets the importer.
+     *
+     * @return the importer
+     */
+    public String getImporter() {
+        return importer;
+    }
 
-	/**
-	 * Sets the profession.
-	 *
-	 * @param profession
-	 *           the new profession
-	 */
-	public void setProfession(final String profession)
-	{
-		this.profession = profession;
-	}
+    /**
+     * Sets the importer.
+     *
+     * @param importer the new importer
+     */
+    public void setImporter(final String importer) {
+        this.importer = importer;
+    }
 
-	/**
-	 * Gets the code.
-	 *
-	 * @return the code
-	 */
-	public String getCode()
-	{
-		return code;
-	}
+    /**
+     * Gets the address.
+     *
+     * @return the address
+     */
+    public String getAddress() {
+        return address;
+    }
 
-	/**
-	 * Sets the code.
-	 *
-	 * @param code
-	 *           the new code
-	 */
-	public void setCode(final String code)
-	{
-		this.code = code;
-	}
+    /**
+     * Sets the address.
+     *
+     * @param address the new address
+     */
+    public void setAddress(final String address) {
+        this.address = address;
+    }
+
+    /**
+     * Gets the profession.
+     *
+     * @return the profession
+     */
+    public String getProfession() {
+        return profession;
+    }
+
+    /**
+     * Sets the profession.
+     *
+     * @param profession the new profession
+     */
+    public void setProfession(final String profession) {
+        this.profession = profession;
+    }
+
+    /**
+     * Gets the code.
+     *
+     * @return the code
+     */
+    public String getCode() {
+        return code;
+    }
+
+    /**
+     * Sets the code.
+     *
+     * @param code the new code
+     */
+    public void setCode(final String code) {
+        this.code = code;
+    }
 
     public String getSignatureDate() {
         return signatureDate;
@@ -211,5 +210,28 @@ public class VtMinepiaFileVo extends AbstractFileVo<VtMinepiaFileItemVo>
         this.signatureDate = signatureDate;
     }
 
-        
+    public InputStream getQrCode() {
+        return qrCode;
+    }
+
+    public void setQrCode(InputStream qrCode) {
+        this.qrCode = qrCode;
+    }
+
+    public InputStream getSignatoryStamp() {
+        return signatoryStamp;
+    }
+
+    public void setSignatoryStamp(InputStream signatoryStamp) {
+        this.signatoryStamp = signatoryStamp;
+    }
+
+    public InputStream getSignatorySignature() {
+        return signatorySignature;
+    }
+
+    public void setSignatorySignature(InputStream signatorySignature) {
+        this.signatorySignature = signatorySignature;
+    }
+
 }

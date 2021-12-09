@@ -139,6 +139,7 @@ import org.guce.siat.core.ct.service.CommonService;
 import org.guce.siat.core.ct.service.EssayTestApService;
 import org.guce.siat.core.ct.service.LaboratoryService;
 import org.guce.siat.core.ct.service.PaymentDataService;
+import org.guce.siat.core.ct.service.UserStampSignatureService;
 import org.guce.siat.core.ct.service.WoodSpecificationService;
 import org.guce.siat.core.utils.SendDocumentUtils;
 import org.guce.siat.web.common.ControllerConstants;
@@ -350,6 +351,12 @@ public class FileItemApDetailController extends DefaultDetailController implemen
      */
     @ManagedProperty(value = "#{messageToSendService}")
     private MessageToSendService messageToSendService;
+    
+    /**
+     * The User Signature and Stamp service.
+     */
+    @ManagedProperty(value = "#{userStampSignatureService}")
+    private UserStampSignatureService userStampSignatureService;
 
     /**
      * The index page url.
@@ -3460,6 +3467,7 @@ public class FileItemApDetailController extends DefaultDetailController implemen
                     Constructor c1 = classe.getConstructor(File.class);
                     reportInvoker = (AbstractReportInvoker) c1.newInstance(currentFile);
                     reportInvoker.setDraft(draft);
+                    reportInvoker.setUserStampSignatureService(userStampSignatureService);
                     report = JsfUtil.getReport(reportInvoker);
                 } else {
                     report = ReportGeneratorUtils.generateReportBytes(fileFieldValueService, classe, currentFile);
@@ -5701,5 +5709,15 @@ public class FileItemApDetailController extends DefaultDetailController implemen
     public boolean canRollback() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    public UserStampSignatureService getUserStampSignatureService() {
+        return userStampSignatureService;
+    }
+
+    public void setUserStampSignatureService(UserStampSignatureService userStampSignatureService) {
+        this.userStampSignatureService = userStampSignatureService;
+    }
+    
+    
 
 }
