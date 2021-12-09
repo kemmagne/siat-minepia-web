@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Objects;
 
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.commons.data.ContentStream;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -21,10 +23,14 @@ import org.guce.siat.common.model.ItemFlow;
 import org.guce.siat.common.model.ItemFlowData;
 import org.guce.siat.common.model.User;
 import org.guce.siat.common.utils.QRCodeGenerator;
+import org.guce.siat.common.utils.ged.CmisClient;
+import org.guce.siat.common.utils.ged.CmisSession;
 ;
 import org.guce.siat.core.ct.model.ApprovedDecision;
 import org.guce.siat.web.reports.vo.CtCctCsvFileItemVo;
 import org.guce.siat.web.reports.vo.CtCctCsvFileVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class CtCctCsvExporter.
@@ -84,6 +90,7 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
             if (ctCctCsvFileVo.getVeterinaryAuthority() == null) {
                 ctCctCsvFileVo.setVeterinaryAuthority(file.getBureau().getLabelFr());
             }
+
             if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
                 for (final FileFieldValue fileFieldValue : fileFieldValueList) {
                     switch (fileFieldValue.getFileField().getCode()) {
@@ -259,6 +266,10 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
                             ctCctCsvFileVo.setCvsIdContainersSeals(value);
                             break;
                         }
+                        case "INFORMATIONS_GENERALES_LIEU_DECHARGEMENT_UNLOCODE": {
+                            ctCctCsvFileVo.setUnloadingPlace(fileFieldValue.getValue());
+                            break;
+                        }
                         default:
                             break;
                     }
@@ -424,6 +435,25 @@ public class CtCctCsvExporter extends AbstractReportInvoker {
             }
 
             ctCctCsvFileVo.setFileItemList(fileItemVos);
+        }
+
+        try {
+            Session sessionCmisClient = CmisSession.getInstance();
+            ContentStream contentStream;
+            if (file.getSignatory().getSignatureLocation() != null) {
+                contentStream = CmisClient.getDocumentByPath(sessionCmisClient, file.getSignatory().getSignatureLocation());
+                if (contentStream != null) {
+                    ctCctCsvFileVo.setSignature(contentStream.getStream());
+                }
+            }
+            if (file.getSignatory().getStampLocation() != null) {
+                contentStream = CmisClient.getDocumentByPath(sessionCmisClient, file.getSignatory().getStampLocation());
+                if (contentStream != null) {
+                    ctCctCsvFileVo.setStamp(contentStream.getStream());
+                }
+            }
+        } catch (Exception ex) {
+            logger.error(file.getNumeroDossier(), ex);
         }
 
         return new JRBeanCollectionDataSource(Collections.singleton(ctCctCsvFileVo));
