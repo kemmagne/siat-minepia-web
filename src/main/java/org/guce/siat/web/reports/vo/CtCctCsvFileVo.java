@@ -1,6 +1,7 @@
 package org.guce.siat.web.reports.vo;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.Date;
 
 /**
@@ -234,7 +235,7 @@ public class CtCctCsvFileVo extends AbstractFileVo<CtCctCsvFileItemVo> {
      * The permit CITES Number.
      */
     private String cvsPermitCITES;
-/**
+    /**
      * The qr Code image.
      */
     private ByteArrayInputStream qrCode;
@@ -242,6 +243,13 @@ public class CtCctCsvFileVo extends AbstractFileVo<CtCctCsvFileItemVo> {
      * The signature date.
      */
     private String date;
+
+    private InputStream signature;
+    private InputStream stamp;
+
+    private String unloadingPlace;
+
+    private boolean csv;
 
     /**
      * Gets the consignor name.
@@ -937,5 +945,36 @@ public class CtCctCsvFileVo extends AbstractFileVo<CtCctCsvFileItemVo> {
         this.date = date;
     }
 
-    
+    public InputStream getSignature() {
+        return signature;
+    }
+
+    public void setSignature(InputStream signature) {
+        this.signature = signature;
+    }
+
+    public InputStream getStamp() {
+        return stamp;
+    }
+
+    public void setStamp(InputStream stamp) {
+        this.stamp = stamp;
+    }
+
+    public String getUnloadingPlace() {
+        return unloadingPlace;
+    }
+
+    public void setUnloadingPlace(String unloadingPlace) {
+        this.unloadingPlace = unloadingPlace;
+    }
+
+    public boolean isCsv() {
+        return csv;
+    }
+
+    public void setCsv(boolean csv) {
+        this.csv = csv;
+    }
+
 }

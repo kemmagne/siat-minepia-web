@@ -169,7 +169,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
  */
 @ManagedBean(name = "fileItemApDetailController")
 @SessionScoped
-public class FileItemApDetailController implements Serializable {
+public class FileItemApDetailController extends DefaultDetailController implements Serializable {
 
     /**
      * The Constant serialVersionUID.
@@ -344,7 +344,7 @@ public class FileItemApDetailController implements Serializable {
 
     @ManagedProperty(value = "#{attachmentService}")
     private AttachmentService attachmentService;
-    
+
     /**
      * The message not already send service.
      */
@@ -660,6 +660,13 @@ public class FileItemApDetailController implements Serializable {
      * The generate report allowed.
      */
     private Boolean generateReportAllowed;
+    
+    /**
+     * The generate report allowed.
+     */
+    private boolean generateDraftAllowed;
+
+    private List<FileTypeFlowReport> fileTypeFlowReportsDraft;
 
     /**
      * The ebxml properties service.
@@ -954,6 +961,8 @@ public class FileItemApDetailController implements Serializable {
         checkIsAllowedRecommandation();
 
         checkGenerateReportAllowed();
+        
+        checkGenerateDraftAllowed();
 
         tabList = new ArrayList<>();
         tabIndexList = concatenateActiveIndexString(tabList);
@@ -1035,7 +1044,7 @@ public class FileItemApDetailController implements Serializable {
 
                 if (equalsSteps) {
                     //Pour la Retreive Seulement une seule decision
-                    if (FileTypeCode.BSBE_MINFOF.equals(currentFile.getFileType().getCode())) {
+                    if (Arrays.asList(FileTypeCode.BSBE_MINFOF, FileTypeCode.VT_MINEPIA).contains(currentFile.getFileType().getCode())) {
                         flows = flowService.findFlowsByFromStepAndFileType2(referenceFileItem.getStep(), referenceFileItem
                                 .getFile().getFileType());
                         if (!CollectionUtils.isEmpty(flows)) {
@@ -1806,6 +1815,7 @@ public class FileItemApDetailController implements Serializable {
 
         paymentData.setMontantHt(invoiceTotalAmount);
         paymentData.setMontantTva(totalTva);
+        paymentData.setMontantEncaissement(invoiceTotalTtcAmount.doubleValue());
         paymentData.setAutreMontant(invoiceOtherAmount);
     }
 
@@ -1841,7 +1851,7 @@ public class FileItemApDetailController implements Serializable {
                 && FileTypeCode.CAT_MINADER.equals(lastDecisions.getFileItem().getFile().getFileType().getCode())) {
             lastDecisionTR = essayTestApService.findByItemFlow(lastDecisions);
             lastDecisionER = essayTestApService.findByItemFlow(lastDecisions);
-        } else if (FlowCode.FL_AP_166.name().equals(lastDecisions.getFlow().getCode())) {
+        } else if (Arrays.asList(FlowCode.FL_AP_VT1_03.name(), FlowCode.FL_AP_166.name()).contains(lastDecisions.getFlow().getCode())) {
             specificDecisionsHistory.setLastPaymentData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
             //    specificDecisionsHistory.setDecisionDetailsPayData(paymentDataService.findPaymentDataByItemFlow(lastDecisions));
         }
@@ -2343,7 +2353,7 @@ public class FileItemApDetailController implements Serializable {
                         Map<String, byte[]> attachedByteFiles = null;
 //                        try {
                         String reportNumber;
-                        if (FlowCode.FL_AP_107.name().equals(flowToSend.getCode()) || FlowCode.FL_AP_169.name().equals(flowToSend.getCode()) || FlowCode.FL_AP_202.name().equals(flowToSend.getCode())) {
+                        if (FlowCode.FL_AP_107.name().equals(flowToSend.getCode()) || FlowCode.FL_AP_169.name().equals(flowToSend.getCode()) || FlowCode.FL_AP_202.name().equals(flowToSend.getCode()) || FlowCode.FL_AP_VT1_06.name().equals(flowToSend.getCode())) {
                             ItemFlow decisionFlow = null;
                             if (currentFile.getFileType().getCode().equals(FileTypeCode.VTP_MINSANTE)) {
                                 decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_103);
@@ -2448,12 +2458,16 @@ public class FileItemApDetailController implements Serializable {
                                     }
                                 }
                             }
+                            // edit signature elements
+                            Date now = java.util.Calendar.getInstance().getTime();
+                            currentFile.setSignatureDate(now);
+                            currentFile.setSignatory(getLoggedUser());
                             attachedByteFiles = new HashMap<>();
 
                             final List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<>();
 
-                            final List<FileTypeFlowReport> fileTypeFlowReportsList = flowToSend.getFileTypeFlowReportsList();
-
+                            //final List<FileTypeFlowReport> fileTypeFlowReportsList = flowToSend.getFileTypeFlowReportsList();
+                            List<FileTypeFlowReport> fileTypeFlowReportsList = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(flowToSend, currentFile.getFileType());
                             if (fileTypeFlowReportsList != null) {
 
                                 for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
@@ -2530,9 +2544,10 @@ public class FileItemApDetailController implements Serializable {
                                 //Update report sequence
                                 reportOrganism.setSequence(reportOrganism.getSequence() + 1);
                                 reportOrganismService.update(reportOrganism);
-                                final Map<String, Date> dateParams = new HashMap<>();
-                                dateParams.put("SIGNATURE_DATE", java.util.Calendar.getInstance().getTime());
-                                fileService.updateSpecificColumn(dateParams, currentFile);
+//                                final Map<String, Date> dateParams = new HashMap<>();
+//                                dateParams.put("SIGNATURE_DATE", java.util.Calendar.getInstance().getTime());
+//                                fileService.updateSpecificColumn(dateParams, currentFile);
+                                fileService.update(currentFile);
                             }
                         } else if (FlowCode.FL_AP_202.name().equals(flowToSend.getCode())) {
                             FileMarshall fileMarshall = fileMarshallServce.findByFile(currentFile);
@@ -2563,8 +2578,8 @@ public class FileItemApDetailController implements Serializable {
                         // prepare document to send
                         byte[] xmlBytes;
                         ByteArrayOutputStream output = SendDocumentUtils.prepareApDocument(documentSerializable, service, documentType);
-                        xmlBytes = output.toByteArray();                        
-                        
+                        xmlBytes = output.toByteArray();
+
                         if (CollectionUtils.isNotEmpty(flowToSend.getCopyRecipientsList())) {
                             final List<CopyRecipient> copyRecipients = flowToSend.getCopyRecipientsList();
                             for (final CopyRecipient copyRecipient : copyRecipients) {
@@ -2633,7 +2648,7 @@ public class FileItemApDetailController implements Serializable {
             messageToSendService.saveOrUpadateNotSendedMessageAsMessageToResend(data);
             showErrorFacesMessage(ControllerConstants.Bundle.Messages.SEND_ERROR, null);
             return;
-        }else{
+        } else {
             messageToSendService.deleteNotSendedMessageIfExistsAsMessageToResend(data);
         }
         if (LOG.isDebugEnabled()) {
@@ -2782,6 +2797,7 @@ public class FileItemApDetailController implements Serializable {
             sendDecisionAllowed = true;
             fileItemHasDraft = true;
         }
+        checkGenerateDraftAllowed();
     }
 
     /**
@@ -3353,27 +3369,43 @@ public class FileItemApDetailController implements Serializable {
         fileFieldGroupDto.setFieldValues(fieldValues);
 
     }
+    
+    /**
+     * Check generate draft allowed.
+     */
+    private void checkGenerateDraftAllowed() {
+        Flow reportingFlow = flowService.findFlowByCode(FlowCode.FL_AP_107.name());
+
+        if (FileTypeCode.VT_MINEPIA.equals(currentFile.getFileType().getCode()) && currentFile.getParent() != null) {
+            reportingFlow = flowService.findFlowByCode(FlowCode.FL_AP_VT1_06.name());
+        }
+
+        
+        Flow currentDecision = selectedFlow;
+        if(currentDecision == null){
+            ItemFlow draftItemFlow = itemFlowService.findDraftByFileItem(selectedFileItem);
+            if(draftItemFlow != null){
+                currentDecision = draftItemFlow.getFlow();
+            }
+        }
+        
+        fileTypeFlowReportsDraft = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getFileType());
+        generateDraftAllowed = sendDecisionAllowed && (Arrays.asList(StepCode.ST_AP_54, StepCode.ST_AP_VT1_01).contains(selectedFileItem.getStep().getStepCode())
+                && reportingFlow.equals(currentDecision))
+                && CollectionUtils.isNotEmpty(fileTypeFlowReportsDraft);
+    }
 
     /**
      * Check generate report allowed.
      */
     private void checkGenerateReportAllowed() {
         generateReportAllowed = false;
-        final Flow reportingFlow = flowService.findByToStep(selectedFileItem.getStep());
+        final Flow reportingFlow = flowService.findByToStep(selectedFileItem.getStep(), currentFile.getFileType());
         if (reportingFlow == null) {
             return;
         }
-        final List<FileTypeFlowReport> fileTypeFlowReportsList = reportingFlow.getFileTypeFlowReportsList();
-
-        if (StepCode.ST_AP_44.name().equals(selectedFileItem.getStep().getStepCode().name())
-                && CollectionUtils.isNotEmpty(fileTypeFlowReportsList)) {
-
-            for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
-                if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType())) {
-                    generateReportAllowed = true;
-                }
-            }
-        }
+        final List<FileTypeFlowReport> fileTypeFlowReportsList = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getFileType());
+        generateReportAllowed = StepCode.ST_AP_44.equals(selectedFileItem.getStep().getStepCode()) && CollectionUtils.isNotEmpty(fileTypeFlowReportsList);
         if (aiMinmidtFileType) {
             generateReportAllowed = false;
         }
@@ -3382,20 +3414,35 @@ public class FileItemApDetailController implements Serializable {
     /**
      * Download report.
      *
+     * @param draft
      * @return the streamed content
      */
-    public StreamedContent downloadReport() {
-        final List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<>();
-
-        final Flow reportingFlow = flowService.findByToStep(selectedFileItem.getStep());
-        final List<FileTypeFlowReport> fileTypeFlowReportsList = reportingFlow.getFileTypeFlowReportsList();
-
-        if (fileTypeFlowReportsList != null && !aiMinmidtFileType) {
-            for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
-                if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType())) {
-                    fileTypeFlowReports.add(fileTypeFlowReport);
-                }
+    public StreamedContent downloadReport(boolean draft) {
+        List<FileTypeFlowReport> fileTypeFlowReports = new ArrayList<>();
+        AbstractReportInvoker reportInvoker = null;
+        final Flow reportingFlow = flowService.findByToStep(selectedFileItem.getStep(), currentFile.getFileType());
+//        final List<FileTypeFlowReport> fileTypeFlowReportsList = reportingFlow.getFileTypeFlowReportsList();
+//
+//        if (fileTypeFlowReportsList != null && !aiMinmidtFileType) {
+//            for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportsList) {
+//                if (currentFile.getFileType().equals(fileTypeFlowReport.getFileType())) {
+//                    fileTypeFlowReports.add(fileTypeFlowReport);
+//                }
+//            }
+//        }
+        if (!aiMinmidtFileType) {
+            if(draft){
+                fileTypeFlowReports = fileTypeFlowReportsDraft;
+            }else{
+                fileTypeFlowReports = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getFileType());
             }
+            
+        }
+        if (currentFile.getSignatory() == null) {
+            currentFile.setSignatory(getLoggedUser());
+        }
+        if (currentFile.getSignatureDate() == null) {
+            currentFile.setSignatureDate(java.util.Calendar.getInstance().getTime());
         }
         for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
 
@@ -3409,6 +3456,11 @@ public class FileItemApDetailController implements Serializable {
                 if (bsbeMinfofFileType) {
                     Constructor c1 = classe.getConstructor(File.class, List.class, String.class);
                     report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile, specsList, woodsType == null ? "GRUMES" : woodsType.getValue()));
+                } else if(FileTypeCode.VT_MINEPIA.equals(currentFile.getFileType().getCode())){
+                    Constructor c1 = classe.getConstructor(File.class);
+                    reportInvoker = (AbstractReportInvoker) c1.newInstance(currentFile);
+                    reportInvoker.setDraft(draft);
+                    report = JsfUtil.getReport(reportInvoker);
                 } else {
                     report = ReportGeneratorUtils.generateReportBytes(fileFieldValueService, classe, currentFile);
                 }
@@ -5610,6 +5662,44 @@ public class FileItemApDetailController implements Serializable {
             JsfUtil.addErrorMessage(clientId, msg);
         }
         LOG.warn(msg);
+    }
+
+    public boolean isGenerateDraftAllowed() {
+        return generateDraftAllowed;
+    }
+
+    public void setGenerateDraftAllowed(boolean generateDraftAllowed) {
+        this.generateDraftAllowed = generateDraftAllowed;
+    }
+
+    public List<FileTypeFlowReport> getFileTypeFlowReportsDraft() {
+        return fileTypeFlowReportsDraft;
+    }
+
+    public void setFileTypeFlowReportsDraft(List<FileTypeFlowReport> fileTypeFlowReportsDraft) {
+        this.fileTypeFlowReportsDraft = fileTypeFlowReportsDraft;
+    }
+    
+    
+
+    @Override
+    public String getDetailIndexPageUrl() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean canDecide() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean canConfirm() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean canRollback() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

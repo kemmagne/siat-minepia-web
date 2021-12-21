@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="file" language="groovy" pageWidth="595" pageHeight="842" columnWidth="585" leftMargin="5" rightMargin="5" topMargin="5" bottomMargin="5" uuid="28078ea8-15af-47d5-9f91-aa95db5f187e">
 	<property name="ireport.zoom" value="1.272292855117456"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="359"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<style name="table">
 		<box>
@@ -106,22 +106,9 @@
 	<field name="signature" class="java.io.InputStream"/>
 	<field name="stamp" class="java.io.InputStream"/>
 	<field name="unloadingPlace" class="java.lang.String"/>
+	<field name="csv" class="java.lang.Boolean"/>
 	<title>
 		<band height="188" splitType="Stretch">
-			<staticText>
-				<reportElement x="167" y="161" width="224" height="11" uuid="69aaa6e1-159a-41fc-b5f9-3ab414af9195"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[DOCUMENT CONTROL CERTIFICATE]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="152" y="148" width="266" height="14" uuid="95102650-d52e-41b9-b255-00a9979eb037"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font size="11" isBold="true"/>
-				</textElement>
-				<text><![CDATA[CERTIFICAT DE CONTRÔLE DOCUMENTAIRE]]></text>
-			</staticText>
 			<frame>
 				<reportElement mode="Transparent" x="10" y="10" width="210" height="120" uuid="011006e8-de79-4005-bb6d-617b4272933b"/>
 				<staticText>
@@ -175,20 +162,6 @@
 				</staticText>
 				<staticText>
 					<reportElement x="38" y="91" width="128" height="11" uuid="10552308-d74b-4c86-907d-d8210f9483ff"/>
-					<textElement textAlignment="Center">
-						<font size="8" isItalic="true"/>
-					</textElement>
-					<text><![CDATA[---------]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="33" y="100" width="142" height="11" uuid="f5e64cc8-8d49-471f-a929-29e289a25541"/>
-					<textElement textAlignment="Center">
-						<font size="8" isItalic="false"/>
-					</textElement>
-					<text><![CDATA[BP : 721 Douala - Tel/Fax : 233 42 65 41]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="38" y="106" width="128" height="11" uuid="76cbedc1-dd08-4f9a-abf1-b765ba600f01"/>
 					<textElement textAlignment="Center">
 						<font size="8" isItalic="true"/>
 					</textElement>
@@ -287,14 +260,18 @@
 				<imageExpression><![CDATA["logo_minepia.jpg"]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="11" y="173" width="23" height="15" uuid="96206be8-36e6-45ec-81b3-e4231d93dfef"/>
+				<reportElement x="11" y="173" width="23" height="15" uuid="96206be8-36e6-45ec-81b3-e4231d93dfef">
+					<printWhenExpression><![CDATA[!$F{csv}]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center">
 					<font size="9" isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[NB:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="34" y="173" width="544" height="15" uuid="c270d85a-c550-486e-b608-c471ee25e1d8"/>
+				<reportElement x="34" y="173" width="544" height="15" uuid="c270d85a-c550-486e-b608-c471ee25e1d8">
+					<printWhenExpression><![CDATA[!$F{csv}]]></printWhenExpression>
+				</reportElement>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
@@ -307,6 +284,20 @@
 			<textField>
 				<reportElement x="397" y="132" width="45" height="17" uuid="bc6ae6e4-4d84-49df-a0c1-35dfcc1e69d2"/>
 				<textFieldExpression><![CDATA[$F{unloadingPlace} != null && $F{unloadingPlace}.startsWith("CMD") ? "Douala," : ($F{unloadingPlace} != null && $F{unloadingPlace}.startsWith("CMK") ? "Kribi," : "")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="152" y="148" width="266" height="14" uuid="625bae6f-b9d8-4542-b585-d849d97ade55"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{csv} ? "CERTIFICAT SANITAIRE VETERINAIRE" : "CERTIFICAT DE CONTROLE DOCUMENTAIRE"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="167" y="161" width="224" height="11" uuid="fa3e693f-d8fa-4bfa-aae0-b9b5d6b1e174"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{csv} ? "VETERINARY HEALTH CERTIFICATE" : "DOCUMENT CONTROL CERTIFICATE"]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
@@ -683,6 +674,9 @@
 					</textElement>
 					<textFieldExpression><![CDATA[($F{cvsPermitCITES}!= null && $F{cvsPermitCITES}.trim().length()>0 ? $F{cvsPermitCITES} : "-")]]></textFieldExpression>
 				</textField>
+				<rectangle>
+					<reportElement x="274" y="0" width="272" height="22" uuid="842bdcc9-77bc-4eb2-bfae-5599501bd6c5"/>
+				</rectangle>
 			</frame>
 		</band>
 		<band height="101">
@@ -1328,7 +1322,7 @@ Titre et Qualité]]></text>
 					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 						<font size="8" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA[($F{signatoryPosition}!= null && $F{signatoryPosition}.trim().length()>0 ? $F{signatoryPosition} : "-")]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Chef de poste"]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="208" y="87" width="166" height="40" uuid="2023edc0-8b35-4b37-a577-7ee43b63ac2b"/>

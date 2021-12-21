@@ -485,9 +485,14 @@ public interface ControllerConstants {
             String CANNOT_GENERATE_REPORT = "CannotGenerateReport";
 
             /**
-             * The Constant SEND_ERROR.
+             * The Constant BILLING_WITHOUT_INVOICE_LINES_ERROR.
              */
             String BILLING_WITHOUT_INVOICE_LINES_ERROR = "billingWithoutInvoiceLines_Error";
+
+            /**
+             * The Constant CANNOT_PARSE_AMOUNT_ERROR.
+             */
+            String CANNOT_PARSE_AMOUNT_ERROR = "cannotParseAmount_Error";
 
             /**
              * The Constant SEND_ERROR.

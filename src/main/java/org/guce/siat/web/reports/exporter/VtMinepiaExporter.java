@@ -15,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.guce.siat.common.model.File;
 import org.guce.siat.common.model.FileFieldValue;
 import org.guce.siat.common.model.FileItem;
+import org.guce.siat.common.utils.DateUtils;
 import org.guce.siat.web.reports.vo.VtMinepiaFileItemVo;
 import org.guce.siat.web.reports.vo.VtMinepiaFileVo;
 import org.slf4j.Logger;
@@ -57,7 +58,7 @@ public class VtMinepiaExporter extends AbstractReportInvoker {
 
 		if ((file != null)) {
 			final List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
-			vtMinepiaVo.setDecisionDate(file.getSignatureDate());
+			
 			if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
 				for (final FileFieldValue fileFieldValue : fileFieldValueList) {
 					switch (fileFieldValue.getFileField().getCode()) {
@@ -80,6 +81,7 @@ public class VtMinepiaExporter extends AbstractReportInvoker {
 							if (StringUtils.isNotBlank(fileFieldValue.getValue())) {
 								try {
 									vtMinepiaVo.setDecisionDate(new SimpleDateFormat("dd/MM/yyyy").parse(fileFieldValue.getValue()));
+                                                                        vtMinepiaVo.setSignatureDate(fileFieldValue.getValue());
 								} catch (final ParseException e) {
 									LOG.error(Objects.toString(e), e);
 								}
@@ -93,13 +95,26 @@ public class VtMinepiaExporter extends AbstractReportInvoker {
 					}
 				}
 			}
+                        String numeroDossier = file.getParent() != null ? file.getParent().getNumeroDossier() : file.getNumeroDossier();
+                        vtMinepiaVo.setDecisionNumber(numeroDossier);
+                        if(StringUtils.isEmpty(vtMinepiaVo.getDecisionPlace())){
+                            vtMinepiaVo.setDecisionPlace("Douala");
+                        }
 
 			if ((file.getClient() != null)) {
 				vtMinepiaVo.setImporter(file.getClient().getCompanyName());
 				vtMinepiaVo.setAddress(file.getClient().getFullAddress());
 				vtMinepiaVo.setProfession(file.getClient().getProfession());
 			}
-
+                        
+                        if(file.getSignatory() != null){
+                            vtMinepiaVo.setSignatory(String.format("%s %s", file.getSignatory().getFirstName(), file.getSignatory().getLastName()));
+                        }
+                        if(file.getSignatureDate() != null){
+                            String signatureDate = DateUtils.formatSimpleDate("dd/MM/yyyy", file.getSignatureDate());
+                            vtMinepiaVo.setSignatureDate(signatureDate);
+                        }
+                        vtMinepiaVo.setCode(String.format("%s/%s", file.getNumeroDemande(), numeroDossier));
 			final List<FileItem> fileItemList = file.getFileItemsList();
 
 			final List<VtMinepiaFileItemVo> fileItemVos = new ArrayList<VtMinepiaFileItemVo>();

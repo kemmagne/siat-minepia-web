@@ -49,7 +49,9 @@
                                     <ui:include src="pdfViewer.xhtml" />
                                     <ui:include src="remindDecision.xhtml" />
                                     <ui:include src="fileBaseInformations.xhtml" />
-                                    <ui:include src="relatedFiles.xhtml" />
+                                    <p:panel rendered="#{fileItemCctDetailController.phyto}">
+                                        <ui:include src="relatedFiles.xhtml" />
+                                    </p:panel>
                                 </h:panelGroup>
                             </h:panelGrid>
                         </p:panel>

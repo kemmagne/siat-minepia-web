@@ -235,9 +235,9 @@ public class PaymentController extends AbstractController<FileItem> {
     public void goToCostsPage() {
         try {
             final FileItem selectedFileItem = selectedFile.getFile().getFileItemsList().get(0);
-            ItemFlow lastItemFlow = itemFlowService.findLastSentItemFlowByFileItem(selectedFileItem);
-            PaymentData paymentData = null;
-            if (isPhyto(selectedFile.getFile())) {
+            final ItemFlow lastItemFlow = itemFlowService.findLastSentItemFlowByFileItem(selectedFileItem);
+            final PaymentData paymentData;
+            if (isPhyto(selectedFile.getFile()) || FileTypeCode.CCT_CSV.equals(selectedFile.getFile().getFileType().getCode())) {
                 paymentData = paymentDataService.findPaymentDataByFileItem(selectedFileItem);
             } else if (isCcsMinsante(selectedFile.getFile())) {
                 paymentData = getPaymentDataByFileAndPaymentFlow(selectedFile.getFile(), FlowCode.FL_CT_158);
@@ -276,7 +276,7 @@ public class PaymentController extends AbstractController<FileItem> {
                     paymentData.setPartVersRs(selectedFile.getFile().getClient().getCompanyName());
                 }
 
-                if (isPhyto(selectedFile.getFile())) {
+                if (isPhyto(selectedFile.getFile()) || FileTypeCode.CCT_CSV.equals(selectedFile.getFile().getFileType().getCode())) {
                     paymentData.setNatureEncaissement("Frais ".concat(selectedFile.getFile().getFileType().getLabelFr()));
                 } else {
                     paymentData.setNatureEncaissement(FileTypeCode.VT_MINEPDED.equals(selectedFile.getFile().getFileType().getCode()) ? NATURE_FRAIS_VT : NATURE_FRAIS_CP);
@@ -344,7 +344,7 @@ public class PaymentController extends AbstractController<FileItem> {
             PaymentData paymentData = null;
             fileDto.setFile(paymentFile);
 
-            if (isPhyto(paymentFile)) {
+            if (isPhyto(paymentFile) || FileTypeCode.CCT_CSV.equals(paymentFile.getFileType().getCode())) {
                 paymentData = paymentDataService.findPaymentDataByFileItem(paymentFile.getFileItemsList().get(0));
             } else if (isCcsMinsante(paymentFile)) {
                 paymentData = getPaymentDataByFileAndPaymentFlow(paymentFile, FlowCode.FL_CT_158);

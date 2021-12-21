@@ -9,14 +9,14 @@
         <version>1.2.3</version>
     </parent>
 
-    <artifactId>siat-ct-web</artifactId>
+    <artifactId>siat-ct-minepia-web</artifactId>
     <!-- .STANDALONE -->
     <!-- .TEST -->
     <!-- .HT -->
-    <version>2.6.24-STANDALONE</version>
+    <version>2.7.0-beta.1</version>
     <packaging>war</packaging>
 
-    <name>siat-ct-web</name>
+    <name>siat-ct-minepia-web</name>
 
     <profiles>
         <profile>
@@ -104,8 +104,8 @@
     <dependencies>
         <dependency>
             <groupId>org.guce.siat</groupId>
-            <artifactId>siat-ct-core</artifactId>
-            <version>2.3.36</version>
+            <artifactId>siat-ct-minepia-core</artifactId>
+            <version>2.4.0-beta.1</version>
         </dependency>
         <!-- Servlet -->
         <dependency>
