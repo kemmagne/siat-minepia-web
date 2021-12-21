@@ -6330,6 +6330,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
         AbstractReportInvoker reportInvoker = null;
         List<AbstractReportInvoker> reportInvokersForFstpAndAtp = null;
         FileItem ffi = file.getFileItemsList().get(0);
+        Flow flow = fileTypeFlowReport.getFlow();
         if (checkMinaderMinistry) {
             String reportNumber = null;
             if (draft) {
@@ -6339,7 +6340,6 @@ public class FileItemCctDetailController extends DefaultDetailController {
                         + ((reportOrganism != null && reportOrganism.getValue() != null) ? reportOrganism.getValue() : StringUtils.EMPTY);
 
             }
-            Flow flow = fileTypeFlowReport.getFlow();
             if (BooleanUtils.toBoolean(flow.getToStep().getIsFinal())) {
                 switch (file.getFileType().getCode()) {
                     case CCT_CT_E: {
