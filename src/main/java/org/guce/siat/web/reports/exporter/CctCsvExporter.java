@@ -49,6 +49,8 @@ public class CctCsvExporter extends AbstractReportInvoker {
 
     private final ApprovedDecision decision;
 
+    private boolean csv;
+
     /**
      * Instantiates a new ct cct csv exporter.
      *
@@ -57,7 +59,7 @@ public class CctCsvExporter extends AbstractReportInvoker {
      * @param decision the decision updated by operator
      */
     public CctCsvExporter(final File file, User connected, ApprovedDecision decision) {
-        super("CT_CCT_CSV", "CT_CCT_CSV");
+        super("CCT_CSV", "CCT_CSV");
         this.file = file;
         this.user = connected;
         this.decision = decision;
@@ -72,6 +74,7 @@ public class CctCsvExporter extends AbstractReportInvoker {
     public JRBeanCollectionDataSource getReportDataSource() {
 
         final CtCctCsvFileVo ctCctCsvFileVo = new CtCctCsvFileVo();
+        ctCctCsvFileVo.setCsv(csv);
 
         if ((file != null)) {
 
@@ -486,6 +489,10 @@ public class CctCsvExporter extends AbstractReportInvoker {
      */
     public File getFile() {
         return file;
+    }
+
+    public void setCsv(boolean csv) {
+        this.csv = csv;
     }
 
 }

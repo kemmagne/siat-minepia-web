@@ -142,7 +142,7 @@
 
     <!-- REST API SERVELT -->
     <servlet>
-        <servlet-name>SIAT CT REST API</servlet-name>
+        <servlet-name>SIAT CT MINEPIA REST API</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <init-param>
             <param-name>contextConfigLocation</param-name>
@@ -151,7 +151,7 @@
         <load-on-startup>2</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>SIAT CT REST API</servlet-name>
+        <servlet-name>SIAT CT MINEPIA REST API</servlet-name>
         <url-pattern>/restapi/*</url-pattern>
     </servlet-mapping>
 
