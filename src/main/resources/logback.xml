@@ -11,10 +11,10 @@
     </appender>
 
     <appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>${catalina.base}/logs/siat_ct.log</File>
+        <File>${catalina.base}/logs/siat_ct_minepia.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <FileNamePattern>${catalina.base}/logs/siat_ct.log.%d{yyyy-MM-dd}</FileNamePattern>
+            <FileNamePattern>${catalina.base}/logs/siat_ct_minepia.log.%d{yyyy-MM-dd}</FileNamePattern>
 
             <!-- keep 30 days' worth of history -->
             <maxHistory>90</maxHistory>
@@ -25,10 +25,10 @@
         </encoder>
     </appender>
     <appender name="hibernateDailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>${catalina.base}/logs/siat_ct_hibernate.log</File>
+        <File>${catalina.base}/logs/siat_ct_minepia_hibernate.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <FileNamePattern>${catalina.base}/logs/siat_ct_hibernate.log.%d{yyyy-MM-dd}</FileNamePattern>
+            <FileNamePattern>${catalina.base}/logs/siat_ct_minepia_hibernate.log.%d{yyyy-MM-dd}</FileNamePattern>
 
             <!-- keep 30 days' worth of history -->
             <maxHistory>30</maxHistory>
