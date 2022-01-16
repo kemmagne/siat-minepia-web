@@ -9,14 +9,14 @@
         <version>1.2.3</version>
     </parent>
 
-    <artifactId>siat-ct-web</artifactId>
+    <artifactId>siat-ct-minepia-web</artifactId>
     <!-- .STANDALONE -->
     <!-- .TEST -->
     <!-- .HT -->
     <version>2.6.24</version>
     <packaging>war</packaging>
 
-    <name>siat-ct-web</name>
+    <name>siat-ct-minepia-web</name>
     
     <properties>
         <jersey.version>2.25</jersey.version>
