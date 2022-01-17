@@ -3082,7 +3082,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                             Map<String, byte[]> attachedByteFiles = null;
                             String reportNumber;
                             if (Arrays.asList(FlowCode.FL_CT_89.name(), FlowCode.FL_CT_08.name(),
-                                    FlowCode.FL_CT_114.name(), FlowCode.FL_CT_117.name(), FlowCode.FL_CT_140.name(),
+                                    FlowCode.FL_CT_114.name(), FlowCode.FL_CT_117.name(), FlowCode.FL_CT_140.name(), FlowCode.FL_CT_176.name(), FlowCode.FL_CT_177.name(),
                                     FlowCode.FL_CT_CVS_03.name(), FlowCode.FL_CT_CVS_07.name(), FlowCode.FL_CT_162.name(), FlowCode.FL_CT_169.name(), FlowCode.FL_CT_CCS_05.name())
                                     .contains(flowToSend.getCode())) {
                                 // edit signature elements
@@ -6329,6 +6329,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
         AbstractReportInvoker reportInvoker = null;
         List<AbstractReportInvoker> reportInvokersForFstpAndAtp = null;
         FileItem ffi = file.getFileItemsList().get(0);
+        Flow flow = fileTypeFlowReport.getFlow();
         if (checkMinaderMinistry) {
             String reportNumber = null;
             if (draft) {
@@ -6338,7 +6339,6 @@ public class FileItemCctDetailController extends DefaultDetailController {
                         + ((reportOrganism != null && reportOrganism.getValue() != null) ? reportOrganism.getValue() : StringUtils.EMPTY);
 
             }
-            Flow flow = fileTypeFlowReport.getFlow();
             if (BooleanUtils.toBoolean(flow.getToStep().getIsFinal())) {
                 switch (file.getFileType().getCode()) {
                     case CCT_CT_E: {
@@ -6470,10 +6470,10 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 case CCT_CSV:
                     if (approvedDecision == null) {
                         lastDecisions = itemFlowService.findLastSentItemFlowByFileItem(selectedFileItemCheck.getFileItem());
-
                         approvedDecision = approvedDecisionService.findApprovedDecisionByItemFlow(lastDecisions);
                     }
                     reportInvoker = new CctCsvExporter(currentFile, loggedUser, approvedDecision);
+                    ((CctCsvExporter) reportInvoker).setCsv(Arrays.asList(FlowCode.FL_CT_162.name(), FlowCode.FL_CT_169.name()).contains(flow.getCode()));
                     break;
             }
         } else if (FileTypeCode.CCS_MINSANTE.equals(file.getFileType().getCode())) {

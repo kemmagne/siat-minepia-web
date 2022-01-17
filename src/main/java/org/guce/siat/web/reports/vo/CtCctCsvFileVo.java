@@ -249,6 +249,8 @@ public class CtCctCsvFileVo extends AbstractFileVo<CtCctCsvFileItemVo> {
 
     private String unloadingPlace;
 
+    private boolean csv;
+
     /**
      * Gets the consignor name.
      *
@@ -965,6 +967,14 @@ public class CtCctCsvFileVo extends AbstractFileVo<CtCctCsvFileItemVo> {
 
     public void setUnloadingPlace(String unloadingPlace) {
         this.unloadingPlace = unloadingPlace;
+    }
+
+    public boolean isCsv() {
+        return csv;
+    }
+
+    public void setCsv(boolean csv) {
+        this.csv = csv;
     }
 
 }
