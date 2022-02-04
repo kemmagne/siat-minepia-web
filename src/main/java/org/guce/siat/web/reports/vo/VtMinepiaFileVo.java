@@ -57,6 +57,10 @@ public class VtMinepiaFileVo extends AbstractFileVo<VtMinepiaFileItemVo> {
     private InputStream signatoryStamp;
 
     private InputStream signatorySignature;
+    
+    private String regionFr;
+    
+    private String regionEn;
 
     /**
      * Gets the country of origin.
@@ -233,5 +237,23 @@ public class VtMinepiaFileVo extends AbstractFileVo<VtMinepiaFileItemVo> {
     public void setSignatorySignature(InputStream signatorySignature) {
         this.signatorySignature = signatorySignature;
     }
+
+    public String getRegionFr() {
+        return regionFr;
+    }
+
+    public void setRegionFr(String regionFr) {
+        this.regionFr = regionFr;
+    }
+
+    public String getRegionEn() {
+        return regionEn;
+    }
+
+    public void setRegionEn(String regionEn) {
+        this.regionEn = regionEn;
+    }
+    
+    
 
 }

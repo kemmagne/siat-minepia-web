@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VT_MINEPIA" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="487cd13d-5160-41db-a737-71f51ecf7f75">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="96"/>
+	<property name="ireport.y" value="192"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -47,6 +47,8 @@
 	<field name="qrCode" class="java.io.InputStream"/>
 	<field name="signatoryStamp" class="java.io.InputStream"/>
 	<field name="signatorySignature" class="java.io.InputStream"/>
+	<field name="regionFr" class="java.lang.String"/>
+	<field name="regionEn" class="java.lang.String"/>
 	<background>
 		<band height="802" splitType="Stretch">
 			<printWhenExpression><![CDATA[$P{DRAFT}]]></printWhenExpression>
@@ -99,13 +101,6 @@
 				<text><![CDATA[-------]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="27" width="229" height="10" uuid="b2725a64-cca6-458d-85a3-211ff1df4893"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="8"/>
-				</textElement>
-				<text><![CDATA[REGION DU LITTORAL]]></text>
-			</staticText>
-			<staticText>
 				<reportElement x="0" y="36" width="229" height="10" uuid="9376ff50-88db-49e2-964b-5366e1b7642e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="8"/>
@@ -155,13 +150,6 @@
 				<text><![CDATA[-------]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="326" y="27" width="229" height="10" uuid="0568d605-8769-4a8b-be25-ce9a8a0a24b2"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="8"/>
-				</textElement>
-				<text><![CDATA[LITTORAL REGION]]></text>
-			</staticText>
-			<staticText>
 				<reportElement x="326" y="64" width="229" height="10" uuid="ef93abfa-3395-4eee-96d3-4dddf80df2e4"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="8" isItalic="true"/>
@@ -179,6 +167,20 @@
 				<reportElement x="240" y="1" width="76" height="79" uuid="ac22faa8-10da-43ad-b2f6-28e8a4928ab9"/>
 				<imageExpression><![CDATA[new java.io.File($P{MINEPIA_LOGO})]]></imageExpression>
 			</image>
+			<textField>
+				<reportElement x="0" y="27" width="229" height="10" uuid="df4448c4-eb58-4f1d-9ae4-4195e552b0cf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled">
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["REGION DU "+ $F{regionFr}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="326" y="27" width="229" height="10" uuid="e10a6304-291b-45f4-a7d5-e8cdea33fa2d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled">
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{regionEn}+ " REGION"]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
@@ -369,16 +371,16 @@
 				<text><![CDATA[NB : ce visa technique est valable pour une facture/connaissement]]></text>
 			</staticText>
 			<image scaleImage="FillFrame">
-				<reportElement x="335" y="131" width="100" height="100" uuid="37706ec2-ab4d-46ef-85b2-46824196a109">
-					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
-				</reportElement>
-				<imageExpression><![CDATA[$F{signatoryStamp}]]></imageExpression>
-			</image>
-			<image scaleImage="FillFrame">
 				<reportElement x="395" y="151" width="89" height="80" uuid="dfeb5caf-5b65-4f1f-9976-b27414ab0b45">
 					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
 				</reportElement>
 				<imageExpression><![CDATA[$F{signatorySignature}]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame">
+				<reportElement x="335" y="131" width="100" height="100" uuid="37706ec2-ab4d-46ef-85b2-46824196a109">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$F{signatoryStamp}]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="314" y="231" width="187" height="14" uuid="ef32840a-6652-4fe3-980a-4a80cdbf6532">
@@ -387,7 +389,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="9" isBold="true" isUnderline="true"/>
 				</textElement>
-				<text><![CDATA[Le Chef de Poste]]></text>
+				<text><![CDATA[Le Délégué régional]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="314" y="246" width="187" height="15" uuid="79a9ae22-367d-4890-a3c6-cc05d901508d">

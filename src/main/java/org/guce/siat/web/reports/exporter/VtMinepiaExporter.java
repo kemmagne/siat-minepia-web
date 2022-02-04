@@ -106,7 +106,14 @@ public class VtMinepiaExporter extends AbstractReportInvoker {
             String numeroDossier = file.getParent() != null ? file.getParent().getNumeroDossier() : file.getNumeroDossier();
             vtMinepiaVo.setDecisionNumber(numeroDossier);
             if (StringUtils.isEmpty(vtMinepiaVo.getDecisionPlace())) {
-                vtMinepiaVo.setDecisionPlace("Douala");
+                vtMinepiaVo.setDecisionPlace(file.getBureau().getCityFr());
+            }
+            if(file.getBureau().getRegionFr() != null){
+                vtMinepiaVo.setRegionFr(file.getBureau().getRegionFr().toUpperCase());
+            }
+            
+            if(file.getBureau().getRegionEn() != null){
+                vtMinepiaVo.setRegionEn(file.getBureau().getRegionEn().toUpperCase());
             }
 
             if ((file.getClient() != null)) {
