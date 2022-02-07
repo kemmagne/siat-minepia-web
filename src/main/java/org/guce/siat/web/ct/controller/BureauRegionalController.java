@@ -88,7 +88,6 @@ public class BureauRegionalController extends AbstractController<Bureau> {
         }
         super.setService(bureauService);
         super.setPageUrl(ControllerConstants.Pages.BO.BUREAU_REGIONAL_INDEX_PAGE);
-
     }
 
     /*
@@ -100,7 +99,14 @@ public class BureauRegionalController extends AbstractController<Bureau> {
     public void create() {
         getSelected().setDeleted(false);
         getSelected().setBureauType(BureauType.BUREAU_REGIONAL);
+        getSelected().setCityEn(getSelected().getCityFr());
         super.create();
+    }
+
+    @Override
+    public void edit() {
+        getSelected().setCityEn(getSelected().getCityFr());
+        super.edit();
     }
 
     /*

@@ -1,125 +1,148 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+      xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
 
-<ui:composition>
+    <ui:composition>
 
-	<p:dialog closeOnEscape="true" id="bureauRegionalEditDlg" widgetVar="bureauRegionalEditDialog" modal="true" resizable="false" appendTo="@(body)"
-		header="#{bundle['EditBureauRegionalTitle']}" width="800px">
+        <p:dialog closeOnEscape="true" id="bureauRegionalEditDlg" widgetVar="bureauRegionalEditDialog" modal="true" resizable="false" appendTo="@(body)"
+                  header="#{bundle['EditBureauRegionalTitle']}" width="800px">
 
-		<h:form id="bureauRegionalEditForm">
-			
-			<h:panelGroup id="display" styleClass="inpWidth">
+            <h:form id="bureauRegionalEditForm">
 
-
-				<p:outputLabel value="#{bundle['EditBureauRegionalLabel_headOffice']}" />
-				<h:outputText
-					value="#{(bureauRegionalController.selected.headOffice.firstName).concat(' ').concat(bureauRegionalController.selected.headOffice.lastName)}" />
-				<br />
-				
-				<p:panelGrid columns="4">
-
-					<p:outputLabel value="#{bundle['EditBureauRegionalLabel_labelFr']}" for="bureauRegional_labelFr" />
-					<p:inputText id="bureauRegional_labelFr" value="#{bureauRegionalController.selected.labelFr}"
-						title="#{bundle['EditBureauRegionalTitle_labelFr']}" required="false"
-						requiredMessage="#{bundle['EditBureauRegionalRequiredMessage_labelFr']}" />
-
-					<h:panelGroup>
-						<h:outputLabel value="#{bundle['EditBureauRegionalLabel_labelEn']}" for="bureauRegional_labelEn" />
-					</h:panelGroup>
-					<p:inputText id="bureauRegional_labelEn" value="#{bureauRegionalController.selected.labelEn}"
-						title="#{bundle['EditBureauRegionalTitle_labelEn']}" required="false"
-						requiredMessage="#{bundle['EditBureauRegionalRequiredMessage_labelEn']}" />
-
-					<h:panelGroup>
-						<h:outputLabel value="#{bundle['EditBureauRegionalLabel_abbreviation']}" for="bureauRegional_abbreviation" />
-					</h:panelGroup>
-					<p:inputText id="bureauRegional_abbreviation" value="#{bureauRegionalController.selected.labelEn}"
-						title="#{bundle['EditBureauRegionalTitle_abbreviation']}" required="false"
-						requiredMessage="#{bundle['EditBureauRegionalRequiredMessage_abbreviation']}" />
-
-					<h:outputLabel value="#{bundle['EditBureauRegionalLabel_address']}" for="bureauRegional_address" />
-					<h:panelGroup>
-						<p:inputText id="bureauRegional_address" value="#{bureauRegionalController.selected.address}"
-							title="#{bundle['EditBureauRegionalTitle_address']}" required="true"
-							requiredMessage="#{bundle['EditBureauRegionalRequiredMessage_address']}" />
-						<p:message for="bureauRegional_address" />
-					</h:panelGroup>
-
-					<p:outputLabel value="#{bundle['EditBureauRegionalLabel_telephone']}" for="bureauRegional_telephone" />
-					<h:panelGroup>
-						<p:inputText id="bureauRegional_telephone" value="#{bureauRegionalController.selected.telephone}"
-							title="#{bundle['EditBureauRegionalTitle_telephone']}" required="false"
-							requiredMessage="#{bundle['EditBureauRegionalRequiredMessage_telephone']}" validatorMessage="#{bundle['PhoneValidationFail']}">
-							<f:validateRegex pattern="[0-9]{0,14}" />
-						</p:inputText>
-						<p:message for="bureauRegional_telephone" />
-					</h:panelGroup>
-
-					<p:outputLabel value="#{bundle['EditBureauRegionalLabel_fax']}" for="bureauRegional_fax" />
-					<h:panelGroup>
-						<p:inputText id="bureauRegional_fax" value="#{bureauRegionalController.selected.fax}" title="#{bundle['EditBureauRegionalTitle_fax']}"
-							required="false" requiredMessage="#{bundle['EditBureauRegionalRequiredMessage_fax']}"
-							validatorMessage="#{bundle['FaxValidationFail']}">
-							<f:validateRegex pattern="[0-9]{0,14}" />
-						</p:inputText>
-						<p:message for="bureauRegional_fax" />
-					</h:panelGroup>
-
-					<p:outputLabel value="#{bundle['EditBureauRegionalLabel_email']}" for="bureauRegional_email" />
-					<h:panelGroup>
-						<p:inputText id="bureauRegional_email" value="#{bureauRegionalController.selected.email}"
-							title="#{bundle['EditBureauRegionalTitle_email']}" required="true"
-							requiredMessage="#{bundle['EditBureauRegionalRequiredMessage_email']}" validatorMessage="#{bundle['MailValidationFail']}">
-							<f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
-						</p:inputText>
-						<p:message for="bureauRegional_email" />
-					</h:panelGroup>
+                <h:panelGroup id="display" styleClass="inpWidth">
 
 
-					<p:outputLabel value="#{bundle['EditBureauRegionalLabel_subDepartment']}" for="bureauRegionalSubDepartment" />
-					<h:panelGroup>
-						<p:selectOneMenu id="bureauRegionalSubDepartment" value="#{bureauRegionalController.subDepartment}" required="true"
-							requiredMessage="#{bundle['EditBureauRegionalRequiredMessage_subDepartment']}">
-							<p:ajax listener="#{bureauRegionalController.onSubDepartmentChange}" update="bureauRegionalService" />
-							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-							<f:selectItems value="#{bureauRegionalController.subDepartments}" var="subDepartment" itemValue="#{subDepartment}"
-								itemLabel="#{facesContext.viewRoot.locale eq 'en' ? subDepartment.labelEn : subDepartment.labelFr}" />
-							<f:converter binding="#{subDepartmentConverter}" />
-						</p:selectOneMenu>
-						<p:message for="bureauRegionalSubDepartment" />
-					</h:panelGroup>
+                    <p:outputLabel value="#{bundle['EditBureauRegionalLabel_headOffice']}" />
+                    <h:outputText
+                        value="#{(bureauRegionalController.selected.headOffice.firstName).concat(' ').concat(bureauRegionalController.selected.headOffice.lastName)}" />
+                    <br />
 
-					<p:outputLabel value="#{bundle['EditBureauRegionalLabel_service']}" for="bureauRegionalService" />
-					<h:panelGroup>
-						<p:selectOneMenu id="bureauRegionalService" value="#{bureauRegionalController.selected.service}" required="true"
-							requiredMessage="#{bundle['EditBureauRegionalRequiredMessage_service']}">
-							<f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
-							<f:selectItems value="#{bureauRegionalController.services}" var="service" itemValue="#{service}"
-								itemLabel="#{facesContext.viewRoot.locale eq 'en' ? service.labelEn : service.labelFr}" />
-							<f:converter binding="#{serviceConverter}" />
-						</p:selectOneMenu>
-						<p:message for="bureauRegionalService" />
-					</h:panelGroup>
+                    <p:panelGrid columns="4">
 
-				</p:panelGrid>
+                        <p:outputLabel value="#{bundle['EditBureauRegionalLabel_labelFr']}" for="bureauRegional_labelFr" />
+                        <p:inputText id="bureauRegional_labelFr" value="#{bureauRegionalController.selected.labelFr}"
+                                     title="#{bundle['EditBureauRegionalTitle_labelFr']}" required="false"
+                                     requiredMessage="#{bundle['EditBureauRegionalRequiredMessage_labelFr']}" />
 
-				<br />
+                        <h:panelGroup>
+                            <h:outputLabel value="#{bundle['EditBureauRegionalLabel_labelEn']}" for="bureauRegional_labelEn" />
+                        </h:panelGroup>
+                        <p:inputText id="bureauRegional_labelEn" value="#{bureauRegionalController.selected.labelEn}"
+                                     title="#{bundle['EditBureauRegionalTitle_labelEn']}" required="false"
+                                     requiredMessage="#{bundle['EditBureauRegionalRequiredMessage_labelEn']}" />
 
-				<div class="btn-bloc">
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="editBtn" actionListener="#{bureauRegionalController.edit}" value="#{bundle['Save']}"
-						styleClass="ui-priority-primary" update="display,:bureauRegionalListForm,:growl"
-						oncomplete="handleSubmit(xhr,status,args,bureauRegionalEditDlg,'datalistTable');" />
-					<p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary"
-						onclick="PF('bureauRegionalEditDialog').hide();" immediate="true" />
-				</div>
-			</h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputLabel value="#{bundle['EditBureauRegionalLabel_abbreviation']}" for="bureauRegional_abbreviation" />
+                        </h:panelGroup>
+                        <p:inputText id="bureauRegional_abbreviation" value="#{bureauRegionalController.selected.labelEn}"
+                                     title="#{bundle['EditBureauRegionalTitle_abbreviation']}" required="false"
+                                     requiredMessage="#{bundle['EditBureauRegionalRequiredMessage_abbreviation']}" />
 
-		</h:form>
+                        <h:outputLabel value="#{bundle['EditBureauRegionalLabel_address']}" for="bureauRegional_address" />
+                        <h:panelGroup>
+                            <p:inputText id="bureauRegional_address" value="#{bureauRegionalController.selected.address}"
+                                         title="#{bundle['EditBureauRegionalTitle_address']}" required="true"
+                                         requiredMessage="#{bundle['EditBureauRegionalRequiredMessage_address']}" />
+                            <p:message for="bureauRegional_address" />
+                        </h:panelGroup>
 
-	</p:dialog>
+                        <p:outputLabel value="#{bundle['EditBureauRegionalLabel_telephone']}" for="bureauRegional_telephone" />
+                        <h:panelGroup>
+                            <p:inputText id="bureauRegional_telephone" value="#{bureauRegionalController.selected.telephone}"
+                                         title="#{bundle['EditBureauRegionalTitle_telephone']}" required="false"
+                                         requiredMessage="#{bundle['EditBureauRegionalRequiredMessage_telephone']}" validatorMessage="#{bundle['PhoneValidationFail']}">
+                                <f:validateRegex pattern="[0-9]{0,14}" />
+                            </p:inputText>
+                            <p:message for="bureauRegional_telephone" />
+                        </h:panelGroup>
 
-</ui:composition>
+                        <p:outputLabel value="#{bundle['EditBureauRegionalLabel_fax']}" for="bureauRegional_fax" />
+                        <h:panelGroup>
+                            <p:inputText id="bureauRegional_fax" value="#{bureauRegionalController.selected.fax}" title="#{bundle['EditBureauRegionalTitle_fax']}"
+                                         required="false" requiredMessage="#{bundle['EditBureauRegionalRequiredMessage_fax']}"
+                                         validatorMessage="#{bundle['FaxValidationFail']}">
+                                <f:validateRegex pattern="[0-9]{0,14}" />
+                            </p:inputText>
+                            <p:message for="bureauRegional_fax" />
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{bundle['EditBureauRegionalLabel_email']}" for="bureauRegional_email" />
+                        <h:panelGroup>
+                            <p:inputText id="bureauRegional_email" value="#{bureauRegionalController.selected.email}"
+                                         title="#{bundle['EditBureauRegionalTitle_email']}" required="true"
+                                         requiredMessage="#{bundle['EditBureauRegionalRequiredMessage_email']}" validatorMessage="#{bundle['MailValidationFail']}">
+                                <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                            </p:inputText>
+                            <p:message for="bureauRegional_email" />
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{bundle['CreateBureauRegionalLabel_city']}" for="bureauRegional_city" />
+                        <h:panelGroup>
+                            <p:inputText id="bureauRegional_city" value="#{bureauRegionalController.selected.cityFr}"
+                                         title="#{bundle['CreateBureauRegionalTitle_city']}" required="true"
+                                         requiredMessage="#{bundle['CreateBureauRegionalRequiredMessage_city']}" />
+                            <p:message for="bureauRegional_city" />
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{bundle['CreateBureauRegionalLabel_regionFr']}" for="bureauRegional_regionFr" />
+                        <h:panelGroup>
+                            <p:inputText id="bureauRegional_regionFr" value="#{bureauRegionalController.selected.regionFr}"
+                                         title="#{bundle['CreateBureauRegionalTitle_regionFr']}" required="true"
+                                         requiredMessage="#{bundle['CreateBureauRegionalRequiredMessage_regionFr']}" />
+                            <p:message for="bureauRegional_regionFr" />
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{bundle['CreateBureauRegionalLabel_regionEn']}" for="bureauRegional_regionEn" />
+                        <h:panelGroup>
+                            <p:inputText id="bureauRegional_regionEn" value="#{bureauRegionalController.selected.regionEn}"
+                                         title="#{bundle['CreateBureauRegionalTitle_regionEn']}" required="true"
+                                         requiredMessage="#{bundle['CreateBureauRegionalRequiredMessage_regionEn']}" />
+                            <p:message for="bureauRegional_regionEn" />
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{bundle['EditBureauRegionalLabel_subDepartment']}" for="bureauRegionalSubDepartment" />
+                        <h:panelGroup>
+                            <p:selectOneMenu id="bureauRegionalSubDepartment" value="#{bureauRegionalController.subDepartment}" required="true"
+                                             requiredMessage="#{bundle['EditBureauRegionalRequiredMessage_subDepartment']}">
+                                <p:ajax listener="#{bureauRegionalController.onSubDepartmentChange}" update="bureauRegionalService" />
+                                <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+                                <f:selectItems value="#{bureauRegionalController.subDepartments}" var="subDepartment" itemValue="#{subDepartment}"
+                                               itemLabel="#{facesContext.viewRoot.locale eq 'en' ? subDepartment.labelEn : subDepartment.labelFr}" />
+                                <f:converter binding="#{subDepartmentConverter}" />
+                            </p:selectOneMenu>
+                            <p:message for="bureauRegionalSubDepartment" />
+                        </h:panelGroup>
+
+                        <p:outputLabel value="#{bundle['EditBureauRegionalLabel_service']}" for="bureauRegionalService" />
+                        <h:panelGroup>
+                            <p:selectOneMenu id="bureauRegionalService" value="#{bureauRegionalController.selected.service}" required="true"
+                                             requiredMessage="#{bundle['EditBureauRegionalRequiredMessage_service']}">
+                                <f:selectItem itemLabel="#{bundle['SelectOneMessage']}" />
+                                <f:selectItems value="#{bureauRegionalController.services}" var="service" itemValue="#{service}"
+                                               itemLabel="#{facesContext.viewRoot.locale eq 'en' ? service.labelEn : service.labelFr}" />
+                                <f:converter binding="#{serviceConverter}" />
+                            </p:selectOneMenu>
+                            <p:message for="bureauRegionalService" />
+                        </h:panelGroup>
+
+                    </p:panelGrid>
+
+                    <br />
+
+                    <div class="btn-bloc">
+                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="editBtn" actionListener="#{bureauRegionalController.edit}" value="#{bundle['Save']}"
+                                         styleClass="ui-priority-primary" update="display,:bureauRegionalListForm,:growl"
+                                         oncomplete="handleSubmit(xhr,status,args,bureauRegionalEditDlg,'datalistTable');" />
+                        <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()"  id="cancelBtn" value="#{bundle['Cancel']}" styleClass="ui-priority-primary"
+                                         onclick="PF('bureauRegionalEditDialog').hide();" immediate="true" />
+                    </div>
+                </h:panelGroup>
+
+            </h:form>
+
+        </p:dialog>
+
+    </ui:composition>
 
 </html>

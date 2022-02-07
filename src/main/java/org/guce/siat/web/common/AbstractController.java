@@ -204,8 +204,7 @@ public abstract class AbstractController<T extends Serializable> implements Seri
      * Edits the.
      */
     public void edit() {
-        final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                itemClass.getSimpleName() + PersistenceActions.UPDATE.getCode());
+        final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(itemClass.getSimpleName() + PersistenceActions.UPDATE.getCode());
         persist(PersistenceActions.UPDATE, msg);
         refreshItems();
         selected = null;
@@ -215,8 +214,7 @@ public abstract class AbstractController<T extends Serializable> implements Seri
      * Delete.
      */
     public void delete() {
-        final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(
-                itemClass.getSimpleName() + PersistenceActions.DELETE.getCode());
+        final String msg = ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(itemClass.getSimpleName() + PersistenceActions.DELETE.getCode());
         persist(PersistenceActions.DELETE, msg);
         if (!isValidationFailed()) {
             selected = null;

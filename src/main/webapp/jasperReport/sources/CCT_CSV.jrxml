@@ -173,14 +173,14 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-					<textFieldExpression><![CDATA["PORT AUTONOME DE " + $F{bureau}.cityFr]]></textFieldExpression>
+					<textFieldExpression><![CDATA["PORT AUTONOME DE " + ($F{bureau}.cityFr != null ? $F{bureau}.cityFr.toUpperCase() : "DOUALA")]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
 					<reportElement x="38" y="28" width="128" height="11" uuid="ac13eb3f-3a19-4af4-ab8d-8d9368ef8fdc"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-					<textFieldExpression><![CDATA["REGION DU " + $F{bureau}.regionFr]]></textFieldExpression>
+					<textFieldExpression><![CDATA["REGION DU " + ($F{bureau}.regionFr != null ? $F{bureau}.regionFr.toUpperCase() : "LITTORAL")]]></textFieldExpression>
 				</textField>
 			</frame>
 			<frame>
@@ -246,14 +246,14 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-					<textFieldExpression><![CDATA["POST - " + $F{bureau}.cityEn + " SEAPORT"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["POST - " + ($F{bureau}.cityEn != null ? $F{bureau}.cityEn.toUpperCase() : "DOUALA") + " SEAPORT"]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
 					<reportElement x="38" y="28" width="128" height="11" uuid="399c18e2-21fd-49e2-b7bf-969b686492cd"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{bureau}.regionEn + " REGION"]]></textFieldExpression>
+					<textFieldExpression><![CDATA[($F{bureau}.regionEn != null ? $F{bureau}.regionEn.toUpperCase() : "LITTORAL") + " REGION"]]></textFieldExpression>
 				</textField>
 			</frame>
 			<image>
