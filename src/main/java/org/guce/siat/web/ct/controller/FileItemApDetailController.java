@@ -46,12 +46,10 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.xml.bind.JAXBException;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.guce.siat.common.data.FieldGroupDto;
@@ -71,7 +69,6 @@ import org.guce.siat.common.model.FileFieldValue;
 import org.guce.siat.common.model.FileItem;
 import org.guce.siat.common.model.FileItemField;
 import org.guce.siat.common.model.FileItemFieldValue;
-import org.guce.siat.common.model.FileMarshall;
 import org.guce.siat.common.model.FileTypeFlow;
 import org.guce.siat.common.model.FileTypeFlowReport;
 import org.guce.siat.common.model.FileTypeStep;
@@ -351,7 +348,7 @@ public class FileItemApDetailController extends DefaultDetailController implemen
      */
     @ManagedProperty(value = "#{messageToSendService}")
     private MessageToSendService messageToSendService;
-    
+
     /**
      * The User Signature and Stamp service.
      */
@@ -667,7 +664,7 @@ public class FileItemApDetailController extends DefaultDetailController implemen
      * The generate report allowed.
      */
     private Boolean generateReportAllowed;
-    
+
     /**
      * The generate report allowed.
      */
@@ -968,7 +965,7 @@ public class FileItemApDetailController extends DefaultDetailController implemen
         checkIsAllowedRecommandation();
 
         checkGenerateReportAllowed();
-        
+
         checkGenerateDraftAllowed();
 
         tabList = new ArrayList<>();
@@ -2556,23 +2553,24 @@ public class FileItemApDetailController extends DefaultDetailController implemen
 //                                fileService.updateSpecificColumn(dateParams, currentFile);
                                 fileService.update(currentFile);
                             }
-                        } else if (FlowCode.FL_AP_202.name().equals(flowToSend.getCode())) {
-                            FileMarshall fileMarshall = fileMarshallServce.findByFile(currentFile);
-                            if (fileMarshall != null) {
-                                Serializable object = (Serializable) SerializationUtils.deserialize(fileMarshall.getMarshall());
-                                File previousFile;
-                                switch (currentFile.getFileType().getCode()) {
-                                    case BSBE_MINFOF:
-                                        previousFile = xmlConverterService.convertDocumentToFile(object);
-                                        break;
-                                    default:
-                                        previousFile = null;
-                                }
-                                if (previousFile != null) {
-                                    xmlConverterService.rollbackFile(currentFile, previousFile);
-                                }
-                            }
                         }
+//                        else if (FlowCode.FL_AP_202.name().equals(flowToSend.getCode())) {
+//                            FileMarshall fileMarshall = fileMarshallServce.findByFile(currentFile);
+//                            if (fileMarshall != null) {
+//                                Serializable object = (Serializable) SerializationUtils.deserialize(fileMarshall.getMarshall());
+//                                File previousFile;
+//                                switch (currentFile.getFileType().getCode()) {
+//                                    case BSBE_MINFOF:
+//                                        previousFile = xmlConverterService.convertDocumentToFile(object);
+//                                        break;
+//                                    default:
+//                                        previousFile = null;
+//                                }
+//                                if (previousFile != null) {
+//                                    xmlConverterService.rollbackFile(currentFile, previousFile);
+//                                }
+//                            }
+//                        }
 //                        } catch (final Exception e) {
 //                            LOG.error("Error occured when loading report: " + e.getMessage(), e);
 //                            attachedByteFiles = null;
@@ -3376,7 +3374,7 @@ public class FileItemApDetailController extends DefaultDetailController implemen
         fileFieldGroupDto.setFieldValues(fieldValues);
 
     }
-    
+
     /**
      * Check generate draft allowed.
      */
@@ -3387,15 +3385,14 @@ public class FileItemApDetailController extends DefaultDetailController implemen
             reportingFlow = flowService.findFlowByCode(FlowCode.FL_AP_VT1_06.name());
         }
 
-        
         Flow currentDecision = selectedFlow;
-        if(currentDecision == null){
+        if (currentDecision == null) {
             ItemFlow draftItemFlow = itemFlowService.findDraftByFileItem(selectedFileItem);
-            if(draftItemFlow != null){
+            if (draftItemFlow != null) {
                 currentDecision = draftItemFlow.getFlow();
             }
         }
-        
+
         fileTypeFlowReportsDraft = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getFileType());
         generateDraftAllowed = sendDecisionAllowed && (Arrays.asList(StepCode.ST_AP_54, StepCode.ST_AP_VT1_01).contains(selectedFileItem.getStep().getStepCode())
                 && reportingFlow.equals(currentDecision))
@@ -3438,12 +3435,12 @@ public class FileItemApDetailController extends DefaultDetailController implemen
 //            }
 //        }
         if (!aiMinmidtFileType) {
-            if(draft){
+            if (draft) {
                 fileTypeFlowReports = fileTypeFlowReportsDraft;
-            }else{
+            } else {
                 fileTypeFlowReports = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getFileType());
             }
-            
+
         }
         if (currentFile.getSignatory() == null) {
             currentFile.setSignatory(getLoggedUser());
@@ -3463,7 +3460,7 @@ public class FileItemApDetailController extends DefaultDetailController implemen
                 if (bsbeMinfofFileType) {
                     Constructor c1 = classe.getConstructor(File.class, List.class, String.class);
                     report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile, specsList, woodsType == null ? "GRUMES" : woodsType.getValue()));
-                } else if(FileTypeCode.VT_MINEPIA.equals(currentFile.getFileType().getCode())){
+                } else if (FileTypeCode.VT_MINEPIA.equals(currentFile.getFileType().getCode())) {
                     Constructor c1 = classe.getConstructor(File.class);
                     reportInvoker = (AbstractReportInvoker) c1.newInstance(currentFile);
                     reportInvoker.setDraft(draft);
@@ -5687,8 +5684,6 @@ public class FileItemApDetailController extends DefaultDetailController implemen
     public void setFileTypeFlowReportsDraft(List<FileTypeFlowReport> fileTypeFlowReportsDraft) {
         this.fileTypeFlowReportsDraft = fileTypeFlowReportsDraft;
     }
-    
-    
 
     @Override
     public String getDetailIndexPageUrl() {
@@ -5717,7 +5712,5 @@ public class FileItemApDetailController extends DefaultDetailController implemen
     public void setUserStampSignatureService(UserStampSignatureService userStampSignatureService) {
         this.userStampSignatureService = userStampSignatureService;
     }
-    
-    
 
 }

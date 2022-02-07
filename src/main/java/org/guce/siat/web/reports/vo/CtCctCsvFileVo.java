@@ -3,6 +3,7 @@ package org.guce.siat.web.reports.vo;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Date;
+import org.guce.siat.common.model.Bureau;
 
 /**
  * The Class CtCctCsqFileVo.
@@ -250,6 +251,8 @@ public class CtCctCsvFileVo extends AbstractFileVo<CtCctCsvFileItemVo> {
     private String unloadingPlace;
 
     private boolean csv;
+
+    private Bureau bureau;
 
     /**
      * Gets the consignor name.
@@ -975,6 +978,14 @@ public class CtCctCsvFileVo extends AbstractFileVo<CtCctCsvFileItemVo> {
 
     public void setCsv(boolean csv) {
         this.csv = csv;
+    }
+
+    public Bureau getBureau() {
+        return bureau;
+    }
+
+    public void setBureau(Bureau bureau) {
+        this.bureau = bureau;
     }
 
 }

@@ -34,7 +34,7 @@ import org.guce.siat.web.reports.vo.CtCctCsvFileItemVo;
 import org.guce.siat.web.reports.vo.CtCctCsvFileVo;
 
 /**
- * The Class CtCctCsvExporter.
+ * The Class CctCsvExporter.
  */
 
 
@@ -79,6 +79,8 @@ public class CctCsvExporter extends AbstractReportInvoker {
         if ((file != null)) {
 
             ctCctCsvFileVo.setCertificateReferenceNumber(file.getNumeroDemande() + "/" + file.getNumeroDossier());
+
+            ctCctCsvFileVo.setBureau(file.getBureau());
 
             if (file.getClient() != null) {
                 ctCctCsvFileVo.setConsigneeName(file.getClient().getCompanyName());

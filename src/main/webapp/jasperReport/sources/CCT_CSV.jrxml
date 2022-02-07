@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="file" language="groovy" pageWidth="595" pageHeight="842" columnWidth="585" leftMargin="5" rightMargin="5" topMargin="5" bottomMargin="5" uuid="28078ea8-15af-47d5-9f91-aa95db5f187e">
 	<property name="ireport.zoom" value="1.272292855117456"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="359"/>
+	<property name="ireport.y" value="0"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<style name="table">
 		<box>
@@ -107,6 +107,7 @@
 	<field name="stamp" class="java.io.InputStream"/>
 	<field name="unloadingPlace" class="java.lang.String"/>
 	<field name="csv" class="java.lang.Boolean"/>
+	<field name="bureau" class="java.lang.Object"/>
 	<title>
 		<band height="188" splitType="Stretch">
 			<frame>
@@ -167,19 +168,19 @@
 					</textElement>
 					<text><![CDATA[---------]]></text>
 				</staticText>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="11" y="83" width="189" height="15" uuid="74efeab4-3627-4266-ad77-1e9ffaddc3b5"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-					<textFieldExpression><![CDATA["PORT AUTONOME DE " + ($F{unloadingPlace} != null && $F{unloadingPlace}.startsWith("CMD") ? "DOUALA" : ($F{unloadingPlace} != null && $F{unloadingPlace}.startsWith("CMK") ? "KRIBI" : ""))]]></textFieldExpression>
+					<textFieldExpression><![CDATA["PORT AUTONOME DE " + $F{bureau}.cityFr]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="38" y="28" width="128" height="11" uuid="ac13eb3f-3a19-4af4-ab8d-8d9368ef8fdc"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-					<textFieldExpression><![CDATA["REGION DU " + ($F{unloadingPlace} != null && $F{unloadingPlace}.startsWith("CMD") ? "LITTORAL" : ($F{unloadingPlace} != null && $F{unloadingPlace}.startsWith("CMK") ? "SUD" : ""))]]></textFieldExpression>
+					<textFieldExpression><![CDATA["REGION DU " + $F{bureau}.regionFr]]></textFieldExpression>
 				</textField>
 			</frame>
 			<frame>
@@ -240,19 +241,19 @@
 					</textElement>
 					<text><![CDATA[---------]]></text>
 				</staticText>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="11" y="83" width="189" height="15" uuid="ee621622-32c3-4dcf-a013-d397e639165b"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-					<textFieldExpression><![CDATA["POST - " + ($F{unloadingPlace} != null && $F{unloadingPlace}.startsWith("CMD") ? "DOUALA" : ($F{unloadingPlace} != null && $F{unloadingPlace}.startsWith("CMK") ? "KRIBI" : "")) + " SEAPORT"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["POST - " + $F{bureau}.cityEn + " SEAPORT"]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="38" y="28" width="128" height="11" uuid="399c18e2-21fd-49e2-b7bf-969b686492cd"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-					<textFieldExpression><![CDATA[($F{unloadingPlace} != null && $F{unloadingPlace}.startsWith("CMD") ? "LITTORAL" : ($F{unloadingPlace} != null && $F{unloadingPlace}.startsWith("CMK") ? "SOUTH" : "")) + " REGION"]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{bureau}.regionEn + " REGION"]]></textFieldExpression>
 				</textField>
 			</frame>
 			<image>
