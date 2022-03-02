@@ -58,6 +58,8 @@ public class VtMinepiaFileVo extends AbstractFileVo<VtMinepiaFileItemVo> {
 
     private InputStream signatorySignature;
     
+    private InputStream signatoryMention;
+    
     private String regionFr;
     
     private String regionEn;
@@ -253,7 +255,13 @@ public class VtMinepiaFileVo extends AbstractFileVo<VtMinepiaFileItemVo> {
     public void setRegionEn(String regionEn) {
         this.regionEn = regionEn;
     }
-    
-    
+
+    public InputStream getSignatoryMention() {
+        return signatoryMention;
+    }
+
+    public void setSignatoryMention(InputStream signatoryMention) {
+        this.signatoryMention = signatoryMention;
+    }   
 
 }

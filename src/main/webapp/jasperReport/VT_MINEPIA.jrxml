@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VT_MINEPIA" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="487cd13d-5160-41db-a737-71f51ecf7f75">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VT_MINEPIA" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="487cd13d-5160-41db-a737-71f51ecf7f75">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="48"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -44,6 +44,12 @@
 	<field name="decisionDate" class="java.lang.String"/>
 	<field name="fileItemList" class="java.util.List"/>
 	<field name="signatureDate" class="java.lang.String"/>
+	<field name="qrCode" class="java.io.InputStream"/>
+	<field name="signatoryStamp" class="java.io.InputStream"/>
+	<field name="signatorySignature" class="java.io.InputStream"/>
+	<field name="regionFr" class="java.lang.String"/>
+	<field name="regionEn" class="java.lang.String"/>
+	<field name="signatoryMention" class="java.io.InputStream"/>
 	<background>
 		<band height="802" splitType="Stretch">
 			<printWhenExpression><![CDATA[$P{DRAFT}]]></printWhenExpression>
@@ -96,13 +102,6 @@
 				<text><![CDATA[-------]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="27" width="229" height="10" uuid="b2725a64-cca6-458d-85a3-211ff1df4893"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="8"/>
-				</textElement>
-				<text><![CDATA[REGION DU LITTORAL]]></text>
-			</staticText>
-			<staticText>
 				<reportElement x="0" y="36" width="229" height="10" uuid="9376ff50-88db-49e2-964b-5366e1b7642e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="8"/>
@@ -152,13 +151,6 @@
 				<text><![CDATA[-------]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="326" y="27" width="229" height="10" uuid="0568d605-8769-4a8b-be25-ce9a8a0a24b2"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="8"/>
-				</textElement>
-				<text><![CDATA[LITTORAL REGION]]></text>
-			</staticText>
-			<staticText>
 				<reportElement x="326" y="64" width="229" height="10" uuid="ef93abfa-3395-4eee-96d3-4dddf80df2e4"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="8" isItalic="true"/>
@@ -176,6 +168,20 @@
 				<reportElement x="240" y="1" width="76" height="79" uuid="ac22faa8-10da-43ad-b2f6-28e8a4928ab9"/>
 				<imageExpression><![CDATA[new java.io.File($P{MINEPIA_LOGO})]]></imageExpression>
 			</image>
+			<textField>
+				<reportElement x="0" y="27" width="229" height="10" uuid="df4448c4-eb58-4f1d-9ae4-4195e552b0cf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled">
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["REGION DU "+ $F{regionFr}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="326" y="27" width="229" height="10" uuid="e10a6304-291b-45f4-a7d5-e8cdea33fa2d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled">
+					<font fontName="Times New Roman" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{regionEn}+ " REGION"]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
@@ -205,6 +211,10 @@
 				</textElement>
 				<textFieldExpression><![CDATA["Je soussigné <style isItalic='true'>(I the undersigned)</style> <style isBold='true'>"+ $F{signatory}+"</style>, certifie avoir étudié la demande <style isItalic='true'>(certifies to have examined the application)</style> introduite par <style isItalic='true'>(submitted by)</style> <style isBold='true'>"+$F{importer}+"</style>, adresse <style isItalic='true'>(address)</style>: <style isBold='true'>"+$F{address}+"</style>, attributaire de l’Avis Technique <style isItalic='true'>(holder of the Technical Notice)</style> N° <style isBold='true'>"+$F{decisionNumber}+"</style>, pour la facture N° <style isBold='true'>"+$F{invoice}+"</style> composée de <style isItalic='true'>(for the invoice composed of)</style> :"]]></textFieldExpression>
 			</textField>
+			<image scaleImage="FillFrame">
+				<reportElement x="49" y="0" width="50" height="50" uuid="b6a8d57a-e4b8-4cb7-8337-0aab8b016616"/>
+				<imageExpression><![CDATA[$F{qrCode}]]></imageExpression>
+			</image>
 		</band>
 		<band height="113">
 			<componentElement>
@@ -339,13 +349,13 @@
 				</jr:table>
 			</componentElement>
 		</band>
-		<band height="148">
+		<band height="264">
 			<textField>
-				<reportElement x="262" y="97" width="241" height="20" uuid="e312f30f-7728-496c-b834-afaf012aaba7"/>
-				<textElement verticalAlignment="Middle" markup="styled">
-					<font fontName="Times New Roman" size="12"/>
+				<reportElement x="150" y="97" width="353" height="20" uuid="e312f30f-7728-496c-b834-afaf012aaba7"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" markup="styled">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Fait à <style isBold='true'>"+ $F{decisionPlace}+"</style>, le <style isBold='true'>"+$F{signatureDate}+"</style>"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Fait à <style isBold='false'>"+ $F{decisionPlace}+"</style>, le <style isBold='false'>"+$F{signatureDate}+"</style>"]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="49" y="8" width="454" height="42" uuid="905ac6d3-bb3a-40b5-ace9-f8519a1e50e7"/>
@@ -361,6 +371,36 @@
 				</textElement>
 				<text><![CDATA[NB : ce visa technique est valable pour une facture/connaissement]]></text>
 			</staticText>
+			<image scaleImage="FillFrame">
+				<reportElement x="379" y="131" width="100" height="100" uuid="37706ec2-ab4d-46ef-85b2-46824196a109">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$F{signatoryStamp}]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame">
+				<reportElement x="337" y="151" width="89" height="80" uuid="dfeb5caf-5b65-4f1f-9976-b27414ab0b45">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$F{signatorySignature}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="316" y="234" width="187" height="15" uuid="ef32840a-6652-4fe3-980a-4a80cdbf6532">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="9" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Le Délégué régional]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="316" y="249" width="187" height="15" uuid="79a9ae22-367d-4890-a3c6-cc05d901508d">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == $V{PAGE_COUNT}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{signatory}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<columnFooter>

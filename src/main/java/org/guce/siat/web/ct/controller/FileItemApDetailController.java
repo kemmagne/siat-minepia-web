@@ -1478,7 +1478,7 @@ public class FileItemApDetailController extends DefaultDetailController implemen
                             if (fileTypeFlow != null || !bsbeMinfofFileType) {
                                 destinationFlowsFromCurrentStep.add(flow);
                             }
-                        } else if ((flow.getToStep() != null && !apDecisionStepCode.contains(flow.getToStep().getStepCode())) && !returnAllowed
+                        } else if (fileTypeFlow != null && (flow.getToStep() != null && !apDecisionStepCode.contains(flow.getToStep().getStepCode())) && !returnAllowed
                                 && !DECISION_FLOWS_AT_COTATION_STEP.contains(flow.getCode()) || flow.getToStep() == null) {
                             destinationFlowsFromCurrentStep.add(flow);
                         }
@@ -2523,6 +2523,12 @@ public class FileItemApDetailController extends DefaultDetailController implemen
                                     if (bsbeMinfofFileType) {
                                         Constructor c1 = classe.getConstructor(File.class, List.class, String.class);
                                         report = JsfUtil.getReport((AbstractReportInvoker) c1.newInstance(currentFile, specsList, woodsType == null ? "GRUMES" : woodsType.getValue()));
+                                    } else if (FileTypeCode.VT_MINEPIA.equals(currentFile.getFileType().getCode())) {
+                                        Constructor c1 = classe.getConstructor(File.class);
+                                        AbstractReportInvoker reportInvoker = (AbstractReportInvoker) c1.newInstance(currentFile);
+                                        reportInvoker.setDraft(false);
+                                        reportInvoker.setUserStampSignatureService(userStampSignatureService);
+                                        report = JsfUtil.getReport(reportInvoker);
                                     } else {
                                         report = ReportGeneratorUtils.generateReportBytes(fileFieldValueService, classe, currentFile);
                                     }
@@ -3410,9 +3416,9 @@ public class FileItemApDetailController extends DefaultDetailController implemen
         }
         final List<FileTypeFlowReport> fileTypeFlowReportsList = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getFileType());
         generateReportAllowed = StepCode.ST_AP_44.equals(selectedFileItem.getStep().getStepCode()) && CollectionUtils.isNotEmpty(fileTypeFlowReportsList);
-        if (aiMinmidtFileType) {
-            generateReportAllowed = false;
-        }
+//        if (aiMinmidtFileType) {
+//            generateReportAllowed = false;
+//        }
     }
 
     /**
