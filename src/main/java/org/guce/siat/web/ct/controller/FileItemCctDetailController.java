@@ -872,13 +872,13 @@ public class FileItemCctDetailController extends DefaultDetailController {
         }
 
         loadProductHistoryList();
-        // Initialiser la vue du Rappel Décision
+        // Initialiser la vue du Rappel Dï¿½cision
         setShowRemindDecisionForm(true);
         // Initialiser la vue de la liste de recommandations article
         setShowListRecommandationArticleForm(true);
-        // Initialiser la vue des détails produit
+        // Initialiser la vue des dï¿½tails produit
         setShowProductDetailsForm(true);
-        // Initialiser la vue de la pièce jointe
+        // Initialiser la vue de la piï¿½ce jointe
         setShowShowAttachmentForm(false);
         // show button to decide
         setShowDecisionButton(true);
@@ -892,7 +892,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
         // Remplir la liste des valeurs des filed Values pour le premier article
         loadAndGroupFileItemFieldValues();
 
-        // Récuperer la derniere décision du current File
+        // Rï¿½cuperer la derniere dï¿½cision du current File
         findLastDecisions();
 
         // SET ATTCHMENT TO NULL AND DISABLED VIEW PANEL OF PDF VIEWER
@@ -997,7 +997,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
             {
                 chckedProductInfoChecksList = selectCheckedFileItemCheck();
             }
-            // Show Decsion System Only if we have decision = Étude Approfondie
+            // Show Decsion System Only if we have decision = ï¿½tude Approfondie
             if (CollectionUtils.isNotEmpty(chckedProductInfoChecksList)
                     && (StepCode.ST_CT_04.equals(chckedProductInfoChecksList.get(0).getFileItem().getStep().getStepCode())) && !isCcsMinsantefFileType()) {
                 setDisionSystemAllowed(true);
@@ -1060,7 +1060,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
                         if (checkMinepiaMinistry && referenceFileItemCheck.getStep().getStepCode().equals(StepCode.ST_CT_04)) {
                             //"FL_CT_CVS_05,FL_CT_CVS_08,FL_CT_CVS_09";
-                            List<String> MINEPIA_FLOW_CODE_LIST = Arrays.asList(FlowCode.FL_CT_CVS_05.name(), FlowCode.FL_CT_CVS_08.name(), FlowCode.FL_CT_CVS_09.name());
+                            List<String> MINEPIA_FLOW_CODE_LIST = Arrays.asList(FlowCode.FL_CT_CVS_05.name(), FlowCode.FL_CT_CVS_08.name(), FlowCode.FL_CT_CVS_09.name(), FlowCode.FL_CT_166.name());
                             List<String> flowsToRemove = new ArrayList<>();
                             for (Flow f : flows) {
                                 if (!MINEPIA_FLOW_CODE_LIST.contains(f.getCode())) {
@@ -1075,17 +1075,17 @@ public class FileItemCctDetailController extends DefaultDetailController {
                         productsHaveSameRDDStatus = productsHaveSameRDDStatus(chckedProductInfoChecksList);
 
                         /*
-						 * Si plusieurs produits sont sélectionnés et ils n’ont pas le même statut par rapport aux décisions
-						 * RDD précédentes, On supprime les flux de destructions dans la liste des décisions et on affiche un
-						 * message informatif dans le popup de décision informant le client que les produits sélectionnés
-						 * n’ont pas le même statut concernant les décisions de destruction.
+						 * Si plusieurs produits sont sï¿½lectionnï¿½s et ils nï¿½ont pas le mï¿½me statut par rapport aux dï¿½cisions
+						 * RDD prï¿½cï¿½dentes, On supprime les flux de destructions dans la liste des dï¿½cisions et on affiche un
+						 * message informatif dans le popup de dï¿½cision informant le client que les produits sï¿½lectionnï¿½s
+						 * nï¿½ont pas le mï¿½me statut concernant les dï¿½cisions de destruction.
                          */
                         if (DECISION_STEPS_LIST.contains(referenceFileItemCheck.getStep().getStepCode()) && !productsHaveSameRDDStatus) {
                             flows = deleteFlowFromFlowList(flows, FlowCode.FL_CT_11.name(), FlowCode.FL_CT_13.name(), FlowCode.FL_CT_33.name(), FlowCode.FL_CT_35.name());
                         } /*
-						 * Si le/les produit(s) sélectionnés ont atteints la valeur seuil des RDD (nbRDD) --> il faut
-						 * supprimer le flux "RDD" dans la liste des décisions sinon il faut supprimer le flux "RDD Final"
-						 * dans la liste des décisions.
+						 * Si le/les produit(s) sï¿½lectionnï¿½s ont atteints la valeur seuil des RDD (nbRDD) --> il faut
+						 * supprimer le flux "RDD" dans la liste des dï¿½cisions sinon il faut supprimer le flux "RDD Final"
+						 * dans la liste des dï¿½cisions.
                          */ else if (DECISION_STEPS_LIST.contains(referenceFileItemCheck.getStep().getStepCode()) && productsHaveSameRDDStatus) {
                             final Long nbrRDDReference = itemFlowService.findNbrDecisionByFileItemHistory(RDD_FLOW_CODES, referenceFileItemCheck);
                             final Long nbRDDParam = paramsOrganismService.findLongParamsOrganismByOrganismAndName(referenceFileItemCheck.getFile().getBureau().getService().getSubDepartment().getOrganism(), "nbRDD");
@@ -1121,7 +1121,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                                     it.remove();
                                 }
                             }
-                        } // En Cas de Réexamen: pour différencier les DSC et EA
+                        } // En Cas de Rï¿½examen: pour diffï¿½rencier les DSC et EA
                         else if (StepCode.ST_CT_22.equals(referenceFileItemCheck.getStep().getStepCode())) {
                             ItemFlow lastOutoingItemFlow = itemFlowService.findLastOutgoingItemFlowByFileItem(referenceFileItemCheck);
                             if (FlowCode.FL_CT_12.name().equals(lastOutoingItemFlow.getFlow().getCode())
@@ -1598,7 +1598,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 inspectionReportData.from(ir);
             }
             prepareGoodsForModif();
-        } // Signature de DCC (Certificat de Contrôle Documentaire)
+        } // Signature de DCC (Certificat de Contrï¿½le Documentaire)
         else if (DCC_FLOW_CODES.contains(selectedFlow.getCode())) {
             lastDecisions = itemFlowService.findLastSentItemFlowByFileItem(selectedFileItemCheck.getFileItem());
 
@@ -1610,10 +1610,10 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 approvedDecision = new ApprovedDecision();
                 fillApprovedDecision(approvedDecision);
                 if (selectedFlow.getCode().equals(FlowCode.FL_CT_CVS_03.name())) {
-                    approvedDecision.setOfficialPosition("Chef du Poste d'inspection Sanitaire Vétérinaire");
+                    approvedDecision.setOfficialPosition("Chef du Poste d'inspection Sanitaire Vï¿½tï¿½rinaire");
                 }
             } else {
-                approvedDecision.setOfficialPosition("Chef du Poste d'inspection Sanitaire Vétérinaire");
+                approvedDecision.setOfficialPosition("Chef du Poste d'inspection Sanitaire Vï¿½tï¿½rinaire");
             }
 
             specificDecision = CctSpecificDecision.DCC;
@@ -1690,7 +1690,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
             treatmentOrder.setDate(java.util.Calendar.getInstance().getTime());
             treatmentTypeDtosList = null;
             selectedTreatmentCompany = null;
-        } // Envoie Résultat d Analyse
+        } // Envoie Rï¿½sultat d Analyse
         else if (FlowCode.FL_CT_31.name().equals(selectedFlow.getCode())) {
             if (chckedListSize == Constants.ONE) {
                 specificDecision = CctSpecificDecision.ANR;
@@ -1708,7 +1708,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
             } else {
                 showErrorFacesMessage(ControllerConstants.Bundle.Messages.CHECK_ANALYSE_DECISION_ERROR, ControllerConstants.Bundle.Messages.CHECK_PRODUCTS_DECISION_MSG);
             }
-        } // Envoie Résultat de Traitement
+        } // Envoie Rï¿½sultat de Traitement
         else if (isFstpReadyForSignature(selectedFlow) || isAtReadyForSignature(selectedFlow)) {
             TreatmentResult tr = treatmentResultService.findLastTreatmentResultByFileItem(currentFileItem);
             if (tr == null && currentFile.getParent() != null) {
@@ -1765,7 +1765,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                     logger.error(ex.getMessage(), ex);
                 }
             }
-        } // Generic : construction du formulaire à partir des DataType
+        } // Generic : construction du formulaire ï¿½ partir des DataType
         else {
             buildGenericFormFromDataType(selectedFlow.getDataTypeList());
         }
@@ -2098,7 +2098,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 String senderMail = mailService.getReplyToValue();
                 String templateFileName = CMIS_CONNEXION_ERROR;
                 Map<String, String> map = new HashMap<>();
-                map.put(MailConstants.SUBJECT, "[SIAT-CT] : Connexion Cmis échoué");
+                map.put(MailConstants.SUBJECT, "[SIAT-CT] : Connexion Cmis ï¿½chouï¿½");
                 map.put(MailConstants.FROM, mailService.getFromValue());
                 map.put(MailConstants.EMAIL, senderMail);
                 map.put("gedUrl", alfrescoPropretiesService.getIpRepoValue());
@@ -2415,7 +2415,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 }
                 List<InspectionReport> inspectionReports = inspectionReportData.transformToReportList(appointment1);
                 commonService.takeDecisionAndSaveInspectionReports(inspectionReports, itemFlowsToAdd);
-            } // Envoie Résultat d Analyse
+            } // Envoie Rï¿½sultat d Analyse
             else if (FlowCode.FL_CT_31.name().equals(selectedFlow.getCode())) {
                 analyseResult.getAnalyseOrder().setAnalysePartsList(new ArrayList<AnalysePart>());
                 for (UploadFileManager<AnalysePart> entry : analysesFileManagers) {
@@ -2439,7 +2439,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 // Attachment --> Alfresco
             } else if (isFstpReadyForSignature(selectedFlow) || isAtReadyForSignature(selectedFlow)) {
                 commonService.takeDecisionAndSaveTreatmentResult2(treatmentResult, itemFlowsToAdd);
-            } // Envoie Résultat de Traitement
+            } // Envoie Rï¿½sultat de Traitement
             else if (FlowCode.FL_CT_66.name().equals(selectedFlow.getCode())) {
                 if (treatmentResult.getTreatmentOrder() != null) {
                     treatmentResult.getTreatmentOrder().setTreatmentPartsList(new ArrayList<TreatmentPart>());
@@ -2924,7 +2924,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
      * @return the map
      */
     public Map<Flow, List<FileItem>> groupFileItemsToSendByFlow(final Map<FileItem, Flow> mapToGroup) {
-        // grouper les flow par file items (pour generer après plusieurs
+        // grouper les flow par file items (pour generer aprï¿½s plusieurs
         // fichiers ebxml au cas ou il ya plusieurs flux sortant par articles)
         final Map<Flow, List<FileItem>> returnedMap = new HashMap<>();
 
@@ -2982,7 +2982,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
      * Send decisions.
      */
     public synchronized void sendDecisions() {
-        logger.info("--------------------------------------------- Prise d'une décision CCT - DEBUT ----------------------------------------------");
+        logger.info("--------------------------------------------- Prise d'une dï¿½cision CCT - DEBUT ----------------------------------------------");
         logger.info(currentFile.toString());
         if (!userConfirmationAllowed) {
             return;
@@ -3181,7 +3181,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                     goToDetailPage();
                 }
             } else {
-                logger.warn("cannot send the décision : " + currentFile.getNumeroDossier());
+                logger.warn("cannot send the dï¿½cision : " + currentFile.getNumeroDossier());
                 showErrorFacesMessage(ControllerConstants.Bundle.Messages.SEND_ERROR, null);
             }
 
@@ -3204,7 +3204,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 }
             }
         }
-        logger.info("--------------------------------------------- Prise d'une décision CCT - FIN ----------------------------------------------");
+        logger.info("--------------------------------------------- Prise d'une dï¿½cision CCT - FIN ----------------------------------------------");
     }
 
     private void send(TransactionStatus transactionStatus, byte[] xmlBytes, Map<String, byte[]> attachedByteFiles, String service, String documentType, String toPartyId, List<ItemFlow> itemFlowList) {
@@ -3223,7 +3223,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
             if (transactionStatus != null) {
 //                transactionManager.rollback(transactionStatus);
             }
-            logger.warn("cannot send the décision : " + currentFile.getNumeroDossier());
+            logger.warn("cannot send the dï¿½cision : " + currentFile.getNumeroDossier());
             messageToSendService.saveOrUpadateNotSendedMessageAsMessageToResend(data);
             showErrorFacesMessage(ControllerConstants.Bundle.Messages.SEND_ERROR, null);
             return;
@@ -3274,7 +3274,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
     /**
      * Refresh view for product informations. (Dans l'affichage du button
-     * Decider : pas de controle sur la selection des cases à cocher car il n'y
+     * Decider : pas de controle sur la selection des cases ï¿½ cocher car il n'y
      * a pas de handler l'ors de l'unchek des checkbox pour detecter l'action)
      */
     public void refreshViewForProductInformations() {
@@ -3286,7 +3286,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
             productInfoItems = initFileItemsForCCt();
         }
 
-        // Gestion des Button pour la décision Par dossier
+        // Gestion des Button pour la dï¿½cision Par dossier
         if (BooleanUtils.isTrue(decisionByFileAllowed)) {
             // Cas de Cotation
             if (BooleanUtils.isTrue(cotationAllowed)) {
@@ -3326,7 +3326,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
             rollBackDecisionsAllowed = true;
             sendDecisionAllowed = true;
             decisionButtonAllowed = false;
-        } // Les FileItem appartenant à ce dossier contienne un ou plus en
+        } // Les FileItem appartenant ï¿½ ce dossier contienne un ou plus en
         // mode DRAFT
         else if (oneFileItemInListIsDraft(productInfoItemsEnabled)) {
             rollBackDecisionsAllowed = true;
@@ -3335,7 +3335,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
         } // Les FileItem n'ont pas de DRAFT
         else if (CollectionUtils.isNotEmpty(productInfoItemsEnabled)) {
             // Dans l'affichage du button Decider : pas de controle sur la
-            // selection des cases à cocher car il n'y a pas de handler
+            // selection des cases ï¿½ cocher car il n'y a pas de handler
             // l'ors de l'unchek des checkbox pour detecter l'action
             rollBackDecisionsAllowed = false;
             sendDecisionAllowed = false;
@@ -6566,7 +6566,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
     public StreamedContent downloadAllAttachments() {
         Map<String, byte[]> attachments = CmisClient.extractAttachments(currentFile);
         if (MapUtils.isEmpty(attachments)) {
-            JsfUtil.addWarningMessage("Il n'y aucune pièce jointe à télécharger");
+            JsfUtil.addWarningMessage("Il n'y aucune piï¿½ce jointe ï¿½ tï¿½lï¿½charger");
             return null;
         }
         byte[] bytes = org.guce.siat.common.utils.io.IOUtils.attachmentsToZip(attachments);
@@ -6575,7 +6575,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
     public StreamedContent downloadAttachment() {
         if (selectedAttachment == null) {
-            JsfUtil.addWarningMessage("Selectionnez la pièce à télécharger");
+            JsfUtil.addWarningMessage("Selectionnez la piï¿½ce ï¿½ tï¿½lï¿½charger");
             return null;
         }
         try {
@@ -6586,7 +6586,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                 contentStream = CmisClient.getDocumentByPath(sessionCmisClient, getSelectedAttachment().getPath());
             }
             if (contentStream == null) {
-                JsfUtil.addErrorMessage("Impossible de trouver la pièce jointe");
+                JsfUtil.addErrorMessage("Impossible de trouver la piï¿½ce jointe");
                 return null;
             }
             final BufferedInputStream in = new BufferedInputStream(contentStream.getStream());
@@ -6605,7 +6605,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
             return new DefaultStreamedContent(new java.io.ByteArrayInputStream(bytes), !org.apache.commons.lang.StringUtils.isEmpty(contentStream.getMimeType()) ? contentStream.getMimeType() : "application/msword", selectedAttachment.getDocumentName());
         } catch (Exception e) {
-            JsfUtil.addErrorMessage("Impossible de télécharger la pièce jointe");
+            JsfUtil.addErrorMessage("Impossible de tï¿½lï¿½charger la piï¿½ce jointe");
             logger.error(e.getMessage(), e);
         }
 
@@ -6832,11 +6832,11 @@ public class FileItemCctDetailController extends DefaultDetailController {
     private void addFileFieldValue(List<FileFieldValue> fileFieldValues, String code, String value) {
 
         /**
-         * pour ajouter votre procédure, vous devez vous assurer que le couple
+         * pour ajouter votre procï¿½dure, vous devez vous assurer que le couple
          * (code, fileType) est unique
          *
-         * cette contrainte a été ajoutée pour éviter qu'il n'y ait violation de
-         * la contrainte d'unicité du couple présenté plus haut
+         * cette contrainte a ï¿½tï¿½ ajoutï¿½e pour ï¿½viter qu'il n'y ait violation de
+         * la contrainte d'unicitï¿½ du couple prï¿½sentï¿½ plus haut
          */
         FileTypeCode fileTypeCode = currentFile.getFileType().getCode();
         if (!FileTypeCode.CCT_CT_E_PVE.equals(fileTypeCode)) {
@@ -6896,7 +6896,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
     }
 
     /**
-     * Lorsque le signature décide transmettre le dossier à un agent de
+     * Lorsque le signature dï¿½cide transmettre le dossier ï¿½ un agent de
      * traitement
      *
      * @param flow
