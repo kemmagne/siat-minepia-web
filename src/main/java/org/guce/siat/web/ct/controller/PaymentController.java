@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.annotation.PostConstruct;
@@ -35,6 +36,7 @@ import org.guce.siat.common.service.ItemFlowService;
 import org.guce.siat.common.service.ServiceService;
 import org.guce.siat.common.service.UserAuthorityFileTypeService;
 import org.guce.siat.common.utils.Constants;
+import org.guce.siat.common.utils.DateUtils;
 import org.guce.siat.common.utils.enums.FileTypeCode;
 import org.guce.siat.common.utils.enums.FlowCode;
 import org.guce.siat.core.ct.filter.PaymentFilter;
@@ -371,6 +373,14 @@ public class PaymentController extends AbstractController<FileItem> {
      * Do search by filter.
      */
     public void doSearchByFilter() {
+        Date toDate = new Date();
+        Date fromDate  = DateUtils.addDays(toDate, -30);
+        boolean initializingPage = false;
+        if(filter.getFromDate() == null && filter.getToDate() == null){
+            filter.setFromDate(fromDate);
+            filter.setToDate(toDate);
+            initializingPage = true;
+        }
         if (filter.getFromDate() != null && filter.getToDate() != null && filter.getFromDate().after(filter.getToDate())) {
             JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(DATE_VALIDATION_ERROR_MESSAGE));
         } else {
@@ -391,6 +401,11 @@ public class PaymentController extends AbstractController<FileItem> {
                 JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(PERSISTENCE_ERROR_OCCURED));
             }
         }
+        if(initializingPage){
+            filter.setFromDate(null);
+            filter.setToDate(null);
+        }
+        
     }
 
     /**
