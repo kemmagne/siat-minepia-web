@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.annotation.PostConstruct;
@@ -27,6 +28,7 @@ import org.guce.siat.common.model.FileType;
 import org.guce.siat.common.model.ItemFlow;
 import org.guce.siat.common.model.User;
 import org.guce.siat.common.model.UserAuthorityFileType;
+import org.guce.siat.common.service.ApplicationPropretiesService;
 import org.guce.siat.common.service.AuthorityService;
 import org.guce.siat.common.service.CompanyService;
 import org.guce.siat.common.service.FileItemService;
@@ -35,6 +37,8 @@ import org.guce.siat.common.service.ItemFlowService;
 import org.guce.siat.common.service.ServiceService;
 import org.guce.siat.common.service.UserAuthorityFileTypeService;
 import org.guce.siat.common.utils.Constants;
+import org.guce.siat.common.utils.DateUtils;
+import org.guce.siat.common.utils.PropertiesConstants;
 import org.guce.siat.common.utils.enums.FileTypeCode;
 import org.guce.siat.common.utils.enums.FlowCode;
 import org.guce.siat.core.ct.filter.PaymentFilter;
@@ -161,6 +165,9 @@ public class PaymentController extends AbstractController<FileItem> {
     @ManagedProperty(value = "#{itemFlowService}")
     private ItemFlowService itemFlowService;
 
+    @ManagedProperty(value = "#{applicationPropretiesService}")
+    private ApplicationPropretiesService applicationPropretiesService;
+
     /**
      * The Constant PREFIXE_FACTURE.
      */
@@ -179,6 +186,8 @@ public class PaymentController extends AbstractController<FileItem> {
     public static final String NATURE_FRAIS_VT = "Frais visa technique";
 
     public static final String NATURE_FRAIS_CP = "Frais consentement préalable";
+
+    private boolean initializingPage = true;
 
     /**
      * Instantiates a new payment controller.
@@ -243,7 +252,7 @@ public class PaymentController extends AbstractController<FileItem> {
                 paymentData = getPaymentDataByFileAndPaymentFlow(selectedFile.getFile(), FlowCode.FL_CT_158);
             } else if (isVtMinepia(selectedFile.getFile())) {
                 paymentData = getPaymentDataByFileAndPaymentFlow(selectedFile.getFile(), FlowCode.FL_AP_VT1_01);
-            }  else {
+            } else {
                 paymentData = paymentDataService.findPaymentDataByItemFlow(lastItemFlow);
             }
 
@@ -371,6 +380,39 @@ public class PaymentController extends AbstractController<FileItem> {
      * Do search by filter.
      */
     public void doSearchByFilter() {
+        try {
+            if (filter.getFromDate() == null && filter.getToDate() == null && StringUtils.isEmpty(filter.getFileNumber()) && filter.getOperator() == null) {
+                Date toDate = new Date();
+                Date fromDate = new Date();
+                String filterIntervalTime = applicationPropretiesService.getPropertiesLoader().getProperty(PropertiesConstants.LISTING_PAYMENT_FILES_INTERVAL_TIME);
+                String filterIntervalTimeNumberStr = applicationPropretiesService.getPropertiesLoader().getProperty(PropertiesConstants.LISTING_PAYMENT_FILES_INTERVAL_TIME_NUMBER);
+                filterIntervalTime = StringUtils.isNotBlank(filterIntervalTime) ? filterIntervalTime : "MONTH";
+                int filterIntervalTimeNumber = StringUtils.isNotBlank(filterIntervalTimeNumberStr) ? Integer.parseInt(filterIntervalTimeNumberStr) : 1;
+                if (null != filterIntervalTime) {
+                    switch (filterIntervalTime) {
+                        case "YEAR":
+                            fromDate = DateUtils.addDays(toDate, -365 * filterIntervalTimeNumber);
+                        case "MONTH":
+                            fromDate = DateUtils.addDays(toDate, -30 * filterIntervalTimeNumber);
+                            break;
+                        case "WEEK":
+                            fromDate = DateUtils.addDays(toDate, -7 * filterIntervalTimeNumber);
+                            break;
+                        case "DAY":
+                            fromDate = DateUtils.addDays(toDate, -1 * filterIntervalTimeNumber);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                filter.setFromDate(fromDate);
+                filter.setToDate(toDate);
+            } else {
+                initializingPage = false;
+            }
+        } catch (Exception ex) {
+            LOG.error(ex.getMessage(), ex);
+        }
         if (filter.getFromDate() != null && filter.getToDate() != null && filter.getFromDate().after(filter.getToDate())) {
             JsfUtil.addErrorMessage(ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(DATE_VALIDATION_ERROR_MESSAGE));
         } else {
@@ -391,6 +433,11 @@ public class PaymentController extends AbstractController<FileItem> {
                 JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(PERSISTENCE_ERROR_OCCURED));
             }
         }
+        if (initializingPage) {
+            filter.setFromDate(null);
+            filter.setToDate(null);
+        }
+
     }
 
     /**
@@ -689,6 +736,22 @@ public class PaymentController extends AbstractController<FileItem> {
      */
     public void setItemFlowService(final ItemFlowService itemFlowService) {
         this.itemFlowService = itemFlowService;
+    }
+
+    public ApplicationPropretiesService getApplicationPropretiesService() {
+        return applicationPropretiesService;
+    }
+
+    public void setApplicationPropretiesService(ApplicationPropretiesService applicationPropretiesService) {
+        this.applicationPropretiesService = applicationPropretiesService;
+    }
+
+    public boolean isInitializingPage() {
+        return initializingPage;
+    }
+
+    public void setInitializingPage(boolean initializingPage) {
+        this.initializingPage = initializingPage;
     }
 
     public boolean isPhyto(File currentFile) {
