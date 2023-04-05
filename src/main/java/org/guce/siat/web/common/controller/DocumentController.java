@@ -1,6 +1,7 @@
 package org.guce.siat.web.common.controller;
 
 import java.io.Serializable;
+import java.util.Base64;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -11,14 +12,11 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.guce.siat.common.model.File;
 import org.guce.siat.common.service.FileService;
-import org.guce.siat.web.common.util.WebConstants;
 import org.guce.siat.web.ct.controller.util.ReportGeneratorUtils;
-import org.guce.siat.web.ct.controller.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
  * @author tadzotsa
  */
 @ViewScoped
@@ -42,34 +40,45 @@ public class DocumentController implements Serializable {
 
     private String fileNumer;
 
+    private String fileType;
+
+    private String niu;
+
     // PREVIEW_CT124648_CCT_CT_E_AT-3.pdf
     private String documentPath;
 
     private String documentNotFound;
+    
+    private byte[] reportBytes;
 
     @PostConstruct
     public void init() {
 
         Map<String, String> requestParameterMap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        fileNumer = requestParameterMap.get(WebConstants.FILE_NUMBER_REQUEST_PARAM_KEY);
-        if (StringUtils.isBlank(fileNumer)) {
-            documentNotFound = "FileNumberNotProvided";
-            return;
-        }
-
-        File file = fileService.findByNumDossierGuce(fileNumer);
-        if (file == null) {
-            documentNotFound = "FileNotFound";
-            return;
-        }
-
-        if (!Utils.isPhyto(file)) {
-            documentNotFound = "NotYetImplemented";
-            return;
-        }
-
         try {
-            byte[] reportBytes = ReportGeneratorUtils.downloadReportByFile(file);
+            String encodedParams = requestParameterMap.get("params");
+            if (StringUtils.isNotEmpty(encodedParams)) {
+                byte[] decodedBytes = Base64.getDecoder().decode(encodedParams);
+                String decodedParams = new String(decodedBytes);
+                if (StringUtils.isNotEmpty(decodedParams)) {
+                    String[] paramsList = decodedParams.split(",");
+                    if (paramsList != null && paramsList.length > 0) {
+                        fileNumer = paramsList[0];
+                        fileType = paramsList[1];
+                        niu = paramsList[2];
+                    }
+                }
+            }
+            if (StringUtils.isEmpty(fileNumer)) {
+                documentNotFound = "FileNotFound";
+                return;
+            }
+            File file = fileService.findByNumDossierGuce(fileNumer);
+            if (file == null) {
+                documentNotFound = "FileNotFound";
+                return;
+            }
+            reportBytes = ReportGeneratorUtils.downloadReportByFile(file);
             String pdfFileName = String.format("%s.pdf", file.getNumeroDossier());
             String pdfFilePath = getRealPath("pages/unsecure", "document", "xhtml");
             java.io.File pdfFileParent = new java.io.File(pdfFilePath);
@@ -77,7 +86,7 @@ public class DocumentController implements Serializable {
             FileUtils.writeByteArrayToFile(pdfFile, reportBytes);
             documentPath = pdfFileName;
         } catch (Exception ex) {
-            logger.error(file.toString(), ex);
+            logger.error(ex.getMessage(), ex);
             documentNotFound = "CannotGetDocument";
         }
     }
@@ -120,5 +129,5 @@ public class DocumentController implements Serializable {
     public void setFileService(FileService fileService) {
         this.fileService = fileService;
     }
-
+    
 }

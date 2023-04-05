@@ -30,6 +30,7 @@ import org.guce.siat.common.utils.ged.CmisSession;
 import org.guce.siat.core.ct.model.ApprovedDecision;
 import org.guce.siat.core.ct.model.UserStampSignature;
 import org.guce.siat.core.ct.service.UserStampSignatureService;
+import org.guce.siat.web.ct.controller.util.Utils;
 import org.guce.siat.web.reports.vo.CtCctCsvFileItemVo;
 import org.guce.siat.web.reports.vo.CtCctCsvFileVo;
 
@@ -447,10 +448,7 @@ public class CctCsvExporter extends AbstractReportInvoker {
             }
             //	ctCctCsvFileVo.setSignatoryName();
 
-            String qrContent = "Nom Importateur : " + ctCctCsvFileVo.getConsigneeName()
-                    + " Nom Fournisseur : " + ctCctCsvFileVo.getConsignorName()
-                    + " Referencence Dedouanement : " + ctCctCsvFileVo.getCertificateReferenceNumber()
-                    + " Numero BL ou LTA : " + ctCctCsvFileVo.getLadingNumberLTA();
+            String qrContent = Utils.getFinalSecureDocumentUrl(file);
             try {
                 ctCctCsvFileVo.setQrCode(new ByteArrayInputStream(new QRCodeGenerator().generateQR(qrContent, 512)));
             } catch (Exception ex) {
