@@ -146,7 +146,8 @@ public class VtMinepiaExporter extends AbstractReportInvoker {
             }
 
             vtMinepiaVo.setFileItemList(fileItemVos);
-            String qrContent = getDocumentPageUrl(file);
+            //String qrContent = getDocumentPageUrl(file);
+            String qrContent = Utils.getFinalSecureDocumentUrl(file);
             try {
                 InputStream qrCode = new ByteArrayInputStream(new QRCodeGenerator().generateQR(qrContent, 512));
                 vtMinepiaVo.setQrCode(qrCode);
