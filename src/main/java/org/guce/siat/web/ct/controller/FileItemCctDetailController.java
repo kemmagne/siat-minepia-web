@@ -4095,6 +4095,14 @@ public class FileItemCctDetailController extends DefaultDetailController {
         if (FileTypeCode.CCS_MINSANTE.equals(currentFile.getFileType().getCode()) && currentFile.getParent() != null) {
             reportingFlow = flowService.findFlowByCode(FlowCode.FL_CT_CCS_05.name());
         }
+        
+        if (FileTypeCode.CCT_CSV.equals(currentFile.getFileType().getCode()) && currentFile.getParent() == null) {
+            reportingFlow = flowService.findFlowByCode(FlowCode.FL_CT_162.name());
+        }
+        
+        if (FileTypeCode.CCT_CSV.equals(currentFile.getFileType().getCode()) && currentFile.getParent() != null) {
+            reportingFlow = flowService.findFlowByCode(FlowCode.FL_CT_169.name());
+        }
 
         boolean okInvoice = StepCode.ST_CT_57.equals(currentFileItem.getStep().getStepCode()) || StepCode.ST_CT_60.equals(currentFileItem.getStep().getStepCode());
         ItemFlow draftItemFlow = itemFlowService.findDraftByFileItem(currentFileItem);
@@ -4109,8 +4117,8 @@ public class FileItemCctDetailController extends DefaultDetailController {
         }
 
         fileTypeFlowReportsDraft = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getFileType());
-        generateDraftAllowed = !Arrays.asList(FileTypeCode.CCT_CSV).contains(currentFile.getFileType().getCode()) && sendDecisionAllowed && showDecisionButton && displayGenerateDraft
-                && ((Arrays.asList(StepCode.ST_CT_38, StepCode.ST_CT_31, StepCode.ST_CT_53, StepCode.ST_CT_55, StepCode.ST_CT_56, StepCode.ST_CT_64, StepCode.ST_CT_CCS_02).contains(currentFileItem.getStep().getStepCode())
+        generateDraftAllowed = sendDecisionAllowed && showDecisionButton && displayGenerateDraft
+                && ((Arrays.asList(StepCode.ST_CT_38, StepCode.ST_CT_31, StepCode.ST_CT_53, StepCode.ST_CT_55, StepCode.ST_CT_56, StepCode.ST_CT_64, StepCode.ST_CT_CCS_02, StepCode.ST_CT_66, StepCode.ST_CT_67).contains(currentFileItem.getStep().getStepCode())
                 && reportingFlow.equals(currentDecision))
                 || (currentDecision != null && StepCode.ST_CT_65.equals(currentFileItem.getStep().getStepCode()) && FlowCode.FL_CT_153.name().equals(currentDecision.getCode()))
                 || okInvoice || isPveReadyForSignature(currentDecision))
