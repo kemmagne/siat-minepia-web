@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="file" language="groovy" pageWidth="595" pageHeight="842" columnWidth="585" leftMargin="5" rightMargin="5" topMargin="5" bottomMargin="5" uuid="28078ea8-15af-47d5-9f91-aa95db5f187e">
 	<property name="ireport.zoom" value="1.272292855117456"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="1961"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<style name="table">
 		<box>
@@ -55,6 +55,7 @@
 		<field name="desc" class="java.lang.String"/>
 		<field name="numberOfPackages" class="java.lang.String"/>
 	</subDataset>
+	<parameter name="DRAFT" class="java.lang.Boolean"/>
 	<field name="consignorName" class="java.lang.String"/>
 	<field name="consignorAddress1" class="java.lang.String"/>
 	<field name="consignorAddress2" class="java.lang.String"/>
@@ -108,6 +109,31 @@
 	<field name="unloadingPlace" class="java.lang.String"/>
 	<field name="csv" class="java.lang.Boolean"/>
 	<field name="bureau" class="java.lang.Object"/>
+	<background>
+		<band height="802" splitType="Stretch">
+			<printWhenExpression><![CDATA[$P{DRAFT}]]></printWhenExpression>
+			<image>
+				<reportElement x="445" y="10" width="130" height="103" uuid="24b196bd-4ed7-48b0-a3e1-d3e1a7a375e8"/>
+				<imageExpression><![CDATA["../images/reports/draft.jpg"]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame">
+				<reportElement x="30" y="153" width="514" height="521" uuid="4b986f0b-d42d-4890-9865-8542f5339910"/>
+				<imageExpression><![CDATA["../images/reports/draft.jpg"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="20" y="10" width="130" height="103" uuid="93fa0058-b626-4961-8290-d32a4ecd80c0"/>
+				<imageExpression><![CDATA["../images/reports/draft.jpg"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="435" y="689" width="130" height="103" uuid="9dcae91f-5b16-4482-91f1-850045e7cd2f"/>
+				<imageExpression><![CDATA["../images/reports/draft.jpg"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="10" y="699" width="130" height="103" uuid="f1b95d1e-5703-40d2-8d9d-dd34f09a3049"/>
+				<imageExpression><![CDATA["../images/reports/draft.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</background>
 	<title>
 		<band height="188" splitType="Stretch">
 			<frame>
