@@ -32,6 +32,7 @@ import org.guce.siat.common.service.ApplicationPropretiesService;
 import org.guce.siat.common.service.AuthorityService;
 import org.guce.siat.common.service.CompanyService;
 import org.guce.siat.common.service.FileItemService;
+import org.guce.siat.common.service.FileService;
 import org.guce.siat.common.service.FileTypeService;
 import org.guce.siat.common.service.ItemFlowService;
 import org.guce.siat.common.service.ServiceService;
@@ -57,7 +58,7 @@ import org.slf4j.LoggerFactory;
  */
 @ManagedBean(name = "paymentController")
 @ViewScoped
-public class PaymentController extends AbstractController<FileItem> {
+public class PaymentController extends AbstractController<File> {
 
     /**
      * The Constant serialVersionUID.
@@ -119,6 +120,12 @@ public class PaymentController extends AbstractController<FileItem> {
      */
     @ManagedProperty(value = "#{fileItemService}")
     private FileItemService fileItemService;
+    
+    /**
+     * The file file service.
+     */
+    @ManagedProperty(value = "#{fileService}")
+    private FileService fileService;
 
     /**
      * The common service.
@@ -193,7 +200,7 @@ public class PaymentController extends AbstractController<FileItem> {
      * Instantiates a new payment controller.
      */
     public PaymentController() {
-        super(FileItem.class);
+        super(File.class);
     }
 
     /**
@@ -202,7 +209,7 @@ public class PaymentController extends AbstractController<FileItem> {
     @PostConstruct
     public void init() {
         LOG.info(Constants.INIT_LOG_INFO_MESSAGE, PaymentController.class.getName());
-        super.setService(fileItemService);
+        super.setService(fileService);
         super.setPageUrl(ControllerConstants.Pages.FO.PAYMENT_INDEX_PAGE);
         operatorList = companyService.findOperator();
         populateFileTypeItems();
@@ -328,14 +335,15 @@ public class PaymentController extends AbstractController<FileItem> {
      * @return the filesList
      */
     public List<File> getFilesList() {
-        final List<FileItem> fileItems = items;
-        filesList = new ArrayList<>();
-        for (final FileItem fileItem : fileItems) {
-            if (!filesList.contains(fileItem.getFile())) {
-                filesList.add(fileItem.getFile());
-            }
-        }
-        return filesList;
+//        final List<FileItem> fileItems = items;
+//        filesList = new ArrayList<>();
+//        for (final FileItem fileItem : fileItems) {
+//            if (!filesList.contains(fileItem.getFile())) {
+//                filesList.add(fileItem.getFile());
+//            }
+//        }
+        
+        return items;
     }
 
     /**
@@ -428,7 +436,7 @@ public class PaymentController extends AbstractController<FileItem> {
                     }
                 }
 
-                items = commonService.findByFilter(filter, getLoggedUser(), getCurrentAdministration());
+                items = commonService.findByFilter2(filter, getLoggedUser(), getCurrentAdministration());
             } catch (final Exception ex) {
                 JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle(LOCAL_BUNDLE_NAME, getCurrentLocale()).getString(PERSISTENCE_ERROR_OCCURED));
             }

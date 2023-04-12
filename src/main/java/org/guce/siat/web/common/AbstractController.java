@@ -295,7 +295,7 @@ public abstract class AbstractController<T extends Serializable> implements Seri
      */
     public void refreshItems() {
         items = null;
-        getItems();
+//        getItems();
 
     }
 
