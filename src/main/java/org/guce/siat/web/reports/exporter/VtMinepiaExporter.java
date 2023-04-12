@@ -146,7 +146,7 @@ public class VtMinepiaExporter extends AbstractReportInvoker {
             }
 
             vtMinepiaVo.setFileItemList(fileItemVos);
-            String qrContent = Utils.getFinalSecureDocumentUrl(getQrCodeBaseUrl(), file);
+            String qrContent = Utils.getFinalSecureDocumentUrl(file);
             try {
                 InputStream qrCode = new ByteArrayInputStream(new QRCodeGenerator().generateQR(qrContent, 512));
                 vtMinepiaVo.setQrCode(qrCode);
@@ -197,26 +197,6 @@ public class VtMinepiaExporter extends AbstractReportInvoker {
      */
     public File getFile() {
         return file;
-    }
-
-    
-    private String getQrCodeBaseUrl() {
-        ApplicationPropretiesService applicationPropretiesService = ServiceUtility.getBean(ApplicationPropretiesService.class);
-        String environment = applicationPropretiesService.getAppEnv();
-        String baseUrl;
-        switch (environment) {
-            case "standalone":
-            case "production":
-                baseUrl = "https://siat.guichetunique.cm";
-                break;
-            case "test":
-                baseUrl = "https://testsiat.guichetunique.cm";
-                break;
-            default:
-                baseUrl = "https://localhost:40081";
-                break;
-        }
-        return baseUrl;
     }
 
 }
