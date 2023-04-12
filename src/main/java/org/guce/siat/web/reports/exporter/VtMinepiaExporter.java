@@ -146,8 +146,7 @@ public class VtMinepiaExporter extends AbstractReportInvoker {
             }
 
             vtMinepiaVo.setFileItemList(fileItemVos);
-            //String qrContent = getDocumentPageUrl(file);
-            String qrContent = Utils.getFinalSecureDocumentUrl(file);
+            String qrContent = Utils.getFinalSecureDocumentUrl(getQrCodeBaseUrl(), file);
             try {
                 InputStream qrCode = new ByteArrayInputStream(new QRCodeGenerator().generateQR(qrContent, 512));
                 vtMinepiaVo.setQrCode(qrCode);
@@ -201,29 +200,23 @@ public class VtMinepiaExporter extends AbstractReportInvoker {
     }
 
     
-    private String getDocumentPageUrl(File file) {
-        FacesContext context = FacesContext.getCurrentInstance();
-        ExternalContext extContext = context.getExternalContext();
-        String documentPageUrl = "/pages/unsecure/document.xhtml";
-        String url = extContext.encodeActionURL(context.getApplication().getViewHandler().getActionURL(context, documentPageUrl));
-        url = Utils.getFinalDetailPageUrl(file, url, false, false);
+    private String getQrCodeBaseUrl() {
         ApplicationPropretiesService applicationPropretiesService = ServiceUtility.getBean(ApplicationPropretiesService.class);
         String environment = applicationPropretiesService.getAppEnv();
-        String urlPrefix;
+        String baseUrl;
         switch (environment) {
             case "standalone":
             case "production":
-                urlPrefix = "https://siat.guichetunique.cm";
+                baseUrl = "https://siat.guichetunique.cm";
                 break;
             case "test":
-                urlPrefix = "https://testsiat.guichetunique.cm";
+                baseUrl = "https://testsiat.guichetunique.cm";
                 break;
             default:
-                urlPrefix = "https://localhost:40081";
+                baseUrl = "https://localhost:40081";
                 break;
         }
-        url = urlPrefix.concat(url);
-        return url;
+        return baseUrl;
     }
 
 }

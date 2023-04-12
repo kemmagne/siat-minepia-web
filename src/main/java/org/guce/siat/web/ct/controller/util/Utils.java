@@ -203,24 +203,20 @@ public final class Utils {
         String baseUrl = requestUrl.substring(0, requestUrl.length() - requestUri.length());
         return baseUrl + APP;
     }
-
-    public static String getFinalSecureDocumentUrl(String xhtmlPage, File file) {
-        String finalUrl = getBaseUrl();
+    
+    public static String getFinalSecureDocumentUrl(String baseUrl, File file) {
+        String finalUrl = baseUrl;
         try {
-            String ext = "";
-            if (!xhtmlPage.endsWith("xhtml")) {
-                ext = ".xhtml";
-            }
             String format = "%s/%s?params=%s";
             String params = file.getNumeroDossier() + "," + file.getFileType().getCode().name() + "," + file.getClient().getNumContribuable();
             String encodedParams = Base64.getEncoder().encodeToString(params.getBytes());
-            return String.format(format, finalUrl, xhtmlPage + ext, encodedParams);
+            return String.format(format, finalUrl, "pages/unsecure/document.xhtml", encodedParams);
         } catch (Exception ex) {
             java.util.logging.Logger.getLogger(JsfUtil.class.getName()).log(Level.WARNING, ex.getMessage());
         }
         return finalUrl;
     }
-
+    
     public static String getFinalSecureDocumentUrl(File file) {
         String finalUrl = getBaseUrl();
         try {
