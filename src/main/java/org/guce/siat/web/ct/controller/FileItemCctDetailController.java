@@ -4133,7 +4133,9 @@ public class FileItemCctDetailController extends DefaultDetailController {
      * Check generate report allowed.
      */
     private void checkGenerateReportAllowed() {
-        final Flow reportingFlow = flowService.findByToStep(currentFileItem.getStep(), currentFile.getFileType());
+//        final Flow reportingFlow = flowService.findByToStep(currentFileItem.getStep(), currentFile.getFileType());
+        ItemFlow itemFlow = itemFlowService.findLastSentItemFlowByFileItem(currentFileItem);
+        Flow reportingFlow = itemFlow.getFlow();        
         fileTypeFlowReports = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getFileType());
         generateReportAllowed = StepCode.ST_CT_06.equals(currentFileItem.getStep().getStepCode()) && CollectionUtils.isNotEmpty(fileTypeFlowReports);
     }
