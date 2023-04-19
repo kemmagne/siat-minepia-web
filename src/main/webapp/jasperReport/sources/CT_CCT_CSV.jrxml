@@ -289,14 +289,14 @@
 			<staticText>
 				<reportElement x="11" y="173" width="23" height="15" uuid="96206be8-36e6-45ec-81b3-e4231d93dfef"/>
 				<textElement textAlignment="Center">
-					<font size="9" isBold="true" isUnderline="true"/>
+					<font size="8" isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[NB:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="34" y="173" width="544" height="15" uuid="c270d85a-c550-486e-b608-c471ee25e1d8"/>
+				<reportElement x="34" y="173" width="524" height="15" uuid="c270d85a-c550-486e-b608-c471ee25e1d8"/>
 				<textElement>
-					<font size="9" isBold="true"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Ce document ne tient pas lieu de Certificat Sanitaire Vétérinaire. Document délivré après une inspection des produits.]]></text>
 			</staticText>

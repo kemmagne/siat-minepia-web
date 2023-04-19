@@ -245,13 +245,13 @@ public final class Utils {
         switch (environment) {
             case "standalone":
             case "production":
-                baseUrl = "https://siat.guichetunique.cm";
+                baseUrl = "https://siat.guichetunique.cm/siat-ct-minepia-web";
                 break;
             case "test":
-                baseUrl = "https://testsiat.guichetunique.cm";
+                baseUrl = "https://testsiat.guichetunique.cm/siat-ct-minepia-web";
                 break;
             default:
-                baseUrl = "https://localhost:40081";
+                baseUrl = "https://localhost:40081/siat-ct-minepia-web";
                 break;
         }
         return baseUrl;
