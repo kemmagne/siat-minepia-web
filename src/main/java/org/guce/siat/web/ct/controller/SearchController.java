@@ -367,8 +367,8 @@ public class SearchController extends AbstractController<FileItem> {
         documentNumberFilter = null;
         filter = new FileItemFilter();
         selectedStepFilter = null;
-        initSimpleSearch();
-        initAdvancedSearch();
+//        initSimpleSearch();
+//        initAdvancedSearch();
     }
 
     /**
@@ -447,7 +447,10 @@ public class SearchController extends AbstractController<FileItem> {
      */
     public void goToSimpleSearchPage() {
         try {
-            init();
+            documentNumberFilter = null;
+            filter = new FileItemFilter();
+            selectedStepFilter = null;
+            initSimpleSearch();
             final FacesContext context = FacesContext.getCurrentInstance();
             final ExternalContext extContext = context.getExternalContext();
             final String url = extContext.encodeActionURL(context.getApplication().getViewHandler()
@@ -463,7 +466,10 @@ public class SearchController extends AbstractController<FileItem> {
      */
     public void goToAdvancedSearchPage() {
         try {
-            init();
+            documentNumberFilter = null;
+            filter = new FileItemFilter();
+            selectedStepFilter = null;
+            initAdvancedSearch();
             final FacesContext context = FacesContext.getCurrentInstance();
             final ExternalContext extContext = context.getExternalContext();
             final String url = extContext.encodeActionURL(context.getApplication().getViewHandler()

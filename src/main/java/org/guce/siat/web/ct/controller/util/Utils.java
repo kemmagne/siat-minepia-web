@@ -2,6 +2,7 @@ package org.guce.siat.web.ct.controller.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.logging.Level;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.guce.siat.common.model.Administration;
 import org.guce.siat.common.model.Bureau;
@@ -189,6 +193,58 @@ public final class Utils {
             return false;
         }
         return Arrays.asList(logins.split(";")).contains(loggedUser.getLogin());
+    }
+
+    public static String getBaseUrl() {
+        String APP = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        String requestUrl = request.getRequestURL().toString();
+        String requestUri = request.getRequestURI();
+        String baseUrl = requestUrl.substring(0, requestUrl.length() - requestUri.length());
+        return baseUrl + APP;
+    }
+
+//    public static String getFinalSecureDocumentUrl(String xhtmlPage, File file) {
+//        String finalUrl = getBaseUrl();
+//        try {
+//            String ext = "";
+//            if (!xhtmlPage.endsWith("xhtml")) {
+//                ext = ".xhtml";
+//            }
+//            String format = "%s/%s?params=%s";
+//            String params = file.getNumeroDossier() + "," + file.getFileType().getCode().name() + "," + file.getClient().getNumContribuable();
+//            String encodedParams = Base64.getEncoder().encodeToString(params.getBytes());
+//            return String.format(format, finalUrl, xhtmlPage + ext, encodedParams);
+//        } catch (Exception ex) {
+//            java.util.logging.Logger.getLogger(JsfUtil.class.getName()).log(Level.WARNING, ex.getMessage());
+//        }
+//        return finalUrl;
+//    }
+
+    public static String getFinalSecureDocumentUrl(File file) {
+        String finalUrl = getBaseUrl();
+        try {
+            String format = "%s/%s?params=%s";
+            String params = file.getNumeroDossier() + "," + file.getFileType().getCode().name() + "," + file.getClient().getNumContribuable();
+            String encodedParams = Base64.getEncoder().encodeToString(params.getBytes());
+            return String.format(format, finalUrl, "pages/unsecure/document.xhtml", encodedParams);
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(JsfUtil.class.getName()).log(Level.WARNING, ex.getMessage());
+        }
+        return finalUrl;
+    }
+    
+    public static String getFinalSecureDocumentUrl(String baseUrl, File file) {
+        String finalUrl = baseUrl;
+        try {
+            String format = "%s/%s?params=%s";
+            String params = file.getNumeroDossier() + "," + file.getFileType().getCode().name() + "," + file.getClient().getNumContribuable();
+            String encodedParams = Base64.getEncoder().encodeToString(params.getBytes());
+            return String.format(format, finalUrl, "pages/unsecure/document.xhtml", encodedParams);
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(JsfUtil.class.getName()).log(Level.WARNING, ex.getMessage());
+        }
+        return finalUrl;
     }
 
     public static String getFinalDetailPageUrl(File file, String indexPage, boolean redirect, boolean search) {
