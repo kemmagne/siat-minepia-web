@@ -3,6 +3,7 @@ package org.guce.siat.web.ct.controller.util;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ import org.guce.siat.common.service.FlowService;
 import org.guce.siat.common.service.ItemFlowService;
 import org.guce.siat.common.utils.enums.FileTypeCode;
 import org.guce.siat.common.utils.enums.FlowCode;
+import org.guce.siat.core.ct.model.ApprovedDecision;
 import org.guce.siat.core.ct.model.CCTCPParamValue;
 import org.guce.siat.core.ct.model.InspectionReport;
 import org.guce.siat.core.ct.model.TreatmentInfos;
@@ -33,9 +35,11 @@ import org.guce.siat.core.ct.service.InspectionReportService;
 import org.guce.siat.core.ct.service.PottingReportService;
 import org.guce.siat.core.ct.service.TreatmentInfosService;
 import org.guce.siat.core.ct.service.TreatmentResultService;
+import org.guce.siat.core.ct.service.UserStampSignatureService;
 import org.guce.siat.core.ct.util.enums.CctExportProductType;
 import org.guce.siat.web.common.ControllerConstants;
 import org.guce.siat.web.reports.exporter.AbstractReportInvoker;
+import org.guce.siat.web.reports.exporter.CctCsvExporter;
 import org.guce.siat.web.reports.exporter.CtCctCpEExporter;
 import org.guce.siat.web.reports.exporter.CtCctCqeExporter;
 import org.guce.siat.web.reports.exporter.CtCctTreatmentExporter;
@@ -85,136 +89,28 @@ public final class ReportGeneratorUtils {
         return report;
     }
 
-    public static byte[] getMinaderReportBytes(File file, FileTypeFlowReport fileTypeFlowReport) throws Exception {
+    public static byte[] getMinepiaReportBytes(File file, FileTypeFlowReport fileTypeFlowReport) throws Exception {
 
-        ItemFlowService itemFlowService = ServiceUtility.getBean(ItemFlowService.class);
-        TreatmentInfosService treatmentInfosService = ServiceUtility.getBean(TreatmentInfosService.class);
-        CCTCPParamValueService cCTCPParamValueService = ServiceUtility.getBean(CCTCPParamValueService.class);
-        InspectionReportService inspectionReportService = ServiceUtility.getBean(InspectionReportService.class);
-        TreatmentResultService treatmentResultService = ServiceUtility.getBean(TreatmentResultService.class);
-        FileFieldValueService fileFieldValueService = ServiceUtility.getBean(FileFieldValueService.class);
-        PottingReportService pottingReportService = ServiceUtility.getBean(PottingReportService.class);
-
-        User signatory = file.getSignatory();
+        UserStampSignatureService userStampSignatureService = ServiceUtility.getBean(UserStampSignatureService.class);
+        User loggedUser = ServiceUtility.getBean(User.class);
+        ApprovedDecision approvedDecision = ServiceUtility.getBean(ApprovedDecision.class);
 
         String nomClasse = fileTypeFlowReport.getReportClassName();
         @SuppressWarnings("rawtypes")
         Class classe = Class.forName(nomClasse);
-        Map<String, Object> forAnnexes = null;
         byte[] report = null;
         AbstractReportInvoker reportInvoker = null;
-        List<AbstractReportInvoker> reportInvokersForFstpAndAtp = null;
-        FileItem ffi = file.getFileItemsList().get(0);
 
         Flow flow = fileTypeFlowReport.getFlow();
         if (BooleanUtils.toBoolean(flow.getToStep().getIsFinal())) {
-            switch (file.getFileType().getCode()) {
-                case CCT_CT_E: {
-                    ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(ffi, FlowCode.FL_CT_151);
-                    if (itemFlow == null) {
-                        itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(ffi, FlowCode.FL_CT_07);
-                    }
-                    if (itemFlow == null) {
-                        itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(ffi, FlowCode.FL_CT_112);
-                    }
-                    if (itemFlow == null) {
-                        itemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(ffi, FlowCode.FL_CT_117);
-                    }
-                    final TreatmentInfos ti = treatmentInfosService.findTreatmentInfosByItemFlow(itemFlow);
-                    if (ti == null || ti.getId() == null) {
-                        return null;
-                    }
-                    ItemFlow itemFlow2 = itemFlowService.findItemFlowByFileItemAndFlow(file.getFileItemsList().get(0), FlowCode.FL_CT_08);
-                    if (itemFlow2 == null) {
-                        itemFlow2 = itemFlowService.findItemFlowByFileItemAndFlow(file.getFileItemsList().get(0), FlowCode.FL_CT_114);
-                    }
-                    CCTCPParamValue paramValue = cCTCPParamValueService.findCCTCPParamValueByItemFlow(itemFlow2);
-                    if (paramValue == null) {
-                        fillCCTCPParamValue(paramValue, signatory, file);
-                    }
-
-                    if (ti.getDelivrableType() == null || "CCT_CT_E".equals(ti.getDelivrableType())) {
-                        Map<String, Integer> count = countFileContainerAndPackage(file);
-                        if (count.get(ReportGeneratorUtils.COUNT_GOODS) > paramValue.getMaxGoodsLineNumber()
-                                || count.get(ReportGeneratorUtils.COUNT_CONTAINERS) > paramValue.getMaxContainerNumber()
-                                || count.get(ReportGeneratorUtils.COUNT_PACKAGES) > paramValue.getMaxPackageNumber()) {
-                            forAnnexes = new HashMap();
-                            forAnnexes.put("ti", ti);
-                            forAnnexes.put("paramValue", paramValue);
-
-                            FileFieldValue ffv = fileFieldValueService.findValueByFileFieldAndFile(CctExportProductType.getFileFieldCode(), file);
-                            if (!CctExportProductType.AUTRES.name().equals(ffv.getValue())) {
-                                forAnnexes.put("fileNameAnnex", ReportGeneratorUtils.CP_DEF_ANNEX);
-                            } else {
-                                forAnnexes.put("fileNameAnnex", ReportGeneratorUtils.CP_ANNEX_AUTRES);
-                            }
-                        }
-                        reportInvoker = new CtCctCpEExporter(file, ti, paramValue, "CERTIFICAT_PHYTOSANITAIRE");
-
-                    } else if ("CQ_CT".equals(ti.getDelivrableType())) {
-                        reportInvoker = new CtCctCqeExporter(file, ti);
-                    }
-                    break;
-                }
-                case CCT_CT_E_PVI: {
-                    ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(ffi, FlowCode.FL_CT_07);
-                    InspectionReport ir = inspectionReportService.findByItemFlow(itemFlow);
-                    reportInvoker = new CtPviExporter(file, ir);
-                    break;
-                }
-                case CCT_CT_E_ATP:
-                case CCT_CT_E_FSTP: {
-                    ItemFlow itemFlow = itemFlowService.findItemFlowByFileItemAndFlow(ffi, FlowCode.FL_CT_07);
-                    TreatmentResult tr = treatmentResultService.findTreatmentResultByItemFlow(itemFlow);
-                    reportInvokersForFstpAndAtp = new ArrayList<>();
-                    if (FileTypeCode.CCT_CT_E_ATP.equals(file.getFileType().getCode())) {
-                        reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_ATP", tr, FileTypeCode.CCT_CT_E_ATP);
-                    } else {
-                        reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_FSTP", tr, FileTypeCode.CCT_CT_E_FSTP);
-                        reportInvokersForFstpAndAtp.add(reportInvoker);
-                        reportInvoker = new CtCctTreatmentExporter(file, "CCT_CT_E_ATP", tr, FileTypeCode.CCT_CT_E_ATP);
-                        reportInvokersForFstpAndAtp.add(reportInvoker);
-                    }
-                    break;
-                }
-                default:
-                    Constructor constructor = classe.getConstructor(File.class);
-                    reportInvoker = (AbstractReportInvoker) constructor.newInstance(file);
-                    break;
+            if (FileTypeCode.VT_MINEPIA.equals(file.getFileType().getCode())) {
+                Constructor c1 = classe.getConstructor(File.class);
+                reportInvoker = (AbstractReportInvoker) c1.newInstance(file);
+                reportInvoker.setUserStampSignatureService(userStampSignatureService);
+                report = JsfUtil.getReport(reportInvoker);
             }
-        }
-        if (FileTypeCode.CCT_CT_E_FSTP.equals(file.getFileType().getCode()) && reportInvokersForFstpAndAtp != null) {
-            List<JasperPrint> inputStreamsForFstpAndAtp = new ArrayList<>();
-            for (AbstractReportInvoker reportInvokerFstpOrAtp : reportInvokersForFstpAndAtp) {
-                reportInvokerFstpOrAtp.setFileFieldValueService(fileFieldValueService);
-                reportInvokerFstpOrAtp.setItemFlowService(itemFlowService);
-                reportInvokerFstpOrAtp.setPottingReportService(pottingReportService);
-                JasperPrint reportJPForFstpOrAtp = JsfUtil.getReportJP(reportInvokerFstpOrAtp);
-                inputStreamsForFstpAndAtp.add(reportJPForFstpOrAtp);
-            }
-            if (!CollectionUtils.isEmpty(inputStreamsForFstpAndAtp)) {
-                report = JsfUtil.mergePdf(inputStreamsForFstpAndAtp);
-            }
-
-        }else if (reportInvoker != null) {
-            reportInvoker.setFileFieldValueService(fileFieldValueService);
-            reportInvoker.setItemFlowService(itemFlowService);
-            reportInvoker.setPottingReportService(pottingReportService);
-            if (forAnnexes != null) {
-                JasperPrint page1 = JsfUtil.getReportJP(reportInvoker);
-                TreatmentInfos ti = (TreatmentInfos) forAnnexes.get("ti");
-                CCTCPParamValue paramValue = (CCTCPParamValue) forAnnexes.get("paramValue");
-                String fileAnnexName = (String) forAnnexes.get("fileNameAnnex");
-                CtCctCpEExporter exporter = new CtCctCpEExporter(file, ti, paramValue, fileAnnexName);
-                exporter.setFileFieldValueService(fileFieldValueService);
-                JasperPrint report2 = JsfUtil.getReportJP(exporter);
-
-                List<JasperPrint> inputStreams = new ArrayList<>();
-                inputStreams.add(page1);
-                inputStreams.add(report2);
-
-                report = JsfUtil.mergePdf(inputStreams);
-            } else {
+            if (FileTypeCode.CCT_CSV.equals(file.getFileType().getCode())) {
+                reportInvoker = new CctCsvExporter(file, loggedUser, approvedDecision);
                 report = JsfUtil.getReport(reportInvoker);
             }
         }
@@ -283,10 +179,13 @@ public final class ReportGeneratorUtils {
 
         if (file == null) {
             return null;
+
         }
 
-        FlowService flowService = ServiceUtility.getBean(FlowService.class);
-        FileTypeFlowReportService fileTypeFlowReportService = ServiceUtility.getBean(FileTypeFlowReportService.class);
+        FlowService flowService = ServiceUtility.getBean(FlowService.class
+        );
+        FileTypeFlowReportService fileTypeFlowReportService = ServiceUtility.getBean(FileTypeFlowReportService.class
+        );
 
         FileItem pfi = file.getFileItemsList().get(0);
         final Flow reportingFlow = flowService.findByToStep(pfi.getStep(), file.getFileType());
@@ -299,7 +198,7 @@ public final class ReportGeneratorUtils {
 
         for (final FileTypeFlowReport fileTypeFlowReport : ftfr) {
             try {
-                final byte[] report = getMinaderReportBytes(file, fileTypeFlowReport);
+                final byte[] report = getMinepiaReportBytes(file, fileTypeFlowReport);
                 return report;
             } catch (Exception e) {
                 LOGGER.error(file.toString(), e);

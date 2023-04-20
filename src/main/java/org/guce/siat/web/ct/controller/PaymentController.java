@@ -790,4 +790,12 @@ public class PaymentController extends AbstractController<File> {
         }
         return paymentData;
     }
+
+    public FileService getFileService() {
+        return fileService;
+    }
+
+    public void setFileService(FileService fileService) {
+        this.fileService = fileService;
+    }
 }

@@ -2,15 +2,12 @@ package org.guce.siat.web.reports.exporter;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
@@ -19,13 +16,11 @@ import org.apache.commons.lang.StringUtils;
 import org.guce.siat.common.model.File;
 import org.guce.siat.common.model.FileFieldValue;
 import org.guce.siat.common.model.FileItem;
-import org.guce.siat.common.service.ApplicationPropretiesService;
 import org.guce.siat.common.utils.DateUtils;
 import org.guce.siat.web.reports.vo.VtMinepiaFileItemVo;
 import org.guce.siat.web.reports.vo.VtMinepiaFileVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.guce.siat.common.lookup.ServiceUtility;
 import org.guce.siat.web.ct.controller.util.Utils;
 import org.guce.siat.common.utils.QRCodeGenerator;
 
@@ -146,7 +141,7 @@ public class VtMinepiaExporter extends AbstractReportInvoker {
             }
 
             vtMinepiaVo.setFileItemList(fileItemVos);
-            String qrContent = Utils.getFinalSecureDocumentUrl(getQrCodeBaseUrl(), file);
+            String qrContent = Utils.getFinalSecureDocumentUrl(file);
             try {
                 InputStream qrCode = new ByteArrayInputStream(new QRCodeGenerator().generateQR(qrContent, 512));
                 vtMinepiaVo.setQrCode(qrCode);
@@ -197,25 +192,6 @@ public class VtMinepiaExporter extends AbstractReportInvoker {
      */
     public File getFile() {
         return file;
-    }
-    
-    private String getQrCodeBaseUrl() {
-        ApplicationPropretiesService applicationPropretiesService = ServiceUtility.getBean(ApplicationPropretiesService.class);
-        String environment = applicationPropretiesService.getAppEnv();
-        String baseUrl;
-        switch (environment) {
-            case "standalone":
-            case "production":
-                baseUrl = "https://siat.guichetunique.cm";
-                break;
-            case "test":
-                baseUrl = "https://testsiat.guichetunique.cm";
-                break;
-            default:
-                baseUrl = "https://localhost:40081";
-                break;
-        }
-        return baseUrl;
     }
 
 }

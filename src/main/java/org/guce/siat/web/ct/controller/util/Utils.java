@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
+import org.guce.siat.common.lookup.ServiceUtility;
 import org.guce.siat.common.model.Administration;
 import org.guce.siat.common.model.Bureau;
 import org.guce.siat.common.model.Entity;
@@ -25,6 +26,7 @@ import org.guce.siat.common.model.Params;
 import org.guce.siat.common.model.Step;
 import org.guce.siat.common.model.User;
 import org.guce.siat.common.model.UserAuthorityFileType;
+import org.guce.siat.common.service.ApplicationPropretiesService;
 import org.guce.siat.common.service.FileFieldValueService;
 import org.guce.siat.common.service.FileItemService;
 import org.guce.siat.common.service.FileTypeStepService;
@@ -203,39 +205,9 @@ public final class Utils {
         String baseUrl = requestUrl.substring(0, requestUrl.length() - requestUri.length());
         return baseUrl + APP;
     }
-
-//    public static String getFinalSecureDocumentUrl(String xhtmlPage, File file) {
-//        String finalUrl = getBaseUrl();
-//        try {
-//            String ext = "";
-//            if (!xhtmlPage.endsWith("xhtml")) {
-//                ext = ".xhtml";
-//            }
-//            String format = "%s/%s?params=%s";
-//            String params = file.getNumeroDossier() + "," + file.getFileType().getCode().name() + "," + file.getClient().getNumContribuable();
-//            String encodedParams = Base64.getEncoder().encodeToString(params.getBytes());
-//            return String.format(format, finalUrl, xhtmlPage + ext, encodedParams);
-//        } catch (Exception ex) {
-//            java.util.logging.Logger.getLogger(JsfUtil.class.getName()).log(Level.WARNING, ex.getMessage());
-//        }
-//        return finalUrl;
-//    }
-
-    public static String getFinalSecureDocumentUrl(File file) {
-        String finalUrl = getBaseUrl();
-        try {
-            String format = "%s/%s?params=%s";
-            String params = file.getNumeroDossier() + "," + file.getFileType().getCode().name() + "," + file.getClient().getNumContribuable();
-            String encodedParams = Base64.getEncoder().encodeToString(params.getBytes());
-            return String.format(format, finalUrl, "pages/unsecure/document.xhtml", encodedParams);
-        } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(JsfUtil.class.getName()).log(Level.WARNING, ex.getMessage());
-        }
-        return finalUrl;
-    }
     
-    public static String getFinalSecureDocumentUrl(String baseUrl, File file) {
-        String finalUrl = baseUrl;
+    public static String getFinalSecureDocumentUrl(File file) {
+        String finalUrl = getQrCodeBaseUrl();
         try {
             String format = "%s/%s?params=%s";
             String params = file.getNumeroDossier() + "," + file.getFileType().getCode().name() + "," + file.getClient().getNumContribuable();
@@ -266,4 +238,22 @@ public final class Utils {
     private Utils() {
     }
 
+    private static String getQrCodeBaseUrl() {
+        ApplicationPropretiesService applicationPropretiesService = ServiceUtility.getBean(ApplicationPropretiesService.class);
+        String environment = applicationPropretiesService.getAppEnv();
+        String baseUrl;
+        switch (environment) {
+            case "standalone":
+            case "production":
+                baseUrl = "https://siat.guichetunique.cm/siat-ct-minepia-web";
+                break;
+            case "test":
+                baseUrl = "https://testsiat.guichetunique.cm/siat-ct-minepia-web";
+                break;
+            default:
+                baseUrl = "https://localhost:40081/siat-ct-minepia-web";
+                break;
+        }
+        return baseUrl;
+    }
 }
