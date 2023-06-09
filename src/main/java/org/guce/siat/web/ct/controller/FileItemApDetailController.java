@@ -2483,21 +2483,23 @@ public class FileItemApDetailController extends DefaultDetailController implemen
                             for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
 
                                 //Begin Add new field value with report Number
-                                final ReportOrganism reportOrganism = reportOrganismService
-                                        .findReportByFileTypeFlowReport(fileTypeFlowReport);
-                                final FileField reportField = fileFieldService.findFileFieldByCodeAndFileType(
-                                        fileTypeFlowReport.getFileFieldName(), fileTypeFlowReport.getFileType().getCode());
-                                reportNumber = (reportOrganism.getSequence() + 1)
-                                        + (reportOrganism.getValue() != null ? reportOrganism.getValue() : StringUtils.EMPTY);
-                                if (reportField != null) {
-                                    FileFieldValue reportFieldValue = fileFieldValueService.findValueByFileFieldAndFile(reportField.getCode(), currentFile);
-                                    if (reportFieldValue == null) {
-                                        reportFieldValue = new FileFieldValue();
-                                        reportFieldValue.setFile(currentFile);
-                                        reportFieldValue.setFileField(reportField);
-                                        reportFieldValue.setValue(reportNumber);
-                                        currentFile.getFileFieldValueList().add(reportFieldValue);
-                                        fileFieldValueService.save(reportFieldValue);
+                                if (!Arrays.asList(FileTypeCode.VT_MINEPIA).contains(currentFile.getFileType().getCode())) {
+                                    final ReportOrganism reportOrganism = reportOrganismService
+                                            .findReportByFileTypeFlowReport(fileTypeFlowReport);
+                                    final FileField reportField = fileFieldService.findFileFieldByCodeAndFileType(
+                                            fileTypeFlowReport.getFileFieldName(), fileTypeFlowReport.getFileType().getCode());
+                                    reportNumber = (reportOrganism.getSequence() + 1)
+                                            + (reportOrganism.getValue() != null ? reportOrganism.getValue() : StringUtils.EMPTY);
+                                    if (reportField != null) {
+                                        FileFieldValue reportFieldValue = fileFieldValueService.findValueByFileFieldAndFile(reportField.getCode(), currentFile);
+                                        if (reportFieldValue == null) {
+                                            reportFieldValue = new FileFieldValue();
+                                            reportFieldValue.setFile(currentFile);
+                                            reportFieldValue.setFileField(reportField);
+                                            reportFieldValue.setValue(reportNumber);
+                                            currentFile.getFileFieldValueList().add(reportFieldValue);
+                                            fileFieldValueService.save(reportFieldValue);
+                                        }
                                     }
                                 }
                                 //End Add new field value with report Number
