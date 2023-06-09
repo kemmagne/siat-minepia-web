@@ -45,13 +45,13 @@
                 </p:column>
 
                 <p:column sortBy="#{file.fileItemsList.get(0).step.id}"
-                          filterBy="#{facesContext.viewRoot.locale eq 'en' ? file.fileItemsList.get(0).redefinedLabelEn: file.fileItemsList.get(0).redefinedLabelFr}"
+                          filterBy="#{facesContext.viewRoot.locale eq 'en' ? file.step.labelEn: file.step.labelFr}"
                           filterMatchMode="contains">
                     <f:facet name="header">
                         <h:outputText value="#{bundle['FileLabel_step']}" title="#{bundle['FileTitle_step']}" />
                     </f:facet>
                     <h:outputText
-                        value="#{facesContext.viewRoot.locale eq 'en' ? file.fileItemsList.get(0).redefinedLabelEn: file.fileItemsList.get(0).redefinedLabelFr}" />
+                        value="#{facesContext.viewRoot.locale eq 'en' ? file.step.labelEn: file.step.labelFr}" />
                 </p:column>
 
                 <p:column sortBy="#{facesContext.viewRoot.locale eq 'en' ? file.fileType.labelEn : file.fileType.labelFr }"
