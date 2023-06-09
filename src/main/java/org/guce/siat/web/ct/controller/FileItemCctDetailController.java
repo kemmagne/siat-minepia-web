@@ -3095,7 +3095,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                                 List<FileTypeFlowReport> fileTypeFlowReportList = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(flowToSend, currentFile.getFileType());
                                 for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportList) {
 
-                                    if (!Arrays.asList(FileTypeCode.CCT_CSV, FileTypeCode.CCT_CT_E_PVE).contains(currentFile.getFileType().getCode())) {
+                                    if (!Arrays.asList(FileTypeCode.CCT_CSV, FileTypeCode.VT_MINEPIA, FileTypeCode.CCT_CT_E_PVE).contains(currentFile.getFileType().getCode())) {
                                         String reportFieldCode = fileTypeFlowReport.getFileFieldName();
                                         FileFieldValue reportFieldValue = fileFieldValueService.findValueByFileFieldAndFile(reportFieldCode, currentFile);
                                         if (reportFieldValue == null) {
