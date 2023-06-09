@@ -13,7 +13,7 @@
     <!-- .STANDALONE -->
     <!-- .TEST -->
     <!-- .HT -->
-    <version>2.7.9</version>
+    <version>2.7.9-beta.2</version>
     <packaging>war</packaging>
 
     <name>siat-ct-minepia-web</name>
