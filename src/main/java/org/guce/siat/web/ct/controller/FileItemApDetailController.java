@@ -2501,6 +2501,9 @@ public class FileItemApDetailController extends DefaultDetailController implemen
                                             fileFieldValueService.save(reportFieldValue);
                                         }
                                     }
+                                    //Update report sequence
+                                    reportOrganism.setSequence(reportOrganism.getSequence() + 1);
+                                    reportOrganismService.update(reportOrganism);
                                 }
                                 //End Add new field value with report Number
                                 byte[] report;
@@ -2553,9 +2556,6 @@ public class FileItemApDetailController extends DefaultDetailController implemen
                                     fileOuputStream.write(report);
                                 }
 
-                                //Update report sequence
-                                reportOrganism.setSequence(reportOrganism.getSequence() + 1);
-                                reportOrganismService.update(reportOrganism);
 //                                final Map<String, Date> dateParams = new HashMap<>();
 //                                dateParams.put("SIGNATURE_DATE", java.util.Calendar.getInstance().getTime());
 //                                fileService.updateSpecificColumn(dateParams, currentFile);
