@@ -2483,22 +2483,27 @@ public class FileItemApDetailController extends DefaultDetailController implemen
                             for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReports) {
 
                                 //Begin Add new field value with report Number
-                                final ReportOrganism reportOrganism = reportOrganismService
-                                        .findReportByFileTypeFlowReport(fileTypeFlowReport);
-                                final FileField reportField = fileFieldService.findFileFieldByCodeAndFileType(
-                                        fileTypeFlowReport.getFileFieldName(), fileTypeFlowReport.getFileType().getCode());
-                                reportNumber = (reportOrganism.getSequence() + 1)
-                                        + (reportOrganism.getValue() != null ? reportOrganism.getValue() : StringUtils.EMPTY);
-                                if (reportField != null) {
-                                    FileFieldValue reportFieldValue = fileFieldValueService.findValueByFileFieldAndFile(reportField.getCode(), currentFile);
-                                    if (reportFieldValue == null) {
-                                        reportFieldValue = new FileFieldValue();
-                                        reportFieldValue.setFile(currentFile);
-                                        reportFieldValue.setFileField(reportField);
-                                        reportFieldValue.setValue(reportNumber);
-                                        currentFile.getFileFieldValueList().add(reportFieldValue);
-                                        fileFieldValueService.save(reportFieldValue);
+                                if (!Arrays.asList(FileTypeCode.VT_MINEPIA).contains(currentFile.getFileType().getCode())) {
+                                    final ReportOrganism reportOrganism = reportOrganismService
+                                            .findReportByFileTypeFlowReport(fileTypeFlowReport);
+                                    final FileField reportField = fileFieldService.findFileFieldByCodeAndFileType(
+                                            fileTypeFlowReport.getFileFieldName(), fileTypeFlowReport.getFileType().getCode());
+                                    reportNumber = (reportOrganism.getSequence() + 1)
+                                            + (reportOrganism.getValue() != null ? reportOrganism.getValue() : StringUtils.EMPTY);
+                                    if (reportField != null) {
+                                        FileFieldValue reportFieldValue = fileFieldValueService.findValueByFileFieldAndFile(reportField.getCode(), currentFile);
+                                        if (reportFieldValue == null) {
+                                            reportFieldValue = new FileFieldValue();
+                                            reportFieldValue.setFile(currentFile);
+                                            reportFieldValue.setFileField(reportField);
+                                            reportFieldValue.setValue(reportNumber);
+                                            currentFile.getFileFieldValueList().add(reportFieldValue);
+                                            fileFieldValueService.save(reportFieldValue);
+                                        }
                                     }
+                                    //Update report sequence
+                                    reportOrganism.setSequence(reportOrganism.getSequence() + 1);
+                                    reportOrganismService.update(reportOrganism);
                                 }
                                 //End Add new field value with report Number
                                 byte[] report;
@@ -2551,9 +2556,6 @@ public class FileItemApDetailController extends DefaultDetailController implemen
                                     fileOuputStream.write(report);
                                 }
 
-                                //Update report sequence
-                                reportOrganism.setSequence(reportOrganism.getSequence() + 1);
-                                reportOrganismService.update(reportOrganism);
 //                                final Map<String, Date> dateParams = new HashMap<>();
 //                                dateParams.put("SIGNATURE_DATE", java.util.Calendar.getInstance().getTime());
 //                                fileService.updateSpecificColumn(dateParams, currentFile);

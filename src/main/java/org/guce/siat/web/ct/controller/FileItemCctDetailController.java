@@ -1060,7 +1060,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
 
                         if (checkMinepiaMinistry && referenceFileItemCheck.getStep().getStepCode().equals(StepCode.ST_CT_04)) {
                             //"FL_CT_CVS_05,FL_CT_CVS_08,FL_CT_CVS_09";
-                            List<String> MINEPIA_FLOW_CODE_LIST = Arrays.asList(FlowCode.FL_CT_CVS_05.name(), FlowCode.FL_CT_CVS_08.name(), FlowCode.FL_CT_CVS_09.name(), FlowCode.FL_CT_166.name());
+                            List<String> MINEPIA_FLOW_CODE_LIST = Arrays.asList(FlowCode.FL_CT_CVS_05.name(), FlowCode.FL_CT_CVS_08.name(), FlowCode.FL_CT_CVS_09.name(), FlowCode.FL_CT_166.name(), FlowCode.FL_CT_181.name());
                             List<String> flowsToRemove = new ArrayList<>();
                             for (Flow f : flows) {
                                 if (!MINEPIA_FLOW_CODE_LIST.contains(f.getCode())) {
@@ -1071,7 +1071,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                             flows = deleteFlowFromFlowList(flows, flowsToRemove.toArray(new String[0]));
 
                         }
-
+                        
                         productsHaveSameRDDStatus = productsHaveSameRDDStatus(chckedProductInfoChecksList);
 
                         /*
@@ -3095,7 +3095,7 @@ public class FileItemCctDetailController extends DefaultDetailController {
                                 List<FileTypeFlowReport> fileTypeFlowReportList = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(flowToSend, currentFile.getFileType());
                                 for (final FileTypeFlowReport fileTypeFlowReport : fileTypeFlowReportList) {
 
-                                    if (!Arrays.asList(FileTypeCode.CCT_CSV, FileTypeCode.CCT_CT_E_PVE).contains(currentFile.getFileType().getCode())) {
+                                    if (!Arrays.asList(FileTypeCode.CCT_CSV, FileTypeCode.VT_MINEPIA, FileTypeCode.CCT_CT_E_PVE).contains(currentFile.getFileType().getCode())) {
                                         String reportFieldCode = fileTypeFlowReport.getFileFieldName();
                                         FileFieldValue reportFieldValue = fileFieldValueService.findValueByFileFieldAndFile(reportFieldCode, currentFile);
                                         if (reportFieldValue == null) {
