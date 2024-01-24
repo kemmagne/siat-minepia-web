@@ -779,15 +779,7 @@ public class PaymentController extends AbstractController<File> {
         ItemFlow lastItemFlow;
         PaymentData paymentData = null;
         final List<ItemFlow> lastPaymentItemFlowList = itemFlowService.findLastItemFlowsByFileAndFlow(file, paymentFlowCode);
-        if (lastPaymentItemFlowList != null && !lastPaymentItemFlowList.isEmpty()) {
-            for (final ItemFlow itemFlow : lastPaymentItemFlowList) {
-                lastItemFlow = itemFlow;
-                paymentData = paymentDataService.findPaymentDataByItemFlow(lastItemFlow);
-                if (paymentData != null) {
-                    break;
-                }
-            }
-        }
+        paymentData = paymentDataService.findPaymentDataByItemFlowList(lastPaymentItemFlowList);
         return paymentData;
     }
 
