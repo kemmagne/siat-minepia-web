@@ -18,6 +18,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.guce.siat.common.model.Administration;
 import org.guce.siat.common.model.Attachment;
@@ -776,10 +777,12 @@ public class PaymentController extends AbstractController<File> {
     }
 
     private PaymentData getPaymentDataByFileAndPaymentFlow(File file, FlowCode paymentFlowCode) {
-        ItemFlow lastItemFlow;
         PaymentData paymentData = null;
-        final List<ItemFlow> lastPaymentItemFlowList = itemFlowService.findLastItemFlowsByFileAndFlow(file, paymentFlowCode);
-        paymentData = paymentDataService.findPaymentDataByItemFlowList(lastPaymentItemFlowList);
+        FileItem firstFileItem = CollectionUtils.isNotEmpty(file.getFileItemsList()) ? file.getFileItemsList().get(0) : null;
+        paymentData = paymentDataService.findPaymentDataByFileItem(firstFileItem);
+        if(paymentData == null){
+            paymentData = paymentDataService.findPaymentDataByFile(file);
+        }
         return paymentData;
     }
 
