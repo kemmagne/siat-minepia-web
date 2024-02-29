@@ -121,7 +121,7 @@ public class PaymentController extends AbstractController<File> {
      */
     @ManagedProperty(value = "#{fileItemService}")
     private FileItemService fileItemService;
-    
+
     /**
      * The file file service.
      */
@@ -257,9 +257,9 @@ public class PaymentController extends AbstractController<File> {
             if (isPhyto(selectedFile.getFile()) || FileTypeCode.CCT_CSV.equals(selectedFile.getFile().getFileType().getCode())) {
                 paymentData = paymentDataService.findPaymentDataByFileItem(selectedFileItem);
             } else if (isCcsMinsante(selectedFile.getFile())) {
-                paymentData = getPaymentDataByFileAndPaymentFlow(selectedFile.getFile(), FlowCode.FL_CT_158);
+                paymentData = getPaymentDataByFileAndPaymentFlow(selectedFile.getFile());
             } else if (isVtMinepia(selectedFile.getFile())) {
-                paymentData = getPaymentDataByFileAndPaymentFlow(selectedFile.getFile(), FlowCode.FL_AP_VT1_01);
+                paymentData = getPaymentDataByFileAndPaymentFlow(selectedFile.getFile());
             } else {
                 paymentData = paymentDataService.findPaymentDataByItemFlow(lastItemFlow);
             }
@@ -343,7 +343,7 @@ public class PaymentController extends AbstractController<File> {
 //                filesList.add(fileItem.getFile());
 //            }
 //        }
-        
+
         return items;
     }
 
@@ -365,9 +365,9 @@ public class PaymentController extends AbstractController<File> {
             if (isPhyto(paymentFile) || FileTypeCode.CCT_CSV.equals(paymentFile.getFileType().getCode())) {
                 paymentData = paymentDataService.findPaymentDataByFileItem(paymentFile.getFileItemsList().get(0));
             } else if (isCcsMinsante(paymentFile)) {
-                paymentData = getPaymentDataByFileAndPaymentFlow(paymentFile, FlowCode.FL_CT_158);
+                paymentData = getPaymentDataByFileAndPaymentFlow(paymentFile);
             } else if (isVtMinepia(paymentFile)) {
-                paymentData = getPaymentDataByFileAndPaymentFlow(paymentFile, FlowCode.FL_AP_VT1_01);
+                paymentData = getPaymentDataByFileAndPaymentFlow(paymentFile);
             } else {
                 final ItemFlow lastItemFlow = itemFlowService.findLastSentItemFlowByFileItem(paymentFile.getFileItemsList().get(0));
                 paymentData = paymentDataService.findPaymentDataByItemFlow(lastItemFlow);
@@ -776,11 +776,13 @@ public class PaymentController extends AbstractController<File> {
         return FileTypeCode.VT_MINEPIA.equals(currentFile.getFileType().getCode());
     }
 
-    private PaymentData getPaymentDataByFileAndPaymentFlow(File file, FlowCode paymentFlowCode) {
+    private PaymentData getPaymentDataByFileAndPaymentFlow(File file) {
         PaymentData paymentData = null;
         FileItem firstFileItem = CollectionUtils.isNotEmpty(file.getFileItemsList()) ? file.getFileItemsList().get(0) : null;
-        paymentData = paymentDataService.findPaymentDataByFileItem(firstFileItem);
-        if(paymentData == null){
+        if (firstFileItem == null) {
+            paymentData = paymentDataService.findPaymentDataByFileItem(firstFileItem);
+        }
+        if (paymentData == null) {
             paymentData = paymentDataService.findPaymentDataByFile(file);
         }
         return paymentData;
