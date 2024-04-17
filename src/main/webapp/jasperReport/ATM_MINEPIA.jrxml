@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="file" language="groovy" pageWidth="595" pageHeight="960" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="28078ea8-15af-47d5-9f91-aa95db5f187e">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="724"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#FFBFBF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="dataset1" uuid="d197f464-70a8-4c11-a561-1300789c9a6f">
+		<field name="measurementUnit" class="java.lang.String"/>
+		<field name="quantity" class="java.lang.String"/>
+		<field name="designation" class="java.lang.String"/>
+	</subDataset>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="ammendement" class="java.lang.String">
+		<fieldDescription><![CDATA[ammendement]]></fieldDescription>
+	</field>
+	<field name="ampliation" class="java.lang.String">
+		<fieldDescription><![CDATA[ampliation]]></fieldDescription>
+	</field>
+	<field name="bp" class="java.lang.String">
+		<fieldDescription><![CDATA[bp]]></fieldDescription>
+	</field>
+	<field name="cebs" class="java.lang.String">
+		<fieldDescription><![CDATA[cebs]]></fieldDescription>
+	</field>
+	<field name="class" class="java.lang.Class">
+		<fieldDescription><![CDATA[class]]></fieldDescription>
+	</field>
+	<field name="decisionDate" class="java.util.Date">
+		<fieldDescription><![CDATA[decisionDate]]></fieldDescription>
+	</field>
+	<field name="decisionNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[decisionNumber]]></fieldDescription>
+	</field>
+	<field name="decisionPlace" class="java.lang.String">
+		<fieldDescription><![CDATA[decisionPlace]]></fieldDescription>
+	</field>
+	<field name="designation" class="java.lang.String">
+		<fieldDescription><![CDATA[designation]]></fieldDescription>
+	</field>
+	<field name="draft" class="java.lang.String">
+		<fieldDescription><![CDATA[draft]]></fieldDescription>
+	</field>
+	<field name="fileItemList" class="java.util.List">
+		<fieldDescription><![CDATA[fileItemList]]></fieldDescription>
+	</field>
+	<field name="importer" class="java.lang.String">
+		<fieldDescription><![CDATA[importer]]></fieldDescription>
+	</field>
+	<field name="measurementUnit" class="java.lang.String">
+		<fieldDescription><![CDATA[measurementUnit]]></fieldDescription>
+	</field>
+	<field name="originCountry" class="java.lang.String">
+		<fieldDescription><![CDATA[originCountry]]></fieldDescription>
+	</field>
+	<field name="qrCode" class="java.lang.String">
+		<fieldDescription><![CDATA[qrCode]]></fieldDescription>
+	</field>
+	<field name="quanditeproposed" class="java.lang.Double">
+		<fieldDescription><![CDATA[quanditeproposed]]></fieldDescription>
+	</field>
+	<field name="quandityRequired" class="java.lang.Double">
+		<fieldDescription><![CDATA[quandityRequired]]></fieldDescription>
+	</field>
+	<field name="signatory" class="java.lang.String">
+		<fieldDescription><![CDATA[signatory]]></fieldDescription>
+	</field>
+	<field name="signature" class="java.lang.String">
+		<fieldDescription><![CDATA[signature]]></fieldDescription>
+	</field>
+	<field name="stamp" class="java.lang.String">
+		<fieldDescription><![CDATA[stamp]]></fieldDescription>
+	</field>
+	<field name="validityDate" class="java.util.Date">
+		<fieldDescription><![CDATA[validityDate]]></fieldDescription>
+	</field>
+	<field name="ville" class="java.lang.String">
+		<fieldDescription><![CDATA[ville]]></fieldDescription>
+	</field>
+	<variable name="variable1" class="java.lang.String"/>
+	<background>
+		<band height="920" splitType="Stretch">
+			<image>
+				<reportElement uuid="0341a0e0-fde0-4019-8297-da8ef5c36043" x="415" y="39" width="130" height="103"/>
+				<imageExpression><![CDATA[new java.io.File($F{draft})]]></imageExpression>
+			</image>
+			<image>
+				<reportElement uuid="0341a0e0-fde0-4019-8297-da8ef5c36043" x="22" y="39" width="130" height="103"/>
+				<imageExpression><![CDATA[new java.io.File($F{draft})]]></imageExpression>
+			</image>
+			<image>
+				<reportElement uuid="0341a0e0-fde0-4019-8297-da8ef5c36043" x="48" y="207" width="497" height="474"/>
+				<imageExpression><![CDATA[new java.io.File($F{draft})]]></imageExpression>
+			</image>
+			<image>
+				<reportElement uuid="0341a0e0-fde0-4019-8297-da8ef5c36043" x="415" y="781" width="130" height="103"/>
+				<imageExpression><![CDATA[new java.io.File($F{draft})]]></imageExpression>
+			</image>
+			<image>
+				<reportElement uuid="0341a0e0-fde0-4019-8297-da8ef5c36043" x="415" y="781" width="130" height="103"/>
+				<imageExpression><![CDATA[new java.io.File($F{draft})]]></imageExpression>
+			</image>
+			<image>
+				<reportElement uuid="0341a0e0-fde0-4019-8297-da8ef5c36043" x="29" y="781" width="130" height="103"/>
+				<imageExpression><![CDATA[new java.io.File($F{draft})]]></imageExpression>
+			</image>
+		</band>
+	</background>
+	<title>
+		<band height="135" splitType="Stretch">
+			<elementGroup>
+				<staticText>
+					<reportElement uuid="62430ea4-9341-42b4-b2b6-f10ebb958d21" x="10" y="73" width="200" height="16"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[DIRECTION DES PECHES, DE L'AQUACULTURE ET DES INDUSTRIES HALIEUTIQUES]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="56667fa5-dcc4-4b2e-8b07-a96aac1696a4" x="10" y="16" width="200" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[---------------]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="80ac220a-0832-4cc8-a152-65bc6404e4d3" x="10" y="24" width="200" height="16"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[MINISTERE DE L'ELEVAGE, DES PECHES ET DES INDUSTRIES ANIMALES]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="2f8ca3fe-536c-4d2f-8210-cc46e8006012" x="10" y="57" width="200" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[SECRETERIAT GENERAL]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="03eef9ba-5a94-4e39-921f-4678cd226b65" x="10" y="40" width="200" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[--------------]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="25220a4d-2c33-4702-8ee9-c7d841d6f2ef" x="10" y="8" width="200" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[ Paix-Travail-Patrie]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="898b970c-05ed-4951-b8ce-0cdd0de02faf" x="10" y="0" width="200" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false" isStrikeThrough="false"/>
+					</textElement>
+					<text><![CDATA[REPUBLIQUE DU CAMEROUN
+]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="b52c9484-2364-41cc-8360-309c7c96643f" x="10" y="65" width="200" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[-------------]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="514ea7f6-8b01-46c1-8b0b-b11fc57ffd66" x="345" y="56" width="200" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[------------]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="32971d30-2dab-403b-a310-35a60414fd06" x="345" y="64" width="200" height="15"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[DEPARTMENT OF FISHERIES, AQUACULTURE AND FISHIERIES INDUSTRIES]]></text>
+				</staticText>
+			</elementGroup>
+			<elementGroup>
+				<staticText>
+					<reportElement uuid="f1eb4dcf-f754-4de2-9514-0c4ed5812882" x="345" y="40" width="200" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[---------------]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="be32ad23-eac7-4847-9cce-65175f9c0adc" x="345" y="16" width="200" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[--------------]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="029ee73e-a2e3-4a51-aa59-063aa92ffa21" x="345" y="8" width="200" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Peace-Work-Fatherland]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="df07ef27-c83a-4d21-8e3f-68d9a343f411" x="345" y="0" width="200" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[REPUBLIC OF CAMEROON
+]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="a6d01776-2f72-4567-b8e7-fd246affcb41" x="345" y="48" width="200" height="8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[GENERAL SECRETARIAT]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="4f599475-e541-4170-8d85-09e788a313cb" x="355" y="24" width="173" height="16"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+						<font size="6" isBold="false"/>
+					</textElement>
+					<text><![CDATA[MINISTRY OF LIVESTOCK, FISHERIES AND ANIMAL INDUSTRIES]]></text>
+				</staticText>
+			</elementGroup>
+			<staticText>
+				<reportElement uuid="d54ae254-3373-482b-8399-dff7519df4ac" x="10" y="99" width="200" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[------------]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="28356718-db51-4da7-8b43-1e907c6f84b6" x="355" y="79" width="200" height="10"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[----------------]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="669" splitType="Stretch">
+			<textField>
+				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="48" y="31" width="455" height="22"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="Times New Roman" size="11" isBold="true" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["N°"+($F{decisionNumber} != null  && $F{decisionNumber}.trim().length()>0 ? $F{decisionNumber} : "")+"/MINEPIA/SG/DPAIH/SDTPIH/SIH"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="fcb32c42-033b-4f1a-b3c3-8a986e835542" x="34" y="166" width="489" height="408"/>
+				<textElement textAlignment="Justified" markup="none">
+					<font size="11" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Vu la constitution;
+Vu la loi n° 94/01 du 20 janvier 1994 portant régime des forêts, de la faune et de la pêche
+Vu la loi 2000/017 du 19 décembre 2000 portant réglementation de l'inspection sanitaire vétérinaire ;
+Vu de la loi n° 006 du 16 avril 2001 portant nomenclature et régment zoo sanitaire des maladies
+    réputées légalement contagieuses à déclaration obligatoire;
+Vu la loi-cadre n° 2011/012 du 06 mai 2011 portant protection des consommateurs au Cameroun ;
+Vu le décret n° 75/527 du 16 juillet 1975 portant réglementation des établissement d'exploitation en
+    matière d'Elevage et des Industries Animales;
+Vu le décret n° 95/413/PM du 20 juin 1995 fixant certaines modalités d'application du régime de la
+    pêche ;
+Vu le décret n° 2002/PM du 17 janvier 2002 fixant les normes de conditionnement et de transport des
+    produits de la pêche ;
+Vu le  décret n° 2011/408 du 09 décembre 2011 portant organisation du Gouvernement ;
+Vu le décret n° 2015/434 du 02 octobre 2015 portant réaménagement du Gouvernement;
+Vu le décret n° 2012/382 du 14 septembre 2012 portant organisation du Ministère de L'Elevage des
+    Pêches et des Industries Animales ;
+Vu le dossier présenté par l'intéressé.]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="29" y="441" width="494" height="61"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="11" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<u>Article 1<sup>er</sup></u>: L'Etablissement Compagnie Equatoriale des Biens et Services «CEBS» B.P."+($F{bp} != null  && $F{bp}.trim().length()>0 ? $F{bp} : "")+" "+($F{ville} != null  && $F{ville}.trim().length()>0 ? $F{ville} : "")+", crée par décision N°00611/MINEPIA/SG/DPAIH/SDTPIH/SIH du 19 octobre 2015 est autorisé à importer"]]></textFieldExpression>
+			</textField>
+			<elementGroup>
+				<staticText>
+					<reportElement uuid="fcb32c42-033b-4f1a-b3c3-8a986e835542" x="10" y="67" width="535" height="27"/>
+					<textElement textAlignment="Center" markup="none">
+						<font fontName="SansSerif" size="11" isBold="true" isUnderline="false"/>
+					</textElement>
+					<text><![CDATA[(Pour l'imporation, le traitement et le stockage des produits halieutiques)  ]]></text>
+				</staticText>
+			</elementGroup>
+			<staticText>
+				<reportElement uuid="fcb32c42-033b-4f1a-b3c3-8a986e835542" x="64" y="106" width="439" height="41"/>
+				<textElement textAlignment="Justified" markup="none">
+					<font fontName="SansSerif" size="11" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[LE  MINISTRE  DE  L ' ELEVAGE,  DES  PECHES  ET  DES  INDUSTRIES
+           				   ANIMALES]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="85" y="490" width="460" height="74"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="11" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["\u2022  <u>"+($F{designation} != null  && $F{designation}.trim().length()>0 ? $F{designation} : "") +"</u>:<b>"+($F{quanditeproposed} != 0.0  && $F{quanditeproposed} > 0 ? $F{quanditeproposed} : "")+"</b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="29" y="543" width="510" height="46"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="11" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<u>Article 2 </u>: Le présent Avis Technique est valable pour l'obtention d'importation délivrée par le"+
+"Ministre en charge du Commerce. <br/>"+
+"<u>Article 3 </u>: Le bénéficiaire de cet Avis Technique est astrient aux conditions"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="63" y="589" width="469" height="80"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="11" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["a)    Le service de l'inspection sanitaire vétérinaire du port au tout autre lieu de débarquement"
+      +"doit être prévenu par l'importateur <b>72 heures</b> au moins l'arrivée du  poisson"
+      + "commandé"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="fcb32c42-033b-4f1a-b3c3-8a986e835542" x="159" y="0" width="280" height="19"/>
+				<textElement textAlignment="Justified" markup="none">
+					<font fontName="SansSerif" size="11" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[A   V   I   S         T   E   C   H   N   I   Q   U   E]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fcb32c42-033b-4f1a-b3c3-8a986e835542" x="48" y="418" width="439" height="23"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="SansSerif" size="11" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[ E M E T   L ' A V I S   T E C H N I Q U E   S U I V A N T :]]></text>
+			</staticText>
+		</band>
+		<band height="820">
+			<textField>
+				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="376" y="556" width="166" height="22"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font fontName="Times New Roman" size="7" isBold="true" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Yaoundé, le "+($F{decisionDate}!= null? new java.text.SimpleDateFormat("dd MMM yyyy").format($F{decisionDate}) : "")+""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="fcb32c42-033b-4f1a-b3c3-8a986e835542" x="314" y="597" width="221" height="28"/>
+				<textElement textAlignment="Center" markup="none">
+					<font size="10" isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[LE MINISTRE DE L'ELEVAGE, DES PECHES ET DES INDUSTRIES ANIMALES.
+]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="22" y="578" width="110" height="99"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<u><i>AMPLIATIONS :</i></u><br/>"+
+($F{ampliation} != null  && $F{ampliation}.trim().length()>0 ? $F{ampliation} : "")+"<br/>"]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement uuid="ca319a39-5c09-4432-bd15-05bb9dbe78c7" x="302" y="648" width="119" height="100"/>
+				<imageExpression><![CDATA[new java.io.File($F{stamp})]]></imageExpression>
+			</image>
+			<image>
+				<reportElement uuid="ca319a39-5c09-4432-bd15-05bb9dbe78c7" x="425" y="648" width="107" height="100"/>
+				<imageExpression><![CDATA[new java.io.File($F{signature})]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="28356718-db51-4da7-8b43-1e907c6f84b6" x="69" y="142" width="459" height="321"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" markup="none">
+					<font size="11" isBold="false"/>
+				</textElement>
+				<text><![CDATA[b)   Les produits doivent porter les étiquettes précisant la nature des produits (dénomination
+      commune ou scientifique), leur provenance (pays, bateau, élevage, firme).
+
+c)   L'importation des produits halieutiques en provenance du Japon est suspendue jusqu'à
+      nouvel avis.
+
+d)   Aucun colis ne dois être enlevé à l'insu de l'argent chargé de l'inspection sanitaire
+      vétérinaire.
+
+e)   Les produits doivent être accompagnés d'un certificat sanitaire délivré par un vétérinaire
+      autorisé du lieu d'expédition.
+
+f)   Le respect scrupuleux des quantités autorisées ne sont pas renouvelables pour un même
+      avis technique.
+
+g)   Les quantités autorisées ne sont pas renouvelables pour un meme avis technique.
+
+h)   L'Avis Technique n'est pas cessible.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fcb32c42-033b-4f1a-b3c3-8a986e835542" x="86" y="463" width="446" height="18"/>
+				<textElement markup="none">
+					<font size="11" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[- les certificats d'origine visés par les vétérinaires et ceux des douanes du Cameroun
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fcb32c42-033b-4f1a-b3c3-8a986e835542" x="86" y="481" width="446" height="14"/>
+				<textElement markup="none">
+					<font size="11" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[-la liste des fournisseurs et leurs adresses.
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fcb32c42-033b-4f1a-b3c3-8a986e835542" x="86" y="448" width="446" height="15"/>
+				<textElement markup="none">
+					<font size="11" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[- un rapport d'activité précisant entre autres les quandités importées;
+]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="25" y="495" width="510" height="51"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="11" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<u>Article 5</u>: Le présent Avis  Technique valable jusqu'au "+($F{validityDate}!= null? new java.text.SimpleDateFormat("dd MMM yyyy").format($F{validityDate}) : "")+" sera enregistré et communiqué partout où besoin sera /-"]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement uuid="ca319a39-5c09-4432-bd15-05bb9dbe78c7" x="198" y="648" width="93" height="91"/>
+				<imageExpression><![CDATA[new java.io.File($F{qrCode})]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="25" y="409" width="510" height="29"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="11" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<u>Article 4</u>: Le dossier de demande de renouvellement du présent Avis Technique comportera toutes les piéces réglementaires en particulier :"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

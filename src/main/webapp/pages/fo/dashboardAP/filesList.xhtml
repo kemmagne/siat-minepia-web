@@ -14,8 +14,7 @@
                          rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}"
                          paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                          currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})"
-                         rowStyleClass="#{fileItemApController.hasUnreadItem(file)?'unreadFiles':null}">
-
+                         rowStyleClass="#{fileItemApController.hasUnreadItem(file)?'unreadFiles':null} #{file.parent != null ?'modification-file':null}">
 
                 <p:ajax event="rowDblselect" listener="#{fileItemApController.goToDetailPage}" onstart="PF('statusDialog1').block()"
                         onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" />
@@ -80,6 +79,12 @@
 
         </h:form>
 
+         <style>
+            .modification-file{
+               background: orange;
+            }
+        </style>
+        
     </p:panel>
 
 </ui:composition>

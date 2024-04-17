@@ -35,6 +35,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlInputTextarea;
 import javax.faces.component.html.HtmlOutputLabel;
@@ -44,6 +45,8 @@ import javax.faces.component.html.HtmlPanelGroup;
 import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.validator.Validator;
+import javax.faces.validator.ValidatorException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.chemistry.opencmis.client.api.Session;
@@ -146,6 +149,7 @@ import org.guce.siat.web.ct.controller.util.ReportGeneratorUtils;
 import org.guce.siat.web.ct.controller.util.enums.DataTypeEnnumeration;
 import org.guce.siat.web.ct.controller.util.enums.PersistenceActions;
 import org.guce.siat.web.reports.exporter.AbstractReportInvoker;
+import org.guce.siat.web.reports.exporter.AtmMinepiaExporter;
 import org.guce.siat.web.reports.exporter.CpMinepdedExporter;
 import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.message.Message;
@@ -194,6 +198,7 @@ public class FileItemApDetailController extends DefaultDetailController implemen
      */
     protected static final String STYLE_CLASS = "required-star-right".intern();
 
+    private File file;
     /**
      * The Constant ID_DECISION_LABEL.
      */
@@ -811,6 +816,7 @@ public class FileItemApDetailController extends DefaultDetailController implemen
     private boolean aiMinmidtFileType;
     private boolean vtMinepdedFileType;
     private boolean bsbeMinfofFileType;
+    private boolean atmMinepiaFileType;
     /**
      *
      */
@@ -986,6 +992,7 @@ public class FileItemApDetailController extends DefaultDetailController implemen
         aiMinmidtFileType = FileTypeCode.AI_MINMIDT.equals(currentFile.getFileType().getCode());
         vtMinepdedFileType = FileTypeCode.VT_MINEPDED.equals(currentFile.getFileType().getCode());
         bsbeMinfofFileType = FileTypeCode.BSBE_MINFOF.equals(currentFile.getFileType().getCode());
+        atmMinepiaFileType = FileTypeCode.ATM_MINEPIA.equals(currentFile.getFileType().getCode());
     }
 
     private void processSpecificAddons() {
@@ -1691,6 +1698,7 @@ public class FileItemApDetailController extends DefaultDetailController implemen
             if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXT.getCode()) && !isFimex) {
                 final HtmlInputText inputText = (HtmlInputText) context.getApplication()
                         .createComponent(HtmlInputText.COMPONENT_TYPE);
+                setUiComponentsForAtmMinePia(dataType, inputText, null, null);
                 if (dataType.getRequired()) {
                     inputText.setRequired(true);
                     inputText.setRequiredMessage(dataType.getLabel()
@@ -1715,6 +1723,7 @@ public class FileItemApDetailController extends DefaultDetailController implemen
             } else if (dataType.getType().equals(DataTypeEnnumeration.CALENDAR.getCode())) {
                 final Calendar calendar = (Calendar) context.getApplication().createComponent(Calendar.COMPONENT_TYPE);
                 calendar.setShowOn("button");
+                setUiComponentsForAtmMinePia(dataType, null, null, calendar);
                 if (dataType.getRequired()) {
                     calendar.setRequired(true);
                     calendar.setRequiredMessage(dataType.getLabel()
@@ -1737,6 +1746,7 @@ public class FileItemApDetailController extends DefaultDetailController implemen
             } else if (dataType.getType().equals(DataTypeEnnumeration.INPUTTEXTAREA.getCode()) && !isFimex) {
                 final HtmlInputTextarea inputTextarea = (HtmlInputTextarea) context.getApplication().createComponent(
                         HtmlInputTextarea.COMPONENT_TYPE);
+                setUiComponentsForAtmMinePia(dataType, null, inputTextarea, null);
                 if (dataType.getRequired()) {
                     inputTextarea.setRequired(true);
                     inputTextarea.setRequiredMessage(dataType.getLabel()
@@ -1792,7 +1802,132 @@ public class FileItemApDetailController extends DefaultDetailController implemen
             }
         }
     }
+    
+    
+    private void checkGenerateDraftAllowed() {
+        
+         List<String> acceptedFlow = Arrays.asList(FlowCode.FL_AP_ATM_10.name(), FlowCode.FL_AP_ATM_13.name(), FlowCode.FL_AP_ATM_16.name(),
+                                                   FlowCode.FL_AP_ATM_10R.name(), FlowCode.FL_AP_ATM_13R.name(), FlowCode.FL_AP_ATM_16R.name(),
+                                                   FlowCode.FL_AP_ATM_25.name(), FlowCode.FL_AP_ATM_27.name(), FlowCode.FL_AP_ATM_29.name());
+        
+        List<StepCode> acceptedStep = Arrays.asList(StepCode.ST_AP_ATM_04,  StepCode.ST_AP_ATM_05, StepCode.ST_AP_ATM_06,
+                                                   StepCode.ST_AP_ATM_04R,  StepCode.ST_AP_ATM_05R, StepCode.ST_AP_ATM_06R,
+                                                   StepCode.ST_AP_ATM_23,  StepCode.ST_AP_ATM_24, StepCode.ST_AP_ATM_25,
+                                                   StepCode.ST_AP_54, StepCode.ST_AP_VT1_01);
 
+        Flow reportingFlow = flowService.findFlowByCode(FlowCode.FL_AP_107.name());
+
+        if (FileTypeCode.VT_MINEPIA.equals(currentFile.getFileType().getCode()) && currentFile.getParent() != null) {
+            reportingFlow = flowService.findFlowByCode(FlowCode.FL_AP_VT1_06.name());
+        }
+
+        if (FileTypeCode.ATM_MINEPIA.equals(currentFile.getFileType().getCode()) ) {
+                 reportingFlow = flowService.findFlowByCode(FlowCode.FL_AP_ATM_16.name());
+        }
+        
+//        fileTypeFlowReportsDraft = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getFileType());
+//        generateDraftAllowed = sendDecisionAllowed && (Arrays.asList(StepCode.ST_AP_54, StepCode.ST_AP_VT1_01).contains(selectedFileItem.getStep().getStepCode())
+//                && reportingFlow.equals(currentDecision))
+//                && CollectionUtils.isNotEmpty(fileTypeFlowReportsDraft);
+
+        fileTypeFlowReportsDraft = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getFileType());
+        generateDraftAllowed = (acceptedStep.contains(selectedFileItem.getStep().getStepCode()) && CollectionUtils.isNotEmpty(fileTypeFlowReportsDraft))
+                &&CollectionUtils.isNotEmpty(currentFile.getFileItemsList() ) && currentFile.getFileItemsList().get(0).getItemFlowsList() != null && 
+                selectedFlow != null  && acceptedFlow.contains(selectedFlow.getCode());   
+        
+        Flow currentDecision = selectedFlow;
+        if (currentDecision == null) {
+            ItemFlow draftItemFlow = itemFlowService.findDraftByFileItem(selectedFileItem);
+            if (draftItemFlow != null) {
+                currentDecision = draftItemFlow.getFlow();
+            }
+        }
+    }
+
+    
+    
+        ItemFlow getItemFlowFromFlow(List<ItemFlow> itemFlows  , Flow currentFlow){
+        for (ItemFlow itemFlow : itemFlows) {
+//                if(Arrays.asList(FlowCode.FL_AP_ATM_10.name(),  FlowCode.FL_AP_ATM_25.name(), FlowCode.FL_AP_ATM_10R.name()).contains(currentFlow.getCode()) && Arrays.asList(FlowCode.FL_AP_ATM_07.name(), FlowCode.FL_AP_ATM_24.name(), FlowCode.FL_AP_ATM_07R.name()).contains( itemFlow.getFlow().getCode())){
+//                    return itemFlow;
+//                }else 
+                    if(Arrays.asList(FlowCode.FL_AP_ATM_13.name() , FlowCode.FL_AP_ATM_27.name(), FlowCode.FL_AP_ATM_13R.name()).contains(currentFlow.getCode()) && Arrays.asList(FlowCode.FL_AP_ATM_10.name(), FlowCode.FL_AP_ATM_25.name(), FlowCode.FL_AP_ATM_10R.name()).contains( itemFlow.getFlow().getCode())){
+                    return itemFlow;
+                }else  if(Arrays.asList(FlowCode.FL_AP_ATM_16.name() , FlowCode.FL_AP_ATM_29.name(), FlowCode.FL_AP_ATM_16R.name()).contains(currentFlow.getCode()) && Arrays.asList(FlowCode.FL_AP_ATM_13.name() ,FlowCode.FL_AP_ATM_27.name(), FlowCode.FL_AP_ATM_13.name()).contains( itemFlow.getFlow().getCode())){
+                    return itemFlow;
+                }
+        }
+        return null;
+    }
+
+    
+     void setUiComponentsForAtmMinePia(DataType dataType, HtmlInputText inputText, HtmlInputTextarea htmlInputTextarea, Calendar calendar) {
+        if (currentFile != null && currentFile.getFileType().getCode().equals(FileTypeCode.ATM_MINEPIA)) {
+             if (!Arrays.asList(FlowCode.FL_AP_ATM_30, FlowCode.FL_AP_ATM_28 , FlowCode.FL_AP_ATM_26, FlowCode.FL_AP_ATM_23,  FlowCode.FL_AP_ATM_15, FlowCode.FL_AP_ATM_08, FlowCode.FL_AP_ATM_14, FlowCode.FL_AP_ATM_15, FlowCode.FL_AP_ATM_04, FlowCode.FL_AP_ATM_11).contains(FlowCode.valueOf(selectedFlow.getCode()))) {              
+                final String quantite = currentFile.getFileItemsList() != null && !currentFile.getFileItemsList().isEmpty() ? currentFile.getFileItemsList().get(0).getQuantity() : "0";
+                  if (inputText != null) {
+                            if (dataType.getLabel() != null && dataType.getLabel().trim().equals("Quantité de produit proposée".trim())){
+                               inputText.setOnkeypress("return event.charCode >= 48 && event.charCode <= 57");
+                               inputText.addValidator(new Validator() {
+                                  @Override
+                                  public void validate(FacesContext fc, UIComponent uic, Object value) throws ValidatorException {
+                                                        if (Integer.parseInt(value.toString()) > Integer.parseInt(quantite))  throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR ,"La quantité doit être  inférieure ou égale à "+ quantite,null));              
+                                  }
+                              });
+                            }
+                            if(dataType.getCode() != null && dataType.getCode().trim().equals("CAD_QUANTITY".trim())) {
+                                inputText.setDisabled(true);
+                                inputText.setValue(quantite);
+                            }
+                             List<FileFieldValue> fieldValues  = currentFile.getFileFieldValueList();
+                            if(fieldValues != null && selectedFlow != null && !fieldValues.isEmpty()  && Arrays.asList(FlowCode.FL_AP_ATM_13.name() , FlowCode.FL_AP_ATM_27.name()).contains(selectedFlow.getCode())){
+                                for(FileFieldValue fieldValue : fieldValues){
+                                    if(dataType.getLabel().trim().equals("Moyen de transport proposé") && fieldValue.getFileField().getCode().equals("TRANSPORT_MODE_TRANSPORT_LIBELLE")   ){
+                                         inputText.setValue(fieldValue.getValue());
+                                         break;
+                                    }
+                                }
+                            }
+                        }
+                  if(calendar != null){
+                        calendar.setMindate(java.util.Calendar.getInstance().getTime());
+                  }       
+                  ItemFlow itemFlow = getItemFlowFromFlow(currentFile.getFileItemsList().get(0).getItemFlowsList(), selectedFlow);
+                          //lastDecisions;
+                  if(selectedFlow != null &&  currentFile.getParent() != null && selectedFlow.getCode().equals(FlowCode.FL_AP_ATM_25.name()) && !currentFile.getParent().getChildrenList().isEmpty()){
+                    itemFlow  = AtmMinepiaExporter.findLastItemFlow(currentFile.getParent());
+                    //                     File file  = PiMinaderExporter.findLastFileSigned(currentFile.getParent().getChildrenList() , currentFile.getParent());
+                    //                    itemFlow  = PiMinaderExporter.findLastItemFlow(file);
+                } 
+                if (itemFlow != null && itemFlow.getItemFlowsDataList() != null && !itemFlow.getItemFlowsDataList().isEmpty()) {
+                    for (ItemFlowData itemFlowData : itemFlow.getItemFlowsDataList()) {
+                        if (itemFlowData.getDataType().getLabel().trim().equals(dataType.getLabel().trim())  || ((itemFlowData.getDataType().getLabel().trim().equals("Date d’expiration proposée") || itemFlowData.getDataType().getLabel().trim().equals("Date d’expiration")) && (dataType.getLabel().trim().equals("Date d’expiration".trim()) || dataType.getLabel().trim().equals("Date d’expiration proposée".trim()))) ) {
+                            if (inputText != null) {
+                                if((dataType.getCode() !=null &&dataType.getCode().trim().equals("CAD_QUANTITY".trim())) ){
+                                  inputText.setValue(quantite);
+                                }else{
+                                  inputText.setValue(itemFlowData.getValue());
+                              }
+                            } else if (htmlInputTextarea != null) {
+                                htmlInputTextarea.setValue(itemFlowData.getValue());
+                            } else if (calendar != null) {
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                                try {
+                                    Date date = sdf.parse(itemFlowData.getValue());
+                                    calendar.setValue(date);
+                                } catch (ParseException ex) {
+                                    java.util.logging.Logger.getLogger(FileItemApDetailController.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    
+    
     /**
      * Payment amout value changed listener.
      */
@@ -1932,6 +2067,15 @@ public class FileItemApDetailController extends DefaultDetailController implemen
 
         }
     }
+    
+    public String officeCode(){
+      String oficeCode = StringUtils.EMPTY;
+       
+    if(FileTypeCode.ATM_MINEPIA.equals(currentFile.getFileType().getCode())){
+       oficeCode  =  file.getBureau().getBureauType().getLabel();
+      }
+      return oficeCode;
+    }
 
     /**
      * Calculat duration.
@@ -1964,6 +2108,9 @@ public class FileItemApDetailController extends DefaultDetailController implemen
         return duration.toString();
     }
 
+    
+    
+    
     /**
      * Change product selection.
      */
@@ -2101,6 +2248,7 @@ public class FileItemApDetailController extends DefaultDetailController implemen
 
             }
             decisionDiv.getChildren().clear();
+            checkGenerateDraftAllowed();
             resetDataGridInofrmationProducts();
 
             if (vtTypeSelectionViewable) {
@@ -2357,7 +2505,7 @@ public class FileItemApDetailController extends DefaultDetailController implemen
                         Map<String, byte[]> attachedByteFiles = null;
 //                        try {
                         String reportNumber;
-                        if (FlowCode.FL_AP_107.name().equals(flowToSend.getCode()) || FlowCode.FL_AP_169.name().equals(flowToSend.getCode()) || FlowCode.FL_AP_202.name().equals(flowToSend.getCode()) || FlowCode.FL_AP_VT1_06.name().equals(flowToSend.getCode())) {
+                        if (FlowCode.FL_AP_107.name().equals(flowToSend.getCode()) || FlowCode.FL_AP_ATM_16.name().equals(flowToSend.getCode()) || FlowCode.FL_AP_169.name().equals(flowToSend.getCode()) || FlowCode.FL_AP_202.name().equals(flowToSend.getCode()) || FlowCode.FL_AP_VT1_06.name().equals(flowToSend.getCode())) {
                             ItemFlow decisionFlow = null;
                             if (currentFile.getFileType().getCode().equals(FileTypeCode.VTP_MINSANTE)) {
                                 decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_103);
@@ -2376,7 +2524,15 @@ public class FileItemApDetailController extends DefaultDetailController implemen
                                 if (decisionFlow == null) {
                                     decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_173);
                                 }
-                            } else if (currentFile.getFileType().getCode().equals(FileTypeCode.VTD_MINSANTE)) {
+                            } else if (currentFile.getFileType().getCode().equals(FileTypeCode.ATM_MINEPIA)) {
+                                    currentFile.getFileItemsList().get(0).setDraft(false);
+                                if (decisionFlow == null) {
+                                    decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_ATM_10);
+                                }
+                                if (decisionFlow == null) {
+                                    decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_ATM_13);
+                                }
+                            }else if (currentFile.getFileType().getCode().equals(FileTypeCode.VTD_MINSANTE)) {
                                 decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_105);
                                 if (decisionFlow == null) {
                                     decisionFlow = itemFlowService.findItemFlowByFileItemAndFlow(fileItemList.get(0), FlowCode.FL_AP_169);
@@ -2521,6 +2677,14 @@ public class FileItemApDetailController extends DefaultDetailController implemen
                                     } else {
                                         report = getBytesFromAttachment(finalAttachment);
                                     }
+                                }else if (atmMinepiaFileType) {
+                                    final String nomClasse = fileTypeFlowReport.getReportClassName();
+                                    @SuppressWarnings("rawtypes")
+                                    final Class classe = Class.forName(nomClasse);
+                                    final Constructor c1 = classe.getConstructor(File.class);
+
+                                    AbstractReportInvoker reportInvoker = (AbstractReportInvoker) c1.newInstance(currentFile);
+                                    report = JsfUtil.getReport(reportInvoker);
                                 } else {
                                     final String nomClasse = fileTypeFlowReport.getReportClassName();
                                     @SuppressWarnings("rawtypes")
@@ -2810,7 +2974,7 @@ public class FileItemApDetailController extends DefaultDetailController implemen
             sendDecisionAllowed = true;
             fileItemHasDraft = true;
         }
-        checkGenerateDraftAllowed();
+      //  checkGenerateDraftAllowed();
     }
 
     /**
@@ -3386,27 +3550,7 @@ public class FileItemApDetailController extends DefaultDetailController implemen
     /**
      * Check generate draft allowed.
      */
-    private void checkGenerateDraftAllowed() {
-        Flow reportingFlow = flowService.findFlowByCode(FlowCode.FL_AP_107.name());
-
-        if (FileTypeCode.VT_MINEPIA.equals(currentFile.getFileType().getCode()) && currentFile.getParent() != null) {
-            reportingFlow = flowService.findFlowByCode(FlowCode.FL_AP_VT1_06.name());
-        }
-
-        Flow currentDecision = selectedFlow;
-        if (currentDecision == null) {
-            ItemFlow draftItemFlow = itemFlowService.findDraftByFileItem(selectedFileItem);
-            if (draftItemFlow != null) {
-                currentDecision = draftItemFlow.getFlow();
-            }
-        }
-
-        fileTypeFlowReportsDraft = fileTypeFlowReportService.findReportClassNameByFlowAndFileType(reportingFlow, currentFile.getFileType());
-        generateDraftAllowed = sendDecisionAllowed && (Arrays.asList(StepCode.ST_AP_54, StepCode.ST_AP_VT1_01).contains(selectedFileItem.getStep().getStepCode())
-                && reportingFlow.equals(currentDecision))
-                && CollectionUtils.isNotEmpty(fileTypeFlowReportsDraft);
-    }
-
+    
     /**
      * Check generate report allowed.
      */

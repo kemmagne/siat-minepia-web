@@ -71,7 +71,7 @@
         <sec:intercept-url pattern="/pages/bo/agentsManagement/**" access="hasAnyRole('GA')" />
 
         <!-- USERS WORKFLOW PAGES ACCESS -->
-        <sec:intercept-url pattern="/pages/fo/**" access="hasAnyRole('SUPER', 'CONS', 'AC1', 'AC2', 'AC3', 'AC4', 'AC5', 'AC6', 'AR', 'INS', 'CONT', 'LAB', 'TREAT', 'SIGN', 'RT', 'CA', 'GA', 'VF', 'STAT', 'VS')" />
+        <sec:intercept-url pattern="/pages/fo/**" access="hasAnyRole('SUPER', 'CONS', 'AC1', 'AC2', 'AC3', 'AC4', 'AC5', 'AC6', 'AR', 'INS', 'CONT', 'LAB', 'TREAT', 'SIGN', 'RT', 'CA', 'GA', 'VF', 'STAT', 'VS', 'VISA')" />
 
         <!-- Open pages if user is not anonymous -->
         <sec:intercept-url pattern="/**" access="isAuthenticated()" />

@@ -235,7 +235,11 @@ public class CostsController extends AbstractController<PaymentData> implements 
                 flowToExecute = flowService.findFlowByCode(FlowCode.FL_CT_123.name());
             } else if (Arrays.asList(FileTypeCode.CCT_CT_E_PVI, FileTypeCode.CCT_CT_E_FSTP).contains(currentFile.getFileType().getCode())) {
                 flowToExecute = flowService.findFlowByCode(FlowCode.FL_CT_126.name());
-            } else if (Arrays.asList(FileTypeCode.CCT_CT_E_PVE).contains(currentFile.getFileType().getCode())) {
+            } else if (Arrays.asList(FileTypeCode.CCT_CT_E_PVI, FileTypeCode.ATM_MINEPIA).contains(currentFile.getFileType().getCode())) {
+                flowToExecute = flowService.findFlowByCode(FlowCode.FL_AP_ATM_02.name());
+            }
+            
+            else if (Arrays.asList(FileTypeCode.CCT_CT_E_PVE).contains(currentFile.getFileType().getCode())) {
                 ItemFlow invValidItemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(currentFile.getFileItemsList().get(0), FlowCode.FL_CT_121);
                 if (invValidItemFlow == null) {
                     invValidItemFlow = itemFlowService.findItemFlowByFileItemAndFlow2(currentFile.getFileItemsList().get(0), FlowCode.FL_CT_133);

@@ -55,7 +55,7 @@
                             <h:outputText value="#{item.draft ? bundle['Oui'] : bundle['Non']}" />
                         </p:column>
 
-                        <f:facet styleClass="btn-bloc" name="footer">
+                          <f:facet styleClass="btn-bloc" name="footer">
                             <p:commandButton onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()" id="rollBackButton"
                                              value="#{bundle['FileItemInformationTitle_annuler']}" rendered="#{fileItemApDetailController.rollBackDecisionsAllowed  == 'true' and fileItemApDetailController.showDecisionButton == 'true'}"
                                              actionListener="#{fileItemApDetailController.prepareRollBackDecisions}" update=":growl datalist decideButton" />
@@ -87,13 +87,14 @@
 
                             <p:commandButton onstart="PF('statusDialog1').block();disableBtn()" onsuccess="PF('statusDialog1').unblock(); enableBtn()" onerror="PF('statusDialog1').unblock(); enableBtn()"
                                              id="sendButton" styleClass="disBtn" value="#{bundle['FileItemInformationTitle_send']}"
-                                             rendered="#{fileItemApDetailController.sendDecisionAllowed == 'true'  and fileItemApDetailController.showDecisionButton == 'true'}" actionListener="#{fileItemApDetailController.sendDecisions}"
+                                             rendered="#{fileItemApDetailController.sendDecisionAllowed == 'true' and fileItemApDetailController.showDecisionButton == 'true'}" actionListener="#{fileItemApDetailController.sendDecisions}"
                                              update=":growl :decisionForm " oncomplete="PF('datalistTable').filter();disableBtn()" ajax="false" />
                             <p:commandButton ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" id="reportingDraft"
                                              value="#{bundle['BouttonGenerateDraft']}" styleClass="ui-priority-primary"
-                                             rendered="#{fileItemApDetailController.generateDraftAllowed}">
+                                             rendered="#{fileItemApDetailController.generateDraftAllowed and  fileItemApDetailController.sendDecisionAllowed == 'true'}">
                                 <p:fileDownload value="#{fileItemApDetailController.downloadReport(true)}" />
                             </p:commandButton>
+
                             <p:commandButton ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" id="reporting"
                                              value="#{bundle['BouttonGenerateReport']}" styleClass="ui-priority-primary" rendered="#{fileItemApDetailController.generateReportAllowed}">
                                 <p:fileDownload value="#{fileItemApDetailController.downloadReport(false)}" />
