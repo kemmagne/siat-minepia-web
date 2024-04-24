@@ -1,83 +1,88 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core">
 
-	<p:outputPanel>
-		<h:outputText />
-		<h:form id="generalInformationForm">
-		<a href="#" class="gototop"></a>
-			<p:accordionPanel>
+    <p:outputPanel>
+        <h:outputText />
+        <h:form id="generalInformationForm">
+            <a href="#" class="gototop"></a>
+            <p:accordionPanel>
 
-				<p:tab title="#{bundle['GeneralInformation_fileDetails']}" titleStyleClass="title" dynamic="true" cache="true">
-				<c:forEach var="fileFieldGroupDto" items="#{fileItemApDetailController.fileFieldGroupDtos}">
-					<div class="breadcump-ginfo">
-						<a href="##{fileFieldGroupDto.labelEn}" >#{facesContext.viewRoot.locale eq 'en' ? fileFieldGroupDto.labelEn : fileFieldGroupDto.labelFr}</a>
-					</div>
-				</c:forEach>
-					<c:forEach var="fileFieldGroupDto" items="#{fileItemApDetailController.fileFieldGroupDtos}">
-						<div id="#{fileFieldGroupDto.labelEn}">
-						<p:fieldset legend="#{facesContext.viewRoot.locale eq 'en' ? fileFieldGroupDto.labelEn : fileFieldGroupDto.labelFr}">
-						
-							<h:panelGrid columns="4" cellspacing="6" styleClass="informationPanelGrid tableGeneralInfo">
-								<c:forEach var="value" items="#{fileFieldGroupDto.fieldValues}">
-									<h:panelGroup>
-										<h:outputLabel value="#{facesContext.viewRoot.locale eq 'en' ? value.fileField.labelEn : value.fileField.labelFr}" />
-									</h:panelGroup>
-									<h:outputLabel value="#{value.value}" />
-								</c:forEach>
-							</h:panelGrid>
-							<p:accordionPanel value="#{fileFieldGroupDto.tabs}" var="tabContentVar" multiple="true" styleClass="generalInfoTable">
-								<p:tab title="#{facesContext.viewRoot.locale eq 'en' ? tabContentVar.labelEn : tabContentVar.labelFr}" dynamic="true" cache="false"
-									titleStyleClass="titlestyle">
-									<p:dataTable value="#{tabContentVar.table}" var="tableContentVar" rowIndexVar="rowId" rows="5" paginator="true"
-										rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}" rowKey="#{rowId}"
-										styleClass="newui-datatable fixeColumnWidth"
-										paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-										currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
+                <p:tab title="#{bundle['GeneralInformation_fileDetails']}" titleStyleClass="title" dynamic="true" cache="true">
+                    <c:forEach var="fileFieldGroupDto" items="#{fileItemApDetailController.fileFieldGroupDtos}">
+                        <div class="breadcump-ginfo">
+                            <a href="##{fileFieldGroupDto.labelEn}" >#{facesContext.viewRoot.locale eq 'en' ? fileFieldGroupDto.labelEn : fileFieldGroupDto.labelFr}</a>
+                        </div>
+                    </c:forEach>
+                    <c:forEach var="fileFieldGroupDto" items="#{fileItemApDetailController.fileFieldGroupDtos}">
+                        <div id="#{fileFieldGroupDto.labelEn}">
+                            <p:fieldset legend="#{facesContext.viewRoot.locale eq 'en' ? fileFieldGroupDto.labelEn : fileFieldGroupDto.labelFr}">
 
-
-										<p:columns value="#{tabContentVar.tableColHeader.size()>3 ? tabContentVar.colHeader: tabContentVar.tableColHeader}" var="column"
-											columnIndexVar="colIdx">
-											<f:facet name="header">
-												<h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? column.labelEn : column.labelFr}" />
-											</f:facet>
-											<h:outputText value="#{tableContentVar.values().toArray()[colIdx]}" />
-										</p:columns>
-										<p:column rendered="#{tabContentVar.tableColHeader.size()>3 }">
+                                <h:panelGrid columns="4" cellspacing="6" styleClass="informationPanelGrid tableGeneralInfo">
+                                    <c:forEach var="value" items="#{fileFieldGroupDto.fieldValues}">
+                                        <h:panelGroup>
+                                            <h:outputLabel value="#{facesContext.viewRoot.locale eq 'en' ? value.fileField.labelEn : value.fileField.labelFr}" />
+                                        </h:panelGroup>
+                                        <h:outputLabel rendered="#{fileItemApDetailController.currentFile.parent == null}" value="#{value.value}" />
+                                        <h:outputLabel rendered="#{fileItemApDetailController.currentFile.parent != null}" 
+                                                       title="#{value.value eq fileItemApDetailController.baseFileValue[value.fileField.id] or value.fileField.id == null ? '':fileItemApDetailController.baseFileValue[value.fileField.id]}"
+                                                       style="#{value.value eq fileItemApDetailController.baseFileValue[value.fileField.id] or value.fileField.id == null ? '':'color:red;cursor: pointer'}"
+                                                       value="#{value.value}" >
+                                        </h:outputLabel>
+                                    </c:forEach>
+                                </h:panelGrid>
+                                <p:accordionPanel value="#{fileFieldGroupDto.tabs}" var="tabContentVar" multiple="true" styleClass="generalInfoTable">
+                                    <p:tab title="#{facesContext.viewRoot.locale eq 'en' ? tabContentVar.labelEn : tabContentVar.labelFr}" dynamic="true" cache="false"
+                                           titleStyleClass="titlestyle">
+                                        <p:dataTable value="#{tabContentVar.table}" var="tableContentVar" rowIndexVar="rowId" rows="5" paginator="true"
+                                                     rowsPerPageTemplate="5,10,20" emptyMessage="#{bundle['AucuneResultat']}" rowKey="#{rowId}"
+                                                     styleClass="newui-datatable fixeColumnWidth"
+                                                     paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                                     currentPageReportTemplate="({startRecord} - {endRecord} sur {totalRecords})">
 
 
-											<p:commandButton value="#{bundle['BouttonDetail']}" icon="ui-icon-search" rendered="#{tabContentVar.tableColHeader.size()>3}"
-												update="@form" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()">
-												<f:setPropertyActionListener target="#{tabContentVar.details}" value="true"></f:setPropertyActionListener>
-												<f:setPropertyActionListener target="#{tabContentVar.detail}" value="#{tableContentVar}"></f:setPropertyActionListener>
-											</p:commandButton>
-										</p:column>
-									</p:dataTable>
-									<br />
-
-									<p:panel rendered="#{tabContentVar.details}">
-
-										<p:dataList value="#{tabContentVar.tableColHeader}" var="column" rowIndexVar="colIdx">
-											<h:panelGrid columns="2" cellspacing="3" styleClass="informationPanelGrid tableGeneralInfo">
-												<h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? column.labelEn : column.labelFr}" />
-
-												<h:outputText value="#{tabContentVar.detail.values().toArray()[colIdx]}" />
-											</h:panelGrid>
+                                            <p:columns value="#{tabContentVar.tableColHeader.size()>3 ? tabContentVar.colHeader: tabContentVar.tableColHeader}" var="column"
+                                                       columnIndexVar="colIdx">
+                                                <f:facet name="header">
+                                                    <h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? column.labelEn : column.labelFr}" />
+                                                </f:facet>
+                                                <h:outputText value="#{tableContentVar.values().toArray()[colIdx]}" />
+                                            </p:columns>
+                                            <p:column rendered="#{tabContentVar.tableColHeader.size()>3 }">
 
 
-										</p:dataList>
-									</p:panel>
+                                                <p:commandButton value="#{bundle['BouttonDetail']}" icon="ui-icon-search" rendered="#{tabContentVar.tableColHeader.size()>3}"
+                                                                 update="@form" onstart="PF('statusDialog1').block()" onsuccess="PF('statusDialog1').unblock()" onerror="PF('statusDialog1').unblock()">
+                                                    <f:setPropertyActionListener target="#{tabContentVar.details}" value="true"></f:setPropertyActionListener>
+                                                    <f:setPropertyActionListener target="#{tabContentVar.detail}" value="#{tableContentVar}"></f:setPropertyActionListener>
+                                                </p:commandButton>
+                                            </p:column>
+                                        </p:dataTable>
+                                        <br />
 
-								</p:tab>
-							</p:accordionPanel>
-						</p:fieldset>
-						</div>
-					</c:forEach>
-				</p:tab>
-			</p:accordionPanel>
-		</h:form>
-	</p:outputPanel>
-    
-        <p:outputPanel>
+                                        <p:panel rendered="#{tabContentVar.details}">
+
+                                            <p:dataList value="#{tabContentVar.tableColHeader}" var="column" rowIndexVar="colIdx">
+                                                <h:panelGrid columns="2" cellspacing="3" styleClass="informationPanelGrid tableGeneralInfo">
+                                                    <h:outputText value="#{facesContext.viewRoot.locale eq 'en' ? column.labelEn : column.labelFr}" />
+
+                                                    <h:outputText value="#{tabContentVar.detail.values().toArray()[colIdx]}" />
+                                                </h:panelGrid>
+
+
+                                            </p:dataList>
+                                        </p:panel>
+
+                                    </p:tab>
+                                </p:accordionPanel>
+                            </p:fieldset>
+                        </div>
+                    </c:forEach>
+                </p:tab>
+            </p:accordionPanel>
+        </h:form>
+    </p:outputPanel>
+
+     <p:outputPanel>
                 <p:accordionPanel>
                             <p:tab title="#{bundle['Specifications']}" dynamic="true" cache="true" titleStyleClass="title" rendered="#{fileItemApDetailController.bsbeMinfofFileType}">
                                     <p:dataTable id="dataListSpec" widgetVar="dataListSpec" value="#{fileItemApDetailController.specsList}"
@@ -177,3 +182,4 @@
                     </p:accordionPanel>
             </p:outputPanel>
 </ui:composition>
+

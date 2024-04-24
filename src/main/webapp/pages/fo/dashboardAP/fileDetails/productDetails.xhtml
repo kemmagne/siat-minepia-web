@@ -1,19 +1,24 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core">
 
-	<h:form id="productDetailsForm">
-		<c:forEach var="fileItemFieldGroupDto" items="#{fileItemApDetailController.fileItemFieldGroupDtos}">
-			<p:fieldset legend="#{facesContext.viewRoot.locale eq 'en' ? fileItemFieldGroupDto.labelEn : fileItemFieldGroupDto.labelFr}"
-			rendered="#{fileItemApDetailController.showProductDetailsForm}">
-				<h:panelGrid columns="2" cellspacing="6" styleClass="informationPanelGrid tableGeneralInfo">
-					<c:forEach var="value" items="#{fileItemFieldGroupDto.fieldValues}">
-						<h:panelGroup>
-							<h:outputLabel value="#{facesContext.viewRoot.locale eq 'en' ? value.fileItemField.labelEn : value.fileItemField.labelFr}" />
-						</h:panelGroup>
-						<h:outputLabel value="#{value.value}" />
-					</c:forEach>
-				</h:panelGrid>
-			</p:fieldset>
-		</c:forEach>
-	</h:form>
+	    <h:form id="productDetailsForm">
+        <c:forEach var="fileItemFieldGroupDto" items="#{fileItemApDetailController.fileItemFieldGroupDtos}">
+            <p:fieldset legend="#{facesContext.viewRoot.locale eq 'en' ? fileItemFieldGroupDto.labelEn : fileItemFieldGroupDto.labelFr}"
+                        rendered="#{fileItemApDetailController.showProductDetailsForm}">
+                <h:panelGrid columns="2" cellspacing="6" styleClass="informationPanelGrid tableGeneralInfo">
+                    <c:forEach var="value" items="#{fileItemFieldGroupDto.fieldValues}">
+                        <h:panelGroup>
+                            <h:outputLabel value="#{facesContext.viewRoot.locale eq 'en' ? value.fileItemField.labelEn : value.fileItemField.labelFr}" />
+                        </h:panelGroup>
+                        <h:outputLabel rendered="#{fileItemApDetailController.currentFile.parent == null or fileItemApDetailController.baseFileItemValue[fileItemApDetailController.selectedFileItem.lineNumber] == null}" value="#{value.value}" />
+                        <h:outputLabel rendered="#{fileItemApDetailController.currentFile.parent != null and fileItemApDetailController.baseFileItemValue[fileItemApDetailController.selectedFileItem.lineNumber] != null}" 
+                                       title="#{value.value eq fileItemApDetailController.baseFileItemValue[fileItemApDetailController.selectedFileItem.lineNumber][value.fileItemField.labelEn] or value.fileItemField.labelEn == null ? '':fileItemApDetailController.baseFileItemValue[fileItemApDetailController.selectedFileItem.lineNumber][value.fileItemField.labelEn]}"
+                                       style="#{value.value eq fileItemApDetailController.baseFileItemValue[fileItemApDetailController.selectedFileItem.lineNumber][value.fileItemField.labelEn] or value.fileItemField.labelEn == null ? '':'color:red;cursor: pointer'}"
+                                       value="#{value.value}" >
+                        </h:outputLabel>
+                    </c:forEach>
+                </h:panelGrid>
+            </p:fieldset>
+        </c:forEach>
+    </h:form>
 </ui:composition>

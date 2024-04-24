@@ -25,10 +25,13 @@ public class AtmMinepiaFileVo extends AbstractFileVo<AtmMinepiaFileItemVo>
         /***Validaation date**/
         private String cebs;
         private String bp;
-        private String ville;
+        private String town;
         private double quandityRequired;
         private double quanditeproposed;
         private String ampliation;
+        
+       
+        
         //Good properties
   	/** The designation. */
 	private String designation;
@@ -106,15 +109,14 @@ public class AtmMinepiaFileVo extends AbstractFileVo<AtmMinepiaFileItemVo>
         this.bp = bp;
     }
 
-    public String getVille() {
-        return ville;
+    public String getTown() {
+        return town;
     }
 
-    public void setVille(String ville) {
-        this.ville = ville;
+    public void setTown(String town) {
+        this.town = town;
     }
-        
-  
+     
     public String getSignature() {
         return signature;
     }

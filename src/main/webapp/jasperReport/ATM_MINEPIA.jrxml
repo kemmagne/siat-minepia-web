@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="file" language="groovy" pageWidth="595" pageHeight="960" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="28078ea8-15af-47d5-9f91-aa95db5f187e">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="724"/>
+	<property name="ireport.y" value="2010"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -91,11 +91,11 @@
 	<field name="stamp" class="java.lang.String">
 		<fieldDescription><![CDATA[stamp]]></fieldDescription>
 	</field>
+	<field name="town" class="java.lang.String">
+		<fieldDescription><![CDATA[town]]></fieldDescription>
+	</field>
 	<field name="validityDate" class="java.util.Date">
 		<fieldDescription><![CDATA[validityDate]]></fieldDescription>
-	</field>
-	<field name="ville" class="java.lang.String">
-		<fieldDescription><![CDATA[ville]]></fieldDescription>
 	</field>
 	<variable name="variable1" class="java.lang.String"/>
 	<background>
@@ -130,7 +130,7 @@
 		<band height="135" splitType="Stretch">
 			<elementGroup>
 				<staticText>
-					<reportElement uuid="62430ea4-9341-42b4-b2b6-f10ebb958d21" x="10" y="73" width="200" height="16"/>
+					<reportElement uuid="62430ea4-9341-42b4-b2b6-f10ebb958d21" x="10" y="64" width="200" height="16"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 						<font size="6" isBold="false"/>
 					</textElement>
@@ -151,7 +151,7 @@
 					<text><![CDATA[MINISTERE DE L'ELEVAGE, DES PECHES ET DES INDUSTRIES ANIMALES]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="2f8ca3fe-536c-4d2f-8210-cc46e8006012" x="10" y="57" width="200" height="8"/>
+					<reportElement uuid="2f8ca3fe-536c-4d2f-8210-cc46e8006012" x="10" y="48" width="200" height="8"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 						<font size="6" isBold="false"/>
 					</textElement>
@@ -180,7 +180,7 @@
 ]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="b52c9484-2364-41cc-8360-309c7c96643f" x="10" y="65" width="200" height="8"/>
+					<reportElement uuid="b52c9484-2364-41cc-8360-309c7c96643f" x="10" y="56" width="200" height="8"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 						<font size="6" isBold="false"/>
 					</textElement>
@@ -194,7 +194,7 @@
 					<text><![CDATA[------------]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="32971d30-2dab-403b-a310-35a60414fd06" x="345" y="64" width="200" height="15"/>
+					<reportElement uuid="32971d30-2dab-403b-a310-35a60414fd06" x="345" y="64" width="200" height="16"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 						<font size="6" isBold="false"/>
 					</textElement>
@@ -247,19 +247,26 @@
 				</staticText>
 			</elementGroup>
 			<staticText>
-				<reportElement uuid="d54ae254-3373-482b-8399-dff7519df4ac" x="10" y="99" width="200" height="15"/>
+				<reportElement uuid="d54ae254-3373-482b-8399-dff7519df4ac" x="10" y="80" width="200" height="12"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[------------]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="28356718-db51-4da7-8b43-1e907c6f84b6" x="355" y="79" width="200" height="10"/>
+				<reportElement uuid="28356718-db51-4da7-8b43-1e907c6f84b6" x="346" y="80" width="200" height="10"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 					<font size="6" isBold="true"/>
 				</textElement>
 				<text><![CDATA[----------------]]></text>
 			</staticText>
+			<textField>
+				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="10" y="102" width="322" height="19"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{ammendement} != null  && $F{ammendement}.trim().length()>0 ? $F{ammendement} : "")]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
@@ -305,7 +312,8 @@ Vu le dossier présenté par l'intéressé.]]></text>
 				<textElement verticalAlignment="Middle" markup="html">
 					<font fontName="SansSerif" size="11" isBold="false" isUnderline="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["<u>Article 1<sup>er</sup></u>: L'Etablissement Compagnie Equatoriale des Biens et Services «CEBS» B.P."+($F{bp} != null  && $F{bp}.trim().length()>0 ? $F{bp} : "")+" "+($F{ville} != null  && $F{ville}.trim().length()>0 ? $F{ville} : "")+", crée par décision N°00611/MINEPIA/SG/DPAIH/SDTPIH/SIH du 19 octobre 2015 est autorisé à importer"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["<u>Article 1<sup>er</sup></u>: "+($F{importer} != null  && $F{importer}.trim().length()>0 ? $F{importer} : "")+ " B.P."+($F{bp} != null  && $F{bp}.trim().length()>0 ? $F{bp} : "")+" "+($F{town} != null  && $F{town}.trim().length()>0 ? $F{town} : "")+", crée par décision N°00611/MINEPIA/SG/DPAIH/SDTPIH/SIH du 19 octobre 2015 est autorisé à importer"
+]]></textFieldExpression>
 			</textField>
 			<elementGroup>
 				<staticText>
@@ -325,23 +333,23 @@ Vu le dossier présenté par l'intéressé.]]></text>
            				   ANIMALES]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="85" y="490" width="460" height="74"/>
+				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="82" y="469" width="460" height="74"/>
 				<textElement verticalAlignment="Middle" markup="html">
 					<font fontName="SansSerif" size="11" isBold="false" isUnderline="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["\u2022  <u>"+($F{designation} != null  && $F{designation}.trim().length()>0 ? $F{designation} : "") +"</u>:<b>"+($F{quanditeproposed} != 0.0  && $F{quanditeproposed} > 0 ? $F{quanditeproposed} : "")+"</b>"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["\u2022  <u>"+($F{designation} != null  && $F{designation}.trim().length()>0 ? $F{designation} : "") +"</u>:<b>"+($F{quanditeproposed} != 0.0  && $F{quanditeproposed} > 0 ? $F{quanditeproposed} : "")+"</b> KG"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="29" y="543" width="510" height="46"/>
+				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="29" y="531" width="510" height="69"/>
 				<textElement verticalAlignment="Middle" markup="html">
 					<font fontName="SansSerif" size="11" isBold="false" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["<u>Article 2 </u>: Le présent Avis Technique est valable pour l'obtention d'importation délivrée par le"+
-"Ministre en charge du Commerce. <br/>"+
+"Ministre en charge du Commerce"+"<br/><br/>"+
 "<u>Article 3 </u>: Le bénéficiaire de cet Avis Technique est astrient aux conditions"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="63" y="589" width="469" height="80"/>
+				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="86" y="626" width="469" height="43"/>
 				<textElement verticalAlignment="Middle" markup="html">
 					<font fontName="SansSerif" size="11" isBold="false" isUnderline="false"/>
 				</textElement>
@@ -381,12 +389,11 @@ Vu le dossier présenté par l'intéressé.]]></text>
 ]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="22" y="578" width="110" height="99"/>
+				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="22" y="578" width="176" height="19"/>
 				<textElement verticalAlignment="Middle" markup="html">
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["<u><i>AMPLIATIONS :</i></u><br/>"+
-($F{ampliation} != null  && $F{ampliation}.trim().length()>0 ? $F{ampliation} : "")+"<br/>"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["<u><i>AMPLIATIONS :</i></u><br/>"]]></textFieldExpression>
 			</textField>
 			<image>
 				<reportElement uuid="ca319a39-5c09-4432-bd15-05bb9dbe78c7" x="302" y="648" width="119" height="100"/>
@@ -449,7 +456,7 @@ h)   L'Avis Technique n'est pas cessible.]]></text>
 				<textElement verticalAlignment="Middle" markup="html">
 					<font fontName="SansSerif" size="11" isBold="false" isUnderline="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["<u>Article 5</u>: Le présent Avis  Technique valable jusqu'au "+($F{validityDate}!= null? new java.text.SimpleDateFormat("dd MMM yyyy").format($F{validityDate}) : "")+" sera enregistré et communiqué partout où besoin sera /-"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["<u>Article 5</u>: Le présent Avis  Technique valable jusqu'au "+($F{validityDate}!= null? new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{validityDate}) : "")+" sera enregistré et communiqué partout où besoin sera /-"]]></textFieldExpression>
 			</textField>
 			<image>
 				<reportElement uuid="ca319a39-5c09-4432-bd15-05bb9dbe78c7" x="198" y="648" width="93" height="91"/>
@@ -461,6 +468,13 @@ h)   L'Avis Technique n'est pas cessible.]]></text>
 					<font fontName="SansSerif" size="11" isBold="false" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["<u>Article 4</u>: Le dossier de demande de renouvellement du présent Avis Technique comportera toutes les piéces réglementaires en particulier :"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="22" y="597" width="99" height="51"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{ampliation} != null  && $F{ampliation}.trim().length()>0 ? $F{ampliation} : "")]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

@@ -832,6 +832,65 @@ public class FileItemApDetailController extends DefaultDetailController implemen
     private List<WoodSpecification> specsList;
     private FileFieldValue woodsType;
 
+    public Map<Long, String> getBaseFileValue() {
+        return baseFileValue;
+    }
+
+    public void setBaseFileValue(Map<Long, String> baseFileValue) {
+        this.baseFileValue = baseFileValue;
+    }
+
+    public Map<Integer, Map<Object, Object>> getBaseFileItemValue() {
+        return baseFileItemValue;
+    }
+
+    public void setBaseFileItemValue(Map<Integer, Map<Object, Object>> baseFileItemValue) {
+        this.baseFileItemValue = baseFileItemValue;
+    }
+
+    public File getParentFile() {
+        return parentFile;
+    }
+
+    public void setParentFile(File parentFile) {
+        this.parentFile = parentFile;
+    }
+
+    public List<FileItem> getParentFileItems() {
+        return parentFileItems;
+    }
+
+    public void setParentFileItems(List<FileItem> parentFileItems) {
+        this.parentFileItems = parentFileItems;
+    }
+
+    public List<FileItem> getRemoveFileItems() {
+        return removeFileItems;
+    }
+
+    public void setRemoveFileItems(List<FileItem> removeFileItems) {
+        this.removeFileItems = removeFileItems;
+    }
+
+    public FileItem getSelectedFileItemRemoved() {
+        return selectedFileItemRemoved;
+    }
+
+    public void setSelectedFileItemRemoved(FileItem selectedFileItemRemoved) {
+        this.selectedFileItemRemoved = selectedFileItemRemoved;
+    }
+    
+    private Map<Long, String> baseFileValue;
+    
+    private Map<Integer, Map<Object, Object>> baseFileItemValue;
+    
+     private File parentFile;
+    private List<FileItem> parentFileItems;
+    private List<FileItem> removeFileItems;
+    private FileItem selectedFileItemRemoved;
+    
+     private Integer itemCompare;
+
     /**
      * The Constant ACCEPTATION_FLOWS.
      */
@@ -958,6 +1017,39 @@ public class FileItemApDetailController extends DefaultDetailController implemen
         //Remplir la liste des filed Values du dossier
         //Remplir la liste des valeurs des filed Values pour le premier article
         loadAndGroupFileItemFieldValues();
+        
+        
+        if (currentFile.getParent() != null) {
+            baseFileValue = new HashMap<>();
+            baseFileItemValue = new HashMap<>();
+            parentFile = currentFile.getParent();
+            for (final FileFieldValue fieldValue : parentFile.getNonRepeatablefileFieldValueList()) {
+                baseFileValue.put(fieldValue.getFileField().getId(), fieldValue.getValue());
+            }
+            parentFileItems = parentFile.getFileItemsList();
+            itemCompare = parentFileItems.size() - productInfoItems.size();
+            removeFileItems = new ArrayList<>();
+            for (final FileItem item : parentFileItems) {
+                if (!baseFileItemValue.containsKey(item.getLineNumber())) {
+                    baseFileItemValue.put(item.getLineNumber(), new HashMap<>());
+                }
+                baseFileItemValue.get(item.getLineNumber()).put(10000L, item);
+                for (final FileItemFieldValue fieldItemValue : item.getNonRepeatablefileItemFieldValueList()) {
+                    baseFileItemValue.get(item.getLineNumber()).put(fieldItemValue.getFileItemField().getLabelEn(), fieldItemValue.getValue());
+                }
+                baseFileItemValue.get(item.getLineNumber()).put("NSH", item.getNsh() != null ? item.getNsh().getGoodsItemCode() : "");
+                baseFileItemValue.get(item.getLineNumber()).put("FOB currency value", item.getFobValue());
+                baseFileItemValue.get(item.getLineNumber()).put("Quantity", item.getQuantity());
+                if (FacesContext.getCurrentInstance().getViewRoot().getLocale().equals(Locale.FRENCH)) {
+                    baseFileItemValue.get(item.getLineNumber()).put("Trade name", item.getNsh() != null ? item.getNsh().getGoodsItemDesc() : "");
+                } else {
+                    baseFileItemValue.get(item.getLineNumber()).put("Trade name", item.getNsh() != null ? item.getNsh().getGoodsItemDescEn() : "");
+                }
+                if (itemCompare > 0 && item.getLineNumber() > productInfoItems.size()) {
+                    removeFileItems.add(item);
+                }
+            }
+        }
 
         //Récuperer la derniere décision du current File
         findLastDecisions();
@@ -1863,7 +1955,7 @@ public class FileItemApDetailController extends DefaultDetailController implemen
     
      void setUiComponentsForAtmMinePia(DataType dataType, HtmlInputText inputText, HtmlInputTextarea htmlInputTextarea, Calendar calendar) {
         if (currentFile != null && currentFile.getFileType().getCode().equals(FileTypeCode.ATM_MINEPIA)) {
-             if (!Arrays.asList(FlowCode.FL_AP_ATM_30, FlowCode.FL_AP_ATM_28 , FlowCode.FL_AP_ATM_26, FlowCode.FL_AP_ATM_23,  FlowCode.FL_AP_ATM_15, FlowCode.FL_AP_ATM_08, FlowCode.FL_AP_ATM_14, FlowCode.FL_AP_ATM_15, FlowCode.FL_AP_ATM_04, FlowCode.FL_AP_ATM_11).contains(FlowCode.valueOf(selectedFlow.getCode()))) {              
+             if (!Arrays.asList(FlowCode.FL_AP_ATM_30, FlowCode.FL_AP_ATM_28 , FlowCode.FL_AP_ATM_26, FlowCode.FL_AP_ATM_23, FlowCode.FL_AP_ATM_17,  FlowCode.FL_AP_ATM_15, FlowCode.FL_AP_ATM_08, FlowCode.FL_AP_ATM_14, FlowCode.FL_AP_ATM_15, FlowCode.FL_AP_ATM_04, FlowCode.FL_AP_ATM_11).contains(FlowCode.valueOf(selectedFlow.getCode()))) {              
                 final String quantite = currentFile.getFileItemsList() != null && !currentFile.getFileItemsList().isEmpty() ? currentFile.getFileItemsList().get(0).getQuantity() : "0";
                   if (inputText != null) {
                             if (dataType.getLabel() != null && dataType.getLabel().trim().equals("Quantité de produit proposée".trim())){
@@ -2201,11 +2293,16 @@ public class FileItemApDetailController extends DefaultDetailController implemen
                     final HtmlInputTextarea valueDataType = (HtmlInputTextarea) decisionDiv.findComponent(ID_DECISION_LABEL
                             + dataType.getId());
                     itemFlowData.setValue(valueDataType.getValue().toString());
+                    itemFlowData.setDataType(dataType);
                 }
                 if (!Objects.equals(itemFlowData.getValue(), null)) {
                     flowDatas.add(itemFlowData);
                 }
             }
+            
+            
+            
+            
             //        if there is an accepting step for EH_MINADER or CAT_MINADER
             if (ACCEPTATION_FLOWS.contains(selectedFlow.getCode())
                     && (FileTypeCode.EH_MINADER.equals(currentFile.getFileType().getCode()) || FileTypeCode.CAT_MINADER
@@ -2264,6 +2361,11 @@ public class FileItemApDetailController extends DefaultDetailController implemen
             // update the last decision date on file
             currentFile.setLastDecisionDate(java.util.Calendar.getInstance().getTime());
             fileService.update(currentFile);
+            
+            if(currentFile != null && currentFile.getFileType().getCode().equals(FileTypeCode.ATM_MINEPIA)){
+                  currentFile.getFileItemsList().get(0).getItemFlowsList().get(0).setItemFlowsDataList(flowDatas);
+            }
+            
 
             transactionManager.commit(status);
             if (LOG.isDebugEnabled()) {
@@ -2491,6 +2593,8 @@ public class FileItemApDetailController extends DefaultDetailController implemen
                     final List<FileItem> fileItemList = new ArrayList<>(map.keySet());
                     final List<ItemFlow> itemFlowList = itemFlowService.findLastItemFlowsByFileItemList(fileItemList);
 
+                       if(currentFile.getFileType().getCode().equals(FileTypeCode.ATM_MINEPIA) && itemFlowList != null && ! itemFlowList.isEmpty() ) currentFile.getFileItemsList().get(0).getItemFlowsList().add(itemFlowList.get(0));
+                    
                     ItemFlowData itemFlowData = null;
                     if (CollectionUtils.isNotEmpty(itemFlowList)
                             && CollectionUtils.isNotEmpty(itemFlowList.get(0).getItemFlowsDataList())) {
@@ -2769,6 +2873,13 @@ public class FileItemApDetailController extends DefaultDetailController implemen
                         }
 
                     }
+                     if( (currentFile.getFileType().getCode().equals(FileTypeCode.ATM_MINEPIA) && currentFile.getFileItemsList() != null  && Arrays.asList(StepCode.ST_AP_ATM_02 , StepCode.ST_AP_ATM_21).contains(currentFile.getFileItemsList().get(0).getStep().getStepCode()))){
+                            cotationService.dispatch(currentFile, selectedFlow);
+                        
+                    } else{
+                             cotationService.automaticQuotation(currentFile, selectedFlow, getLoggedUser());
+                     }
+                    
                     JsfUtil.addSuccessMessageAfterRedirect(ResourceBundle.getBundle(ControllerConstants.Bundle.LOCAL_BUNDLE_NAME,
                             getCurrentLocale()).getString(ControllerConstants.Bundle.Messages.SEND_SUCCESS));
 

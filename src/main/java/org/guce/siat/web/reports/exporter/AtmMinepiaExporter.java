@@ -112,7 +112,7 @@ public class AtmMinepiaExporter extends AbstractReportInvoker {
             List<ItemFlow> itemsFlows =  file.getFileItemsList().get(0).getItemFlowsList();
             if(Objects.nonNull(itemsFlows) && Boolean.FALSE.equals(itemsFlows.isEmpty())){
                 for (ItemFlow itf : itemsFlows) {
-                    if(itf.getFlow().getCode().equals(FlowCode.FL_AP_ATM_16.name())){
+                    if(itf.getFlow().getCode().equals(FlowCode.FL_AP_ATM_16.name()) || itf.getFlow().getCode().equals(FlowCode.FL_AP_ATM_29.name())){
                         return itf;      
                     }
                 }
@@ -129,13 +129,49 @@ public class AtmMinepiaExporter extends AbstractReportInvoker {
                 final String cebs = "<<CEBS>>";
                 
                 atmMinepiaFileVo.setCebs(cebs);
-//                 Date date = new Date();
-//                                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
-//                                    String yearAsString = dateFormat.format(date);
-//                                    int year = Integer.parseInt(yearAsString);
-//                                String endYearFormat =  String.valueOf(year + 1);
-//                                String expirationDate = "31 Décembre "+endYearFormat;
-//                                atmMinepiaFileVo.setExpiredDate(expirationDate);
+                     ItemFlow lastItemFlow = this.findLastItemFlow(file);
+                     for(final ItemFlowData itemFlowData : lastItemFlow.getItemFlowsDataList()){
+                                                  switch(itemFlowData.getDataType().getLabel()){
+                                                      case "Quantité de produit de l'importateur":
+                                                           if(itemFlowData.getValue() != null && itemFlowData.getValue().length() > 0){
+                                                               atmMinepiaFileVo.setQuandityRequired(Double.parseDouble(itemFlowData.getValue()));
+                                                           }
+                                                           break;
+                                                      
+                                                      case "Quantité de produit proposée":
+                                                          if(itemFlowData.getValue() != null && itemFlowData.getValue().length() > 0){
+                                                              Double quandityProposeed = Double.parseDouble(itemFlowData.getValue());
+                                                              Double quandityGiven = 4000.00;
+                                                              String quandity = quandityGiven.toString();
+                                                               atmMinepiaFileVo.setQuanditeproposed(quandityProposeed);
+                                                           }
+                                                           break;
+                                                          
+                                                      case "Validité de l'avis technique proposée":
+                                                          if(itemFlowData.getValue() != null && itemFlowData.getValue().length() > 0){
+                                                              try{
+                                                                atmMinepiaFileVo.setValidityDate(DATEFORMATTER.parse(itemFlowData.getValue()));
+                                                              }catch(ParseException e){
+                                                              
+                                                                LOG.error("{}",  e);
+                                                              }
+                                                               
+                                                           }
+                                                           break;
+                                                           
+//                                                           case "CODE_TARIF_DESIGNATION":
+//								atmMinepiaFileVo.setDesignation(itemFlowData.getValue());
+//							    break;
+                                                          
+                                                      case "Ampliations proposées":
+                                                         if(itemFlowData.getValue() != null && itemFlowData.getValue().length() > 0){
+                                                               atmMinepiaFileVo.setAmpliation(itemFlowData.getValue());
+                                                               String ampliantion = atmMinepiaFileVo.getAmpliation();
+                                                           }
+                                                           break;
+                                                  }    
+                                              }
+                
 
 		if (file != null) {
 			List<FileFieldValue> fileFieldValueList = file.getFileFieldValueList();
@@ -143,6 +179,14 @@ public class AtmMinepiaExporter extends AbstractReportInvoker {
 			atmMinepiaFileVo.setDecisionPlace(file.getBureau().getAddress());
                         atmMinepiaFileVo.setBp(file.getClient().getPostalCode());
                         atmMinepiaFileVo.setDecisionNumber(file.getNumeroDossier());
+                        
+                          if(file.getNumeroDossier().contains("M0") && file.getParent() != null){
+                                           File parentFile = file.getParent();
+                                           fileFieldValueList = parentFile.getFileFieldValueList();
+                                           String amendement = "Amendement N °";
+                                          atmMinepiaFileVo.setAmmendement(amendement.concat(String.valueOf(file.getParent().getChildrenList().size())));
+                                          atmMinepiaFileVo.setDecisionNumber(file.getNumeroDossier().replace("M01", ""));
+                       } 
                    
                         String a = file.getNumeroDossier();
 			if (file.getClient() != null) {
@@ -153,7 +197,8 @@ public class AtmMinepiaExporter extends AbstractReportInvoker {
 				atmMinepiaFileVo.setOriginCountry(file.getCountryOfOrigin().getCountryName());
                         }  
                        if (file.getClient() != null) {
-				atmMinepiaFileVo.setVille(file.getClient().getCity());          
+				atmMinepiaFileVo.setTown(file.getClient().getCity()); 
+                                atmMinepiaFileVo.setImporter(file.getClient().getCompanyName());
 			}
                          if (CollectionUtils.isNotEmpty(fileFieldValueList)) {
 
@@ -183,18 +228,8 @@ public class AtmMinepiaExporter extends AbstractReportInvoker {
 
 			}
                       }
-
-
-                if(file.getNumeroDossier().contains("M0") && file.getParent() != null){
-                                           File parentFile = file.getParent();
-                                           fileFieldValueList = parentFile.getFileFieldValueList();
-                                           String amendement = "Amendement N °";
-                                          atmMinepiaFileVo.setAmmendement(amendement.concat(String.valueOf(file.getParent().getChildrenList().size())));
-                                          atmMinepiaFileVo.setDecisionNumber(file.getNumeroDossier().replace("M01", ""));
-                                }                        
-
-                        ItemFlow lastItemFlow = this.findLastItemFlow(file);       
-                      if(Objects.nonNull(lastItemFlow) && file.getFileItemsList().get(0).getDraft() && !file.getFileItemsList().get(0).getStep().getStepCode().equals(StepCode.ST_AP_44) && Arrays.asList(FlowCode.FL_AP_ATM_10.name(), FlowCode.FL_AP_ATM_13.name(), FlowCode.FL_AP_ATM_16.name(), FlowCode.FL_AP_ATM_25.name(), FlowCode.FL_AP_ATM_27.name(), FlowCode.FL_AP_ATM_13R.name(), FlowCode.FL_AP_ATM_16R.name()).contains(lastItemFlow.getFlow().getCode())){
+                       // ItemFlow lastItemFlow = this.findLastItemFlow(file);       
+                      if(Objects.nonNull(lastItemFlow) && file.getFileItemsList().get(0).getDraft() && !file.getFileItemsList().get(0).getStep().getStepCode().equals(StepCode.ST_AP_44) && Arrays.asList(FlowCode.FL_AP_ATM_07.name(), FlowCode.FL_AP_ATM_10.name(), FlowCode.FL_AP_ATM_13.name(), FlowCode.FL_AP_ATM_16.name(), FlowCode.FL_AP_ATM_24.name(), FlowCode.FL_AP_ATM_25.name(), FlowCode.FL_AP_ATM_27.name(), FlowCode.FL_AP_ATM_13R.name(), FlowCode.FL_AP_ATM_16R.name()).contains(lastItemFlow.getFlow().getCode())){
                         
                              atmMinepiaFileVo.setDraft(getRealPath(IMAGES_PATH, "draft", "jpg"));
 
