@@ -365,6 +365,20 @@ public class AtmMinepiaExporter extends AbstractReportInvoker {
         }
     }
 
+         public  static boolean isRenewing(File file){
+             if(Objects.nonNull(file)  && !CollectionUtils.isEmpty(file.getFileFieldValueList())){
+                 List<FileFieldValue> fileFieldValues = file.getFileFieldValueList();
+                 if(CollectionUtils.isNotEmpty(fileFieldValues)){
+                     for (FileFieldValue fileFieldValue : fileFieldValues) {
+                     if(fileFieldValue.getFileField().getCode().trim().equals("IS_RENEWING") &&  Boolean.valueOf(fileFieldValue.getValue()))  {
+                         return Boolean.TRUE;
+                     }
+                 }
+                 }
+             }
+             return  Boolean.FALSE;
+         }
+         
     private void putQrCode(AtmMinepiaFileVo atmMinepiaFileVo) {
         try {
             String qrCodeContent = Utils.getFinalSecureDocumentUrl(file);
