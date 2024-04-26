@@ -308,6 +308,7 @@ public class AtmMinepiaExporter extends AbstractReportInvoker {
                                                   }    
                                               }
 					}
+                                        
 					fileItemVos.add(fileItemVo);
 				}
 			}

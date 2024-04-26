@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="file" language="groovy" pageWidth="595" pageHeight="960" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="28078ea8-15af-47d5-9f91-aa95db5f187e">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="2010"/>
+	<property name="ireport.y" value="1392"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -285,22 +285,22 @@
 				<textFieldExpression><![CDATA["N°"+($F{decisionNumber} != null  && $F{decisionNumber}.trim().length()>0 ? $F{decisionNumber} : "")+"/MINEPIA/SG/DPAIH/SDTPIH/SIH"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="fcb32c42-033b-4f1a-b3c3-8a986e835542" x="34" y="166" width="489" height="408"/>
+				<reportElement uuid="fcb32c42-033b-4f1a-b3c3-8a986e835542" x="34" y="147" width="489" height="427"/>
 				<textElement textAlignment="Justified" markup="none">
 					<font size="11" isBold="false" isUnderline="false"/>
 				</textElement>
 				<text><![CDATA[Vu la constitution;
 Vu la loi n° 94/01 du 20 janvier 1994 portant régime des forêts, de la faune et de la pêche
 Vu la loi 2000/017 du 19 décembre 2000 portant réglementation de l'inspection sanitaire vétérinaire ;
-Vu de la loi n° 006 du 16 avril 2001 portant nomenclature et régment zoo sanitaire des maladies
+Vu de la loi n° 006 du 16 avril 2001 portant nomenclature et réglement zoo sanitaire des maladies
     réputées légalement contagieuses à déclaration obligatoire;
 Vu la loi-cadre n° 2011/012 du 06 mai 2011 portant protection des consommateurs au Cameroun ;
-Vu le décret n° 75/527 du 16 juillet 1975 portant réglementation des établissement d'exploitation en
+Vu le décret n° 75/527 du 16 juillet 1975 portant réglementation des établissements d'exploitation en
     matière d'Elevage et des Industries Animales;
 Vu le décret n° 95/413/PM du 20 juin 1995 fixant certaines modalités d'application du régime de la
     pêche ;
-Vu le décret n° 2002/PM du 17 janvier 2002 fixant les normes de conditionnement et de transport des
-    produits de la pêche ;
+Vu le décret n° 2002/PM du 17 janvier 2002 fixant les normes de conditionnement et de transport
+    des produits de la pêche ;
 Vu le  décret n° 2011/408 du 09 décembre 2011 portant organisation du Gouvernement ;
 Vu le décret n° 2015/434 du 02 octobre 2015 portant réaménagement du Gouvernement;
 Vu le décret n° 2012/382 du 14 septembre 2012 portant organisation du Ministère de L'Elevage des
@@ -308,16 +308,15 @@ Vu le décret n° 2012/382 du 14 septembre 2012 portant organisation du Ministè
 Vu le dossier présenté par l'intéressé.]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="29" y="441" width="494" height="61"/>
+				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="34" y="414" width="494" height="61"/>
 				<textElement verticalAlignment="Middle" markup="html">
 					<font fontName="SansSerif" size="11" isBold="false" isUnderline="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["<u>Article 1<sup>er</sup></u>: "+($F{importer} != null  && $F{importer}.trim().length()>0 ? $F{importer} : "")+ " B.P."+($F{bp} != null  && $F{bp}.trim().length()>0 ? $F{bp} : "")+" "+($F{town} != null  && $F{town}.trim().length()>0 ? $F{town} : "")+", crée par décision N°00611/MINEPIA/SG/DPAIH/SDTPIH/SIH du 19 octobre 2015 est autorisé à importer"
-]]></textFieldExpression>
+				<textFieldExpression><![CDATA["<u><b>Article 1<sup>er</sup></b></u>: "+($F{importer} != null  && $F{importer}.trim().length()>0 ? $F{importer} : "")+ " B.P."+($F{bp} != null  && $F{bp}.trim().length()>0 ? $F{bp} : "")+" "+($F{town} != null  && $F{town}.trim().length()>0 ? $F{town} : "")+", crée par décision N°00611/MINEPIA/SG/DPAIH/SDTPIH/SIH du 19 octobre 2015 est autorisé à importer"]]></textFieldExpression>
 			</textField>
 			<elementGroup>
 				<staticText>
-					<reportElement uuid="fcb32c42-033b-4f1a-b3c3-8a986e835542" x="10" y="67" width="535" height="27"/>
+					<reportElement uuid="fcb32c42-033b-4f1a-b3c3-8a986e835542" x="48" y="66" width="401" height="27"/>
 					<textElement textAlignment="Center" markup="none">
 						<font fontName="SansSerif" size="11" isBold="true" isUnderline="false"/>
 					</textElement>
@@ -325,7 +324,7 @@ Vu le dossier présenté par l'intéressé.]]></text>
 				</staticText>
 			</elementGroup>
 			<staticText>
-				<reportElement uuid="fcb32c42-033b-4f1a-b3c3-8a986e835542" x="64" y="106" width="439" height="41"/>
+				<reportElement uuid="fcb32c42-033b-4f1a-b3c3-8a986e835542" x="64" y="106" width="439" height="30"/>
 				<textElement textAlignment="Justified" markup="none">
 					<font fontName="SansSerif" size="11" isBold="false" isUnderline="false"/>
 				</textElement>
@@ -333,39 +332,40 @@ Vu le dossier présenté par l'intéressé.]]></text>
            				   ANIMALES]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="82" y="469" width="460" height="74"/>
+				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="79" y="441" width="460" height="74"/>
 				<textElement verticalAlignment="Middle" markup="html">
 					<font fontName="SansSerif" size="11" isBold="false" isUnderline="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["\u2022  <u>"+($F{designation} != null  && $F{designation}.trim().length()>0 ? $F{designation} : "") +"</u>:<b>"+($F{quanditeproposed} != 0.0  && $F{quanditeproposed} > 0 ? $F{quanditeproposed} : "")+"</b> KG"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["\u2022  <u>"+($F{designation} != null  && $F{designation}.trim().length()>0 ? $F{designation} : "") +"</u>: <b>"+($F{quanditeproposed} != 0.0  && $F{quanditeproposed} > 0 ? $F{quanditeproposed} : "")+"</b> KG"
+]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="29" y="531" width="510" height="69"/>
+				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="69" y="515" width="600" height="74"/>
 				<textElement verticalAlignment="Middle" markup="html">
 					<font fontName="SansSerif" size="11" isBold="false" isUnderline="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["<u>Article 2 </u>: Le présent Avis Technique est valable pour l'obtention d'importation délivrée par le"+
-"Ministre en charge du Commerce"+"<br/><br/>"+
-"<u>Article 3 </u>: Le bénéficiaire de cet Avis Technique est astrient aux conditions"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["<u><b>Article 2 </b></u>: Le présent Avis Technique est valable pour l'obtention d'importation délivrée par le Ministre<br/>"+
+"en charge du Commerce."+"<br/><br/>"+
+"<u><b>Article 3 </b></u>: Le bénéficiaire de cet Avis Technique est astreint aux conditions suivantes :"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="86" y="626" width="469" height="43"/>
+				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="86" y="589" width="493" height="43"/>
 				<textElement verticalAlignment="Middle" markup="html">
 					<font fontName="SansSerif" size="11" isBold="false" isUnderline="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["a)    Le service de l'inspection sanitaire vétérinaire du port au tout autre lieu de débarquement"
-      +"doit être prévenu par l'importateur <b>72 heures</b> au moins l'arrivée du  poisson"
-      + "commandé"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["a)    Le service de l'inspection sanitaire vétérinaire du port au tout autre lieu de débarquement<br/>"
+      +"  doit être prévenu par l'importateur <b>72 heures</b> au moins avant l'arrivée du  poisson<b/r>"
+      + "  commandé"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="fcb32c42-033b-4f1a-b3c3-8a986e835542" x="159" y="0" width="280" height="19"/>
+				<reportElement uuid="fcb32c42-033b-4f1a-b3c3-8a986e835542" x="169" y="0" width="280" height="19"/>
 				<textElement textAlignment="Justified" markup="none">
 					<font fontName="SansSerif" size="11" isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[A   V   I   S         T   E   C   H   N   I   Q   U   E]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="fcb32c42-033b-4f1a-b3c3-8a986e835542" x="48" y="418" width="439" height="23"/>
+				<reportElement uuid="fcb32c42-033b-4f1a-b3c3-8a986e835542" x="64" y="391" width="439" height="23"/>
 				<textElement textAlignment="Center" markup="none">
 					<font fontName="SansSerif" size="11" isBold="true" isUnderline="true"/>
 				</textElement>
@@ -376,7 +376,7 @@ Vu le dossier présenté par l'intéressé.]]></text>
 			<textField>
 				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="376" y="556" width="166" height="22"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
-					<font fontName="Times New Roman" size="7" isBold="true" isUnderline="false"/>
+					<font fontName="Times New Roman" size="9" isBold="true" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Yaoundé, le "+($F{decisionDate}!= null? new java.text.SimpleDateFormat("dd MMM yyyy").format($F{decisionDate}) : "")+""]]></textFieldExpression>
 			</textField>
@@ -414,21 +414,20 @@ Vu le dossier présenté par l'intéressé.]]></text>
 c)   L'importation des produits halieutiques en provenance du Japon est suspendue jusqu'à
       nouvel avis.
 
-d)   Aucun colis ne dois être enlevé à l'insu de l'argent chargé de l'inspection sanitaire
+d)   Aucun colis ne doit être enlevé à l'insu de l'agent chargé de l'inspection sanitaire
       vétérinaire.
 
 e)   Les produits doivent être accompagnés d'un certificat sanitaire délivré par un vétérinaire
       autorisé du lieu d'expédition.
 
-f)   Le respect scrupuleux des quantités autorisées ne sont pas renouvelables pour un même
-      avis technique.
+f)   Le respect scrupuleux des quantités autorisées ainsi que leur nature.
 
 g)   Les quantités autorisées ne sont pas renouvelables pour un meme avis technique.
 
 h)   L'Avis Technique n'est pas cessible.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="fcb32c42-033b-4f1a-b3c3-8a986e835542" x="86" y="463" width="446" height="18"/>
+				<reportElement uuid="fcb32c42-033b-4f1a-b3c3-8a986e835542" x="86" y="463" width="493" height="18"/>
 				<textElement markup="none">
 					<font size="11" isBold="false" isUnderline="false"/>
 				</textElement>
@@ -440,7 +439,7 @@ h)   L'Avis Technique n'est pas cessible.]]></text>
 				<textElement markup="none">
 					<font size="11" isBold="false" isUnderline="false"/>
 				</textElement>
-				<text><![CDATA[-la liste des fournisseurs et leurs adresses.
+				<text><![CDATA[- la liste des fournisseurs et leurs adresses.
 ]]></text>
 			</staticText>
 			<staticText>
@@ -448,7 +447,7 @@ h)   L'Avis Technique n'est pas cessible.]]></text>
 				<textElement markup="none">
 					<font size="11" isBold="false" isUnderline="false"/>
 				</textElement>
-				<text><![CDATA[- un rapport d'activité précisant entre autres les quandités importées;
+				<text><![CDATA[- un rapport d'activité précisant entre autres les quantités importées;
 ]]></text>
 			</staticText>
 			<textField>
@@ -456,7 +455,7 @@ h)   L'Avis Technique n'est pas cessible.]]></text>
 				<textElement verticalAlignment="Middle" markup="html">
 					<font fontName="SansSerif" size="11" isBold="false" isUnderline="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["<u>Article 5</u>: Le présent Avis  Technique valable jusqu'au "+($F{validityDate}!= null? new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{validityDate}) : "")+" sera enregistré et communiqué partout où besoin sera /-"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["<u><b>Article 5</b></u>: Le présent Avis  Technique valable jusqu'au <b>"+($F{validityDate}!= null? new java.text.SimpleDateFormat("dd MMMM yyyy").format($F{validityDate}) : "")+"</b> sera enregistré et communiqué partout où besoin sera /-"]]></textFieldExpression>
 			</textField>
 			<image>
 				<reportElement uuid="ca319a39-5c09-4432-bd15-05bb9dbe78c7" x="198" y="648" width="93" height="91"/>
@@ -467,10 +466,10 @@ h)   L'Avis Technique n'est pas cessible.]]></text>
 				<textElement verticalAlignment="Middle" markup="html">
 					<font fontName="SansSerif" size="11" isBold="false" isUnderline="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["<u>Article 4</u>: Le dossier de demande de renouvellement du présent Avis Technique comportera toutes les piéces réglementaires en particulier :"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["<u><b>Article 4</b></u>: Le dossier de demande de renouvellement du présent Avis Technique comportera toutes les piéces réglementaires en particulier :"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="22" y="597" width="99" height="51"/>
+				<reportElement uuid="fa5528fb-3a37-4a80-8995-e341ed553b1e" x="25" y="578" width="99" height="51"/>
 				<textElement verticalAlignment="Middle" markup="none">
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false"/>
 				</textElement>
